@@ -34,23 +34,7 @@
                 <MudDrawerHeader>
                     <MudText Typo="Typo.h5" Class="mt-1">AlriyadahBMS</MudText>
                 </MudDrawerHeader>
-                @* <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-                </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-                </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-                </NavLink>
-                </div> *@
-
-
+               
                 <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
                     <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
                 </MudNavLink>
@@ -79,7 +63,8 @@
             Palette = new PaletteLight()
             {
                 AppbarBackground = new MudBlazor.Utilities.MudColor("#198754"),
-                DrawerBackground = new MudBlazor.Utilities.MudColor("#f1e9d2")
+                DrawerBackground = new MudBlazor.Utilities.MudColor("#f1e9d2"),
+                Primary =  new MudBlazor.Utilities.MudColor("#198754")
             },
             Typography = new Typography()
             {
@@ -89,6 +74,5 @@
                 }
 
             }
-
         };
 }
