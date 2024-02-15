@@ -13,7 +13,6 @@ namespace AlriyadahBMS.Services
             _client = client;
         }
 
-
         public Task<TResponse?> GetAsync<TResponse>(string url, Dictionary<string, string>? queryParams = null)
         {
             throw new NotImplementedException();

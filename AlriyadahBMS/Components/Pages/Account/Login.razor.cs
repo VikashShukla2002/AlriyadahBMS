@@ -1,4 +1,5 @@
 ﻿
+using AlriyadahBMS.Shared.ApiModels;
 using AlriyadahBMS.Shared.ViewModels;
 using MudBlazor;
 using System;
@@ -11,78 +12,20 @@ namespace AlriyadahBMS.Components.Pages.Account
 {
     public partial class Login
     {
-        private bool PasswordIsClicked { get; set; } = false;
         private LoginModel LoginModel { get; set; } = new();
 
-        //MudCodeInput<string> _textFieldGroup;
-        //string _value;
-        //int _count = 4;
-        //int _spacing = 2;
-        //Variant _variant = Variant.Outlined;
-        //Margin _margin;
-        //bool _disabled;
-        //bool _readonly;
-
-        //bool success;
-        //string[] errors = { };
-        //MudTextField<string> pwField1;
-        //MudForm form;
-
-        private IEnumerable<string> PasswordStrength(string pw)
-        {
-            if (string.IsNullOrWhiteSpace(pw))
-            {
-                yield return "Password is required!";
-                yield break;
-            }
-            // if (pw.Length < 8)
-            //     yield return "Password must be at least of length 8";
-            // if (!Regex.IsMatch(pw, @"[A-Z]"))
-            //     yield return "Password must contain at least one capital letter";
-            // if (!Regex.IsMatch(pw, @"[a-z]"))
-            //     yield return "Password must contain at least one lowercase letter";
-            // if (!Regex.IsMatch(pw, @"[0-9]"))
-            //     yield return "Password must contain at least one digit";
-        }
-
-        //private string PasswordMatch(string arg)
-        //{
-        //    if (pwField1.Value != arg)
-        //        return "Passwords don't match";
-        //    return null;
-        //}
-
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    await CheckAuthenticationState();
-        //}
-
-        //private void OnInvalidSubmit()
-        //{
-
-        //}
+        private bool ShowPassword { get; set; } = false;
 
         private async Task OnValidSubmitAsync()
         {
-            //var response = await AuthService!.LoginAsync(new SignInRequest
-            //{
-            //    UserName = LoginModel!.UserName,
-            //    Password = LoginModel!.Password
-            //});
-            //Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
 
+            var response = await Swagger.PostAsync<SignInRequest, SignInResponse>("api/login", new SignInRequest
+            {
+                UserName = LoginModel.UserName,
+                Password = LoginModel.Password
+            });
+           
 
-            //if (response!.IsAuthSuccessful)
-            //{
-            //    Snackbar.Add(response.Message, Severity.Success);
-
-            //    //NavigationManager!.NavigateTo("/");
-            //    NavigationManager.NavigateTo("/", false, true);
-            //}
-            //else
-            //{
-            //    Snackbar.Add(response.Message, Severity.Error);
-            //}
         }
 
         private async Task CheckAuthenticationState()
@@ -98,12 +41,9 @@ namespace AlriyadahBMS.Components.Pages.Account
             //}
         }
 
-
-        private bool showPassword = false;
-
         private InputType GetInputType()
         {
-            return showPassword ? InputType.Text : InputType.Password;
+            return ShowPassword ? InputType.Text : InputType.Password;
         }
     }
 }

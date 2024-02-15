@@ -1,5 +1,5 @@
-﻿@page "/"
-
+﻿@page "/login"
+@inject ISwaggerApiService Swagger
 
 <div class="container-fluid">
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
@@ -26,7 +26,7 @@
 
                 <div class="mb-4">
                     <label>
-                        <input type="checkbox" @bind="showPassword" /> Show password
+                        <input type="checkbox" @bind="ShowPassword" /> Show password
                     </label>
                 </div>
 

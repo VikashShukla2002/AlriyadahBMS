@@ -19,60 +19,29 @@
 
 <MudDialogProvider />
 <MudSnackbarProvider />
-@* <MudThemeProvider Theme="_themeManager.Theme" /> *@
 <MudThemeProvider Theme="MyCustomTheme" />
 
 <CascadingValue Value="this">
     <ChildContent>
         <MudLayout>
-            <MudAppBar Elevation="1">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-                <MudSpacer />
-                <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
-            </MudAppBar>
-            <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
-                <MudDrawerHeader>
-                    <MudText Typo="Typo.h5" Class="mt-1">AlriyadahBMS</MudText>
-                </MudDrawerHeader>
-               
-                <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
-                    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
-                </MudNavLink>
-                <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
-                    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
-                </MudNavLink>
+            <AuthorizeView>
+                <Authorized>
+                    <MudAppBar Elevation="1">
+                        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                        <MudSpacer />
+                        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+                    </MudAppBar>
+                    <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
+                        <NavLink />
+                    </MudDrawer>
+                    <MudMainContent>
+                        
+                        @* @Body *@
 
-            </MudDrawer>
-            <MudMainContent>
-                @Body
-            </MudMainContent>
+                    </MudMainContent>
+                </Authorized>
+            </AuthorizeView>
+
         </MudLayout>
-
     </ChildContent>
 </CascadingValue>
-@code {
-    bool _drawerOpen = true;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    MudTheme MyCustomTheme = new MudTheme()
-        {
-            Palette = new PaletteLight()
-            {
-                AppbarBackground = new MudBlazor.Utilities.MudColor("#198754"),
-                DrawerBackground = new MudBlazor.Utilities.MudColor("#f1e9d2"),
-                Primary =  new MudBlazor.Utilities.MudColor("#198754")
-            },
-            Typography = new Typography()
-            {
-                Default = new Default()
-                {
-                    FontFamily = new[] { "Poppins", "sans-serif" }
-                }
-
-            }
-        };
-}

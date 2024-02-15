@@ -1,6 +1,24 @@
-﻿<Router AppAssembly="@typeof(MauiProgram).Assembly">
+﻿@using AlriyadahBMS.Components.Pages.Account
+@using Microsoft.AspNetCore.Components.Authorization
+
+@* <Router AppAssembly="@typeof(MauiProgram).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(Components.Layout.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
-</Router>
+</Router>*@
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(MauiProgram).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Components.Layout.MainLayout)">
+                <Authorizing>
+                    <p>Please wait, we are authorizring the user!</p>
+                </Authorizing>
+                <NotAuthorized>
+                    <Login />
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+    </Router>
+</CascadingAuthenticationState>
