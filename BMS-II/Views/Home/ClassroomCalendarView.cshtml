@@ -1,0 +1,205 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (classroomCalendarView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!classroomCalendarView.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!classroomCalendarView.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!classroomCalendarView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!classroomCalendarView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @classroomCalendarView.ExportOptions.RenderBody()
+    @classroomCalendarView.OtherOptions.RenderBody()
+</div>
+}
+@classroomCalendarView.ShowPageHeader()
+@classroomCalendarView.ShowMessages()
+<main class="view">
+<form name="fClassroom_Calendarview" id="fClassroom_Calendarview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!classroomCalendarView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(classroomCalendarView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Classroom_Calendar: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var fClassroom_Calendarview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fClassroom_Calendarview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(classroomCalendarView.IsModal)">
+<table class="@(classroomCalendarView.TableClass)">
+@if (classroomCalendarView.Id.Visible) { // classroomCalendarView.Id.Visible (begin)
+    <tr id="r_Id" @Html.Raw(classroomCalendarView.Id.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_Id">@Html.Raw(classroomCalendarView.Id.Caption)</span></td>
+        <td data-name="Id" @Html.Raw(classroomCalendarView.Id.CellAttributes)>
+<span id="el_Classroom_Calendar_Id">
+<span @Html.Raw(classroomCalendarView.Id.ViewAttributes)>
+@Html.Raw(classroomCalendarView.Id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.Id.Visible (end) *@
+@if (classroomCalendarView._Title.Visible) { // classroomCalendarView._Title.Visible (begin)
+    <tr id="r__Title" @Html.Raw(classroomCalendarView._Title.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar__Title">@Html.Raw(classroomCalendarView._Title.Caption)</span></td>
+        <td data-name="_Title" @Html.Raw(classroomCalendarView._Title.CellAttributes)>
+<span id="el_Classroom_Calendar__Title">
+<span @Html.Raw(classroomCalendarView._Title.ViewAttributes)>
+@Html.Raw(classroomCalendarView._Title.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView._Title.Visible (end) *@
+@if (classroomCalendarView.Start.Visible) { // classroomCalendarView.Start.Visible (begin)
+    <tr id="r_Start" @Html.Raw(classroomCalendarView.Start.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_Start">@Html.Raw(classroomCalendarView.Start.Caption)</span></td>
+        <td data-name="Start" @Html.Raw(classroomCalendarView.Start.CellAttributes)>
+<span id="el_Classroom_Calendar_Start">
+<span @Html.Raw(classroomCalendarView.Start.ViewAttributes)>
+@Html.Raw(classroomCalendarView.Start.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.Start.Visible (end) *@
+@if (classroomCalendarView.End.Visible) { // classroomCalendarView.End.Visible (begin)
+    <tr id="r_End" @Html.Raw(classroomCalendarView.End.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_End">@Html.Raw(classroomCalendarView.End.Caption)</span></td>
+        <td data-name="End" @Html.Raw(classroomCalendarView.End.CellAttributes)>
+<span id="el_Classroom_Calendar_End">
+<span @Html.Raw(classroomCalendarView.End.ViewAttributes)>
+@Html.Raw(classroomCalendarView.End.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.End.Visible (end) *@
+@if (classroomCalendarView.AllDay.Visible) { // classroomCalendarView.AllDay.Visible (begin)
+    <tr id="r_AllDay" @Html.Raw(classroomCalendarView.AllDay.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_AllDay">@Html.Raw(classroomCalendarView.AllDay.Caption)</span></td>
+        <td data-name="AllDay" @Html.Raw(classroomCalendarView.AllDay.CellAttributes)>
+<span id="el_Classroom_Calendar_AllDay">
+<span @Html.Raw(classroomCalendarView.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(classroomCalendarView.RowCount)" class="form-check-input" value="@(classroomCalendarView.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(classroomCalendarView.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(classroomCalendarView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.AllDay.Visible (end) *@
+@if (classroomCalendarView.Notes.Visible) { // classroomCalendarView.Notes.Visible (begin)
+    <tr id="r_Notes" @Html.Raw(classroomCalendarView.Notes.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_Notes">@Html.Raw(classroomCalendarView.Notes.Caption)</span></td>
+        <td data-name="Notes" @Html.Raw(classroomCalendarView.Notes.CellAttributes)>
+<span id="el_Classroom_Calendar_Notes">
+<span @Html.Raw(classroomCalendarView.Notes.ViewAttributes)>
+@Html.Raw(classroomCalendarView.Notes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.Notes.Visible (end) *@
+@if (classroomCalendarView.str_Username.Visible) { // classroomCalendarView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(classroomCalendarView.str_Username.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_str_Username">@Html.Raw(classroomCalendarView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(classroomCalendarView.str_Username.CellAttributes)>
+<span id="el_Classroom_Calendar_str_Username">
+<span @Html.Raw(classroomCalendarView.str_Username.ViewAttributes)>
+@Html.Raw(classroomCalendarView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.str_Username.Visible (end) *@
+@if (classroomCalendarView._Url.Visible) { // classroomCalendarView._Url.Visible (begin)
+    <tr id="r__Url" @Html.Raw(classroomCalendarView._Url.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar__Url">@Html.Raw(classroomCalendarView._Url.Caption)</span></td>
+        <td data-name="_Url" @Html.Raw(classroomCalendarView._Url.CellAttributes)>
+<span id="el_Classroom_Calendar__Url">
+<span @Html.Raw(classroomCalendarView._Url.ViewAttributes)>
+@Html.Raw(classroomCalendarView._Url.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView._Url.Visible (end) *@
+@if (classroomCalendarView.ClassNames.Visible) { // classroomCalendarView.ClassNames.Visible (begin)
+    <tr id="r_ClassNames" @Html.Raw(classroomCalendarView.ClassNames.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_ClassNames">@Html.Raw(classroomCalendarView.ClassNames.Caption)</span></td>
+        <td data-name="ClassNames" @Html.Raw(classroomCalendarView.ClassNames.CellAttributes)>
+<span id="el_Classroom_Calendar_ClassNames">
+<span @Html.Raw(classroomCalendarView.ClassNames.ViewAttributes)>
+@Html.Raw(classroomCalendarView.ClassNames.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.ClassNames.Visible (end) *@
+@if (classroomCalendarView.Display.Visible) { // classroomCalendarView.Display.Visible (begin)
+    <tr id="r_Display" @Html.Raw(classroomCalendarView.Display.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_Display">@Html.Raw(classroomCalendarView.Display.Caption)</span></td>
+        <td data-name="Display" @Html.Raw(classroomCalendarView.Display.CellAttributes)>
+<span id="el_Classroom_Calendar_Display">
+<span @Html.Raw(classroomCalendarView.Display.ViewAttributes)>
+@Html.Raw(classroomCalendarView.Display.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.Display.Visible (end) *@
+@if (classroomCalendarView.BackgroundColor.Visible) { // classroomCalendarView.BackgroundColor.Visible (begin)
+    <tr id="r_BackgroundColor" @Html.Raw(classroomCalendarView.BackgroundColor.RowAttributes)>
+        <td class="@(classroomCalendarView.TableLeftColumnClass)"><span id="elh_Classroom_Calendar_BackgroundColor">@Html.Raw(classroomCalendarView.BackgroundColor.Caption)</span></td>
+        <td data-name="BackgroundColor" @Html.Raw(classroomCalendarView.BackgroundColor.CellAttributes)>
+<span id="el_Classroom_Calendar_BackgroundColor">
+<span @Html.Raw(classroomCalendarView.BackgroundColor.ViewAttributes)>
+@Html.Raw(classroomCalendarView.BackgroundColor.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* classroomCalendarView.BackgroundColor.Visible (end) *@
+</table>
+@{ classroomCalendarView.CloseRecordset(); }
+</form>
+</main>
+@classroomCalendarView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!classroomCalendarView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

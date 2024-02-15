@@ -1,0 +1,2017 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblEvaluationEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblEvaluationEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblEvaluationEdit.ShowPageHeader()
+@tblEvaluationEdit.ShowMessages()
+<main class="edit">
+<form name="ftblEvaluationedit" id="ftblEvaluationedit" class="@(tblEvaluationEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluation: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var ftblEvaluationedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblEvaluationedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name_Hdr", [fields.str_Full_Name_Hdr.visible && fields.str_Full_Name_Hdr.required ? ew.Validators.required(fields.str_Full_Name_Hdr.caption) : null], fields.str_Full_Name_Hdr.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["intDrivinglicenseType", [fields.intDrivinglicenseType.visible && fields.intDrivinglicenseType.required ? ew.Validators.required(fields.intDrivinglicenseType.caption) : null], fields.intDrivinglicenseType.isInvalid],
+            ["Date_Entered", [fields.Date_Entered.visible && fields.Date_Entered.required ? ew.Validators.required(fields.Date_Entered.caption) : null], fields.Date_Entered.isInvalid],
+            ["Section_1", [fields.Section_1.visible && fields.Section_1.required ? ew.Validators.required(fields.Section_1.caption) : null], fields.Section_1.isInvalid],
+            ["Q1", [fields.Q1.visible && fields.Q1.required ? ew.Validators.required(fields.Q1.caption) : null], fields.Q1.isInvalid],
+            ["Q2", [fields.Q2.visible && fields.Q2.required ? ew.Validators.required(fields.Q2.caption) : null], fields.Q2.isInvalid],
+            ["Q3", [fields.Q3.visible && fields.Q3.required ? ew.Validators.required(fields.Q3.caption) : null], fields.Q3.isInvalid],
+            ["Q4", [fields.Q4.visible && fields.Q4.required ? ew.Validators.required(fields.Q4.caption) : null], fields.Q4.isInvalid],
+            ["Q5", [fields.Q5.visible && fields.Q5.required ? ew.Validators.required(fields.Q5.caption) : null], fields.Q5.isInvalid],
+            ["Section_2", [fields.Section_2.visible && fields.Section_2.required ? ew.Validators.required(fields.Section_2.caption) : null], fields.Section_2.isInvalid],
+            ["Q6", [fields.Q6.visible && fields.Q6.required ? ew.Validators.required(fields.Q6.caption) : null], fields.Q6.isInvalid],
+            ["Q7", [fields.Q7.visible && fields.Q7.required ? ew.Validators.required(fields.Q7.caption) : null], fields.Q7.isInvalid],
+            ["Q8", [fields.Q8.visible && fields.Q8.required ? ew.Validators.required(fields.Q8.caption) : null], fields.Q8.isInvalid],
+            ["Q9", [fields.Q9.visible && fields.Q9.required ? ew.Validators.required(fields.Q9.caption) : null], fields.Q9.isInvalid],
+            ["Q10", [fields.Q10.visible && fields.Q10.required ? ew.Validators.required(fields.Q10.caption) : null], fields.Q10.isInvalid],
+            ["Q11", [fields.Q11.visible && fields.Q11.required ? ew.Validators.required(fields.Q11.caption) : null], fields.Q11.isInvalid],
+            ["Q12", [fields.Q12.visible && fields.Q12.required ? ew.Validators.required(fields.Q12.caption) : null], fields.Q12.isInvalid],
+            ["Q13", [fields.Q13.visible && fields.Q13.required ? ew.Validators.required(fields.Q13.caption) : null], fields.Q13.isInvalid],
+            ["Q14", [fields.Q14.visible && fields.Q14.required ? ew.Validators.required(fields.Q14.caption) : null], fields.Q14.isInvalid],
+            ["Q15", [fields.Q15.visible && fields.Q15.required ? ew.Validators.required(fields.Q15.caption) : null], fields.Q15.isInvalid],
+            ["Section_3", [fields.Section_3.visible && fields.Section_3.required ? ew.Validators.required(fields.Section_3.caption) : null], fields.Section_3.isInvalid],
+            ["Q16", [fields.Q16.visible && fields.Q16.required ? ew.Validators.required(fields.Q16.caption) : null], fields.Q16.isInvalid],
+            ["Q17", [fields.Q17.visible && fields.Q17.required ? ew.Validators.required(fields.Q17.caption) : null], fields.Q17.isInvalid],
+            ["Q18", [fields.Q18.visible && fields.Q18.required ? ew.Validators.required(fields.Q18.caption) : null], fields.Q18.isInvalid],
+            ["Q19", [fields.Q19.visible && fields.Q19.required ? ew.Validators.required(fields.Q19.caption) : null], fields.Q19.isInvalid],
+            ["Q20", [fields.Q20.visible && fields.Q20.required ? ew.Validators.required(fields.Q20.caption) : null], fields.Q20.isInvalid],
+            ["Q21", [fields.Q21.visible && fields.Q21.required ? ew.Validators.required(fields.Q21.caption) : null], fields.Q21.isInvalid],
+            ["Section_4", [fields.Section_4.visible && fields.Section_4.required ? ew.Validators.required(fields.Section_4.caption) : null], fields.Section_4.isInvalid],
+            ["Q22", [fields.Q22.visible && fields.Q22.required ? ew.Validators.required(fields.Q22.caption) : null], fields.Q22.isInvalid],
+            ["Q23", [fields.Q23.visible && fields.Q23.required ? ew.Validators.required(fields.Q23.caption) : null], fields.Q23.isInvalid],
+            ["Q24", [fields.Q24.visible && fields.Q24.required ? ew.Validators.required(fields.Q24.caption) : null], fields.Q24.isInvalid],
+            ["Q25", [fields.Q25.visible && fields.Q25.required ? ew.Validators.required(fields.Q25.caption) : null], fields.Q25.isInvalid],
+            ["Q26", [fields.Q26.visible && fields.Q26.required ? ew.Validators.required(fields.Q26.caption) : null], fields.Q26.isInvalid],
+            ["Section_5", [fields.Section_5.visible && fields.Section_5.required ? ew.Validators.required(fields.Section_5.caption) : null], fields.Section_5.isInvalid],
+            ["Q27", [fields.Q27.visible && fields.Q27.required ? ew.Validators.required(fields.Q27.caption) : null], fields.Q27.isInvalid],
+            ["Q28", [fields.Q28.visible && fields.Q28.required ? ew.Validators.required(fields.Q28.caption) : null], fields.Q28.isInvalid],
+            ["Q29", [fields.Q29.visible && fields.Q29.required ? ew.Validators.required(fields.Q29.caption) : null], fields.Q29.isInvalid],
+            ["Q30", [fields.Q30.visible && fields.Q30.required ? ew.Validators.required(fields.Q30.caption) : null], fields.Q30.isInvalid],
+            ["Q31", [fields.Q31.visible && fields.Q31.required ? ew.Validators.required(fields.Q31.caption) : null], fields.Q31.isInvalid],
+            ["Q32", [fields.Q32.visible && fields.Q32.required ? ew.Validators.required(fields.Q32.caption) : null], fields.Q32.isInvalid],
+            ["Q33", [fields.Q33.visible && fields.Q33.required ? ew.Validators.required(fields.Q33.caption) : null], fields.Q33.isInvalid],
+            ["Q34", [fields.Q34.visible && fields.Q34.required ? ew.Validators.required(fields.Q34.caption) : null], fields.Q34.isInvalid],
+            ["Q35", [fields.Q35.visible && fields.Q35.required ? ew.Validators.required(fields.Q35.caption) : null], fields.Q35.isInvalid],
+            ["Section_6", [fields.Section_6.visible && fields.Section_6.required ? ew.Validators.required(fields.Section_6.caption) : null], fields.Section_6.isInvalid],
+            ["Q36", [fields.Q36.visible && fields.Q36.required ? ew.Validators.required(fields.Q36.caption) : null], fields.Q36.isInvalid],
+            ["Q37", [fields.Q37.visible && fields.Q37.required ? ew.Validators.required(fields.Q37.caption) : null], fields.Q37.isInvalid],
+            ["Q38", [fields.Q38.visible && fields.Q38.required ? ew.Validators.required(fields.Q38.caption) : null], fields.Q38.isInvalid],
+            ["Q39", [fields.Q39.visible && fields.Q39.required ? ew.Validators.required(fields.Q39.caption) : null], fields.Q39.isInvalid],
+            ["Q40", [fields.Q40.visible && fields.Q40.required ? ew.Validators.required(fields.Q40.caption) : null], fields.Q40.isInvalid],
+            ["Q41", [fields.Q41.visible && fields.Q41.required ? ew.Validators.required(fields.Q41.caption) : null], fields.Q41.isInvalid],
+            ["Q42", [fields.Q42.visible && fields.Q42.required ? ew.Validators.required(fields.Q42.caption) : null], fields.Q42.isInvalid],
+            ["Q43", [fields.Q43.visible && fields.Q43.required ? ew.Validators.required(fields.Q43.caption) : null], fields.Q43.isInvalid],
+            ["Section_7", [fields.Section_7.visible && fields.Section_7.required ? ew.Validators.required(fields.Section_7.caption) : null], fields.Section_7.isInvalid],
+            ["Q44", [fields.Q44.visible && fields.Q44.required ? ew.Validators.required(fields.Q44.caption) : null], fields.Q44.isInvalid],
+            ["Q45", [fields.Q45.visible && fields.Q45.required ? ew.Validators.required(fields.Q45.caption) : null], fields.Q45.isInvalid],
+            ["Q46", [fields.Q46.visible && fields.Q46.required ? ew.Validators.required(fields.Q46.caption) : null], fields.Q46.isInvalid],
+            ["Q47", [fields.Q47.visible && fields.Q47.required ? ew.Validators.required(fields.Q47.caption) : null], fields.Q47.isInvalid],
+            ["Q48", [fields.Q48.visible && fields.Q48.required ? ew.Validators.required(fields.Q48.caption) : null], fields.Q48.isInvalid],
+            ["Q49", [fields.Q49.visible && fields.Q49.required ? ew.Validators.required(fields.Q49.caption) : null], fields.Q49.isInvalid],
+            ["Q50", [fields.Q50.visible && fields.Q50.required ? ew.Validators.required(fields.Q50.caption) : null], fields.Q50.isInvalid],
+            ["Section_8", [fields.Section_8.visible && fields.Section_8.required ? ew.Validators.required(fields.Section_8.caption) : null], fields.Section_8.isInvalid],
+            ["Q51", [fields.Q51.visible && fields.Q51.required ? ew.Validators.required(fields.Q51.caption) : null], fields.Q51.isInvalid],
+            ["Q52", [fields.Q52.visible && fields.Q52.required ? ew.Validators.required(fields.Q52.caption) : null], fields.Q52.isInvalid],
+            ["Q53", [fields.Q53.visible && fields.Q53.required ? ew.Validators.required(fields.Q53.caption) : null], fields.Q53.isInvalid],
+            ["Q54", [fields.Q54.visible && fields.Q54.required ? ew.Validators.required(fields.Q54.caption) : null], fields.Q54.isInvalid],
+            ["Q55", [fields.Q55.visible && fields.Q55.required ? ew.Validators.required(fields.Q55.caption) : null], fields.Q55.isInvalid],
+            ["Section_9", [fields.Section_9.visible && fields.Section_9.required ? ew.Validators.required(fields.Section_9.caption) : null], fields.Section_9.isInvalid],
+            ["Q56", [fields.Q56.visible && fields.Q56.required ? ew.Validators.required(fields.Q56.caption) : null], fields.Q56.isInvalid],
+            ["Q57", [fields.Q57.visible && fields.Q57.required ? ew.Validators.required(fields.Q57.caption) : null], fields.Q57.isInvalid],
+            ["Q58", [fields.Q58.visible && fields.Q58.required ? ew.Validators.required(fields.Q58.caption) : null], fields.Q58.isInvalid],
+            ["Q59", [fields.Q59.visible && fields.Q59.required ? ew.Validators.required(fields.Q59.caption) : null], fields.Q59.isInvalid],
+            ["Q60", [fields.Q60.visible && fields.Q60.required ? ew.Validators.required(fields.Q60.caption) : null], fields.Q60.isInvalid],
+            ["Section_10", [fields.Section_10.visible && fields.Section_10.required ? ew.Validators.required(fields.Section_10.caption) : null], fields.Section_10.isInvalid],
+            ["Q61", [fields.Q61.visible && fields.Q61.required ? ew.Validators.required(fields.Q61.caption) : null], fields.Q61.isInvalid],
+            ["Q62", [fields.Q62.visible && fields.Q62.required ? ew.Validators.required(fields.Q62.caption) : null], fields.Q62.isInvalid],
+            ["Q63", [fields.Q63.visible && fields.Q63.required ? ew.Validators.required(fields.Q63.caption) : null], fields.Q63.isInvalid],
+            ["Q64", [fields.Q64.visible && fields.Q64.required ? ew.Validators.required(fields.Q64.caption) : null], fields.Q64.isInvalid],
+            ["Q65", [fields.Q65.visible && fields.Q65.required ? ew.Validators.required(fields.Q65.caption) : null], fields.Q65.isInvalid],
+            ["Q66", [fields.Q66.visible && fields.Q66.required ? ew.Validators.required(fields.Q66.caption) : null], fields.Q66.isInvalid],
+            ["Section_11", [fields.Section_11.visible && fields.Section_11.required ? ew.Validators.required(fields.Section_11.caption) : null], fields.Section_11.isInvalid],
+            ["Q67", [fields.Q67.visible && fields.Q67.required ? ew.Validators.required(fields.Q67.caption) : null], fields.Q67.isInvalid],
+            ["Q68", [fields.Q68.visible && fields.Q68.required ? ew.Validators.required(fields.Q68.caption) : null], fields.Q68.isInvalid],
+            ["Q69", [fields.Q69.visible && fields.Q69.required ? ew.Validators.required(fields.Q69.caption) : null], fields.Q69.isInvalid],
+            ["Q70", [fields.Q70.visible && fields.Q70.required ? ew.Validators.required(fields.Q70.caption) : null], fields.Q70.isInvalid],
+            ["Notes_3", [fields.Notes_3.visible && fields.Notes_3.required ? ew.Validators.required(fields.Notes_3.caption) : null], fields.Notes_3.isInvalid],
+            ["Student_Signature", [fields.Student_Signature.visible && fields.Student_Signature.required ? ew.Validators.required(fields.Student_Signature.caption) : null], fields.Student_Signature.isInvalid],
+            ["Examiner_Signature", [fields.Examiner_Signature.visible && fields.Examiner_Signature.required ? ew.Validators.required(fields.Examiner_Signature.caption) : null], fields.Examiner_Signature.isInvalid],
+            ["Retake", [fields.Retake.visible && fields.Retake.required ? ew.Validators.required(fields.Retake.caption) : null], fields.Retake.isInvalid],
+            ["AbsherApptNbr", [fields.AbsherApptNbr.visible && fields.AbsherApptNbr.required ? ew.Validators.required(fields.AbsherApptNbr.caption) : null], fields.AbsherApptNbr.isInvalid],
+            ["IsDrivingexperience", [fields.IsDrivingexperience.visible && fields.IsDrivingexperience.required ? ew.Validators.required(fields.IsDrivingexperience.caption) : null], fields.IsDrivingexperience.isInvalid],
+            ["date_Birth_Hijri", [fields.date_Birth_Hijri.visible && fields.date_Birth_Hijri.required ? ew.Validators.required(fields.date_Birth_Hijri.caption) : null], fields.date_Birth_Hijri.isInvalid],
+            ["date_Birth", [fields.date_Birth.visible && fields.date_Birth.required ? ew.Validators.required(fields.date_Birth.caption) : null], fields.date_Birth.isInvalid],
+            ["str_Email", [fields.str_Email.visible && fields.str_Email.required ? ew.Validators.required(fields.str_Email.caption) : null], fields.str_Email.isInvalid],
+            ["UserlevelID", [fields.UserlevelID.visible && fields.UserlevelID.required ? ew.Validators.required(fields.UserlevelID.caption) : null], fields.UserlevelID.isInvalid],
+            ["intEvaluationType", [fields.intEvaluationType.visible && fields.intEvaluationType.required ? ew.Validators.required(fields.intEvaluationType.caption) : null, ew.Validators.integer], fields.intEvaluationType.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Q1": @Html.Raw(tblEvaluationEdit.Q1.ToClientList(tblEvaluationEdit)),
+            "Q2": @Html.Raw(tblEvaluationEdit.Q2.ToClientList(tblEvaluationEdit)),
+            "Q3": @Html.Raw(tblEvaluationEdit.Q3.ToClientList(tblEvaluationEdit)),
+            "Q4": @Html.Raw(tblEvaluationEdit.Q4.ToClientList(tblEvaluationEdit)),
+            "Q5": @Html.Raw(tblEvaluationEdit.Q5.ToClientList(tblEvaluationEdit)),
+            "Q6": @Html.Raw(tblEvaluationEdit.Q6.ToClientList(tblEvaluationEdit)),
+            "Q7": @Html.Raw(tblEvaluationEdit.Q7.ToClientList(tblEvaluationEdit)),
+            "Q8": @Html.Raw(tblEvaluationEdit.Q8.ToClientList(tblEvaluationEdit)),
+            "Q9": @Html.Raw(tblEvaluationEdit.Q9.ToClientList(tblEvaluationEdit)),
+            "Q10": @Html.Raw(tblEvaluationEdit.Q10.ToClientList(tblEvaluationEdit)),
+            "Q11": @Html.Raw(tblEvaluationEdit.Q11.ToClientList(tblEvaluationEdit)),
+            "Q12": @Html.Raw(tblEvaluationEdit.Q12.ToClientList(tblEvaluationEdit)),
+            "Q13": @Html.Raw(tblEvaluationEdit.Q13.ToClientList(tblEvaluationEdit)),
+            "Q14": @Html.Raw(tblEvaluationEdit.Q14.ToClientList(tblEvaluationEdit)),
+            "Q15": @Html.Raw(tblEvaluationEdit.Q15.ToClientList(tblEvaluationEdit)),
+            "Q16": @Html.Raw(tblEvaluationEdit.Q16.ToClientList(tblEvaluationEdit)),
+            "Q17": @Html.Raw(tblEvaluationEdit.Q17.ToClientList(tblEvaluationEdit)),
+            "Q18": @Html.Raw(tblEvaluationEdit.Q18.ToClientList(tblEvaluationEdit)),
+            "Q19": @Html.Raw(tblEvaluationEdit.Q19.ToClientList(tblEvaluationEdit)),
+            "Q20": @Html.Raw(tblEvaluationEdit.Q20.ToClientList(tblEvaluationEdit)),
+            "Q21": @Html.Raw(tblEvaluationEdit.Q21.ToClientList(tblEvaluationEdit)),
+            "Q22": @Html.Raw(tblEvaluationEdit.Q22.ToClientList(tblEvaluationEdit)),
+            "Q23": @Html.Raw(tblEvaluationEdit.Q23.ToClientList(tblEvaluationEdit)),
+            "Q24": @Html.Raw(tblEvaluationEdit.Q24.ToClientList(tblEvaluationEdit)),
+            "Q25": @Html.Raw(tblEvaluationEdit.Q25.ToClientList(tblEvaluationEdit)),
+            "Q26": @Html.Raw(tblEvaluationEdit.Q26.ToClientList(tblEvaluationEdit)),
+            "Q27": @Html.Raw(tblEvaluationEdit.Q27.ToClientList(tblEvaluationEdit)),
+            "Q28": @Html.Raw(tblEvaluationEdit.Q28.ToClientList(tblEvaluationEdit)),
+            "Q29": @Html.Raw(tblEvaluationEdit.Q29.ToClientList(tblEvaluationEdit)),
+            "Q30": @Html.Raw(tblEvaluationEdit.Q30.ToClientList(tblEvaluationEdit)),
+            "Q31": @Html.Raw(tblEvaluationEdit.Q31.ToClientList(tblEvaluationEdit)),
+            "Q32": @Html.Raw(tblEvaluationEdit.Q32.ToClientList(tblEvaluationEdit)),
+            "Q33": @Html.Raw(tblEvaluationEdit.Q33.ToClientList(tblEvaluationEdit)),
+            "Q34": @Html.Raw(tblEvaluationEdit.Q34.ToClientList(tblEvaluationEdit)),
+            "Q35": @Html.Raw(tblEvaluationEdit.Q35.ToClientList(tblEvaluationEdit)),
+            "Q36": @Html.Raw(tblEvaluationEdit.Q36.ToClientList(tblEvaluationEdit)),
+            "Q37": @Html.Raw(tblEvaluationEdit.Q37.ToClientList(tblEvaluationEdit)),
+            "Q38": @Html.Raw(tblEvaluationEdit.Q38.ToClientList(tblEvaluationEdit)),
+            "Q39": @Html.Raw(tblEvaluationEdit.Q39.ToClientList(tblEvaluationEdit)),
+            "Q40": @Html.Raw(tblEvaluationEdit.Q40.ToClientList(tblEvaluationEdit)),
+            "Q41": @Html.Raw(tblEvaluationEdit.Q41.ToClientList(tblEvaluationEdit)),
+            "Q42": @Html.Raw(tblEvaluationEdit.Q42.ToClientList(tblEvaluationEdit)),
+            "Q43": @Html.Raw(tblEvaluationEdit.Q43.ToClientList(tblEvaluationEdit)),
+            "Q44": @Html.Raw(tblEvaluationEdit.Q44.ToClientList(tblEvaluationEdit)),
+            "Q45": @Html.Raw(tblEvaluationEdit.Q45.ToClientList(tblEvaluationEdit)),
+            "Q46": @Html.Raw(tblEvaluationEdit.Q46.ToClientList(tblEvaluationEdit)),
+            "Q47": @Html.Raw(tblEvaluationEdit.Q47.ToClientList(tblEvaluationEdit)),
+            "Q48": @Html.Raw(tblEvaluationEdit.Q48.ToClientList(tblEvaluationEdit)),
+            "Q49": @Html.Raw(tblEvaluationEdit.Q49.ToClientList(tblEvaluationEdit)),
+            "Q50": @Html.Raw(tblEvaluationEdit.Q50.ToClientList(tblEvaluationEdit)),
+            "Q51": @Html.Raw(tblEvaluationEdit.Q51.ToClientList(tblEvaluationEdit)),
+            "Q52": @Html.Raw(tblEvaluationEdit.Q52.ToClientList(tblEvaluationEdit)),
+            "Q53": @Html.Raw(tblEvaluationEdit.Q53.ToClientList(tblEvaluationEdit)),
+            "Q54": @Html.Raw(tblEvaluationEdit.Q54.ToClientList(tblEvaluationEdit)),
+            "Q55": @Html.Raw(tblEvaluationEdit.Q55.ToClientList(tblEvaluationEdit)),
+            "Q56": @Html.Raw(tblEvaluationEdit.Q56.ToClientList(tblEvaluationEdit)),
+            "Q57": @Html.Raw(tblEvaluationEdit.Q57.ToClientList(tblEvaluationEdit)),
+            "Q58": @Html.Raw(tblEvaluationEdit.Q58.ToClientList(tblEvaluationEdit)),
+            "Q59": @Html.Raw(tblEvaluationEdit.Q59.ToClientList(tblEvaluationEdit)),
+            "Q60": @Html.Raw(tblEvaluationEdit.Q60.ToClientList(tblEvaluationEdit)),
+            "Q61": @Html.Raw(tblEvaluationEdit.Q61.ToClientList(tblEvaluationEdit)),
+            "Q62": @Html.Raw(tblEvaluationEdit.Q62.ToClientList(tblEvaluationEdit)),
+            "Q63": @Html.Raw(tblEvaluationEdit.Q63.ToClientList(tblEvaluationEdit)),
+            "Q64": @Html.Raw(tblEvaluationEdit.Q64.ToClientList(tblEvaluationEdit)),
+            "Q65": @Html.Raw(tblEvaluationEdit.Q65.ToClientList(tblEvaluationEdit)),
+            "Q66": @Html.Raw(tblEvaluationEdit.Q66.ToClientList(tblEvaluationEdit)),
+            "Q67": @Html.Raw(tblEvaluationEdit.Q67.ToClientList(tblEvaluationEdit)),
+            "Q68": @Html.Raw(tblEvaluationEdit.Q68.ToClientList(tblEvaluationEdit)),
+            "Q69": @Html.Raw(tblEvaluationEdit.Q69.ToClientList(tblEvaluationEdit)),
+            "Q70": @Html.Raw(tblEvaluationEdit.Q70.ToClientList(tblEvaluationEdit)),
+            "Retake": @Html.Raw(tblEvaluationEdit.Retake.ToClientList(tblEvaluationEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="modal" value="@ConvertToInt(tblEvaluationEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblEvaluationEdit.OldKeyName)" value="@Html.Raw(tblEvaluationEdit.OldKey)">
+@if (tblEvaluationEdit.CurrentMasterTable == "tblAssessment") {
+<input type="hidden" name="@Config.TableShowMaster" value="tblAssessment">
+<input type="hidden" name="fk_AssessmentID" value="@(HtmlEncode(tblEvaluationEdit.AssessmentID.SessionValue))">
+}
+<div class="ew-edit-div d-none"><!-- page* -->
+@if (tblEvaluationEdit.str_Full_Name_Hdr.Visible) { // tblEvaluationEdit.str_Full_Name_Hdr.Visible (begin)
+    <div id="r_str_Full_Name_Hdr" @Html.Raw(tblEvaluationEdit.str_Full_Name_Hdr.RowAttributes)>
+        <label id="elh_tblEvaluation_str_Full_Name_Hdr" for="x_str_Full_Name_Hdr" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_str_Full_Name_Hdr">@Html.Raw(tblEvaluationEdit.str_Full_Name_Hdr.Caption)@Html.Raw(tblEvaluationEdit.str_Full_Name_Hdr.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.str_Full_Name_Hdr.CellAttributes)>
+<template id="tpx_tblEvaluation_str_Full_Name_Hdr"><span id="el_tblEvaluation_str_Full_Name_Hdr">
+<span @Html.Raw(tblEvaluationEdit.str_Full_Name_Hdr.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.str_Full_Name_Hdr.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_str_Full_Name_Hdr" data-hidden="1" name="x_str_Full_Name_Hdr" id="x_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.str_Full_Name_Hdr.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.str_Full_Name_Hdr.Visible (end) *@
+@if (tblEvaluationEdit.NationalID.Visible) { // tblEvaluationEdit.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblEvaluationEdit.NationalID.RowAttributes)>
+        <label id="elh_tblEvaluation_NationalID" for="x_NationalID" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_NationalID">@Html.Raw(tblEvaluationEdit.NationalID.Caption)@Html.Raw(tblEvaluationEdit.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.NationalID.CellAttributes)>
+<template id="tpx_tblEvaluation_NationalID"><span id="el_tblEvaluation_NationalID">
+<span @Html.Raw(tblEvaluationEdit.NationalID.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.NationalID.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_NationalID" data-hidden="1" name="x_NationalID" id="x_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.NationalID.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.NationalID.Visible (end) *@
+@if (tblEvaluationEdit.str_Cell_Phone.Visible) { // tblEvaluationEdit.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" @Html.Raw(tblEvaluationEdit.str_Cell_Phone.RowAttributes)>
+        <label id="elh_tblEvaluation_str_Cell_Phone" for="x_str_Cell_Phone" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_str_Cell_Phone">@Html.Raw(tblEvaluationEdit.str_Cell_Phone.Caption)@Html.Raw(tblEvaluationEdit.str_Cell_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.str_Cell_Phone.CellAttributes)>
+<template id="tpx_tblEvaluation_str_Cell_Phone"><span id="el_tblEvaluation_str_Cell_Phone">
+<span @Html.Raw(tblEvaluationEdit.str_Cell_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.str_Cell_Phone.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_str_Cell_Phone" data-hidden="1" name="x_str_Cell_Phone" id="x_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.str_Cell_Phone.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationEdit.intDrivinglicenseType.Visible) { // tblEvaluationEdit.intDrivinglicenseType.Visible (begin)
+    <div id="r_intDrivinglicenseType" @Html.Raw(tblEvaluationEdit.intDrivinglicenseType.RowAttributes)>
+        <label id="elh_tblEvaluation_intDrivinglicenseType" for="x_intDrivinglicenseType" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_intDrivinglicenseType">@Html.Raw(tblEvaluationEdit.intDrivinglicenseType.Caption)@Html.Raw(tblEvaluationEdit.intDrivinglicenseType.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.intDrivinglicenseType.CellAttributes)>
+<template id="tpx_tblEvaluation_intDrivinglicenseType"><span id="el_tblEvaluation_intDrivinglicenseType">
+<span @Html.Raw(tblEvaluationEdit.intDrivinglicenseType.ViewAttributes)>
+@if ((!EmptyString(tblEvaluationEdit.intDrivinglicenseType.EditValue) || !EmptyString(tblEvaluationEdit.intDrivinglicenseType.TooltipValue)) && !Empty(tblEvaluationEdit.intDrivinglicenseType.LinkAttributes)) {
+<a @Html.Raw(tblEvaluationEdit.intDrivinglicenseType.LinkAttributes)><input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.intDrivinglicenseType.EditValue)))"></a>
+} else {
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.intDrivinglicenseType.EditValue)))">
+}
+</span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_intDrivinglicenseType" data-hidden="1" name="x_intDrivinglicenseType" id="x_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.intDrivinglicenseType.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.intDrivinglicenseType.Visible (end) *@
+@if (tblEvaluationEdit.Section_1.Visible) { // tblEvaluationEdit.Section_1.Visible (begin)
+    <div id="r_Section_1" @Html.Raw(tblEvaluationEdit.Section_1.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_1" for="x_Section_1" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_1">@Html.Raw(tblEvaluationEdit.Section_1.Caption)@Html.Raw(tblEvaluationEdit.Section_1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_1.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_1" class="tblEvaluationedit">
+(Performance Standards) Safety Check
+</template>
+<template id="tpx_tblEvaluation_Section_1"><span id="el_tblEvaluation_Section_1">
+<slot name="tpx_tblEvaluation_Section_1"></slot>
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_1.Visible (end) *@
+@if (tblEvaluationEdit.Q1.Visible) { // tblEvaluationEdit.Q1.Visible (begin)
+    <div id="r_Q1" @Html.Raw(tblEvaluationEdit.Q1.RowAttributes)>
+        <label id="elh_tblEvaluation_Q1" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q1">@Html.Raw(tblEvaluationEdit.Q1.Caption)@Html.Raw(tblEvaluationEdit.Q1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q1.CellAttributes)>
+<template id="tpx_tblEvaluation_Q1"><span id="el_tblEvaluation_Q1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q1.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q1" data-boolean name="x_Q1" id="x_Q1" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q1.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q1.EditAttributes) aria-describedby="x_Q1_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q1.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q1.Visible (end) *@
+@if (tblEvaluationEdit.Q2.Visible) { // tblEvaluationEdit.Q2.Visible (begin)
+    <div id="r_Q2" @Html.Raw(tblEvaluationEdit.Q2.RowAttributes)>
+        <label id="elh_tblEvaluation_Q2" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q2">@Html.Raw(tblEvaluationEdit.Q2.Caption)@Html.Raw(tblEvaluationEdit.Q2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q2.CellAttributes)>
+<template id="tpx_tblEvaluation_Q2"><span id="el_tblEvaluation_Q2">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q2.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q2" data-boolean name="x_Q2" id="x_Q2" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q2.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q2.EditAttributes) aria-describedby="x_Q2_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q2.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q2.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q2.Visible (end) *@
+@if (tblEvaluationEdit.Q3.Visible) { // tblEvaluationEdit.Q3.Visible (begin)
+    <div id="r_Q3" @Html.Raw(tblEvaluationEdit.Q3.RowAttributes)>
+        <label id="elh_tblEvaluation_Q3" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q3">@Html.Raw(tblEvaluationEdit.Q3.Caption)@Html.Raw(tblEvaluationEdit.Q3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q3.CellAttributes)>
+<template id="tpx_tblEvaluation_Q3"><span id="el_tblEvaluation_Q3">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q3.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q3" data-boolean name="x_Q3" id="x_Q3" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q3.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q3.EditAttributes) aria-describedby="x_Q3_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q3.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q3.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q3.Visible (end) *@
+@if (tblEvaluationEdit.Q4.Visible) { // tblEvaluationEdit.Q4.Visible (begin)
+    <div id="r_Q4" @Html.Raw(tblEvaluationEdit.Q4.RowAttributes)>
+        <label id="elh_tblEvaluation_Q4" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q4">@Html.Raw(tblEvaluationEdit.Q4.Caption)@Html.Raw(tblEvaluationEdit.Q4.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q4.CellAttributes)>
+<template id="tpx_tblEvaluation_Q4"><span id="el_tblEvaluation_Q4">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q4.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q4" data-boolean name="x_Q4" id="x_Q4" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q4.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q4.EditAttributes) aria-describedby="x_Q4_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q4.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q4.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q4.Visible (end) *@
+@if (tblEvaluationEdit.Q5.Visible) { // tblEvaluationEdit.Q5.Visible (begin)
+    <div id="r_Q5" @Html.Raw(tblEvaluationEdit.Q5.RowAttributes)>
+        <label id="elh_tblEvaluation_Q5" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q5">@Html.Raw(tblEvaluationEdit.Q5.Caption)@Html.Raw(tblEvaluationEdit.Q5.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q5.CellAttributes)>
+<template id="tpx_tblEvaluation_Q5"><span id="el_tblEvaluation_Q5">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q5.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q5" data-boolean name="x_Q5" id="x_Q5" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q5.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q5.EditAttributes) aria-describedby="x_Q5_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q5.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q5.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q5.Visible (end) *@
+@if (tblEvaluationEdit.Section_2.Visible) { // tblEvaluationEdit.Section_2.Visible (begin)
+    <div id="r_Section_2" @Html.Raw(tblEvaluationEdit.Section_2.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_2" for="x_Section_2" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_2">@Html.Raw(tblEvaluationEdit.Section_2.Caption)@Html.Raw(tblEvaluationEdit.Section_2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_2.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_2"><span id="el_tblEvaluation_Section_2">
+<span @Html.Raw(tblEvaluationEdit.Section_2.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_2.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_2" data-hidden="1" name="x_Section_2" id="x_Section_2" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_2.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_2.Visible (end) *@
+@if (tblEvaluationEdit.Q6.Visible) { // tblEvaluationEdit.Q6.Visible (begin)
+    <div id="r_Q6" @Html.Raw(tblEvaluationEdit.Q6.RowAttributes)>
+        <label id="elh_tblEvaluation_Q6" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q6">@Html.Raw(tblEvaluationEdit.Q6.Caption)@Html.Raw(tblEvaluationEdit.Q6.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q6.CellAttributes)>
+<template id="tpx_tblEvaluation_Q6"><span id="el_tblEvaluation_Q6">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q6.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q6" data-boolean name="x_Q6" id="x_Q6" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q6.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q6.EditAttributes) aria-describedby="x_Q6_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q6.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q6.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q6.Visible (end) *@
+@if (tblEvaluationEdit.Q7.Visible) { // tblEvaluationEdit.Q7.Visible (begin)
+    <div id="r_Q7" @Html.Raw(tblEvaluationEdit.Q7.RowAttributes)>
+        <label id="elh_tblEvaluation_Q7" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q7">@Html.Raw(tblEvaluationEdit.Q7.Caption)@Html.Raw(tblEvaluationEdit.Q7.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q7.CellAttributes)>
+<template id="tpx_tblEvaluation_Q7"><span id="el_tblEvaluation_Q7">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q7.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q7" data-boolean name="x_Q7" id="x_Q7" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q7.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q7.EditAttributes) aria-describedby="x_Q7_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q7.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q7.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q7.Visible (end) *@
+@if (tblEvaluationEdit.Q8.Visible) { // tblEvaluationEdit.Q8.Visible (begin)
+    <div id="r_Q8" @Html.Raw(tblEvaluationEdit.Q8.RowAttributes)>
+        <label id="elh_tblEvaluation_Q8" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q8">@Html.Raw(tblEvaluationEdit.Q8.Caption)@Html.Raw(tblEvaluationEdit.Q8.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q8.CellAttributes)>
+<template id="tpx_tblEvaluation_Q8"><span id="el_tblEvaluation_Q8">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q8.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q8" data-boolean name="x_Q8" id="x_Q8" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q8.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q8.EditAttributes) aria-describedby="x_Q8_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q8.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q8.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q8.Visible (end) *@
+@if (tblEvaluationEdit.Q9.Visible) { // tblEvaluationEdit.Q9.Visible (begin)
+    <div id="r_Q9" @Html.Raw(tblEvaluationEdit.Q9.RowAttributes)>
+        <label id="elh_tblEvaluation_Q9" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q9">@Html.Raw(tblEvaluationEdit.Q9.Caption)@Html.Raw(tblEvaluationEdit.Q9.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q9.CellAttributes)>
+<template id="tpx_tblEvaluation_Q9"><span id="el_tblEvaluation_Q9">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q9.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q9" data-boolean name="x_Q9" id="x_Q9" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q9.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q9.EditAttributes) aria-describedby="x_Q9_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q9.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q9.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q9.Visible (end) *@
+@if (tblEvaluationEdit.Q10.Visible) { // tblEvaluationEdit.Q10.Visible (begin)
+    <div id="r_Q10" @Html.Raw(tblEvaluationEdit.Q10.RowAttributes)>
+        <label id="elh_tblEvaluation_Q10" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q10">@Html.Raw(tblEvaluationEdit.Q10.Caption)@Html.Raw(tblEvaluationEdit.Q10.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q10.CellAttributes)>
+<template id="tpx_tblEvaluation_Q10"><span id="el_tblEvaluation_Q10">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q10.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q10" data-boolean name="x_Q10" id="x_Q10" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q10.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q10.EditAttributes) aria-describedby="x_Q10_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q10.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q10.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q10.Visible (end) *@
+@if (tblEvaluationEdit.Q11.Visible) { // tblEvaluationEdit.Q11.Visible (begin)
+    <div id="r_Q11" @Html.Raw(tblEvaluationEdit.Q11.RowAttributes)>
+        <label id="elh_tblEvaluation_Q11" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q11">@Html.Raw(tblEvaluationEdit.Q11.Caption)@Html.Raw(tblEvaluationEdit.Q11.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q11.CellAttributes)>
+<template id="tpx_tblEvaluation_Q11"><span id="el_tblEvaluation_Q11">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q11.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q11" data-boolean name="x_Q11" id="x_Q11" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q11.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q11.EditAttributes) aria-describedby="x_Q11_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q11.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q11.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q11.Visible (end) *@
+@if (tblEvaluationEdit.Q12.Visible) { // tblEvaluationEdit.Q12.Visible (begin)
+    <div id="r_Q12" @Html.Raw(tblEvaluationEdit.Q12.RowAttributes)>
+        <label id="elh_tblEvaluation_Q12" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q12">@Html.Raw(tblEvaluationEdit.Q12.Caption)@Html.Raw(tblEvaluationEdit.Q12.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q12.CellAttributes)>
+<template id="tpx_tblEvaluation_Q12"><span id="el_tblEvaluation_Q12">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q12.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q12" data-boolean name="x_Q12" id="x_Q12" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q12.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q12.EditAttributes) aria-describedby="x_Q12_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q12.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q12.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q12.Visible (end) *@
+@if (tblEvaluationEdit.Q13.Visible) { // tblEvaluationEdit.Q13.Visible (begin)
+    <div id="r_Q13" @Html.Raw(tblEvaluationEdit.Q13.RowAttributes)>
+        <label id="elh_tblEvaluation_Q13" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q13">@Html.Raw(tblEvaluationEdit.Q13.Caption)@Html.Raw(tblEvaluationEdit.Q13.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q13.CellAttributes)>
+<template id="tpx_tblEvaluation_Q13"><span id="el_tblEvaluation_Q13">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q13.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q13" data-boolean name="x_Q13" id="x_Q13" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q13.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q13.EditAttributes) aria-describedby="x_Q13_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q13.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q13.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q13.Visible (end) *@
+@if (tblEvaluationEdit.Q14.Visible) { // tblEvaluationEdit.Q14.Visible (begin)
+    <div id="r_Q14" @Html.Raw(tblEvaluationEdit.Q14.RowAttributes)>
+        <label id="elh_tblEvaluation_Q14" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q14">@Html.Raw(tblEvaluationEdit.Q14.Caption)@Html.Raw(tblEvaluationEdit.Q14.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q14.CellAttributes)>
+<template id="tpx_tblEvaluation_Q14"><span id="el_tblEvaluation_Q14">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q14.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q14" data-boolean name="x_Q14" id="x_Q14" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q14.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q14.EditAttributes) aria-describedby="x_Q14_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q14.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q14.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q14.Visible (end) *@
+@if (tblEvaluationEdit.Q15.Visible) { // tblEvaluationEdit.Q15.Visible (begin)
+    <div id="r_Q15" @Html.Raw(tblEvaluationEdit.Q15.RowAttributes)>
+        <label id="elh_tblEvaluation_Q15" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q15">@Html.Raw(tblEvaluationEdit.Q15.Caption)@Html.Raw(tblEvaluationEdit.Q15.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q15.CellAttributes)>
+<template id="tpx_tblEvaluation_Q15"><span id="el_tblEvaluation_Q15">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q15.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q15" data-boolean name="x_Q15" id="x_Q15" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q15.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q15.EditAttributes) aria-describedby="x_Q15_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q15.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q15.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q15.Visible (end) *@
+@if (tblEvaluationEdit.Section_3.Visible) { // tblEvaluationEdit.Section_3.Visible (begin)
+    <div id="r_Section_3" @Html.Raw(tblEvaluationEdit.Section_3.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_3" for="x_Section_3" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_3">@Html.Raw(tblEvaluationEdit.Section_3.Caption)@Html.Raw(tblEvaluationEdit.Section_3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_3.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_3"><span id="el_tblEvaluation_Section_3">
+<span @Html.Raw(tblEvaluationEdit.Section_3.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_3.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_3" data-hidden="1" name="x_Section_3" id="x_Section_3" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_3.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_3.Visible (end) *@
+@if (tblEvaluationEdit.Q16.Visible) { // tblEvaluationEdit.Q16.Visible (begin)
+    <div id="r_Q16" @Html.Raw(tblEvaluationEdit.Q16.RowAttributes)>
+        <label id="elh_tblEvaluation_Q16" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q16">@Html.Raw(tblEvaluationEdit.Q16.Caption)@Html.Raw(tblEvaluationEdit.Q16.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q16.CellAttributes)>
+<template id="tpx_tblEvaluation_Q16"><span id="el_tblEvaluation_Q16">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q16.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q16" data-boolean name="x_Q16" id="x_Q16" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q16.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q16.EditAttributes) aria-describedby="x_Q16_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q16.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q16.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q16.Visible (end) *@
+@if (tblEvaluationEdit.Q17.Visible) { // tblEvaluationEdit.Q17.Visible (begin)
+    <div id="r_Q17" @Html.Raw(tblEvaluationEdit.Q17.RowAttributes)>
+        <label id="elh_tblEvaluation_Q17" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q17">@Html.Raw(tblEvaluationEdit.Q17.Caption)@Html.Raw(tblEvaluationEdit.Q17.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q17.CellAttributes)>
+<template id="tpx_tblEvaluation_Q17"><span id="el_tblEvaluation_Q17">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q17.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q17" data-boolean name="x_Q17" id="x_Q17" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q17.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q17.EditAttributes) aria-describedby="x_Q17_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q17.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q17.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q17.Visible (end) *@
+@if (tblEvaluationEdit.Q18.Visible) { // tblEvaluationEdit.Q18.Visible (begin)
+    <div id="r_Q18" @Html.Raw(tblEvaluationEdit.Q18.RowAttributes)>
+        <label id="elh_tblEvaluation_Q18" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q18">@Html.Raw(tblEvaluationEdit.Q18.Caption)@Html.Raw(tblEvaluationEdit.Q18.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q18.CellAttributes)>
+<template id="tpx_tblEvaluation_Q18"><span id="el_tblEvaluation_Q18">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q18.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q18" data-boolean name="x_Q18" id="x_Q18" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q18.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q18.EditAttributes) aria-describedby="x_Q18_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q18.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q18.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q18.Visible (end) *@
+@if (tblEvaluationEdit.Q19.Visible) { // tblEvaluationEdit.Q19.Visible (begin)
+    <div id="r_Q19" @Html.Raw(tblEvaluationEdit.Q19.RowAttributes)>
+        <label id="elh_tblEvaluation_Q19" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q19">@Html.Raw(tblEvaluationEdit.Q19.Caption)@Html.Raw(tblEvaluationEdit.Q19.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q19.CellAttributes)>
+<template id="tpx_tblEvaluation_Q19"><span id="el_tblEvaluation_Q19">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q19.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q19" data-boolean name="x_Q19" id="x_Q19" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q19.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q19.EditAttributes) aria-describedby="x_Q19_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q19.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q19.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q19.Visible (end) *@
+@if (tblEvaluationEdit.Q20.Visible) { // tblEvaluationEdit.Q20.Visible (begin)
+    <div id="r_Q20" @Html.Raw(tblEvaluationEdit.Q20.RowAttributes)>
+        <label id="elh_tblEvaluation_Q20" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q20">@Html.Raw(tblEvaluationEdit.Q20.Caption)@Html.Raw(tblEvaluationEdit.Q20.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q20.CellAttributes)>
+<template id="tpx_tblEvaluation_Q20"><span id="el_tblEvaluation_Q20">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q20.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q20" data-boolean name="x_Q20" id="x_Q20" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q20.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q20.EditAttributes) aria-describedby="x_Q20_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q20.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q20.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q20.Visible (end) *@
+@if (tblEvaluationEdit.Q21.Visible) { // tblEvaluationEdit.Q21.Visible (begin)
+    <div id="r_Q21" @Html.Raw(tblEvaluationEdit.Q21.RowAttributes)>
+        <label id="elh_tblEvaluation_Q21" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q21">@Html.Raw(tblEvaluationEdit.Q21.Caption)@Html.Raw(tblEvaluationEdit.Q21.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q21.CellAttributes)>
+<template id="tpx_tblEvaluation_Q21"><span id="el_tblEvaluation_Q21">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q21.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q21" data-boolean name="x_Q21" id="x_Q21" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q21.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q21.EditAttributes) aria-describedby="x_Q21_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q21.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q21.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q21.Visible (end) *@
+@if (tblEvaluationEdit.Section_4.Visible) { // tblEvaluationEdit.Section_4.Visible (begin)
+    <div id="r_Section_4" @Html.Raw(tblEvaluationEdit.Section_4.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_4" for="x_Section_4" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_4">@Html.Raw(tblEvaluationEdit.Section_4.Caption)@Html.Raw(tblEvaluationEdit.Section_4.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_4.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_4"><span id="el_tblEvaluation_Section_4">
+<span @Html.Raw(tblEvaluationEdit.Section_4.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_4.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_4" data-hidden="1" name="x_Section_4" id="x_Section_4" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_4.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_4.Visible (end) *@
+@if (tblEvaluationEdit.Q22.Visible) { // tblEvaluationEdit.Q22.Visible (begin)
+    <div id="r_Q22" @Html.Raw(tblEvaluationEdit.Q22.RowAttributes)>
+        <label id="elh_tblEvaluation_Q22" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q22">@Html.Raw(tblEvaluationEdit.Q22.Caption)@Html.Raw(tblEvaluationEdit.Q22.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q22.CellAttributes)>
+<template id="tpx_tblEvaluation_Q22"><span id="el_tblEvaluation_Q22">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q22.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q22" data-boolean name="x_Q22" id="x_Q22" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q22.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q22.EditAttributes) aria-describedby="x_Q22_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q22.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q22.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q22.Visible (end) *@
+@if (tblEvaluationEdit.Q23.Visible) { // tblEvaluationEdit.Q23.Visible (begin)
+    <div id="r_Q23" @Html.Raw(tblEvaluationEdit.Q23.RowAttributes)>
+        <label id="elh_tblEvaluation_Q23" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q23">@Html.Raw(tblEvaluationEdit.Q23.Caption)@Html.Raw(tblEvaluationEdit.Q23.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q23.CellAttributes)>
+<template id="tpx_tblEvaluation_Q23"><span id="el_tblEvaluation_Q23">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q23.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q23" data-boolean name="x_Q23" id="x_Q23" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q23.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q23.EditAttributes) aria-describedby="x_Q23_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q23.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q23.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q23.Visible (end) *@
+@if (tblEvaluationEdit.Q24.Visible) { // tblEvaluationEdit.Q24.Visible (begin)
+    <div id="r_Q24" @Html.Raw(tblEvaluationEdit.Q24.RowAttributes)>
+        <label id="elh_tblEvaluation_Q24" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q24">@Html.Raw(tblEvaluationEdit.Q24.Caption)@Html.Raw(tblEvaluationEdit.Q24.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q24.CellAttributes)>
+<template id="tpx_tblEvaluation_Q24"><span id="el_tblEvaluation_Q24">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q24.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q24" data-boolean name="x_Q24" id="x_Q24" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q24.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q24.EditAttributes) aria-describedby="x_Q24_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q24.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q24.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q24.Visible (end) *@
+@if (tblEvaluationEdit.Q25.Visible) { // tblEvaluationEdit.Q25.Visible (begin)
+    <div id="r_Q25" @Html.Raw(tblEvaluationEdit.Q25.RowAttributes)>
+        <label id="elh_tblEvaluation_Q25" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q25">@Html.Raw(tblEvaluationEdit.Q25.Caption)@Html.Raw(tblEvaluationEdit.Q25.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q25.CellAttributes)>
+<template id="tpx_tblEvaluation_Q25"><span id="el_tblEvaluation_Q25">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q25.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q25" data-boolean name="x_Q25" id="x_Q25" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q25.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q25.EditAttributes) aria-describedby="x_Q25_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q25.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q25.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q25.Visible (end) *@
+@if (tblEvaluationEdit.Q26.Visible) { // tblEvaluationEdit.Q26.Visible (begin)
+    <div id="r_Q26" @Html.Raw(tblEvaluationEdit.Q26.RowAttributes)>
+        <label id="elh_tblEvaluation_Q26" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q26">@Html.Raw(tblEvaluationEdit.Q26.Caption)@Html.Raw(tblEvaluationEdit.Q26.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q26.CellAttributes)>
+<template id="tpx_tblEvaluation_Q26"><span id="el_tblEvaluation_Q26">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q26.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q26" data-boolean name="x_Q26" id="x_Q26" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q26.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q26.EditAttributes) aria-describedby="x_Q26_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q26.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q26.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q26.Visible (end) *@
+@if (tblEvaluationEdit.Section_5.Visible) { // tblEvaluationEdit.Section_5.Visible (begin)
+    <div id="r_Section_5" @Html.Raw(tblEvaluationEdit.Section_5.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_5" for="x_Section_5" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_5">@Html.Raw(tblEvaluationEdit.Section_5.Caption)@Html.Raw(tblEvaluationEdit.Section_5.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_5.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_5"><span id="el_tblEvaluation_Section_5">
+<span @Html.Raw(tblEvaluationEdit.Section_5.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_5.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_5" data-hidden="1" name="x_Section_5" id="x_Section_5" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_5.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_5.Visible (end) *@
+@if (tblEvaluationEdit.Q27.Visible) { // tblEvaluationEdit.Q27.Visible (begin)
+    <div id="r_Q27" @Html.Raw(tblEvaluationEdit.Q27.RowAttributes)>
+        <label id="elh_tblEvaluation_Q27" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q27">@Html.Raw(tblEvaluationEdit.Q27.Caption)@Html.Raw(tblEvaluationEdit.Q27.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q27.CellAttributes)>
+<template id="tpx_tblEvaluation_Q27"><span id="el_tblEvaluation_Q27">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q27.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q27" data-boolean name="x_Q27" id="x_Q27" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q27.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q27.EditAttributes) aria-describedby="x_Q27_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q27.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q27.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q27.Visible (end) *@
+@if (tblEvaluationEdit.Q28.Visible) { // tblEvaluationEdit.Q28.Visible (begin)
+    <div id="r_Q28" @Html.Raw(tblEvaluationEdit.Q28.RowAttributes)>
+        <label id="elh_tblEvaluation_Q28" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q28">@Html.Raw(tblEvaluationEdit.Q28.Caption)@Html.Raw(tblEvaluationEdit.Q28.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q28.CellAttributes)>
+<template id="tpx_tblEvaluation_Q28"><span id="el_tblEvaluation_Q28">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q28.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q28" data-boolean name="x_Q28" id="x_Q28" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q28.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q28.EditAttributes) aria-describedby="x_Q28_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q28.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q28.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q28.Visible (end) *@
+@if (tblEvaluationEdit.Q29.Visible) { // tblEvaluationEdit.Q29.Visible (begin)
+    <div id="r_Q29" @Html.Raw(tblEvaluationEdit.Q29.RowAttributes)>
+        <label id="elh_tblEvaluation_Q29" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q29">@Html.Raw(tblEvaluationEdit.Q29.Caption)@Html.Raw(tblEvaluationEdit.Q29.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q29.CellAttributes)>
+<template id="tpx_tblEvaluation_Q29"><span id="el_tblEvaluation_Q29">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q29.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q29" data-boolean name="x_Q29" id="x_Q29" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q29.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q29.EditAttributes) aria-describedby="x_Q29_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q29.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q29.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q29.Visible (end) *@
+@if (tblEvaluationEdit.Q30.Visible) { // tblEvaluationEdit.Q30.Visible (begin)
+    <div id="r_Q30" @Html.Raw(tblEvaluationEdit.Q30.RowAttributes)>
+        <label id="elh_tblEvaluation_Q30" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q30">@Html.Raw(tblEvaluationEdit.Q30.Caption)@Html.Raw(tblEvaluationEdit.Q30.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q30.CellAttributes)>
+<template id="tpx_tblEvaluation_Q30"><span id="el_tblEvaluation_Q30">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q30.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q30" data-boolean name="x_Q30" id="x_Q30" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q30.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q30.EditAttributes) aria-describedby="x_Q30_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q30.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q30.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q30.Visible (end) *@
+@if (tblEvaluationEdit.Q31.Visible) { // tblEvaluationEdit.Q31.Visible (begin)
+    <div id="r_Q31" @Html.Raw(tblEvaluationEdit.Q31.RowAttributes)>
+        <label id="elh_tblEvaluation_Q31" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q31">@Html.Raw(tblEvaluationEdit.Q31.Caption)@Html.Raw(tblEvaluationEdit.Q31.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q31.CellAttributes)>
+<template id="tpx_tblEvaluation_Q31"><span id="el_tblEvaluation_Q31">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q31.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q31" data-boolean name="x_Q31" id="x_Q31" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q31.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q31.EditAttributes) aria-describedby="x_Q31_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q31.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q31.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q31.Visible (end) *@
+@if (tblEvaluationEdit.Q32.Visible) { // tblEvaluationEdit.Q32.Visible (begin)
+    <div id="r_Q32" @Html.Raw(tblEvaluationEdit.Q32.RowAttributes)>
+        <label id="elh_tblEvaluation_Q32" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q32">@Html.Raw(tblEvaluationEdit.Q32.Caption)@Html.Raw(tblEvaluationEdit.Q32.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q32.CellAttributes)>
+<template id="tpx_tblEvaluation_Q32"><span id="el_tblEvaluation_Q32">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q32.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q32" data-boolean name="x_Q32" id="x_Q32" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q32.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q32.EditAttributes) aria-describedby="x_Q32_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q32.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q32.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q32.Visible (end) *@
+@if (tblEvaluationEdit.Q33.Visible) { // tblEvaluationEdit.Q33.Visible (begin)
+    <div id="r_Q33" @Html.Raw(tblEvaluationEdit.Q33.RowAttributes)>
+        <label id="elh_tblEvaluation_Q33" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q33">@Html.Raw(tblEvaluationEdit.Q33.Caption)@Html.Raw(tblEvaluationEdit.Q33.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q33.CellAttributes)>
+<template id="tpx_tblEvaluation_Q33"><span id="el_tblEvaluation_Q33">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q33.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q33" data-boolean name="x_Q33" id="x_Q33" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q33.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q33.EditAttributes) aria-describedby="x_Q33_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q33.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q33.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q33.Visible (end) *@
+@if (tblEvaluationEdit.Q34.Visible) { // tblEvaluationEdit.Q34.Visible (begin)
+    <div id="r_Q34" @Html.Raw(tblEvaluationEdit.Q34.RowAttributes)>
+        <label id="elh_tblEvaluation_Q34" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q34">@Html.Raw(tblEvaluationEdit.Q34.Caption)@Html.Raw(tblEvaluationEdit.Q34.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q34.CellAttributes)>
+<template id="tpx_tblEvaluation_Q34"><span id="el_tblEvaluation_Q34">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q34.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q34" data-boolean name="x_Q34" id="x_Q34" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q34.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q34.EditAttributes) aria-describedby="x_Q34_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q34.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q34.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q34.Visible (end) *@
+@if (tblEvaluationEdit.Q35.Visible) { // tblEvaluationEdit.Q35.Visible (begin)
+    <div id="r_Q35" @Html.Raw(tblEvaluationEdit.Q35.RowAttributes)>
+        <label id="elh_tblEvaluation_Q35" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q35">@Html.Raw(tblEvaluationEdit.Q35.Caption)@Html.Raw(tblEvaluationEdit.Q35.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q35.CellAttributes)>
+<template id="tpx_tblEvaluation_Q35"><span id="el_tblEvaluation_Q35">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q35.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q35" data-boolean name="x_Q35" id="x_Q35" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q35.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q35.EditAttributes) aria-describedby="x_Q35_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q35.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q35.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q35.Visible (end) *@
+@if (tblEvaluationEdit.Section_6.Visible) { // tblEvaluationEdit.Section_6.Visible (begin)
+    <div id="r_Section_6" @Html.Raw(tblEvaluationEdit.Section_6.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_6" for="x_Section_6" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_6">@Html.Raw(tblEvaluationEdit.Section_6.Caption)@Html.Raw(tblEvaluationEdit.Section_6.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_6.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_6"><span id="el_tblEvaluation_Section_6">
+<span @Html.Raw(tblEvaluationEdit.Section_6.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_6.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_6" data-hidden="1" name="x_Section_6" id="x_Section_6" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_6.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_6.Visible (end) *@
+@if (tblEvaluationEdit.Q36.Visible) { // tblEvaluationEdit.Q36.Visible (begin)
+    <div id="r_Q36" @Html.Raw(tblEvaluationEdit.Q36.RowAttributes)>
+        <label id="elh_tblEvaluation_Q36" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q36">@Html.Raw(tblEvaluationEdit.Q36.Caption)@Html.Raw(tblEvaluationEdit.Q36.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q36.CellAttributes)>
+<template id="tpx_tblEvaluation_Q36"><span id="el_tblEvaluation_Q36">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q36.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q36" data-boolean name="x_Q36" id="x_Q36" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q36.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q36.EditAttributes) aria-describedby="x_Q36_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q36.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q36.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q36.Visible (end) *@
+@if (tblEvaluationEdit.Q37.Visible) { // tblEvaluationEdit.Q37.Visible (begin)
+    <div id="r_Q37" @Html.Raw(tblEvaluationEdit.Q37.RowAttributes)>
+        <label id="elh_tblEvaluation_Q37" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q37">@Html.Raw(tblEvaluationEdit.Q37.Caption)@Html.Raw(tblEvaluationEdit.Q37.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q37.CellAttributes)>
+<template id="tpx_tblEvaluation_Q37"><span id="el_tblEvaluation_Q37">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q37.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q37" data-boolean name="x_Q37" id="x_Q37" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q37.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q37.EditAttributes) aria-describedby="x_Q37_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q37.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q37.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q37.Visible (end) *@
+@if (tblEvaluationEdit.Q38.Visible) { // tblEvaluationEdit.Q38.Visible (begin)
+    <div id="r_Q38" @Html.Raw(tblEvaluationEdit.Q38.RowAttributes)>
+        <label id="elh_tblEvaluation_Q38" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q38">@Html.Raw(tblEvaluationEdit.Q38.Caption)@Html.Raw(tblEvaluationEdit.Q38.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q38.CellAttributes)>
+<template id="tpx_tblEvaluation_Q38"><span id="el_tblEvaluation_Q38">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q38.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q38" data-boolean name="x_Q38" id="x_Q38" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q38.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q38.EditAttributes) aria-describedby="x_Q38_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q38.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q38.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q38.Visible (end) *@
+@if (tblEvaluationEdit.Q39.Visible) { // tblEvaluationEdit.Q39.Visible (begin)
+    <div id="r_Q39" @Html.Raw(tblEvaluationEdit.Q39.RowAttributes)>
+        <label id="elh_tblEvaluation_Q39" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q39">@Html.Raw(tblEvaluationEdit.Q39.Caption)@Html.Raw(tblEvaluationEdit.Q39.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q39.CellAttributes)>
+<template id="tpx_tblEvaluation_Q39"><span id="el_tblEvaluation_Q39">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q39.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q39" data-boolean name="x_Q39" id="x_Q39" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q39.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q39.EditAttributes) aria-describedby="x_Q39_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q39.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q39.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q39.Visible (end) *@
+@if (tblEvaluationEdit.Q40.Visible) { // tblEvaluationEdit.Q40.Visible (begin)
+    <div id="r_Q40" @Html.Raw(tblEvaluationEdit.Q40.RowAttributes)>
+        <label id="elh_tblEvaluation_Q40" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q40">@Html.Raw(tblEvaluationEdit.Q40.Caption)@Html.Raw(tblEvaluationEdit.Q40.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q40.CellAttributes)>
+<template id="tpx_tblEvaluation_Q40"><span id="el_tblEvaluation_Q40">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q40.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q40" data-boolean name="x_Q40" id="x_Q40" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q40.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q40.EditAttributes) aria-describedby="x_Q40_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q40.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q40.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q40.Visible (end) *@
+@if (tblEvaluationEdit.Q41.Visible) { // tblEvaluationEdit.Q41.Visible (begin)
+    <div id="r_Q41" @Html.Raw(tblEvaluationEdit.Q41.RowAttributes)>
+        <label id="elh_tblEvaluation_Q41" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q41">@Html.Raw(tblEvaluationEdit.Q41.Caption)@Html.Raw(tblEvaluationEdit.Q41.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q41.CellAttributes)>
+<template id="tpx_tblEvaluation_Q41"><span id="el_tblEvaluation_Q41">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q41.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q41" data-boolean name="x_Q41" id="x_Q41" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q41.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q41.EditAttributes) aria-describedby="x_Q41_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q41.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q41.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q41.Visible (end) *@
+@if (tblEvaluationEdit.Q42.Visible) { // tblEvaluationEdit.Q42.Visible (begin)
+    <div id="r_Q42" @Html.Raw(tblEvaluationEdit.Q42.RowAttributes)>
+        <label id="elh_tblEvaluation_Q42" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q42">@Html.Raw(tblEvaluationEdit.Q42.Caption)@Html.Raw(tblEvaluationEdit.Q42.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q42.CellAttributes)>
+<template id="tpx_tblEvaluation_Q42"><span id="el_tblEvaluation_Q42">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q42.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q42" data-boolean name="x_Q42" id="x_Q42" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q42.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q42.EditAttributes) aria-describedby="x_Q42_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q42.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q42.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q42.Visible (end) *@
+@if (tblEvaluationEdit.Q43.Visible) { // tblEvaluationEdit.Q43.Visible (begin)
+    <div id="r_Q43" @Html.Raw(tblEvaluationEdit.Q43.RowAttributes)>
+        <label id="elh_tblEvaluation_Q43" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q43">@Html.Raw(tblEvaluationEdit.Q43.Caption)@Html.Raw(tblEvaluationEdit.Q43.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q43.CellAttributes)>
+<template id="tpx_tblEvaluation_Q43"><span id="el_tblEvaluation_Q43">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q43.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q43" data-boolean name="x_Q43" id="x_Q43" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q43.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q43.EditAttributes) aria-describedby="x_Q43_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q43.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q43.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q43.Visible (end) *@
+@if (tblEvaluationEdit.Section_7.Visible) { // tblEvaluationEdit.Section_7.Visible (begin)
+    <div id="r_Section_7" @Html.Raw(tblEvaluationEdit.Section_7.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_7" for="x_Section_7" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_7">@Html.Raw(tblEvaluationEdit.Section_7.Caption)@Html.Raw(tblEvaluationEdit.Section_7.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_7.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_7"><span id="el_tblEvaluation_Section_7">
+<span @Html.Raw(tblEvaluationEdit.Section_7.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_7.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_7" data-hidden="1" name="x_Section_7" id="x_Section_7" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_7.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_7.Visible (end) *@
+@if (tblEvaluationEdit.Q44.Visible) { // tblEvaluationEdit.Q44.Visible (begin)
+    <div id="r_Q44" @Html.Raw(tblEvaluationEdit.Q44.RowAttributes)>
+        <label id="elh_tblEvaluation_Q44" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q44">@Html.Raw(tblEvaluationEdit.Q44.Caption)@Html.Raw(tblEvaluationEdit.Q44.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q44.CellAttributes)>
+<template id="tpx_tblEvaluation_Q44"><span id="el_tblEvaluation_Q44">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q44.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q44" data-boolean name="x_Q44" id="x_Q44" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q44.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q44.EditAttributes) aria-describedby="x_Q44_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q44.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q44.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q44.Visible (end) *@
+@if (tblEvaluationEdit.Q45.Visible) { // tblEvaluationEdit.Q45.Visible (begin)
+    <div id="r_Q45" @Html.Raw(tblEvaluationEdit.Q45.RowAttributes)>
+        <label id="elh_tblEvaluation_Q45" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q45">@Html.Raw(tblEvaluationEdit.Q45.Caption)@Html.Raw(tblEvaluationEdit.Q45.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q45.CellAttributes)>
+<template id="tpx_tblEvaluation_Q45"><span id="el_tblEvaluation_Q45">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q45.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q45" data-boolean name="x_Q45" id="x_Q45" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q45.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q45.EditAttributes) aria-describedby="x_Q45_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q45.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q45.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q45.Visible (end) *@
+@if (tblEvaluationEdit.Q46.Visible) { // tblEvaluationEdit.Q46.Visible (begin)
+    <div id="r_Q46" @Html.Raw(tblEvaluationEdit.Q46.RowAttributes)>
+        <label id="elh_tblEvaluation_Q46" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q46">@Html.Raw(tblEvaluationEdit.Q46.Caption)@Html.Raw(tblEvaluationEdit.Q46.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q46.CellAttributes)>
+<template id="tpx_tblEvaluation_Q46"><span id="el_tblEvaluation_Q46">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q46.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q46" data-boolean name="x_Q46" id="x_Q46" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q46.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q46.EditAttributes) aria-describedby="x_Q46_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q46.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q46.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q46.Visible (end) *@
+@if (tblEvaluationEdit.Q47.Visible) { // tblEvaluationEdit.Q47.Visible (begin)
+    <div id="r_Q47" @Html.Raw(tblEvaluationEdit.Q47.RowAttributes)>
+        <label id="elh_tblEvaluation_Q47" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q47">@Html.Raw(tblEvaluationEdit.Q47.Caption)@Html.Raw(tblEvaluationEdit.Q47.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q47.CellAttributes)>
+<template id="tpx_tblEvaluation_Q47"><span id="el_tblEvaluation_Q47">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q47.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q47" data-boolean name="x_Q47" id="x_Q47" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q47.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q47.EditAttributes) aria-describedby="x_Q47_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q47.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q47.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q47.Visible (end) *@
+@if (tblEvaluationEdit.Q48.Visible) { // tblEvaluationEdit.Q48.Visible (begin)
+    <div id="r_Q48" @Html.Raw(tblEvaluationEdit.Q48.RowAttributes)>
+        <label id="elh_tblEvaluation_Q48" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q48">@Html.Raw(tblEvaluationEdit.Q48.Caption)@Html.Raw(tblEvaluationEdit.Q48.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q48.CellAttributes)>
+<template id="tpx_tblEvaluation_Q48"><span id="el_tblEvaluation_Q48">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q48.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q48" data-boolean name="x_Q48" id="x_Q48" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q48.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q48.EditAttributes) aria-describedby="x_Q48_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q48.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q48.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q48.Visible (end) *@
+@if (tblEvaluationEdit.Q49.Visible) { // tblEvaluationEdit.Q49.Visible (begin)
+    <div id="r_Q49" @Html.Raw(tblEvaluationEdit.Q49.RowAttributes)>
+        <label id="elh_tblEvaluation_Q49" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q49">@Html.Raw(tblEvaluationEdit.Q49.Caption)@Html.Raw(tblEvaluationEdit.Q49.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q49.CellAttributes)>
+<template id="tpx_tblEvaluation_Q49"><span id="el_tblEvaluation_Q49">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q49.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q49" data-boolean name="x_Q49" id="x_Q49" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q49.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q49.EditAttributes) aria-describedby="x_Q49_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q49.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q49.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q49.Visible (end) *@
+@if (tblEvaluationEdit.Q50.Visible) { // tblEvaluationEdit.Q50.Visible (begin)
+    <div id="r_Q50" @Html.Raw(tblEvaluationEdit.Q50.RowAttributes)>
+        <label id="elh_tblEvaluation_Q50" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q50">@Html.Raw(tblEvaluationEdit.Q50.Caption)@Html.Raw(tblEvaluationEdit.Q50.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q50.CellAttributes)>
+<template id="tpx_tblEvaluation_Q50"><span id="el_tblEvaluation_Q50">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q50.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q50" data-boolean name="x_Q50" id="x_Q50" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q50.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q50.EditAttributes) aria-describedby="x_Q50_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q50.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q50.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q50.Visible (end) *@
+@if (tblEvaluationEdit.Section_8.Visible) { // tblEvaluationEdit.Section_8.Visible (begin)
+    <div id="r_Section_8" @Html.Raw(tblEvaluationEdit.Section_8.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_8" for="x_Section_8" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_8">@Html.Raw(tblEvaluationEdit.Section_8.Caption)@Html.Raw(tblEvaluationEdit.Section_8.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_8.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_8"><span id="el_tblEvaluation_Section_8">
+<span @Html.Raw(tblEvaluationEdit.Section_8.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_8.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_8" data-hidden="1" name="x_Section_8" id="x_Section_8" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_8.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_8.Visible (end) *@
+@if (tblEvaluationEdit.Q51.Visible) { // tblEvaluationEdit.Q51.Visible (begin)
+    <div id="r_Q51" @Html.Raw(tblEvaluationEdit.Q51.RowAttributes)>
+        <label id="elh_tblEvaluation_Q51" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q51">@Html.Raw(tblEvaluationEdit.Q51.Caption)@Html.Raw(tblEvaluationEdit.Q51.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q51.CellAttributes)>
+<template id="tpx_tblEvaluation_Q51"><span id="el_tblEvaluation_Q51">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q51.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q51" data-boolean name="x_Q51" id="x_Q51" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q51.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q51.EditAttributes) aria-describedby="x_Q51_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q51.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q51.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q51.Visible (end) *@
+@if (tblEvaluationEdit.Q52.Visible) { // tblEvaluationEdit.Q52.Visible (begin)
+    <div id="r_Q52" @Html.Raw(tblEvaluationEdit.Q52.RowAttributes)>
+        <label id="elh_tblEvaluation_Q52" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q52">@Html.Raw(tblEvaluationEdit.Q52.Caption)@Html.Raw(tblEvaluationEdit.Q52.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q52.CellAttributes)>
+<template id="tpx_tblEvaluation_Q52"><span id="el_tblEvaluation_Q52">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q52.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q52" data-boolean name="x_Q52" id="x_Q52" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q52.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q52.EditAttributes) aria-describedby="x_Q52_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q52.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q52.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q52.Visible (end) *@
+@if (tblEvaluationEdit.Q53.Visible) { // tblEvaluationEdit.Q53.Visible (begin)
+    <div id="r_Q53" @Html.Raw(tblEvaluationEdit.Q53.RowAttributes)>
+        <label id="elh_tblEvaluation_Q53" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q53">@Html.Raw(tblEvaluationEdit.Q53.Caption)@Html.Raw(tblEvaluationEdit.Q53.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q53.CellAttributes)>
+<template id="tpx_tblEvaluation_Q53"><span id="el_tblEvaluation_Q53">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q53.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q53" data-boolean name="x_Q53" id="x_Q53" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q53.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q53.EditAttributes) aria-describedby="x_Q53_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q53.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q53.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q53.Visible (end) *@
+@if (tblEvaluationEdit.Q54.Visible) { // tblEvaluationEdit.Q54.Visible (begin)
+    <div id="r_Q54" @Html.Raw(tblEvaluationEdit.Q54.RowAttributes)>
+        <label id="elh_tblEvaluation_Q54" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q54">@Html.Raw(tblEvaluationEdit.Q54.Caption)@Html.Raw(tblEvaluationEdit.Q54.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q54.CellAttributes)>
+<template id="tpx_tblEvaluation_Q54"><span id="el_tblEvaluation_Q54">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q54.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q54" data-boolean name="x_Q54" id="x_Q54" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q54.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q54.EditAttributes) aria-describedby="x_Q54_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q54.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q54.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q54.Visible (end) *@
+@if (tblEvaluationEdit.Q55.Visible) { // tblEvaluationEdit.Q55.Visible (begin)
+    <div id="r_Q55" @Html.Raw(tblEvaluationEdit.Q55.RowAttributes)>
+        <label id="elh_tblEvaluation_Q55" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q55">@Html.Raw(tblEvaluationEdit.Q55.Caption)@Html.Raw(tblEvaluationEdit.Q55.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q55.CellAttributes)>
+<template id="tpx_tblEvaluation_Q55"><span id="el_tblEvaluation_Q55">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q55.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q55" data-boolean name="x_Q55" id="x_Q55" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q55.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q55.EditAttributes) aria-describedby="x_Q55_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q55.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q55.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q55.Visible (end) *@
+@if (tblEvaluationEdit.Section_9.Visible) { // tblEvaluationEdit.Section_9.Visible (begin)
+    <div id="r_Section_9" @Html.Raw(tblEvaluationEdit.Section_9.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_9" for="x_Section_9" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_9">@Html.Raw(tblEvaluationEdit.Section_9.Caption)@Html.Raw(tblEvaluationEdit.Section_9.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_9.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_9"><span id="el_tblEvaluation_Section_9">
+<span @Html.Raw(tblEvaluationEdit.Section_9.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_9.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_9" data-hidden="1" name="x_Section_9" id="x_Section_9" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_9.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_9.Visible (end) *@
+@if (tblEvaluationEdit.Q56.Visible) { // tblEvaluationEdit.Q56.Visible (begin)
+    <div id="r_Q56" @Html.Raw(tblEvaluationEdit.Q56.RowAttributes)>
+        <label id="elh_tblEvaluation_Q56" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q56">@Html.Raw(tblEvaluationEdit.Q56.Caption)@Html.Raw(tblEvaluationEdit.Q56.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q56.CellAttributes)>
+<template id="tpx_tblEvaluation_Q56"><span id="el_tblEvaluation_Q56">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q56.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q56" data-boolean name="x_Q56" id="x_Q56" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q56.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q56.EditAttributes) aria-describedby="x_Q56_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q56.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q56.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q56.Visible (end) *@
+@if (tblEvaluationEdit.Q57.Visible) { // tblEvaluationEdit.Q57.Visible (begin)
+    <div id="r_Q57" @Html.Raw(tblEvaluationEdit.Q57.RowAttributes)>
+        <label id="elh_tblEvaluation_Q57" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q57">@Html.Raw(tblEvaluationEdit.Q57.Caption)@Html.Raw(tblEvaluationEdit.Q57.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q57.CellAttributes)>
+<template id="tpx_tblEvaluation_Q57"><span id="el_tblEvaluation_Q57">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q57.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q57" data-boolean name="x_Q57" id="x_Q57" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q57.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q57.EditAttributes) aria-describedby="x_Q57_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q57.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q57.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q57.Visible (end) *@
+@if (tblEvaluationEdit.Q58.Visible) { // tblEvaluationEdit.Q58.Visible (begin)
+    <div id="r_Q58" @Html.Raw(tblEvaluationEdit.Q58.RowAttributes)>
+        <label id="elh_tblEvaluation_Q58" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q58">@Html.Raw(tblEvaluationEdit.Q58.Caption)@Html.Raw(tblEvaluationEdit.Q58.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q58.CellAttributes)>
+<template id="tpx_tblEvaluation_Q58"><span id="el_tblEvaluation_Q58">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q58.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q58" data-boolean name="x_Q58" id="x_Q58" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q58.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q58.EditAttributes) aria-describedby="x_Q58_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q58.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q58.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q58.Visible (end) *@
+@if (tblEvaluationEdit.Q59.Visible) { // tblEvaluationEdit.Q59.Visible (begin)
+    <div id="r_Q59" @Html.Raw(tblEvaluationEdit.Q59.RowAttributes)>
+        <label id="elh_tblEvaluation_Q59" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q59">@Html.Raw(tblEvaluationEdit.Q59.Caption)@Html.Raw(tblEvaluationEdit.Q59.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q59.CellAttributes)>
+<template id="tpx_tblEvaluation_Q59"><span id="el_tblEvaluation_Q59">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q59.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q59" data-boolean name="x_Q59" id="x_Q59" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q59.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q59.EditAttributes) aria-describedby="x_Q59_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q59.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q59.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q59.Visible (end) *@
+@if (tblEvaluationEdit.Q60.Visible) { // tblEvaluationEdit.Q60.Visible (begin)
+    <div id="r_Q60" @Html.Raw(tblEvaluationEdit.Q60.RowAttributes)>
+        <label id="elh_tblEvaluation_Q60" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q60">@Html.Raw(tblEvaluationEdit.Q60.Caption)@Html.Raw(tblEvaluationEdit.Q60.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q60.CellAttributes)>
+<template id="tpx_tblEvaluation_Q60"><span id="el_tblEvaluation_Q60">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q60.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q60" data-boolean name="x_Q60" id="x_Q60" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q60.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q60.EditAttributes) aria-describedby="x_Q60_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q60.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q60.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q60.Visible (end) *@
+@if (tblEvaluationEdit.Section_10.Visible) { // tblEvaluationEdit.Section_10.Visible (begin)
+    <div id="r_Section_10" @Html.Raw(tblEvaluationEdit.Section_10.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_10" for="x_Section_10" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_10">@Html.Raw(tblEvaluationEdit.Section_10.Caption)@Html.Raw(tblEvaluationEdit.Section_10.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_10.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_10"><span id="el_tblEvaluation_Section_10">
+<span @Html.Raw(tblEvaluationEdit.Section_10.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_10.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_10" data-hidden="1" name="x_Section_10" id="x_Section_10" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_10.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_10.Visible (end) *@
+@if (tblEvaluationEdit.Q61.Visible) { // tblEvaluationEdit.Q61.Visible (begin)
+    <div id="r_Q61" @Html.Raw(tblEvaluationEdit.Q61.RowAttributes)>
+        <label id="elh_tblEvaluation_Q61" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q61">@Html.Raw(tblEvaluationEdit.Q61.Caption)@Html.Raw(tblEvaluationEdit.Q61.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q61.CellAttributes)>
+<template id="tpx_tblEvaluation_Q61"><span id="el_tblEvaluation_Q61">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q61.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q61" data-boolean name="x_Q61" id="x_Q61" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q61.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q61.EditAttributes) aria-describedby="x_Q61_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q61.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q61.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q61.Visible (end) *@
+@if (tblEvaluationEdit.Q62.Visible) { // tblEvaluationEdit.Q62.Visible (begin)
+    <div id="r_Q62" @Html.Raw(tblEvaluationEdit.Q62.RowAttributes)>
+        <label id="elh_tblEvaluation_Q62" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q62">@Html.Raw(tblEvaluationEdit.Q62.Caption)@Html.Raw(tblEvaluationEdit.Q62.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q62.CellAttributes)>
+<template id="tpx_tblEvaluation_Q62"><span id="el_tblEvaluation_Q62">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q62.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q62" data-boolean name="x_Q62" id="x_Q62" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q62.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q62.EditAttributes) aria-describedby="x_Q62_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q62.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q62.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q62.Visible (end) *@
+@if (tblEvaluationEdit.Q63.Visible) { // tblEvaluationEdit.Q63.Visible (begin)
+    <div id="r_Q63" @Html.Raw(tblEvaluationEdit.Q63.RowAttributes)>
+        <label id="elh_tblEvaluation_Q63" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q63">@Html.Raw(tblEvaluationEdit.Q63.Caption)@Html.Raw(tblEvaluationEdit.Q63.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q63.CellAttributes)>
+<template id="tpx_tblEvaluation_Q63"><span id="el_tblEvaluation_Q63">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q63.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q63" data-boolean name="x_Q63" id="x_Q63" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q63.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q63.EditAttributes) aria-describedby="x_Q63_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q63.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q63.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q63.Visible (end) *@
+@if (tblEvaluationEdit.Q64.Visible) { // tblEvaluationEdit.Q64.Visible (begin)
+    <div id="r_Q64" @Html.Raw(tblEvaluationEdit.Q64.RowAttributes)>
+        <label id="elh_tblEvaluation_Q64" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q64">@Html.Raw(tblEvaluationEdit.Q64.Caption)@Html.Raw(tblEvaluationEdit.Q64.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q64.CellAttributes)>
+<template id="tpx_tblEvaluation_Q64"><span id="el_tblEvaluation_Q64">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q64.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q64" data-boolean name="x_Q64" id="x_Q64" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q64.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q64.EditAttributes) aria-describedby="x_Q64_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q64.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q64.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q64.Visible (end) *@
+@if (tblEvaluationEdit.Q65.Visible) { // tblEvaluationEdit.Q65.Visible (begin)
+    <div id="r_Q65" @Html.Raw(tblEvaluationEdit.Q65.RowAttributes)>
+        <label id="elh_tblEvaluation_Q65" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q65">@Html.Raw(tblEvaluationEdit.Q65.Caption)@Html.Raw(tblEvaluationEdit.Q65.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q65.CellAttributes)>
+<template id="tpx_tblEvaluation_Q65"><span id="el_tblEvaluation_Q65">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q65.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q65" data-boolean name="x_Q65" id="x_Q65" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q65.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q65.EditAttributes) aria-describedby="x_Q65_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q65.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q65.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q65.Visible (end) *@
+@if (tblEvaluationEdit.Q66.Visible) { // tblEvaluationEdit.Q66.Visible (begin)
+    <div id="r_Q66" @Html.Raw(tblEvaluationEdit.Q66.RowAttributes)>
+        <label id="elh_tblEvaluation_Q66" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q66">@Html.Raw(tblEvaluationEdit.Q66.Caption)@Html.Raw(tblEvaluationEdit.Q66.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q66.CellAttributes)>
+<template id="tpx_tblEvaluation_Q66"><span id="el_tblEvaluation_Q66">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q66.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q66" data-boolean name="x_Q66" id="x_Q66" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q66.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q66.EditAttributes) aria-describedby="x_Q66_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q66.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q66.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q66.Visible (end) *@
+@if (tblEvaluationEdit.Section_11.Visible) { // tblEvaluationEdit.Section_11.Visible (begin)
+    <div id="r_Section_11" @Html.Raw(tblEvaluationEdit.Section_11.RowAttributes)>
+        <label id="elh_tblEvaluation_Section_11" for="x_Section_11" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Section_11">@Html.Raw(tblEvaluationEdit.Section_11.Caption)@Html.Raw(tblEvaluationEdit.Section_11.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Section_11.CellAttributes)>
+<template id="tpx_tblEvaluation_Section_11"><span id="el_tblEvaluation_Section_11">
+<span @Html.Raw(tblEvaluationEdit.Section_11.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.Section_11.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_Section_11" data-hidden="1" name="x_Section_11" id="x_Section_11" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Section_11.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Section_11.Visible (end) *@
+@if (tblEvaluationEdit.Q67.Visible) { // tblEvaluationEdit.Q67.Visible (begin)
+    <div id="r_Q67" @Html.Raw(tblEvaluationEdit.Q67.RowAttributes)>
+        <label id="elh_tblEvaluation_Q67" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q67">@Html.Raw(tblEvaluationEdit.Q67.Caption)@Html.Raw(tblEvaluationEdit.Q67.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q67.CellAttributes)>
+<template id="tpx_tblEvaluation_Q67"><span id="el_tblEvaluation_Q67">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q67.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q67" data-boolean name="x_Q67" id="x_Q67" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q67.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q67.EditAttributes) aria-describedby="x_Q67_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q67.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q67.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q67.Visible (end) *@
+@if (tblEvaluationEdit.Q68.Visible) { // tblEvaluationEdit.Q68.Visible (begin)
+    <div id="r_Q68" @Html.Raw(tblEvaluationEdit.Q68.RowAttributes)>
+        <label id="elh_tblEvaluation_Q68" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q68">@Html.Raw(tblEvaluationEdit.Q68.Caption)@Html.Raw(tblEvaluationEdit.Q68.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q68.CellAttributes)>
+<template id="tpx_tblEvaluation_Q68"><span id="el_tblEvaluation_Q68">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q68.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q68" data-boolean name="x_Q68" id="x_Q68" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q68.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q68.EditAttributes) aria-describedby="x_Q68_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q68.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q68.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q68.Visible (end) *@
+@if (tblEvaluationEdit.Q69.Visible) { // tblEvaluationEdit.Q69.Visible (begin)
+    <div id="r_Q69" @Html.Raw(tblEvaluationEdit.Q69.RowAttributes)>
+        <label id="elh_tblEvaluation_Q69" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q69">@Html.Raw(tblEvaluationEdit.Q69.Caption)@Html.Raw(tblEvaluationEdit.Q69.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q69.CellAttributes)>
+<template id="tpx_tblEvaluation_Q69"><span id="el_tblEvaluation_Q69">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q69.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q69" data-boolean name="x_Q69" id="x_Q69" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q69.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q69.EditAttributes) aria-describedby="x_Q69_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q69.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q69.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q69.Visible (end) *@
+@if (tblEvaluationEdit.Q70.Visible) { // tblEvaluationEdit.Q70.Visible (begin)
+    <div id="r_Q70" @Html.Raw(tblEvaluationEdit.Q70.RowAttributes)>
+        <label id="elh_tblEvaluation_Q70" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Q70">@Html.Raw(tblEvaluationEdit.Q70.Caption)@Html.Raw(tblEvaluationEdit.Q70.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Q70.CellAttributes)>
+<template id="tpx_tblEvaluation_Q70"><span id="el_tblEvaluation_Q70">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Q70.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Q70" data-boolean name="x_Q70" id="x_Q70" value="1" checked="@ConvertToBool(tblEvaluationEdit.Q70.CurrentValue)" @Html.Raw(tblEvaluationEdit.Q70.EditAttributes) aria-describedby="x_Q70_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Q70.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Q70.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Q70.Visible (end) *@
+@if (tblEvaluationEdit.Notes_3.Visible) { // tblEvaluationEdit.Notes_3.Visible (begin)
+    <div id="r_Notes_3" @Html.Raw(tblEvaluationEdit.Notes_3.RowAttributes)>
+        <label id="elh_tblEvaluation_Notes_3" for="x_Notes_3" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Notes_3">@Html.Raw(tblEvaluationEdit.Notes_3.Caption)@Html.Raw(tblEvaluationEdit.Notes_3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Notes_3.CellAttributes)>
+<template id="tpx_tblEvaluation_Notes_3"><span id="el_tblEvaluation_Notes_3">
+<textarea data-table="tblEvaluation" data-field="x_Notes_3" name="x_Notes_3" id="x_Notes_3" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblEvaluationEdit.Notes_3.PlaceHolder))"@Html.Raw(tblEvaluationEdit.Notes_3.EditAttributes) aria-describedby="x_Notes_3_help">@(tblEvaluationEdit.Notes_3.EditValue)</textarea>
+@Html.Raw(tblEvaluationEdit.Notes_3.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Notes_3.GetErrorMessage())</div>
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Notes_3.Visible (end) *@
+@if (tblEvaluationEdit.Retake.Visible) { // tblEvaluationEdit.Retake.Visible (begin)
+    <div id="r_Retake" @Html.Raw(tblEvaluationEdit.Retake.RowAttributes)>
+        <label id="elh_tblEvaluation_Retake" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_Retake">@Html.Raw(tblEvaluationEdit.Retake.Caption)@Html.Raw(tblEvaluationEdit.Retake.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.Retake.CellAttributes)>
+<template id="tpx_tblEvaluation_Retake"><span id="el_tblEvaluation_Retake">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblEvaluationEdit.Retake.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Retake" data-boolean name="x_Retake" id="x_Retake" value="1" checked="@ConvertToBool(tblEvaluationEdit.Retake.CurrentValue)" @Html.Raw(tblEvaluationEdit.Retake.EditAttributes) aria-describedby="x_Retake_help">
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.Retake.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblEvaluationEdit.Retake.GetCustomMessage)
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.Retake.Visible (end) *@
+@if (tblEvaluationEdit.AbsherApptNbr.Visible) { // tblEvaluationEdit.AbsherApptNbr.Visible (begin)
+    <div id="r_AbsherApptNbr" @Html.Raw(tblEvaluationEdit.AbsherApptNbr.RowAttributes)>
+        <label id="elh_tblEvaluation_AbsherApptNbr" for="x_AbsherApptNbr" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_AbsherApptNbr">@Html.Raw(tblEvaluationEdit.AbsherApptNbr.Caption)@Html.Raw(tblEvaluationEdit.AbsherApptNbr.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.AbsherApptNbr.CellAttributes)>
+<template id="tpx_tblEvaluation_AbsherApptNbr"><span id="el_tblEvaluation_AbsherApptNbr">
+<span @Html.Raw(tblEvaluationEdit.AbsherApptNbr.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.AbsherApptNbr.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_AbsherApptNbr" data-hidden="1" name="x_AbsherApptNbr" id="x_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.AbsherApptNbr.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.AbsherApptNbr.Visible (end) *@
+@if (tblEvaluationEdit.IsDrivingexperience.Visible) { // tblEvaluationEdit.IsDrivingexperience.Visible (begin)
+    <div id="r_IsDrivingexperience" @Html.Raw(tblEvaluationEdit.IsDrivingexperience.RowAttributes)>
+        <label id="elh_tblEvaluation_IsDrivingexperience" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_IsDrivingexperience">@Html.Raw(tblEvaluationEdit.IsDrivingexperience.Caption)@Html.Raw(tblEvaluationEdit.IsDrivingexperience.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.IsDrivingexperience.CellAttributes)>
+<template id="tpx_tblEvaluation_IsDrivingexperience"><span id="el_tblEvaluation_IsDrivingexperience">
+<span @Html.Raw(tblEvaluationEdit.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationEdit.RowCount)" class="form-check-input" value="@(tblEvaluationEdit.IsDrivingexperience.EditValue)" disabled checked="@(ConvertToBool(tblEvaluationEdit.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_IsDrivingexperience" data-hidden="1" name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.IsDrivingexperience.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.IsDrivingexperience.Visible (end) *@
+@if (tblEvaluationEdit.date_Birth_Hijri.Visible) { // tblEvaluationEdit.date_Birth_Hijri.Visible (begin)
+    <div id="r_date_Birth_Hijri" @Html.Raw(tblEvaluationEdit.date_Birth_Hijri.RowAttributes)>
+        <label id="elh_tblEvaluation_date_Birth_Hijri" for="x_date_Birth_Hijri" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_date_Birth_Hijri">@Html.Raw(tblEvaluationEdit.date_Birth_Hijri.Caption)@Html.Raw(tblEvaluationEdit.date_Birth_Hijri.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.date_Birth_Hijri.CellAttributes)>
+<template id="tpx_tblEvaluation_date_Birth_Hijri"><span id="el_tblEvaluation_date_Birth_Hijri">
+<span @Html.Raw(tblEvaluationEdit.date_Birth_Hijri.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.date_Birth_Hijri.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_date_Birth_Hijri" data-hidden="1" name="x_date_Birth_Hijri" id="x_date_Birth_Hijri" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.date_Birth_Hijri.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.date_Birth_Hijri.Visible (end) *@
+@if (tblEvaluationEdit.date_Birth.Visible) { // tblEvaluationEdit.date_Birth.Visible (begin)
+    <div id="r_date_Birth" @Html.Raw(tblEvaluationEdit.date_Birth.RowAttributes)>
+        <label id="elh_tblEvaluation_date_Birth" for="x_date_Birth" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_date_Birth">@Html.Raw(tblEvaluationEdit.date_Birth.Caption)@Html.Raw(tblEvaluationEdit.date_Birth.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.date_Birth.CellAttributes)>
+<template id="tpx_tblEvaluation_date_Birth"><span id="el_tblEvaluation_date_Birth">
+<span @Html.Raw(tblEvaluationEdit.date_Birth.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.date_Birth.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_date_Birth" data-hidden="1" name="x_date_Birth" id="x_date_Birth" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.date_Birth.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.date_Birth.Visible (end) *@
+@if (tblEvaluationEdit.str_Email.Visible) { // tblEvaluationEdit.str_Email.Visible (begin)
+    <div id="r_str_Email" @Html.Raw(tblEvaluationEdit.str_Email.RowAttributes)>
+        <label id="elh_tblEvaluation_str_Email" for="x_str_Email" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_str_Email">@Html.Raw(tblEvaluationEdit.str_Email.Caption)@Html.Raw(tblEvaluationEdit.str_Email.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.str_Email.CellAttributes)>
+<template id="tpx_tblEvaluation_str_Email"><span id="el_tblEvaluation_str_Email">
+<span @Html.Raw(tblEvaluationEdit.str_Email.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationEdit.str_Email.EditValue)))"></span>
+<input type="hidden" data-table="tblEvaluation" data-field="x_str_Email" data-hidden="1" name="x_str_Email" id="x_str_Email" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.str_Email.CurrentValue))">
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.str_Email.Visible (end) *@
+@if (tblEvaluationEdit.intEvaluationType.Visible) { // tblEvaluationEdit.intEvaluationType.Visible (begin)
+    <div id="r_intEvaluationType" @Html.Raw(tblEvaluationEdit.intEvaluationType.RowAttributes)>
+        <label id="elh_tblEvaluation_intEvaluationType" for="x_intEvaluationType" class="@(tblEvaluationEdit.LeftColumnClass)"><template id="tpc_tblEvaluation_intEvaluationType">@Html.Raw(tblEvaluationEdit.intEvaluationType.Caption)@Html.Raw(tblEvaluationEdit.intEvaluationType.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(tblEvaluationEdit.RightColumnClass)"><div @Html.Raw(tblEvaluationEdit.intEvaluationType.CellAttributes)>
+<template id="tpx_tblEvaluation_intEvaluationType"><span id="el_tblEvaluation_intEvaluationType">
+<input type="@(tblEvaluationEdit.intEvaluationType.InputTextType)" name="x_intEvaluationType" id="x_intEvaluationType" data-table="tblEvaluation" data-field="x_intEvaluationType" value="@Html.Raw(tblEvaluationEdit.intEvaluationType.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblEvaluationEdit.intEvaluationType.PlaceHolder))" data-format-pattern="@(tblEvaluationEdit.intEvaluationType.FormatPattern)"@Html.Raw(tblEvaluationEdit.intEvaluationType.EditAttributes) aria-describedby="x_intEvaluationType_help">
+@Html.Raw(tblEvaluationEdit.intEvaluationType.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblEvaluationEdit.intEvaluationType.GetErrorMessage())</div>
+</span></template>
+</div></div>
+    </div>
+} @* tblEvaluationEdit.intEvaluationType.Visible (end) *@
+</div><!-- /page* -->
+<template id="tpx_tblEvaluation_Student_Signature"><span id="el_tblEvaluation_Student_Signature">
+<input type="hidden" data-table="tblEvaluation" data-field="x_Student_Signature" data-hidden="1" name="x_Student_Signature" id="x_Student_Signature" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Student_Signature.CurrentValue))">
+</span></template>
+<template id="tpx_tblEvaluation_Examiner_Signature"><span id="el_tblEvaluation_Examiner_Signature">
+<input type="hidden" data-table="tblEvaluation" data-field="x_Examiner_Signature" data-hidden="1" name="x_Examiner_Signature" id="x_Examiner_Signature" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Examiner_Signature.CurrentValue))">
+</span></template>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_Eval_ID" data-hidden="1" name="x_Eval_ID" id="x_Eval_ID" value="@Html.Raw(HtmlEncode(tblEvaluationEdit.Eval_ID.CurrentValue))">
+<div id="tpd_tblEvaluationedit" class="ew-custom-template"></div>
+<template id="tpm_tblEvaluationedit">
+<div id="ct_tblEvaluationEdit">    <div id="r_str_Full_Name_Hdr" class="mb-3 row">
+        <label for="x_str_Full_Name_Hdr" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.str_Full_Name_Hdr.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_str_Full_Name_Hdr"></slot></div>
+    </div>
+    <div id="r_NationalID" class="mb-3 row">
+        <label for="x_NationalID" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.NationalID.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_NationalID"></slot></div>
+    </div>
+    <div id="r_intDrivinglicenseType" class="mb-3 row">
+        <label for="x_intDrivinglicenseType" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.intDrivinglicenseType.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_intDrivinglicenseType"></slot></div>
+    </div>
+    <div id="r_Section_1" class="mb-3 row">
+        <label for="x_Section_1" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_1.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_1"></slot></div>
+    </div>
+    <div id="r_Q1" class="mb-3 row">
+        <label for="x_Q1" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q1.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q1"></slot></div>
+    </div>
+    <div id="r_Q2" class="mb-3 row">
+        <label for="x_Q2" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q2.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q2"></slot></div>
+    </div>
+    <div id="r_Q3" class="mb-3 row">
+        <label for="x_Q3" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q3.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q3"></slot></div>
+    </div>
+    <div id="r_Q4" class="mb-3 row">
+        <label for="x_Q4" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q4.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q4"></slot></div>
+    </div>
+    <div id="r_Q5" class="mb-3 row">
+        <label for="x_Q5" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q5.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q5"></slot></div>
+    </div>
+    <div id="r_Section_2" class="mb-3 row">
+        <label for="x_Section_2" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_2.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_2"></slot></div>
+    </div>
+    <div id="r_Q6" class="mb-3 row">
+        <label for="x_Q6" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q6.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q6"></slot></div>
+    </div>
+    <div id="r_Q7" class="mb-3 row">
+        <label for="x_Q7" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q7.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q7"></slot></div>
+    </div>
+    <div id="r_Q8" class="mb-3 row">
+        <label for="x_Q8" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q8.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q8"></slot></div>
+    </div>
+    <div id="r_Q9" class="mb-3 row">
+        <label for="x_Q9" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q9.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q9"></slot></div>
+    </div>
+    <div id="r_Q10" class="mb-3 row">
+        <label for="x_Q10" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q10.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q10"></slot></div>
+    </div>
+    <div id="r_Q11" class="mb-3 row">
+        <label for="x_Q11" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q11.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q11"></slot></div>
+    </div>
+    <div id="r_Q12" class="mb-3 row">
+        <label for="x_Q12" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q12.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q12"></slot></div>
+    </div>
+    <div id="r_Q13" class="mb-3 row">
+        <label for="x_Q13" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q13.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q13"></slot></div>
+    </div>
+    <div id="r_Q14" class="mb-3 row">
+        <label for="x_Q14" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q14.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q14"></slot></div>
+    </div>
+    <div id="r_Q15" class="mb-3 row">
+        <label for="x_Q15" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q15.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q15"></slot></div>
+    </div>
+    <div id="r_Section_3" class="mb-3 row">
+        <label for="x_Section_3" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_3.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_3"></slot></div>
+    </div>
+    <div id="r_Q16" class="mb-3 row">
+        <label for="x_Q16" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q16.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q16"></slot></div>
+    </div>
+    <div id="r_Q17" class="mb-3 row">
+        <label for="x_Q17" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q17.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q17"></slot></div>
+    </div>
+    <div id="r_Q18" class="mb-3 row">
+        <label for="x_Q18" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q18.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q18"></slot></div>
+    </div>
+    <div id="r_Q19" class="mb-3 row">
+        <label for="x_Q19" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q19.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q19"></slot></div>
+    </div>
+    <div id="r_Q20" class="mb-3 row">
+        <label for="x_Q20" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q20.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q20"></slot></div>
+    </div>
+    <div id="r_Q21" class="mb-3 row">
+        <label for="x_Q21" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q21.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q21"></slot></div>
+    </div>
+    <div id="r_Section_4" class="mb-3 row">
+        <label for="x_Section_4" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_4.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_4"></slot></div>
+    </div>
+    <div id="r_Q22" class="mb-3 row">
+        <label for="x_Q22" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q22.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q22"></slot></div>
+    </div>
+    <div id="r_Q23" class="mb-3 row">
+        <label for="x_Q23" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q23.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q23"></slot></div>
+    </div>
+    <div id="r_Q24" class="mb-3 row">
+        <label for="x_Q24" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q24.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q24"></slot></div>
+    </div>
+    <div id="r_Q25" class="mb-3 row">
+        <label for="x_Q25" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q25.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q25"></slot></div>
+    </div>
+    <div id="r_Q26" class="mb-3 row">
+        <label for="x_Q26" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q26.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q26"></slot></div>
+    </div>
+    <div id="r_Section_5" class="mb-3 row">
+        <label for="x_Section_5" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_5.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_5"></slot></div>
+    </div>
+    <div id="r_Q27" class="mb-3 row">
+        <label for="x_Q27" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q27.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q27"></slot></div>
+    </div>
+    <div id="r_Q28" class="mb-3 row">
+        <label for="x_Q28" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q28.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q28"></slot></div>
+    </div>
+    <div id="r_Q29" class="mb-3 row">
+        <label for="x_Q29" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q29.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q29"></slot></div>
+    </div>
+    <div id="r_Q30" class="mb-3 row">
+        <label for="x_Q30" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q30.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q30"></slot></div>
+    </div>
+    <div id="r_Q31" class="mb-3 row">
+        <label for="x_Q31" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q31.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q31"></slot></div>
+    </div>
+    <div id="r_Q32" class="mb-3 row">
+        <label for="x_Q32" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q32.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q32"></slot></div>
+    </div>
+    <div id="r_Q33" class="mb-3 row">
+        <label for="x_Q33" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q33.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q33"></slot></div>
+    </div>
+    <div id="r_Q34" class="mb-3 row">
+        <label for="x_Q34" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q34.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q34"></slot></div>
+    </div>
+    <div id="r_Q35" class="mb-3 row">
+        <label for="x_Q35" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q35.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q35"></slot></div>
+    </div>
+    <div id="r_Section_6" class="mb-3 row">
+        <label for="x_Section_6" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_6.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_6"></slot></div>
+    </div>
+    <div id="r_Q36" class="mb-3 row">
+        <label for="x_Q36" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q36.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q36"></slot></div>
+    </div>
+    <div id="r_Q37" class="mb-3 row">
+        <label for="x_Q37" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q37.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q37"></slot></div>
+    </div>
+    <div id="r_Q38" class="mb-3 row">
+        <label for="x_Q38" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q38.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q38"></slot></div>
+    </div>
+    <div id="r_Q39" class="mb-3 row">
+        <label for="x_Q39" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q39.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q39"></slot></div>
+    </div>
+    <div id="r_Q40" class="mb-3 row">
+        <label for="x_Q40" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q40.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q40"></slot></div>
+    </div>
+    <div id="r_Q41" class="mb-3 row">
+        <label for="x_Q41" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q41.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q41"></slot></div>
+    </div>
+    <div id="r_Q42" class="mb-3 row">
+        <label for="x_Q42" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q42.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q42"></slot></div>
+    </div>
+    <div id="r_Q43" class="mb-3 row">
+        <label for="x_Q43" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q43.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q43"></slot></div>
+    </div>
+    <div id="r_Section_7" class="mb-3 row">
+        <label for="x_Section_7" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_7.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_7"></slot></div>
+    </div>
+    <div id="r_Q44" class="mb-3 row">
+        <label for="x_Q44" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q44.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q44"></slot></div>
+    </div>
+    <div id="r_Q45" class="mb-3 row">
+        <label for="x_Q45" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q45.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q45"></slot></div>
+    </div>
+    <div id="r_Q46" class="mb-3 row">
+        <label for="x_Q46" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q46.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q46"></slot></div>
+    </div>
+    <div id="r_Q47" class="mb-3 row">
+        <label for="x_Q47" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q47.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q47"></slot></div>
+    </div>
+    <div id="r_Q48" class="mb-3 row">
+        <label for="x_Q48" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q48.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q48"></slot></div>
+    </div>
+    <div id="r_Q49" class="mb-3 row">
+        <label for="x_Q49" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q49.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q49"></slot></div>
+    </div>
+    <div id="r_Q50" class="mb-3 row">
+        <label for="x_Q50" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q50.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q50"></slot></div>
+    </div>
+    <div id="r_Section_8" class="mb-3 row">
+        <label for="x_Section_8" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_8.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_8"></slot></div>
+    </div>
+    <div id="r_Q51" class="mb-3 row">
+        <label for="x_Q51" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q51.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q51"></slot></div>
+    </div>
+    <div id="r_Q52" class="mb-3 row">
+        <label for="x_Q52" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q52.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q52"></slot></div>
+    </div>
+    <div id="r_Q53" class="mb-3 row">
+        <label for="x_Q53" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q53.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q53"></slot></div>
+    </div>
+    <div id="r_Q54" class="mb-3 row">
+        <label for="x_Q54" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q54.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q54"></slot></div>
+    </div>
+    <div id="r_Q55" class="mb-3 row">
+        <label for="x_Q55" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q55.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q55"></slot></div>
+    </div>
+    <div id="r_Section_9" class="mb-3 row">
+        <label for="x_Section_9" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_9.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_9"></slot></div>
+    </div>
+    <div id="r_Q56" class="mb-3 row">
+        <label for="x_Q56" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q56.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q56"></slot></div>
+    </div>
+    <div id="r_Q57" class="mb-3 row">
+        <label for="x_Q57" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q57.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q57"></slot></div>
+    </div>
+    <div id="r_Q58" class="mb-3 row">
+        <label for="x_Q58" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q58.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q58"></slot></div>
+    </div>
+    <div id="r_Q59" class="mb-3 row">
+        <label for="x_Q59" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q59.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q59"></slot></div>
+    </div>
+    <div id="r_Q60" class="mb-3 row">
+        <label for="x_Q60" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q60.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q60"></slot></div>
+    </div>
+    <div id="r_Section_10" class="mb-3 row">
+        <label for="x_Section_10" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_10.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_10"></slot></div>
+    </div>
+    <div id="r_Q61" class="mb-3 row">
+        <label for="x_Q61" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q61.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q61"></slot></div>
+    </div>
+    <div id="r_Q62" class="mb-3 row">
+        <label for="x_Q62" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q62.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q62"></slot></div>
+    </div>
+    <div id="r_Q63" class="mb-3 row">
+        <label for="x_Q63" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q63.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q63"></slot></div>
+    </div>
+    <div id="r_Q64" class="mb-3 row">
+        <label for="x_Q64" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q64.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q64"></slot></div>
+    </div>
+    <div id="r_Q65" class="mb-3 row">
+        <label for="x_Q65" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q65.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q65"></slot></div>
+    </div>
+    <div id="r_Q66" class="mb-3 row">
+        <label for="x_Q66" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q66.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q66"></slot></div>
+    </div>
+    <div id="r_Section_11" class="mb-3 row">
+        <label for="x_Section_11" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Section_11.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Section_11"></slot></div>
+    </div>
+    <div id="r_Q67" class="mb-3 row">
+        <label for="x_Q67" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q67.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q67"></slot></div>
+    </div>
+    <div id="r_Q68" class="mb-3 row">
+        <label for="x_Q68" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q68.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q68"></slot></div>
+    </div>
+    <div id="r_Q69" class="mb-3 row">
+        <label for="x_Q69" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q69.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q69"></slot></div>
+    </div>
+    <div id="r_Q70" class="mb-3 row">
+        <label for="x_Q70" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Q70.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Q70"></slot></div>
+    </div>
+    <div id="r_Notes_3" class="mb-3 row">
+        <label for="x_Notes_3" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Notes_3.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Notes_3"></slot></div>
+    </div>
+    <!-- <div id="r_Examiner_Signature" class="mb-3 row">
+        <label for="x_Examiner_Signature" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Examiner_Signature.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Examiner_Signature"></slot></div>
+    </div>
+    <div id="r_Student_Signature" class="mb-3 row">
+        <label for="x_Student_Signature" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Student_Signature.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Student_Signature"></slot></div>
+    </div> -->
+    <div id="r_Examiner_Signature" class="mb-3 row">
+        <label for="x_Examiner_Signature" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Examiner_Signature.Caption)</label>
+        <!-- <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Examiner_Signature"></slot></div> -->
+        <div class="col-sm-10 d-flex">
+            <slot class="ew-slot" name="tpx_tblEvaluation_Examiner_Signature"></slot>
+            <div class="wrapper">
+                <canvas id="ExaminerSignaturePad" width="400" height="200"></canvas>
+            </div>
+            <div class="signature-action-btns">
+                <button id="ClearExaminerSignaturePad" type="button" class="btn btn-sm btn-primary mt-0"><span> Clear </span></button>
+                <button id="SaveExaminerSignaturePad" type="button" class="btn btn-sm btn-primary"><span> Save </span></button>
+            </div>
+        </div>
+    </div>
+    <div id="r_Student_Signature" class="mb-3 row">
+        <label for="x_Student_Signature" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Student_Signature.Caption)</label>
+        <!-- <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Student_Signature"></slot></div> -->
+        <div class="col-sm-10 d-flex">
+            <slot class="ew-slot" name="tpx_tblEvaluation_Student_Signature"></slot>
+            <div class="wrapper">
+                <canvas id="StudentSignaturePad" width="400" height="200"></canvas>
+            </div>
+            <div class="signature-action-btns">
+                <button id="ClearStudentSignaturePad" type="button" class="btn btn-sm btn-primary mt-0"><span> Clear </span></button>
+                <button id="SaveStudentSignaturePad" type="button" class="btn btn-sm btn-primary"><span> Save </span></button>
+            </div>
+        </div>
+    </div>
+    <div id="r_str_Cell_Phone" class="mb-3 row">
+        <label for="x_str_Cell_Phone" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.str_Cell_Phone.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_str_Cell_Phone"></slot></div>
+    </div>
+    <div id="r_Retake" class="mb-3 row">
+        <label for="x_Retake" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.Retake.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_Retake"></slot></div>
+    </div>
+    <div id="r_AbsherApptNbr" class="mb-3 row">
+        <label for="x_AbsherApptNbr" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.AbsherApptNbr.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_AbsherApptNbr"></slot></div>
+    </div>
+    <div id="r_IsDrivingexperience" class="mb-3 row">
+        <label for="x_IsDrivingexperience" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.IsDrivingexperience.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_IsDrivingexperience"></slot></div>
+    </div>
+    <div id="r_date_Birth_Hijri" class="mb-3 row">
+        <label for="x_date_Birth_Hijri" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.date_Birth_Hijri.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_date_Birth_Hijri"></slot></div>
+    </div>
+    <div id="r_date_Birth" class="mb-3 row">
+        <label for="x_date_Birth" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.date_Birth.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_date_Birth"></slot></div>
+    </div>
+    <div id="r_str_Email" class="mb-3 row">
+        <label for="x_str_Email" class="col-sm-2 col-form-label">@Html.Raw(tblEvaluationEdit.str_Email.Caption)</label>
+        <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblEvaluation_str_Email"></slot></div>
+    </div>
+    </div>
+</template>
+@{ tblEvaluationEdit.CloseRecordset(); }
+@Html.Raw(tblEvaluationEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblEvaluationEdit.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblEvaluationedit">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblEvaluationedit" data-href="@AppPath(tblEvaluationEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblEvaluationEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+<script class="ew-apply-template">
+loadjs.ready(ew.applyTemplateId, function() {
+    var $ = jQuery;
+    ew.templateData = { rows: @Html.Raw(ConvertToJson(tblEvaluationEdit.Rows)) };
+    ew.applyTemplate("tpd_tblEvaluationedit", "tpm_tblEvaluationedit", "tblEvaluationedit", "@(tblEvaluationEdit.Export)", "tblEvaluation", ew.templateData.rows[0], @(tblEvaluationEdit.IsModal ? "true" : "false"));
+    loadjs.done("customtemplate");
+});
+</script>
+</main>
+@tblEvaluationEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblEvaluation");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Startup script
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+    var examinerSignaturePadCanvas = document.getElementById("ExaminerSignaturePad");
+    var studentSignaturePadCanvas = document.getElementById("StudentSignaturePad");
+    var examinerSignaturePad = new SignaturePad(examinerSignaturePadCanvas, {
+        backgroundColor: "rgb(250,250,250)",
+    });
+    var studentSignaturePad = new SignaturePad(studentSignaturePadCanvas, {
+        backgroundColor: "rgb(250,250,250)",
+    });
+    document.getElementById("ClearExaminerSignaturePad").addEventListener("click", function () {
+        examinerSignaturePad.clear();
+    });
+    document.getElementById("ClearStudentSignaturePad").addEventListener("click", function () {
+        studentSignaturePad.clear();
+    });
+    document.getElementById("SaveStudentSignaturePad").addEventListener("click", function () {
+        $('input:hidden','#r_Student_Signature').val(studentSignaturePadCanvas.toDataURL());
+    });
+    document.getElementById("SaveExaminerSignaturePad").addEventListener("click", function () {
+        $('input:hidden','#r_Examiner_Signature').val(examinerSignaturePadCanvas.toDataURL());
+    });
+    var dtStudentSignature = $('input:hidden','#r_Student_Signature').val();
+    var dtExaminerSignature = $('input:hidden','#r_Examiner_Signature').val();
+    if((dtExaminerSignature || '') != '')
+    {
+        var contextExaminerSignaturePadCanvas = examinerSignaturePadCanvas.getContext('2d');
+        var imgExaminerSignature = new Image();
+        imgExaminerSignature.src = dtExaminerSignature;
+        imgExaminerSignature.onload = function() {
+            contextExaminerSignaturePadCanvas.drawImage(imgExaminerSignature, 0, 0, examinerSignaturePadCanvas.width, examinerSignaturePadCanvas.height);
+        };
+    }
+    if((dtStudentSignature || '') != '')
+    {
+        var contextStudentSignaturePadCanvas = studentSignaturePadCanvas.getContext('2d');
+        var imgStudentSignature = new Image();
+        imgStudentSignature.src = dtStudentSignature;
+        imgStudentSignature.onload = function() {
+            contextStudentSignaturePadCanvas.drawImage(imgStudentSignature, 0, 0, studentSignaturePadCanvas.width, studentSignaturePadCanvas.height);
+        };
+    }
+});
+</script>

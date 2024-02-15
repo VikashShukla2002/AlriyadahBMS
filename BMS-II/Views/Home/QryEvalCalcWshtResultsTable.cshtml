@@ -1,0 +1,305 @@
+@if (qryEvalCalcWshtResultsList.ModalGridAdd && qryEvalCalcWshtResultsList.IsGridAdd || qryEvalCalcWshtResultsList.ModalGridEdit && qryEvalCalcWshtResultsList.IsGridEdit || qryEvalCalcWshtResultsList.ModalMultiEdit && qryEvalCalcWshtResultsList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryEvalCalcWshtResultsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryEvalCalcWsht_Results: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryEvalCalcWshtResultsList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryEvalCalcWshtResultsList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryEvalCalcWshtResultsList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryEvalCalcWshtResultsList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryEvalCalcWshtResultsList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryEvalCalcWshtResultsList.TableGridClass)">
+@if (!qryEvalCalcWshtResultsList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryEvalCalcWshtResultsList.IsGridAdd && !(qryEvalCalcWshtResultsList.IsGridEdit && qryEvalCalcWshtResultsList.ModalGridEdit) && !qryEvalCalcWshtResultsList.IsMultiEdit) {
+@Html.Raw(qryEvalCalcWshtResultsList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryEvalCalcWshtResultsList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryEvalCalcWshtResultsList.FormName)" id="@(qryEvalCalcWshtResultsList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryEvalCalcWshtResultsList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryEvalCalcWshtResultsList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_qryEvalCalcWsht_Results" class="card-body ew-grid-middle-panel @(qryEvalCalcWshtResultsList.TableContainerClass)" style="@(qryEvalCalcWshtResultsList.TableContainerStyle)">
+@if (qryEvalCalcWshtResultsList.TotalRecords > 0 || qryEvalCalcWshtResultsList.IsGridEdit || qryEvalCalcWshtResultsList.IsMultiEdit) {
+<table id="tbl_qryEvalCalcWsht_Resultslist" class="@(qryEvalCalcWshtResultsList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryEvalCalcWshtResultsList.RowType = RowType.Header;
+
+    // Render list options
+    await qryEvalCalcWshtResultsList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryEvalCalcWshtResultsList.ListOptions.RenderHeader("left")
+@if (qryEvalCalcWshtResultsList.Eval_ID.Visible) { // qryEvalCalcWshtResultsList.Eval_ID.Visible (begin)
+        <th data-name="Eval_ID" class="@(qryEvalCalcWshtResultsList.Eval_ID.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Eval_ID" class="qryEvalCalcWsht_Results_Eval_ID">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Eval_ID))</div></th>
+} @* qryEvalCalcWshtResultsList.Eval_ID.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.int_Student_ID.Visible) { // qryEvalCalcWshtResultsList.int_Student_ID.Visible (begin)
+        <th data-name="int_Student_ID" class="@(qryEvalCalcWshtResultsList.int_Student_ID.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_int_Student_ID" class="qryEvalCalcWsht_Results_int_Student_ID">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.int_Student_ID))</div></th>
+} @* qryEvalCalcWshtResultsList.int_Student_ID.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.AssessmentID.Visible) { // qryEvalCalcWshtResultsList.AssessmentID.Visible (begin)
+        <th data-name="AssessmentID" class="@(qryEvalCalcWshtResultsList.AssessmentID.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_AssessmentID" class="qryEvalCalcWsht_Results_AssessmentID">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.AssessmentID))</div></th>
+} @* qryEvalCalcWshtResultsList.AssessmentID.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.str_Full_Name_Hdr.Visible) { // qryEvalCalcWshtResultsList.str_Full_Name_Hdr.Visible (begin)
+        <th data-name="str_Full_Name_Hdr" class="@(qryEvalCalcWshtResultsList.str_Full_Name_Hdr.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_str_Full_Name_Hdr" class="qryEvalCalcWsht_Results_str_Full_Name_Hdr">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.str_Full_Name_Hdr))</div></th>
+} @* qryEvalCalcWshtResultsList.str_Full_Name_Hdr.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.NationalID.Visible) { // qryEvalCalcWshtResultsList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(qryEvalCalcWshtResultsList.NationalID.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_NationalID" class="qryEvalCalcWsht_Results_NationalID">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.NationalID))</div></th>
+} @* qryEvalCalcWshtResultsList.NationalID.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.str_Username.Visible) { // qryEvalCalcWshtResultsList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(qryEvalCalcWshtResultsList.str_Username.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_str_Username" class="qryEvalCalcWsht_Results_str_Username">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.str_Username))</div></th>
+} @* qryEvalCalcWshtResultsList.str_Username.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.intDrivinglicenseType.Visible) { // qryEvalCalcWshtResultsList.intDrivinglicenseType.Visible (begin)
+        <th data-name="intDrivinglicenseType" class="@(qryEvalCalcWshtResultsList.intDrivinglicenseType.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_intDrivinglicenseType" class="qryEvalCalcWsht_Results_intDrivinglicenseType">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.intDrivinglicenseType))</div></th>
+} @* qryEvalCalcWshtResultsList.intDrivinglicenseType.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Date_Entered.Visible) { // qryEvalCalcWshtResultsList.Date_Entered.Visible (begin)
+        <th data-name="Date_Entered" class="@(qryEvalCalcWshtResultsList.Date_Entered.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Date_Entered" class="qryEvalCalcWsht_Results_Date_Entered">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Date_Entered))</div></th>
+} @* qryEvalCalcWshtResultsList.Date_Entered.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Examination_Number.Visible) { // qryEvalCalcWshtResultsList.Examination_Number.Visible (begin)
+        <th data-name="Examination_Number" class="@(qryEvalCalcWshtResultsList.Examination_Number.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Examination_Number" class="qryEvalCalcWsht_Results_Examination_Number">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Examination_Number))</div></th>
+} @* qryEvalCalcWshtResultsList.Examination_Number.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Sect11Sum.Visible) { // qryEvalCalcWshtResultsList.Sect11Sum.Visible (begin)
+        <th data-name="Sect11Sum" class="@(qryEvalCalcWshtResultsList.Sect11Sum.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Sect11Sum" class="qryEvalCalcWsht_Results_Sect11Sum">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Sect11Sum))</div></th>
+} @* qryEvalCalcWshtResultsList.Sect11Sum.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Subtotal.Visible) { // qryEvalCalcWshtResultsList.Subtotal.Visible (begin)
+        <th data-name="Subtotal" class="@(qryEvalCalcWshtResultsList.Subtotal.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Subtotal" class="qryEvalCalcWsht_Results_Subtotal">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Subtotal))</div></th>
+} @* qryEvalCalcWshtResultsList.Subtotal.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Assign_int_Package_Id.Visible) { // qryEvalCalcWshtResultsList.Assign_int_Package_Id.Visible (begin)
+        <th data-name="Assign_int_Package_Id" class="@(qryEvalCalcWshtResultsList.Assign_int_Package_Id.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Assign_int_Package_Id" class="qryEvalCalcWsht_Results_Assign_int_Package_Id">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Assign_int_Package_Id))</div></th>
+} @* qryEvalCalcWshtResultsList.Assign_int_Package_Id.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Package_Name.Visible) { // qryEvalCalcWshtResultsList.Package_Name.Visible (begin)
+        <th data-name="Package_Name" class="@(qryEvalCalcWshtResultsList.Package_Name.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Package_Name" class="qryEvalCalcWsht_Results_Package_Name">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Package_Name))</div></th>
+} @* qryEvalCalcWshtResultsList.Package_Name.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Discount.Visible) { // qryEvalCalcWshtResultsList.Discount.Visible (begin)
+        <th data-name="Discount" class="@(qryEvalCalcWshtResultsList.Discount.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Discount" class="qryEvalCalcWsht_Results_Discount">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Discount))</div></th>
+} @* qryEvalCalcWshtResultsList.Discount.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Price.Visible) { // qryEvalCalcWshtResultsList.Price.Visible (begin)
+        <th data-name="Price" class="@(qryEvalCalcWshtResultsList.Price.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Price" class="qryEvalCalcWsht_Results_Price">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Price))</div></th>
+} @* qryEvalCalcWshtResultsList.Price.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.Package_Items.Visible) { // qryEvalCalcWshtResultsList.Package_Items.Visible (begin)
+        <th data-name="Package_Items" class="@(qryEvalCalcWshtResultsList.Package_Items.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_Package_Items" class="qryEvalCalcWsht_Results_Package_Items">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.Package_Items))</div></th>
+} @* qryEvalCalcWshtResultsList.Package_Items.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.str_Email.Visible) { // qryEvalCalcWshtResultsList.str_Email.Visible (begin)
+        <th data-name="str_Email" class="@(qryEvalCalcWshtResultsList.str_Email.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_str_Email" class="qryEvalCalcWsht_Results_str_Email">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.str_Email))</div></th>
+} @* qryEvalCalcWshtResultsList.str_Email.Visible (end) *@
+@if (qryEvalCalcWshtResultsList.UserlevelID.Visible) { // qryEvalCalcWshtResultsList.UserlevelID.Visible (begin)
+        <th data-name="UserlevelID" class="@(qryEvalCalcWshtResultsList.UserlevelID.HeaderCellClass)"><div id="elh_qryEvalCalcWsht_Results_UserlevelID" class="qryEvalCalcWsht_Results_UserlevelID">@Html.Raw(qryEvalCalcWshtResultsList.RenderFieldHeader(qryEvalCalcWshtResultsList.UserlevelID))</div></th>
+} @* qryEvalCalcWshtResultsList.UserlevelID.Visible (end) *@
+@* Render list options (header, right) *@
+@qryEvalCalcWshtResultsList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryEvalCalcWshtResultsList.PageNumber)">
+@{
+    await qryEvalCalcWshtResultsList.SetupGrid();
+    bool eof = qryEvalCalcWshtResultsList.Recordset == null; // DN
+}
+@while (qryEvalCalcWshtResultsList.RecordCount < qryEvalCalcWshtResultsList.StopRecord || SameString(qryEvalCalcWshtResultsList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryEvalCalcWshtResultsList.RowIndex, "$rowindex$") &&
+        (!qryEvalCalcWshtResultsList.IsGridAdd || qryEvalCalcWshtResultsList.CurrentMode == "copy") &&
+        (!((qryEvalCalcWshtResultsList.IsCopy || qryEvalCalcWshtResultsList.IsAdd) && qryEvalCalcWshtResultsList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryEvalCalcWshtResultsList.Recordset.ReadAsync();
+    qryEvalCalcWshtResultsList.RecordCount++;
+    if (qryEvalCalcWshtResultsList.RecordCount >= qryEvalCalcWshtResultsList.StartRecord) {
+        await qryEvalCalcWshtResultsList.SetupRow();
+    <tr @Html.Raw(qryEvalCalcWshtResultsList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryEvalCalcWshtResultsList.ListOptions.RenderBody("left", qryEvalCalcWshtResultsList.RowCount)
+    @if (qryEvalCalcWshtResultsList.Eval_ID.Visible) { // qryEvalCalcWshtResultsList.Eval_ID.Visible (begin)
+        <td data-name="Eval_ID" @Html.Raw(qryEvalCalcWshtResultsList.Eval_ID.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Eval_ID" class="el_qryEvalCalcWsht_Results_Eval_ID">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Eval_ID.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Eval_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Eval_ID.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.int_Student_ID.Visible) { // qryEvalCalcWshtResultsList.int_Student_ID.Visible (begin)
+        <td data-name="int_Student_ID" @Html.Raw(qryEvalCalcWshtResultsList.int_Student_ID.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_int_Student_ID" class="el_qryEvalCalcWsht_Results_int_Student_ID">
+<span @Html.Raw(qryEvalCalcWshtResultsList.int_Student_ID.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.int_Student_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.int_Student_ID.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.AssessmentID.Visible) { // qryEvalCalcWshtResultsList.AssessmentID.Visible (begin)
+        <td data-name="AssessmentID" @Html.Raw(qryEvalCalcWshtResultsList.AssessmentID.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_AssessmentID" class="el_qryEvalCalcWsht_Results_AssessmentID">
+<span @Html.Raw(qryEvalCalcWshtResultsList.AssessmentID.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.AssessmentID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.AssessmentID.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.str_Full_Name_Hdr.Visible) { // qryEvalCalcWshtResultsList.str_Full_Name_Hdr.Visible (begin)
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(qryEvalCalcWshtResultsList.str_Full_Name_Hdr.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_str_Full_Name_Hdr" class="el_qryEvalCalcWsht_Results_str_Full_Name_Hdr">
+<span @Html.Raw(qryEvalCalcWshtResultsList.str_Full_Name_Hdr.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.str_Full_Name_Hdr.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.str_Full_Name_Hdr.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.NationalID.Visible) { // qryEvalCalcWshtResultsList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(qryEvalCalcWshtResultsList.NationalID.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_NationalID" class="el_qryEvalCalcWsht_Results_NationalID">
+<span @Html.Raw(qryEvalCalcWshtResultsList.NationalID.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.NationalID.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.str_Username.Visible) { // qryEvalCalcWshtResultsList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(qryEvalCalcWshtResultsList.str_Username.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_str_Username" class="el_qryEvalCalcWsht_Results_str_Username">
+<span @Html.Raw(qryEvalCalcWshtResultsList.str_Username.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.str_Username.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.intDrivinglicenseType.Visible) { // qryEvalCalcWshtResultsList.intDrivinglicenseType.Visible (begin)
+        <td data-name="intDrivinglicenseType" @Html.Raw(qryEvalCalcWshtResultsList.intDrivinglicenseType.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_intDrivinglicenseType" class="el_qryEvalCalcWsht_Results_intDrivinglicenseType">
+<span @Html.Raw(qryEvalCalcWshtResultsList.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.intDrivinglicenseType.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.intDrivinglicenseType.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Date_Entered.Visible) { // qryEvalCalcWshtResultsList.Date_Entered.Visible (begin)
+        <td data-name="Date_Entered" @Html.Raw(qryEvalCalcWshtResultsList.Date_Entered.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Date_Entered" class="el_qryEvalCalcWsht_Results_Date_Entered">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Date_Entered.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Date_Entered.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Date_Entered.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Examination_Number.Visible) { // qryEvalCalcWshtResultsList.Examination_Number.Visible (begin)
+        <td data-name="Examination_Number" @Html.Raw(qryEvalCalcWshtResultsList.Examination_Number.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Examination_Number" class="el_qryEvalCalcWsht_Results_Examination_Number">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Examination_Number.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Examination_Number.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Examination_Number.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Sect11Sum.Visible) { // qryEvalCalcWshtResultsList.Sect11Sum.Visible (begin)
+        <td data-name="Sect11Sum" @Html.Raw(qryEvalCalcWshtResultsList.Sect11Sum.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Sect11Sum" class="el_qryEvalCalcWsht_Results_Sect11Sum">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Sect11Sum.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Sect11Sum.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Sect11Sum.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Subtotal.Visible) { // qryEvalCalcWshtResultsList.Subtotal.Visible (begin)
+        <td data-name="Subtotal" @Html.Raw(qryEvalCalcWshtResultsList.Subtotal.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Subtotal" class="el_qryEvalCalcWsht_Results_Subtotal">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Subtotal.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Subtotal.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Subtotal.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Assign_int_Package_Id.Visible) { // qryEvalCalcWshtResultsList.Assign_int_Package_Id.Visible (begin)
+        <td data-name="Assign_int_Package_Id" @Html.Raw(qryEvalCalcWshtResultsList.Assign_int_Package_Id.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Assign_int_Package_Id" class="el_qryEvalCalcWsht_Results_Assign_int_Package_Id">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Assign_int_Package_Id.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Assign_int_Package_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Assign_int_Package_Id.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Package_Name.Visible) { // qryEvalCalcWshtResultsList.Package_Name.Visible (begin)
+        <td data-name="Package_Name" @Html.Raw(qryEvalCalcWshtResultsList.Package_Name.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Package_Name" class="el_qryEvalCalcWsht_Results_Package_Name">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Package_Name.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Package_Name.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Discount.Visible) { // qryEvalCalcWshtResultsList.Discount.Visible (begin)
+        <td data-name="Discount" @Html.Raw(qryEvalCalcWshtResultsList.Discount.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Discount" class="el_qryEvalCalcWsht_Results_Discount">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Discount.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Discount.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Discount.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Price.Visible) { // qryEvalCalcWshtResultsList.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(qryEvalCalcWshtResultsList.Price.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Price" class="el_qryEvalCalcWsht_Results_Price">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Price.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Price.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.Package_Items.Visible) { // qryEvalCalcWshtResultsList.Package_Items.Visible (begin)
+        <td data-name="Package_Items" @Html.Raw(qryEvalCalcWshtResultsList.Package_Items.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_Package_Items" class="el_qryEvalCalcWsht_Results_Package_Items">
+<span @Html.Raw(qryEvalCalcWshtResultsList.Package_Items.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.Package_Items.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.Package_Items.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.str_Email.Visible) { // qryEvalCalcWshtResultsList.str_Email.Visible (begin)
+        <td data-name="str_Email" @Html.Raw(qryEvalCalcWshtResultsList.str_Email.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_str_Email" class="el_qryEvalCalcWsht_Results_str_Email">
+<span @Html.Raw(qryEvalCalcWshtResultsList.str_Email.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.str_Email.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.str_Email.Visible (end) *@
+    @if (qryEvalCalcWshtResultsList.UserlevelID.Visible) { // qryEvalCalcWshtResultsList.UserlevelID.Visible (begin)
+        <td data-name="UserlevelID" @Html.Raw(qryEvalCalcWshtResultsList.UserlevelID.CellAttributes)>
+<span id="el@(qryEvalCalcWshtResultsList.RowIndex == "$rowindex$" ? "$rowindex$" : qryEvalCalcWshtResultsList.RowCount)_qryEvalCalcWsht_Results_UserlevelID" class="el_qryEvalCalcWsht_Results_UserlevelID">
+<span @Html.Raw(qryEvalCalcWshtResultsList.UserlevelID.ViewAttributes)>
+@Html.Raw(qryEvalCalcWshtResultsList.UserlevelID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryEvalCalcWshtResultsList.UserlevelID.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryEvalCalcWshtResultsList.ListOptions.RenderBody("right", qryEvalCalcWshtResultsList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryEvalCalcWshtResultsList.RowIndex, "$rowindex$"))
+        qryEvalCalcWshtResultsList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryEvalCalcWshtResultsList.IsCopy || qryEvalCalcWshtResultsList.IsAdd) && qryEvalCalcWshtResultsList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryEvalCalcWshtResultsList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryEvalCalcWshtResultsList.CurrentAction) && !qryEvalCalcWshtResultsList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryEvalCalcWshtResultsList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

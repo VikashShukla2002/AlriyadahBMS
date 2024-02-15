@@ -1,0 +1,425 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStaffView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStaffView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblStaffView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblStaffView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblStaffView.ExportOptions.RenderBody()
+    @tblStaffView.OtherOptions.RenderBody()
+</div>
+}
+@tblStaffView.ShowPageHeader()
+@tblStaffView.ShowMessages()
+<main class="view">
+<form name="ftblStaffview" id="ftblStaffview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblStaffView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStaffView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStaff: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblStaffview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStaffview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblStaffView.IsModal)">
+@if (!tblStaffView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblStaffView.MultiPages.ContainerClasses)" id="pages_tblStaffView"><!-- multi-page tabs -->
+    <ul class="@(tblStaffView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblStaffView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblStaff1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff1" aria-selected="@(ConvertToJson(tblStaffView.MultiPages.IsActive(1)))">@Html.Raw(tblStaffView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblStaffView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblStaff2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff2" aria-selected="@(ConvertToJson(tblStaffView.MultiPages.IsActive(2)))">@Html.Raw(tblStaffView.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblStaffView.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblStaff3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff3" aria-selected="@(ConvertToJson(tblStaffView.MultiPages.IsActive(3)))">@Html.Raw(tblStaffView.PageCaption(3))</button></li>
+        <li class="nav-item"><button class="@(tblStaffView.MultiPages.NavLinkClasses(4))" data-bs-target="#tab_tblStaff4" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff4" aria-selected="@(ConvertToJson(tblStaffView.MultiPages.IsActive(4)))">@Html.Raw(tblStaffView.PageCaption(4))</button></li>
+    </ul>
+    @:<div class="@(tblStaffView.MultiPages.TabContentClasses)"">
+}
+@if (!tblStaffView.IsExport()) {
+    @:<div class="@(tblStaffView.MultiPages.TabPaneClasses(1))" id="tab_tblStaff1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStaffView.TableClass)">
+@if (tblStaffView.str_Full_Name.Visible) { // tblStaffView.str_Full_Name.Visible (begin)
+    <tr id="r_str_Full_Name" @Html.Raw(tblStaffView.str_Full_Name.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Full_Name">@Html.Raw(tblStaffView.str_Full_Name.Caption)</span></td>
+        <td data-name="str_Full_Name" @Html.Raw(tblStaffView.str_Full_Name.CellAttributes)>
+<span id="el_tblStaff_str_Full_Name" data-page="1">
+<span @Html.Raw(tblStaffView.str_Full_Name.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Full_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Full_Name.Visible (end) *@
+@if (tblStaffView.str_Cell_Phone.Visible) { // tblStaffView.str_Cell_Phone.Visible (begin)
+    <tr id="r_str_Cell_Phone" @Html.Raw(tblStaffView.str_Cell_Phone.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Cell_Phone">@Html.Raw(tblStaffView.str_Cell_Phone.Caption)</span></td>
+        <td data-name="str_Cell_Phone" @Html.Raw(tblStaffView.str_Cell_Phone.CellAttributes)>
+<span id="el_tblStaff_str_Cell_Phone" data-page="1">
+<span @Html.Raw(tblStaffView.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Cell_Phone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Cell_Phone.Visible (end) *@
+@if (tblStaffView.str_Email.Visible) { // tblStaffView.str_Email.Visible (begin)
+    <tr id="r_str_Email" @Html.Raw(tblStaffView.str_Email.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Email">@Html.Raw(tblStaffView.str_Email.Caption)</span></td>
+        <td data-name="str_Email" @Html.Raw(tblStaffView.str_Email.CellAttributes)>
+<span id="el_tblStaff_str_Email" data-page="1">
+<span @Html.Raw(tblStaffView.str_Email.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Email.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Email.Visible (end) *@
+@if (tblStaffView.date_Birth.Visible) { // tblStaffView.date_Birth.Visible (begin)
+    <tr id="r_date_Birth" @Html.Raw(tblStaffView.date_Birth.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_date_Birth">@Html.Raw(tblStaffView.date_Birth.Caption)</span></td>
+        <td data-name="date_Birth" @Html.Raw(tblStaffView.date_Birth.CellAttributes)>
+<span id="el_tblStaff_date_Birth" data-page="1">
+<span @Html.Raw(tblStaffView.date_Birth.ViewAttributes)>
+@Html.Raw(tblStaffView.date_Birth.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.date_Birth.Visible (end) *@
+@if (tblStaffView.date_Birth_Hijri.Visible) { // tblStaffView.date_Birth_Hijri.Visible (begin)
+    <tr id="r_date_Birth_Hijri" @Html.Raw(tblStaffView.date_Birth_Hijri.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_date_Birth_Hijri">@Html.Raw(tblStaffView.date_Birth_Hijri.Caption)</span></td>
+        <td data-name="date_Birth_Hijri" @Html.Raw(tblStaffView.date_Birth_Hijri.CellAttributes)>
+<span id="el_tblStaff_date_Birth_Hijri" data-page="1">
+<span @Html.Raw(tblStaffView.date_Birth_Hijri.ViewAttributes)>
+@Html.Raw(tblStaffView.date_Birth_Hijri.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.date_Birth_Hijri.Visible (end) *@
+@if (tblStaffView.Hijri_Year.Visible) { // tblStaffView.Hijri_Year.Visible (begin)
+    <tr id="r_Hijri_Year" @Html.Raw(tblStaffView.Hijri_Year.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_Hijri_Year">@Html.Raw(tblStaffView.Hijri_Year.Caption)</span></td>
+        <td data-name="Hijri_Year" @Html.Raw(tblStaffView.Hijri_Year.CellAttributes)>
+<span id="el_tblStaff_Hijri_Year" data-page="1">
+<span @Html.Raw(tblStaffView.Hijri_Year.ViewAttributes)>
+@Html.Raw(tblStaffView.Hijri_Year.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.Hijri_Year.Visible (end) *@
+@if (tblStaffView.Hijri_Month.Visible) { // tblStaffView.Hijri_Month.Visible (begin)
+    <tr id="r_Hijri_Month" @Html.Raw(tblStaffView.Hijri_Month.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_Hijri_Month">@Html.Raw(tblStaffView.Hijri_Month.Caption)</span></td>
+        <td data-name="Hijri_Month" @Html.Raw(tblStaffView.Hijri_Month.CellAttributes)>
+<span id="el_tblStaff_Hijri_Month" data-page="1">
+<span @Html.Raw(tblStaffView.Hijri_Month.ViewAttributes)>
+@Html.Raw(tblStaffView.Hijri_Month.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.Hijri_Month.Visible (end) *@
+@if (tblStaffView.Hijri_Day.Visible) { // tblStaffView.Hijri_Day.Visible (begin)
+    <tr id="r_Hijri_Day" @Html.Raw(tblStaffView.Hijri_Day.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_Hijri_Day">@Html.Raw(tblStaffView.Hijri_Day.Caption)</span></td>
+        <td data-name="Hijri_Day" @Html.Raw(tblStaffView.Hijri_Day.CellAttributes)>
+<span id="el_tblStaff_Hijri_Day" data-page="1">
+<span @Html.Raw(tblStaffView.Hijri_Day.ViewAttributes)>
+@Html.Raw(tblStaffView.Hijri_Day.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.Hijri_Day.Visible (end) *@
+@if (tblStaffView.int_Nationality.Visible) { // tblStaffView.int_Nationality.Visible (begin)
+    <tr id="r_int_Nationality" @Html.Raw(tblStaffView.int_Nationality.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_int_Nationality">@Html.Raw(tblStaffView.int_Nationality.Caption)</span></td>
+        <td data-name="int_Nationality" @Html.Raw(tblStaffView.int_Nationality.CellAttributes)>
+<span id="el_tblStaff_int_Nationality" data-page="1">
+<span @Html.Raw(tblStaffView.int_Nationality.ViewAttributes)>
+@Html.Raw(tblStaffView.int_Nationality.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.int_Nationality.Visible (end) *@
+@if (tblStaffView.date_Created.Visible) { // tblStaffView.date_Created.Visible (begin)
+    <tr id="r_date_Created" @Html.Raw(tblStaffView.date_Created.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_date_Created">@Html.Raw(tblStaffView.date_Created.Caption)</span></td>
+        <td data-name="date_Created" @Html.Raw(tblStaffView.date_Created.CellAttributes)>
+<span id="el_tblStaff_date_Created" data-page="1">
+<span @Html.Raw(tblStaffView.date_Created.ViewAttributes)>
+@Html.Raw(tblStaffView.date_Created.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.date_Created.Visible (end) *@
+@if (tblStaffView.date_Modified.Visible) { // tblStaffView.date_Modified.Visible (begin)
+    <tr id="r_date_Modified" @Html.Raw(tblStaffView.date_Modified.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_date_Modified">@Html.Raw(tblStaffView.date_Modified.Caption)</span></td>
+        <td data-name="date_Modified" @Html.Raw(tblStaffView.date_Modified.CellAttributes)>
+<span id="el_tblStaff_date_Modified" data-page="1">
+<span @Html.Raw(tblStaffView.date_Modified.ViewAttributes)>
+@Html.Raw(tblStaffView.date_Modified.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.date_Modified.Visible (end) *@
+@if (tblStaffView.int_Created_By.Visible) { // tblStaffView.int_Created_By.Visible (begin)
+    <tr id="r_int_Created_By" @Html.Raw(tblStaffView.int_Created_By.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_int_Created_By">@Html.Raw(tblStaffView.int_Created_By.Caption)</span></td>
+        <td data-name="int_Created_By" @Html.Raw(tblStaffView.int_Created_By.CellAttributes)>
+<span id="el_tblStaff_int_Created_By" data-page="1">
+<span @Html.Raw(tblStaffView.int_Created_By.ViewAttributes)>
+@Html.Raw(tblStaffView.int_Created_By.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.int_Created_By.Visible (end) *@
+@if (tblStaffView.int_Modified_By.Visible) { // tblStaffView.int_Modified_By.Visible (begin)
+    <tr id="r_int_Modified_By" @Html.Raw(tblStaffView.int_Modified_By.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_int_Modified_By">@Html.Raw(tblStaffView.int_Modified_By.Caption)</span></td>
+        <td data-name="int_Modified_By" @Html.Raw(tblStaffView.int_Modified_By.CellAttributes)>
+<span id="el_tblStaff_int_Modified_By" data-page="1">
+<span @Html.Raw(tblStaffView.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblStaffView.int_Modified_By.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.int_Modified_By.Visible (end) *@
+@if (tblStaffView.ProfileField.Visible) { // tblStaffView.ProfileField.Visible (begin)
+    <tr id="r_ProfileField" @Html.Raw(tblStaffView.ProfileField.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_ProfileField">@Html.Raw(tblStaffView.ProfileField.Caption)</span></td>
+        <td data-name="ProfileField" @Html.Raw(tblStaffView.ProfileField.CellAttributes)>
+<span id="el_tblStaff_ProfileField" data-page="1">
+<span @Html.Raw(tblStaffView.ProfileField.ViewAttributes)>
+@Html.Raw(tblStaffView.ProfileField.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.ProfileField.Visible (end) *@
+</table>
+@if (!tblStaffView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStaffView.IsExport()) {
+    @:<div class="@(tblStaffView.MultiPages.TabPaneClasses(2))" id="tab_tblStaff2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStaffView.TableClass)">
+@if (tblStaffView.str_NationalID_Iqama.Visible) { // tblStaffView.str_NationalID_Iqama.Visible (begin)
+    <tr id="r_str_NationalID_Iqama" @Html.Raw(tblStaffView.str_NationalID_Iqama.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_NationalID_Iqama">@Html.Raw(tblStaffView.str_NationalID_Iqama.Caption)</span></td>
+        <td data-name="str_NationalID_Iqama" @Html.Raw(tblStaffView.str_NationalID_Iqama.CellAttributes)>
+<span id="el_tblStaff_str_NationalID_Iqama" data-page="2">
+<span @Html.Raw(tblStaffView.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStaffView.str_NationalID_Iqama.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_NationalID_Iqama.Visible (end) *@
+@if (tblStaffView.User_Role.Visible) { // tblStaffView.User_Role.Visible (begin)
+    <tr id="r_User_Role" @Html.Raw(tblStaffView.User_Role.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_User_Role">@Html.Raw(tblStaffView.User_Role.Caption)</span></td>
+        <td data-name="User_Role" @Html.Raw(tblStaffView.User_Role.CellAttributes)>
+<span id="el_tblStaff_User_Role" data-page="2">
+<span @Html.Raw(tblStaffView.User_Role.ViewAttributes)>
+@Html.Raw(tblStaffView.User_Role.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.User_Role.Visible (end) *@
+@if (tblStaffView.UserlevelID.Visible) { // tblStaffView.UserlevelID.Visible (begin)
+    <tr id="r_UserlevelID" @Html.Raw(tblStaffView.UserlevelID.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_UserlevelID">@Html.Raw(tblStaffView.UserlevelID.Caption)</span></td>
+        <td data-name="UserlevelID" @Html.Raw(tblStaffView.UserlevelID.CellAttributes)>
+<span id="el_tblStaff_UserlevelID" data-page="2">
+<span @Html.Raw(tblStaffView.UserlevelID.ViewAttributes)>
+@Html.Raw(tblStaffView.UserlevelID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.UserlevelID.Visible (end) *@
+@if (tblStaffView.Activated.Visible) { // tblStaffView.Activated.Visible (begin)
+    <tr id="r_Activated" @Html.Raw(tblStaffView.Activated.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_Activated">@Html.Raw(tblStaffView.Activated.Caption)</span></td>
+        <td data-name="Activated" @Html.Raw(tblStaffView.Activated.CellAttributes)>
+<span id="el_tblStaff_Activated" data-page="2">
+<span @Html.Raw(tblStaffView.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(tblStaffView.RowCount)" class="form-check-input" value="@(tblStaffView.Activated.GetViewValue())" disabled checked="@(ConvertToBool(tblStaffView.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(tblStaffView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblStaffView.Activated.Visible (end) *@
+@if (tblStaffView.Supervisor_Username.Visible) { // tblStaffView.Supervisor_Username.Visible (begin)
+    <tr id="r_Supervisor_Username" @Html.Raw(tblStaffView.Supervisor_Username.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_Supervisor_Username">@Html.Raw(tblStaffView.Supervisor_Username.Caption)</span></td>
+        <td data-name="Supervisor_Username" @Html.Raw(tblStaffView.Supervisor_Username.CellAttributes)>
+<span id="el_tblStaff_Supervisor_Username" data-page="2">
+<span @Html.Raw(tblStaffView.Supervisor_Username.ViewAttributes)>
+@Html.Raw(tblStaffView.Supervisor_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.Supervisor_Username.Visible (end) *@
+@if (tblStaffView.str_Staff_Username.Visible) { // tblStaffView.str_Staff_Username.Visible (begin)
+    <tr id="r_str_Staff_Username" @Html.Raw(tblStaffView.str_Staff_Username.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Staff_Username">@Html.Raw(tblStaffView.str_Staff_Username.Caption)</span></td>
+        <td data-name="str_Staff_Username" @Html.Raw(tblStaffView.str_Staff_Username.CellAttributes)>
+<span id="el_tblStaff_str_Staff_Username" data-page="2">
+<span @Html.Raw(tblStaffView.str_Staff_Username.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Staff_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Staff_Username.Visible (end) *@
+@if (tblStaffView.Absherphoto.Visible) { // tblStaffView.Absherphoto.Visible (begin)
+    <tr id="r_Absherphoto" @Html.Raw(tblStaffView.Absherphoto.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_Absherphoto">@Html.Raw(tblStaffView.Absherphoto.Caption)</span></td>
+        <td data-name="Absherphoto" @Html.Raw(tblStaffView.Absherphoto.CellAttributes)>
+<span id="el_tblStaff_Absherphoto" data-page="2">
+<span @Html.Raw(tblStaffView.Absherphoto.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblStaffView.Absherphoto, ConvertToString(tblStaffView.Absherphoto.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblStaffView.Absherphoto.Visible (end) *@
+</table>
+@if (!tblStaffView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStaffView.IsExport()) {
+    @:<div class="@(tblStaffView.MultiPages.TabPaneClasses(3))" id="tab_tblStaff3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStaffView.TableClass)">
+@if (tblStaffView.str_Address.Visible) { // tblStaffView.str_Address.Visible (begin)
+    <tr id="r_str_Address" @Html.Raw(tblStaffView.str_Address.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Address">@Html.Raw(tblStaffView.str_Address.Caption)</span></td>
+        <td data-name="str_Address" @Html.Raw(tblStaffView.str_Address.CellAttributes)>
+<span id="el_tblStaff_str_Address" data-page="3">
+<span @Html.Raw(tblStaffView.str_Address.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Address.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Address.Visible (end) *@
+@if (tblStaffView.str_City.Visible) { // tblStaffView.str_City.Visible (begin)
+    <tr id="r_str_City" @Html.Raw(tblStaffView.str_City.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_City">@Html.Raw(tblStaffView.str_City.Caption)</span></td>
+        <td data-name="str_City" @Html.Raw(tblStaffView.str_City.CellAttributes)>
+<span id="el_tblStaff_str_City" data-page="3">
+<span @Html.Raw(tblStaffView.str_City.ViewAttributes)>
+@Html.Raw(tblStaffView.str_City.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_City.Visible (end) *@
+@if (tblStaffView.int_State.Visible) { // tblStaffView.int_State.Visible (begin)
+    <tr id="r_int_State" @Html.Raw(tblStaffView.int_State.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_int_State">@Html.Raw(tblStaffView.int_State.Caption)</span></td>
+        <td data-name="int_State" @Html.Raw(tblStaffView.int_State.CellAttributes)>
+<span id="el_tblStaff_int_State" data-page="3">
+<span @Html.Raw(tblStaffView.int_State.ViewAttributes)>
+@Html.Raw(tblStaffView.int_State.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.int_State.Visible (end) *@
+@if (tblStaffView.str_Zip.Visible) { // tblStaffView.str_Zip.Visible (begin)
+    <tr id="r_str_Zip" @Html.Raw(tblStaffView.str_Zip.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Zip">@Html.Raw(tblStaffView.str_Zip.Caption)</span></td>
+        <td data-name="str_Zip" @Html.Raw(tblStaffView.str_Zip.CellAttributes)>
+<span id="el_tblStaff_str_Zip" data-page="3">
+<span @Html.Raw(tblStaffView.str_Zip.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Zip.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Zip.Visible (end) *@
+@if (tblStaffView.str_Home_Phone.Visible) { // tblStaffView.str_Home_Phone.Visible (begin)
+    <tr id="r_str_Home_Phone" @Html.Raw(tblStaffView.str_Home_Phone.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Home_Phone">@Html.Raw(tblStaffView.str_Home_Phone.Caption)</span></td>
+        <td data-name="str_Home_Phone" @Html.Raw(tblStaffView.str_Home_Phone.CellAttributes)>
+<span id="el_tblStaff_str_Home_Phone" data-page="3">
+<span @Html.Raw(tblStaffView.str_Home_Phone.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Home_Phone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Home_Phone.Visible (end) *@
+</table>
+@if (!tblStaffView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStaffView.IsExport()) {
+    @:<div class="@(tblStaffView.MultiPages.TabPaneClasses(4))" id="tab_tblStaff4" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStaffView.TableClass)">
+@if (tblStaffView.str_Emergency_Contact_Name.Visible) { // tblStaffView.str_Emergency_Contact_Name.Visible (begin)
+    <tr id="r_str_Emergency_Contact_Name" @Html.Raw(tblStaffView.str_Emergency_Contact_Name.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Emergency_Contact_Name">@Html.Raw(tblStaffView.str_Emergency_Contact_Name.Caption)</span></td>
+        <td data-name="str_Emergency_Contact_Name" @Html.Raw(tblStaffView.str_Emergency_Contact_Name.CellAttributes)>
+<span id="el_tblStaff_str_Emergency_Contact_Name" data-page="4">
+<span @Html.Raw(tblStaffView.str_Emergency_Contact_Name.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Emergency_Contact_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Emergency_Contact_Name.Visible (end) *@
+@if (tblStaffView.str_Emergency_Contact_Phone.Visible) { // tblStaffView.str_Emergency_Contact_Phone.Visible (begin)
+    <tr id="r_str_Emergency_Contact_Phone" @Html.Raw(tblStaffView.str_Emergency_Contact_Phone.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Emergency_Contact_Phone">@Html.Raw(tblStaffView.str_Emergency_Contact_Phone.Caption)</span></td>
+        <td data-name="str_Emergency_Contact_Phone" @Html.Raw(tblStaffView.str_Emergency_Contact_Phone.CellAttributes)>
+<span id="el_tblStaff_str_Emergency_Contact_Phone" data-page="4">
+<span @Html.Raw(tblStaffView.str_Emergency_Contact_Phone.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Emergency_Contact_Phone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Emergency_Contact_Phone.Visible (end) *@
+@if (tblStaffView.str_Emergency_Contact_Relation.Visible) { // tblStaffView.str_Emergency_Contact_Relation.Visible (begin)
+    <tr id="r_str_Emergency_Contact_Relation" @Html.Raw(tblStaffView.str_Emergency_Contact_Relation.RowAttributes)>
+        <td class="@(tblStaffView.TableLeftColumnClass)"><span id="elh_tblStaff_str_Emergency_Contact_Relation">@Html.Raw(tblStaffView.str_Emergency_Contact_Relation.Caption)</span></td>
+        <td data-name="str_Emergency_Contact_Relation" @Html.Raw(tblStaffView.str_Emergency_Contact_Relation.CellAttributes)>
+<span id="el_tblStaff_str_Emergency_Contact_Relation" data-page="4">
+<span @Html.Raw(tblStaffView.str_Emergency_Contact_Relation.ViewAttributes)>
+@Html.Raw(tblStaffView.str_Emergency_Contact_Relation.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStaffView.str_Emergency_Contact_Relation.Visible (end) *@
+</table>
+@if (!tblStaffView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStaffView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblStaffView.CloseRecordset(); }
+</form>
+</main>
+@tblStaffView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblStaffView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

@@ -1,0 +1,1319 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblEvaluationMbView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblEvaluationMbView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblEvaluationMbView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblEvaluationMbView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblEvaluationMbView.ExportOptions.RenderBody()
+    @tblEvaluationMbView.OtherOptions.RenderBody()
+</div>
+}
+@tblEvaluationMbView.ShowPageHeader()
+@tblEvaluationMbView.ShowMessages()
+<main class="view">
+<form name="ftblEvaluationMBview" id="ftblEvaluationMBview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblEvaluationMbView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationMbView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluationMB: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblEvaluationMBview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblEvaluationMBview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblEvaluationMbView.IsModal)">
+@if (!tblEvaluationMbView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblEvaluationMbView.MultiPages.ContainerClasses)" id="pages_tblEvaluationMbView"><!-- multi-page tabs -->
+    <ul class="@(tblEvaluationMbView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblEvaluationMbView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblEvaluationMB1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblEvaluationMB1" aria-selected="@(ConvertToJson(tblEvaluationMbView.MultiPages.IsActive(1)))">@Html.Raw(tblEvaluationMbView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblEvaluationMbView.MultiPages.NavLinkClasses(12))" data-bs-target="#tab_tblEvaluationMB12" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblEvaluationMB12" aria-selected="@(ConvertToJson(tblEvaluationMbView.MultiPages.IsActive(12)))">@Html.Raw(tblEvaluationMbView.PageCaption(12))</button></li>
+        <li class="nav-item"><button class="@(tblEvaluationMbView.MultiPages.NavLinkClasses(13))" data-bs-target="#tab_tblEvaluationMB13" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblEvaluationMB13" aria-selected="@(ConvertToJson(tblEvaluationMbView.MultiPages.IsActive(13)))">@Html.Raw(tblEvaluationMbView.PageCaption(13))</button></li>
+    </ul>
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabContentClasses)"">
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(1))" id="tab_tblEvaluationMB1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblEvaluationMbView.TableClass)">
+@if (tblEvaluationMbView.str_Full_Name_Hdr.Visible) { // tblEvaluationMbView.str_Full_Name_Hdr.Visible (begin)
+    <tr id="r_str_Full_Name_Hdr" @Html.Raw(tblEvaluationMbView.str_Full_Name_Hdr.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_str_Full_Name_Hdr">@Html.Raw(tblEvaluationMbView.str_Full_Name_Hdr.Caption)</span></td>
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(tblEvaluationMbView.str_Full_Name_Hdr.CellAttributes)>
+<span id="el_tblEvaluationMB_str_Full_Name_Hdr" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.str_Full_Name_Hdr.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.str_Full_Name_Hdr.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.str_Full_Name_Hdr.Visible (end) *@
+@if (tblEvaluationMbView.NationalID.Visible) { // tblEvaluationMbView.NationalID.Visible (begin)
+    <tr id="r_NationalID" @Html.Raw(tblEvaluationMbView.NationalID.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_NationalID">@Html.Raw(tblEvaluationMbView.NationalID.Caption)</span></td>
+        <td data-name="NationalID" @Html.Raw(tblEvaluationMbView.NationalID.CellAttributes)>
+<span id="el_tblEvaluationMB_NationalID" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.NationalID.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.NationalID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.NationalID.Visible (end) *@
+@if (tblEvaluationMbView.str_Cell_Phone.Visible) { // tblEvaluationMbView.str_Cell_Phone.Visible (begin)
+    <tr id="r_str_Cell_Phone" @Html.Raw(tblEvaluationMbView.str_Cell_Phone.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_str_Cell_Phone">@Html.Raw(tblEvaluationMbView.str_Cell_Phone.Caption)</span></td>
+        <td data-name="str_Cell_Phone" @Html.Raw(tblEvaluationMbView.str_Cell_Phone.CellAttributes)>
+<span id="el_tblEvaluationMB_str_Cell_Phone" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.str_Cell_Phone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationMbView.intDrivinglicenseType.Visible) { // tblEvaluationMbView.intDrivinglicenseType.Visible (begin)
+    <tr id="r_intDrivinglicenseType" @Html.Raw(tblEvaluationMbView.intDrivinglicenseType.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_intDrivinglicenseType">@Html.Raw(tblEvaluationMbView.intDrivinglicenseType.Caption)</span></td>
+        <td data-name="intDrivinglicenseType" @Html.Raw(tblEvaluationMbView.intDrivinglicenseType.CellAttributes)>
+<span id="el_tblEvaluationMB_intDrivinglicenseType" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.intDrivinglicenseType.ViewAttributes)>
+@if ((!EmptyString(tblEvaluationMbView.intDrivinglicenseType.GetViewValue()) || !EmptyString(tblEvaluationMbView.intDrivinglicenseType.TooltipValue)) && !Empty(tblEvaluationMbView.intDrivinglicenseType.LinkAttributes)) {
+<a @Html.Raw(tblEvaluationMbView.intDrivinglicenseType.LinkAttributes)>@Html.Raw(tblEvaluationMbView.intDrivinglicenseType.GetViewValue())</a>
+} else {
+@Html.Raw(tblEvaluationMbView.intDrivinglicenseType.GetViewValue())
+}
+<span id="tt_tblEvaluationMB_x_intDrivinglicenseType" class="d-none">
+@Html.Raw(tblEvaluationMbView.intDrivinglicenseType.TooltipValue)
+</span></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.intDrivinglicenseType.Visible (end) *@
+@if (tblEvaluationMbView.Examination_Number.Visible) { // tblEvaluationMbView.Examination_Number.Visible (begin)
+    <tr id="r_Examination_Number" @Html.Raw(tblEvaluationMbView.Examination_Number.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Examination_Number">@Html.Raw(tblEvaluationMbView.Examination_Number.Caption)</span></td>
+        <td data-name="Examination_Number" @Html.Raw(tblEvaluationMbView.Examination_Number.CellAttributes)>
+<span id="el_tblEvaluationMB_Examination_Number" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Examination_Number.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Examination_Number.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Examination_Number.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S1.Visible) { // tblEvaluationMbView.Scores_S1.Visible (begin)
+    <tr id="r_Scores_S1" @Html.Raw(tblEvaluationMbView.Scores_S1.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S1">@Html.Raw(tblEvaluationMbView.Scores_S1.Caption)</span></td>
+        <td data-name="Scores_S1" @Html.Raw(tblEvaluationMbView.Scores_S1.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S1" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S1.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S1.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S1.Visible (end) *@
+@if (tblEvaluationMbView.S1.Visible) { // tblEvaluationMbView.S1.Visible (begin)
+    <tr id="r_S1" @Html.Raw(tblEvaluationMbView.S1.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S1">@Html.Raw(tblEvaluationMbView.S1.Caption)</span></td>
+        <td data-name="S1" @Html.Raw(tblEvaluationMbView.S1.CellAttributes)>
+<span id="el_tblEvaluationMB_S1" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S1_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S1.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S1.CurrentValue))">
+    <label class="form-check-label" for="x_S1_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S1.Visible (end) *@
+@if (tblEvaluationMbView.S2.Visible) { // tblEvaluationMbView.S2.Visible (begin)
+    <tr id="r_S2" @Html.Raw(tblEvaluationMbView.S2.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S2">@Html.Raw(tblEvaluationMbView.S2.Caption)</span></td>
+        <td data-name="S2" @Html.Raw(tblEvaluationMbView.S2.CellAttributes)>
+<span id="el_tblEvaluationMB_S2" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S2_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S2.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S2.CurrentValue))">
+    <label class="form-check-label" for="x_S2_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S2.Visible (end) *@
+@if (tblEvaluationMbView.S3.Visible) { // tblEvaluationMbView.S3.Visible (begin)
+    <tr id="r_S3" @Html.Raw(tblEvaluationMbView.S3.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S3">@Html.Raw(tblEvaluationMbView.S3.Caption)</span></td>
+        <td data-name="S3" @Html.Raw(tblEvaluationMbView.S3.CellAttributes)>
+<span id="el_tblEvaluationMB_S3" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S3_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S3.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S3.CurrentValue))">
+    <label class="form-check-label" for="x_S3_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S3.Visible (end) *@
+@if (tblEvaluationMbView.S4.Visible) { // tblEvaluationMbView.S4.Visible (begin)
+    <tr id="r_S4" @Html.Raw(tblEvaluationMbView.S4.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S4">@Html.Raw(tblEvaluationMbView.S4.Caption)</span></td>
+        <td data-name="S4" @Html.Raw(tblEvaluationMbView.S4.CellAttributes)>
+<span id="el_tblEvaluationMB_S4" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S4.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S4_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S4.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S4.CurrentValue))">
+    <label class="form-check-label" for="x_S4_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S4.Visible (end) *@
+@if (tblEvaluationMbView.S5.Visible) { // tblEvaluationMbView.S5.Visible (begin)
+    <tr id="r_S5" @Html.Raw(tblEvaluationMbView.S5.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S5">@Html.Raw(tblEvaluationMbView.S5.Caption)</span></td>
+        <td data-name="S5" @Html.Raw(tblEvaluationMbView.S5.CellAttributes)>
+<span id="el_tblEvaluationMB_S5" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S5.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S5_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S5.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S5.CurrentValue))">
+    <label class="form-check-label" for="x_S5_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S5.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S2.Visible) { // tblEvaluationMbView.Scores_S2.Visible (begin)
+    <tr id="r_Scores_S2" @Html.Raw(tblEvaluationMbView.Scores_S2.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S2">@Html.Raw(tblEvaluationMbView.Scores_S2.Caption)</span></td>
+        <td data-name="Scores_S2" @Html.Raw(tblEvaluationMbView.Scores_S2.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S2" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S2.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S2.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S2.Visible (end) *@
+@if (tblEvaluationMbView.S6.Visible) { // tblEvaluationMbView.S6.Visible (begin)
+    <tr id="r_S6" @Html.Raw(tblEvaluationMbView.S6.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S6">@Html.Raw(tblEvaluationMbView.S6.Caption)</span></td>
+        <td data-name="S6" @Html.Raw(tblEvaluationMbView.S6.CellAttributes)>
+<span id="el_tblEvaluationMB_S6" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S6.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S6_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S6.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S6.CurrentValue))">
+    <label class="form-check-label" for="x_S6_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S6.Visible (end) *@
+@if (tblEvaluationMbView.S7.Visible) { // tblEvaluationMbView.S7.Visible (begin)
+    <tr id="r_S7" @Html.Raw(tblEvaluationMbView.S7.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S7">@Html.Raw(tblEvaluationMbView.S7.Caption)</span></td>
+        <td data-name="S7" @Html.Raw(tblEvaluationMbView.S7.CellAttributes)>
+<span id="el_tblEvaluationMB_S7" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S7.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S7_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S7.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S7.CurrentValue))">
+    <label class="form-check-label" for="x_S7_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S7.Visible (end) *@
+@if (tblEvaluationMbView.S8.Visible) { // tblEvaluationMbView.S8.Visible (begin)
+    <tr id="r_S8" @Html.Raw(tblEvaluationMbView.S8.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S8">@Html.Raw(tblEvaluationMbView.S8.Caption)</span></td>
+        <td data-name="S8" @Html.Raw(tblEvaluationMbView.S8.CellAttributes)>
+<span id="el_tblEvaluationMB_S8" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S8.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S8_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S8.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S8.CurrentValue))">
+    <label class="form-check-label" for="x_S8_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S8.Visible (end) *@
+@if (tblEvaluationMbView.S9.Visible) { // tblEvaluationMbView.S9.Visible (begin)
+    <tr id="r_S9" @Html.Raw(tblEvaluationMbView.S9.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S9">@Html.Raw(tblEvaluationMbView.S9.Caption)</span></td>
+        <td data-name="S9" @Html.Raw(tblEvaluationMbView.S9.CellAttributes)>
+<span id="el_tblEvaluationMB_S9" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S9.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S9_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S9.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S9.CurrentValue))">
+    <label class="form-check-label" for="x_S9_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S9.Visible (end) *@
+@if (tblEvaluationMbView.S10.Visible) { // tblEvaluationMbView.S10.Visible (begin)
+    <tr id="r_S10" @Html.Raw(tblEvaluationMbView.S10.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S10">@Html.Raw(tblEvaluationMbView.S10.Caption)</span></td>
+        <td data-name="S10" @Html.Raw(tblEvaluationMbView.S10.CellAttributes)>
+<span id="el_tblEvaluationMB_S10" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S10.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S10_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S10.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S10.CurrentValue))">
+    <label class="form-check-label" for="x_S10_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S10.Visible (end) *@
+@if (tblEvaluationMbView.S11.Visible) { // tblEvaluationMbView.S11.Visible (begin)
+    <tr id="r_S11" @Html.Raw(tblEvaluationMbView.S11.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S11">@Html.Raw(tblEvaluationMbView.S11.Caption)</span></td>
+        <td data-name="S11" @Html.Raw(tblEvaluationMbView.S11.CellAttributes)>
+<span id="el_tblEvaluationMB_S11" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S11.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S11_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S11.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S11.CurrentValue))">
+    <label class="form-check-label" for="x_S11_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S11.Visible (end) *@
+@if (tblEvaluationMbView.S12.Visible) { // tblEvaluationMbView.S12.Visible (begin)
+    <tr id="r_S12" @Html.Raw(tblEvaluationMbView.S12.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S12">@Html.Raw(tblEvaluationMbView.S12.Caption)</span></td>
+        <td data-name="S12" @Html.Raw(tblEvaluationMbView.S12.CellAttributes)>
+<span id="el_tblEvaluationMB_S12" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S12.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S12_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S12.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S12.CurrentValue))">
+    <label class="form-check-label" for="x_S12_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S12.Visible (end) *@
+@if (tblEvaluationMbView.S13.Visible) { // tblEvaluationMbView.S13.Visible (begin)
+    <tr id="r_S13" @Html.Raw(tblEvaluationMbView.S13.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S13">@Html.Raw(tblEvaluationMbView.S13.Caption)</span></td>
+        <td data-name="S13" @Html.Raw(tblEvaluationMbView.S13.CellAttributes)>
+<span id="el_tblEvaluationMB_S13" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S13.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S13_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S13.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S13.CurrentValue))">
+    <label class="form-check-label" for="x_S13_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S13.Visible (end) *@
+@if (tblEvaluationMbView.S14.Visible) { // tblEvaluationMbView.S14.Visible (begin)
+    <tr id="r_S14" @Html.Raw(tblEvaluationMbView.S14.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S14">@Html.Raw(tblEvaluationMbView.S14.Caption)</span></td>
+        <td data-name="S14" @Html.Raw(tblEvaluationMbView.S14.CellAttributes)>
+<span id="el_tblEvaluationMB_S14" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S14.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S14_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S14.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S14.CurrentValue))">
+    <label class="form-check-label" for="x_S14_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S14.Visible (end) *@
+@if (tblEvaluationMbView.S15.Visible) { // tblEvaluationMbView.S15.Visible (begin)
+    <tr id="r_S15" @Html.Raw(tblEvaluationMbView.S15.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S15">@Html.Raw(tblEvaluationMbView.S15.Caption)</span></td>
+        <td data-name="S15" @Html.Raw(tblEvaluationMbView.S15.CellAttributes)>
+<span id="el_tblEvaluationMB_S15" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S15.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S15_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S15.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S15.CurrentValue))">
+    <label class="form-check-label" for="x_S15_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S15.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S3.Visible) { // tblEvaluationMbView.Scores_S3.Visible (begin)
+    <tr id="r_Scores_S3" @Html.Raw(tblEvaluationMbView.Scores_S3.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S3">@Html.Raw(tblEvaluationMbView.Scores_S3.Caption)</span></td>
+        <td data-name="Scores_S3" @Html.Raw(tblEvaluationMbView.Scores_S3.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S3" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S3.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S3.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S3.Visible (end) *@
+@if (tblEvaluationMbView.S16.Visible) { // tblEvaluationMbView.S16.Visible (begin)
+    <tr id="r_S16" @Html.Raw(tblEvaluationMbView.S16.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S16">@Html.Raw(tblEvaluationMbView.S16.Caption)</span></td>
+        <td data-name="S16" @Html.Raw(tblEvaluationMbView.S16.CellAttributes)>
+<span id="el_tblEvaluationMB_S16" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S16.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S16_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S16.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S16.CurrentValue))">
+    <label class="form-check-label" for="x_S16_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S16.Visible (end) *@
+@if (tblEvaluationMbView.S17.Visible) { // tblEvaluationMbView.S17.Visible (begin)
+    <tr id="r_S17" @Html.Raw(tblEvaluationMbView.S17.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S17">@Html.Raw(tblEvaluationMbView.S17.Caption)</span></td>
+        <td data-name="S17" @Html.Raw(tblEvaluationMbView.S17.CellAttributes)>
+<span id="el_tblEvaluationMB_S17" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S17.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S17_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S17.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S17.CurrentValue))">
+    <label class="form-check-label" for="x_S17_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S17.Visible (end) *@
+@if (tblEvaluationMbView.S18.Visible) { // tblEvaluationMbView.S18.Visible (begin)
+    <tr id="r_S18" @Html.Raw(tblEvaluationMbView.S18.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S18">@Html.Raw(tblEvaluationMbView.S18.Caption)</span></td>
+        <td data-name="S18" @Html.Raw(tblEvaluationMbView.S18.CellAttributes)>
+<span id="el_tblEvaluationMB_S18" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S18.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S18_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S18.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S18.CurrentValue))">
+    <label class="form-check-label" for="x_S18_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S18.Visible (end) *@
+@if (tblEvaluationMbView.S19.Visible) { // tblEvaluationMbView.S19.Visible (begin)
+    <tr id="r_S19" @Html.Raw(tblEvaluationMbView.S19.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S19">@Html.Raw(tblEvaluationMbView.S19.Caption)</span></td>
+        <td data-name="S19" @Html.Raw(tblEvaluationMbView.S19.CellAttributes)>
+<span id="el_tblEvaluationMB_S19" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S19.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S19_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S19.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S19.CurrentValue))">
+    <label class="form-check-label" for="x_S19_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S19.Visible (end) *@
+@if (tblEvaluationMbView.S20.Visible) { // tblEvaluationMbView.S20.Visible (begin)
+    <tr id="r_S20" @Html.Raw(tblEvaluationMbView.S20.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S20">@Html.Raw(tblEvaluationMbView.S20.Caption)</span></td>
+        <td data-name="S20" @Html.Raw(tblEvaluationMbView.S20.CellAttributes)>
+<span id="el_tblEvaluationMB_S20" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S20.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S20_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S20.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S20.CurrentValue))">
+    <label class="form-check-label" for="x_S20_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S20.Visible (end) *@
+@if (tblEvaluationMbView.S21.Visible) { // tblEvaluationMbView.S21.Visible (begin)
+    <tr id="r_S21" @Html.Raw(tblEvaluationMbView.S21.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S21">@Html.Raw(tblEvaluationMbView.S21.Caption)</span></td>
+        <td data-name="S21" @Html.Raw(tblEvaluationMbView.S21.CellAttributes)>
+<span id="el_tblEvaluationMB_S21" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S21.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S21_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S21.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S21.CurrentValue))">
+    <label class="form-check-label" for="x_S21_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S21.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S4.Visible) { // tblEvaluationMbView.Scores_S4.Visible (begin)
+    <tr id="r_Scores_S4" @Html.Raw(tblEvaluationMbView.Scores_S4.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S4">@Html.Raw(tblEvaluationMbView.Scores_S4.Caption)</span></td>
+        <td data-name="Scores_S4" @Html.Raw(tblEvaluationMbView.Scores_S4.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S4" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S4.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S4.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S4.Visible (end) *@
+@if (tblEvaluationMbView.S22.Visible) { // tblEvaluationMbView.S22.Visible (begin)
+    <tr id="r_S22" @Html.Raw(tblEvaluationMbView.S22.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S22">@Html.Raw(tblEvaluationMbView.S22.Caption)</span></td>
+        <td data-name="S22" @Html.Raw(tblEvaluationMbView.S22.CellAttributes)>
+<span id="el_tblEvaluationMB_S22" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S22.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S22_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S22.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S22.CurrentValue))">
+    <label class="form-check-label" for="x_S22_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S22.Visible (end) *@
+@if (tblEvaluationMbView.S23.Visible) { // tblEvaluationMbView.S23.Visible (begin)
+    <tr id="r_S23" @Html.Raw(tblEvaluationMbView.S23.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S23">@Html.Raw(tblEvaluationMbView.S23.Caption)</span></td>
+        <td data-name="S23" @Html.Raw(tblEvaluationMbView.S23.CellAttributes)>
+<span id="el_tblEvaluationMB_S23" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S23.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S23_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S23.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S23.CurrentValue))">
+    <label class="form-check-label" for="x_S23_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S23.Visible (end) *@
+@if (tblEvaluationMbView.S24.Visible) { // tblEvaluationMbView.S24.Visible (begin)
+    <tr id="r_S24" @Html.Raw(tblEvaluationMbView.S24.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S24">@Html.Raw(tblEvaluationMbView.S24.Caption)</span></td>
+        <td data-name="S24" @Html.Raw(tblEvaluationMbView.S24.CellAttributes)>
+<span id="el_tblEvaluationMB_S24" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S24.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S24_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S24.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S24.CurrentValue))">
+    <label class="form-check-label" for="x_S24_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S24.Visible (end) *@
+@if (tblEvaluationMbView.S25.Visible) { // tblEvaluationMbView.S25.Visible (begin)
+    <tr id="r_S25" @Html.Raw(tblEvaluationMbView.S25.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S25">@Html.Raw(tblEvaluationMbView.S25.Caption)</span></td>
+        <td data-name="S25" @Html.Raw(tblEvaluationMbView.S25.CellAttributes)>
+<span id="el_tblEvaluationMB_S25" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S25.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S25_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S25.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S25.CurrentValue))">
+    <label class="form-check-label" for="x_S25_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S25.Visible (end) *@
+@if (tblEvaluationMbView.S26.Visible) { // tblEvaluationMbView.S26.Visible (begin)
+    <tr id="r_S26" @Html.Raw(tblEvaluationMbView.S26.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S26">@Html.Raw(tblEvaluationMbView.S26.Caption)</span></td>
+        <td data-name="S26" @Html.Raw(tblEvaluationMbView.S26.CellAttributes)>
+<span id="el_tblEvaluationMB_S26" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S26.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S26_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S26.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S26.CurrentValue))">
+    <label class="form-check-label" for="x_S26_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S26.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S5.Visible) { // tblEvaluationMbView.Scores_S5.Visible (begin)
+    <tr id="r_Scores_S5" @Html.Raw(tblEvaluationMbView.Scores_S5.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S5">@Html.Raw(tblEvaluationMbView.Scores_S5.Caption)</span></td>
+        <td data-name="Scores_S5" @Html.Raw(tblEvaluationMbView.Scores_S5.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S5" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S5.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S5.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S5.Visible (end) *@
+@if (tblEvaluationMbView.S27.Visible) { // tblEvaluationMbView.S27.Visible (begin)
+    <tr id="r_S27" @Html.Raw(tblEvaluationMbView.S27.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S27">@Html.Raw(tblEvaluationMbView.S27.Caption)</span></td>
+        <td data-name="S27" @Html.Raw(tblEvaluationMbView.S27.CellAttributes)>
+<span id="el_tblEvaluationMB_S27" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S27.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S27_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S27.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S27.CurrentValue))">
+    <label class="form-check-label" for="x_S27_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S27.Visible (end) *@
+@if (tblEvaluationMbView.S28.Visible) { // tblEvaluationMbView.S28.Visible (begin)
+    <tr id="r_S28" @Html.Raw(tblEvaluationMbView.S28.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S28">@Html.Raw(tblEvaluationMbView.S28.Caption)</span></td>
+        <td data-name="S28" @Html.Raw(tblEvaluationMbView.S28.CellAttributes)>
+<span id="el_tblEvaluationMB_S28" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S28.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S28_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S28.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S28.CurrentValue))">
+    <label class="form-check-label" for="x_S28_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S28.Visible (end) *@
+@if (tblEvaluationMbView.S29.Visible) { // tblEvaluationMbView.S29.Visible (begin)
+    <tr id="r_S29" @Html.Raw(tblEvaluationMbView.S29.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S29">@Html.Raw(tblEvaluationMbView.S29.Caption)</span></td>
+        <td data-name="S29" @Html.Raw(tblEvaluationMbView.S29.CellAttributes)>
+<span id="el_tblEvaluationMB_S29" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S29.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S29_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S29.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S29.CurrentValue))">
+    <label class="form-check-label" for="x_S29_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S29.Visible (end) *@
+@if (tblEvaluationMbView.S30.Visible) { // tblEvaluationMbView.S30.Visible (begin)
+    <tr id="r_S30" @Html.Raw(tblEvaluationMbView.S30.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S30">@Html.Raw(tblEvaluationMbView.S30.Caption)</span></td>
+        <td data-name="S30" @Html.Raw(tblEvaluationMbView.S30.CellAttributes)>
+<span id="el_tblEvaluationMB_S30" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S30.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S30_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S30.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S30.CurrentValue))">
+    <label class="form-check-label" for="x_S30_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S30.Visible (end) *@
+@if (tblEvaluationMbView.S31.Visible) { // tblEvaluationMbView.S31.Visible (begin)
+    <tr id="r_S31" @Html.Raw(tblEvaluationMbView.S31.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S31">@Html.Raw(tblEvaluationMbView.S31.Caption)</span></td>
+        <td data-name="S31" @Html.Raw(tblEvaluationMbView.S31.CellAttributes)>
+<span id="el_tblEvaluationMB_S31" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S31.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S31_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S31.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S31.CurrentValue))">
+    <label class="form-check-label" for="x_S31_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S31.Visible (end) *@
+@if (tblEvaluationMbView.S32.Visible) { // tblEvaluationMbView.S32.Visible (begin)
+    <tr id="r_S32" @Html.Raw(tblEvaluationMbView.S32.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S32">@Html.Raw(tblEvaluationMbView.S32.Caption)</span></td>
+        <td data-name="S32" @Html.Raw(tblEvaluationMbView.S32.CellAttributes)>
+<span id="el_tblEvaluationMB_S32" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S32.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S32_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S32.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S32.CurrentValue))">
+    <label class="form-check-label" for="x_S32_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S32.Visible (end) *@
+@if (tblEvaluationMbView.S33.Visible) { // tblEvaluationMbView.S33.Visible (begin)
+    <tr id="r_S33" @Html.Raw(tblEvaluationMbView.S33.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S33">@Html.Raw(tblEvaluationMbView.S33.Caption)</span></td>
+        <td data-name="S33" @Html.Raw(tblEvaluationMbView.S33.CellAttributes)>
+<span id="el_tblEvaluationMB_S33" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S33.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S33_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S33.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S33.CurrentValue))">
+    <label class="form-check-label" for="x_S33_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S33.Visible (end) *@
+@if (tblEvaluationMbView.S34.Visible) { // tblEvaluationMbView.S34.Visible (begin)
+    <tr id="r_S34" @Html.Raw(tblEvaluationMbView.S34.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S34">@Html.Raw(tblEvaluationMbView.S34.Caption)</span></td>
+        <td data-name="S34" @Html.Raw(tblEvaluationMbView.S34.CellAttributes)>
+<span id="el_tblEvaluationMB_S34" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S34.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S34_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S34.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S34.CurrentValue))">
+    <label class="form-check-label" for="x_S34_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S34.Visible (end) *@
+@if (tblEvaluationMbView.S35.Visible) { // tblEvaluationMbView.S35.Visible (begin)
+    <tr id="r_S35" @Html.Raw(tblEvaluationMbView.S35.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S35">@Html.Raw(tblEvaluationMbView.S35.Caption)</span></td>
+        <td data-name="S35" @Html.Raw(tblEvaluationMbView.S35.CellAttributes)>
+<span id="el_tblEvaluationMB_S35" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S35.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S35_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S35.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S35.CurrentValue))">
+    <label class="form-check-label" for="x_S35_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S35.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S6.Visible) { // tblEvaluationMbView.Scores_S6.Visible (begin)
+    <tr id="r_Scores_S6" @Html.Raw(tblEvaluationMbView.Scores_S6.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S6">@Html.Raw(tblEvaluationMbView.Scores_S6.Caption)</span></td>
+        <td data-name="Scores_S6" @Html.Raw(tblEvaluationMbView.Scores_S6.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S6" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S6.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S6.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S6.Visible (end) *@
+@if (tblEvaluationMbView.S36.Visible) { // tblEvaluationMbView.S36.Visible (begin)
+    <tr id="r_S36" @Html.Raw(tblEvaluationMbView.S36.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S36">@Html.Raw(tblEvaluationMbView.S36.Caption)</span></td>
+        <td data-name="S36" @Html.Raw(tblEvaluationMbView.S36.CellAttributes)>
+<span id="el_tblEvaluationMB_S36" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S36.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S36_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S36.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S36.CurrentValue))">
+    <label class="form-check-label" for="x_S36_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S36.Visible (end) *@
+@if (tblEvaluationMbView.S37.Visible) { // tblEvaluationMbView.S37.Visible (begin)
+    <tr id="r_S37" @Html.Raw(tblEvaluationMbView.S37.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S37">@Html.Raw(tblEvaluationMbView.S37.Caption)</span></td>
+        <td data-name="S37" @Html.Raw(tblEvaluationMbView.S37.CellAttributes)>
+<span id="el_tblEvaluationMB_S37" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S37.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S37_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S37.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S37.CurrentValue))">
+    <label class="form-check-label" for="x_S37_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S37.Visible (end) *@
+@if (tblEvaluationMbView.S38.Visible) { // tblEvaluationMbView.S38.Visible (begin)
+    <tr id="r_S38" @Html.Raw(tblEvaluationMbView.S38.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S38">@Html.Raw(tblEvaluationMbView.S38.Caption)</span></td>
+        <td data-name="S38" @Html.Raw(tblEvaluationMbView.S38.CellAttributes)>
+<span id="el_tblEvaluationMB_S38" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S38.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S38_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S38.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S38.CurrentValue))">
+    <label class="form-check-label" for="x_S38_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S38.Visible (end) *@
+@if (tblEvaluationMbView.S39.Visible) { // tblEvaluationMbView.S39.Visible (begin)
+    <tr id="r_S39" @Html.Raw(tblEvaluationMbView.S39.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S39">@Html.Raw(tblEvaluationMbView.S39.Caption)</span></td>
+        <td data-name="S39" @Html.Raw(tblEvaluationMbView.S39.CellAttributes)>
+<span id="el_tblEvaluationMB_S39" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S39.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S39_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S39.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S39.CurrentValue))">
+    <label class="form-check-label" for="x_S39_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S39.Visible (end) *@
+@if (tblEvaluationMbView.S40.Visible) { // tblEvaluationMbView.S40.Visible (begin)
+    <tr id="r_S40" @Html.Raw(tblEvaluationMbView.S40.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S40">@Html.Raw(tblEvaluationMbView.S40.Caption)</span></td>
+        <td data-name="S40" @Html.Raw(tblEvaluationMbView.S40.CellAttributes)>
+<span id="el_tblEvaluationMB_S40" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S40.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S40_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S40.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S40.CurrentValue))">
+    <label class="form-check-label" for="x_S40_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S40.Visible (end) *@
+@if (tblEvaluationMbView.S41.Visible) { // tblEvaluationMbView.S41.Visible (begin)
+    <tr id="r_S41" @Html.Raw(tblEvaluationMbView.S41.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S41">@Html.Raw(tblEvaluationMbView.S41.Caption)</span></td>
+        <td data-name="S41" @Html.Raw(tblEvaluationMbView.S41.CellAttributes)>
+<span id="el_tblEvaluationMB_S41" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S41.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S41_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S41.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S41.CurrentValue))">
+    <label class="form-check-label" for="x_S41_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S41.Visible (end) *@
+@if (tblEvaluationMbView.S42.Visible) { // tblEvaluationMbView.S42.Visible (begin)
+    <tr id="r_S42" @Html.Raw(tblEvaluationMbView.S42.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S42">@Html.Raw(tblEvaluationMbView.S42.Caption)</span></td>
+        <td data-name="S42" @Html.Raw(tblEvaluationMbView.S42.CellAttributes)>
+<span id="el_tblEvaluationMB_S42" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S42.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S42_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S42.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S42.CurrentValue))">
+    <label class="form-check-label" for="x_S42_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S42.Visible (end) *@
+@if (tblEvaluationMbView.S43.Visible) { // tblEvaluationMbView.S43.Visible (begin)
+    <tr id="r_S43" @Html.Raw(tblEvaluationMbView.S43.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S43">@Html.Raw(tblEvaluationMbView.S43.Caption)</span></td>
+        <td data-name="S43" @Html.Raw(tblEvaluationMbView.S43.CellAttributes)>
+<span id="el_tblEvaluationMB_S43" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S43.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S43_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S43.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S43.CurrentValue))">
+    <label class="form-check-label" for="x_S43_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S43.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S7.Visible) { // tblEvaluationMbView.Scores_S7.Visible (begin)
+    <tr id="r_Scores_S7" @Html.Raw(tblEvaluationMbView.Scores_S7.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S7">@Html.Raw(tblEvaluationMbView.Scores_S7.Caption)</span></td>
+        <td data-name="Scores_S7" @Html.Raw(tblEvaluationMbView.Scores_S7.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S7" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S7.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S7.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S7.Visible (end) *@
+@if (tblEvaluationMbView.S44.Visible) { // tblEvaluationMbView.S44.Visible (begin)
+    <tr id="r_S44" @Html.Raw(tblEvaluationMbView.S44.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S44">@Html.Raw(tblEvaluationMbView.S44.Caption)</span></td>
+        <td data-name="S44" @Html.Raw(tblEvaluationMbView.S44.CellAttributes)>
+<span id="el_tblEvaluationMB_S44" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S44.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S44_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S44.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S44.CurrentValue))">
+    <label class="form-check-label" for="x_S44_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S44.Visible (end) *@
+@if (tblEvaluationMbView.S45.Visible) { // tblEvaluationMbView.S45.Visible (begin)
+    <tr id="r_S45" @Html.Raw(tblEvaluationMbView.S45.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S45">@Html.Raw(tblEvaluationMbView.S45.Caption)</span></td>
+        <td data-name="S45" @Html.Raw(tblEvaluationMbView.S45.CellAttributes)>
+<span id="el_tblEvaluationMB_S45" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S45.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S45_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S45.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S45.CurrentValue))">
+    <label class="form-check-label" for="x_S45_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S45.Visible (end) *@
+@if (tblEvaluationMbView.S46.Visible) { // tblEvaluationMbView.S46.Visible (begin)
+    <tr id="r_S46" @Html.Raw(tblEvaluationMbView.S46.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S46">@Html.Raw(tblEvaluationMbView.S46.Caption)</span></td>
+        <td data-name="S46" @Html.Raw(tblEvaluationMbView.S46.CellAttributes)>
+<span id="el_tblEvaluationMB_S46" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S46.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S46_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S46.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S46.CurrentValue))">
+    <label class="form-check-label" for="x_S46_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S46.Visible (end) *@
+@if (tblEvaluationMbView.S47.Visible) { // tblEvaluationMbView.S47.Visible (begin)
+    <tr id="r_S47" @Html.Raw(tblEvaluationMbView.S47.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S47">@Html.Raw(tblEvaluationMbView.S47.Caption)</span></td>
+        <td data-name="S47" @Html.Raw(tblEvaluationMbView.S47.CellAttributes)>
+<span id="el_tblEvaluationMB_S47" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S47.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S47_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S47.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S47.CurrentValue))">
+    <label class="form-check-label" for="x_S47_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S47.Visible (end) *@
+@if (tblEvaluationMbView.S48.Visible) { // tblEvaluationMbView.S48.Visible (begin)
+    <tr id="r_S48" @Html.Raw(tblEvaluationMbView.S48.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S48">@Html.Raw(tblEvaluationMbView.S48.Caption)</span></td>
+        <td data-name="S48" @Html.Raw(tblEvaluationMbView.S48.CellAttributes)>
+<span id="el_tblEvaluationMB_S48" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S48.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S48_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S48.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S48.CurrentValue))">
+    <label class="form-check-label" for="x_S48_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S48.Visible (end) *@
+@if (tblEvaluationMbView.S49.Visible) { // tblEvaluationMbView.S49.Visible (begin)
+    <tr id="r_S49" @Html.Raw(tblEvaluationMbView.S49.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S49">@Html.Raw(tblEvaluationMbView.S49.Caption)</span></td>
+        <td data-name="S49" @Html.Raw(tblEvaluationMbView.S49.CellAttributes)>
+<span id="el_tblEvaluationMB_S49" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S49.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S49_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S49.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S49.CurrentValue))">
+    <label class="form-check-label" for="x_S49_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S49.Visible (end) *@
+@if (tblEvaluationMbView.S50.Visible) { // tblEvaluationMbView.S50.Visible (begin)
+    <tr id="r_S50" @Html.Raw(tblEvaluationMbView.S50.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S50">@Html.Raw(tblEvaluationMbView.S50.Caption)</span></td>
+        <td data-name="S50" @Html.Raw(tblEvaluationMbView.S50.CellAttributes)>
+<span id="el_tblEvaluationMB_S50" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S50.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S50_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S50.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S50.CurrentValue))">
+    <label class="form-check-label" for="x_S50_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S50.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S8.Visible) { // tblEvaluationMbView.Scores_S8.Visible (begin)
+    <tr id="r_Scores_S8" @Html.Raw(tblEvaluationMbView.Scores_S8.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S8">@Html.Raw(tblEvaluationMbView.Scores_S8.Caption)</span></td>
+        <td data-name="Scores_S8" @Html.Raw(tblEvaluationMbView.Scores_S8.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S8" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S8.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S8.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S8.Visible (end) *@
+@if (tblEvaluationMbView.S51.Visible) { // tblEvaluationMbView.S51.Visible (begin)
+    <tr id="r_S51" @Html.Raw(tblEvaluationMbView.S51.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S51">@Html.Raw(tblEvaluationMbView.S51.Caption)</span></td>
+        <td data-name="S51" @Html.Raw(tblEvaluationMbView.S51.CellAttributes)>
+<span id="el_tblEvaluationMB_S51" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S51.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S51_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S51.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S51.CurrentValue))">
+    <label class="form-check-label" for="x_S51_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S51.Visible (end) *@
+@if (tblEvaluationMbView.S52.Visible) { // tblEvaluationMbView.S52.Visible (begin)
+    <tr id="r_S52" @Html.Raw(tblEvaluationMbView.S52.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S52">@Html.Raw(tblEvaluationMbView.S52.Caption)</span></td>
+        <td data-name="S52" @Html.Raw(tblEvaluationMbView.S52.CellAttributes)>
+<span id="el_tblEvaluationMB_S52" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S52.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S52_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S52.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S52.CurrentValue))">
+    <label class="form-check-label" for="x_S52_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S52.Visible (end) *@
+@if (tblEvaluationMbView.S53.Visible) { // tblEvaluationMbView.S53.Visible (begin)
+    <tr id="r_S53" @Html.Raw(tblEvaluationMbView.S53.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S53">@Html.Raw(tblEvaluationMbView.S53.Caption)</span></td>
+        <td data-name="S53" @Html.Raw(tblEvaluationMbView.S53.CellAttributes)>
+<span id="el_tblEvaluationMB_S53" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S53.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S53_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S53.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S53.CurrentValue))">
+    <label class="form-check-label" for="x_S53_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S53.Visible (end) *@
+@if (tblEvaluationMbView.S54.Visible) { // tblEvaluationMbView.S54.Visible (begin)
+    <tr id="r_S54" @Html.Raw(tblEvaluationMbView.S54.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S54">@Html.Raw(tblEvaluationMbView.S54.Caption)</span></td>
+        <td data-name="S54" @Html.Raw(tblEvaluationMbView.S54.CellAttributes)>
+<span id="el_tblEvaluationMB_S54" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S54.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S54_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S54.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S54.CurrentValue))">
+    <label class="form-check-label" for="x_S54_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S54.Visible (end) *@
+@if (tblEvaluationMbView.S55.Visible) { // tblEvaluationMbView.S55.Visible (begin)
+    <tr id="r_S55" @Html.Raw(tblEvaluationMbView.S55.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S55">@Html.Raw(tblEvaluationMbView.S55.Caption)</span></td>
+        <td data-name="S55" @Html.Raw(tblEvaluationMbView.S55.CellAttributes)>
+<span id="el_tblEvaluationMB_S55" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S55.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S55_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S55.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S55.CurrentValue))">
+    <label class="form-check-label" for="x_S55_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S55.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S9.Visible) { // tblEvaluationMbView.Scores_S9.Visible (begin)
+    <tr id="r_Scores_S9" @Html.Raw(tblEvaluationMbView.Scores_S9.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S9">@Html.Raw(tblEvaluationMbView.Scores_S9.Caption)</span></td>
+        <td data-name="Scores_S9" @Html.Raw(tblEvaluationMbView.Scores_S9.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S9" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S9.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S9.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S9.Visible (end) *@
+@if (tblEvaluationMbView.S56.Visible) { // tblEvaluationMbView.S56.Visible (begin)
+    <tr id="r_S56" @Html.Raw(tblEvaluationMbView.S56.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S56">@Html.Raw(tblEvaluationMbView.S56.Caption)</span></td>
+        <td data-name="S56" @Html.Raw(tblEvaluationMbView.S56.CellAttributes)>
+<span id="el_tblEvaluationMB_S56" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S56.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S56_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S56.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S56.CurrentValue))">
+    <label class="form-check-label" for="x_S56_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S56.Visible (end) *@
+@if (tblEvaluationMbView.S57.Visible) { // tblEvaluationMbView.S57.Visible (begin)
+    <tr id="r_S57" @Html.Raw(tblEvaluationMbView.S57.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S57">@Html.Raw(tblEvaluationMbView.S57.Caption)</span></td>
+        <td data-name="S57" @Html.Raw(tblEvaluationMbView.S57.CellAttributes)>
+<span id="el_tblEvaluationMB_S57" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S57.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S57_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S57.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S57.CurrentValue))">
+    <label class="form-check-label" for="x_S57_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S57.Visible (end) *@
+@if (tblEvaluationMbView.S58.Visible) { // tblEvaluationMbView.S58.Visible (begin)
+    <tr id="r_S58" @Html.Raw(tblEvaluationMbView.S58.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S58">@Html.Raw(tblEvaluationMbView.S58.Caption)</span></td>
+        <td data-name="S58" @Html.Raw(tblEvaluationMbView.S58.CellAttributes)>
+<span id="el_tblEvaluationMB_S58" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S58.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S58_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S58.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S58.CurrentValue))">
+    <label class="form-check-label" for="x_S58_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S58.Visible (end) *@
+@if (tblEvaluationMbView.S59.Visible) { // tblEvaluationMbView.S59.Visible (begin)
+    <tr id="r_S59" @Html.Raw(tblEvaluationMbView.S59.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S59">@Html.Raw(tblEvaluationMbView.S59.Caption)</span></td>
+        <td data-name="S59" @Html.Raw(tblEvaluationMbView.S59.CellAttributes)>
+<span id="el_tblEvaluationMB_S59" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S59.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S59_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S59.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S59.CurrentValue))">
+    <label class="form-check-label" for="x_S59_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S59.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S10.Visible) { // tblEvaluationMbView.Scores_S10.Visible (begin)
+    <tr id="r_Scores_S10" @Html.Raw(tblEvaluationMbView.Scores_S10.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S10">@Html.Raw(tblEvaluationMbView.Scores_S10.Caption)</span></td>
+        <td data-name="Scores_S10" @Html.Raw(tblEvaluationMbView.Scores_S10.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S10" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S10.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S10.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S10.Visible (end) *@
+@if (tblEvaluationMbView.S60.Visible) { // tblEvaluationMbView.S60.Visible (begin)
+    <tr id="r_S60" @Html.Raw(tblEvaluationMbView.S60.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S60">@Html.Raw(tblEvaluationMbView.S60.Caption)</span></td>
+        <td data-name="S60" @Html.Raw(tblEvaluationMbView.S60.CellAttributes)>
+<span id="el_tblEvaluationMB_S60" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S60.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S60_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S60.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S60.CurrentValue))">
+    <label class="form-check-label" for="x_S60_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S60.Visible (end) *@
+@if (tblEvaluationMbView.S61.Visible) { // tblEvaluationMbView.S61.Visible (begin)
+    <tr id="r_S61" @Html.Raw(tblEvaluationMbView.S61.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S61">@Html.Raw(tblEvaluationMbView.S61.Caption)</span></td>
+        <td data-name="S61" @Html.Raw(tblEvaluationMbView.S61.CellAttributes)>
+<span id="el_tblEvaluationMB_S61" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S61.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S61_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S61.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S61.CurrentValue))">
+    <label class="form-check-label" for="x_S61_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S61.Visible (end) *@
+@if (tblEvaluationMbView.S62.Visible) { // tblEvaluationMbView.S62.Visible (begin)
+    <tr id="r_S62" @Html.Raw(tblEvaluationMbView.S62.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S62">@Html.Raw(tblEvaluationMbView.S62.Caption)</span></td>
+        <td data-name="S62" @Html.Raw(tblEvaluationMbView.S62.CellAttributes)>
+<span id="el_tblEvaluationMB_S62" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S62.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S62_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S62.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S62.CurrentValue))">
+    <label class="form-check-label" for="x_S62_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S62.Visible (end) *@
+@if (tblEvaluationMbView.S63.Visible) { // tblEvaluationMbView.S63.Visible (begin)
+    <tr id="r_S63" @Html.Raw(tblEvaluationMbView.S63.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S63">@Html.Raw(tblEvaluationMbView.S63.Caption)</span></td>
+        <td data-name="S63" @Html.Raw(tblEvaluationMbView.S63.CellAttributes)>
+<span id="el_tblEvaluationMB_S63" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S63.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S63_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S63.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S63.CurrentValue))">
+    <label class="form-check-label" for="x_S63_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S63.Visible (end) *@
+@if (tblEvaluationMbView.S64.Visible) { // tblEvaluationMbView.S64.Visible (begin)
+    <tr id="r_S64" @Html.Raw(tblEvaluationMbView.S64.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S64">@Html.Raw(tblEvaluationMbView.S64.Caption)</span></td>
+        <td data-name="S64" @Html.Raw(tblEvaluationMbView.S64.CellAttributes)>
+<span id="el_tblEvaluationMB_S64" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S64.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S64_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S64.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S64.CurrentValue))">
+    <label class="form-check-label" for="x_S64_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S64.Visible (end) *@
+@if (tblEvaluationMbView.S65.Visible) { // tblEvaluationMbView.S65.Visible (begin)
+    <tr id="r_S65" @Html.Raw(tblEvaluationMbView.S65.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S65">@Html.Raw(tblEvaluationMbView.S65.Caption)</span></td>
+        <td data-name="S65" @Html.Raw(tblEvaluationMbView.S65.CellAttributes)>
+<span id="el_tblEvaluationMB_S65" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S65.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S65_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S65.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S65.CurrentValue))">
+    <label class="form-check-label" for="x_S65_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S65.Visible (end) *@
+@if (tblEvaluationMbView.Scores_S11.Visible) { // tblEvaluationMbView.Scores_S11.Visible (begin)
+    <tr id="r_Scores_S11" @Html.Raw(tblEvaluationMbView.Scores_S11.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Scores_S11">@Html.Raw(tblEvaluationMbView.Scores_S11.Caption)</span></td>
+        <td data-name="Scores_S11" @Html.Raw(tblEvaluationMbView.Scores_S11.CellAttributes)>
+<span id="el_tblEvaluationMB_Scores_S11" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.Scores_S11.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Scores_S11.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Scores_S11.Visible (end) *@
+@if (tblEvaluationMbView.S66.Visible) { // tblEvaluationMbView.S66.Visible (begin)
+    <tr id="r_S66" @Html.Raw(tblEvaluationMbView.S66.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S66">@Html.Raw(tblEvaluationMbView.S66.Caption)</span></td>
+        <td data-name="S66" @Html.Raw(tblEvaluationMbView.S66.CellAttributes)>
+<span id="el_tblEvaluationMB_S66" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S66.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S66_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S66.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S66.CurrentValue))">
+    <label class="form-check-label" for="x_S66_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S66.Visible (end) *@
+@if (tblEvaluationMbView.S67.Visible) { // tblEvaluationMbView.S67.Visible (begin)
+    <tr id="r_S67" @Html.Raw(tblEvaluationMbView.S67.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S67">@Html.Raw(tblEvaluationMbView.S67.Caption)</span></td>
+        <td data-name="S67" @Html.Raw(tblEvaluationMbView.S67.CellAttributes)>
+<span id="el_tblEvaluationMB_S67" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S67.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S67_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S67.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S67.CurrentValue))">
+    <label class="form-check-label" for="x_S67_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S67.Visible (end) *@
+@if (tblEvaluationMbView.S68.Visible) { // tblEvaluationMbView.S68.Visible (begin)
+    <tr id="r_S68" @Html.Raw(tblEvaluationMbView.S68.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S68">@Html.Raw(tblEvaluationMbView.S68.Caption)</span></td>
+        <td data-name="S68" @Html.Raw(tblEvaluationMbView.S68.CellAttributes)>
+<span id="el_tblEvaluationMB_S68" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S68.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S68_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S68.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S68.CurrentValue))">
+    <label class="form-check-label" for="x_S68_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S68.Visible (end) *@
+@if (tblEvaluationMbView.S69.Visible) { // tblEvaluationMbView.S69.Visible (begin)
+    <tr id="r_S69" @Html.Raw(tblEvaluationMbView.S69.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S69">@Html.Raw(tblEvaluationMbView.S69.Caption)</span></td>
+        <td data-name="S69" @Html.Raw(tblEvaluationMbView.S69.CellAttributes)>
+<span id="el_tblEvaluationMB_S69" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S69.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S69_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S69.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S69.CurrentValue))">
+    <label class="form-check-label" for="x_S69_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S69.Visible (end) *@
+@if (tblEvaluationMbView.S70.Visible) { // tblEvaluationMbView.S70.Visible (begin)
+    <tr id="r_S70" @Html.Raw(tblEvaluationMbView.S70.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_S70">@Html.Raw(tblEvaluationMbView.S70.Caption)</span></td>
+        <td data-name="S70" @Html.Raw(tblEvaluationMbView.S70.CellAttributes)>
+<span id="el_tblEvaluationMB_S70" data-page="1">
+<span @Html.Raw(tblEvaluationMbView.S70.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_S70_@(tblEvaluationMbView.RowCount)" class="form-check-input" value="@(tblEvaluationMbView.S70.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbView.S70.CurrentValue))">
+    <label class="form-check-label" for="x_S70_@(tblEvaluationMbView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.S70.Visible (end) *@
+</table>
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(2))" id="tab_tblEvaluationMB2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(3))" id="tab_tblEvaluationMB3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(4))" id="tab_tblEvaluationMB4" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(5))" id="tab_tblEvaluationMB5" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(6))" id="tab_tblEvaluationMB6" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(7))" id="tab_tblEvaluationMB7" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(8))" id="tab_tblEvaluationMB8" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(9))" id="tab_tblEvaluationMB9" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(10))" id="tab_tblEvaluationMB10" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(11))" id="tab_tblEvaluationMB11" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(12))" id="tab_tblEvaluationMB12" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblEvaluationMbView.TableClass)">
+@if (tblEvaluationMbView.Evaluation_Score.Visible) { // tblEvaluationMbView.Evaluation_Score.Visible (begin)
+    <tr id="r_Evaluation_Score" @Html.Raw(tblEvaluationMbView.Evaluation_Score.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Evaluation_Score">@Html.Raw(tblEvaluationMbView.Evaluation_Score.Caption)</span></td>
+        <td data-name="Evaluation_Score" @Html.Raw(tblEvaluationMbView.Evaluation_Score.CellAttributes)>
+<span id="el_tblEvaluationMB_Evaluation_Score" data-page="12">
+<span @Html.Raw(tblEvaluationMbView.Evaluation_Score.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Evaluation_Score.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Evaluation_Score.Visible (end) *@
+@if (tblEvaluationMbView.Immediate_Failure_Score.Visible) { // tblEvaluationMbView.Immediate_Failure_Score.Visible (begin)
+    <tr id="r_Immediate_Failure_Score" @Html.Raw(tblEvaluationMbView.Immediate_Failure_Score.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Immediate_Failure_Score">@Html.Raw(tblEvaluationMbView.Immediate_Failure_Score.Caption)</span></td>
+        <td data-name="Immediate_Failure_Score" @Html.Raw(tblEvaluationMbView.Immediate_Failure_Score.CellAttributes)>
+<span id="el_tblEvaluationMB_Immediate_Failure_Score" data-page="12">
+<span @Html.Raw(tblEvaluationMbView.Immediate_Failure_Score.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Immediate_Failure_Score.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Immediate_Failure_Score.Visible (end) *@
+</table>
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:<div class="@(tblEvaluationMbView.MultiPages.TabPaneClasses(13))" id="tab_tblEvaluationMB13" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblEvaluationMbView.TableClass)">
+@if (tblEvaluationMbView.Examiner_Signature.Visible) { // tblEvaluationMbView.Examiner_Signature.Visible (begin)
+    <tr id="r_Examiner_Signature" @Html.Raw(tblEvaluationMbView.Examiner_Signature.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Examiner_Signature">@Html.Raw(tblEvaluationMbView.Examiner_Signature.Caption)</span></td>
+        <td data-name="Examiner_Signature" @Html.Raw(tblEvaluationMbView.Examiner_Signature.CellAttributes)>
+<span id="el_tblEvaluationMB_Examiner_Signature" data-page="13">
+<span @Html.Raw(tblEvaluationMbView.Examiner_Signature.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Examiner_Signature.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Examiner_Signature.Visible (end) *@
+@if (tblEvaluationMbView.Student_Signature.Visible) { // tblEvaluationMbView.Student_Signature.Visible (begin)
+    <tr id="r_Student_Signature" @Html.Raw(tblEvaluationMbView.Student_Signature.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Student_Signature">@Html.Raw(tblEvaluationMbView.Student_Signature.Caption)</span></td>
+        <td data-name="Student_Signature" @Html.Raw(tblEvaluationMbView.Student_Signature.CellAttributes)>
+<span id="el_tblEvaluationMB_Student_Signature" data-page="13">
+<span @Html.Raw(tblEvaluationMbView.Student_Signature.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Student_Signature.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Student_Signature.Visible (end) *@
+@if (tblEvaluationMbView.Required_Program.Visible) { // tblEvaluationMbView.Required_Program.Visible (begin)
+    <tr id="r_Required_Program" @Html.Raw(tblEvaluationMbView.Required_Program.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Required_Program">@Html.Raw(tblEvaluationMbView.Required_Program.Caption)</span></td>
+        <td data-name="Required_Program" @Html.Raw(tblEvaluationMbView.Required_Program.CellAttributes)>
+<span id="el_tblEvaluationMB_Required_Program" data-page="13">
+<span @Html.Raw(tblEvaluationMbView.Required_Program.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Required_Program.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Required_Program.Visible (end) *@
+@if (tblEvaluationMbView.Price.Visible) { // tblEvaluationMbView.Price.Visible (begin)
+    <tr id="r_Price" @Html.Raw(tblEvaluationMbView.Price.RowAttributes)>
+        <td class="@(tblEvaluationMbView.TableLeftColumnClass)"><span id="elh_tblEvaluationMB_Price">@Html.Raw(tblEvaluationMbView.Price.Caption)</span></td>
+        <td data-name="Price" @Html.Raw(tblEvaluationMbView.Price.CellAttributes)>
+<span id="el_tblEvaluationMB_Price" data-page="13">
+<span @Html.Raw(tblEvaluationMbView.Price.ViewAttributes)>
+@Html.Raw(tblEvaluationMbView.Price.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblEvaluationMbView.Price.Visible (end) *@
+</table>
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblEvaluationMbView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblEvaluationMbView.CloseRecordset(); }
+</form>
+</main>
+@tblEvaluationMbView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblEvaluationMbView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

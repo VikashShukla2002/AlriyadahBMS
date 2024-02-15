@@ -1,0 +1,172 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblOtherWebServicesList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblOtherWebServicesList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblOtherWebServicesList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblOtherWebServicesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblOtherWebServices: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblOtherWebServicesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblOtherWebServicesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblOtherWebServicesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblOtherWebServicesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblOtherWebServicesList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblOtherWebServicesList.TotalRecords > 0 && tblOtherWebServicesList.ExportOptions.Visible) {
+    tblOtherWebServicesList.ExportOptions.Render("body");
+}
+@if (tblOtherWebServicesList.ImportOptions.Visible) {
+    tblOtherWebServicesList.ImportOptions.Render("body");
+}
+@if (tblOtherWebServicesList.SearchOptions.Visible) {
+    tblOtherWebServicesList.SearchOptions.Render("body");
+}
+@if (tblOtherWebServicesList.FilterOptions.Visible) {
+    tblOtherWebServicesList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblOtherWebServicesList.IsModal) {
+<form name="ftblOtherWebServicessrch" id="ftblOtherWebServicessrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblOtherWebServicessrch_search_panel" class="mb-2 mb-sm-0 @(tblOtherWebServicesList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblOtherWebServicesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblOtherWebServices: currentTable } });
+var currentForm;
+var ftblOtherWebServicessrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblOtherWebServicessrch")
+        .setPageId("list")
+@if (tblOtherWebServicesList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblOtherWebServicesList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblOtherWebServicesList.IsExport() && Empty(tblOtherWebServicesList.CurrentAction) && tblOtherWebServicesList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblOtherWebServicesList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblOtherWebServicesList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblOtherWebServicesList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblOtherWebServicesList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblOtherWebServicessrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblOtherWebServicesList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblOtherWebServicessrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblOtherWebServicesList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblOtherWebServicessrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblOtherWebServicesList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblOtherWebServicessrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblOtherWebServicesList.ShowPageHeader()
+@tblOtherWebServicesList.ShowMessages()
+<main class="list @(tblOtherWebServicesList.TotalRecords == 0 && !tblOtherWebServicesList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblOtherWebServicesList.TotalRecords > 0 || !Empty(tblOtherWebServicesList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblOtherWebServicesList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblOtherWebServices" + TitleCaseInvariant(tblOtherWebServicesList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblOtherWebServicesList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblOtherWebServicesList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblOtherWebServicesList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblOtherWebServices");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

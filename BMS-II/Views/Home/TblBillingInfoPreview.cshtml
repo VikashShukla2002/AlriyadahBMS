@@ -1,0 +1,261 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblBillingInfoPreview.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+ew.deepAssign(ew.vars, { tables: { tblBillingInfo: @Html.Raw(ConvertToJson(tblBillingInfoPreview.ToClientVar())) } });
+</script>
+@tblBillingInfoPreview.ShowPageHeader()
+@if (tblBillingInfoPreview.TotalRecords > 0) {
+<div class="card ew-grid @(tblBillingInfoPreview.TableGridClass)"><!-- .card -->
+<div class="card-header ew-grid-upper-panel ew-preview-upper-panel"><!-- .card-header -->
+@Html.Raw(tblBillingInfoPreview.Pager.Render())
+<div class="ew-preview-other-options">
+@tblBillingInfoPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card-header -->
+<div class="card-body ew-preview-middle-panel ew-grid-middle-panel @(tblBillingInfoPreview.TableContainerClass)" style="@(tblBillingInfoPreview.TableContainerStyle)"><!-- .card-body -->
+<table class="@(tblBillingInfoPreview.TableClass)"><!-- .table -->
+    <thead><!-- Table header -->
+        <tr class="ew-table-header">
+@{
+    await tblBillingInfoPreview.RenderListOptions(); // Render list options
+}
+@tblBillingInfoPreview.ListOptions.RenderHeader("left")
+@if (tblBillingInfoPreview.NationalID.Visible) { // tblBillingInfoPreview.NationalID.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.NationalID))) {
+        <th class="@tblBillingInfoPreview.NationalID.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.NationalID.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.NationalID.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.NationalID.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.NationalID.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.NationalID.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.NationalID.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.NationalID.Visible (end) *@
+@if (tblBillingInfoPreview.str_First_Name.Visible) { // tblBillingInfoPreview.str_First_Name.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.str_First_Name))) {
+        <th class="@tblBillingInfoPreview.str_First_Name.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.str_First_Name.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.str_First_Name.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.str_First_Name.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.str_First_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.str_First_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.str_First_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.str_First_Name.Visible (end) *@
+@if (tblBillingInfoPreview.str_Last_Name.Visible) { // tblBillingInfoPreview.str_Last_Name.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.str_Last_Name))) {
+        <th class="@tblBillingInfoPreview.str_Last_Name.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.str_Last_Name.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.str_Last_Name.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.str_Last_Name.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.str_Last_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.str_Last_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.str_Last_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.str_Last_Name.Visible (end) *@
+@if (tblBillingInfoPreview.date_Paid.Visible) { // tblBillingInfoPreview.date_Paid.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.date_Paid))) {
+        <th class="@tblBillingInfoPreview.date_Paid.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.date_Paid.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.date_Paid.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.date_Paid.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.date_Paid.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.date_Paid.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.date_Paid.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.date_Paid.Visible (end) *@
+@if (tblBillingInfoPreview.str_ApprovalCode.Visible) { // tblBillingInfoPreview.str_ApprovalCode.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.str_ApprovalCode))) {
+        <th class="@tblBillingInfoPreview.str_ApprovalCode.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.str_ApprovalCode.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.str_ApprovalCode.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.str_ApprovalCode.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.str_ApprovalCode.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.str_ApprovalCode.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.str_ApprovalCode.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.str_ApprovalCode.Visible (end) *@
+@if (tblBillingInfoPreview.Payment_Number.Visible) { // tblBillingInfoPreview.Payment_Number.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.Payment_Number))) {
+        <th class="@tblBillingInfoPreview.Payment_Number.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.Payment_Number.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.Payment_Number.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.Payment_Number.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.Payment_Number.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.Payment_Number.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.Payment_Number.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.Payment_Number.Visible (end) *@
+@if (tblBillingInfoPreview.Pricelist.Visible) { // tblBillingInfoPreview.Pricelist.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.Pricelist))) {
+        <th class="@tblBillingInfoPreview.Pricelist.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.Pricelist.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.Pricelist.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.Pricelist.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.Pricelist.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.Pricelist.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.Pricelist.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.Pricelist.Visible (end) *@
+@if (tblBillingInfoPreview.str_Amount_Pay.Visible) { // tblBillingInfoPreview.str_Amount_Pay.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.str_Amount_Pay))) {
+        <th class="@tblBillingInfoPreview.str_Amount_Pay.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.str_Amount_Pay.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.str_Amount_Pay.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.str_Amount_Pay.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.str_Amount_Pay.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.str_Amount_Pay.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.str_Amount_Pay.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.str_Amount_Pay.Visible (end) *@
+@if (tblBillingInfoPreview.mny_Running_Payments.Visible) { // tblBillingInfoPreview.mny_Running_Payments.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.mny_Running_Payments))) {
+        <th class="@tblBillingInfoPreview.mny_Running_Payments.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.mny_Running_Payments.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.mny_Running_Payments.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.mny_Running_Payments.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.mny_Running_Payments.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.mny_Running_Payments.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.mny_Running_Payments.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.mny_Running_Payments.Visible (end) *@
+@if (tblBillingInfoPreview.mny_Running_Balance.Visible) { // tblBillingInfoPreview.mny_Running_Balance.Visible (begin)
+    if (Empty(tblBillingInfoPreview.SortUrl(tblBillingInfoPreview.mny_Running_Balance))) {
+        <th class="@tblBillingInfoPreview.mny_Running_Balance.HeaderCellClass">@Html.Raw(tblBillingInfoPreview.mny_Running_Balance.Caption)</th>
+    } else {
+        <th class="@tblBillingInfoPreview.mny_Running_Balance.HeaderCellClass"><div role="button" data-table="tblBillingInfo" data-sort="@tblBillingInfoPreview.mny_Running_Balance.Name" data-sort-type="2" data-sort-order="@tblBillingInfoPreview.mny_Running_Balance.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblBillingInfoPreview.mny_Running_Balance.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblBillingInfoPreview.mny_Running_Balance.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblBillingInfoPreview.mny_Running_Balance.Visible (end) *@
+@tblBillingInfoPreview.ListOptions.RenderHeader("right")
+        </tr>
+    </thead>
+    <tbody><!-- Table body -->
+@{
+    tblBillingInfoPreview.RecordCount = 0;
+    tblBillingInfoPreview.RowCount = 0;
+}
+@do {
+    // Init row class and style
+    tblBillingInfoPreview.RecordCount++;
+    tblBillingInfoPreview.RowCount++;
+    tblBillingInfoPreview.CssStyle = "";
+    tblBillingInfoPreview.LoadListRowValues(tblBillingInfoPreview.Recordset);
+
+    // Render row
+    tblBillingInfoPreview.RowType = RowType.Preview; // Preview record
+    tblBillingInfoPreview.ResetAttributes();
+    await tblBillingInfoPreview.RenderListRow();
+
+    // Render list options
+    await tblBillingInfoPreview.RenderListOptions();
+    <tr @Html.Raw(tblBillingInfoPreview.RowAttributes)>
+    @tblBillingInfoPreview.ListOptions.RenderBody("left", tblBillingInfoPreview.RowCount)
+    @if (tblBillingInfoPreview.NationalID.Visible) { // tblBillingInfoPreview.NationalID.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.NationalID.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.NationalID.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.NationalID.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.NationalID.Visible (end) *@
+    @if (tblBillingInfoPreview.str_First_Name.Visible) { // tblBillingInfoPreview.str_First_Name.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.str_First_Name.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.str_First_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.str_First_Name.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.str_First_Name.Visible (end) *@
+    @if (tblBillingInfoPreview.str_Last_Name.Visible) { // tblBillingInfoPreview.str_Last_Name.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.str_Last_Name.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.str_Last_Name.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.str_Last_Name.Visible (end) *@
+    @if (tblBillingInfoPreview.date_Paid.Visible) { // tblBillingInfoPreview.date_Paid.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.date_Paid.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.date_Paid.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.date_Paid.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.date_Paid.Visible (end) *@
+    @if (tblBillingInfoPreview.str_ApprovalCode.Visible) { // tblBillingInfoPreview.str_ApprovalCode.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.str_ApprovalCode.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.str_ApprovalCode.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.str_ApprovalCode.Visible (end) *@
+    @if (tblBillingInfoPreview.Payment_Number.Visible) { // tblBillingInfoPreview.Payment_Number.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.Payment_Number.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.Payment_Number.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.Payment_Number.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.Payment_Number.Visible (end) *@
+    @if (tblBillingInfoPreview.Pricelist.Visible) { // tblBillingInfoPreview.Pricelist.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.Pricelist.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.Pricelist.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.Pricelist.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.Pricelist.Visible (end) *@
+    @if (tblBillingInfoPreview.str_Amount_Pay.Visible) { // tblBillingInfoPreview.str_Amount_Pay.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.str_Amount_Pay.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.str_Amount_Pay.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.str_Amount_Pay.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.str_Amount_Pay.Visible (end) *@
+    @if (tblBillingInfoPreview.mny_Running_Payments.Visible) { // tblBillingInfoPreview.mny_Running_Payments.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.mny_Running_Payments.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.mny_Running_Payments.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.mny_Running_Payments.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.mny_Running_Payments.Visible (end) *@
+    @if (tblBillingInfoPreview.mny_Running_Balance.Visible) { // tblBillingInfoPreview.mny_Running_Balance.Visible (begin)
+            <td @Html.Raw(tblBillingInfoPreview.mny_Running_Balance.CellAttributes)>
+<span @Html.Raw(tblBillingInfoPreview.mny_Running_Balance.ViewAttributes)>
+@Html.Raw(tblBillingInfoPreview.mny_Running_Balance.GetViewValue())</span>
+</td>
+    } @* tblBillingInfoPreview.mny_Running_Balance.Visible (end) *@
+    @tblBillingInfoPreview.ListOptions.RenderBody("right", tblBillingInfoPreview.RowCount)
+    </tr>
+} while (await tblBillingInfoPreview.Recordset.ReadAsync());
+    </tbody>
+</table><!-- /.table -->
+</div><!-- /.card-body -->
+</div><!-- /.card -->
+} else { @* No record *@
+<div class="card border-0"><!-- .card -->
+<div class="ew-detail-count">@Html.Raw(Language.Phrase("NoRecord"))</div>
+<div class="ew-preview-other-options">
+@tblBillingInfoPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card -->
+}
+@tblBillingInfoPreview.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()

@@ -1,0 +1,594 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblBillingInfoEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblBillingInfoEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblBillingInfoEdit.ShowPageHeader()
+@tblBillingInfoEdit.ShowMessages()
+<main class="edit">
+<form name="ftblBillingInfoedit" id="ftblBillingInfoedit" class="@(tblBillingInfoEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblBillingInfoEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblBillingInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var ftblBillingInfoedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblBillingInfoedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["int_Payment_Method", [fields.int_Payment_Method.visible && fields.int_Payment_Method.required ? ew.Validators.required(fields.int_Payment_Method.caption) : null], fields.int_Payment_Method.isInvalid],
+            ["date_Paid", [fields.date_Paid.visible && fields.date_Paid.required ? ew.Validators.required(fields.date_Paid.caption) : null, ew.Validators.datetime(fields.date_Paid.clientFormatPattern)], fields.date_Paid.isInvalid],
+            ["str_ApprovalCode", [fields.str_ApprovalCode.visible && fields.str_ApprovalCode.required ? ew.Validators.required(fields.str_ApprovalCode.caption) : null], fields.str_ApprovalCode.isInvalid],
+            ["str_CC_Holder_Name", [fields.str_CC_Holder_Name.visible && fields.str_CC_Holder_Name.required ? ew.Validators.required(fields.str_CC_Holder_Name.caption) : null], fields.str_CC_Holder_Name.isInvalid],
+            ["str_CC_Number", [fields.str_CC_Number.visible && fields.str_CC_Number.required ? ew.Validators.required(fields.str_CC_Number.caption) : null, ew.Validators.creditCard], fields.str_CC_Number.isInvalid],
+            ["int_CC_ExpMonth", [fields.int_CC_ExpMonth.visible && fields.int_CC_ExpMonth.required ? ew.Validators.required(fields.int_CC_ExpMonth.caption) : null, ew.Validators.integer], fields.int_CC_ExpMonth.isInvalid],
+            ["int_CC_ExpYear", [fields.int_CC_ExpYear.visible && fields.int_CC_ExpYear.required ? ew.Validators.required(fields.int_CC_ExpYear.caption) : null, ew.Validators.integer], fields.int_CC_ExpYear.isInvalid],
+            ["int_CC_Type", [fields.int_CC_Type.visible && fields.int_CC_Type.required ? ew.Validators.required(fields.int_CC_Type.caption) : null, ew.Validators.integer], fields.int_CC_Type.isInvalid],
+            ["str_Card_Id", [fields.str_Card_Id.visible && fields.str_Card_Id.required ? ew.Validators.required(fields.str_Card_Id.caption) : null], fields.str_Card_Id.isInvalid],
+            ["str_CC_ValidationNum", [fields.str_CC_ValidationNum.visible && fields.str_CC_ValidationNum.required ? ew.Validators.required(fields.str_CC_ValidationNum.caption) : null], fields.str_CC_ValidationNum.isInvalid],
+            ["str_Amount_Pay", [fields.str_Amount_Pay.visible && fields.str_Amount_Pay.required ? ew.Validators.required(fields.str_Amount_Pay.caption) : null], fields.str_Amount_Pay.isInvalid],
+            ["mny_Running_Balance", [fields.mny_Running_Balance.visible && fields.mny_Running_Balance.required ? ew.Validators.required(fields.mny_Running_Balance.caption) : null], fields.mny_Running_Balance.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null], fields.int_Modified_By.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null], fields.date_Modified.isInvalid],
+            ["bit_IsRefund", [fields.bit_IsRefund.visible && fields.bit_IsRefund.required ? ew.Validators.required(fields.bit_IsRefund.caption) : null], fields.bit_IsRefund.isInvalid],
+            ["str_Payment_Note", [fields.str_Payment_Note.visible && fields.str_Payment_Note.required ? ew.Validators.required(fields.str_Payment_Note.caption) : null], fields.str_Payment_Note.isInvalid],
+            ["Package_Name", [fields.Package_Name.visible && fields.Package_Name.required ? ew.Validators.required(fields.Package_Name.caption) : null], fields.Package_Name.isInvalid],
+            ["Price", [fields.Price.visible && fields.Price.required ? ew.Validators.required(fields.Price.caption) : null], fields.Price.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_Payment_Method": @Html.Raw(tblBillingInfoEdit.int_Payment_Method.ToClientList(tblBillingInfoEdit)),
+            "bit_IsRefund": @Html.Raw(tblBillingInfoEdit.bit_IsRefund.ToClientList(tblBillingInfoEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblBillingInfoEdit.IsConfirm) { // Confirm page
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="confirm" id="confirm" value="confirm">
+} else {
+<input type="hidden" name="action" id="action" value="confirm">
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblBillingInfoEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblBillingInfoEdit.OldKeyName)" value="@Html.Raw(tblBillingInfoEdit.OldKey)">
+@if (tblBillingInfoEdit.CurrentMasterTable == "tblPotentialStudentInfo") {
+<input type="hidden" name="@Config.TableShowMaster" value="tblPotentialStudentInfo">
+<input type="hidden" name="fk_NationalID" value="@(HtmlEncode(tblBillingInfoEdit.NationalID.SessionValue))">
+}
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblBillingInfoEdit.MultiPages.ContainerClasses)" id="pages_tblBillingInfoEdit"><!-- multi-page tabs -->
+    <ul class="@(tblBillingInfoEdit.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblBillingInfoEdit.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblBillingInfo1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblBillingInfo1" aria-selected="@(ConvertToJson(tblBillingInfoEdit.MultiPages.IsActive(1)))">@Html.Raw(tblBillingInfoEdit.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblBillingInfoEdit.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblBillingInfo2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblBillingInfo2" aria-selected="@(ConvertToJson(tblBillingInfoEdit.MultiPages.IsActive(2)))">@Html.Raw(tblBillingInfoEdit.PageCaption(2))</button></li>
+    </ul>
+    <div class="@(tblBillingInfoEdit.MultiPages.TabContentClasses)"><!-- multi-page tabs .tab-content -->
+        <div class="@(tblBillingInfoEdit.MultiPages.TabPaneClasses(1))" id="tab_tblBillingInfo1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblBillingInfoEdit.NationalID.Visible) { // tblBillingInfoEdit.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblBillingInfoEdit.NationalID.RowAttributes)>
+        <label id="elh_tblBillingInfo_NationalID" for="x_NationalID" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.NationalID.Caption)@Html.Raw(tblBillingInfoEdit.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.NationalID.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // NationalID (begin)
+<span id="el_tblBillingInfo_NationalID">
+<span @Html.Raw(tblBillingInfoEdit.NationalID.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.NationalID.DisplayValue(tblBillingInfoEdit.NationalID.EditValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_NationalID" data-hidden="1" data-page="1" name="x_NationalID" id="x_NationalID" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.NationalID.CurrentValue))">
+</span>
+} else { // NationalID (confirm)
+<span @Html.Raw(tblBillingInfoEdit.NationalID.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.NationalID.DisplayValue(tblBillingInfoEdit.NationalID.ViewValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_NationalID" data-hidden="1" data-page="1" name="x_NationalID" id="x_NationalID" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.NationalID.FormValue))">
+} @* NationalID (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.NationalID.Visible (end) *@
+@if (tblBillingInfoEdit.str_First_Name.Visible) { // tblBillingInfoEdit.str_First_Name.Visible (begin)
+    <div id="r_str_First_Name" @Html.Raw(tblBillingInfoEdit.str_First_Name.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_First_Name" for="x_str_First_Name" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_First_Name.Caption)@Html.Raw(tblBillingInfoEdit.str_First_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_First_Name.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_First_Name (begin)
+<span id="el_tblBillingInfo_str_First_Name">
+<span @Html.Raw(tblBillingInfoEdit.str_First_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_First_Name.EditValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_First_Name" data-hidden="1" data-page="1" name="x_str_First_Name" id="x_str_First_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_First_Name.CurrentValue))">
+</span>
+} else { // str_First_Name (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_First_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_First_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_First_Name" data-hidden="1" data-page="1" name="x_str_First_Name" id="x_str_First_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_First_Name.FormValue))">
+} @* str_First_Name (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_First_Name.Visible (end) *@
+@if (tblBillingInfoEdit.str_Last_Name.Visible) { // tblBillingInfoEdit.str_Last_Name.Visible (begin)
+    <div id="r_str_Last_Name" @Html.Raw(tblBillingInfoEdit.str_Last_Name.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_Last_Name" for="x_str_Last_Name" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_Last_Name.Caption)@Html.Raw(tblBillingInfoEdit.str_Last_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_Last_Name.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_Last_Name (begin)
+<span id="el_tblBillingInfo_str_Last_Name">
+<span @Html.Raw(tblBillingInfoEdit.str_Last_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_Last_Name.EditValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_Last_Name" data-hidden="1" data-page="1" name="x_str_Last_Name" id="x_str_Last_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Last_Name.CurrentValue))">
+</span>
+} else { // str_Last_Name (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_Last_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_Last_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_Last_Name" data-hidden="1" data-page="1" name="x_str_Last_Name" id="x_str_Last_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Last_Name.FormValue))">
+} @* str_Last_Name (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_Last_Name.Visible (end) *@
+@if (tblBillingInfoEdit.str_ApprovalCode.Visible) { // tblBillingInfoEdit.str_ApprovalCode.Visible (begin)
+    <div id="r_str_ApprovalCode" @Html.Raw(tblBillingInfoEdit.str_ApprovalCode.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_ApprovalCode" for="x_str_ApprovalCode" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_ApprovalCode.Caption)@Html.Raw(tblBillingInfoEdit.str_ApprovalCode.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_ApprovalCode.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_ApprovalCode (begin)
+<span id="el_tblBillingInfo_str_ApprovalCode">
+<input type="@(tblBillingInfoEdit.str_ApprovalCode.InputTextType)" name="x_str_ApprovalCode" id="x_str_ApprovalCode" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" value="@Html.Raw(tblBillingInfoEdit.str_ApprovalCode.EditValue)" data-page="1" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_ApprovalCode.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.str_ApprovalCode.FormatPattern)"@Html.Raw(tblBillingInfoEdit.str_ApprovalCode.EditAttributes) aria-describedby="x_str_ApprovalCode_help">
+@Html.Raw(tblBillingInfoEdit.str_ApprovalCode.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_ApprovalCode.GetErrorMessage())</div>
+</span>
+} else { // str_ApprovalCode (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_ApprovalCode.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_ApprovalCode.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" data-hidden="1" data-page="1" name="x_str_ApprovalCode" id="x_str_ApprovalCode" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_ApprovalCode.FormValue))">
+} @* str_ApprovalCode (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_ApprovalCode.Visible (end) *@
+@if (tblBillingInfoEdit.bit_IsRefund.Visible) { // tblBillingInfoEdit.bit_IsRefund.Visible (begin)
+    <div id="r_bit_IsRefund" @Html.Raw(tblBillingInfoEdit.bit_IsRefund.RowAttributes)>
+        <label id="elh_tblBillingInfo_bit_IsRefund" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.bit_IsRefund.Caption)@Html.Raw(tblBillingInfoEdit.bit_IsRefund.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.bit_IsRefund.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // bit_IsRefund (begin)
+<span id="el_tblBillingInfo_bit_IsRefund">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblBillingInfoEdit.bit_IsRefund.IsInvalidClass)" data-table="tblBillingInfo" data-field="x_bit_IsRefund" data-boolean data-page="1" name="x_bit_IsRefund" id="x_bit_IsRefund" value="1" checked="@ConvertToBool(tblBillingInfoEdit.bit_IsRefund.CurrentValue)" @Html.Raw(tblBillingInfoEdit.bit_IsRefund.EditAttributes) aria-describedby="x_bit_IsRefund_help">
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.bit_IsRefund.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblBillingInfoEdit.bit_IsRefund.GetCustomMessage)
+</span>
+} else { // bit_IsRefund (confirm)
+<span @Html.Raw(tblBillingInfoEdit.bit_IsRefund.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsRefund_@(tblBillingInfoEdit.RowCount)" class="form-check-input" value="@(tblBillingInfoEdit.bit_IsRefund.ViewValue)" disabled checked="@(ConvertToBool(tblBillingInfoEdit.bit_IsRefund.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsRefund_@(tblBillingInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_bit_IsRefund" data-hidden="1" data-page="1" name="x_bit_IsRefund" id="x_bit_IsRefund" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.bit_IsRefund.FormValue))">
+} @* bit_IsRefund (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.bit_IsRefund.Visible (end) *@
+@if (tblBillingInfoEdit.Package_Name.Visible) { // tblBillingInfoEdit.Package_Name.Visible (begin)
+    <div id="r_Package_Name" @Html.Raw(tblBillingInfoEdit.Package_Name.RowAttributes)>
+        <label id="elh_tblBillingInfo_Package_Name" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.Package_Name.Caption)@Html.Raw(tblBillingInfoEdit.Package_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.Package_Name.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // Package_Name (begin)
+<span id="el_tblBillingInfo_Package_Name">
+<span @Html.Raw(tblBillingInfoEdit.Package_Name.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.Package_Name.DisplayValue(tblBillingInfoEdit.Package_Name.EditValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_Package_Name" data-hidden="1" data-page="1" name="x_Package_Name" id="x_Package_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.Package_Name.CurrentValue))">
+</span>
+} else { // Package_Name (confirm)
+<span @Html.Raw(tblBillingInfoEdit.Package_Name.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.Package_Name.DisplayValue(tblBillingInfoEdit.Package_Name.ViewValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_Package_Name" data-hidden="1" data-page="1" name="x_Package_Name" id="x_Package_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.Package_Name.FormValue))">
+} @* Package_Name (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.Package_Name.Visible (end) *@
+@if (tblBillingInfoEdit.Price.Visible) { // tblBillingInfoEdit.Price.Visible (begin)
+    <div id="r_Price" @Html.Raw(tblBillingInfoEdit.Price.RowAttributes)>
+        <label id="elh_tblBillingInfo_Price" for="x_Price" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.Price.Caption)@Html.Raw(tblBillingInfoEdit.Price.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.Price.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // Price (begin)
+<span id="el_tblBillingInfo_Price">
+<span @Html.Raw(tblBillingInfoEdit.Price.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.Price.DisplayValue(tblBillingInfoEdit.Price.EditValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_Price" data-hidden="1" data-page="1" name="x_Price" id="x_Price" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.Price.CurrentValue))">
+</span>
+} else { // Price (confirm)
+<span @Html.Raw(tblBillingInfoEdit.Price.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.Price.DisplayValue(tblBillingInfoEdit.Price.ViewValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_Price" data-hidden="1" data-page="1" name="x_Price" id="x_Price" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.Price.FormValue))">
+} @* Price (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.Price.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblBillingInfoEdit.MultiPages.TabPaneClasses(2))" id="tab_tblBillingInfo2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblBillingInfoEdit.int_Payment_Method.Visible) { // tblBillingInfoEdit.int_Payment_Method.Visible (begin)
+    <div id="r_int_Payment_Method" @Html.Raw(tblBillingInfoEdit.int_Payment_Method.RowAttributes)>
+        <label id="elh_tblBillingInfo_int_Payment_Method" for="x_int_Payment_Method" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.int_Payment_Method.Caption)@Html.Raw(tblBillingInfoEdit.int_Payment_Method.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.int_Payment_Method.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // int_Payment_Method (begin)
+<span id="el_tblBillingInfo_int_Payment_Method">
+    <select
+        id="x_int_Payment_Method"
+        name="x_int_Payment_Method"
+        class="form-select ew-select@(tblBillingInfoEdit.int_Payment_Method.IsInvalidClass)"
+        data-select2-id="ftblBillingInfoedit_x_int_Payment_Method"
+        data-table="tblBillingInfo"
+        data-field="x_int_Payment_Method"
+        data-page="2"
+        data-value-separator="@(tblBillingInfoEdit.int_Payment_Method.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblBillingInfoEdit.int_Payment_Method.PlaceHolder))"
+        @Html.Raw(tblBillingInfoEdit.int_Payment_Method.EditAttributes)>
+        @(tblBillingInfoEdit.int_Payment_Method.SelectOptionListHtml("x_int_Payment_Method"))
+    </select>
+    @Html.Raw(tblBillingInfoEdit.int_Payment_Method.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.int_Payment_Method.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblBillingInfoedit", function() {
+    var options = { name: "x_int_Payment_Method", selectId: "ftblBillingInfoedit_x_int_Payment_Method" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblBillingInfoedit.lists.int_Payment_Method?.lookupOptions.length) {
+        options.data = { id: "x_int_Payment_Method", form: "ftblBillingInfoedit" };
+    } else {
+        options.ajax = { id: "x_int_Payment_Method", form: "ftblBillingInfoedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblBillingInfo.fields.int_Payment_Method.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // int_Payment_Method (confirm)
+<span @Html.Raw(tblBillingInfoEdit.int_Payment_Method.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblBillingInfoEdit.int_Payment_Method.DisplayValue(tblBillingInfoEdit.int_Payment_Method.ViewValue))</span></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_int_Payment_Method" data-hidden="1" data-page="2" name="x_int_Payment_Method" id="x_int_Payment_Method" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_Payment_Method.FormValue))">
+} @* int_Payment_Method (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.int_Payment_Method.Visible (end) *@
+@if (tblBillingInfoEdit.date_Paid.Visible) { // tblBillingInfoEdit.date_Paid.Visible (begin)
+    <div id="r_date_Paid" @Html.Raw(tblBillingInfoEdit.date_Paid.RowAttributes)>
+        <label id="elh_tblBillingInfo_date_Paid" for="x_date_Paid" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.date_Paid.Caption)@Html.Raw(tblBillingInfoEdit.date_Paid.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.date_Paid.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // date_Paid (begin)
+<span id="el_tblBillingInfo_date_Paid">
+<input type="@(tblBillingInfoEdit.date_Paid.InputTextType)" name="x_date_Paid" id="x_date_Paid" data-table="tblBillingInfo" data-field="x_date_Paid" value="@Html.Raw(tblBillingInfoEdit.date_Paid.EditValue)" data-page="2" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.date_Paid.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.date_Paid.FormatPattern)"@Html.Raw(tblBillingInfoEdit.date_Paid.EditAttributes) aria-describedby="x_date_Paid_help">
+@Html.Raw(tblBillingInfoEdit.date_Paid.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.date_Paid.GetErrorMessage())</div>
+@if (!tblBillingInfoEdit.date_Paid.ReadOnly && !tblBillingInfoEdit.date_Paid.Disabled && !tblBillingInfoEdit.date_Paid.EditAttrs.Is("readonly") && !tblBillingInfoEdit.date_Paid.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblBillingInfoedit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(116))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblBillingInfoedit", "x_date_Paid", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+} else { // date_Paid (confirm)
+<span @Html.Raw(tblBillingInfoEdit.date_Paid.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.date_Paid.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_date_Paid" data-hidden="1" data-page="2" name="x_date_Paid" id="x_date_Paid" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.date_Paid.FormValue))">
+} @* date_Paid (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.date_Paid.Visible (end) *@
+@if (tblBillingInfoEdit.str_CC_Holder_Name.Visible) { // tblBillingInfoEdit.str_CC_Holder_Name.Visible (begin)
+    <div id="r_str_CC_Holder_Name" @Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_CC_Holder_Name" for="x_str_CC_Holder_Name" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.Caption)@Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_CC_Holder_Name (begin)
+<span id="el_tblBillingInfo_str_CC_Holder_Name">
+<input type="@(tblBillingInfoEdit.str_CC_Holder_Name.InputTextType)" name="x_str_CC_Holder_Name" id="x_str_CC_Holder_Name" data-table="tblBillingInfo" data-field="x_str_CC_Holder_Name" value="@Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_CC_Holder_Name.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.str_CC_Holder_Name.FormatPattern)"@Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.EditAttributes) aria-describedby="x_str_CC_Holder_Name_help">
+@Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.GetErrorMessage())</div>
+</span>
+} else { // str_CC_Holder_Name (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_CC_Holder_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_CC_Holder_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_CC_Holder_Name" data-hidden="1" data-page="2" name="x_str_CC_Holder_Name" id="x_str_CC_Holder_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_CC_Holder_Name.FormValue))">
+} @* str_CC_Holder_Name (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_CC_Holder_Name.Visible (end) *@
+@if (tblBillingInfoEdit.str_CC_Number.Visible) { // tblBillingInfoEdit.str_CC_Number.Visible (begin)
+    <div id="r_str_CC_Number" @Html.Raw(tblBillingInfoEdit.str_CC_Number.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_CC_Number" for="x_str_CC_Number" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_CC_Number.Caption)@Html.Raw(tblBillingInfoEdit.str_CC_Number.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_CC_Number.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_CC_Number (begin)
+<span id="el_tblBillingInfo_str_CC_Number">
+<input type="@(tblBillingInfoEdit.str_CC_Number.InputTextType)" name="x_str_CC_Number" id="x_str_CC_Number" data-table="tblBillingInfo" data-field="x_str_CC_Number" value="@Html.Raw(tblBillingInfoEdit.str_CC_Number.EditValue)" data-page="2" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_CC_Number.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.str_CC_Number.FormatPattern)"@Html.Raw(tblBillingInfoEdit.str_CC_Number.EditAttributes) aria-describedby="x_str_CC_Number_help">
+@Html.Raw(tblBillingInfoEdit.str_CC_Number.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_CC_Number.GetErrorMessage())</div>
+</span>
+} else { // str_CC_Number (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_CC_Number.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_CC_Number.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_CC_Number" data-hidden="1" data-page="2" name="x_str_CC_Number" id="x_str_CC_Number" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_CC_Number.FormValue))">
+} @* str_CC_Number (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_CC_Number.Visible (end) *@
+@if (tblBillingInfoEdit.int_CC_ExpMonth.Visible) { // tblBillingInfoEdit.int_CC_ExpMonth.Visible (begin)
+    <div id="r_int_CC_ExpMonth" @Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.RowAttributes)>
+        <label id="elh_tblBillingInfo_int_CC_ExpMonth" for="x_int_CC_ExpMonth" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.Caption)@Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // int_CC_ExpMonth (begin)
+<span id="el_tblBillingInfo_int_CC_ExpMonth">
+<input type="@(tblBillingInfoEdit.int_CC_ExpMonth.InputTextType)" name="x_int_CC_ExpMonth" id="x_int_CC_ExpMonth" data-table="tblBillingInfo" data-field="x_int_CC_ExpMonth" value="@Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.EditValue)" data-page="2" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_CC_ExpMonth.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.int_CC_ExpMonth.FormatPattern)"@Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.EditAttributes) aria-describedby="x_int_CC_ExpMonth_help">
+@Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.GetErrorMessage())</div>
+</span>
+} else { // int_CC_ExpMonth (confirm)
+<span @Html.Raw(tblBillingInfoEdit.int_CC_ExpMonth.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.int_CC_ExpMonth.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_int_CC_ExpMonth" data-hidden="1" data-page="2" name="x_int_CC_ExpMonth" id="x_int_CC_ExpMonth" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_CC_ExpMonth.FormValue))">
+} @* int_CC_ExpMonth (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.int_CC_ExpMonth.Visible (end) *@
+@if (tblBillingInfoEdit.int_CC_ExpYear.Visible) { // tblBillingInfoEdit.int_CC_ExpYear.Visible (begin)
+    <div id="r_int_CC_ExpYear" @Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.RowAttributes)>
+        <label id="elh_tblBillingInfo_int_CC_ExpYear" for="x_int_CC_ExpYear" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.Caption)@Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // int_CC_ExpYear (begin)
+<span id="el_tblBillingInfo_int_CC_ExpYear">
+<input type="@(tblBillingInfoEdit.int_CC_ExpYear.InputTextType)" name="x_int_CC_ExpYear" id="x_int_CC_ExpYear" data-table="tblBillingInfo" data-field="x_int_CC_ExpYear" value="@Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.EditValue)" data-page="2" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_CC_ExpYear.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.int_CC_ExpYear.FormatPattern)"@Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.EditAttributes) aria-describedby="x_int_CC_ExpYear_help">
+@Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.GetErrorMessage())</div>
+</span>
+} else { // int_CC_ExpYear (confirm)
+<span @Html.Raw(tblBillingInfoEdit.int_CC_ExpYear.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.int_CC_ExpYear.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_int_CC_ExpYear" data-hidden="1" data-page="2" name="x_int_CC_ExpYear" id="x_int_CC_ExpYear" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_CC_ExpYear.FormValue))">
+} @* int_CC_ExpYear (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.int_CC_ExpYear.Visible (end) *@
+@if (tblBillingInfoEdit.int_CC_Type.Visible) { // tblBillingInfoEdit.int_CC_Type.Visible (begin)
+    <div id="r_int_CC_Type" @Html.Raw(tblBillingInfoEdit.int_CC_Type.RowAttributes)>
+        <label id="elh_tblBillingInfo_int_CC_Type" for="x_int_CC_Type" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.int_CC_Type.Caption)@Html.Raw(tblBillingInfoEdit.int_CC_Type.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.int_CC_Type.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // int_CC_Type (begin)
+<span id="el_tblBillingInfo_int_CC_Type">
+<input type="@(tblBillingInfoEdit.int_CC_Type.InputTextType)" name="x_int_CC_Type" id="x_int_CC_Type" data-table="tblBillingInfo" data-field="x_int_CC_Type" value="@Html.Raw(tblBillingInfoEdit.int_CC_Type.EditValue)" data-page="2" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_CC_Type.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.int_CC_Type.FormatPattern)"@Html.Raw(tblBillingInfoEdit.int_CC_Type.EditAttributes) aria-describedby="x_int_CC_Type_help">
+@Html.Raw(tblBillingInfoEdit.int_CC_Type.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.int_CC_Type.GetErrorMessage())</div>
+</span>
+} else { // int_CC_Type (confirm)
+<span @Html.Raw(tblBillingInfoEdit.int_CC_Type.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.int_CC_Type.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_int_CC_Type" data-hidden="1" data-page="2" name="x_int_CC_Type" id="x_int_CC_Type" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_CC_Type.FormValue))">
+} @* int_CC_Type (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.int_CC_Type.Visible (end) *@
+@if (tblBillingInfoEdit.str_Card_Id.Visible) { // tblBillingInfoEdit.str_Card_Id.Visible (begin)
+    <div id="r_str_Card_Id" @Html.Raw(tblBillingInfoEdit.str_Card_Id.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_Card_Id" for="x_str_Card_Id" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_Card_Id.Caption)@Html.Raw(tblBillingInfoEdit.str_Card_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_Card_Id.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_Card_Id (begin)
+<span id="el_tblBillingInfo_str_Card_Id">
+<input type="@(tblBillingInfoEdit.str_Card_Id.InputTextType)" name="x_str_Card_Id" id="x_str_Card_Id" data-table="tblBillingInfo" data-field="x_str_Card_Id" value="@Html.Raw(tblBillingInfoEdit.str_Card_Id.EditValue)" data-page="2" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Card_Id.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.str_Card_Id.FormatPattern)"@Html.Raw(tblBillingInfoEdit.str_Card_Id.EditAttributes) aria-describedby="x_str_Card_Id_help">
+@Html.Raw(tblBillingInfoEdit.str_Card_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_Card_Id.GetErrorMessage())</div>
+</span>
+} else { // str_Card_Id (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_Card_Id.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_Card_Id.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_Card_Id" data-hidden="1" data-page="2" name="x_str_Card_Id" id="x_str_Card_Id" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Card_Id.FormValue))">
+} @* str_Card_Id (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_Card_Id.Visible (end) *@
+@if (tblBillingInfoEdit.str_CC_ValidationNum.Visible) { // tblBillingInfoEdit.str_CC_ValidationNum.Visible (begin)
+    <div id="r_str_CC_ValidationNum" @Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_CC_ValidationNum" for="x_str_CC_ValidationNum" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.Caption)@Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_CC_ValidationNum (begin)
+<span id="el_tblBillingInfo_str_CC_ValidationNum">
+<input type="@(tblBillingInfoEdit.str_CC_ValidationNum.InputTextType)" name="x_str_CC_ValidationNum" id="x_str_CC_ValidationNum" data-table="tblBillingInfo" data-field="x_str_CC_ValidationNum" value="@Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.EditValue)" data-page="2" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_CC_ValidationNum.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.str_CC_ValidationNum.FormatPattern)"@Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.EditAttributes) aria-describedby="x_str_CC_ValidationNum_help">
+@Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.GetErrorMessage())</div>
+</span>
+} else { // str_CC_ValidationNum (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_CC_ValidationNum.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_CC_ValidationNum.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_CC_ValidationNum" data-hidden="1" data-page="2" name="x_str_CC_ValidationNum" id="x_str_CC_ValidationNum" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_CC_ValidationNum.FormValue))">
+} @* str_CC_ValidationNum (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_CC_ValidationNum.Visible (end) *@
+@if (tblBillingInfoEdit.str_Amount_Pay.Visible) { // tblBillingInfoEdit.str_Amount_Pay.Visible (begin)
+    <div id="r_str_Amount_Pay" @Html.Raw(tblBillingInfoEdit.str_Amount_Pay.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_Amount_Pay" for="x_str_Amount_Pay" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_Amount_Pay.Caption)@Html.Raw(tblBillingInfoEdit.str_Amount_Pay.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_Amount_Pay.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_Amount_Pay (begin)
+<span id="el_tblBillingInfo_str_Amount_Pay">
+<input type="@(tblBillingInfoEdit.str_Amount_Pay.InputTextType)" name="x_str_Amount_Pay" id="x_str_Amount_Pay" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" value="@Html.Raw(tblBillingInfoEdit.str_Amount_Pay.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Amount_Pay.PlaceHolder))" data-format-pattern="@(tblBillingInfoEdit.str_Amount_Pay.FormatPattern)"@Html.Raw(tblBillingInfoEdit.str_Amount_Pay.EditAttributes) aria-describedby="x_str_Amount_Pay_help">
+@Html.Raw(tblBillingInfoEdit.str_Amount_Pay.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_Amount_Pay.GetErrorMessage())</div>
+</span>
+} else { // str_Amount_Pay (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_Amount_Pay.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.str_Amount_Pay.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" data-hidden="1" data-page="2" name="x_str_Amount_Pay" id="x_str_Amount_Pay" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Amount_Pay.FormValue))">
+} @* str_Amount_Pay (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_Amount_Pay.Visible (end) *@
+@if (tblBillingInfoEdit.mny_Running_Balance.Visible) { // tblBillingInfoEdit.mny_Running_Balance.Visible (begin)
+    <div id="r_mny_Running_Balance" @Html.Raw(tblBillingInfoEdit.mny_Running_Balance.RowAttributes)>
+        <label id="elh_tblBillingInfo_mny_Running_Balance" for="x_mny_Running_Balance" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.mny_Running_Balance.Caption)@Html.Raw(tblBillingInfoEdit.mny_Running_Balance.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.mny_Running_Balance.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // mny_Running_Balance (begin)
+<span id="el_tblBillingInfo_mny_Running_Balance">
+<span @Html.Raw(tblBillingInfoEdit.mny_Running_Balance.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.mny_Running_Balance.EditValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" data-hidden="1" data-page="2" name="x_mny_Running_Balance" id="x_mny_Running_Balance" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.mny_Running_Balance.CurrentValue))">
+</span>
+} else { // mny_Running_Balance (confirm)
+<span @Html.Raw(tblBillingInfoEdit.mny_Running_Balance.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoEdit.mny_Running_Balance.ViewValue)))"></span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" data-hidden="1" data-page="2" name="x_mny_Running_Balance" id="x_mny_Running_Balance" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.mny_Running_Balance.FormValue))">
+} @* mny_Running_Balance (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.mny_Running_Balance.Visible (end) *@
+@if (tblBillingInfoEdit.str_Payment_Note.Visible) { // tblBillingInfoEdit.str_Payment_Note.Visible (begin)
+    <div id="r_str_Payment_Note" @Html.Raw(tblBillingInfoEdit.str_Payment_Note.RowAttributes)>
+        <label id="elh_tblBillingInfo_str_Payment_Note" for="x_str_Payment_Note" class="@(tblBillingInfoEdit.LeftColumnClass)">@Html.Raw(tblBillingInfoEdit.str_Payment_Note.Caption)@Html.Raw(tblBillingInfoEdit.str_Payment_Note.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblBillingInfoEdit.RightColumnClass)"><div @Html.Raw(tblBillingInfoEdit.str_Payment_Note.CellAttributes)>
+@if (!tblBillingInfoEdit.IsConfirm) { // str_Payment_Note (begin)
+<span id="el_tblBillingInfo_str_Payment_Note">
+<textarea data-table="tblBillingInfo" data-field="x_str_Payment_Note" data-page="2" name="x_str_Payment_Note" id="x_str_Payment_Note" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Payment_Note.PlaceHolder))"@Html.Raw(tblBillingInfoEdit.str_Payment_Note.EditAttributes) aria-describedby="x_str_Payment_Note_help">@(tblBillingInfoEdit.str_Payment_Note.EditValue)</textarea>
+@Html.Raw(tblBillingInfoEdit.str_Payment_Note.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblBillingInfoEdit.str_Payment_Note.GetErrorMessage())</div>
+</span>
+} else { // str_Payment_Note (confirm)
+<span @Html.Raw(tblBillingInfoEdit.str_Payment_Note.ViewAttributes)>
+@Html.Raw(tblBillingInfoEdit.str_Payment_Note.ViewValue)</span>
+<input type="hidden" data-table="tblBillingInfo" data-field="x_str_Payment_Note" data-hidden="1" data-page="2" name="x_str_Payment_Note" id="x_str_Payment_Note" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.str_Payment_Note.FormValue))">
+} @* str_Payment_Note (end) *@
+</div></div>
+    </div>
+} @* tblBillingInfoEdit.str_Payment_Note.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+@if (!tblBillingInfoEdit.IsConfirm) { // date_Modified (begin)
+} else { // date_Modified (confirm)
+<input type="hidden" data-table="tblBillingInfo" data-field="x_date_Modified" data-hidden="1" data-page="1" name="x_date_Modified" id="x_date_Modified" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.date_Modified.FormValue))">
+} @* date_Modified (end) *@
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_int_Bill_ID" data-hidden="1" name="x_int_Bill_ID" id="x_int_Bill_ID" value="@Html.Raw(HtmlEncode(tblBillingInfoEdit.int_Bill_ID.CurrentValue))">
+@{ tblBillingInfoEdit.CloseRecordset(); }
+@if (tblBillingInfoEdit.CurrentDetailTables.Contains("tblStudentEnrollment") && tblStudentEnrollment.DetailEdit) {
+    if (!Empty(tblBillingInfoEdit.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblStudentEnrollment", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblStudentEnrollmentGrid")
+    View = this;
+}
+@if (tblBillingInfoEdit.CurrentDetailTables.Contains("qryBillingDetails_v2") && qryBillingDetailsV2.DetailEdit) {
+    if (!Empty(tblBillingInfoEdit.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("qryBillingDetails_v2", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("QryBillingDetailsV2Grid")
+    View = this;
+}
+@Html.Raw(tblBillingInfoEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblBillingInfoEdit.OffsetColumnClass)"><!-- buttons offset -->
+@if (!tblBillingInfoEdit.IsConfirm) { // Confirm page
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblBillingInfoedit" data-ew-action="set-action" data-value="confirm">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblBillingInfoedit" data-href="@AppPath(tblBillingInfoEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+} else {
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblBillingInfoedit">@Html.Raw(Language.Phrase("ConfirmBtn"))</button>
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="submit" form="ftblBillingInfoedit" data-ew-action="set-action" data-value="cancel">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblBillingInfoEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@tblBillingInfoEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblBillingInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

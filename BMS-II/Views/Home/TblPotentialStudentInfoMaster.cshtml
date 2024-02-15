@@ -1,0 +1,86 @@
+@{
+    tblPotentialStudentInfo.TableClass = "table table-bordered table-hover ew-table ew-master-table"; // DN
+}
+@if (tblPotentialStudentInfo.Visible) { // tblPotentialStudentInfo.Visible (begin)
+<div class="ew-master-div">
+<table id="tbl_tblPotentialStudentInfomaster" class="table ew-view-table ew-master-table ew-vertical">
+    <tbody>
+        @if (tblPotentialStudentInfo.NationalID.Visible) { // tblPotentialStudentInfo.NationalID.Visible (begin)
+        <tr id="r_NationalID" @Html.Raw(tblPotentialStudentInfo.NationalID.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.NationalID.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.NationalID.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_NationalID">
+<span @Html.Raw(tblPotentialStudentInfo.NationalID.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfo.NationalID.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.NationalID.Visible (end) *@
+        @if (tblPotentialStudentInfo.str_First_Name.Visible) { // tblPotentialStudentInfo.str_First_Name.Visible (begin)
+        <tr id="r_str_First_Name" @Html.Raw(tblPotentialStudentInfo.str_First_Name.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.str_First_Name.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.str_First_Name.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_str_First_Name">
+<span @Html.Raw(tblPotentialStudentInfo.str_First_Name.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfo.str_First_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.str_First_Name.Visible (end) *@
+        @if (tblPotentialStudentInfo.str_Last_Name.Visible) { // tblPotentialStudentInfo.str_Last_Name.Visible (begin)
+        <tr id="r_str_Last_Name" @Html.Raw(tblPotentialStudentInfo.str_Last_Name.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.str_Last_Name.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.str_Last_Name.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_str_Last_Name">
+<span @Html.Raw(tblPotentialStudentInfo.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfo.str_Last_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.str_Last_Name.Visible (end) *@
+        @if (tblPotentialStudentInfo.str_Cell_Phone.Visible) { // tblPotentialStudentInfo.str_Cell_Phone.Visible (begin)
+        <tr id="r_str_Cell_Phone" @Html.Raw(tblPotentialStudentInfo.str_Cell_Phone.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.str_Cell_Phone.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.str_Cell_Phone.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_str_Cell_Phone">
+<span @Html.Raw(tblPotentialStudentInfo.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfo.str_Cell_Phone.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.str_Cell_Phone.Visible (end) *@
+        @if (tblPotentialStudentInfo.Required_Program.Visible) { // tblPotentialStudentInfo.Required_Program.Visible (begin)
+        <tr id="r_Required_Program" @Html.Raw(tblPotentialStudentInfo.Required_Program.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.Required_Program.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.Required_Program.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_Required_Program">
+<span @Html.Raw(tblPotentialStudentInfo.Required_Program.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfo.Required_Program.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.Required_Program.Visible (end) *@
+        @if (tblPotentialStudentInfo.Price.Visible) { // tblPotentialStudentInfo.Price.Visible (begin)
+        <tr id="r_Price" @Html.Raw(tblPotentialStudentInfo.Price.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.Price.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.Price.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_Price">
+<span @Html.Raw(tblPotentialStudentInfo.Price.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfo.Price.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.Price.Visible (end) *@
+        @if (tblPotentialStudentInfo.Payment_Online.Visible) { // tblPotentialStudentInfo.Payment_Online.Visible (begin)
+        <tr id="r_Payment_Online" @Html.Raw(tblPotentialStudentInfo.Payment_Online.RowAttributes)>
+            <td class="@(tblPotentialStudentInfo.TableLeftColumnClass)">@Html.Raw(tblPotentialStudentInfo.Payment_Online.Caption)</td>
+            <td @Html.Raw(tblPotentialStudentInfo.Payment_Online.CellAttributes)>
+<span id="el_tblPotentialStudentInfo_Payment_Online">
+<span @Html.Raw(tblPotentialStudentInfo.Payment_Online.ViewAttributes)>
+@if (!EmptyString(tblPotentialStudentInfo.Payment_Online.GetViewValue()) && !Empty(tblPotentialStudentInfo.Payment_Online.LinkAttributes)) {
+<a @Html.Raw(tblPotentialStudentInfo.Payment_Online.LinkAttributes)>@Html.Raw(tblPotentialStudentInfo.Payment_Online.GetViewValue())</a>
+} else {
+@Html.Raw(tblPotentialStudentInfo.Payment_Online.GetViewValue())
+}
+</span>
+</span></td>
+        </tr>
+        } @* tblPotentialStudentInfo.Payment_Online.Visible (end) *@
+    </tbody>
+</table>
+</div>
+} @* tblPotentialStudentInfo.Visible (end) *@

@@ -1,0 +1,400 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (appointmentCldrEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!appointmentCldrEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@appointmentCldrEdit.ShowPageHeader()
+@appointmentCldrEdit.ShowMessages()
+<main class="edit">
+<form name="fAppointment_Cldredit" id="fAppointment_Cldredit" class="@(appointmentCldrEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(appointmentCldrEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Appointment_Cldr: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var fAppointment_Cldredit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fAppointment_Cldredit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["int_Enrollement_Id", [fields.int_Enrollement_Id.visible && fields.int_Enrollement_Id.required ? ew.Validators.required(fields.int_Enrollement_Id.caption) : null], fields.int_Enrollement_Id.isInvalid],
+            ["int_PackageID", [fields.int_PackageID.visible && fields.int_PackageID.required ? ew.Validators.required(fields.int_PackageID.caption) : null], fields.int_PackageID.isInvalid],
+            ["_Title", [fields._Title.visible && fields._Title.required ? ew.Validators.required(fields._Title.caption) : null], fields._Title.isInvalid],
+            ["Start", [fields.Start.visible && fields.Start.required ? ew.Validators.required(fields.Start.caption) : null, ew.Validators.datetime(fields.Start.clientFormatPattern)], fields.Start.isInvalid],
+            ["End", [fields.End.visible && fields.End.required ? ew.Validators.required(fields.End.caption) : null, ew.Validators.datetime(fields.End.clientFormatPattern)], fields.End.isInvalid],
+            ["Description", [fields.Description.visible && fields.Description.required ? ew.Validators.required(fields.Description.caption) : null], fields.Description.isInvalid],
+            ["str_AppointmentType", [fields.str_AppointmentType.visible && fields.str_AppointmentType.required ? ew.Validators.required(fields.str_AppointmentType.caption) : null], fields.str_AppointmentType.isInvalid],
+            ["str_AppointmentStatus", [fields.str_AppointmentStatus.visible && fields.str_AppointmentStatus.required ? ew.Validators.required(fields.str_AppointmentStatus.caption) : null], fields.str_AppointmentStatus.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_Enrollement_Id": @Html.Raw(appointmentCldrEdit.int_Enrollement_Id.ToClientList(appointmentCldrEdit)),
+            "int_PackageID": @Html.Raw(appointmentCldrEdit.int_PackageID.ToClientList(appointmentCldrEdit)),
+            "str_AppointmentType": @Html.Raw(appointmentCldrEdit.str_AppointmentType.ToClientList(appointmentCldrEdit)),
+            "str_AppointmentStatus": @Html.Raw(appointmentCldrEdit.str_AppointmentStatus.ToClientList(appointmentCldrEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="modal" value="@ConvertToInt(appointmentCldrEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(appointmentCldrEdit.OldKeyName)" value="@Html.Raw(appointmentCldrEdit.OldKey)">
+<div class="ew-edit-div"><!-- page* -->
+@if (appointmentCldrEdit.int_Enrollement_Id.Visible) { // appointmentCldrEdit.int_Enrollement_Id.Visible (begin)
+    <div id="r_int_Enrollement_Id" @Html.Raw(appointmentCldrEdit.int_Enrollement_Id.RowAttributes)>
+        <label id="elh_Appointment_Cldr_int_Enrollement_Id" for="x_int_Enrollement_Id" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.int_Enrollement_Id.Caption)@Html.Raw(appointmentCldrEdit.int_Enrollement_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.int_Enrollement_Id.CellAttributes)>
+<span id="el_Appointment_Cldr_int_Enrollement_Id">
+    <select
+        id="x_int_Enrollement_Id"
+        name="x_int_Enrollement_Id"
+        class="form-select ew-select@(appointmentCldrEdit.int_Enrollement_Id.IsInvalidClass)"
+        data-select2-id="fAppointment_Cldredit_x_int_Enrollement_Id"
+        data-table="Appointment_Cldr"
+        data-field="x_int_Enrollement_Id"
+        data-value-separator="@(appointmentCldrEdit.int_Enrollement_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(appointmentCldrEdit.int_Enrollement_Id.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(appointmentCldrEdit.int_Enrollement_Id.EditAttributes)>
+        @(appointmentCldrEdit.int_Enrollement_Id.SelectOptionListHtml("x_int_Enrollement_Id"))
+    </select>
+    @Html.Raw(appointmentCldrEdit.int_Enrollement_Id.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.int_Enrollement_Id.GetErrorMessage())</div>
+@Html.Raw(appointmentCldrEdit.int_Enrollement_Id.Lookup.GetParamTag(appointmentCldrEdit, "p_x_int_Enrollement_Id"))
+<script>
+loadjs.ready("fAppointment_Cldredit", function() {
+    var options = { name: "x_int_Enrollement_Id", selectId: "fAppointment_Cldredit_x_int_Enrollement_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fAppointment_Cldredit.lists.int_Enrollement_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_Enrollement_Id", form: "fAppointment_Cldredit" };
+    } else {
+        options.ajax = { id: "x_int_Enrollement_Id", form: "fAppointment_Cldredit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Appointment_Cldr.fields.int_Enrollement_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.int_Enrollement_Id.Visible (end) *@
+@if (appointmentCldrEdit.int_PackageID.Visible) { // appointmentCldrEdit.int_PackageID.Visible (begin)
+    <div id="r_int_PackageID" @Html.Raw(appointmentCldrEdit.int_PackageID.RowAttributes)>
+        <label id="elh_Appointment_Cldr_int_PackageID" for="x_int_PackageID" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.int_PackageID.Caption)@Html.Raw(appointmentCldrEdit.int_PackageID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.int_PackageID.CellAttributes)>
+<span id="el_Appointment_Cldr_int_PackageID">
+    <select
+        id="x_int_PackageID"
+        name="x_int_PackageID"
+        class="form-select ew-select@(appointmentCldrEdit.int_PackageID.IsInvalidClass)"
+        data-select2-id="fAppointment_Cldredit_x_int_PackageID"
+        data-table="Appointment_Cldr"
+        data-field="x_int_PackageID"
+        data-value-separator="@(appointmentCldrEdit.int_PackageID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(appointmentCldrEdit.int_PackageID.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(appointmentCldrEdit.int_PackageID.EditAttributes)>
+        @(appointmentCldrEdit.int_PackageID.SelectOptionListHtml("x_int_PackageID"))
+    </select>
+    @Html.Raw(appointmentCldrEdit.int_PackageID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.int_PackageID.GetErrorMessage())</div>
+@Html.Raw(appointmentCldrEdit.int_PackageID.Lookup.GetParamTag(appointmentCldrEdit, "p_x_int_PackageID"))
+<script>
+loadjs.ready("fAppointment_Cldredit", function() {
+    var options = { name: "x_int_PackageID", selectId: "fAppointment_Cldredit_x_int_PackageID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fAppointment_Cldredit.lists.int_PackageID?.lookupOptions.length) {
+        options.data = { id: "x_int_PackageID", form: "fAppointment_Cldredit" };
+    } else {
+        options.ajax = { id: "x_int_PackageID", form: "fAppointment_Cldredit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Appointment_Cldr.fields.int_PackageID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.int_PackageID.Visible (end) *@
+@if (appointmentCldrEdit._Title.Visible) { // appointmentCldrEdit._Title.Visible (begin)
+    <div id="r__Title" @Html.Raw(appointmentCldrEdit._Title.RowAttributes)>
+        <label id="elh_Appointment_Cldr__Title" for="x__Title" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit._Title.Caption)@Html.Raw(appointmentCldrEdit._Title.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit._Title.CellAttributes)>
+<span id="el_Appointment_Cldr__Title">
+<input type="@(appointmentCldrEdit._Title.InputTextType)" name="x__Title" id="x__Title" data-table="Appointment_Cldr" data-field="x__Title" value="@Html.Raw(appointmentCldrEdit._Title.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(appointmentCldrEdit._Title.PlaceHolder))" data-format-pattern="@(appointmentCldrEdit._Title.FormatPattern)"@Html.Raw(appointmentCldrEdit._Title.EditAttributes) aria-describedby="x__Title_help">
+@Html.Raw(appointmentCldrEdit._Title.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(appointmentCldrEdit._Title.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit._Title.Visible (end) *@
+@if (appointmentCldrEdit.Start.Visible) { // appointmentCldrEdit.Start.Visible (begin)
+    <div id="r_Start" @Html.Raw(appointmentCldrEdit.Start.RowAttributes)>
+        <label id="elh_Appointment_Cldr_Start" for="x_Start" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.Start.Caption)@Html.Raw(appointmentCldrEdit.Start.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.Start.CellAttributes)>
+<span id="el_Appointment_Cldr_Start">
+<input type="@(appointmentCldrEdit.Start.InputTextType)" name="x_Start" id="x_Start" data-table="Appointment_Cldr" data-field="x_Start" value="@Html.Raw(appointmentCldrEdit.Start.EditValue)" placeholder="@Html.Raw(HtmlEncode(appointmentCldrEdit.Start.PlaceHolder))" data-format-pattern="@(appointmentCldrEdit.Start.FormatPattern)"@Html.Raw(appointmentCldrEdit.Start.EditAttributes) aria-describedby="x_Start_help">
+@Html.Raw(appointmentCldrEdit.Start.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.Start.GetErrorMessage())</div>
+@if (!appointmentCldrEdit.Start.ReadOnly && !appointmentCldrEdit.Start.Disabled && !appointmentCldrEdit.Start.EditAttrs.Is("readonly") && !appointmentCldrEdit.Start.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["fAppointment_Cldredit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("fAppointment_Cldredit", "x_Start", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.Start.Visible (end) *@
+@if (appointmentCldrEdit.End.Visible) { // appointmentCldrEdit.End.Visible (begin)
+    <div id="r_End" @Html.Raw(appointmentCldrEdit.End.RowAttributes)>
+        <label id="elh_Appointment_Cldr_End" for="x_End" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.End.Caption)@Html.Raw(appointmentCldrEdit.End.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.End.CellAttributes)>
+<span id="el_Appointment_Cldr_End">
+<input type="@(appointmentCldrEdit.End.InputTextType)" name="x_End" id="x_End" data-table="Appointment_Cldr" data-field="x_End" value="@Html.Raw(appointmentCldrEdit.End.EditValue)" placeholder="@Html.Raw(HtmlEncode(appointmentCldrEdit.End.PlaceHolder))" data-format-pattern="@(appointmentCldrEdit.End.FormatPattern)"@Html.Raw(appointmentCldrEdit.End.EditAttributes) aria-describedby="x_End_help">
+@Html.Raw(appointmentCldrEdit.End.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.End.GetErrorMessage())</div>
+@if (!appointmentCldrEdit.End.ReadOnly && !appointmentCldrEdit.End.Disabled && !appointmentCldrEdit.End.EditAttrs.Is("readonly") && !appointmentCldrEdit.End.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["fAppointment_Cldredit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("fAppointment_Cldredit", "x_End", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.End.Visible (end) *@
+@if (appointmentCldrEdit.Description.Visible) { // appointmentCldrEdit.Description.Visible (begin)
+    <div id="r_Description" @Html.Raw(appointmentCldrEdit.Description.RowAttributes)>
+        <label id="elh_Appointment_Cldr_Description" for="x_Description" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.Description.Caption)@Html.Raw(appointmentCldrEdit.Description.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.Description.CellAttributes)>
+<span id="el_Appointment_Cldr_Description">
+<textarea data-table="Appointment_Cldr" data-field="x_Description" name="x_Description" id="x_Description" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(appointmentCldrEdit.Description.PlaceHolder))"@Html.Raw(appointmentCldrEdit.Description.EditAttributes) aria-describedby="x_Description_help">@(appointmentCldrEdit.Description.EditValue)</textarea>
+@Html.Raw(appointmentCldrEdit.Description.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.Description.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.Description.Visible (end) *@
+@if (appointmentCldrEdit.str_AppointmentType.Visible) { // appointmentCldrEdit.str_AppointmentType.Visible (begin)
+    <div id="r_str_AppointmentType" @Html.Raw(appointmentCldrEdit.str_AppointmentType.RowAttributes)>
+        <label id="elh_Appointment_Cldr_str_AppointmentType" for="x_str_AppointmentType" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.str_AppointmentType.Caption)@Html.Raw(appointmentCldrEdit.str_AppointmentType.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.str_AppointmentType.CellAttributes)>
+<span id="el_Appointment_Cldr_str_AppointmentType">
+    <select
+        id="x_str_AppointmentType"
+        name="x_str_AppointmentType"
+        class="form-select ew-select@(appointmentCldrEdit.str_AppointmentType.IsInvalidClass)"
+        data-select2-id="fAppointment_Cldredit_x_str_AppointmentType"
+        data-table="Appointment_Cldr"
+        data-field="x_str_AppointmentType"
+        data-value-separator="@(appointmentCldrEdit.str_AppointmentType.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(appointmentCldrEdit.str_AppointmentType.PlaceHolder))"
+        @Html.Raw(appointmentCldrEdit.str_AppointmentType.EditAttributes)>
+        @(appointmentCldrEdit.str_AppointmentType.SelectOptionListHtml("x_str_AppointmentType"))
+    </select>
+    @Html.Raw(appointmentCldrEdit.str_AppointmentType.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.str_AppointmentType.GetErrorMessage())</div>
+@Html.Raw(appointmentCldrEdit.str_AppointmentType.Lookup.GetParamTag(appointmentCldrEdit, "p_x_str_AppointmentType"))
+<script>
+loadjs.ready("fAppointment_Cldredit", function() {
+    var options = { name: "x_str_AppointmentType", selectId: "fAppointment_Cldredit_x_str_AppointmentType" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fAppointment_Cldredit.lists.str_AppointmentType?.lookupOptions.length) {
+        options.data = { id: "x_str_AppointmentType", form: "fAppointment_Cldredit" };
+    } else {
+        options.ajax = { id: "x_str_AppointmentType", form: "fAppointment_Cldredit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Appointment_Cldr.fields.str_AppointmentType.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.str_AppointmentType.Visible (end) *@
+@if (appointmentCldrEdit.str_AppointmentStatus.Visible) { // appointmentCldrEdit.str_AppointmentStatus.Visible (begin)
+    <div id="r_str_AppointmentStatus" @Html.Raw(appointmentCldrEdit.str_AppointmentStatus.RowAttributes)>
+        <label id="elh_Appointment_Cldr_str_AppointmentStatus" for="x_str_AppointmentStatus" class="@(appointmentCldrEdit.LeftColumnClass)">@Html.Raw(appointmentCldrEdit.str_AppointmentStatus.Caption)@Html.Raw(appointmentCldrEdit.str_AppointmentStatus.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(appointmentCldrEdit.RightColumnClass)"><div @Html.Raw(appointmentCldrEdit.str_AppointmentStatus.CellAttributes)>
+<span id="el_Appointment_Cldr_str_AppointmentStatus">
+    <select
+        id="x_str_AppointmentStatus"
+        name="x_str_AppointmentStatus"
+        class="form-select ew-select@(appointmentCldrEdit.str_AppointmentStatus.IsInvalidClass)"
+        data-select2-id="fAppointment_Cldredit_x_str_AppointmentStatus"
+        data-table="Appointment_Cldr"
+        data-field="x_str_AppointmentStatus"
+        data-value-separator="@(appointmentCldrEdit.str_AppointmentStatus.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(appointmentCldrEdit.str_AppointmentStatus.PlaceHolder))"
+        @Html.Raw(appointmentCldrEdit.str_AppointmentStatus.EditAttributes)>
+        @(appointmentCldrEdit.str_AppointmentStatus.SelectOptionListHtml("x_str_AppointmentStatus"))
+    </select>
+    @Html.Raw(appointmentCldrEdit.str_AppointmentStatus.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(appointmentCldrEdit.str_AppointmentStatus.GetErrorMessage())</div>
+<script>
+loadjs.ready("fAppointment_Cldredit", function() {
+    var options = { name: "x_str_AppointmentStatus", selectId: "fAppointment_Cldredit_x_str_AppointmentStatus" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fAppointment_Cldredit.lists.str_AppointmentStatus?.lookupOptions.length) {
+        options.data = { id: "x_str_AppointmentStatus", form: "fAppointment_Cldredit" };
+    } else {
+        options.ajax = { id: "x_str_AppointmentStatus", form: "fAppointment_Cldredit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Appointment_Cldr.fields.str_AppointmentStatus.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* appointmentCldrEdit.str_AppointmentStatus.Visible (end) *@
+</div><!-- /page* -->
+    <input type="hidden" data-table="Appointment_Cldr" data-field="x_Id" data-hidden="1" name="x_Id" id="x_Id" value="@Html.Raw(HtmlEncode(appointmentCldrEdit.Id.CurrentValue))">
+@{ appointmentCldrEdit.CloseRecordset(); }
+@Html.Raw(appointmentCldrEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(appointmentCldrEdit.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="fAppointment_Cldredit">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="fAppointment_Cldredit" data-href="@AppPath(appointmentCldrEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(appointmentCldrEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@appointmentCldrEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("Appointment_Cldr");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

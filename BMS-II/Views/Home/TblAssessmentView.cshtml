@@ -1,0 +1,380 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAssessmentView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAssessmentView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblAssessmentView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblAssessmentView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblAssessmentView.ExportOptions.RenderBody()
+    @tblAssessmentView.OtherOptions.RenderBody()
+</div>
+}
+@tblAssessmentView.ShowPageHeader()
+@tblAssessmentView.ShowMessages()
+<main class="view">
+<form name="ftblAssessmentview" id="ftblAssessmentview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblAssessmentView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAssessmentView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblAssessmentview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblAssessmentview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblAssessmentView.IsModal)">
+@if (!tblAssessmentView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblAssessmentView.MultiPages.ContainerClasses)" id="pages_tblAssessmentView"><!-- multi-page tabs -->
+    <ul class="@(tblAssessmentView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblAssessmentView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblAssessment1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment1" aria-selected="@(ConvertToJson(tblAssessmentView.MultiPages.IsActive(1)))">@Html.Raw(tblAssessmentView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblAssessmentView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblAssessment2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment2" aria-selected="@(ConvertToJson(tblAssessmentView.MultiPages.IsActive(2)))">@Html.Raw(tblAssessmentView.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblAssessmentView.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblAssessment3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment3" aria-selected="@(ConvertToJson(tblAssessmentView.MultiPages.IsActive(3)))">@Html.Raw(tblAssessmentView.PageCaption(3))</button></li>
+    </ul>
+    @:<div class="@(tblAssessmentView.MultiPages.TabContentClasses)"">
+}
+@if (!tblAssessmentView.IsExport()) {
+    @:<div class="@(tblAssessmentView.MultiPages.TabPaneClasses(1))" id="tab_tblAssessment1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblAssessmentView.TableClass)">
+@if (tblAssessmentView.str_Full_Name_Hdr.Visible) { // tblAssessmentView.str_Full_Name_Hdr.Visible (begin)
+    <tr id="r_str_Full_Name_Hdr" @Html.Raw(tblAssessmentView.str_Full_Name_Hdr.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_str_Full_Name_Hdr">@Html.Raw(tblAssessmentView.str_Full_Name_Hdr.Caption)</span></td>
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(tblAssessmentView.str_Full_Name_Hdr.CellAttributes)>
+<span id="el_tblAssessment_str_Full_Name_Hdr" data-page="1">
+<span @Html.Raw(tblAssessmentView.str_Full_Name_Hdr.ViewAttributes)>
+@Html.Raw(tblAssessmentView.str_Full_Name_Hdr.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.str_Full_Name_Hdr.Visible (end) *@
+@if (tblAssessmentView.AssessmentTime.Visible) { // tblAssessmentView.AssessmentTime.Visible (begin)
+    <tr id="r_AssessmentTime" @Html.Raw(tblAssessmentView.AssessmentTime.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_AssessmentTime">@Html.Raw(tblAssessmentView.AssessmentTime.Caption)</span></td>
+        <td data-name="AssessmentTime" @Html.Raw(tblAssessmentView.AssessmentTime.CellAttributes)>
+<span id="el_tblAssessment_AssessmentTime" data-page="1">
+<span @Html.Raw(tblAssessmentView.AssessmentTime.ViewAttributes)>
+@Html.Raw(tblAssessmentView.AssessmentTime.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.AssessmentTime.Visible (end) *@
+@if (tblAssessmentView.AbsherApptNbr.Visible) { // tblAssessmentView.AbsherApptNbr.Visible (begin)
+    <tr id="r_AbsherApptNbr" @Html.Raw(tblAssessmentView.AbsherApptNbr.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_AbsherApptNbr">@Html.Raw(tblAssessmentView.AbsherApptNbr.Caption)</span></td>
+        <td data-name="AbsherApptNbr" @Html.Raw(tblAssessmentView.AbsherApptNbr.CellAttributes)>
+<span id="el_tblAssessment_AbsherApptNbr" data-page="1">
+<span @Html.Raw(tblAssessmentView.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblAssessmentView.AbsherApptNbr.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.AbsherApptNbr.Visible (end) *@
+@if (tblAssessmentView.Absherphoto.Visible) { // tblAssessmentView.Absherphoto.Visible (begin)
+    <tr id="r_Absherphoto" @Html.Raw(tblAssessmentView.Absherphoto.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_Absherphoto">@Html.Raw(tblAssessmentView.Absherphoto.Caption)</span></td>
+        <td data-name="Absherphoto" @Html.Raw(tblAssessmentView.Absherphoto.CellAttributes)>
+<span id="el_tblAssessment_Absherphoto" data-page="1">
+<span>
+@Html.Raw(await GetFileViewTag((DbField)tblAssessmentView.Absherphoto, ConvertToString(tblAssessmentView.Absherphoto.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.Absherphoto.Visible (end) *@
+@if (tblAssessmentView.date_Birth.Visible) { // tblAssessmentView.date_Birth.Visible (begin)
+    <tr id="r_date_Birth" @Html.Raw(tblAssessmentView.date_Birth.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_date_Birth">@Html.Raw(tblAssessmentView.date_Birth.Caption)</span></td>
+        <td data-name="date_Birth" @Html.Raw(tblAssessmentView.date_Birth.CellAttributes)>
+<span id="el_tblAssessment_date_Birth" data-page="1">
+<span @Html.Raw(tblAssessmentView.date_Birth.ViewAttributes)>
+@Html.Raw(tblAssessmentView.date_Birth.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.date_Birth.Visible (end) *@
+@if (tblAssessmentView.date_Birth_Hijri.Visible) { // tblAssessmentView.date_Birth_Hijri.Visible (begin)
+    <tr id="r_date_Birth_Hijri" @Html.Raw(tblAssessmentView.date_Birth_Hijri.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_date_Birth_Hijri">@Html.Raw(tblAssessmentView.date_Birth_Hijri.Caption)</span></td>
+        <td data-name="date_Birth_Hijri" @Html.Raw(tblAssessmentView.date_Birth_Hijri.CellAttributes)>
+<span id="el_tblAssessment_date_Birth_Hijri" data-page="1">
+<span @Html.Raw(tblAssessmentView.date_Birth_Hijri.ViewAttributes)>
+@Html.Raw(tblAssessmentView.date_Birth_Hijri.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.date_Birth_Hijri.Visible (end) *@
+@if (tblAssessmentView.str_Cell_Phone.Visible) { // tblAssessmentView.str_Cell_Phone.Visible (begin)
+    <tr id="r_str_Cell_Phone" @Html.Raw(tblAssessmentView.str_Cell_Phone.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_str_Cell_Phone">@Html.Raw(tblAssessmentView.str_Cell_Phone.Caption)</span></td>
+        <td data-name="str_Cell_Phone" @Html.Raw(tblAssessmentView.str_Cell_Phone.CellAttributes)>
+<span id="el_tblAssessment_str_Cell_Phone" data-page="1">
+<span @Html.Raw(tblAssessmentView.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblAssessmentView.str_Cell_Phone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.str_Cell_Phone.Visible (end) *@
+@if (tblAssessmentView.str_Email.Visible) { // tblAssessmentView.str_Email.Visible (begin)
+    <tr id="r_str_Email" @Html.Raw(tblAssessmentView.str_Email.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_str_Email">@Html.Raw(tblAssessmentView.str_Email.Caption)</span></td>
+        <td data-name="str_Email" @Html.Raw(tblAssessmentView.str_Email.CellAttributes)>
+<span id="el_tblAssessment_str_Email" data-page="1">
+<span @Html.Raw(tblAssessmentView.str_Email.ViewAttributes)>
+@Html.Raw(tblAssessmentView.str_Email.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.str_Email.Visible (end) *@
+@if (tblAssessmentView.Institution.Visible) { // tblAssessmentView.Institution.Visible (begin)
+    <tr id="r_Institution" @Html.Raw(tblAssessmentView.Institution.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_Institution">@Html.Raw(tblAssessmentView.Institution.Caption)</span></td>
+        <td data-name="Institution" @Html.Raw(tblAssessmentView.Institution.CellAttributes)>
+<span id="el_tblAssessment_Institution" data-page="1">
+<span @Html.Raw(tblAssessmentView.Institution.ViewAttributes)>
+@Html.Raw(tblAssessmentView.Institution.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.Institution.Visible (end) *@
+</table>
+@if (!tblAssessmentView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblAssessmentView.IsExport()) {
+    @:<div class="@(tblAssessmentView.MultiPages.TabPaneClasses(2))" id="tab_tblAssessment2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblAssessmentView.TableClass)">
+@if (tblAssessmentView.Assessment_Type.Visible) { // tblAssessmentView.Assessment_Type.Visible (begin)
+    <tr id="r_Assessment_Type" @Html.Raw(tblAssessmentView.Assessment_Type.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_Assessment_Type">@Html.Raw(tblAssessmentView.Assessment_Type.Caption)</span></td>
+        <td data-name="Assessment_Type" @Html.Raw(tblAssessmentView.Assessment_Type.CellAttributes)>
+<span id="el_tblAssessment_Assessment_Type" data-page="2">
+<span @Html.Raw(tblAssessmentView.Assessment_Type.ViewAttributes)>
+@Html.Raw(tblAssessmentView.Assessment_Type.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.Assessment_Type.Visible (end) *@
+@if (tblAssessmentView.AssessmentDate.Visible) { // tblAssessmentView.AssessmentDate.Visible (begin)
+    <tr id="r_AssessmentDate" @Html.Raw(tblAssessmentView.AssessmentDate.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_AssessmentDate">@Html.Raw(tblAssessmentView.AssessmentDate.Caption)</span></td>
+        <td data-name="AssessmentDate" @Html.Raw(tblAssessmentView.AssessmentDate.CellAttributes)>
+<span id="el_tblAssessment_AssessmentDate" data-page="2">
+<span @Html.Raw(tblAssessmentView.AssessmentDate.ViewAttributes)>
+@Html.Raw(tblAssessmentView.AssessmentDate.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.AssessmentDate.Visible (end) *@
+@if (tblAssessmentView.isAssessmentDone.Visible) { // tblAssessmentView.isAssessmentDone.Visible (begin)
+    <tr id="r_isAssessmentDone" @Html.Raw(tblAssessmentView.isAssessmentDone.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_isAssessmentDone">@Html.Raw(tblAssessmentView.isAssessmentDone.Caption)</span></td>
+        <td data-name="isAssessmentDone" @Html.Raw(tblAssessmentView.isAssessmentDone.CellAttributes)>
+<span id="el_tblAssessment_isAssessmentDone" data-page="2">
+<span @Html.Raw(tblAssessmentView.isAssessmentDone.ViewAttributes)>
+@Html.Raw(tblAssessmentView.isAssessmentDone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.isAssessmentDone.Visible (end) *@
+@if (tblAssessmentView.AssessmentScore.Visible) { // tblAssessmentView.AssessmentScore.Visible (begin)
+    <tr id="r_AssessmentScore" @Html.Raw(tblAssessmentView.AssessmentScore.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_AssessmentScore">@Html.Raw(tblAssessmentView.AssessmentScore.Caption)</span></td>
+        <td data-name="AssessmentScore" @Html.Raw(tblAssessmentView.AssessmentScore.CellAttributes)>
+<span id="el_tblAssessment_AssessmentScore" data-page="2">
+<span @Html.Raw(tblAssessmentView.AssessmentScore.ViewAttributes)>
+@Html.Raw(tblAssessmentView.AssessmentScore.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.AssessmentScore.Visible (end) *@
+@if (tblAssessmentView.Assessment_Instructor.Visible) { // tblAssessmentView.Assessment_Instructor.Visible (begin)
+    <tr id="r_Assessment_Instructor" @Html.Raw(tblAssessmentView.Assessment_Instructor.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_Assessment_Instructor">@Html.Raw(tblAssessmentView.Assessment_Instructor.Caption)</span></td>
+        <td data-name="Assessment_Instructor" @Html.Raw(tblAssessmentView.Assessment_Instructor.CellAttributes)>
+<span id="el_tblAssessment_Assessment_Instructor" data-page="2">
+<span @Html.Raw(tblAssessmentView.Assessment_Instructor.ViewAttributes)>
+@Html.Raw(tblAssessmentView.Assessment_Instructor.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.Assessment_Instructor.Visible (end) *@
+@if (tblAssessmentView.IsDrivingexperience.Visible) { // tblAssessmentView.IsDrivingexperience.Visible (begin)
+    <tr id="r_IsDrivingexperience" @Html.Raw(tblAssessmentView.IsDrivingexperience.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_IsDrivingexperience">@Html.Raw(tblAssessmentView.IsDrivingexperience.Caption)</span></td>
+        <td data-name="IsDrivingexperience" @Html.Raw(tblAssessmentView.IsDrivingexperience.CellAttributes)>
+<span id="el_tblAssessment_IsDrivingexperience" data-page="2">
+<span @Html.Raw(tblAssessmentView.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblAssessmentView.RowCount)" class="form-check-input" value="@(tblAssessmentView.IsDrivingexperience.GetViewValue())" disabled checked="@(ConvertToBool(tblAssessmentView.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblAssessmentView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.IsDrivingexperience.Visible (end) *@
+@if (tblAssessmentView.intDrivinglicenseType.Visible) { // tblAssessmentView.intDrivinglicenseType.Visible (begin)
+    <tr id="r_intDrivinglicenseType" @Html.Raw(tblAssessmentView.intDrivinglicenseType.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_intDrivinglicenseType">@Html.Raw(tblAssessmentView.intDrivinglicenseType.Caption)</span></td>
+        <td data-name="intDrivinglicenseType" @Html.Raw(tblAssessmentView.intDrivinglicenseType.CellAttributes)>
+<span id="el_tblAssessment_intDrivinglicenseType" data-page="2">
+<span @Html.Raw(tblAssessmentView.intDrivinglicenseType.ViewAttributes)>
+@if ((!EmptyString(tblAssessmentView.intDrivinglicenseType.GetViewValue()) || !EmptyString(tblAssessmentView.intDrivinglicenseType.TooltipValue)) && !Empty(tblAssessmentView.intDrivinglicenseType.LinkAttributes)) {
+<a @Html.Raw(tblAssessmentView.intDrivinglicenseType.LinkAttributes)>@Html.Raw(tblAssessmentView.intDrivinglicenseType.GetViewValue())</a>
+} else {
+@Html.Raw(tblAssessmentView.intDrivinglicenseType.GetViewValue())
+}
+<span id="tt_tblAssessment_x_intDrivinglicenseType" class="d-none">
+@Html.Raw(tblAssessmentView.intDrivinglicenseType.TooltipValue)
+</span></span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.intDrivinglicenseType.Visible (end) *@
+@if (tblAssessmentView.TheoreticalScore.Visible) { // tblAssessmentView.TheoreticalScore.Visible (begin)
+    <tr id="r_TheoreticalScore" @Html.Raw(tblAssessmentView.TheoreticalScore.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_TheoreticalScore">@Html.Raw(tblAssessmentView.TheoreticalScore.Caption)</span></td>
+        <td data-name="TheoreticalScore" @Html.Raw(tblAssessmentView.TheoreticalScore.CellAttributes)>
+<span id="el_tblAssessment_TheoreticalScore" data-page="2">
+<span @Html.Raw(tblAssessmentView.TheoreticalScore.ViewAttributes)>
+@Html.Raw(tblAssessmentView.TheoreticalScore.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.TheoreticalScore.Visible (end) *@
+@if (tblAssessmentView.dt_TheoreticalScore.Visible) { // tblAssessmentView.dt_TheoreticalScore.Visible (begin)
+    <tr id="r_dt_TheoreticalScore" @Html.Raw(tblAssessmentView.dt_TheoreticalScore.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_dt_TheoreticalScore">@Html.Raw(tblAssessmentView.dt_TheoreticalScore.Caption)</span></td>
+        <td data-name="dt_TheoreticalScore" @Html.Raw(tblAssessmentView.dt_TheoreticalScore.CellAttributes)>
+<span id="el_tblAssessment_dt_TheoreticalScore" data-page="2">
+<span @Html.Raw(tblAssessmentView.dt_TheoreticalScore.ViewAttributes)>
+@Html.Raw(tblAssessmentView.dt_TheoreticalScore.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.dt_TheoreticalScore.Visible (end) *@
+@if (tblAssessmentView.RoadTestScore.Visible) { // tblAssessmentView.RoadTestScore.Visible (begin)
+    <tr id="r_RoadTestScore" @Html.Raw(tblAssessmentView.RoadTestScore.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_RoadTestScore">@Html.Raw(tblAssessmentView.RoadTestScore.Caption)</span></td>
+        <td data-name="RoadTestScore" @Html.Raw(tblAssessmentView.RoadTestScore.CellAttributes)>
+<span id="el_tblAssessment_RoadTestScore" data-page="2">
+<span @Html.Raw(tblAssessmentView.RoadTestScore.ViewAttributes)>
+@Html.Raw(tblAssessmentView.RoadTestScore.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.RoadTestScore.Visible (end) *@
+@if (tblAssessmentView.dt_RoadTestScore.Visible) { // tblAssessmentView.dt_RoadTestScore.Visible (begin)
+    <tr id="r_dt_RoadTestScore" @Html.Raw(tblAssessmentView.dt_RoadTestScore.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_dt_RoadTestScore">@Html.Raw(tblAssessmentView.dt_RoadTestScore.Caption)</span></td>
+        <td data-name="dt_RoadTestScore" @Html.Raw(tblAssessmentView.dt_RoadTestScore.CellAttributes)>
+<span id="el_tblAssessment_dt_RoadTestScore" data-page="2">
+<span @Html.Raw(tblAssessmentView.dt_RoadTestScore.ViewAttributes)>
+@Html.Raw(tblAssessmentView.dt_RoadTestScore.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.dt_RoadTestScore.Visible (end) *@
+</table>
+@if (!tblAssessmentView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblAssessmentView.IsExport()) {
+    @:<div class="@(tblAssessmentView.MultiPages.TabPaneClasses(3))" id="tab_tblAssessment3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblAssessmentView.TableClass)">
+@if (tblAssessmentView.AccidentOccurrence.Visible) { // tblAssessmentView.AccidentOccurrence.Visible (begin)
+    <tr id="r_AccidentOccurrence" @Html.Raw(tblAssessmentView.AccidentOccurrence.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_AccidentOccurrence">@Html.Raw(tblAssessmentView.AccidentOccurrence.Caption)</span></td>
+        <td data-name="AccidentOccurrence" @Html.Raw(tblAssessmentView.AccidentOccurrence.CellAttributes)>
+<span id="el_tblAssessment_AccidentOccurrence" data-page="3">
+<span @Html.Raw(tblAssessmentView.AccidentOccurrence.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AccidentOccurrence_@(tblAssessmentView.RowCount)" class="form-check-input" value="@(tblAssessmentView.AccidentOccurrence.GetViewValue())" disabled checked="@(ConvertToBool(tblAssessmentView.AccidentOccurrence.CurrentValue))">
+    <label class="form-check-label" for="x_AccidentOccurrence_@(tblAssessmentView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.AccidentOccurrence.Visible (end) *@
+@if (tblAssessmentView.Dt_AccidentOccurrence.Visible) { // tblAssessmentView.Dt_AccidentOccurrence.Visible (begin)
+    <tr id="r_Dt_AccidentOccurrence" @Html.Raw(tblAssessmentView.Dt_AccidentOccurrence.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_Dt_AccidentOccurrence">@Html.Raw(tblAssessmentView.Dt_AccidentOccurrence.Caption)</span></td>
+        <td data-name="Dt_AccidentOccurrence" @Html.Raw(tblAssessmentView.Dt_AccidentOccurrence.CellAttributes)>
+<span id="el_tblAssessment_Dt_AccidentOccurrence" data-page="3">
+<span @Html.Raw(tblAssessmentView.Dt_AccidentOccurrence.ViewAttributes)>
+@Html.Raw(tblAssessmentView.Dt_AccidentOccurrence.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.Dt_AccidentOccurrence.Visible (end) *@
+@if (tblAssessmentView.AccidentNotes.Visible) { // tblAssessmentView.AccidentNotes.Visible (begin)
+    <tr id="r_AccidentNotes" @Html.Raw(tblAssessmentView.AccidentNotes.RowAttributes)>
+        <td class="@(tblAssessmentView.TableLeftColumnClass)"><span id="elh_tblAssessment_AccidentNotes">@Html.Raw(tblAssessmentView.AccidentNotes.Caption)</span></td>
+        <td data-name="AccidentNotes" @Html.Raw(tblAssessmentView.AccidentNotes.CellAttributes)>
+<span id="el_tblAssessment_AccidentNotes" data-page="3">
+<span @Html.Raw(tblAssessmentView.AccidentNotes.ViewAttributes)>
+@Html.Raw(tblAssessmentView.AccidentNotes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAssessmentView.AccidentNotes.Visible (end) *@
+</table>
+@if (!tblAssessmentView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblAssessmentView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblAssessmentView.CloseRecordset(); }
+@if (tblAssessmentView.CurrentDetailTables.Contains("tblEvaluation") && tblEvaluation.DetailView) {
+    if (!Empty(tblAssessmentView.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblEvaluation", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblEvaluationGrid")
+    View = this;
+}
+@if (tblAssessmentView.CurrentDetailTables.Contains("tblEvaluationMB") && tblEvaluationMb.DetailView) {
+    if (!Empty(tblAssessmentView.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblEvaluationMB", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblEvaluationMbGrid")
+    View = this;
+}
+</form>
+</main>
+@tblAssessmentView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblAssessmentView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

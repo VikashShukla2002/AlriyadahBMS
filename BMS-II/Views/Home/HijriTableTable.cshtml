@@ -1,0 +1,173 @@
+@if (hijriTableList.ModalGridAdd && hijriTableList.IsGridAdd || hijriTableList.ModalGridEdit && hijriTableList.IsGridEdit || hijriTableList.ModalMultiEdit && hijriTableList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(hijriTableList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Hijri_Table: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(hijriTableList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(hijriTableList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(hijriTableList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(hijriTableList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(hijriTableList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(hijriTableList.TableGridClass)">
+@if (!hijriTableList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!hijriTableList.IsGridAdd && !(hijriTableList.IsGridEdit && hijriTableList.ModalGridEdit) && !hijriTableList.IsMultiEdit) {
+@Html.Raw(hijriTableList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@hijriTableList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(hijriTableList.FormName)" id="@(hijriTableList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(hijriTableList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (hijriTableList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_Hijri_Table" class="card-body ew-grid-middle-panel @(hijriTableList.TableContainerClass)" style="@(hijriTableList.TableContainerStyle)">
+@if (hijriTableList.TotalRecords > 0 || hijriTableList.IsGridEdit || hijriTableList.IsMultiEdit) {
+<table id="tbl_Hijri_Tablelist" class="@(hijriTableList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    hijriTableList.RowType = RowType.Header;
+
+    // Render list options
+    await hijriTableList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@hijriTableList.ListOptions.RenderHeader("left")
+@if (hijriTableList.ID.Visible) { // hijriTableList.ID.Visible (begin)
+        <th data-name="ID" class="@(hijriTableList.ID.HeaderCellClass)"><div id="elh_Hijri_Table_ID" class="Hijri_Table_ID">@Html.Raw(hijriTableList.RenderFieldHeader(hijriTableList.ID))</div></th>
+} @* hijriTableList.ID.Visible (end) *@
+@if (hijriTableList.Hijri_Year.Visible) { // hijriTableList.Hijri_Year.Visible (begin)
+        <th data-name="Hijri_Year" class="@(hijriTableList.Hijri_Year.HeaderCellClass)"><div id="elh_Hijri_Table_Hijri_Year" class="Hijri_Table_Hijri_Year">@Html.Raw(hijriTableList.RenderFieldHeader(hijriTableList.Hijri_Year))</div></th>
+} @* hijriTableList.Hijri_Year.Visible (end) *@
+@if (hijriTableList.Hijri_Month.Visible) { // hijriTableList.Hijri_Month.Visible (begin)
+        <th data-name="Hijri_Month" class="@(hijriTableList.Hijri_Month.HeaderCellClass)"><div id="elh_Hijri_Table_Hijri_Month" class="Hijri_Table_Hijri_Month">@Html.Raw(hijriTableList.RenderFieldHeader(hijriTableList.Hijri_Month))</div></th>
+} @* hijriTableList.Hijri_Month.Visible (end) *@
+@if (hijriTableList.Hijri_Monthname.Visible) { // hijriTableList.Hijri_Monthname.Visible (begin)
+        <th data-name="Hijri_Monthname" class="@(hijriTableList.Hijri_Monthname.HeaderCellClass)"><div id="elh_Hijri_Table_Hijri_Monthname" class="Hijri_Table_Hijri_Monthname">@Html.Raw(hijriTableList.RenderFieldHeader(hijriTableList.Hijri_Monthname))</div></th>
+} @* hijriTableList.Hijri_Monthname.Visible (end) *@
+@if (hijriTableList.Hijri_Day.Visible) { // hijriTableList.Hijri_Day.Visible (begin)
+        <th data-name="Hijri_Day" class="@(hijriTableList.Hijri_Day.HeaderCellClass)"><div id="elh_Hijri_Table_Hijri_Day" class="Hijri_Table_Hijri_Day">@Html.Raw(hijriTableList.RenderFieldHeader(hijriTableList.Hijri_Day))</div></th>
+} @* hijriTableList.Hijri_Day.Visible (end) *@
+@if (hijriTableList.Hijri_mon_ar.Visible) { // hijriTableList.Hijri_mon_ar.Visible (begin)
+        <th data-name="Hijri_mon_ar" class="@(hijriTableList.Hijri_mon_ar.HeaderCellClass)"><div id="elh_Hijri_Table_Hijri_mon_ar" class="Hijri_Table_Hijri_mon_ar">@Html.Raw(hijriTableList.RenderFieldHeader(hijriTableList.Hijri_mon_ar))</div></th>
+} @* hijriTableList.Hijri_mon_ar.Visible (end) *@
+@* Render list options (header, right) *@
+@hijriTableList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(hijriTableList.PageNumber)">
+@{
+    await hijriTableList.SetupGrid();
+    bool eof = hijriTableList.Recordset == null; // DN
+}
+@while (hijriTableList.RecordCount < hijriTableList.StopRecord || SameString(hijriTableList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(hijriTableList.RowIndex, "$rowindex$") &&
+        (!hijriTableList.IsGridAdd || hijriTableList.CurrentMode == "copy") &&
+        (!((hijriTableList.IsCopy || hijriTableList.IsAdd) && hijriTableList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await hijriTableList.Recordset.ReadAsync();
+    hijriTableList.RecordCount++;
+    if (hijriTableList.RecordCount >= hijriTableList.StartRecord) {
+        await hijriTableList.SetupRow();
+    <tr @Html.Raw(hijriTableList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @hijriTableList.ListOptions.RenderBody("left", hijriTableList.RowCount)
+    @if (hijriTableList.ID.Visible) { // hijriTableList.ID.Visible (begin)
+        <td data-name="ID" @Html.Raw(hijriTableList.ID.CellAttributes)>
+<span id="el@(hijriTableList.RowIndex == "$rowindex$" ? "$rowindex$" : hijriTableList.RowCount)_Hijri_Table_ID" class="el_Hijri_Table_ID">
+<span @Html.Raw(hijriTableList.ID.ViewAttributes)>
+@Html.Raw(hijriTableList.ID.GetViewValue())</span>
+</span>
+</td>
+    } @* hijriTableList.ID.Visible (end) *@
+    @if (hijriTableList.Hijri_Year.Visible) { // hijriTableList.Hijri_Year.Visible (begin)
+        <td data-name="Hijri_Year" @Html.Raw(hijriTableList.Hijri_Year.CellAttributes)>
+<span id="el@(hijriTableList.RowIndex == "$rowindex$" ? "$rowindex$" : hijriTableList.RowCount)_Hijri_Table_Hijri_Year" class="el_Hijri_Table_Hijri_Year">
+<span @Html.Raw(hijriTableList.Hijri_Year.ViewAttributes)>
+@Html.Raw(hijriTableList.Hijri_Year.GetViewValue())</span>
+</span>
+</td>
+    } @* hijriTableList.Hijri_Year.Visible (end) *@
+    @if (hijriTableList.Hijri_Month.Visible) { // hijriTableList.Hijri_Month.Visible (begin)
+        <td data-name="Hijri_Month" @Html.Raw(hijriTableList.Hijri_Month.CellAttributes)>
+<span id="el@(hijriTableList.RowIndex == "$rowindex$" ? "$rowindex$" : hijriTableList.RowCount)_Hijri_Table_Hijri_Month" class="el_Hijri_Table_Hijri_Month">
+<span @Html.Raw(hijriTableList.Hijri_Month.ViewAttributes)>
+@Html.Raw(hijriTableList.Hijri_Month.GetViewValue())</span>
+</span>
+</td>
+    } @* hijriTableList.Hijri_Month.Visible (end) *@
+    @if (hijriTableList.Hijri_Monthname.Visible) { // hijriTableList.Hijri_Monthname.Visible (begin)
+        <td data-name="Hijri_Monthname" @Html.Raw(hijriTableList.Hijri_Monthname.CellAttributes)>
+<span id="el@(hijriTableList.RowIndex == "$rowindex$" ? "$rowindex$" : hijriTableList.RowCount)_Hijri_Table_Hijri_Monthname" class="el_Hijri_Table_Hijri_Monthname">
+<span @Html.Raw(hijriTableList.Hijri_Monthname.ViewAttributes)>
+@Html.Raw(hijriTableList.Hijri_Monthname.GetViewValue())</span>
+</span>
+</td>
+    } @* hijriTableList.Hijri_Monthname.Visible (end) *@
+    @if (hijriTableList.Hijri_Day.Visible) { // hijriTableList.Hijri_Day.Visible (begin)
+        <td data-name="Hijri_Day" @Html.Raw(hijriTableList.Hijri_Day.CellAttributes)>
+<span id="el@(hijriTableList.RowIndex == "$rowindex$" ? "$rowindex$" : hijriTableList.RowCount)_Hijri_Table_Hijri_Day" class="el_Hijri_Table_Hijri_Day">
+<span @Html.Raw(hijriTableList.Hijri_Day.ViewAttributes)>
+@Html.Raw(hijriTableList.Hijri_Day.GetViewValue())</span>
+</span>
+</td>
+    } @* hijriTableList.Hijri_Day.Visible (end) *@
+    @if (hijriTableList.Hijri_mon_ar.Visible) { // hijriTableList.Hijri_mon_ar.Visible (begin)
+        <td data-name="Hijri_mon_ar" @Html.Raw(hijriTableList.Hijri_mon_ar.CellAttributes)>
+<span id="el@(hijriTableList.RowIndex == "$rowindex$" ? "$rowindex$" : hijriTableList.RowCount)_Hijri_Table_Hijri_mon_ar" class="el_Hijri_Table_Hijri_mon_ar">
+<span @Html.Raw(hijriTableList.Hijri_mon_ar.ViewAttributes)>
+@Html.Raw(hijriTableList.Hijri_mon_ar.GetViewValue())</span>
+</span>
+</td>
+    } @* hijriTableList.Hijri_mon_ar.Visible (end) *@
+    @* Render list options (body, right) *@
+    @hijriTableList.ListOptions.RenderBody("right", hijriTableList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(hijriTableList.RowIndex, "$rowindex$"))
+        hijriTableList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((hijriTableList.IsCopy || hijriTableList.IsAdd) && hijriTableList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        hijriTableList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(hijriTableList.CurrentAction) && !hijriTableList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ hijriTableList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

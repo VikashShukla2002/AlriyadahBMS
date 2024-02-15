@@ -1,0 +1,220 @@
+@if (calendar2List.ModalGridAdd && calendar2List.IsGridAdd || calendar2List.ModalGridEdit && calendar2List.IsGridEdit || calendar2List.ModalMultiEdit && calendar2List.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(calendar2List.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Calendar2: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(calendar2List.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(calendar2List.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(calendar2List.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(calendar2List.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(calendar2List.IsAddOrEdit ? " ew-grid-add-edit" : "") @(calendar2List.TableGridClass)">
+@if (!calendar2List.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!calendar2List.IsGridAdd && !(calendar2List.IsGridEdit && calendar2List.ModalGridEdit) && !calendar2List.IsMultiEdit) {
+@Html.Raw(calendar2List.Pager.Render())
+}
+<div class="ew-list-other-options">
+@calendar2List.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(calendar2List.FormName)" id="@(calendar2List.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(calendar2List.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (calendar2List.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_Calendar2" class="card-body ew-grid-middle-panel @(calendar2List.TableContainerClass)" style="@(calendar2List.TableContainerStyle)">
+@if (calendar2List.TotalRecords > 0 || calendar2List.IsGridEdit || calendar2List.IsMultiEdit) {
+<table id="tbl_Calendar2list" class="@(calendar2List.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    calendar2List.RowType = RowType.Header;
+
+    // Render list options
+    await calendar2List.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@calendar2List.ListOptions.RenderHeader("left")
+@if (calendar2List.Id.Visible) { // calendar2List.Id.Visible (begin)
+        <th data-name="Id" class="@(calendar2List.Id.HeaderCellClass)"><div id="elh_Calendar2_Id" class="Calendar2_Id">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.Id))</div></th>
+} @* calendar2List.Id.Visible (end) *@
+@if (calendar2List._Title.Visible) { // calendar2List._Title.Visible (begin)
+        <th data-name="_Title" class="@(calendar2List._Title.HeaderCellClass)"><div id="elh_Calendar2__Title" class="Calendar2__Title">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List._Title))</div></th>
+} @* calendar2List._Title.Visible (end) *@
+@if (calendar2List.Start.Visible) { // calendar2List.Start.Visible (begin)
+        <th data-name="Start" class="@(calendar2List.Start.HeaderCellClass)"><div id="elh_Calendar2_Start" class="Calendar2_Start">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.Start))</div></th>
+} @* calendar2List.Start.Visible (end) *@
+@if (calendar2List.End.Visible) { // calendar2List.End.Visible (begin)
+        <th data-name="End" class="@(calendar2List.End.HeaderCellClass)"><div id="elh_Calendar2_End" class="Calendar2_End">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.End))</div></th>
+} @* calendar2List.End.Visible (end) *@
+@if (calendar2List.AllDay.Visible) { // calendar2List.AllDay.Visible (begin)
+        <th data-name="AllDay" class="@(calendar2List.AllDay.HeaderCellClass)"><div id="elh_Calendar2_AllDay" class="Calendar2_AllDay">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.AllDay))</div></th>
+} @* calendar2List.AllDay.Visible (end) *@
+@if (calendar2List.str_Username.Visible) { // calendar2List.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(calendar2List.str_Username.HeaderCellClass)"><div id="elh_Calendar2_str_Username" class="Calendar2_str_Username">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.str_Username))</div></th>
+} @* calendar2List.str_Username.Visible (end) *@
+@if (calendar2List._Url.Visible) { // calendar2List._Url.Visible (begin)
+        <th data-name="_Url" class="@(calendar2List._Url.HeaderCellClass)"><div id="elh_Calendar2__Url" class="Calendar2__Url">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List._Url))</div></th>
+} @* calendar2List._Url.Visible (end) *@
+@if (calendar2List.ClassNames.Visible) { // calendar2List.ClassNames.Visible (begin)
+        <th data-name="ClassNames" class="@(calendar2List.ClassNames.HeaderCellClass)"><div id="elh_Calendar2_ClassNames" class="Calendar2_ClassNames">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.ClassNames))</div></th>
+} @* calendar2List.ClassNames.Visible (end) *@
+@if (calendar2List.Display.Visible) { // calendar2List.Display.Visible (begin)
+        <th data-name="Display" class="@(calendar2List.Display.HeaderCellClass)"><div id="elh_Calendar2_Display" class="Calendar2_Display">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.Display))</div></th>
+} @* calendar2List.Display.Visible (end) *@
+@if (calendar2List.BackgroundColor.Visible) { // calendar2List.BackgroundColor.Visible (begin)
+        <th data-name="BackgroundColor" class="@(calendar2List.BackgroundColor.HeaderCellClass)"><div id="elh_Calendar2_BackgroundColor" class="Calendar2_BackgroundColor">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.BackgroundColor))</div></th>
+} @* calendar2List.BackgroundColor.Visible (end) *@
+@* Render list options (header, right) *@
+@calendar2List.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(calendar2List.PageNumber)">
+@{
+    await calendar2List.SetupGrid();
+    bool eof = calendar2List.Recordset == null; // DN
+}
+@while (calendar2List.RecordCount < calendar2List.StopRecord || SameString(calendar2List.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(calendar2List.RowIndex, "$rowindex$") &&
+        (!calendar2List.IsGridAdd || calendar2List.CurrentMode == "copy") &&
+        (!((calendar2List.IsCopy || calendar2List.IsAdd) && calendar2List.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await calendar2List.Recordset.ReadAsync();
+    calendar2List.RecordCount++;
+    if (calendar2List.RecordCount >= calendar2List.StartRecord) {
+        await calendar2List.SetupRow();
+    <tr @Html.Raw(calendar2List.RowAttributes)>
+    @* Render list options (body, left) *@
+    @calendar2List.ListOptions.RenderBody("left", calendar2List.RowCount)
+    @if (calendar2List.Id.Visible) { // calendar2List.Id.Visible (begin)
+        <td data-name="Id" @Html.Raw(calendar2List.Id.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_Id" class="el_Calendar2_Id">
+<span @Html.Raw(calendar2List.Id.ViewAttributes)>
+@Html.Raw(calendar2List.Id.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.Id.Visible (end) *@
+    @if (calendar2List._Title.Visible) { // calendar2List._Title.Visible (begin)
+        <td data-name="_Title" @Html.Raw(calendar2List._Title.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2__Title" class="el_Calendar2__Title">
+<span @Html.Raw(calendar2List._Title.ViewAttributes)>
+@Html.Raw(calendar2List._Title.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List._Title.Visible (end) *@
+    @if (calendar2List.Start.Visible) { // calendar2List.Start.Visible (begin)
+        <td data-name="Start" @Html.Raw(calendar2List.Start.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_Start" class="el_Calendar2_Start">
+<span @Html.Raw(calendar2List.Start.ViewAttributes)>
+@Html.Raw(calendar2List.Start.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.Start.Visible (end) *@
+    @if (calendar2List.End.Visible) { // calendar2List.End.Visible (begin)
+        <td data-name="End" @Html.Raw(calendar2List.End.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_End" class="el_Calendar2_End">
+<span @Html.Raw(calendar2List.End.ViewAttributes)>
+@Html.Raw(calendar2List.End.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.End.Visible (end) *@
+    @if (calendar2List.AllDay.Visible) { // calendar2List.AllDay.Visible (begin)
+        <td data-name="AllDay" @Html.Raw(calendar2List.AllDay.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_AllDay" class="el_Calendar2_AllDay">
+<span @Html.Raw(calendar2List.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(calendar2List.RowCount)" class="form-check-input" value="@(calendar2List.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(calendar2List.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(calendar2List.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* calendar2List.AllDay.Visible (end) *@
+    @if (calendar2List.str_Username.Visible) { // calendar2List.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(calendar2List.str_Username.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_str_Username" class="el_Calendar2_str_Username">
+<span @Html.Raw(calendar2List.str_Username.ViewAttributes)>
+@Html.Raw(calendar2List.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.str_Username.Visible (end) *@
+    @if (calendar2List._Url.Visible) { // calendar2List._Url.Visible (begin)
+        <td data-name="_Url" @Html.Raw(calendar2List._Url.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2__Url" class="el_Calendar2__Url">
+<span @Html.Raw(calendar2List._Url.ViewAttributes)>
+@Html.Raw(calendar2List._Url.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List._Url.Visible (end) *@
+    @if (calendar2List.ClassNames.Visible) { // calendar2List.ClassNames.Visible (begin)
+        <td data-name="ClassNames" @Html.Raw(calendar2List.ClassNames.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_ClassNames" class="el_Calendar2_ClassNames">
+<span @Html.Raw(calendar2List.ClassNames.ViewAttributes)>
+@Html.Raw(calendar2List.ClassNames.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.ClassNames.Visible (end) *@
+    @if (calendar2List.Display.Visible) { // calendar2List.Display.Visible (begin)
+        <td data-name="Display" @Html.Raw(calendar2List.Display.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_Display" class="el_Calendar2_Display">
+<span @Html.Raw(calendar2List.Display.ViewAttributes)>
+@Html.Raw(calendar2List.Display.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.Display.Visible (end) *@
+    @if (calendar2List.BackgroundColor.Visible) { // calendar2List.BackgroundColor.Visible (begin)
+        <td data-name="BackgroundColor" @Html.Raw(calendar2List.BackgroundColor.CellAttributes)>
+<span id="el@(calendar2List.RowIndex == "$rowindex$" ? "$rowindex$" : calendar2List.RowCount)_Calendar2_BackgroundColor" class="el_Calendar2_BackgroundColor">
+<span @Html.Raw(calendar2List.BackgroundColor.ViewAttributes)>
+@Html.Raw(calendar2List.BackgroundColor.GetViewValue())</span>
+</span>
+</td>
+    } @* calendar2List.BackgroundColor.Visible (end) *@
+    @* Render list options (body, right) *@
+    @calendar2List.ListOptions.RenderBody("right", calendar2List.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(calendar2List.RowIndex, "$rowindex$"))
+        calendar2List.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((calendar2List.IsCopy || calendar2List.IsAdd) && calendar2List.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        calendar2List.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(calendar2List.CurrentAction) && !calendar2List.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ calendar2List.CloseRecordset(); }
+</div><!-- /.ew-grid -->

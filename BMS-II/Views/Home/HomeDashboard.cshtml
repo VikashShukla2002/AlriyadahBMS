@@ -1,0 +1,177 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (homeDashboard.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    Layout = "_Layout";
+    HomeDashboard DashboardPage = homeDashboard;
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(homeDashboard.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Home_Dashboard: currentTable } });
+var currentPageID = ew.PAGE_ID = "dashboard";
+var currentForm;
+var fHome_Dashboarddashboard;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fHome_Dashboarddashboard")
+        .setPageId("dashboard")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report">
+<div class="btn-toolbar ew-toolbar">
+@{ homeDashboard.ExportOptions.Render("body"); }
+</div>
+@homeDashboard.ShowPageHeader()
+@homeDashboard.ShowMessages()
+<!-- Dashboard Container -->
+<div id="ew-dashboard" class="ew-dashboard">
+<div class="row">
+<div class="@homeDashboard.ItemClassNames[0]" style=' min-width: 350px; min-height: 470px;'>
+<div id="Item1" class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Html.Raw(Language.TablePhrase("Registration_Status", "TblCaption"))</h3>
+@if (!homeDashboard.IsExport()) {
+        <div class="card-tools">
+    @if (homeDashboard.CanRefresh) {
+            <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="@AppPath("RegistrationStatus")?layout=false&dashboard=true" data-load-on-init="@(homeDashboard.LoadOnInit ? "true" : "false")"><i class="fa-solid fa-rotate"></i></button>
+    }
+    @if (homeDashboard.CanMaximize) {
+            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fa-solid fa-maximize"></i></button>
+    }
+    @if (homeDashboard.CanCollapse) {
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa-solid fa-minus"></i></button>
+    }
+        </div>
+}
+    </div><!-- /.card-header -->
+    <div class="card-body">
+        @Html.Raw(await homeDashboard.GetItem(1))
+    </div><!-- /.card-body -->
+</div><!-- /.card -->
+</div>
+<div class="@homeDashboard.ItemClassNames[1]" style=' min-width: 350px; min-height: 470px;'>
+<div id="Item2" class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Html.Raw(Language.TablePhrase("Assessment_Status", "TblCaption"))</h3>
+@if (!homeDashboard.IsExport()) {
+        <div class="card-tools">
+    @if (homeDashboard.CanRefresh) {
+            <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="@AppPath("AssessmentStatus")?layout=false&dashboard=true" data-load-on-init="@(homeDashboard.LoadOnInit ? "true" : "false")"><i class="fa-solid fa-rotate"></i></button>
+    }
+    @if (homeDashboard.CanMaximize) {
+            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fa-solid fa-maximize"></i></button>
+    }
+    @if (homeDashboard.CanCollapse) {
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa-solid fa-minus"></i></button>
+    }
+        </div>
+}
+    </div><!-- /.card-header -->
+    <div class="card-body">
+        @Html.Raw(await homeDashboard.GetItem(2))
+    </div><!-- /.card-body -->
+</div><!-- /.card -->
+</div>
+<div class="@homeDashboard.ItemClassNames[2]" style=' min-width: 350px; min-height: 470px;'>
+<div id="Item3" class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Html.Raw(Language.TablePhrase("Billing_Status", "TblCaption"))</h3>
+@if (!homeDashboard.IsExport()) {
+        <div class="card-tools">
+    @if (homeDashboard.CanRefresh) {
+            <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="@AppPath("BillingStatus")?layout=false&dashboard=true" data-load-on-init="@(homeDashboard.LoadOnInit ? "true" : "false")"><i class="fa-solid fa-rotate"></i></button>
+    }
+    @if (homeDashboard.CanMaximize) {
+            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fa-solid fa-maximize"></i></button>
+    }
+    @if (homeDashboard.CanCollapse) {
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa-solid fa-minus"></i></button>
+    }
+        </div>
+}
+    </div><!-- /.card-header -->
+    <div class="card-body">
+        @Html.Raw(await homeDashboard.GetItem(3))
+    </div><!-- /.card-body -->
+</div><!-- /.card -->
+</div>
+<div class="@homeDashboard.ItemClassNames[3]" style=' min-width: 350px; min-height: 470px;'>
+<div id="Item4" class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Html.Raw(Language.TablePhrase("Enrollment_Status", "TblCaption"))</h3>
+@if (!homeDashboard.IsExport()) {
+        <div class="card-tools">
+    @if (homeDashboard.CanRefresh) {
+            <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="@AppPath("EnrollmentStatus")?layout=false&dashboard=true" data-load-on-init="@(homeDashboard.LoadOnInit ? "true" : "false")"><i class="fa-solid fa-rotate"></i></button>
+    }
+    @if (homeDashboard.CanMaximize) {
+            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fa-solid fa-maximize"></i></button>
+    }
+    @if (homeDashboard.CanCollapse) {
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa-solid fa-minus"></i></button>
+    }
+        </div>
+}
+    </div><!-- /.card-header -->
+    <div class="card-body">
+        @Html.Raw(await homeDashboard.GetItem(4))
+    </div><!-- /.card-body -->
+</div><!-- /.card -->
+</div>
+</div>
+</div>
+<!-- /.ew-dashboard -->
+</div>
+<!-- /.ew-report -->
+<script>
+loadjs.ready("load", () => jQuery('[data-card-widget="card-refresh"]')
+    .on("loaded.fail.lte.cardrefresh", (e, jqXHR, textStatus, errorThrown) => console.error(errorThrown))
+    .on("loaded.success.lte.cardrefresh", (e, result) => !ew.getError(result) || console.error(result)));
+</script>
+@if (homeDashboard.IsExport() && !homeDashboard.IsExport("print")) {
+<script class="ew-export-dashboard">
+loadjs.ready("load", function() {
+    ew.exportCustom("ew-dashboard", "@homeDashboard.Export", "Home_Dashboard");
+    loadjs.done("exportdashboard");
+});
+</script>
+}
+@homeDashboard.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

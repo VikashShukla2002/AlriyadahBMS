@@ -1,0 +1,208 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (calendarDelete.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!calendarDelete.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(calendarDelete.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Calendar: currentTable } });
+var currentPageID = ew.PAGE_ID = "delete";
+var currentForm;
+var fCalendardelete;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fCalendardelete")
+        .setPageId("delete")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@calendarDelete.ShowPageHeader()
+@calendarDelete.ShowMessages()
+<form name="fCalendardelete" id="fCalendardelete" class="ew-form ew-delete-form" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="delete">
+@foreach (string key in calendarDelete.RecordKeys) {
+<input type="hidden" name="key_m[]" value="@key">
+}
+<div class="card ew-card ew-grid @(calendarDelete.TableGridClass)">
+<div class="card-body ew-grid-middle-panel @(calendarDelete.TableContainerClass)" style="@(calendarDelete.TableContainerStyle)">
+<table class="@(calendarDelete.TableClass)">
+    <thead>
+    <tr class="ew-table-header">
+@if (calendarDelete.Id.Visible) { // calendarDelete.Id.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.Id.HeaderCellClass)"><span id="elh_Calendar_Id" class="Calendar_Id">@Html.Raw(calendarDelete.Id.Caption)</span></th>
+} @* calendarDelete.Id.Visible (end) *@
+@if (calendarDelete._Title.Visible) { // calendarDelete._Title.Visible (begin)
+        <th class="@Html.Raw(calendarDelete._Title.HeaderCellClass)"><span id="elh_Calendar__Title" class="Calendar__Title">@Html.Raw(calendarDelete._Title.Caption)</span></th>
+} @* calendarDelete._Title.Visible (end) *@
+@if (calendarDelete.Start.Visible) { // calendarDelete.Start.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.Start.HeaderCellClass)"><span id="elh_Calendar_Start" class="Calendar_Start">@Html.Raw(calendarDelete.Start.Caption)</span></th>
+} @* calendarDelete.Start.Visible (end) *@
+@if (calendarDelete.End.Visible) { // calendarDelete.End.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.End.HeaderCellClass)"><span id="elh_Calendar_End" class="Calendar_End">@Html.Raw(calendarDelete.End.Caption)</span></th>
+} @* calendarDelete.End.Visible (end) *@
+@if (calendarDelete.AllDay.Visible) { // calendarDelete.AllDay.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.AllDay.HeaderCellClass)"><span id="elh_Calendar_AllDay" class="Calendar_AllDay">@Html.Raw(calendarDelete.AllDay.Caption)</span></th>
+} @* calendarDelete.AllDay.Visible (end) *@
+@if (calendarDelete.str_Username.Visible) { // calendarDelete.str_Username.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.str_Username.HeaderCellClass)"><span id="elh_Calendar_str_Username" class="Calendar_str_Username">@Html.Raw(calendarDelete.str_Username.Caption)</span></th>
+} @* calendarDelete.str_Username.Visible (end) *@
+@if (calendarDelete._Url.Visible) { // calendarDelete._Url.Visible (begin)
+        <th class="@Html.Raw(calendarDelete._Url.HeaderCellClass)"><span id="elh_Calendar__Url" class="Calendar__Url">@Html.Raw(calendarDelete._Url.Caption)</span></th>
+} @* calendarDelete._Url.Visible (end) *@
+@if (calendarDelete.ClassNames.Visible) { // calendarDelete.ClassNames.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.ClassNames.HeaderCellClass)"><span id="elh_Calendar_ClassNames" class="Calendar_ClassNames">@Html.Raw(calendarDelete.ClassNames.Caption)</span></th>
+} @* calendarDelete.ClassNames.Visible (end) *@
+@if (calendarDelete.Display.Visible) { // calendarDelete.Display.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.Display.HeaderCellClass)"><span id="elh_Calendar_Display" class="Calendar_Display">@Html.Raw(calendarDelete.Display.Caption)</span></th>
+} @* calendarDelete.Display.Visible (end) *@
+@if (calendarDelete.BackgroundColor.Visible) { // calendarDelete.BackgroundColor.Visible (begin)
+        <th class="@Html.Raw(calendarDelete.BackgroundColor.HeaderCellClass)"><span id="elh_Calendar_BackgroundColor" class="Calendar_BackgroundColor">@Html.Raw(calendarDelete.BackgroundColor.Caption)</span></th>
+} @* calendarDelete.BackgroundColor.Visible (end) *@
+    </tr>
+    </thead>
+    <tbody>
+@{ calendarDelete.RecordCount = 0; }
+@while (calendarDelete.Recordset != null && await calendarDelete.Recordset.ReadAsync()) { // DN
+    calendarDelete.RecordCount++;
+    calendarDelete.RowCount++;
+
+    // Set row properties
+    calendarDelete.ResetAttributes();
+    calendarDelete.RowType = RowType.View; // View
+
+    // Get the field contents
+    await calendarDelete.LoadRowValues(calendarDelete.Recordset);
+
+    // Render row
+    await calendarDelete.RenderRow();
+    <tr @Html.Raw(calendarDelete.RowAttributes)>
+@if (calendarDelete.Id.Visible) { // calendarDelete.Id.Visible (begin)
+        <td @Html.Raw(calendarDelete.Id.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.Id.ViewAttributes)>
+@Html.Raw(calendarDelete.Id.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.Id.Visible (end) *@
+@if (calendarDelete._Title.Visible) { // calendarDelete._Title.Visible (begin)
+        <td @Html.Raw(calendarDelete._Title.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete._Title.ViewAttributes)>
+@Html.Raw(calendarDelete._Title.GetViewValue())</span>
+</span></td>
+} @* calendarDelete._Title.Visible (end) *@
+@if (calendarDelete.Start.Visible) { // calendarDelete.Start.Visible (begin)
+        <td @Html.Raw(calendarDelete.Start.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.Start.ViewAttributes)>
+@Html.Raw(calendarDelete.Start.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.Start.Visible (end) *@
+@if (calendarDelete.End.Visible) { // calendarDelete.End.Visible (begin)
+        <td @Html.Raw(calendarDelete.End.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.End.ViewAttributes)>
+@Html.Raw(calendarDelete.End.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.End.Visible (end) *@
+@if (calendarDelete.AllDay.Visible) { // calendarDelete.AllDay.Visible (begin)
+        <td @Html.Raw(calendarDelete.AllDay.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(calendarDelete.RowCount)" class="form-check-input" value="@(calendarDelete.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(calendarDelete.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(calendarDelete.RowCount)"></label>
+</div></span>
+</span></td>
+} @* calendarDelete.AllDay.Visible (end) *@
+@if (calendarDelete.str_Username.Visible) { // calendarDelete.str_Username.Visible (begin)
+        <td @Html.Raw(calendarDelete.str_Username.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.str_Username.ViewAttributes)>
+@Html.Raw(calendarDelete.str_Username.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.str_Username.Visible (end) *@
+@if (calendarDelete._Url.Visible) { // calendarDelete._Url.Visible (begin)
+        <td @Html.Raw(calendarDelete._Url.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete._Url.ViewAttributes)>
+@Html.Raw(calendarDelete._Url.GetViewValue())</span>
+</span></td>
+} @* calendarDelete._Url.Visible (end) *@
+@if (calendarDelete.ClassNames.Visible) { // calendarDelete.ClassNames.Visible (begin)
+        <td @Html.Raw(calendarDelete.ClassNames.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.ClassNames.ViewAttributes)>
+@Html.Raw(calendarDelete.ClassNames.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.ClassNames.Visible (end) *@
+@if (calendarDelete.Display.Visible) { // calendarDelete.Display.Visible (begin)
+        <td @Html.Raw(calendarDelete.Display.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.Display.ViewAttributes)>
+@Html.Raw(calendarDelete.Display.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.Display.Visible (end) *@
+@if (calendarDelete.BackgroundColor.Visible) { // calendarDelete.BackgroundColor.Visible (begin)
+        <td @Html.Raw(calendarDelete.BackgroundColor.CellAttributes)>
+<span id="">
+<span @Html.Raw(calendarDelete.BackgroundColor.ViewAttributes)>
+@Html.Raw(calendarDelete.BackgroundColor.GetViewValue())</span>
+</span></td>
+} @* calendarDelete.BackgroundColor.Visible (end) *@
+    </tr>
+}
+@{ calendarDelete.CloseRecordset(); }
+</tbody>
+</table>
+</div>
+</div>
+<div class="ew-buttons ew-desktop-buttons">
+<button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit">@Html.Raw(Language.Phrase("DeleteBtn"))</button>
+<button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-href="@AppPath(calendarDelete.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+</div>
+</form>
+@calendarDelete.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

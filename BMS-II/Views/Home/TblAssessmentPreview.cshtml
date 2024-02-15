@@ -1,0 +1,225 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAssessmentPreview.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+ew.deepAssign(ew.vars, { tables: { tblAssessment: @Html.Raw(ConvertToJson(tblAssessmentPreview.ToClientVar())) } });
+</script>
+@tblAssessmentPreview.ShowPageHeader()
+@if (tblAssessmentPreview.TotalRecords > 0) {
+<div class="card ew-grid @(tblAssessmentPreview.TableGridClass)"><!-- .card -->
+<div class="card-header ew-grid-upper-panel ew-preview-upper-panel"><!-- .card-header -->
+@Html.Raw(tblAssessmentPreview.Pager.Render())
+<div class="ew-preview-other-options">
+@tblAssessmentPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card-header -->
+<div class="card-body ew-preview-middle-panel ew-grid-middle-panel @(tblAssessmentPreview.TableContainerClass)" style="@(tblAssessmentPreview.TableContainerStyle)"><!-- .card-body -->
+<table class="@(tblAssessmentPreview.TableClass)"><!-- .table -->
+    <thead><!-- Table header -->
+        <tr class="ew-table-header">
+@{
+    await tblAssessmentPreview.RenderListOptions(); // Render list options
+}
+@tblAssessmentPreview.ListOptions.RenderHeader("left")
+@if (tblAssessmentPreview.str_First_Name.Visible) { // tblAssessmentPreview.str_First_Name.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.str_First_Name))) {
+        <th class="@tblAssessmentPreview.str_First_Name.HeaderCellClass">@Html.Raw(tblAssessmentPreview.str_First_Name.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.str_First_Name.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.str_First_Name.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.str_First_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.str_First_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.str_First_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.str_First_Name.Visible (end) *@
+@if (tblAssessmentPreview.str_Middle_Name.Visible) { // tblAssessmentPreview.str_Middle_Name.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.str_Middle_Name))) {
+        <th class="@tblAssessmentPreview.str_Middle_Name.HeaderCellClass">@Html.Raw(tblAssessmentPreview.str_Middle_Name.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.str_Middle_Name.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.str_Middle_Name.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.str_Middle_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.str_Middle_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.str_Middle_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.str_Middle_Name.Visible (end) *@
+@if (tblAssessmentPreview.str_Last_Name.Visible) { // tblAssessmentPreview.str_Last_Name.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.str_Last_Name))) {
+        <th class="@tblAssessmentPreview.str_Last_Name.HeaderCellClass">@Html.Raw(tblAssessmentPreview.str_Last_Name.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.str_Last_Name.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.str_Last_Name.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.str_Last_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.str_Last_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.str_Last_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.str_Last_Name.Visible (end) *@
+@if (tblAssessmentPreview.str_Username.Visible) { // tblAssessmentPreview.str_Username.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.str_Username))) {
+        <th class="@tblAssessmentPreview.str_Username.HeaderCellClass">@Html.Raw(tblAssessmentPreview.str_Username.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.str_Username.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.str_Username.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.str_Username.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.str_Username.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.str_Username.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.str_Username.Visible (end) *@
+@if (tblAssessmentPreview.Assessment_Type.Visible) { // tblAssessmentPreview.Assessment_Type.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.Assessment_Type))) {
+        <th class="@tblAssessmentPreview.Assessment_Type.HeaderCellClass">@Html.Raw(tblAssessmentPreview.Assessment_Type.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.Assessment_Type.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.Assessment_Type.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.Assessment_Type.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.Assessment_Type.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.Assessment_Type.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.Assessment_Type.Visible (end) *@
+@if (tblAssessmentPreview.AssessmentDate.Visible) { // tblAssessmentPreview.AssessmentDate.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.AssessmentDate))) {
+        <th class="@tblAssessmentPreview.AssessmentDate.HeaderCellClass">@Html.Raw(tblAssessmentPreview.AssessmentDate.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.AssessmentDate.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.AssessmentDate.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.AssessmentDate.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.AssessmentDate.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.AssessmentDate.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.AssessmentDate.Visible (end) *@
+@if (tblAssessmentPreview.isAssessmentDone.Visible) { // tblAssessmentPreview.isAssessmentDone.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.isAssessmentDone))) {
+        <th class="@tblAssessmentPreview.isAssessmentDone.HeaderCellClass">@Html.Raw(tblAssessmentPreview.isAssessmentDone.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.isAssessmentDone.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.isAssessmentDone.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.isAssessmentDone.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.isAssessmentDone.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.isAssessmentDone.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.isAssessmentDone.Visible (end) *@
+@if (tblAssessmentPreview.AssessmentScore.Visible) { // tblAssessmentPreview.AssessmentScore.Visible (begin)
+    if (Empty(tblAssessmentPreview.SortUrl(tblAssessmentPreview.AssessmentScore))) {
+        <th class="@tblAssessmentPreview.AssessmentScore.HeaderCellClass">@Html.Raw(tblAssessmentPreview.AssessmentScore.Caption)</th>
+    } else {
+        <th class="@tblAssessmentPreview.AssessmentScore.HeaderCellClass"><div role="button" data-table="tblAssessment" data-sort="@tblAssessmentPreview.AssessmentScore.Name" data-sort-type="2" data-sort-order="@tblAssessmentPreview.AssessmentScore.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblAssessmentPreview.AssessmentScore.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblAssessmentPreview.AssessmentScore.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblAssessmentPreview.AssessmentScore.Visible (end) *@
+@tblAssessmentPreview.ListOptions.RenderHeader("right")
+        </tr>
+    </thead>
+    <tbody><!-- Table body -->
+@{
+    tblAssessmentPreview.RecordCount = 0;
+    tblAssessmentPreview.RowCount = 0;
+}
+@do {
+    // Init row class and style
+    tblAssessmentPreview.RecordCount++;
+    tblAssessmentPreview.RowCount++;
+    tblAssessmentPreview.CssStyle = "";
+    tblAssessmentPreview.LoadListRowValues(tblAssessmentPreview.Recordset);
+
+    // Render row
+    tblAssessmentPreview.RowType = RowType.Preview; // Preview record
+    tblAssessmentPreview.ResetAttributes();
+    await tblAssessmentPreview.RenderListRow();
+
+    // Render list options
+    await tblAssessmentPreview.RenderListOptions();
+    <tr @Html.Raw(tblAssessmentPreview.RowAttributes)>
+    @tblAssessmentPreview.ListOptions.RenderBody("left", tblAssessmentPreview.RowCount)
+    @if (tblAssessmentPreview.str_First_Name.Visible) { // tblAssessmentPreview.str_First_Name.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.str_First_Name.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.str_First_Name.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.str_First_Name.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.str_First_Name.Visible (end) *@
+    @if (tblAssessmentPreview.str_Middle_Name.Visible) { // tblAssessmentPreview.str_Middle_Name.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.str_Middle_Name.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.str_Middle_Name.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.str_Middle_Name.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.str_Middle_Name.Visible (end) *@
+    @if (tblAssessmentPreview.str_Last_Name.Visible) { // tblAssessmentPreview.str_Last_Name.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.str_Last_Name.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.str_Last_Name.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.str_Last_Name.Visible (end) *@
+    @if (tblAssessmentPreview.str_Username.Visible) { // tblAssessmentPreview.str_Username.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.str_Username.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.str_Username.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.str_Username.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.str_Username.Visible (end) *@
+    @if (tblAssessmentPreview.Assessment_Type.Visible) { // tblAssessmentPreview.Assessment_Type.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.Assessment_Type.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.Assessment_Type.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.Assessment_Type.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.Assessment_Type.Visible (end) *@
+    @if (tblAssessmentPreview.AssessmentDate.Visible) { // tblAssessmentPreview.AssessmentDate.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.AssessmentDate.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.AssessmentDate.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.AssessmentDate.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.AssessmentDate.Visible (end) *@
+    @if (tblAssessmentPreview.isAssessmentDone.Visible) { // tblAssessmentPreview.isAssessmentDone.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.isAssessmentDone.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.isAssessmentDone.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.isAssessmentDone.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.isAssessmentDone.Visible (end) *@
+    @if (tblAssessmentPreview.AssessmentScore.Visible) { // tblAssessmentPreview.AssessmentScore.Visible (begin)
+            <td @Html.Raw(tblAssessmentPreview.AssessmentScore.CellAttributes)>
+<span @Html.Raw(tblAssessmentPreview.AssessmentScore.ViewAttributes)>
+@Html.Raw(tblAssessmentPreview.AssessmentScore.GetViewValue())</span>
+</td>
+    } @* tblAssessmentPreview.AssessmentScore.Visible (end) *@
+    @tblAssessmentPreview.ListOptions.RenderBody("right", tblAssessmentPreview.RowCount)
+    </tr>
+} while (await tblAssessmentPreview.Recordset.ReadAsync());
+    </tbody>
+</table><!-- /.table -->
+</div><!-- /.card-body -->
+</div><!-- /.card -->
+} else { @* No record *@
+<div class="card border-0"><!-- .card -->
+<div class="ew-detail-count">@Html.Raw(Language.Phrase("NoRecord"))</div>
+<div class="ew-preview-other-options">
+@tblAssessmentPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card -->
+}
+@tblAssessmentPreview.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()

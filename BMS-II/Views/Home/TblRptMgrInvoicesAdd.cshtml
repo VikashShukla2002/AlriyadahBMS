@@ -1,0 +1,243 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblRptMgrInvoicesAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblRptMgrInvoicesAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblRptMgrInvoicesAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblRptMgrInvoices: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblRptMgrInvoicesadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblRptMgrInvoicesadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["Program_ID", [fields.Program_ID.visible && fields.Program_ID.required ? ew.Validators.required(fields.Program_ID.caption) : null], fields.Program_ID.isInvalid],
+            ["Report_Date", [fields.Report_Date.visible && fields.Report_Date.required ? ew.Validators.required(fields.Report_Date.caption) : null, ew.Validators.datetime(fields.Report_Date.clientFormatPattern)], fields.Report_Date.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "NationalID": @Html.Raw(tblRptMgrInvoicesAdd.NationalID.ToClientList(tblRptMgrInvoicesAdd)),
+            "Program_ID": @Html.Raw(tblRptMgrInvoicesAdd.Program_ID.ToClientList(tblRptMgrInvoicesAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblRptMgrInvoicesAdd.ShowPageHeader()
+@tblRptMgrInvoicesAdd.ShowMessages()
+<form name="ftblRptMgrInvoicesadd" id="ftblRptMgrInvoicesadd" class="@(tblRptMgrInvoicesAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblRptMgrInvoicesAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblRptMgrInvoicesAdd.OldKeyName)" value="@Html.Raw(tblRptMgrInvoicesAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblRptMgrInvoicesAdd.NationalID.Visible) { // tblRptMgrInvoicesAdd.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblRptMgrInvoicesAdd.NationalID.RowAttributes)>
+        <label id="elh_tblRptMgrInvoices_NationalID" for="x_NationalID" class="@(tblRptMgrInvoicesAdd.LeftColumnClass)">@Html.Raw(tblRptMgrInvoicesAdd.NationalID.Caption)@Html.Raw(tblRptMgrInvoicesAdd.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblRptMgrInvoicesAdd.RightColumnClass)"><div @Html.Raw(tblRptMgrInvoicesAdd.NationalID.CellAttributes)>
+<span id="el_tblRptMgrInvoices_NationalID">
+    <select
+        id="x_NationalID"
+        name="x_NationalID"
+        class="form-select ew-select@(tblRptMgrInvoicesAdd.NationalID.IsInvalidClass)"
+        data-select2-id="ftblRptMgrInvoicesadd_x_NationalID"
+        data-table="tblRptMgrInvoices"
+        data-field="x_NationalID"
+        data-value-separator="@(tblRptMgrInvoicesAdd.NationalID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblRptMgrInvoicesAdd.NationalID.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblRptMgrInvoicesAdd.NationalID.EditAttributes)>
+        @(tblRptMgrInvoicesAdd.NationalID.SelectOptionListHtml("x_NationalID"))
+    </select>
+    @Html.Raw(tblRptMgrInvoicesAdd.NationalID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblRptMgrInvoicesAdd.NationalID.GetErrorMessage())</div>
+@Html.Raw(tblRptMgrInvoicesAdd.NationalID.Lookup.GetParamTag(tblRptMgrInvoicesAdd, "p_x_NationalID"))
+<script>
+loadjs.ready("ftblRptMgrInvoicesadd", function() {
+    var options = { name: "x_NationalID", selectId: "ftblRptMgrInvoicesadd_x_NationalID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblRptMgrInvoicesadd.lists.NationalID?.lookupOptions.length) {
+        options.data = { id: "x_NationalID", form: "ftblRptMgrInvoicesadd" };
+    } else {
+        options.ajax = { id: "x_NationalID", form: "ftblRptMgrInvoicesadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblRptMgrInvoices.fields.NationalID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblRptMgrInvoicesAdd.NationalID.Visible (end) *@
+@if (tblRptMgrInvoicesAdd.Program_ID.Visible) { // tblRptMgrInvoicesAdd.Program_ID.Visible (begin)
+    <div id="r_Program_ID" @Html.Raw(tblRptMgrInvoicesAdd.Program_ID.RowAttributes)>
+        <label id="elh_tblRptMgrInvoices_Program_ID" for="x_Program_ID" class="@(tblRptMgrInvoicesAdd.LeftColumnClass)">@Html.Raw(tblRptMgrInvoicesAdd.Program_ID.Caption)@Html.Raw(tblRptMgrInvoicesAdd.Program_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblRptMgrInvoicesAdd.RightColumnClass)"><div @Html.Raw(tblRptMgrInvoicesAdd.Program_ID.CellAttributes)>
+<span id="el_tblRptMgrInvoices_Program_ID">
+    <select
+        id="x_Program_ID"
+        name="x_Program_ID"
+        class="form-select ew-select@(tblRptMgrInvoicesAdd.Program_ID.IsInvalidClass)"
+        data-select2-id="ftblRptMgrInvoicesadd_x_Program_ID"
+        data-table="tblRptMgrInvoices"
+        data-field="x_Program_ID"
+        data-value-separator="@(tblRptMgrInvoicesAdd.Program_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblRptMgrInvoicesAdd.Program_ID.PlaceHolder))"
+        @Html.Raw(tblRptMgrInvoicesAdd.Program_ID.EditAttributes)>
+        @(tblRptMgrInvoicesAdd.Program_ID.SelectOptionListHtml("x_Program_ID"))
+    </select>
+    @Html.Raw(tblRptMgrInvoicesAdd.Program_ID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblRptMgrInvoicesAdd.Program_ID.GetErrorMessage())</div>
+@Html.Raw(tblRptMgrInvoicesAdd.Program_ID.Lookup.GetParamTag(tblRptMgrInvoicesAdd, "p_x_Program_ID"))
+<script>
+loadjs.ready("ftblRptMgrInvoicesadd", function() {
+    var options = { name: "x_Program_ID", selectId: "ftblRptMgrInvoicesadd_x_Program_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblRptMgrInvoicesadd.lists.Program_ID?.lookupOptions.length) {
+        options.data = { id: "x_Program_ID", form: "ftblRptMgrInvoicesadd" };
+    } else {
+        options.ajax = { id: "x_Program_ID", form: "ftblRptMgrInvoicesadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblRptMgrInvoices.fields.Program_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblRptMgrInvoicesAdd.Program_ID.Visible (end) *@
+@if (tblRptMgrInvoicesAdd.Report_Date.Visible) { // tblRptMgrInvoicesAdd.Report_Date.Visible (begin)
+    <div id="r_Report_Date" @Html.Raw(tblRptMgrInvoicesAdd.Report_Date.RowAttributes)>
+        <label id="elh_tblRptMgrInvoices_Report_Date" for="x_Report_Date" class="@(tblRptMgrInvoicesAdd.LeftColumnClass)">@Html.Raw(tblRptMgrInvoicesAdd.Report_Date.Caption)@Html.Raw(tblRptMgrInvoicesAdd.Report_Date.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblRptMgrInvoicesAdd.RightColumnClass)"><div @Html.Raw(tblRptMgrInvoicesAdd.Report_Date.CellAttributes)>
+<span id="el_tblRptMgrInvoices_Report_Date">
+<input type="@(tblRptMgrInvoicesAdd.Report_Date.InputTextType)" name="x_Report_Date" id="x_Report_Date" data-table="tblRptMgrInvoices" data-field="x_Report_Date" value="@Html.Raw(tblRptMgrInvoicesAdd.Report_Date.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblRptMgrInvoicesAdd.Report_Date.PlaceHolder))" data-format-pattern="@(tblRptMgrInvoicesAdd.Report_Date.FormatPattern)"@Html.Raw(tblRptMgrInvoicesAdd.Report_Date.EditAttributes) aria-describedby="x_Report_Date_help">
+@Html.Raw(tblRptMgrInvoicesAdd.Report_Date.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblRptMgrInvoicesAdd.Report_Date.GetErrorMessage())</div>
+@if (!tblRptMgrInvoicesAdd.Report_Date.ReadOnly && !tblRptMgrInvoicesAdd.Report_Date.Disabled && !tblRptMgrInvoicesAdd.Report_Date.EditAttrs.Is("readonly") && !tblRptMgrInvoicesAdd.Report_Date.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblRptMgrInvoicesadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblRptMgrInvoicesadd", "x_Report_Date", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblRptMgrInvoicesAdd.Report_Date.Visible (end) *@
+</div><!-- /page* -->
+@{ tblRptMgrInvoicesAdd.CloseRecordset(); }
+@Html.Raw(tblRptMgrInvoicesAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblRptMgrInvoicesAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblRptMgrInvoicesadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblRptMgrInvoicesadd" data-href="@AppPath(tblRptMgrInvoicesAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblRptMgrInvoicesAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblRptMgrInvoicesAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblRptMgrInvoices");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

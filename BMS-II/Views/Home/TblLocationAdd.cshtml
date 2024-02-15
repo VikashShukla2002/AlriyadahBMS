@@ -1,0 +1,744 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblLocationAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblLocationAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblLocationAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblLocation: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblLocationadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblLocationadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["int_Location_Id", [fields.int_Location_Id.visible && fields.int_Location_Id.required ? ew.Validators.required(fields.int_Location_Id.caption) : null], fields.int_Location_Id.isInvalid],
+            ["str_Name", [fields.str_Name.visible && fields.str_Name.required ? ew.Validators.required(fields.str_Name.caption) : null], fields.str_Name.isInvalid],
+            ["str_Code", [fields.str_Code.visible && fields.str_Code.required ? ew.Validators.required(fields.str_Code.caption) : null], fields.str_Code.isInvalid],
+            ["str_Location_Type", [fields.str_Location_Type.visible && fields.str_Location_Type.required ? ew.Validators.required(fields.str_Location_Type.caption) : null], fields.str_Location_Type.isInvalid],
+            ["str_Address1", [fields.str_Address1.visible && fields.str_Address1.required ? ew.Validators.required(fields.str_Address1.caption) : null], fields.str_Address1.isInvalid],
+            ["str_Address2", [fields.str_Address2.visible && fields.str_Address2.required ? ew.Validators.required(fields.str_Address2.caption) : null], fields.str_Address2.isInvalid],
+            ["str_City", [fields.str_City.visible && fields.str_City.required ? ew.Validators.required(fields.str_City.caption) : null], fields.str_City.isInvalid],
+            ["int_State", [fields.int_State.visible && fields.int_State.required ? ew.Validators.required(fields.int_State.caption) : null, ew.Validators.integer], fields.int_State.isInvalid],
+            ["str_Zip", [fields.str_Zip.visible && fields.str_Zip.required ? ew.Validators.required(fields.str_Zip.caption) : null], fields.str_Zip.isInvalid],
+            ["str_County", [fields.str_County.visible && fields.str_County.required ? ew.Validators.required(fields.str_County.caption) : null], fields.str_County.isInvalid],
+            ["str_Manager", [fields.str_Manager.visible && fields.str_Manager.required ? ew.Validators.required(fields.str_Manager.caption) : null], fields.str_Manager.isInvalid],
+            ["str_Phone_Main", [fields.str_Phone_Main.visible && fields.str_Phone_Main.required ? ew.Validators.required(fields.str_Phone_Main.caption) : null], fields.str_Phone_Main.isInvalid],
+            ["str_Phone_Fax", [fields.str_Phone_Fax.visible && fields.str_Phone_Fax.required ? ew.Validators.required(fields.str_Phone_Fax.caption) : null], fields.str_Phone_Fax.isInvalid],
+            ["str_Phone_Other", [fields.str_Phone_Other.visible && fields.str_Phone_Other.required ? ew.Validators.required(fields.str_Phone_Other.caption) : null], fields.str_Phone_Other.isInvalid],
+            ["str_Notes", [fields.str_Notes.visible && fields.str_Notes.required ? ew.Validators.required(fields.str_Notes.caption) : null], fields.str_Notes.isInvalid],
+            ["str_Coverage_Code", [fields.str_Coverage_Code.visible && fields.str_Coverage_Code.required ? ew.Validators.required(fields.str_Coverage_Code.caption) : null], fields.str_Coverage_Code.isInvalid],
+            ["int_Status", [fields.int_Status.visible && fields.int_Status.required ? ew.Validators.required(fields.int_Status.caption) : null, ew.Validators.integer], fields.int_Status.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null, ew.Validators.datetime(fields.date_Created.clientFormatPattern)], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null, ew.Validators.datetime(fields.date_Modified.clientFormatPattern)], fields.date_Modified.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null, ew.Validators.float], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null, ew.Validators.float], fields.int_Modified_By.isInvalid],
+            ["bit_IsDeleted", [fields.bit_IsDeleted.visible && fields.bit_IsDeleted.required ? ew.Validators.required(fields.bit_IsDeleted.caption) : null], fields.bit_IsDeleted.isInvalid],
+            ["str_LocCapacity", [fields.str_LocCapacity.visible && fields.str_LocCapacity.required ? ew.Validators.required(fields.str_LocCapacity.caption) : null], fields.str_LocCapacity.isInvalid],
+            ["str_ContactEmail", [fields.str_ContactEmail.visible && fields.str_ContactEmail.required ? ew.Validators.required(fields.str_ContactEmail.caption) : null], fields.str_ContactEmail.isInvalid],
+            ["str_SchoolHours", [fields.str_SchoolHours.visible && fields.str_SchoolHours.required ? ew.Validators.required(fields.str_SchoolHours.caption) : null], fields.str_SchoolHours.isInvalid],
+            ["str_EmerName", [fields.str_EmerName.visible && fields.str_EmerName.required ? ew.Validators.required(fields.str_EmerName.caption) : null], fields.str_EmerName.isInvalid],
+            ["str_EmerPhone", [fields.str_EmerPhone.visible && fields.str_EmerPhone.required ? ew.Validators.required(fields.str_EmerPhone.caption) : null], fields.str_EmerPhone.isInvalid],
+            ["str_Room", [fields.str_Room.visible && fields.str_Room.required ? ew.Validators.required(fields.str_Room.caption) : null], fields.str_Room.isInvalid],
+            ["str_Email_Content", [fields.str_Email_Content.visible && fields.str_Email_Content.required ? ew.Validators.required(fields.str_Email_Content.caption) : null], fields.str_Email_Content.isInvalid],
+            ["bit_appointmentColor", [fields.bit_appointmentColor.visible && fields.bit_appointmentColor.required ? ew.Validators.required(fields.bit_appointmentColor.caption) : null], fields.bit_appointmentColor.isInvalid],
+            ["str_appointmentColorCode", [fields.str_appointmentColorCode.visible && fields.str_appointmentColorCode.required ? ew.Validators.required(fields.str_appointmentColorCode.caption) : null], fields.str_appointmentColorCode.isInvalid],
+            ["isKnowledgeTest", [fields.isKnowledgeTest.visible && fields.isKnowledgeTest.required ? ew.Validators.required(fields.isKnowledgeTest.caption) : null], fields.isKnowledgeTest.isInvalid],
+            ["isRoadTest", [fields.isRoadTest.visible && fields.isRoadTest.required ? ew.Validators.required(fields.isRoadTest.caption) : null], fields.isRoadTest.isInvalid],
+            ["dec_Latitude", [fields.dec_Latitude.visible && fields.dec_Latitude.required ? ew.Validators.required(fields.dec_Latitude.caption) : null, ew.Validators.float], fields.dec_Latitude.isInvalid],
+            ["dec_Longitude", [fields.dec_Longitude.visible && fields.dec_Longitude.required ? ew.Validators.required(fields.dec_Longitude.caption) : null, ew.Validators.float], fields.dec_Longitude.isInvalid],
+            ["str_nameAr", [fields.str_nameAr.visible && fields.str_nameAr.required ? ew.Validators.required(fields.str_nameAr.caption) : null], fields.str_nameAr.isInvalid],
+            ["IsDistanceBasedScheduling", [fields.IsDistanceBasedScheduling.visible && fields.IsDistanceBasedScheduling.required ? ew.Validators.required(fields.IsDistanceBasedScheduling.caption) : null, ew.Validators.integer], fields.IsDistanceBasedScheduling.isInvalid],
+            ["str_ZoomEmail", [fields.str_ZoomEmail.visible && fields.str_ZoomEmail.required ? ew.Validators.required(fields.str_ZoomEmail.caption) : null], fields.str_ZoomEmail.isInvalid],
+            ["str_ProviderLocationId", [fields.str_ProviderLocationId.visible && fields.str_ProviderLocationId.required ? ew.Validators.required(fields.str_ProviderLocationId.caption) : null], fields.str_ProviderLocationId.isInvalid],
+            ["int_RoadDistanceCoverage", [fields.int_RoadDistanceCoverage.visible && fields.int_RoadDistanceCoverage.required ? ew.Validators.required(fields.int_RoadDistanceCoverage.caption) : null, ew.Validators.integer], fields.int_RoadDistanceCoverage.isInvalid],
+            ["IsCashDrawer", [fields.IsCashDrawer.visible && fields.IsCashDrawer.required ? ew.Validators.required(fields.IsCashDrawer.caption) : null, ew.Validators.integer], fields.IsCashDrawer.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_Location_Id": @Html.Raw(tblLocationAdd.int_Location_Id.ToClientList(tblLocationAdd)),
+            "bit_IsDeleted": @Html.Raw(tblLocationAdd.bit_IsDeleted.ToClientList(tblLocationAdd)),
+            "bit_appointmentColor": @Html.Raw(tblLocationAdd.bit_appointmentColor.ToClientList(tblLocationAdd)),
+            "isKnowledgeTest": @Html.Raw(tblLocationAdd.isKnowledgeTest.ToClientList(tblLocationAdd)),
+            "isRoadTest": @Html.Raw(tblLocationAdd.isRoadTest.ToClientList(tblLocationAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblLocationAdd.ShowPageHeader()
+@tblLocationAdd.ShowMessages()
+<form name="ftblLocationadd" id="ftblLocationadd" class="@(tblLocationAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblLocationAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblLocationAdd.OldKeyName)" value="@Html.Raw(tblLocationAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblLocationAdd.int_Location_Id.Visible) { // tblLocationAdd.int_Location_Id.Visible (begin)
+    <div id="r_int_Location_Id" @Html.Raw(tblLocationAdd.int_Location_Id.RowAttributes)>
+        <label id="elh_tblLocation_int_Location_Id" for="x_int_Location_Id" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.int_Location_Id.Caption)@Html.Raw(tblLocationAdd.int_Location_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.int_Location_Id.CellAttributes)>
+<span id="el_tblLocation_int_Location_Id">
+    <select
+        id="x_int_Location_Id"
+        name="x_int_Location_Id"
+        class="form-select ew-select@(tblLocationAdd.int_Location_Id.IsInvalidClass)"
+        data-select2-id="ftblLocationadd_x_int_Location_Id"
+        data-table="tblLocation"
+        data-field="x_int_Location_Id"
+        data-value-separator="@(tblLocationAdd.int_Location_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblLocationAdd.int_Location_Id.PlaceHolder))"
+        @Html.Raw(tblLocationAdd.int_Location_Id.EditAttributes)>
+        @(tblLocationAdd.int_Location_Id.SelectOptionListHtml("x_int_Location_Id"))
+    </select>
+    @Html.Raw(tblLocationAdd.int_Location_Id.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblLocationAdd.int_Location_Id.GetErrorMessage())</div>
+@Html.Raw(tblLocationAdd.int_Location_Id.Lookup.GetParamTag(tblLocationAdd, "p_x_int_Location_Id"))
+<script>
+loadjs.ready("ftblLocationadd", function() {
+    var options = { name: "x_int_Location_Id", selectId: "ftblLocationadd_x_int_Location_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblLocationadd.lists.int_Location_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_Location_Id", form: "ftblLocationadd" };
+    } else {
+        options.ajax = { id: "x_int_Location_Id", form: "ftblLocationadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblLocation.fields.int_Location_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.int_Location_Id.Visible (end) *@
+@if (tblLocationAdd.str_Name.Visible) { // tblLocationAdd.str_Name.Visible (begin)
+    <div id="r_str_Name" @Html.Raw(tblLocationAdd.str_Name.RowAttributes)>
+        <label id="elh_tblLocation_str_Name" for="x_str_Name" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Name.Caption)@Html.Raw(tblLocationAdd.str_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Name.CellAttributes)>
+<span id="el_tblLocation_str_Name">
+<input type="@(tblLocationAdd.str_Name.InputTextType)" name="x_str_Name" id="x_str_Name" data-table="tblLocation" data-field="x_str_Name" value="@Html.Raw(tblLocationAdd.str_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Name.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Name.FormatPattern)"@Html.Raw(tblLocationAdd.str_Name.EditAttributes) aria-describedby="x_str_Name_help">
+@Html.Raw(tblLocationAdd.str_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Name.Visible (end) *@
+@if (tblLocationAdd.str_Code.Visible) { // tblLocationAdd.str_Code.Visible (begin)
+    <div id="r_str_Code" @Html.Raw(tblLocationAdd.str_Code.RowAttributes)>
+        <label id="elh_tblLocation_str_Code" for="x_str_Code" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Code.Caption)@Html.Raw(tblLocationAdd.str_Code.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Code.CellAttributes)>
+<span id="el_tblLocation_str_Code">
+<input type="@(tblLocationAdd.str_Code.InputTextType)" name="x_str_Code" id="x_str_Code" data-table="tblLocation" data-field="x_str_Code" value="@Html.Raw(tblLocationAdd.str_Code.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Code.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Code.FormatPattern)"@Html.Raw(tblLocationAdd.str_Code.EditAttributes) aria-describedby="x_str_Code_help">
+@Html.Raw(tblLocationAdd.str_Code.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Code.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Code.Visible (end) *@
+@if (tblLocationAdd.str_Location_Type.Visible) { // tblLocationAdd.str_Location_Type.Visible (begin)
+    <div id="r_str_Location_Type" @Html.Raw(tblLocationAdd.str_Location_Type.RowAttributes)>
+        <label id="elh_tblLocation_str_Location_Type" for="x_str_Location_Type" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Location_Type.Caption)@Html.Raw(tblLocationAdd.str_Location_Type.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Location_Type.CellAttributes)>
+<span id="el_tblLocation_str_Location_Type">
+<input type="@(tblLocationAdd.str_Location_Type.InputTextType)" name="x_str_Location_Type" id="x_str_Location_Type" data-table="tblLocation" data-field="x_str_Location_Type" value="@Html.Raw(tblLocationAdd.str_Location_Type.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Location_Type.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Location_Type.FormatPattern)"@Html.Raw(tblLocationAdd.str_Location_Type.EditAttributes) aria-describedby="x_str_Location_Type_help">
+@Html.Raw(tblLocationAdd.str_Location_Type.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Location_Type.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Location_Type.Visible (end) *@
+@if (tblLocationAdd.str_Address1.Visible) { // tblLocationAdd.str_Address1.Visible (begin)
+    <div id="r_str_Address1" @Html.Raw(tblLocationAdd.str_Address1.RowAttributes)>
+        <label id="elh_tblLocation_str_Address1" for="x_str_Address1" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Address1.Caption)@Html.Raw(tblLocationAdd.str_Address1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Address1.CellAttributes)>
+<span id="el_tblLocation_str_Address1">
+<input type="@(tblLocationAdd.str_Address1.InputTextType)" name="x_str_Address1" id="x_str_Address1" data-table="tblLocation" data-field="x_str_Address1" value="@Html.Raw(tblLocationAdd.str_Address1.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Address1.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Address1.FormatPattern)"@Html.Raw(tblLocationAdd.str_Address1.EditAttributes) aria-describedby="x_str_Address1_help">
+@Html.Raw(tblLocationAdd.str_Address1.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Address1.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Address1.Visible (end) *@
+@if (tblLocationAdd.str_Address2.Visible) { // tblLocationAdd.str_Address2.Visible (begin)
+    <div id="r_str_Address2" @Html.Raw(tblLocationAdd.str_Address2.RowAttributes)>
+        <label id="elh_tblLocation_str_Address2" for="x_str_Address2" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Address2.Caption)@Html.Raw(tblLocationAdd.str_Address2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Address2.CellAttributes)>
+<span id="el_tblLocation_str_Address2">
+<input type="@(tblLocationAdd.str_Address2.InputTextType)" name="x_str_Address2" id="x_str_Address2" data-table="tblLocation" data-field="x_str_Address2" value="@Html.Raw(tblLocationAdd.str_Address2.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Address2.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Address2.FormatPattern)"@Html.Raw(tblLocationAdd.str_Address2.EditAttributes) aria-describedby="x_str_Address2_help">
+@Html.Raw(tblLocationAdd.str_Address2.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Address2.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Address2.Visible (end) *@
+@if (tblLocationAdd.str_City.Visible) { // tblLocationAdd.str_City.Visible (begin)
+    <div id="r_str_City" @Html.Raw(tblLocationAdd.str_City.RowAttributes)>
+        <label id="elh_tblLocation_str_City" for="x_str_City" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_City.Caption)@Html.Raw(tblLocationAdd.str_City.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_City.CellAttributes)>
+<span id="el_tblLocation_str_City">
+<input type="@(tblLocationAdd.str_City.InputTextType)" name="x_str_City" id="x_str_City" data-table="tblLocation" data-field="x_str_City" value="@Html.Raw(tblLocationAdd.str_City.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_City.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_City.FormatPattern)"@Html.Raw(tblLocationAdd.str_City.EditAttributes) aria-describedby="x_str_City_help">
+@Html.Raw(tblLocationAdd.str_City.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_City.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_City.Visible (end) *@
+@if (tblLocationAdd.int_State.Visible) { // tblLocationAdd.int_State.Visible (begin)
+    <div id="r_int_State" @Html.Raw(tblLocationAdd.int_State.RowAttributes)>
+        <label id="elh_tblLocation_int_State" for="x_int_State" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.int_State.Caption)@Html.Raw(tblLocationAdd.int_State.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.int_State.CellAttributes)>
+<span id="el_tblLocation_int_State">
+<input type="@(tblLocationAdd.int_State.InputTextType)" name="x_int_State" id="x_int_State" data-table="tblLocation" data-field="x_int_State" value="@Html.Raw(tblLocationAdd.int_State.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.int_State.PlaceHolder))" data-format-pattern="@(tblLocationAdd.int_State.FormatPattern)"@Html.Raw(tblLocationAdd.int_State.EditAttributes) aria-describedby="x_int_State_help">
+@Html.Raw(tblLocationAdd.int_State.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.int_State.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.int_State.Visible (end) *@
+@if (tblLocationAdd.str_Zip.Visible) { // tblLocationAdd.str_Zip.Visible (begin)
+    <div id="r_str_Zip" @Html.Raw(tblLocationAdd.str_Zip.RowAttributes)>
+        <label id="elh_tblLocation_str_Zip" for="x_str_Zip" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Zip.Caption)@Html.Raw(tblLocationAdd.str_Zip.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Zip.CellAttributes)>
+<span id="el_tblLocation_str_Zip">
+<input type="@(tblLocationAdd.str_Zip.InputTextType)" name="x_str_Zip" id="x_str_Zip" data-table="tblLocation" data-field="x_str_Zip" value="@Html.Raw(tblLocationAdd.str_Zip.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Zip.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Zip.FormatPattern)"@Html.Raw(tblLocationAdd.str_Zip.EditAttributes) aria-describedby="x_str_Zip_help">
+@Html.Raw(tblLocationAdd.str_Zip.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Zip.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Zip.Visible (end) *@
+@if (tblLocationAdd.str_County.Visible) { // tblLocationAdd.str_County.Visible (begin)
+    <div id="r_str_County" @Html.Raw(tblLocationAdd.str_County.RowAttributes)>
+        <label id="elh_tblLocation_str_County" for="x_str_County" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_County.Caption)@Html.Raw(tblLocationAdd.str_County.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_County.CellAttributes)>
+<span id="el_tblLocation_str_County">
+<input type="@(tblLocationAdd.str_County.InputTextType)" name="x_str_County" id="x_str_County" data-table="tblLocation" data-field="x_str_County" value="@Html.Raw(tblLocationAdd.str_County.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_County.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_County.FormatPattern)"@Html.Raw(tblLocationAdd.str_County.EditAttributes) aria-describedby="x_str_County_help">
+@Html.Raw(tblLocationAdd.str_County.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_County.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_County.Visible (end) *@
+@if (tblLocationAdd.str_Manager.Visible) { // tblLocationAdd.str_Manager.Visible (begin)
+    <div id="r_str_Manager" @Html.Raw(tblLocationAdd.str_Manager.RowAttributes)>
+        <label id="elh_tblLocation_str_Manager" for="x_str_Manager" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Manager.Caption)@Html.Raw(tblLocationAdd.str_Manager.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Manager.CellAttributes)>
+<span id="el_tblLocation_str_Manager">
+<input type="@(tblLocationAdd.str_Manager.InputTextType)" name="x_str_Manager" id="x_str_Manager" data-table="tblLocation" data-field="x_str_Manager" value="@Html.Raw(tblLocationAdd.str_Manager.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Manager.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Manager.FormatPattern)"@Html.Raw(tblLocationAdd.str_Manager.EditAttributes) aria-describedby="x_str_Manager_help">
+@Html.Raw(tblLocationAdd.str_Manager.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Manager.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Manager.Visible (end) *@
+@if (tblLocationAdd.str_Phone_Main.Visible) { // tblLocationAdd.str_Phone_Main.Visible (begin)
+    <div id="r_str_Phone_Main" @Html.Raw(tblLocationAdd.str_Phone_Main.RowAttributes)>
+        <label id="elh_tblLocation_str_Phone_Main" for="x_str_Phone_Main" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Phone_Main.Caption)@Html.Raw(tblLocationAdd.str_Phone_Main.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Phone_Main.CellAttributes)>
+<span id="el_tblLocation_str_Phone_Main">
+<input type="@(tblLocationAdd.str_Phone_Main.InputTextType)" name="x_str_Phone_Main" id="x_str_Phone_Main" data-table="tblLocation" data-field="x_str_Phone_Main" value="@Html.Raw(tblLocationAdd.str_Phone_Main.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Phone_Main.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Phone_Main.FormatPattern)"@Html.Raw(tblLocationAdd.str_Phone_Main.EditAttributes) aria-describedby="x_str_Phone_Main_help">
+@Html.Raw(tblLocationAdd.str_Phone_Main.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Phone_Main.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Phone_Main.Visible (end) *@
+@if (tblLocationAdd.str_Phone_Fax.Visible) { // tblLocationAdd.str_Phone_Fax.Visible (begin)
+    <div id="r_str_Phone_Fax" @Html.Raw(tblLocationAdd.str_Phone_Fax.RowAttributes)>
+        <label id="elh_tblLocation_str_Phone_Fax" for="x_str_Phone_Fax" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Phone_Fax.Caption)@Html.Raw(tblLocationAdd.str_Phone_Fax.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Phone_Fax.CellAttributes)>
+<span id="el_tblLocation_str_Phone_Fax">
+<input type="@(tblLocationAdd.str_Phone_Fax.InputTextType)" name="x_str_Phone_Fax" id="x_str_Phone_Fax" data-table="tblLocation" data-field="x_str_Phone_Fax" value="@Html.Raw(tblLocationAdd.str_Phone_Fax.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Phone_Fax.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Phone_Fax.FormatPattern)"@Html.Raw(tblLocationAdd.str_Phone_Fax.EditAttributes) aria-describedby="x_str_Phone_Fax_help">
+@Html.Raw(tblLocationAdd.str_Phone_Fax.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Phone_Fax.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Phone_Fax.Visible (end) *@
+@if (tblLocationAdd.str_Phone_Other.Visible) { // tblLocationAdd.str_Phone_Other.Visible (begin)
+    <div id="r_str_Phone_Other" @Html.Raw(tblLocationAdd.str_Phone_Other.RowAttributes)>
+        <label id="elh_tblLocation_str_Phone_Other" for="x_str_Phone_Other" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Phone_Other.Caption)@Html.Raw(tblLocationAdd.str_Phone_Other.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Phone_Other.CellAttributes)>
+<span id="el_tblLocation_str_Phone_Other">
+<input type="@(tblLocationAdd.str_Phone_Other.InputTextType)" name="x_str_Phone_Other" id="x_str_Phone_Other" data-table="tblLocation" data-field="x_str_Phone_Other" value="@Html.Raw(tblLocationAdd.str_Phone_Other.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Phone_Other.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Phone_Other.FormatPattern)"@Html.Raw(tblLocationAdd.str_Phone_Other.EditAttributes) aria-describedby="x_str_Phone_Other_help">
+@Html.Raw(tblLocationAdd.str_Phone_Other.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Phone_Other.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Phone_Other.Visible (end) *@
+@if (tblLocationAdd.str_Notes.Visible) { // tblLocationAdd.str_Notes.Visible (begin)
+    <div id="r_str_Notes" @Html.Raw(tblLocationAdd.str_Notes.RowAttributes)>
+        <label id="elh_tblLocation_str_Notes" for="x_str_Notes" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Notes.Caption)@Html.Raw(tblLocationAdd.str_Notes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Notes.CellAttributes)>
+<span id="el_tblLocation_str_Notes">
+<input type="@(tblLocationAdd.str_Notes.InputTextType)" name="x_str_Notes" id="x_str_Notes" data-table="tblLocation" data-field="x_str_Notes" value="@Html.Raw(tblLocationAdd.str_Notes.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Notes.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Notes.FormatPattern)"@Html.Raw(tblLocationAdd.str_Notes.EditAttributes) aria-describedby="x_str_Notes_help">
+@Html.Raw(tblLocationAdd.str_Notes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Notes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Notes.Visible (end) *@
+@if (tblLocationAdd.str_Coverage_Code.Visible) { // tblLocationAdd.str_Coverage_Code.Visible (begin)
+    <div id="r_str_Coverage_Code" @Html.Raw(tblLocationAdd.str_Coverage_Code.RowAttributes)>
+        <label id="elh_tblLocation_str_Coverage_Code" for="x_str_Coverage_Code" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Coverage_Code.Caption)@Html.Raw(tblLocationAdd.str_Coverage_Code.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Coverage_Code.CellAttributes)>
+<span id="el_tblLocation_str_Coverage_Code">
+<textarea data-table="tblLocation" data-field="x_str_Coverage_Code" name="x_str_Coverage_Code" id="x_str_Coverage_Code" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Coverage_Code.PlaceHolder))"@Html.Raw(tblLocationAdd.str_Coverage_Code.EditAttributes) aria-describedby="x_str_Coverage_Code_help">@(tblLocationAdd.str_Coverage_Code.EditValue)</textarea>
+@Html.Raw(tblLocationAdd.str_Coverage_Code.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Coverage_Code.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Coverage_Code.Visible (end) *@
+@if (tblLocationAdd.int_Status.Visible) { // tblLocationAdd.int_Status.Visible (begin)
+    <div id="r_int_Status" @Html.Raw(tblLocationAdd.int_Status.RowAttributes)>
+        <label id="elh_tblLocation_int_Status" for="x_int_Status" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.int_Status.Caption)@Html.Raw(tblLocationAdd.int_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.int_Status.CellAttributes)>
+<span id="el_tblLocation_int_Status">
+<input type="@(tblLocationAdd.int_Status.InputTextType)" name="x_int_Status" id="x_int_Status" data-table="tblLocation" data-field="x_int_Status" value="@Html.Raw(tblLocationAdd.int_Status.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.int_Status.PlaceHolder))" data-format-pattern="@(tblLocationAdd.int_Status.FormatPattern)"@Html.Raw(tblLocationAdd.int_Status.EditAttributes) aria-describedby="x_int_Status_help">
+@Html.Raw(tblLocationAdd.int_Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.int_Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.int_Status.Visible (end) *@
+@if (tblLocationAdd.date_Created.Visible) { // tblLocationAdd.date_Created.Visible (begin)
+    <div id="r_date_Created" @Html.Raw(tblLocationAdd.date_Created.RowAttributes)>
+        <label id="elh_tblLocation_date_Created" for="x_date_Created" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.date_Created.Caption)@Html.Raw(tblLocationAdd.date_Created.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.date_Created.CellAttributes)>
+<span id="el_tblLocation_date_Created">
+<input type="@(tblLocationAdd.date_Created.InputTextType)" name="x_date_Created" id="x_date_Created" data-table="tblLocation" data-field="x_date_Created" value="@Html.Raw(tblLocationAdd.date_Created.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.date_Created.PlaceHolder))" data-format-pattern="@(tblLocationAdd.date_Created.FormatPattern)"@Html.Raw(tblLocationAdd.date_Created.EditAttributes) aria-describedby="x_date_Created_help">
+@Html.Raw(tblLocationAdd.date_Created.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.date_Created.GetErrorMessage())</div>
+@if (!tblLocationAdd.date_Created.ReadOnly && !tblLocationAdd.date_Created.Disabled && !tblLocationAdd.date_Created.EditAttrs.Is("readonly") && !tblLocationAdd.date_Created.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblLocationadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblLocationadd", "x_date_Created", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.date_Created.Visible (end) *@
+@if (tblLocationAdd.date_Modified.Visible) { // tblLocationAdd.date_Modified.Visible (begin)
+    <div id="r_date_Modified" @Html.Raw(tblLocationAdd.date_Modified.RowAttributes)>
+        <label id="elh_tblLocation_date_Modified" for="x_date_Modified" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.date_Modified.Caption)@Html.Raw(tblLocationAdd.date_Modified.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.date_Modified.CellAttributes)>
+<span id="el_tblLocation_date_Modified">
+<input type="@(tblLocationAdd.date_Modified.InputTextType)" name="x_date_Modified" id="x_date_Modified" data-table="tblLocation" data-field="x_date_Modified" value="@Html.Raw(tblLocationAdd.date_Modified.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.date_Modified.PlaceHolder))" data-format-pattern="@(tblLocationAdd.date_Modified.FormatPattern)"@Html.Raw(tblLocationAdd.date_Modified.EditAttributes) aria-describedby="x_date_Modified_help">
+@Html.Raw(tblLocationAdd.date_Modified.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.date_Modified.GetErrorMessage())</div>
+@if (!tblLocationAdd.date_Modified.ReadOnly && !tblLocationAdd.date_Modified.Disabled && !tblLocationAdd.date_Modified.EditAttrs.Is("readonly") && !tblLocationAdd.date_Modified.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblLocationadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblLocationadd", "x_date_Modified", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.date_Modified.Visible (end) *@
+@if (tblLocationAdd.int_Created_By.Visible) { // tblLocationAdd.int_Created_By.Visible (begin)
+    <div id="r_int_Created_By" @Html.Raw(tblLocationAdd.int_Created_By.RowAttributes)>
+        <label id="elh_tblLocation_int_Created_By" for="x_int_Created_By" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.int_Created_By.Caption)@Html.Raw(tblLocationAdd.int_Created_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.int_Created_By.CellAttributes)>
+<span id="el_tblLocation_int_Created_By">
+<input type="@(tblLocationAdd.int_Created_By.InputTextType)" name="x_int_Created_By" id="x_int_Created_By" data-table="tblLocation" data-field="x_int_Created_By" value="@Html.Raw(tblLocationAdd.int_Created_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.int_Created_By.PlaceHolder))" data-format-pattern="@(tblLocationAdd.int_Created_By.FormatPattern)"@Html.Raw(tblLocationAdd.int_Created_By.EditAttributes) aria-describedby="x_int_Created_By_help">
+@Html.Raw(tblLocationAdd.int_Created_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.int_Created_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.int_Created_By.Visible (end) *@
+@if (tblLocationAdd.int_Modified_By.Visible) { // tblLocationAdd.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" @Html.Raw(tblLocationAdd.int_Modified_By.RowAttributes)>
+        <label id="elh_tblLocation_int_Modified_By" for="x_int_Modified_By" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.int_Modified_By.Caption)@Html.Raw(tblLocationAdd.int_Modified_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.int_Modified_By.CellAttributes)>
+<span id="el_tblLocation_int_Modified_By">
+<input type="@(tblLocationAdd.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblLocation" data-field="x_int_Modified_By" value="@Html.Raw(tblLocationAdd.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblLocationAdd.int_Modified_By.FormatPattern)"@Html.Raw(tblLocationAdd.int_Modified_By.EditAttributes) aria-describedby="x_int_Modified_By_help">
+@Html.Raw(tblLocationAdd.int_Modified_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.int_Modified_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.int_Modified_By.Visible (end) *@
+@if (tblLocationAdd.bit_IsDeleted.Visible) { // tblLocationAdd.bit_IsDeleted.Visible (begin)
+    <div id="r_bit_IsDeleted" @Html.Raw(tblLocationAdd.bit_IsDeleted.RowAttributes)>
+        <label id="elh_tblLocation_bit_IsDeleted" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.bit_IsDeleted.Caption)@Html.Raw(tblLocationAdd.bit_IsDeleted.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.bit_IsDeleted.CellAttributes)>
+<span id="el_tblLocation_bit_IsDeleted">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblLocationAdd.bit_IsDeleted.IsInvalidClass)" data-table="tblLocation" data-field="x_bit_IsDeleted" data-boolean name="x_bit_IsDeleted" id="x_bit_IsDeleted" value="1" checked="@ConvertToBool(tblLocationAdd.bit_IsDeleted.CurrentValue)" @Html.Raw(tblLocationAdd.bit_IsDeleted.EditAttributes) aria-describedby="x_bit_IsDeleted_help">
+    <div class="invalid-feedback">@Html.Raw(tblLocationAdd.bit_IsDeleted.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblLocationAdd.bit_IsDeleted.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.bit_IsDeleted.Visible (end) *@
+@if (tblLocationAdd.str_LocCapacity.Visible) { // tblLocationAdd.str_LocCapacity.Visible (begin)
+    <div id="r_str_LocCapacity" @Html.Raw(tblLocationAdd.str_LocCapacity.RowAttributes)>
+        <label id="elh_tblLocation_str_LocCapacity" for="x_str_LocCapacity" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_LocCapacity.Caption)@Html.Raw(tblLocationAdd.str_LocCapacity.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_LocCapacity.CellAttributes)>
+<span id="el_tblLocation_str_LocCapacity">
+<input type="@(tblLocationAdd.str_LocCapacity.InputTextType)" name="x_str_LocCapacity" id="x_str_LocCapacity" data-table="tblLocation" data-field="x_str_LocCapacity" value="@Html.Raw(tblLocationAdd.str_LocCapacity.EditValue)" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_LocCapacity.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_LocCapacity.FormatPattern)"@Html.Raw(tblLocationAdd.str_LocCapacity.EditAttributes) aria-describedby="x_str_LocCapacity_help">
+@Html.Raw(tblLocationAdd.str_LocCapacity.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_LocCapacity.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_LocCapacity.Visible (end) *@
+@if (tblLocationAdd.str_ContactEmail.Visible) { // tblLocationAdd.str_ContactEmail.Visible (begin)
+    <div id="r_str_ContactEmail" @Html.Raw(tblLocationAdd.str_ContactEmail.RowAttributes)>
+        <label id="elh_tblLocation_str_ContactEmail" for="x_str_ContactEmail" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_ContactEmail.Caption)@Html.Raw(tblLocationAdd.str_ContactEmail.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_ContactEmail.CellAttributes)>
+<span id="el_tblLocation_str_ContactEmail">
+<input type="@(tblLocationAdd.str_ContactEmail.InputTextType)" name="x_str_ContactEmail" id="x_str_ContactEmail" data-table="tblLocation" data-field="x_str_ContactEmail" value="@Html.Raw(tblLocationAdd.str_ContactEmail.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_ContactEmail.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_ContactEmail.FormatPattern)"@Html.Raw(tblLocationAdd.str_ContactEmail.EditAttributes) aria-describedby="x_str_ContactEmail_help">
+@Html.Raw(tblLocationAdd.str_ContactEmail.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_ContactEmail.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_ContactEmail.Visible (end) *@
+@if (tblLocationAdd.str_SchoolHours.Visible) { // tblLocationAdd.str_SchoolHours.Visible (begin)
+    <div id="r_str_SchoolHours" @Html.Raw(tblLocationAdd.str_SchoolHours.RowAttributes)>
+        <label id="elh_tblLocation_str_SchoolHours" for="x_str_SchoolHours" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_SchoolHours.Caption)@Html.Raw(tblLocationAdd.str_SchoolHours.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_SchoolHours.CellAttributes)>
+<span id="el_tblLocation_str_SchoolHours">
+<input type="@(tblLocationAdd.str_SchoolHours.InputTextType)" name="x_str_SchoolHours" id="x_str_SchoolHours" data-table="tblLocation" data-field="x_str_SchoolHours" value="@Html.Raw(tblLocationAdd.str_SchoolHours.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_SchoolHours.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_SchoolHours.FormatPattern)"@Html.Raw(tblLocationAdd.str_SchoolHours.EditAttributes) aria-describedby="x_str_SchoolHours_help">
+@Html.Raw(tblLocationAdd.str_SchoolHours.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_SchoolHours.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_SchoolHours.Visible (end) *@
+@if (tblLocationAdd.str_EmerName.Visible) { // tblLocationAdd.str_EmerName.Visible (begin)
+    <div id="r_str_EmerName" @Html.Raw(tblLocationAdd.str_EmerName.RowAttributes)>
+        <label id="elh_tblLocation_str_EmerName" for="x_str_EmerName" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_EmerName.Caption)@Html.Raw(tblLocationAdd.str_EmerName.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_EmerName.CellAttributes)>
+<span id="el_tblLocation_str_EmerName">
+<input type="@(tblLocationAdd.str_EmerName.InputTextType)" name="x_str_EmerName" id="x_str_EmerName" data-table="tblLocation" data-field="x_str_EmerName" value="@Html.Raw(tblLocationAdd.str_EmerName.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_EmerName.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_EmerName.FormatPattern)"@Html.Raw(tblLocationAdd.str_EmerName.EditAttributes) aria-describedby="x_str_EmerName_help">
+@Html.Raw(tblLocationAdd.str_EmerName.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_EmerName.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_EmerName.Visible (end) *@
+@if (tblLocationAdd.str_EmerPhone.Visible) { // tblLocationAdd.str_EmerPhone.Visible (begin)
+    <div id="r_str_EmerPhone" @Html.Raw(tblLocationAdd.str_EmerPhone.RowAttributes)>
+        <label id="elh_tblLocation_str_EmerPhone" for="x_str_EmerPhone" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_EmerPhone.Caption)@Html.Raw(tblLocationAdd.str_EmerPhone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_EmerPhone.CellAttributes)>
+<span id="el_tblLocation_str_EmerPhone">
+<input type="@(tblLocationAdd.str_EmerPhone.InputTextType)" name="x_str_EmerPhone" id="x_str_EmerPhone" data-table="tblLocation" data-field="x_str_EmerPhone" value="@Html.Raw(tblLocationAdd.str_EmerPhone.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_EmerPhone.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_EmerPhone.FormatPattern)"@Html.Raw(tblLocationAdd.str_EmerPhone.EditAttributes) aria-describedby="x_str_EmerPhone_help">
+@Html.Raw(tblLocationAdd.str_EmerPhone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_EmerPhone.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_EmerPhone.Visible (end) *@
+@if (tblLocationAdd.str_Room.Visible) { // tblLocationAdd.str_Room.Visible (begin)
+    <div id="r_str_Room" @Html.Raw(tblLocationAdd.str_Room.RowAttributes)>
+        <label id="elh_tblLocation_str_Room" for="x_str_Room" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Room.Caption)@Html.Raw(tblLocationAdd.str_Room.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Room.CellAttributes)>
+<span id="el_tblLocation_str_Room">
+<input type="@(tblLocationAdd.str_Room.InputTextType)" name="x_str_Room" id="x_str_Room" data-table="tblLocation" data-field="x_str_Room" value="@Html.Raw(tblLocationAdd.str_Room.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Room.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Room.FormatPattern)"@Html.Raw(tblLocationAdd.str_Room.EditAttributes) aria-describedby="x_str_Room_help">
+@Html.Raw(tblLocationAdd.str_Room.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Room.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Room.Visible (end) *@
+@if (tblLocationAdd.str_Email_Content.Visible) { // tblLocationAdd.str_Email_Content.Visible (begin)
+    <div id="r_str_Email_Content" @Html.Raw(tblLocationAdd.str_Email_Content.RowAttributes)>
+        <label id="elh_tblLocation_str_Email_Content" for="x_str_Email_Content" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_Email_Content.Caption)@Html.Raw(tblLocationAdd.str_Email_Content.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_Email_Content.CellAttributes)>
+<span id="el_tblLocation_str_Email_Content">
+<input type="@(tblLocationAdd.str_Email_Content.InputTextType)" name="x_str_Email_Content" id="x_str_Email_Content" data-table="tblLocation" data-field="x_str_Email_Content" value="@Html.Raw(tblLocationAdd.str_Email_Content.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_Email_Content.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_Email_Content.FormatPattern)"@Html.Raw(tblLocationAdd.str_Email_Content.EditAttributes) aria-describedby="x_str_Email_Content_help">
+@Html.Raw(tblLocationAdd.str_Email_Content.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_Email_Content.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_Email_Content.Visible (end) *@
+@if (tblLocationAdd.bit_appointmentColor.Visible) { // tblLocationAdd.bit_appointmentColor.Visible (begin)
+    <div id="r_bit_appointmentColor" @Html.Raw(tblLocationAdd.bit_appointmentColor.RowAttributes)>
+        <label id="elh_tblLocation_bit_appointmentColor" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.bit_appointmentColor.Caption)@Html.Raw(tblLocationAdd.bit_appointmentColor.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.bit_appointmentColor.CellAttributes)>
+<span id="el_tblLocation_bit_appointmentColor">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblLocationAdd.bit_appointmentColor.IsInvalidClass)" data-table="tblLocation" data-field="x_bit_appointmentColor" data-boolean name="x_bit_appointmentColor" id="x_bit_appointmentColor" value="1" checked="@ConvertToBool(tblLocationAdd.bit_appointmentColor.CurrentValue)" @Html.Raw(tblLocationAdd.bit_appointmentColor.EditAttributes) aria-describedby="x_bit_appointmentColor_help">
+    <div class="invalid-feedback">@Html.Raw(tblLocationAdd.bit_appointmentColor.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblLocationAdd.bit_appointmentColor.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.bit_appointmentColor.Visible (end) *@
+@if (tblLocationAdd.str_appointmentColorCode.Visible) { // tblLocationAdd.str_appointmentColorCode.Visible (begin)
+    <div id="r_str_appointmentColorCode" @Html.Raw(tblLocationAdd.str_appointmentColorCode.RowAttributes)>
+        <label id="elh_tblLocation_str_appointmentColorCode" for="x_str_appointmentColorCode" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_appointmentColorCode.Caption)@Html.Raw(tblLocationAdd.str_appointmentColorCode.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_appointmentColorCode.CellAttributes)>
+<span id="el_tblLocation_str_appointmentColorCode">
+<input type="@(tblLocationAdd.str_appointmentColorCode.InputTextType)" name="x_str_appointmentColorCode" id="x_str_appointmentColorCode" data-table="tblLocation" data-field="x_str_appointmentColorCode" value="@Html.Raw(tblLocationAdd.str_appointmentColorCode.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_appointmentColorCode.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_appointmentColorCode.FormatPattern)"@Html.Raw(tblLocationAdd.str_appointmentColorCode.EditAttributes) aria-describedby="x_str_appointmentColorCode_help">
+@Html.Raw(tblLocationAdd.str_appointmentColorCode.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_appointmentColorCode.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_appointmentColorCode.Visible (end) *@
+@if (tblLocationAdd.isKnowledgeTest.Visible) { // tblLocationAdd.isKnowledgeTest.Visible (begin)
+    <div id="r_isKnowledgeTest" @Html.Raw(tblLocationAdd.isKnowledgeTest.RowAttributes)>
+        <label id="elh_tblLocation_isKnowledgeTest" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.isKnowledgeTest.Caption)@Html.Raw(tblLocationAdd.isKnowledgeTest.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.isKnowledgeTest.CellAttributes)>
+<span id="el_tblLocation_isKnowledgeTest">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblLocationAdd.isKnowledgeTest.IsInvalidClass)" data-table="tblLocation" data-field="x_isKnowledgeTest" data-boolean name="x_isKnowledgeTest" id="x_isKnowledgeTest" value="1" checked="@ConvertToBool(tblLocationAdd.isKnowledgeTest.CurrentValue)" @Html.Raw(tblLocationAdd.isKnowledgeTest.EditAttributes) aria-describedby="x_isKnowledgeTest_help">
+    <div class="invalid-feedback">@Html.Raw(tblLocationAdd.isKnowledgeTest.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblLocationAdd.isKnowledgeTest.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.isKnowledgeTest.Visible (end) *@
+@if (tblLocationAdd.isRoadTest.Visible) { // tblLocationAdd.isRoadTest.Visible (begin)
+    <div id="r_isRoadTest" @Html.Raw(tblLocationAdd.isRoadTest.RowAttributes)>
+        <label id="elh_tblLocation_isRoadTest" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.isRoadTest.Caption)@Html.Raw(tblLocationAdd.isRoadTest.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.isRoadTest.CellAttributes)>
+<span id="el_tblLocation_isRoadTest">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblLocationAdd.isRoadTest.IsInvalidClass)" data-table="tblLocation" data-field="x_isRoadTest" data-boolean name="x_isRoadTest" id="x_isRoadTest" value="1" checked="@ConvertToBool(tblLocationAdd.isRoadTest.CurrentValue)" @Html.Raw(tblLocationAdd.isRoadTest.EditAttributes) aria-describedby="x_isRoadTest_help">
+    <div class="invalid-feedback">@Html.Raw(tblLocationAdd.isRoadTest.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblLocationAdd.isRoadTest.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.isRoadTest.Visible (end) *@
+@if (tblLocationAdd.dec_Latitude.Visible) { // tblLocationAdd.dec_Latitude.Visible (begin)
+    <div id="r_dec_Latitude" @Html.Raw(tblLocationAdd.dec_Latitude.RowAttributes)>
+        <label id="elh_tblLocation_dec_Latitude" for="x_dec_Latitude" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.dec_Latitude.Caption)@Html.Raw(tblLocationAdd.dec_Latitude.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.dec_Latitude.CellAttributes)>
+<span id="el_tblLocation_dec_Latitude">
+<input type="@(tblLocationAdd.dec_Latitude.InputTextType)" name="x_dec_Latitude" id="x_dec_Latitude" data-table="tblLocation" data-field="x_dec_Latitude" value="@Html.Raw(tblLocationAdd.dec_Latitude.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.dec_Latitude.PlaceHolder))" data-format-pattern="@(tblLocationAdd.dec_Latitude.FormatPattern)"@Html.Raw(tblLocationAdd.dec_Latitude.EditAttributes) aria-describedby="x_dec_Latitude_help">
+@Html.Raw(tblLocationAdd.dec_Latitude.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.dec_Latitude.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.dec_Latitude.Visible (end) *@
+@if (tblLocationAdd.dec_Longitude.Visible) { // tblLocationAdd.dec_Longitude.Visible (begin)
+    <div id="r_dec_Longitude" @Html.Raw(tblLocationAdd.dec_Longitude.RowAttributes)>
+        <label id="elh_tblLocation_dec_Longitude" for="x_dec_Longitude" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.dec_Longitude.Caption)@Html.Raw(tblLocationAdd.dec_Longitude.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.dec_Longitude.CellAttributes)>
+<span id="el_tblLocation_dec_Longitude">
+<input type="@(tblLocationAdd.dec_Longitude.InputTextType)" name="x_dec_Longitude" id="x_dec_Longitude" data-table="tblLocation" data-field="x_dec_Longitude" value="@Html.Raw(tblLocationAdd.dec_Longitude.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.dec_Longitude.PlaceHolder))" data-format-pattern="@(tblLocationAdd.dec_Longitude.FormatPattern)"@Html.Raw(tblLocationAdd.dec_Longitude.EditAttributes) aria-describedby="x_dec_Longitude_help">
+@Html.Raw(tblLocationAdd.dec_Longitude.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.dec_Longitude.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.dec_Longitude.Visible (end) *@
+@if (tblLocationAdd.str_nameAr.Visible) { // tblLocationAdd.str_nameAr.Visible (begin)
+    <div id="r_str_nameAr" @Html.Raw(tblLocationAdd.str_nameAr.RowAttributes)>
+        <label id="elh_tblLocation_str_nameAr" for="x_str_nameAr" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_nameAr.Caption)@Html.Raw(tblLocationAdd.str_nameAr.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_nameAr.CellAttributes)>
+<span id="el_tblLocation_str_nameAr">
+<input type="@(tblLocationAdd.str_nameAr.InputTextType)" name="x_str_nameAr" id="x_str_nameAr" data-table="tblLocation" data-field="x_str_nameAr" value="@Html.Raw(tblLocationAdd.str_nameAr.EditValue)" size="30" maxlength="80" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_nameAr.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_nameAr.FormatPattern)"@Html.Raw(tblLocationAdd.str_nameAr.EditAttributes) aria-describedby="x_str_nameAr_help">
+@Html.Raw(tblLocationAdd.str_nameAr.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_nameAr.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_nameAr.Visible (end) *@
+@if (tblLocationAdd.IsDistanceBasedScheduling.Visible) { // tblLocationAdd.IsDistanceBasedScheduling.Visible (begin)
+    <div id="r_IsDistanceBasedScheduling" @Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.RowAttributes)>
+        <label id="elh_tblLocation_IsDistanceBasedScheduling" for="x_IsDistanceBasedScheduling" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.Caption)@Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.CellAttributes)>
+<span id="el_tblLocation_IsDistanceBasedScheduling">
+<input type="@(tblLocationAdd.IsDistanceBasedScheduling.InputTextType)" name="x_IsDistanceBasedScheduling" id="x_IsDistanceBasedScheduling" data-table="tblLocation" data-field="x_IsDistanceBasedScheduling" value="@Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.IsDistanceBasedScheduling.PlaceHolder))" data-format-pattern="@(tblLocationAdd.IsDistanceBasedScheduling.FormatPattern)"@Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.EditAttributes) aria-describedby="x_IsDistanceBasedScheduling_help">
+@Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.IsDistanceBasedScheduling.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.IsDistanceBasedScheduling.Visible (end) *@
+@if (tblLocationAdd.str_ZoomEmail.Visible) { // tblLocationAdd.str_ZoomEmail.Visible (begin)
+    <div id="r_str_ZoomEmail" @Html.Raw(tblLocationAdd.str_ZoomEmail.RowAttributes)>
+        <label id="elh_tblLocation_str_ZoomEmail" for="x_str_ZoomEmail" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_ZoomEmail.Caption)@Html.Raw(tblLocationAdd.str_ZoomEmail.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_ZoomEmail.CellAttributes)>
+<span id="el_tblLocation_str_ZoomEmail">
+<input type="@(tblLocationAdd.str_ZoomEmail.InputTextType)" name="x_str_ZoomEmail" id="x_str_ZoomEmail" data-table="tblLocation" data-field="x_str_ZoomEmail" value="@Html.Raw(tblLocationAdd.str_ZoomEmail.EditValue)" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_ZoomEmail.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_ZoomEmail.FormatPattern)"@Html.Raw(tblLocationAdd.str_ZoomEmail.EditAttributes) aria-describedby="x_str_ZoomEmail_help">
+@Html.Raw(tblLocationAdd.str_ZoomEmail.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_ZoomEmail.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_ZoomEmail.Visible (end) *@
+@if (tblLocationAdd.str_ProviderLocationId.Visible) { // tblLocationAdd.str_ProviderLocationId.Visible (begin)
+    <div id="r_str_ProviderLocationId" @Html.Raw(tblLocationAdd.str_ProviderLocationId.RowAttributes)>
+        <label id="elh_tblLocation_str_ProviderLocationId" for="x_str_ProviderLocationId" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.str_ProviderLocationId.Caption)@Html.Raw(tblLocationAdd.str_ProviderLocationId.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.str_ProviderLocationId.CellAttributes)>
+<span id="el_tblLocation_str_ProviderLocationId">
+<input type="@(tblLocationAdd.str_ProviderLocationId.InputTextType)" name="x_str_ProviderLocationId" id="x_str_ProviderLocationId" data-table="tblLocation" data-field="x_str_ProviderLocationId" value="@Html.Raw(tblLocationAdd.str_ProviderLocationId.EditValue)" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.str_ProviderLocationId.PlaceHolder))" data-format-pattern="@(tblLocationAdd.str_ProviderLocationId.FormatPattern)"@Html.Raw(tblLocationAdd.str_ProviderLocationId.EditAttributes) aria-describedby="x_str_ProviderLocationId_help">
+@Html.Raw(tblLocationAdd.str_ProviderLocationId.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.str_ProviderLocationId.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.str_ProviderLocationId.Visible (end) *@
+@if (tblLocationAdd.int_RoadDistanceCoverage.Visible) { // tblLocationAdd.int_RoadDistanceCoverage.Visible (begin)
+    <div id="r_int_RoadDistanceCoverage" @Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.RowAttributes)>
+        <label id="elh_tblLocation_int_RoadDistanceCoverage" for="x_int_RoadDistanceCoverage" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.Caption)@Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.CellAttributes)>
+<span id="el_tblLocation_int_RoadDistanceCoverage">
+<input type="@(tblLocationAdd.int_RoadDistanceCoverage.InputTextType)" name="x_int_RoadDistanceCoverage" id="x_int_RoadDistanceCoverage" data-table="tblLocation" data-field="x_int_RoadDistanceCoverage" value="@Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.int_RoadDistanceCoverage.PlaceHolder))" data-format-pattern="@(tblLocationAdd.int_RoadDistanceCoverage.FormatPattern)"@Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.EditAttributes) aria-describedby="x_int_RoadDistanceCoverage_help">
+@Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.int_RoadDistanceCoverage.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.int_RoadDistanceCoverage.Visible (end) *@
+@if (tblLocationAdd.IsCashDrawer.Visible) { // tblLocationAdd.IsCashDrawer.Visible (begin)
+    <div id="r_IsCashDrawer" @Html.Raw(tblLocationAdd.IsCashDrawer.RowAttributes)>
+        <label id="elh_tblLocation_IsCashDrawer" for="x_IsCashDrawer" class="@(tblLocationAdd.LeftColumnClass)">@Html.Raw(tblLocationAdd.IsCashDrawer.Caption)@Html.Raw(tblLocationAdd.IsCashDrawer.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblLocationAdd.RightColumnClass)"><div @Html.Raw(tblLocationAdd.IsCashDrawer.CellAttributes)>
+<span id="el_tblLocation_IsCashDrawer">
+<input type="@(tblLocationAdd.IsCashDrawer.InputTextType)" name="x_IsCashDrawer" id="x_IsCashDrawer" data-table="tblLocation" data-field="x_IsCashDrawer" value="@Html.Raw(tblLocationAdd.IsCashDrawer.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblLocationAdd.IsCashDrawer.PlaceHolder))" data-format-pattern="@(tblLocationAdd.IsCashDrawer.FormatPattern)"@Html.Raw(tblLocationAdd.IsCashDrawer.EditAttributes) aria-describedby="x_IsCashDrawer_help">
+@Html.Raw(tblLocationAdd.IsCashDrawer.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblLocationAdd.IsCashDrawer.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblLocationAdd.IsCashDrawer.Visible (end) *@
+</div><!-- /page* -->
+@{ tblLocationAdd.CloseRecordset(); }
+@Html.Raw(tblLocationAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblLocationAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblLocationadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblLocationadd" data-href="@AppPath(tblLocationAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblLocationAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblLocationAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblLocation");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

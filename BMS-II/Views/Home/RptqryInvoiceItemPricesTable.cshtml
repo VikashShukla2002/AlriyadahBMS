@@ -1,0 +1,162 @@
+@if (rptqryInvoiceItemPricesList.ModalGridAdd && rptqryInvoiceItemPricesList.IsGridAdd || rptqryInvoiceItemPricesList.ModalGridEdit && rptqryInvoiceItemPricesList.IsGridEdit || rptqryInvoiceItemPricesList.ModalMultiEdit && rptqryInvoiceItemPricesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(rptqryInvoiceItemPricesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { rptqryInvoiceItemPrices: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(rptqryInvoiceItemPricesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(rptqryInvoiceItemPricesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(rptqryInvoiceItemPricesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(rptqryInvoiceItemPricesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(rptqryInvoiceItemPricesList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(rptqryInvoiceItemPricesList.TableGridClass)">
+@if (!rptqryInvoiceItemPricesList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!rptqryInvoiceItemPricesList.IsGridAdd && !(rptqryInvoiceItemPricesList.IsGridEdit && rptqryInvoiceItemPricesList.ModalGridEdit) && !rptqryInvoiceItemPricesList.IsMultiEdit) {
+@Html.Raw(rptqryInvoiceItemPricesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@rptqryInvoiceItemPricesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(rptqryInvoiceItemPricesList.FormName)" id="@(rptqryInvoiceItemPricesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(rptqryInvoiceItemPricesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (rptqryInvoiceItemPricesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_rptqryInvoiceItemPrices" class="card-body ew-grid-middle-panel @(rptqryInvoiceItemPricesList.TableContainerClass)" style="@(rptqryInvoiceItemPricesList.TableContainerStyle)">
+@if (rptqryInvoiceItemPricesList.TotalRecords > 0 || rptqryInvoiceItemPricesList.IsGridEdit || rptqryInvoiceItemPricesList.IsMultiEdit) {
+<table id="tbl_rptqryInvoiceItemPriceslist" class="@(rptqryInvoiceItemPricesList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    rptqryInvoiceItemPricesList.RowType = RowType.Header;
+
+    // Render list options
+    await rptqryInvoiceItemPricesList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@rptqryInvoiceItemPricesList.ListOptions.RenderHeader("left")
+@if (rptqryInvoiceItemPricesList.Package_No.Visible) { // rptqryInvoiceItemPricesList.Package_No.Visible (begin)
+        <th data-name="Package_No" class="@(rptqryInvoiceItemPricesList.Package_No.HeaderCellClass)"><div id="elh_rptqryInvoiceItemPrices_Package_No" class="rptqryInvoiceItemPrices_Package_No">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Package_No))</div></th>
+} @* rptqryInvoiceItemPricesList.Package_No.Visible (end) *@
+@if (rptqryInvoiceItemPricesList.Package_Name.Visible) { // rptqryInvoiceItemPricesList.Package_Name.Visible (begin)
+        <th data-name="Package_Name" class="@(rptqryInvoiceItemPricesList.Package_Name.HeaderCellClass)"><div id="elh_rptqryInvoiceItemPrices_Package_Name" class="rptqryInvoiceItemPrices_Package_Name">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Package_Name))</div></th>
+} @* rptqryInvoiceItemPricesList.Package_Name.Visible (end) *@
+@if (rptqryInvoiceItemPricesList.Item_No.Visible) { // rptqryInvoiceItemPricesList.Item_No.Visible (begin)
+        <th data-name="Item_No" class="@(rptqryInvoiceItemPricesList.Item_No.HeaderCellClass)"><div id="elh_rptqryInvoiceItemPrices_Item_No" class="rptqryInvoiceItemPrices_Item_No">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Item_No))</div></th>
+} @* rptqryInvoiceItemPricesList.Item_No.Visible (end) *@
+@if (rptqryInvoiceItemPricesList.Service_Description.Visible) { // rptqryInvoiceItemPricesList.Service_Description.Visible (begin)
+        <th data-name="Service_Description" class="@(rptqryInvoiceItemPricesList.Service_Description.HeaderCellClass)"><div id="elh_rptqryInvoiceItemPrices_Service_Description" class="rptqryInvoiceItemPrices_Service_Description">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Service_Description))</div></th>
+} @* rptqryInvoiceItemPricesList.Service_Description.Visible (end) *@
+@if (rptqryInvoiceItemPricesList.Price.Visible) { // rptqryInvoiceItemPricesList.Price.Visible (begin)
+        <th data-name="Price" class="@(rptqryInvoiceItemPricesList.Price.HeaderCellClass)"><div id="elh_rptqryInvoiceItemPrices_Price" class="rptqryInvoiceItemPrices_Price">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Price))</div></th>
+} @* rptqryInvoiceItemPricesList.Price.Visible (end) *@
+@* Render list options (header, right) *@
+@rptqryInvoiceItemPricesList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(rptqryInvoiceItemPricesList.PageNumber)">
+@{
+    await rptqryInvoiceItemPricesList.SetupGrid();
+    bool eof = rptqryInvoiceItemPricesList.Recordset == null; // DN
+}
+@while (rptqryInvoiceItemPricesList.RecordCount < rptqryInvoiceItemPricesList.StopRecord || SameString(rptqryInvoiceItemPricesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(rptqryInvoiceItemPricesList.RowIndex, "$rowindex$") &&
+        (!rptqryInvoiceItemPricesList.IsGridAdd || rptqryInvoiceItemPricesList.CurrentMode == "copy") &&
+        (!((rptqryInvoiceItemPricesList.IsCopy || rptqryInvoiceItemPricesList.IsAdd) && rptqryInvoiceItemPricesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await rptqryInvoiceItemPricesList.Recordset.ReadAsync();
+    rptqryInvoiceItemPricesList.RecordCount++;
+    if (rptqryInvoiceItemPricesList.RecordCount >= rptqryInvoiceItemPricesList.StartRecord) {
+        await rptqryInvoiceItemPricesList.SetupRow();
+    <tr @Html.Raw(rptqryInvoiceItemPricesList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @rptqryInvoiceItemPricesList.ListOptions.RenderBody("left", rptqryInvoiceItemPricesList.RowCount)
+    @if (rptqryInvoiceItemPricesList.Package_No.Visible) { // rptqryInvoiceItemPricesList.Package_No.Visible (begin)
+        <td data-name="Package_No" @Html.Raw(rptqryInvoiceItemPricesList.Package_No.CellAttributes)>
+<span id="el@(rptqryInvoiceItemPricesList.RowIndex == "$rowindex$" ? "$rowindex$" : rptqryInvoiceItemPricesList.RowCount)_rptqryInvoiceItemPrices_Package_No" class="el_rptqryInvoiceItemPrices_Package_No">
+<span @Html.Raw(rptqryInvoiceItemPricesList.Package_No.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Package_No.GetViewValue())</span>
+</span>
+</td>
+    } @* rptqryInvoiceItemPricesList.Package_No.Visible (end) *@
+    @if (rptqryInvoiceItemPricesList.Package_Name.Visible) { // rptqryInvoiceItemPricesList.Package_Name.Visible (begin)
+        <td data-name="Package_Name" @Html.Raw(rptqryInvoiceItemPricesList.Package_Name.CellAttributes)>
+<span id="el@(rptqryInvoiceItemPricesList.RowIndex == "$rowindex$" ? "$rowindex$" : rptqryInvoiceItemPricesList.RowCount)_rptqryInvoiceItemPrices_Package_Name" class="el_rptqryInvoiceItemPrices_Package_Name">
+<span @Html.Raw(rptqryInvoiceItemPricesList.Package_Name.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* rptqryInvoiceItemPricesList.Package_Name.Visible (end) *@
+    @if (rptqryInvoiceItemPricesList.Item_No.Visible) { // rptqryInvoiceItemPricesList.Item_No.Visible (begin)
+        <td data-name="Item_No" @Html.Raw(rptqryInvoiceItemPricesList.Item_No.CellAttributes)>
+<span id="el@(rptqryInvoiceItemPricesList.RowIndex == "$rowindex$" ? "$rowindex$" : rptqryInvoiceItemPricesList.RowCount)_rptqryInvoiceItemPrices_Item_No" class="el_rptqryInvoiceItemPrices_Item_No">
+<span @Html.Raw(rptqryInvoiceItemPricesList.Item_No.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Item_No.GetViewValue())</span>
+</span>
+</td>
+    } @* rptqryInvoiceItemPricesList.Item_No.Visible (end) *@
+    @if (rptqryInvoiceItemPricesList.Service_Description.Visible) { // rptqryInvoiceItemPricesList.Service_Description.Visible (begin)
+        <td data-name="Service_Description" @Html.Raw(rptqryInvoiceItemPricesList.Service_Description.CellAttributes)>
+<span id="el@(rptqryInvoiceItemPricesList.RowIndex == "$rowindex$" ? "$rowindex$" : rptqryInvoiceItemPricesList.RowCount)_rptqryInvoiceItemPrices_Service_Description" class="el_rptqryInvoiceItemPrices_Service_Description">
+<span @Html.Raw(rptqryInvoiceItemPricesList.Service_Description.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Service_Description.GetViewValue())</span>
+</span>
+</td>
+    } @* rptqryInvoiceItemPricesList.Service_Description.Visible (end) *@
+    @if (rptqryInvoiceItemPricesList.Price.Visible) { // rptqryInvoiceItemPricesList.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(rptqryInvoiceItemPricesList.Price.CellAttributes)>
+<span id="el@(rptqryInvoiceItemPricesList.RowIndex == "$rowindex$" ? "$rowindex$" : rptqryInvoiceItemPricesList.RowCount)_rptqryInvoiceItemPrices_Price" class="el_rptqryInvoiceItemPrices_Price">
+<span @Html.Raw(rptqryInvoiceItemPricesList.Price.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* rptqryInvoiceItemPricesList.Price.Visible (end) *@
+    @* Render list options (body, right) *@
+    @rptqryInvoiceItemPricesList.ListOptions.RenderBody("right", rptqryInvoiceItemPricesList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(rptqryInvoiceItemPricesList.RowIndex, "$rowindex$"))
+        rptqryInvoiceItemPricesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((rptqryInvoiceItemPricesList.IsCopy || rptqryInvoiceItemPricesList.IsAdd) && rptqryInvoiceItemPricesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        rptqryInvoiceItemPricesList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(rptqryInvoiceItemPricesList.CurrentAction) && !rptqryInvoiceItemPricesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ rptqryInvoiceItemPricesList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

@@ -1,0 +1,189 @@
+@if (tblPotentialStudentInfoList.ModalGridAdd && tblPotentialStudentInfoList.IsGridAdd || tblPotentialStudentInfoList.ModalGridEdit && tblPotentialStudentInfoList.IsGridEdit || tblPotentialStudentInfoList.ModalMultiEdit && tblPotentialStudentInfoList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblPotentialStudentInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblPotentialStudentInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblPotentialStudentInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblPotentialStudentInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblPotentialStudentInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblPotentialStudentInfoList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblPotentialStudentInfoList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblPotentialStudentInfoList.TableGridClass)">
+@if (!tblPotentialStudentInfoList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblPotentialStudentInfoList.IsGridAdd && !(tblPotentialStudentInfoList.IsGridEdit && tblPotentialStudentInfoList.ModalGridEdit) && !tblPotentialStudentInfoList.IsMultiEdit) {
+@Html.Raw(tblPotentialStudentInfoList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblPotentialStudentInfoList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblPotentialStudentInfoList.FormName)" id="@(tblPotentialStudentInfoList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblPotentialStudentInfoList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblPotentialStudentInfoList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblPotentialStudentInfo" class="card-body ew-grid-middle-panel @(tblPotentialStudentInfoList.TableContainerClass)" style="@(tblPotentialStudentInfoList.TableContainerStyle)">
+@if (tblPotentialStudentInfoList.TotalRecords > 0 || tblPotentialStudentInfoList.IsGridEdit || tblPotentialStudentInfoList.IsMultiEdit) {
+<table id="tbl_tblPotentialStudentInfolist" class="@(tblPotentialStudentInfoList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblPotentialStudentInfoList.RowType = RowType.Header;
+
+    // Render list options
+    await tblPotentialStudentInfoList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblPotentialStudentInfoList.ListOptions.RenderHeader("left")
+@if (tblPotentialStudentInfoList.NationalID.Visible) { // tblPotentialStudentInfoList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(tblPotentialStudentInfoList.NationalID.HeaderCellClass)"><div id="elh_tblPotentialStudentInfo_NationalID" class="tblPotentialStudentInfo_NationalID">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.NationalID))</div></th>
+} @* tblPotentialStudentInfoList.NationalID.Visible (end) *@
+@if (tblPotentialStudentInfoList.str_First_Name.Visible) { // tblPotentialStudentInfoList.str_First_Name.Visible (begin)
+        <th data-name="str_First_Name" class="@(tblPotentialStudentInfoList.str_First_Name.HeaderCellClass)"><div id="elh_tblPotentialStudentInfo_str_First_Name" class="tblPotentialStudentInfo_str_First_Name">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.str_First_Name))</div></th>
+} @* tblPotentialStudentInfoList.str_First_Name.Visible (end) *@
+@if (tblPotentialStudentInfoList.str_Last_Name.Visible) { // tblPotentialStudentInfoList.str_Last_Name.Visible (begin)
+        <th data-name="str_Last_Name" class="@(tblPotentialStudentInfoList.str_Last_Name.HeaderCellClass)"><div id="elh_tblPotentialStudentInfo_str_Last_Name" class="tblPotentialStudentInfo_str_Last_Name">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.str_Last_Name))</div></th>
+} @* tblPotentialStudentInfoList.str_Last_Name.Visible (end) *@
+@if (tblPotentialStudentInfoList.str_Cell_Phone.Visible) { // tblPotentialStudentInfoList.str_Cell_Phone.Visible (begin)
+        <th data-name="str_Cell_Phone" class="@(tblPotentialStudentInfoList.str_Cell_Phone.HeaderCellClass)"><div id="elh_tblPotentialStudentInfo_str_Cell_Phone" class="tblPotentialStudentInfo_str_Cell_Phone">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.str_Cell_Phone))</div></th>
+} @* tblPotentialStudentInfoList.str_Cell_Phone.Visible (end) *@
+@if (tblPotentialStudentInfoList.Required_Program.Visible) { // tblPotentialStudentInfoList.Required_Program.Visible (begin)
+        <th data-name="Required_Program" class="@(tblPotentialStudentInfoList.Required_Program.HeaderCellClass)"><div id="elh_tblPotentialStudentInfo_Required_Program" class="tblPotentialStudentInfo_Required_Program">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.Required_Program))</div></th>
+} @* tblPotentialStudentInfoList.Required_Program.Visible (end) *@
+@if (tblPotentialStudentInfoList.Price.Visible) { // tblPotentialStudentInfoList.Price.Visible (begin)
+        <th data-name="Price" class="@(tblPotentialStudentInfoList.Price.HeaderCellClass)"><div id="elh_tblPotentialStudentInfo_Price" class="tblPotentialStudentInfo_Price">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.Price))</div></th>
+} @* tblPotentialStudentInfoList.Price.Visible (end) *@
+@if (tblPotentialStudentInfoList.Payment_Online.Visible) { // tblPotentialStudentInfoList.Payment_Online.Visible (begin)
+        <th data-name="Payment_Online" class="@(tblPotentialStudentInfoList.Payment_Online.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblPotentialStudentInfo_Payment_Online" class="tblPotentialStudentInfo_Payment_Online">@Html.Raw(tblPotentialStudentInfoList.RenderFieldHeader(tblPotentialStudentInfoList.Payment_Online))</div></th>
+} @* tblPotentialStudentInfoList.Payment_Online.Visible (end) *@
+@* Render list options (header, right) *@
+@tblPotentialStudentInfoList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblPotentialStudentInfoList.PageNumber)">
+@{
+    await tblPotentialStudentInfoList.SetupGrid();
+    bool eof = tblPotentialStudentInfoList.Recordset == null; // DN
+}
+@while (tblPotentialStudentInfoList.RecordCount < tblPotentialStudentInfoList.StopRecord || SameString(tblPotentialStudentInfoList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblPotentialStudentInfoList.RowIndex, "$rowindex$") &&
+        (!tblPotentialStudentInfoList.IsGridAdd || tblPotentialStudentInfoList.CurrentMode == "copy") &&
+        (!((tblPotentialStudentInfoList.IsCopy || tblPotentialStudentInfoList.IsAdd) && tblPotentialStudentInfoList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblPotentialStudentInfoList.Recordset.ReadAsync();
+    tblPotentialStudentInfoList.RecordCount++;
+    if (tblPotentialStudentInfoList.RecordCount >= tblPotentialStudentInfoList.StartRecord) {
+        await tblPotentialStudentInfoList.SetupRow();
+    <tr @Html.Raw(tblPotentialStudentInfoList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblPotentialStudentInfoList.ListOptions.RenderBody("left", tblPotentialStudentInfoList.RowCount)
+    @if (tblPotentialStudentInfoList.NationalID.Visible) { // tblPotentialStudentInfoList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(tblPotentialStudentInfoList.NationalID.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_NationalID" class="el_tblPotentialStudentInfo_NationalID">
+<span @Html.Raw(tblPotentialStudentInfoList.NationalID.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.NationalID.Visible (end) *@
+    @if (tblPotentialStudentInfoList.str_First_Name.Visible) { // tblPotentialStudentInfoList.str_First_Name.Visible (begin)
+        <td data-name="str_First_Name" @Html.Raw(tblPotentialStudentInfoList.str_First_Name.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_str_First_Name" class="el_tblPotentialStudentInfo_str_First_Name">
+<span @Html.Raw(tblPotentialStudentInfoList.str_First_Name.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoList.str_First_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.str_First_Name.Visible (end) *@
+    @if (tblPotentialStudentInfoList.str_Last_Name.Visible) { // tblPotentialStudentInfoList.str_Last_Name.Visible (begin)
+        <td data-name="str_Last_Name" @Html.Raw(tblPotentialStudentInfoList.str_Last_Name.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_str_Last_Name" class="el_tblPotentialStudentInfo_str_Last_Name">
+<span @Html.Raw(tblPotentialStudentInfoList.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoList.str_Last_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.str_Last_Name.Visible (end) *@
+    @if (tblPotentialStudentInfoList.str_Cell_Phone.Visible) { // tblPotentialStudentInfoList.str_Cell_Phone.Visible (begin)
+        <td data-name="str_Cell_Phone" @Html.Raw(tblPotentialStudentInfoList.str_Cell_Phone.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_str_Cell_Phone" class="el_tblPotentialStudentInfo_str_Cell_Phone">
+<span @Html.Raw(tblPotentialStudentInfoList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoList.str_Cell_Phone.GetViewValue())</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.str_Cell_Phone.Visible (end) *@
+    @if (tblPotentialStudentInfoList.Required_Program.Visible) { // tblPotentialStudentInfoList.Required_Program.Visible (begin)
+        <td data-name="Required_Program" @Html.Raw(tblPotentialStudentInfoList.Required_Program.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_Required_Program" class="el_tblPotentialStudentInfo_Required_Program">
+<span @Html.Raw(tblPotentialStudentInfoList.Required_Program.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoList.Required_Program.GetViewValue())</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.Required_Program.Visible (end) *@
+    @if (tblPotentialStudentInfoList.Price.Visible) { // tblPotentialStudentInfoList.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(tblPotentialStudentInfoList.Price.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_Price" class="el_tblPotentialStudentInfo_Price">
+<span @Html.Raw(tblPotentialStudentInfoList.Price.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoList.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.Price.Visible (end) *@
+    @if (tblPotentialStudentInfoList.Payment_Online.Visible) { // tblPotentialStudentInfoList.Payment_Online.Visible (begin)
+        <td data-name="Payment_Online" @Html.Raw(tblPotentialStudentInfoList.Payment_Online.CellAttributes)>
+<span id="el@(tblPotentialStudentInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblPotentialStudentInfoList.RowCount)_tblPotentialStudentInfo_Payment_Online" class="el_tblPotentialStudentInfo_Payment_Online">
+<span @Html.Raw(tblPotentialStudentInfoList.Payment_Online.ViewAttributes)>
+@if (!EmptyString(tblPotentialStudentInfoList.Payment_Online.GetViewValue()) && !Empty(tblPotentialStudentInfoList.Payment_Online.LinkAttributes)) {
+<a @Html.Raw(tblPotentialStudentInfoList.Payment_Online.LinkAttributes)>@Html.Raw(tblPotentialStudentInfoList.Payment_Online.GetViewValue())</a>
+} else {
+@Html.Raw(tblPotentialStudentInfoList.Payment_Online.GetViewValue())
+}
+</span>
+</span>
+</td>
+    } @* tblPotentialStudentInfoList.Payment_Online.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblPotentialStudentInfoList.ListOptions.RenderBody("right", tblPotentialStudentInfoList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblPotentialStudentInfoList.RowIndex, "$rowindex$"))
+        tblPotentialStudentInfoList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblPotentialStudentInfoList.IsCopy || tblPotentialStudentInfoList.IsAdd) && tblPotentialStudentInfoList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblPotentialStudentInfoList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblPotentialStudentInfoList.CurrentAction) && !tblPotentialStudentInfoList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblPotentialStudentInfoList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

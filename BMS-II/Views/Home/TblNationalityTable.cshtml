@@ -1,0 +1,223 @@
+@if (tblNationalityList.ModalGridAdd && tblNationalityList.IsGridAdd || tblNationalityList.ModalGridEdit && tblNationalityList.IsGridEdit || tblNationalityList.ModalMultiEdit && tblNationalityList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblNationalityList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblNationality: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblNationalityList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblNationalityList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblNationalityList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblNationalityList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblNationalityList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblNationalityList.TableGridClass)">
+@if (!tblNationalityList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblNationalityList.IsGridAdd && !(tblNationalityList.IsGridEdit && tblNationalityList.ModalGridEdit) && !tblNationalityList.IsMultiEdit) {
+@Html.Raw(tblNationalityList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblNationalityList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblNationalityList.FormName)" id="@(tblNationalityList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblNationalityList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblNationalityList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblNationality" class="card-body ew-grid-middle-panel @(tblNationalityList.TableContainerClass)" style="@(tblNationalityList.TableContainerStyle)">
+@if (tblNationalityList.TotalRecords > 0 || tblNationalityList.IsGridEdit || tblNationalityList.IsMultiEdit) {
+<table id="tbl_tblNationalitylist" class="@(tblNationalityList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblNationalityList.RowType = RowType.Header;
+
+    // Render list options
+    await tblNationalityList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblNationalityList.ListOptions.RenderHeader("left")
+@if (tblNationalityList.ID.Visible) { // tblNationalityList.ID.Visible (begin)
+        <th data-name="ID" class="@(tblNationalityList.ID.HeaderCellClass)"><div id="elh_tblNationality_ID" class="tblNationality_ID">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.ID))</div></th>
+} @* tblNationalityList.ID.Visible (end) *@
+@if (tblNationalityList.Nationality_en.Visible) { // tblNationalityList.Nationality_en.Visible (begin)
+        <th data-name="Nationality_en" class="@(tblNationalityList.Nationality_en.HeaderCellClass)"><div id="elh_tblNationality_Nationality_en" class="tblNationality_Nationality_en">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.Nationality_en))</div></th>
+} @* tblNationalityList.Nationality_en.Visible (end) *@
+@if (tblNationalityList.Nationality_arabic.Visible) { // tblNationalityList.Nationality_arabic.Visible (begin)
+        <th data-name="Nationality_arabic" class="@(tblNationalityList.Nationality_arabic.HeaderCellClass)"><div id="elh_tblNationality_Nationality_arabic" class="tblNationality_Nationality_arabic">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.Nationality_arabic))</div></th>
+} @* tblNationalityList.Nationality_arabic.Visible (end) *@
+@if (tblNationalityList.IsActive.Visible) { // tblNationalityList.IsActive.Visible (begin)
+        <th data-name="IsActive" class="@(tblNationalityList.IsActive.HeaderCellClass)"><div id="elh_tblNationality_IsActive" class="tblNationality_IsActive">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.IsActive))</div></th>
+} @* tblNationalityList.IsActive.Visible (end) *@
+@if (tblNationalityList.IsDeleted.Visible) { // tblNationalityList.IsDeleted.Visible (begin)
+        <th data-name="IsDeleted" class="@(tblNationalityList.IsDeleted.HeaderCellClass)"><div id="elh_tblNationality_IsDeleted" class="tblNationality_IsDeleted">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.IsDeleted))</div></th>
+} @* tblNationalityList.IsDeleted.Visible (end) *@
+@if (tblNationalityList.int_Status.Visible) { // tblNationalityList.int_Status.Visible (begin)
+        <th data-name="int_Status" class="@(tblNationalityList.int_Status.HeaderCellClass)"><div id="elh_tblNationality_int_Status" class="tblNationality_int_Status">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.int_Status))</div></th>
+} @* tblNationalityList.int_Status.Visible (end) *@
+@if (tblNationalityList.int_Created_By.Visible) { // tblNationalityList.int_Created_By.Visible (begin)
+        <th data-name="int_Created_By" class="@(tblNationalityList.int_Created_By.HeaderCellClass)"><div id="elh_tblNationality_int_Created_By" class="tblNationality_int_Created_By">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.int_Created_By))</div></th>
+} @* tblNationalityList.int_Created_By.Visible (end) *@
+@if (tblNationalityList.int_Modified_By.Visible) { // tblNationalityList.int_Modified_By.Visible (begin)
+        <th data-name="int_Modified_By" class="@(tblNationalityList.int_Modified_By.HeaderCellClass)"><div id="elh_tblNationality_int_Modified_By" class="tblNationality_int_Modified_By">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.int_Modified_By))</div></th>
+} @* tblNationalityList.int_Modified_By.Visible (end) *@
+@if (tblNationalityList.date_Created.Visible) { // tblNationalityList.date_Created.Visible (begin)
+        <th data-name="date_Created" class="@(tblNationalityList.date_Created.HeaderCellClass)"><div id="elh_tblNationality_date_Created" class="tblNationality_date_Created">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.date_Created))</div></th>
+} @* tblNationalityList.date_Created.Visible (end) *@
+@if (tblNationalityList.date_Modified.Visible) { // tblNationalityList.date_Modified.Visible (begin)
+        <th data-name="date_Modified" class="@(tblNationalityList.date_Modified.HeaderCellClass)"><div id="elh_tblNationality_date_Modified" class="tblNationality_date_Modified">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.date_Modified))</div></th>
+} @* tblNationalityList.date_Modified.Visible (end) *@
+@* Render list options (header, right) *@
+@tblNationalityList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblNationalityList.PageNumber)">
+@{
+    await tblNationalityList.SetupGrid();
+    bool eof = tblNationalityList.Recordset == null; // DN
+}
+@while (tblNationalityList.RecordCount < tblNationalityList.StopRecord || SameString(tblNationalityList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblNationalityList.RowIndex, "$rowindex$") &&
+        (!tblNationalityList.IsGridAdd || tblNationalityList.CurrentMode == "copy") &&
+        (!((tblNationalityList.IsCopy || tblNationalityList.IsAdd) && tblNationalityList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblNationalityList.Recordset.ReadAsync();
+    tblNationalityList.RecordCount++;
+    if (tblNationalityList.RecordCount >= tblNationalityList.StartRecord) {
+        await tblNationalityList.SetupRow();
+    <tr @Html.Raw(tblNationalityList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblNationalityList.ListOptions.RenderBody("left", tblNationalityList.RowCount)
+    @if (tblNationalityList.ID.Visible) { // tblNationalityList.ID.Visible (begin)
+        <td data-name="ID" @Html.Raw(tblNationalityList.ID.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_ID" class="el_tblNationality_ID">
+<span @Html.Raw(tblNationalityList.ID.ViewAttributes)>
+@Html.Raw(tblNationalityList.ID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.ID.Visible (end) *@
+    @if (tblNationalityList.Nationality_en.Visible) { // tblNationalityList.Nationality_en.Visible (begin)
+        <td data-name="Nationality_en" @Html.Raw(tblNationalityList.Nationality_en.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_Nationality_en" class="el_tblNationality_Nationality_en">
+<span @Html.Raw(tblNationalityList.Nationality_en.ViewAttributes)>
+@Html.Raw(tblNationalityList.Nationality_en.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.Nationality_en.Visible (end) *@
+    @if (tblNationalityList.Nationality_arabic.Visible) { // tblNationalityList.Nationality_arabic.Visible (begin)
+        <td data-name="Nationality_arabic" @Html.Raw(tblNationalityList.Nationality_arabic.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_Nationality_arabic" class="el_tblNationality_Nationality_arabic">
+<span @Html.Raw(tblNationalityList.Nationality_arabic.ViewAttributes)>
+@Html.Raw(tblNationalityList.Nationality_arabic.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.Nationality_arabic.Visible (end) *@
+    @if (tblNationalityList.IsActive.Visible) { // tblNationalityList.IsActive.Visible (begin)
+        <td data-name="IsActive" @Html.Raw(tblNationalityList.IsActive.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_IsActive" class="el_tblNationality_IsActive">
+<span @Html.Raw(tblNationalityList.IsActive.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsActive_@(tblNationalityList.RowCount)" class="form-check-input" value="@(tblNationalityList.IsActive.GetViewValue())" disabled checked="@(ConvertToBool(tblNationalityList.IsActive.CurrentValue))">
+    <label class="form-check-label" for="x_IsActive_@(tblNationalityList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblNationalityList.IsActive.Visible (end) *@
+    @if (tblNationalityList.IsDeleted.Visible) { // tblNationalityList.IsDeleted.Visible (begin)
+        <td data-name="IsDeleted" @Html.Raw(tblNationalityList.IsDeleted.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_IsDeleted" class="el_tblNationality_IsDeleted">
+<span @Html.Raw(tblNationalityList.IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDeleted_@(tblNationalityList.RowCount)" class="form-check-input" value="@(tblNationalityList.IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblNationalityList.IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_IsDeleted_@(tblNationalityList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblNationalityList.IsDeleted.Visible (end) *@
+    @if (tblNationalityList.int_Status.Visible) { // tblNationalityList.int_Status.Visible (begin)
+        <td data-name="int_Status" @Html.Raw(tblNationalityList.int_Status.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_int_Status" class="el_tblNationality_int_Status">
+<span @Html.Raw(tblNationalityList.int_Status.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Status.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.int_Status.Visible (end) *@
+    @if (tblNationalityList.int_Created_By.Visible) { // tblNationalityList.int_Created_By.Visible (begin)
+        <td data-name="int_Created_By" @Html.Raw(tblNationalityList.int_Created_By.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_int_Created_By" class="el_tblNationality_int_Created_By">
+<span @Html.Raw(tblNationalityList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Created_By.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.int_Created_By.Visible (end) *@
+    @if (tblNationalityList.int_Modified_By.Visible) { // tblNationalityList.int_Modified_By.Visible (begin)
+        <td data-name="int_Modified_By" @Html.Raw(tblNationalityList.int_Modified_By.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_int_Modified_By" class="el_tblNationality_int_Modified_By">
+<span @Html.Raw(tblNationalityList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Modified_By.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.int_Modified_By.Visible (end) *@
+    @if (tblNationalityList.date_Created.Visible) { // tblNationalityList.date_Created.Visible (begin)
+        <td data-name="date_Created" @Html.Raw(tblNationalityList.date_Created.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_date_Created" class="el_tblNationality_date_Created">
+<span @Html.Raw(tblNationalityList.date_Created.ViewAttributes)>
+@Html.Raw(tblNationalityList.date_Created.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.date_Created.Visible (end) *@
+    @if (tblNationalityList.date_Modified.Visible) { // tblNationalityList.date_Modified.Visible (begin)
+        <td data-name="date_Modified" @Html.Raw(tblNationalityList.date_Modified.CellAttributes)>
+<span id="el@(tblNationalityList.RowIndex == "$rowindex$" ? "$rowindex$" : tblNationalityList.RowCount)_tblNationality_date_Modified" class="el_tblNationality_date_Modified">
+<span @Html.Raw(tblNationalityList.date_Modified.ViewAttributes)>
+@Html.Raw(tblNationalityList.date_Modified.GetViewValue())</span>
+</span>
+</td>
+    } @* tblNationalityList.date_Modified.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblNationalityList.ListOptions.RenderBody("right", tblNationalityList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblNationalityList.RowIndex, "$rowindex$"))
+        tblNationalityList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblNationalityList.IsCopy || tblNationalityList.IsAdd) && tblNationalityList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblNationalityList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblNationalityList.CurrentAction) && !tblNationalityList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblNationalityList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

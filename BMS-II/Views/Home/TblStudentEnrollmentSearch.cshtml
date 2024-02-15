@@ -1,0 +1,884 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentEnrollmentSearch.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentEnrollmentSearch.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentEnrollmentSearch.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentEnrollment: currentTable } });
+var currentPageID = ew.PAGE_ID = "search";
+var currentForm;
+var ftblStudentEnrollmentsearch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentEnrollmentsearch")
+        .setPageId("search")
+@if (tblStudentEnrollmentSearch.IsModal && tblStudentEnrollmentSearch.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["int_Enrollement_Id", [ew.Validators.integer], fields.int_Enrollement_Id.isInvalid],
+            ["str_Full_Name", [], fields.str_Full_Name.isInvalid],
+            ["str_Username", [], fields.str_Username.isInvalid],
+            ["NationalID", [], fields.NationalID.isInvalid],
+            ["int_CR_ID", [], fields.int_CR_ID.isInvalid],
+            ["int_Student_Id", [ew.Validators.integer], fields.int_Student_Id.isInvalid],
+            ["int_BTW_Id", [ew.Validators.integer], fields.int_BTW_Id.isInvalid],
+            ["int_Item_Id", [ew.Validators.integer], fields.int_Item_Id.isInvalid],
+            ["int_Package_Id", [], fields.int_Package_Id.isInvalid],
+            ["str_Package_Name", [], fields.str_Package_Name.isInvalid],
+            ["int_PackageCR_Id", [], fields.int_PackageCR_Id.isInvalid],
+            ["date_Created", [ew.Validators.datetime(fields.date_Created.clientFormatPattern)], fields.date_Created.isInvalid],
+            ["date_Modified", [ew.Validators.datetime(fields.date_Modified.clientFormatPattern)], fields.date_Modified.isInvalid],
+            ["int_Created_By", [ew.Validators.integer], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [ew.Validators.integer], fields.int_Modified_By.isInvalid],
+            ["str_PurchaseAmount", [ew.Validators.float], fields.str_PurchaseAmount.isInvalid],
+            ["int_ApptId", [ew.Validators.integer], fields.int_ApptId.isInvalid],
+            ["course", [], fields.course.isInvalid],
+            ["institution", [], fields.institution.isInvalid],
+            ["str_Notes", [], fields.str_Notes.isInvalid],
+            ["int_SoldBy", [ew.Validators.integer], fields.int_SoldBy.isInvalid],
+            ["int_Bill_ID", [ew.Validators.integer], fields.int_Bill_ID.isInvalid],
+            ["str_Amount_Pay", [], fields.str_Amount_Pay.isInvalid],
+            ["int_ApptCldr_ID", [ew.Validators.integer], fields.int_ApptCldr_ID.isInvalid],
+            ["UniqueIdx", [], fields.UniqueIdx.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Full_Name": @Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.ToClientList(tblStudentEnrollmentSearch)),
+            "NationalID": @Html.Raw(tblStudentEnrollmentSearch.NationalID.ToClientList(tblStudentEnrollmentSearch)),
+            "int_CR_ID": @Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.ToClientList(tblStudentEnrollmentSearch)),
+            "int_Package_Id": @Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.ToClientList(tblStudentEnrollmentSearch)),
+            "course": @Html.Raw(tblStudentEnrollmentSearch.course.ToClientList(tblStudentEnrollmentSearch)),
+        })
+        .build();
+    window[form.id] = form;
+@if (tblStudentEnrollmentSearch.IsModal) {
+    <text>currentAdvancedSearchForm = form;</text>
+} else {
+    <text>currentForm = form;</text>
+}
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStudentEnrollmentSearch.ShowPageHeader()
+@tblStudentEnrollmentSearch.ShowMessages()
+<form name="ftblStudentEnrollmentsearch" id="ftblStudentEnrollmentsearch" class="@(tblStudentEnrollmentSearch.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="search">
+@if (tblStudentEnrollmentSearch.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="ew-search-div"><!-- page* -->
+@if (tblStudentEnrollmentSearch.int_Enrollement_Id.Visible) { // tblStudentEnrollmentSearch.int_Enrollement_Id.Visible (begin)
+    <div id="r_int_Enrollement_Id" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Enrollement_Id.RowAttributes)>
+        <label for="x_int_Enrollement_Id" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Enrollement_Id">@Html.Raw(tblStudentEnrollmentSearch.int_Enrollement_Id.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Enrollement_Id" id="z_int_Enrollement_Id" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Enrollement_Id.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Enrollement_Id" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_Enrollement_Id.InputTextType)" name="x_int_Enrollement_Id" id="x_int_Enrollement_Id" data-table="tblStudentEnrollment" data-field="x_int_Enrollement_Id" value="@Html.Raw(tblStudentEnrollmentSearch.int_Enrollement_Id.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_Enrollement_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_Enrollement_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_Enrollement_Id.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Enrollement_Id.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Enrollement_Id.Visible (end) *@
+@if (tblStudentEnrollmentSearch.str_Full_Name.Visible) { // tblStudentEnrollmentSearch.str_Full_Name.Visible (begin)
+    <div id="r_str_Full_Name" class="row" @Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.RowAttributes)>
+        <label for="x_str_Full_Name" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Full_Name">@Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Full_Name" id="z_str_Full_Name" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_str_Full_Name" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_str_Full_Name"
+        name="x_str_Full_Name"
+        class="form-select ew-select@(tblStudentEnrollmentSearch.str_Full_Name.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentsearch_x_str_Full_Name"
+        data-table="tblStudentEnrollment"
+        data-field="x_str_Full_Name"
+        data-value-separator="@(tblStudentEnrollmentSearch.str_Full_Name.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentSearch.str_Full_Name.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.EditAttributes)>
+        @(tblStudentEnrollmentSearch.str_Full_Name.SelectOptionListHtml("x_str_Full_Name"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.GetErrorMessage(false))</div>
+@Html.Raw(tblStudentEnrollmentSearch.str_Full_Name.Lookup.GetParamTag(tblStudentEnrollmentSearch, "p_x_str_Full_Name"))
+<script>
+loadjs.ready("ftblStudentEnrollmentsearch", function() {
+    var options = { name: "x_str_Full_Name", selectId: "ftblStudentEnrollmentsearch_x_str_Full_Name" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentsearch.lists.str_Full_Name?.lookupOptions.length) {
+        options.data = { id: "x_str_Full_Name", form: "ftblStudentEnrollmentsearch" };
+    } else {
+        options.ajax = { id: "x_str_Full_Name", form: "ftblStudentEnrollmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.str_Full_Name.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.str_Full_Name.Visible (end) *@
+@if (tblStudentEnrollmentSearch.str_Username.Visible) { // tblStudentEnrollmentSearch.str_Username.Visible (begin)
+    <div id="r_str_Username" class="row" @Html.Raw(tblStudentEnrollmentSearch.str_Username.RowAttributes)>
+        <label class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Username">@Html.Raw(tblStudentEnrollmentSearch.str_Username.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Username" id="z_str_Username" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.str_Username.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_str_Username" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblStudentEnrollment" data-field="x_str_Username" value="@Html.Raw(tblStudentEnrollmentSearch.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.str_Username.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.str_Username.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.str_Username.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.str_Username.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.str_Username.Visible (end) *@
+@if (tblStudentEnrollmentSearch.NationalID.Visible) { // tblStudentEnrollmentSearch.NationalID.Visible (begin)
+    <div id="r_NationalID" class="row" @Html.Raw(tblStudentEnrollmentSearch.NationalID.RowAttributes)>
+        <label for="x_NationalID" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_NationalID">@Html.Raw(tblStudentEnrollmentSearch.NationalID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_NationalID" id="z_NationalID" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.NationalID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_NationalID" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_NationalID"
+        name="x_NationalID"
+        class="form-select ew-select@(tblStudentEnrollmentSearch.NationalID.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentsearch_x_NationalID"
+        data-table="tblStudentEnrollment"
+        data-field="x_NationalID"
+        data-value-separator="@(tblStudentEnrollmentSearch.NationalID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentSearch.NationalID.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentSearch.NationalID.EditAttributes)>
+        @(tblStudentEnrollmentSearch.NationalID.SelectOptionListHtml("x_NationalID"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.NationalID.GetErrorMessage(false))</div>
+@Html.Raw(tblStudentEnrollmentSearch.NationalID.Lookup.GetParamTag(tblStudentEnrollmentSearch, "p_x_NationalID"))
+<script>
+loadjs.ready("ftblStudentEnrollmentsearch", function() {
+    var options = { name: "x_NationalID", selectId: "ftblStudentEnrollmentsearch_x_NationalID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentsearch.lists.NationalID?.lookupOptions.length) {
+        options.data = { id: "x_NationalID", form: "ftblStudentEnrollmentsearch" };
+    } else {
+        options.ajax = { id: "x_NationalID", form: "ftblStudentEnrollmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.NationalID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.NationalID.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_CR_ID.Visible) { // tblStudentEnrollmentSearch.int_CR_ID.Visible (begin)
+    <div id="r_int_CR_ID" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.RowAttributes)>
+        <label for="x_int_CR_ID" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_CR_ID">@Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_CR_ID" id="z_int_CR_ID" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_CR_ID" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_int_CR_ID"
+        name="x_int_CR_ID"
+        class="form-select ew-select@(tblStudentEnrollmentSearch.int_CR_ID.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentsearch_x_int_CR_ID"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_CR_ID"
+        data-value-separator="@(tblStudentEnrollmentSearch.int_CR_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentSearch.int_CR_ID.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.EditAttributes)>
+        @(tblStudentEnrollmentSearch.int_CR_ID.SelectOptionListHtml("x_int_CR_ID"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.GetErrorMessage(false))</div>
+@Html.Raw(tblStudentEnrollmentSearch.int_CR_ID.Lookup.GetParamTag(tblStudentEnrollmentSearch, "p_x_int_CR_ID"))
+<script>
+loadjs.ready("ftblStudentEnrollmentsearch", function() {
+    var options = { name: "x_int_CR_ID", selectId: "ftblStudentEnrollmentsearch_x_int_CR_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentsearch.lists.int_CR_ID?.lookupOptions.length) {
+        options.data = { id: "x_int_CR_ID", form: "ftblStudentEnrollmentsearch" };
+    } else {
+        options.ajax = { id: "x_int_CR_ID", form: "ftblStudentEnrollmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_CR_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_CR_ID.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_Student_Id.Visible) { // tblStudentEnrollmentSearch.int_Student_Id.Visible (begin)
+    <div id="r_int_Student_Id" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Student_Id.RowAttributes)>
+        <label for="x_int_Student_Id" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Student_Id">@Html.Raw(tblStudentEnrollmentSearch.int_Student_Id.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Student_Id" id="z_int_Student_Id" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Student_Id.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Student_Id" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_Student_Id.InputTextType)" name="x_int_Student_Id" id="x_int_Student_Id" data-table="tblStudentEnrollment" data-field="x_int_Student_Id" value="@Html.Raw(tblStudentEnrollmentSearch.int_Student_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_Student_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_Student_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_Student_Id.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Student_Id.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Student_Id.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_BTW_Id.Visible) { // tblStudentEnrollmentSearch.int_BTW_Id.Visible (begin)
+    <div id="r_int_BTW_Id" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_BTW_Id.RowAttributes)>
+        <label for="x_int_BTW_Id" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_BTW_Id">@Html.Raw(tblStudentEnrollmentSearch.int_BTW_Id.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_BTW_Id" id="z_int_BTW_Id" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_BTW_Id.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_BTW_Id" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_BTW_Id.InputTextType)" name="x_int_BTW_Id" id="x_int_BTW_Id" data-table="tblStudentEnrollment" data-field="x_int_BTW_Id" value="@Html.Raw(tblStudentEnrollmentSearch.int_BTW_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_BTW_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_BTW_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_BTW_Id.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_BTW_Id.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_BTW_Id.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_Item_Id.Visible) { // tblStudentEnrollmentSearch.int_Item_Id.Visible (begin)
+    <div id="r_int_Item_Id" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Item_Id.RowAttributes)>
+        <label for="x_int_Item_Id" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Item_Id">@Html.Raw(tblStudentEnrollmentSearch.int_Item_Id.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Item_Id" id="z_int_Item_Id" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Item_Id.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Item_Id" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_Item_Id.InputTextType)" name="x_int_Item_Id" id="x_int_Item_Id" data-table="tblStudentEnrollment" data-field="x_int_Item_Id" value="@Html.Raw(tblStudentEnrollmentSearch.int_Item_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_Item_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_Item_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_Item_Id.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Item_Id.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Item_Id.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_Package_Id.Visible) { // tblStudentEnrollmentSearch.int_Package_Id.Visible (begin)
+    <div id="r_int_Package_Id" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.RowAttributes)>
+        <label for="x_int_Package_Id" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Package_Id">@Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Package_Id" id="z_int_Package_Id" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Package_Id" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_int_Package_Id"
+        name="x_int_Package_Id"
+        class="form-select ew-select@(tblStudentEnrollmentSearch.int_Package_Id.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentsearch_x_int_Package_Id"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_Package_Id"
+        data-value-separator="@(tblStudentEnrollmentSearch.int_Package_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentSearch.int_Package_Id.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.EditAttributes)>
+        @(tblStudentEnrollmentSearch.int_Package_Id.SelectOptionListHtml("x_int_Package_Id"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.GetErrorMessage(false))</div>
+@Html.Raw(tblStudentEnrollmentSearch.int_Package_Id.Lookup.GetParamTag(tblStudentEnrollmentSearch, "p_x_int_Package_Id"))
+<script>
+loadjs.ready("ftblStudentEnrollmentsearch", function() {
+    var options = { name: "x_int_Package_Id", selectId: "ftblStudentEnrollmentsearch_x_int_Package_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentsearch.lists.int_Package_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_Package_Id", form: "ftblStudentEnrollmentsearch" };
+    } else {
+        options.ajax = { id: "x_int_Package_Id", form: "ftblStudentEnrollmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_Package_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Package_Id.Visible (end) *@
+@if (tblStudentEnrollmentSearch.str_Package_Name.Visible) { // tblStudentEnrollmentSearch.str_Package_Name.Visible (begin)
+    <div id="r_str_Package_Name" class="row" @Html.Raw(tblStudentEnrollmentSearch.str_Package_Name.RowAttributes)>
+        <label for="x_str_Package_Name" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Package_Name">@Html.Raw(tblStudentEnrollmentSearch.str_Package_Name.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Package_Name" id="z_str_Package_Name" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.str_Package_Name.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_str_Package_Name" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.str_Package_Name.InputTextType)" name="x_str_Package_Name" id="x_str_Package_Name" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" value="@Html.Raw(tblStudentEnrollmentSearch.str_Package_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.str_Package_Name.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.str_Package_Name.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.str_Package_Name.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.str_Package_Name.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.str_Package_Name.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_PackageCR_Id.Visible) { // tblStudentEnrollmentSearch.int_PackageCR_Id.Visible (begin)
+    <div id="r_int_PackageCR_Id" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_PackageCR_Id.RowAttributes)>
+        <label for="x_int_PackageCR_Id" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_PackageCR_Id">@Html.Raw(tblStudentEnrollmentSearch.int_PackageCR_Id.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_PackageCR_Id" id="z_int_PackageCR_Id" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_PackageCR_Id.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_PackageCR_Id" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_int_PackageCR_Id"
+        name="x_int_PackageCR_Id"
+        class="form-select ew-select@(tblStudentEnrollmentSearch.int_PackageCR_Id.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentsearch_x_int_PackageCR_Id"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_PackageCR_Id"
+        data-value-separator="@(tblStudentEnrollmentSearch.int_PackageCR_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentSearch.int_PackageCR_Id.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentSearch.int_PackageCR_Id.EditAttributes)>
+        @(tblStudentEnrollmentSearch.int_PackageCR_Id.SelectOptionListHtml("x_int_PackageCR_Id"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_PackageCR_Id.GetErrorMessage(false))</div>
+<script>
+loadjs.ready("ftblStudentEnrollmentsearch", function() {
+    var options = { name: "x_int_PackageCR_Id", selectId: "ftblStudentEnrollmentsearch_x_int_PackageCR_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentsearch.lists.int_PackageCR_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_PackageCR_Id", form: "ftblStudentEnrollmentsearch" };
+    } else {
+        options.ajax = { id: "x_int_PackageCR_Id", form: "ftblStudentEnrollmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_PackageCR_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_PackageCR_Id.Visible (end) *@
+@if (tblStudentEnrollmentSearch.date_Created.Visible) { // tblStudentEnrollmentSearch.date_Created.Visible (begin)
+    <div id="r_date_Created" class="row" @Html.Raw(tblStudentEnrollmentSearch.date_Created.RowAttributes)>
+        <label for="x_date_Created" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_date_Created">@Html.Raw(tblStudentEnrollmentSearch.date_Created.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_date_Created" id="z_date_Created" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.date_Created.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_date_Created" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.date_Created.InputTextType)" name="x_date_Created" id="x_date_Created" data-table="tblStudentEnrollment" data-field="x_date_Created" value="@Html.Raw(tblStudentEnrollmentSearch.date_Created.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.date_Created.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.date_Created.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.date_Created.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.date_Created.GetErrorMessage(false))</div>
+@if (!tblStudentEnrollmentSearch.date_Created.ReadOnly && !tblStudentEnrollmentSearch.date_Created.Disabled && !tblStudentEnrollmentSearch.date_Created.EditAttrs.Is("readonly") && !tblStudentEnrollmentSearch.date_Created.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblStudentEnrollmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblStudentEnrollmentsearch", "x_date_Created", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.date_Created.Visible (end) *@
+@if (tblStudentEnrollmentSearch.date_Modified.Visible) { // tblStudentEnrollmentSearch.date_Modified.Visible (begin)
+    <div id="r_date_Modified" class="row" @Html.Raw(tblStudentEnrollmentSearch.date_Modified.RowAttributes)>
+        <label for="x_date_Modified" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_date_Modified">@Html.Raw(tblStudentEnrollmentSearch.date_Modified.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_date_Modified" id="z_date_Modified" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.date_Modified.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_date_Modified" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.date_Modified.InputTextType)" name="x_date_Modified" id="x_date_Modified" data-table="tblStudentEnrollment" data-field="x_date_Modified" value="@Html.Raw(tblStudentEnrollmentSearch.date_Modified.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.date_Modified.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.date_Modified.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.date_Modified.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.date_Modified.GetErrorMessage(false))</div>
+@if (!tblStudentEnrollmentSearch.date_Modified.ReadOnly && !tblStudentEnrollmentSearch.date_Modified.Disabled && !tblStudentEnrollmentSearch.date_Modified.EditAttrs.Is("readonly") && !tblStudentEnrollmentSearch.date_Modified.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblStudentEnrollmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblStudentEnrollmentsearch", "x_date_Modified", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.date_Modified.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_Created_By.Visible) { // tblStudentEnrollmentSearch.int_Created_By.Visible (begin)
+    <div id="r_int_Created_By" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Created_By.RowAttributes)>
+        <label for="x_int_Created_By" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Created_By">@Html.Raw(tblStudentEnrollmentSearch.int_Created_By.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Created_By" id="z_int_Created_By" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Created_By.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Created_By" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_Created_By.InputTextType)" name="x_int_Created_By" id="x_int_Created_By" data-table="tblStudentEnrollment" data-field="x_int_Created_By" value="@Html.Raw(tblStudentEnrollmentSearch.int_Created_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_Created_By.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_Created_By.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_Created_By.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Created_By.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Created_By.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_Modified_By.Visible) { // tblStudentEnrollmentSearch.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Modified_By.RowAttributes)>
+        <label for="x_int_Modified_By" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Modified_By">@Html.Raw(tblStudentEnrollmentSearch.int_Modified_By.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Modified_By" id="z_int_Modified_By" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Modified_By.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Modified_By" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblStudentEnrollment" data-field="x_int_Modified_By" value="@Html.Raw(tblStudentEnrollmentSearch.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_Modified_By.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_Modified_By.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Modified_By.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Modified_By.Visible (end) *@
+@if (tblStudentEnrollmentSearch.str_PurchaseAmount.Visible) { // tblStudentEnrollmentSearch.str_PurchaseAmount.Visible (begin)
+    <div id="r_str_PurchaseAmount" class="row" @Html.Raw(tblStudentEnrollmentSearch.str_PurchaseAmount.RowAttributes)>
+        <label for="x_str_PurchaseAmount" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_str_PurchaseAmount">@Html.Raw(tblStudentEnrollmentSearch.str_PurchaseAmount.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_str_PurchaseAmount" id="z_str_PurchaseAmount" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.str_PurchaseAmount.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_str_PurchaseAmount" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.str_PurchaseAmount.InputTextType)" name="x_str_PurchaseAmount" id="x_str_PurchaseAmount" data-table="tblStudentEnrollment" data-field="x_str_PurchaseAmount" value="@Html.Raw(tblStudentEnrollmentSearch.str_PurchaseAmount.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.str_PurchaseAmount.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.str_PurchaseAmount.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.str_PurchaseAmount.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.str_PurchaseAmount.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.str_PurchaseAmount.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_ApptId.Visible) { // tblStudentEnrollmentSearch.int_ApptId.Visible (begin)
+    <div id="r_int_ApptId" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_ApptId.RowAttributes)>
+        <label for="x_int_ApptId" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_ApptId">@Html.Raw(tblStudentEnrollmentSearch.int_ApptId.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_ApptId" id="z_int_ApptId" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_ApptId.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_ApptId" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_ApptId.InputTextType)" name="x_int_ApptId" id="x_int_ApptId" data-table="tblStudentEnrollment" data-field="x_int_ApptId" value="@Html.Raw(tblStudentEnrollmentSearch.int_ApptId.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_ApptId.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_ApptId.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_ApptId.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_ApptId.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_ApptId.Visible (end) *@
+@if (tblStudentEnrollmentSearch.course.Visible) { // tblStudentEnrollmentSearch.course.Visible (begin)
+    <div id="r_course" class="row" @Html.Raw(tblStudentEnrollmentSearch.course.RowAttributes)>
+        <label class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_course">@Html.Raw(tblStudentEnrollmentSearch.course.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_course" id="z_course" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.course.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_course" class="ew-search-field ew-search-field-single">
+<span>@{
+    if (IsRTL) {
+        tblStudentEnrollmentSearch.course.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_course" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_course" id="sv_x_course" value="@(RemoveHtml(ConvertToString(tblStudentEnrollmentSearch.course.EditValue)))" autocomplete="off" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.course.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.course.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.course.FormatPattern)" @Html.Raw(tblStudentEnrollmentSearch.course.EditAttributes)>
+</span>
+<selection-list hidden class="form-control" data-table="tblStudentEnrollment" data-field="x_course" data-input="sv_x_course" data-value-separator="@(tblStudentEnrollmentSearch.course.DisplayValueSeparatorAttribute)" name="x_course" id="x_course" value="@(HtmlEncode(tblStudentEnrollmentSearch.course.AdvancedSearch.SearchValue))"></selection-list>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.course.GetErrorMessage(false))</div>
+<script>
+loadjs.ready(["ftblStudentEnrollmentsearch"], function() {
+    ftblStudentEnrollmentsearch.createAutoSuggest(Object.assign({"id":"x_course","forceSelect":false}, { lookupAllDisplayFields: @(tblStudentEnrollmentSearch.course.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblStudentEnrollment.fields.course.autoSuggestOptions));
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.course.Visible (end) *@
+@if (tblStudentEnrollmentSearch.institution.Visible) { // tblStudentEnrollmentSearch.institution.Visible (begin)
+    <div id="r_institution" class="row" @Html.Raw(tblStudentEnrollmentSearch.institution.RowAttributes)>
+        <label for="x_institution" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_institution">@Html.Raw(tblStudentEnrollmentSearch.institution.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_institution" id="z_institution" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.institution.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_institution" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.institution.InputTextType)" name="x_institution" id="x_institution" data-table="tblStudentEnrollment" data-field="x_institution" value="@Html.Raw(tblStudentEnrollmentSearch.institution.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.institution.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.institution.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.institution.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.institution.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.institution.Visible (end) *@
+@if (tblStudentEnrollmentSearch.str_Notes.Visible) { // tblStudentEnrollmentSearch.str_Notes.Visible (begin)
+    <div id="r_str_Notes" class="row" @Html.Raw(tblStudentEnrollmentSearch.str_Notes.RowAttributes)>
+        <label for="x_str_Notes" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Notes">@Html.Raw(tblStudentEnrollmentSearch.str_Notes.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Notes" id="z_str_Notes" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.str_Notes.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_str_Notes" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.str_Notes.InputTextType)" name="x_str_Notes" id="x_str_Notes" data-table="tblStudentEnrollment" data-field="x_str_Notes" value="@Html.Raw(tblStudentEnrollmentSearch.str_Notes.EditValue)" size="30" maxlength="1200" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.str_Notes.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.str_Notes.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.str_Notes.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.str_Notes.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.str_Notes.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_SoldBy.Visible) { // tblStudentEnrollmentSearch.int_SoldBy.Visible (begin)
+    <div id="r_int_SoldBy" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_SoldBy.RowAttributes)>
+        <label for="x_int_SoldBy" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_SoldBy">@Html.Raw(tblStudentEnrollmentSearch.int_SoldBy.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_SoldBy" id="z_int_SoldBy" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_SoldBy.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_SoldBy" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_SoldBy.InputTextType)" name="x_int_SoldBy" id="x_int_SoldBy" data-table="tblStudentEnrollment" data-field="x_int_SoldBy" value="@Html.Raw(tblStudentEnrollmentSearch.int_SoldBy.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_SoldBy.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_SoldBy.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_SoldBy.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_SoldBy.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_SoldBy.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_Bill_ID.Visible) { // tblStudentEnrollmentSearch.int_Bill_ID.Visible (begin)
+    <div id="r_int_Bill_ID" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_Bill_ID.RowAttributes)>
+        <label for="x_int_Bill_ID" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_Bill_ID">@Html.Raw(tblStudentEnrollmentSearch.int_Bill_ID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Bill_ID" id="z_int_Bill_ID" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_Bill_ID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_Bill_ID" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_Bill_ID.InputTextType)" name="x_int_Bill_ID" id="x_int_Bill_ID" data-table="tblStudentEnrollment" data-field="x_int_Bill_ID" value="@Html.Raw(tblStudentEnrollmentSearch.int_Bill_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_Bill_ID.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_Bill_ID.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_Bill_ID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_Bill_ID.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_Bill_ID.Visible (end) *@
+@if (tblStudentEnrollmentSearch.str_Amount_Pay.Visible) { // tblStudentEnrollmentSearch.str_Amount_Pay.Visible (begin)
+    <div id="r_str_Amount_Pay" class="row" @Html.Raw(tblStudentEnrollmentSearch.str_Amount_Pay.RowAttributes)>
+        <label for="x_str_Amount_Pay" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Amount_Pay">@Html.Raw(tblStudentEnrollmentSearch.str_Amount_Pay.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Amount_Pay" id="z_str_Amount_Pay" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.str_Amount_Pay.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_str_Amount_Pay" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.str_Amount_Pay.InputTextType)" name="x_str_Amount_Pay" id="x_str_Amount_Pay" data-table="tblStudentEnrollment" data-field="x_str_Amount_Pay" value="@Html.Raw(tblStudentEnrollmentSearch.str_Amount_Pay.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.str_Amount_Pay.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.str_Amount_Pay.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.str_Amount_Pay.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.str_Amount_Pay.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.str_Amount_Pay.Visible (end) *@
+@if (tblStudentEnrollmentSearch.int_ApptCldr_ID.Visible) { // tblStudentEnrollmentSearch.int_ApptCldr_ID.Visible (begin)
+    <div id="r_int_ApptCldr_ID" class="row" @Html.Raw(tblStudentEnrollmentSearch.int_ApptCldr_ID.RowAttributes)>
+        <label for="x_int_ApptCldr_ID" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_int_ApptCldr_ID">@Html.Raw(tblStudentEnrollmentSearch.int_ApptCldr_ID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_ApptCldr_ID" id="z_int_ApptCldr_ID" value="=">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.int_ApptCldr_ID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_int_ApptCldr_ID" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.int_ApptCldr_ID.InputTextType)" name="x_int_ApptCldr_ID" id="x_int_ApptCldr_ID" data-table="tblStudentEnrollment" data-field="x_int_ApptCldr_ID" value="@Html.Raw(tblStudentEnrollmentSearch.int_ApptCldr_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.int_ApptCldr_ID.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.int_ApptCldr_ID.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.int_ApptCldr_ID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.int_ApptCldr_ID.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.int_ApptCldr_ID.Visible (end) *@
+@if (tblStudentEnrollmentSearch.UniqueIdx.Visible) { // tblStudentEnrollmentSearch.UniqueIdx.Visible (begin)
+    <div id="r_UniqueIdx" class="row" @Html.Raw(tblStudentEnrollmentSearch.UniqueIdx.RowAttributes)>
+        <label for="x_UniqueIdx" class="@(tblStudentEnrollmentSearch.LeftColumnClass)"><span id="elh_tblStudentEnrollment_UniqueIdx">@Html.Raw(tblStudentEnrollmentSearch.UniqueIdx.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_UniqueIdx" id="z_UniqueIdx" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblStudentEnrollmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblStudentEnrollmentSearch.UniqueIdx.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblStudentEnrollment_UniqueIdx" class="ew-search-field ew-search-field-single">
+<input type="@(tblStudentEnrollmentSearch.UniqueIdx.InputTextType)" name="x_UniqueIdx" id="x_UniqueIdx" data-table="tblStudentEnrollment" data-field="x_UniqueIdx" value="@Html.Raw(tblStudentEnrollmentSearch.UniqueIdx.EditValue)" size="30" maxlength="261" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentSearch.UniqueIdx.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentSearch.UniqueIdx.FormatPattern)"@Html.Raw(tblStudentEnrollmentSearch.UniqueIdx.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentSearch.UniqueIdx.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblStudentEnrollmentSearch.UniqueIdx.Visible (end) *@
+</div><!-- /page* -->
+@Html.Raw(tblStudentEnrollmentSearch.IsModal ? Html.Raw("<template class=\"ew-modal-buttons\">") : Html.Raw("<div class=\"row ew-buttons\">"))<!-- buttons .row -->
+    <div class="@(tblStudentEnrollmentSearch.OffsetColumnClass)"><!-- buttons offset -->
+        <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblStudentEnrollmentsearch">@Html.Raw(Language.Phrase("Search"))</button>
+@if (tblStudentEnrollmentSearch.IsModal) {
+        <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblStudentEnrollmentsearch">@Html.Raw(Language.Phrase("Cancel"))</button>
+} else {
+        <button class="btn btn-default ew-btn" name="btn-reset" id="btn-reset" type="button" form="ftblStudentEnrollmentsearch" data-ew-action="reload">@Html.Raw(Language.Phrase("Reset"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblStudentEnrollmentSearch.IsModal ? Html.Raw("</template>") : Html.Raw("</div>"))<!-- /buttons .row -->
+</form>
+@tblStudentEnrollmentSearch.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudentEnrollment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

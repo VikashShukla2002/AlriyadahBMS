@@ -1,0 +1,195 @@
+@if (dshbdPayList.ModalGridAdd && dshbdPayList.IsGridAdd || dshbdPayList.ModalGridEdit && dshbdPayList.IsGridEdit || dshbdPayList.ModalMultiEdit && dshbdPayList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(dshbdPayList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { dshbdPay: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(dshbdPayList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(dshbdPayList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(dshbdPayList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(dshbdPayList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(dshbdPayList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(dshbdPayList.TableGridClass)">
+@if (!dshbdPayList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!dshbdPayList.IsGridAdd && !(dshbdPayList.IsGridEdit && dshbdPayList.ModalGridEdit) && !dshbdPayList.IsMultiEdit) {
+@Html.Raw(dshbdPayList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@dshbdPayList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(dshbdPayList.FormName)" id="@(dshbdPayList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(dshbdPayList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (dshbdPayList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_dshbdPay" class="card-body ew-grid-middle-panel @(dshbdPayList.TableContainerClass)" style="@(dshbdPayList.TableContainerStyle)">
+@if (dshbdPayList.TotalRecords > 0 || dshbdPayList.IsGridEdit || dshbdPayList.IsMultiEdit) {
+<table id="tbl_dshbdPaylist" class="@(dshbdPayList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    dshbdPayList.RowType = RowType.Header;
+
+    // Render list options
+    await dshbdPayList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@dshbdPayList.ListOptions.RenderHeader("left")
+@if (dshbdPayList.int_Payment_Method.Visible) { // dshbdPayList.int_Payment_Method.Visible (begin)
+        <th data-name="int_Payment_Method" class="@(dshbdPayList.int_Payment_Method.HeaderCellClass)"><div id="elh_dshbdPay_int_Payment_Method" class="dshbdPay_int_Payment_Method">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.int_Payment_Method))</div></th>
+} @* dshbdPayList.int_Payment_Method.Visible (end) *@
+@if (dshbdPayList.int_Student_ID.Visible) { // dshbdPayList.int_Student_ID.Visible (begin)
+        <th data-name="int_Student_ID" class="@(dshbdPayList.int_Student_ID.HeaderCellClass)"><div id="elh_dshbdPay_int_Student_ID" class="dshbdPay_int_Student_ID">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.int_Student_ID))</div></th>
+} @* dshbdPayList.int_Student_ID.Visible (end) *@
+@if (dshbdPayList.NationalID.Visible) { // dshbdPayList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(dshbdPayList.NationalID.HeaderCellClass)"><div id="elh_dshbdPay_NationalID" class="dshbdPay_NationalID">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.NationalID))</div></th>
+} @* dshbdPayList.NationalID.Visible (end) *@
+@if (dshbdPayList.str_Username.Visible) { // dshbdPayList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(dshbdPayList.str_Username.HeaderCellClass)"><div id="elh_dshbdPay_str_Username" class="dshbdPay_str_Username">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.str_Username))</div></th>
+} @* dshbdPayList.str_Username.Visible (end) *@
+@if (dshbdPayList.AmountPaid.Visible) { // dshbdPayList.AmountPaid.Visible (begin)
+        <th data-name="AmountPaid" class="@(dshbdPayList.AmountPaid.HeaderCellClass)"><div id="elh_dshbdPay_AmountPaid" class="dshbdPay_AmountPaid">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.AmountPaid))</div></th>
+} @* dshbdPayList.AmountPaid.Visible (end) *@
+@if (dshbdPayList.Price.Visible) { // dshbdPayList.Price.Visible (begin)
+        <th data-name="Price" class="@(dshbdPayList.Price.HeaderCellClass)"><div id="elh_dshbdPay_Price" class="dshbdPay_Price">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.Price))</div></th>
+} @* dshbdPayList.Price.Visible (end) *@
+@if (dshbdPayList.date_Paid.Visible) { // dshbdPayList.date_Paid.Visible (begin)
+        <th data-name="date_Paid" class="@(dshbdPayList.date_Paid.HeaderCellClass)"><div id="elh_dshbdPay_date_Paid" class="dshbdPay_date_Paid">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.date_Paid))</div></th>
+} @* dshbdPayList.date_Paid.Visible (end) *@
+@if (dshbdPayList.str_ApprovalCode.Visible) { // dshbdPayList.str_ApprovalCode.Visible (begin)
+        <th data-name="str_ApprovalCode" class="@(dshbdPayList.str_ApprovalCode.HeaderCellClass)"><div id="elh_dshbdPay_str_ApprovalCode" class="dshbdPay_str_ApprovalCode">@Html.Raw(dshbdPayList.RenderFieldHeader(dshbdPayList.str_ApprovalCode))</div></th>
+} @* dshbdPayList.str_ApprovalCode.Visible (end) *@
+@* Render list options (header, right) *@
+@dshbdPayList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(dshbdPayList.PageNumber)">
+@{
+    await dshbdPayList.SetupGrid();
+    bool eof = dshbdPayList.Recordset == null; // DN
+}
+@while (dshbdPayList.RecordCount < dshbdPayList.StopRecord || SameString(dshbdPayList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(dshbdPayList.RowIndex, "$rowindex$") &&
+        (!dshbdPayList.IsGridAdd || dshbdPayList.CurrentMode == "copy") &&
+        (!((dshbdPayList.IsCopy || dshbdPayList.IsAdd) && dshbdPayList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await dshbdPayList.Recordset.ReadAsync();
+    dshbdPayList.RecordCount++;
+    if (dshbdPayList.RecordCount >= dshbdPayList.StartRecord) {
+        await dshbdPayList.SetupRow();
+    <tr @Html.Raw(dshbdPayList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @dshbdPayList.ListOptions.RenderBody("left", dshbdPayList.RowCount)
+    @if (dshbdPayList.int_Payment_Method.Visible) { // dshbdPayList.int_Payment_Method.Visible (begin)
+        <td data-name="int_Payment_Method" @Html.Raw(dshbdPayList.int_Payment_Method.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_int_Payment_Method" class="el_dshbdPay_int_Payment_Method">
+<span @Html.Raw(dshbdPayList.int_Payment_Method.ViewAttributes)>
+@Html.Raw(dshbdPayList.int_Payment_Method.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.int_Payment_Method.Visible (end) *@
+    @if (dshbdPayList.int_Student_ID.Visible) { // dshbdPayList.int_Student_ID.Visible (begin)
+        <td data-name="int_Student_ID" @Html.Raw(dshbdPayList.int_Student_ID.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_int_Student_ID" class="el_dshbdPay_int_Student_ID">
+<span @Html.Raw(dshbdPayList.int_Student_ID.ViewAttributes)>
+@Html.Raw(dshbdPayList.int_Student_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.int_Student_ID.Visible (end) *@
+    @if (dshbdPayList.NationalID.Visible) { // dshbdPayList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(dshbdPayList.NationalID.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_NationalID" class="el_dshbdPay_NationalID">
+<span @Html.Raw(dshbdPayList.NationalID.ViewAttributes)>
+@Html.Raw(dshbdPayList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.NationalID.Visible (end) *@
+    @if (dshbdPayList.str_Username.Visible) { // dshbdPayList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(dshbdPayList.str_Username.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_str_Username" class="el_dshbdPay_str_Username">
+<span @Html.Raw(dshbdPayList.str_Username.ViewAttributes)>
+@Html.Raw(dshbdPayList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.str_Username.Visible (end) *@
+    @if (dshbdPayList.AmountPaid.Visible) { // dshbdPayList.AmountPaid.Visible (begin)
+        <td data-name="AmountPaid" @Html.Raw(dshbdPayList.AmountPaid.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_AmountPaid" class="el_dshbdPay_AmountPaid">
+<span @Html.Raw(dshbdPayList.AmountPaid.ViewAttributes)>
+@Html.Raw(dshbdPayList.AmountPaid.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.AmountPaid.Visible (end) *@
+    @if (dshbdPayList.Price.Visible) { // dshbdPayList.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(dshbdPayList.Price.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_Price" class="el_dshbdPay_Price">
+<span @Html.Raw(dshbdPayList.Price.ViewAttributes)>
+@Html.Raw(dshbdPayList.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.Price.Visible (end) *@
+    @if (dshbdPayList.date_Paid.Visible) { // dshbdPayList.date_Paid.Visible (begin)
+        <td data-name="date_Paid" @Html.Raw(dshbdPayList.date_Paid.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_date_Paid" class="el_dshbdPay_date_Paid">
+<span @Html.Raw(dshbdPayList.date_Paid.ViewAttributes)>
+@Html.Raw(dshbdPayList.date_Paid.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.date_Paid.Visible (end) *@
+    @if (dshbdPayList.str_ApprovalCode.Visible) { // dshbdPayList.str_ApprovalCode.Visible (begin)
+        <td data-name="str_ApprovalCode" @Html.Raw(dshbdPayList.str_ApprovalCode.CellAttributes)>
+<span id="el@(dshbdPayList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdPayList.RowCount)_dshbdPay_str_ApprovalCode" class="el_dshbdPay_str_ApprovalCode">
+<span @Html.Raw(dshbdPayList.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(dshbdPayList.str_ApprovalCode.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdPayList.str_ApprovalCode.Visible (end) *@
+    @* Render list options (body, right) *@
+    @dshbdPayList.ListOptions.RenderBody("right", dshbdPayList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(dshbdPayList.RowIndex, "$rowindex$"))
+        dshbdPayList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((dshbdPayList.IsCopy || dshbdPayList.IsAdd) && dshbdPayList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        dshbdPayList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(dshbdPayList.CurrentAction) && !dshbdPayList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ dshbdPayList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

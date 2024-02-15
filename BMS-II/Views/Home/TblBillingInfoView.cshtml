@@ -1,0 +1,277 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblBillingInfoView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblBillingInfoView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblBillingInfoView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblBillingInfoView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblBillingInfoView.ExportOptions.RenderBody()
+    @tblBillingInfoView.OtherOptions.RenderBody()
+</div>
+}
+@tblBillingInfoView.ShowPageHeader()
+@tblBillingInfoView.ShowMessages()
+<main class="view">
+<form name="ftblBillingInfoview" id="ftblBillingInfoview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblBillingInfoView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblBillingInfoView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblBillingInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblBillingInfoview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblBillingInfoview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblBillingInfoView.IsModal)">
+@if (!tblBillingInfoView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblBillingInfoView.MultiPages.ContainerClasses)" id="pages_tblBillingInfoView"><!-- multi-page tabs -->
+    <ul class="@(tblBillingInfoView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblBillingInfoView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblBillingInfo1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblBillingInfo1" aria-selected="@(ConvertToJson(tblBillingInfoView.MultiPages.IsActive(1)))">@Html.Raw(tblBillingInfoView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblBillingInfoView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblBillingInfo2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblBillingInfo2" aria-selected="@(ConvertToJson(tblBillingInfoView.MultiPages.IsActive(2)))">@Html.Raw(tblBillingInfoView.PageCaption(2))</button></li>
+    </ul>
+    @:<div class="@(tblBillingInfoView.MultiPages.TabContentClasses)"">
+}
+@if (!tblBillingInfoView.IsExport()) {
+    @:<div class="@(tblBillingInfoView.MultiPages.TabPaneClasses(1))" id="tab_tblBillingInfo1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblBillingInfoView.TableClass)">
+@if (tblBillingInfoView.NationalID.Visible) { // tblBillingInfoView.NationalID.Visible (begin)
+    <tr id="r_NationalID" @Html.Raw(tblBillingInfoView.NationalID.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_NationalID">@Html.Raw(tblBillingInfoView.NationalID.Caption)</span></td>
+        <td data-name="NationalID" @Html.Raw(tblBillingInfoView.NationalID.CellAttributes)>
+<span id="el_tblBillingInfo_NationalID" data-page="1">
+<span @Html.Raw(tblBillingInfoView.NationalID.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.NationalID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.NationalID.Visible (end) *@
+@if (tblBillingInfoView.str_First_Name.Visible) { // tblBillingInfoView.str_First_Name.Visible (begin)
+    <tr id="r_str_First_Name" @Html.Raw(tblBillingInfoView.str_First_Name.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_str_First_Name">@Html.Raw(tblBillingInfoView.str_First_Name.Caption)</span></td>
+        <td data-name="str_First_Name" @Html.Raw(tblBillingInfoView.str_First_Name.CellAttributes)>
+<span id="el_tblBillingInfo_str_First_Name" data-page="1">
+<span @Html.Raw(tblBillingInfoView.str_First_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.str_First_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.str_First_Name.Visible (end) *@
+@if (tblBillingInfoView.str_Last_Name.Visible) { // tblBillingInfoView.str_Last_Name.Visible (begin)
+    <tr id="r_str_Last_Name" @Html.Raw(tblBillingInfoView.str_Last_Name.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_str_Last_Name">@Html.Raw(tblBillingInfoView.str_Last_Name.Caption)</span></td>
+        <td data-name="str_Last_Name" @Html.Raw(tblBillingInfoView.str_Last_Name.CellAttributes)>
+<span id="el_tblBillingInfo_str_Last_Name" data-page="1">
+<span @Html.Raw(tblBillingInfoView.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.str_Last_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.str_Last_Name.Visible (end) *@
+@if (tblBillingInfoView.str_ApprovalCode.Visible) { // tblBillingInfoView.str_ApprovalCode.Visible (begin)
+    <tr id="r_str_ApprovalCode" @Html.Raw(tblBillingInfoView.str_ApprovalCode.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_str_ApprovalCode">@Html.Raw(tblBillingInfoView.str_ApprovalCode.Caption)</span></td>
+        <td data-name="str_ApprovalCode" @Html.Raw(tblBillingInfoView.str_ApprovalCode.CellAttributes)>
+<span id="el_tblBillingInfo_str_ApprovalCode" data-page="1">
+<span @Html.Raw(tblBillingInfoView.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.str_ApprovalCode.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.str_ApprovalCode.Visible (end) *@
+@if (tblBillingInfoView.str_TransactionTime.Visible) { // tblBillingInfoView.str_TransactionTime.Visible (begin)
+    <tr id="r_str_TransactionTime" @Html.Raw(tblBillingInfoView.str_TransactionTime.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_str_TransactionTime">@Html.Raw(tblBillingInfoView.str_TransactionTime.Caption)</span></td>
+        <td data-name="str_TransactionTime" @Html.Raw(tblBillingInfoView.str_TransactionTime.CellAttributes)>
+<span id="el_tblBillingInfo_str_TransactionTime" data-page="1">
+<span @Html.Raw(tblBillingInfoView.str_TransactionTime.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.str_TransactionTime.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.str_TransactionTime.Visible (end) *@
+@if (tblBillingInfoView.Package_Name.Visible) { // tblBillingInfoView.Package_Name.Visible (begin)
+    <tr id="r_Package_Name" @Html.Raw(tblBillingInfoView.Package_Name.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_Package_Name">@Html.Raw(tblBillingInfoView.Package_Name.Caption)</span></td>
+        <td data-name="Package_Name" @Html.Raw(tblBillingInfoView.Package_Name.CellAttributes)>
+<span id="el_tblBillingInfo_Package_Name" data-page="1">
+<span @Html.Raw(tblBillingInfoView.Package_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.Package_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.Package_Name.Visible (end) *@
+@if (tblBillingInfoView.Price.Visible) { // tblBillingInfoView.Price.Visible (begin)
+    <tr id="r_Price" @Html.Raw(tblBillingInfoView.Price.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_Price">@Html.Raw(tblBillingInfoView.Price.Caption)</span></td>
+        <td data-name="Price" @Html.Raw(tblBillingInfoView.Price.CellAttributes)>
+<span id="el_tblBillingInfo_Price" data-page="1">
+<span @Html.Raw(tblBillingInfoView.Price.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.Price.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.Price.Visible (end) *@
+@if (tblBillingInfoView.course.Visible) { // tblBillingInfoView.course.Visible (begin)
+    <tr id="r_course" @Html.Raw(tblBillingInfoView.course.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_course">@Html.Raw(tblBillingInfoView.course.Caption)</span></td>
+        <td data-name="course" @Html.Raw(tblBillingInfoView.course.CellAttributes)>
+<span id="el_tblBillingInfo_course" data-page="1">
+<span @Html.Raw(tblBillingInfoView.course.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.course.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.course.Visible (end) *@
+@if (tblBillingInfoView.institution.Visible) { // tblBillingInfoView.institution.Visible (begin)
+    <tr id="r_institution" @Html.Raw(tblBillingInfoView.institution.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_institution">@Html.Raw(tblBillingInfoView.institution.Caption)</span></td>
+        <td data-name="institution" @Html.Raw(tblBillingInfoView.institution.CellAttributes)>
+<span id="el_tblBillingInfo_institution" data-page="1">
+<span @Html.Raw(tblBillingInfoView.institution.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.institution.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.institution.Visible (end) *@
+</table>
+@if (!tblBillingInfoView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblBillingInfoView.IsExport()) {
+    @:<div class="@(tblBillingInfoView.MultiPages.TabPaneClasses(2))" id="tab_tblBillingInfo2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblBillingInfoView.TableClass)">
+@if (tblBillingInfoView.int_Payment_Method.Visible) { // tblBillingInfoView.int_Payment_Method.Visible (begin)
+    <tr id="r_int_Payment_Method" @Html.Raw(tblBillingInfoView.int_Payment_Method.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_int_Payment_Method">@Html.Raw(tblBillingInfoView.int_Payment_Method.Caption)</span></td>
+        <td data-name="int_Payment_Method" @Html.Raw(tblBillingInfoView.int_Payment_Method.CellAttributes)>
+<span id="el_tblBillingInfo_int_Payment_Method" data-page="2">
+<span @Html.Raw(tblBillingInfoView.int_Payment_Method.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.int_Payment_Method.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.int_Payment_Method.Visible (end) *@
+@if (tblBillingInfoView.date_Paid.Visible) { // tblBillingInfoView.date_Paid.Visible (begin)
+    <tr id="r_date_Paid" @Html.Raw(tblBillingInfoView.date_Paid.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_date_Paid">@Html.Raw(tblBillingInfoView.date_Paid.Caption)</span></td>
+        <td data-name="date_Paid" @Html.Raw(tblBillingInfoView.date_Paid.CellAttributes)>
+<span id="el_tblBillingInfo_date_Paid" data-page="2">
+<span @Html.Raw(tblBillingInfoView.date_Paid.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.date_Paid.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.date_Paid.Visible (end) *@
+@if (tblBillingInfoView.str_Amount_Pay.Visible) { // tblBillingInfoView.str_Amount_Pay.Visible (begin)
+    <tr id="r_str_Amount_Pay" @Html.Raw(tblBillingInfoView.str_Amount_Pay.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_str_Amount_Pay">@Html.Raw(tblBillingInfoView.str_Amount_Pay.Caption)</span></td>
+        <td data-name="str_Amount_Pay" @Html.Raw(tblBillingInfoView.str_Amount_Pay.CellAttributes)>
+<span id="el_tblBillingInfo_str_Amount_Pay" data-page="2">
+<span @Html.Raw(tblBillingInfoView.str_Amount_Pay.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.str_Amount_Pay.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.str_Amount_Pay.Visible (end) *@
+@if (tblBillingInfoView.mny_Running_Payments.Visible) { // tblBillingInfoView.mny_Running_Payments.Visible (begin)
+    <tr id="r_mny_Running_Payments" @Html.Raw(tblBillingInfoView.mny_Running_Payments.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_mny_Running_Payments">@Html.Raw(tblBillingInfoView.mny_Running_Payments.Caption)</span></td>
+        <td data-name="mny_Running_Payments" @Html.Raw(tblBillingInfoView.mny_Running_Payments.CellAttributes)>
+<span id="el_tblBillingInfo_mny_Running_Payments" data-page="2">
+<span @Html.Raw(tblBillingInfoView.mny_Running_Payments.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.mny_Running_Payments.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.mny_Running_Payments.Visible (end) *@
+@if (tblBillingInfoView.mny_Running_Balance.Visible) { // tblBillingInfoView.mny_Running_Balance.Visible (begin)
+    <tr id="r_mny_Running_Balance" @Html.Raw(tblBillingInfoView.mny_Running_Balance.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_mny_Running_Balance">@Html.Raw(tblBillingInfoView.mny_Running_Balance.Caption)</span></td>
+        <td data-name="mny_Running_Balance" @Html.Raw(tblBillingInfoView.mny_Running_Balance.CellAttributes)>
+<span id="el_tblBillingInfo_mny_Running_Balance" data-page="2">
+<span @Html.Raw(tblBillingInfoView.mny_Running_Balance.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.mny_Running_Balance.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.mny_Running_Balance.Visible (end) *@
+@if (tblBillingInfoView.str_Payment_Note.Visible) { // tblBillingInfoView.str_Payment_Note.Visible (begin)
+    <tr id="r_str_Payment_Note" @Html.Raw(tblBillingInfoView.str_Payment_Note.RowAttributes)>
+        <td class="@(tblBillingInfoView.TableLeftColumnClass)"><span id="elh_tblBillingInfo_str_Payment_Note">@Html.Raw(tblBillingInfoView.str_Payment_Note.Caption)</span></td>
+        <td data-name="str_Payment_Note" @Html.Raw(tblBillingInfoView.str_Payment_Note.CellAttributes)>
+<span id="el_tblBillingInfo_str_Payment_Note" data-page="2">
+<span @Html.Raw(tblBillingInfoView.str_Payment_Note.ViewAttributes)>
+@Html.Raw(tblBillingInfoView.str_Payment_Note.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblBillingInfoView.str_Payment_Note.Visible (end) *@
+</table>
+@if (!tblBillingInfoView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblBillingInfoView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblBillingInfoView.CloseRecordset(); }
+@if (tblBillingInfoView.CurrentDetailTables.Contains("tblStudentEnrollment") && tblStudentEnrollment.DetailView) {
+    if (!Empty(tblBillingInfoView.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblStudentEnrollment", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblStudentEnrollmentGrid")
+    View = this;
+}
+@if (tblBillingInfoView.CurrentDetailTables.Contains("qryBillingDetails_v2") && qryBillingDetailsV2.DetailView) {
+    if (!Empty(tblBillingInfoView.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("qryBillingDetails_v2", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("QryBillingDetailsV2Grid")
+    View = this;
+}
+</form>
+</main>
+@tblBillingInfoView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblBillingInfoView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

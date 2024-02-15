@@ -1,0 +1,633 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentEnrollmentAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentEnrollmentAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentEnrollmentAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentEnrollment: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblStudentEnrollmentadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentEnrollmentadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name", [fields.str_Full_Name.visible && fields.str_Full_Name.required ? ew.Validators.required(fields.str_Full_Name.caption) : null], fields.str_Full_Name.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["int_CR_ID", [fields.int_CR_ID.visible && fields.int_CR_ID.required ? ew.Validators.required(fields.int_CR_ID.caption) : null], fields.int_CR_ID.isInvalid],
+            ["int_Student_Id", [fields.int_Student_Id.visible && fields.int_Student_Id.required ? ew.Validators.required(fields.int_Student_Id.caption) : null, ew.Validators.integer], fields.int_Student_Id.isInvalid],
+            ["int_BTW_Id", [fields.int_BTW_Id.visible && fields.int_BTW_Id.required ? ew.Validators.required(fields.int_BTW_Id.caption) : null, ew.Validators.integer], fields.int_BTW_Id.isInvalid],
+            ["int_Item_Id", [fields.int_Item_Id.visible && fields.int_Item_Id.required ? ew.Validators.required(fields.int_Item_Id.caption) : null, ew.Validators.integer], fields.int_Item_Id.isInvalid],
+            ["int_Package_Id", [fields.int_Package_Id.visible && fields.int_Package_Id.required ? ew.Validators.required(fields.int_Package_Id.caption) : null], fields.int_Package_Id.isInvalid],
+            ["str_Package_Name", [fields.str_Package_Name.visible && fields.str_Package_Name.required ? ew.Validators.required(fields.str_Package_Name.caption) : null], fields.str_Package_Name.isInvalid],
+            ["int_PackageCR_Id", [fields.int_PackageCR_Id.visible && fields.int_PackageCR_Id.required ? ew.Validators.required(fields.int_PackageCR_Id.caption) : null], fields.int_PackageCR_Id.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null, ew.Validators.datetime(fields.date_Created.clientFormatPattern)], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null, ew.Validators.datetime(fields.date_Modified.clientFormatPattern)], fields.date_Modified.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null, ew.Validators.integer], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null, ew.Validators.integer], fields.int_Modified_By.isInvalid],
+            ["str_PurchaseAmount", [fields.str_PurchaseAmount.visible && fields.str_PurchaseAmount.required ? ew.Validators.required(fields.str_PurchaseAmount.caption) : null, ew.Validators.float], fields.str_PurchaseAmount.isInvalid],
+            ["int_ApptId", [fields.int_ApptId.visible && fields.int_ApptId.required ? ew.Validators.required(fields.int_ApptId.caption) : null, ew.Validators.integer], fields.int_ApptId.isInvalid],
+            ["course", [fields.course.visible && fields.course.required ? ew.Validators.required(fields.course.caption) : null], fields.course.isInvalid],
+            ["institution", [fields.institution.visible && fields.institution.required ? ew.Validators.required(fields.institution.caption) : null], fields.institution.isInvalid],
+            ["str_Notes", [fields.str_Notes.visible && fields.str_Notes.required ? ew.Validators.required(fields.str_Notes.caption) : null], fields.str_Notes.isInvalid],
+            ["int_SoldBy", [fields.int_SoldBy.visible && fields.int_SoldBy.required ? ew.Validators.required(fields.int_SoldBy.caption) : null, ew.Validators.integer], fields.int_SoldBy.isInvalid],
+            ["int_Bill_ID", [fields.int_Bill_ID.visible && fields.int_Bill_ID.required ? ew.Validators.required(fields.int_Bill_ID.caption) : null, ew.Validators.integer], fields.int_Bill_ID.isInvalid],
+            ["str_Amount_Pay", [fields.str_Amount_Pay.visible && fields.str_Amount_Pay.required ? ew.Validators.required(fields.str_Amount_Pay.caption) : null], fields.str_Amount_Pay.isInvalid],
+            ["UniqueIdx", [fields.UniqueIdx.visible && fields.UniqueIdx.required ? ew.Validators.required(fields.UniqueIdx.caption) : null], fields.UniqueIdx.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Full_Name": @Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.ToClientList(tblStudentEnrollmentAdd)),
+            "NationalID": @Html.Raw(tblStudentEnrollmentAdd.NationalID.ToClientList(tblStudentEnrollmentAdd)),
+            "int_CR_ID": @Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.ToClientList(tblStudentEnrollmentAdd)),
+            "int_Package_Id": @Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.ToClientList(tblStudentEnrollmentAdd)),
+            "course": @Html.Raw(tblStudentEnrollmentAdd.course.ToClientList(tblStudentEnrollmentAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStudentEnrollmentAdd.ShowPageHeader()
+@tblStudentEnrollmentAdd.ShowMessages()
+<form name="ftblStudentEnrollmentadd" id="ftblStudentEnrollmentadd" class="@(tblStudentEnrollmentAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblStudentEnrollmentAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblStudentEnrollmentAdd.OldKeyName)" value="@Html.Raw(tblStudentEnrollmentAdd.OldKey)">
+@if (tblStudentEnrollmentAdd.CurrentMasterTable == "tblBillingInfo") {
+<input type="hidden" name="@Config.TableShowMaster" value="tblBillingInfo">
+<input type="hidden" name="fk_NationalID" value="@(HtmlEncode(tblStudentEnrollmentAdd.NationalID.SessionValue))">
+}
+<div class="ew-add-div"><!-- page* -->
+@if (tblStudentEnrollmentAdd.str_Full_Name.Visible) { // tblStudentEnrollmentAdd.str_Full_Name.Visible (begin)
+    <div id="r_str_Full_Name" @Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_str_Full_Name" for="x_str_Full_Name" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.Caption)@Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Full_Name">
+    <select
+        id="x_str_Full_Name"
+        name="x_str_Full_Name"
+        class="form-select ew-select@(tblStudentEnrollmentAdd.str_Full_Name.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentadd_x_str_Full_Name"
+        data-table="tblStudentEnrollment"
+        data-field="x_str_Full_Name"
+        data-value-separator="@(tblStudentEnrollmentAdd.str_Full_Name.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentAdd.str_Full_Name.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.EditAttributes)>
+        @(tblStudentEnrollmentAdd.str_Full_Name.SelectOptionListHtml("x_str_Full_Name"))
+    </select>
+    @Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.GetErrorMessage())</div>
+@Html.Raw(tblStudentEnrollmentAdd.str_Full_Name.Lookup.GetParamTag(tblStudentEnrollmentAdd, "p_x_str_Full_Name"))
+<script>
+loadjs.ready("ftblStudentEnrollmentadd", function() {
+    var options = { name: "x_str_Full_Name", selectId: "ftblStudentEnrollmentadd_x_str_Full_Name" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentadd.lists.str_Full_Name?.lookupOptions.length) {
+        options.data = { id: "x_str_Full_Name", form: "ftblStudentEnrollmentadd" };
+    } else {
+        options.ajax = { id: "x_str_Full_Name", form: "ftblStudentEnrollmentadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.str_Full_Name.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.str_Full_Name.Visible (end) *@
+@if (tblStudentEnrollmentAdd.NationalID.Visible) { // tblStudentEnrollmentAdd.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblStudentEnrollmentAdd.NationalID.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_NationalID" for="x_NationalID" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.NationalID.Caption)@Html.Raw(tblStudentEnrollmentAdd.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.NationalID.CellAttributes)>
+@if (!Empty(tblStudentEnrollmentAdd.NationalID.SessionValue)) {
+<span @Html.Raw(tblStudentEnrollmentAdd.NationalID.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStudentEnrollmentAdd.NationalID.DisplayValue(tblStudentEnrollmentAdd.NationalID.ViewValue))</span></span>
+<input type="hidden" id="x_NationalID" name="x_NationalID" value="@(HtmlEncode(tblStudentEnrollmentAdd.NationalID.CurrentValue))" data-hidden="1">
+} else {
+<span id="el_tblStudentEnrollment_NationalID">
+    <select
+        id="x_NationalID"
+        name="x_NationalID"
+        class="form-select ew-select@(tblStudentEnrollmentAdd.NationalID.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentadd_x_NationalID"
+        data-table="tblStudentEnrollment"
+        data-field="x_NationalID"
+        data-value-separator="@(tblStudentEnrollmentAdd.NationalID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentAdd.NationalID.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentAdd.NationalID.EditAttributes)>
+        @(tblStudentEnrollmentAdd.NationalID.SelectOptionListHtml("x_NationalID"))
+    </select>
+    @Html.Raw(tblStudentEnrollmentAdd.NationalID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.NationalID.GetErrorMessage())</div>
+@Html.Raw(tblStudentEnrollmentAdd.NationalID.Lookup.GetParamTag(tblStudentEnrollmentAdd, "p_x_NationalID"))
+<script>
+loadjs.ready("ftblStudentEnrollmentadd", function() {
+    var options = { name: "x_NationalID", selectId: "ftblStudentEnrollmentadd_x_NationalID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentadd.lists.NationalID?.lookupOptions.length) {
+        options.data = { id: "x_NationalID", form: "ftblStudentEnrollmentadd" };
+    } else {
+        options.ajax = { id: "x_NationalID", form: "ftblStudentEnrollmentadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.NationalID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+}
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.NationalID.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_CR_ID.Visible) { // tblStudentEnrollmentAdd.int_CR_ID.Visible (begin)
+    <div id="r_int_CR_ID" @Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_CR_ID" for="x_int_CR_ID" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_CR_ID">
+    <select
+        id="x_int_CR_ID"
+        name="x_int_CR_ID"
+        class="form-select ew-select@(tblStudentEnrollmentAdd.int_CR_ID.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentadd_x_int_CR_ID"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_CR_ID"
+        data-value-separator="@(tblStudentEnrollmentAdd.int_CR_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentAdd.int_CR_ID.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.EditAttributes)>
+        @(tblStudentEnrollmentAdd.int_CR_ID.SelectOptionListHtml("x_int_CR_ID"))
+    </select>
+    @Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.GetErrorMessage())</div>
+@Html.Raw(tblStudentEnrollmentAdd.int_CR_ID.Lookup.GetParamTag(tblStudentEnrollmentAdd, "p_x_int_CR_ID"))
+<script>
+loadjs.ready("ftblStudentEnrollmentadd", function() {
+    var options = { name: "x_int_CR_ID", selectId: "ftblStudentEnrollmentadd_x_int_CR_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentadd.lists.int_CR_ID?.lookupOptions.length) {
+        options.data = { id: "x_int_CR_ID", form: "ftblStudentEnrollmentadd" };
+    } else {
+        options.ajax = { id: "x_int_CR_ID", form: "ftblStudentEnrollmentadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_CR_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_CR_ID.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_Student_Id.Visible) { // tblStudentEnrollmentAdd.int_Student_Id.Visible (begin)
+    <div id="r_int_Student_Id" @Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_Student_Id" for="x_int_Student_Id" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_Student_Id">
+<input type="@(tblStudentEnrollmentAdd.int_Student_Id.InputTextType)" name="x_int_Student_Id" id="x_int_Student_Id" data-table="tblStudentEnrollment" data-field="x_int_Student_Id" value="@Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_Student_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_Student_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.EditAttributes) aria-describedby="x_int_Student_Id_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_Student_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_Student_Id.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_BTW_Id.Visible) { // tblStudentEnrollmentAdd.int_BTW_Id.Visible (begin)
+    <div id="r_int_BTW_Id" @Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_BTW_Id" for="x_int_BTW_Id" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_BTW_Id">
+<input type="@(tblStudentEnrollmentAdd.int_BTW_Id.InputTextType)" name="x_int_BTW_Id" id="x_int_BTW_Id" data-table="tblStudentEnrollment" data-field="x_int_BTW_Id" value="@Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_BTW_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_BTW_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.EditAttributes) aria-describedby="x_int_BTW_Id_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_BTW_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_BTW_Id.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_Item_Id.Visible) { // tblStudentEnrollmentAdd.int_Item_Id.Visible (begin)
+    <div id="r_int_Item_Id" @Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_Item_Id" for="x_int_Item_Id" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_Item_Id">
+<input type="@(tblStudentEnrollmentAdd.int_Item_Id.InputTextType)" name="x_int_Item_Id" id="x_int_Item_Id" data-table="tblStudentEnrollment" data-field="x_int_Item_Id" value="@Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_Item_Id.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_Item_Id.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.EditAttributes) aria-describedby="x_int_Item_Id_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_Item_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_Item_Id.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_Package_Id.Visible) { // tblStudentEnrollmentAdd.int_Package_Id.Visible (begin)
+    <div id="r_int_Package_Id" @Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_Package_Id" for="x_int_Package_Id" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_Package_Id">
+    <select
+        id="x_int_Package_Id"
+        name="x_int_Package_Id"
+        class="form-select ew-select@(tblStudentEnrollmentAdd.int_Package_Id.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentadd_x_int_Package_Id"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_Package_Id"
+        data-value-separator="@(tblStudentEnrollmentAdd.int_Package_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentAdd.int_Package_Id.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.EditAttributes)>
+        @(tblStudentEnrollmentAdd.int_Package_Id.SelectOptionListHtml("x_int_Package_Id"))
+    </select>
+    @Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.GetErrorMessage())</div>
+@Html.Raw(tblStudentEnrollmentAdd.int_Package_Id.Lookup.GetParamTag(tblStudentEnrollmentAdd, "p_x_int_Package_Id"))
+<script>
+loadjs.ready("ftblStudentEnrollmentadd", function() {
+    var options = { name: "x_int_Package_Id", selectId: "ftblStudentEnrollmentadd_x_int_Package_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentadd.lists.int_Package_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_Package_Id", form: "ftblStudentEnrollmentadd" };
+    } else {
+        options.ajax = { id: "x_int_Package_Id", form: "ftblStudentEnrollmentadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_Package_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_Package_Id.Visible (end) *@
+@if (tblStudentEnrollmentAdd.str_Package_Name.Visible) { // tblStudentEnrollmentAdd.str_Package_Name.Visible (begin)
+    <div id="r_str_Package_Name" @Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_str_Package_Name" for="x_str_Package_Name" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.Caption)@Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Package_Name">
+<input type="@(tblStudentEnrollmentAdd.str_Package_Name.InputTextType)" name="x_str_Package_Name" id="x_str_Package_Name" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" value="@Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.str_Package_Name.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.str_Package_Name.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.EditAttributes) aria-describedby="x_str_Package_Name_help">
+@Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.str_Package_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.str_Package_Name.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_PackageCR_Id.Visible) { // tblStudentEnrollmentAdd.int_PackageCR_Id.Visible (begin)
+    <div id="r_int_PackageCR_Id" @Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_PackageCR_Id" for="x_int_PackageCR_Id" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_PackageCR_Id">
+    <select
+        id="x_int_PackageCR_Id"
+        name="x_int_PackageCR_Id"
+        class="form-select ew-select@(tblStudentEnrollmentAdd.int_PackageCR_Id.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentadd_x_int_PackageCR_Id"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_PackageCR_Id"
+        data-value-separator="@(tblStudentEnrollmentAdd.int_PackageCR_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentAdd.int_PackageCR_Id.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.EditAttributes)>
+        @(tblStudentEnrollmentAdd.int_PackageCR_Id.SelectOptionListHtml("x_int_PackageCR_Id"))
+    </select>
+    @Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_PackageCR_Id.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblStudentEnrollmentadd", function() {
+    var options = { name: "x_int_PackageCR_Id", selectId: "ftblStudentEnrollmentadd_x_int_PackageCR_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentadd.lists.int_PackageCR_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_PackageCR_Id", form: "ftblStudentEnrollmentadd" };
+    } else {
+        options.ajax = { id: "x_int_PackageCR_Id", form: "ftblStudentEnrollmentadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_PackageCR_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_PackageCR_Id.Visible (end) *@
+@if (tblStudentEnrollmentAdd.date_Created.Visible) { // tblStudentEnrollmentAdd.date_Created.Visible (begin)
+    <div id="r_date_Created" @Html.Raw(tblStudentEnrollmentAdd.date_Created.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_date_Created" for="x_date_Created" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.date_Created.Caption)@Html.Raw(tblStudentEnrollmentAdd.date_Created.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.date_Created.CellAttributes)>
+<span id="el_tblStudentEnrollment_date_Created">
+<input type="@(tblStudentEnrollmentAdd.date_Created.InputTextType)" name="x_date_Created" id="x_date_Created" data-table="tblStudentEnrollment" data-field="x_date_Created" value="@Html.Raw(tblStudentEnrollmentAdd.date_Created.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.date_Created.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.date_Created.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.date_Created.EditAttributes) aria-describedby="x_date_Created_help">
+@Html.Raw(tblStudentEnrollmentAdd.date_Created.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.date_Created.GetErrorMessage())</div>
+@if (!tblStudentEnrollmentAdd.date_Created.ReadOnly && !tblStudentEnrollmentAdd.date_Created.Disabled && !tblStudentEnrollmentAdd.date_Created.EditAttrs.Is("readonly") && !tblStudentEnrollmentAdd.date_Created.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblStudentEnrollmentadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblStudentEnrollmentadd", "x_date_Created", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.date_Created.Visible (end) *@
+@if (tblStudentEnrollmentAdd.date_Modified.Visible) { // tblStudentEnrollmentAdd.date_Modified.Visible (begin)
+    <div id="r_date_Modified" @Html.Raw(tblStudentEnrollmentAdd.date_Modified.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_date_Modified" for="x_date_Modified" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.date_Modified.Caption)@Html.Raw(tblStudentEnrollmentAdd.date_Modified.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.date_Modified.CellAttributes)>
+<span id="el_tblStudentEnrollment_date_Modified">
+<input type="@(tblStudentEnrollmentAdd.date_Modified.InputTextType)" name="x_date_Modified" id="x_date_Modified" data-table="tblStudentEnrollment" data-field="x_date_Modified" value="@Html.Raw(tblStudentEnrollmentAdd.date_Modified.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.date_Modified.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.date_Modified.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.date_Modified.EditAttributes) aria-describedby="x_date_Modified_help">
+@Html.Raw(tblStudentEnrollmentAdd.date_Modified.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.date_Modified.GetErrorMessage())</div>
+@if (!tblStudentEnrollmentAdd.date_Modified.ReadOnly && !tblStudentEnrollmentAdd.date_Modified.Disabled && !tblStudentEnrollmentAdd.date_Modified.EditAttrs.Is("readonly") && !tblStudentEnrollmentAdd.date_Modified.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblStudentEnrollmentadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblStudentEnrollmentadd", "x_date_Modified", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.date_Modified.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_Created_By.Visible) { // tblStudentEnrollmentAdd.int_Created_By.Visible (begin)
+    <div id="r_int_Created_By" @Html.Raw(tblStudentEnrollmentAdd.int_Created_By.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_Created_By" for="x_int_Created_By" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_Created_By.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_Created_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_Created_By.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_Created_By">
+<input type="@(tblStudentEnrollmentAdd.int_Created_By.InputTextType)" name="x_int_Created_By" id="x_int_Created_By" data-table="tblStudentEnrollment" data-field="x_int_Created_By" value="@Html.Raw(tblStudentEnrollmentAdd.int_Created_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_Created_By.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_Created_By.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_Created_By.EditAttributes) aria-describedby="x_int_Created_By_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_Created_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_Created_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_Created_By.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_Modified_By.Visible) { // tblStudentEnrollmentAdd.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" @Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_Modified_By" for="x_int_Modified_By" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_Modified_By">
+<input type="@(tblStudentEnrollmentAdd.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblStudentEnrollment" data-field="x_int_Modified_By" value="@Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_Modified_By.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.EditAttributes) aria-describedby="x_int_Modified_By_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_Modified_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_Modified_By.Visible (end) *@
+@if (tblStudentEnrollmentAdd.str_PurchaseAmount.Visible) { // tblStudentEnrollmentAdd.str_PurchaseAmount.Visible (begin)
+    <div id="r_str_PurchaseAmount" @Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_str_PurchaseAmount" for="x_str_PurchaseAmount" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.Caption)@Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_PurchaseAmount">
+<input type="@(tblStudentEnrollmentAdd.str_PurchaseAmount.InputTextType)" name="x_str_PurchaseAmount" id="x_str_PurchaseAmount" data-table="tblStudentEnrollment" data-field="x_str_PurchaseAmount" value="@Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.str_PurchaseAmount.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.str_PurchaseAmount.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.EditAttributes) aria-describedby="x_str_PurchaseAmount_help">
+@Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.str_PurchaseAmount.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.str_PurchaseAmount.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_ApptId.Visible) { // tblStudentEnrollmentAdd.int_ApptId.Visible (begin)
+    <div id="r_int_ApptId" @Html.Raw(tblStudentEnrollmentAdd.int_ApptId.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_ApptId" for="x_int_ApptId" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_ApptId.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_ApptId.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_ApptId.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_ApptId">
+<input type="@(tblStudentEnrollmentAdd.int_ApptId.InputTextType)" name="x_int_ApptId" id="x_int_ApptId" data-table="tblStudentEnrollment" data-field="x_int_ApptId" value="@Html.Raw(tblStudentEnrollmentAdd.int_ApptId.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_ApptId.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_ApptId.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_ApptId.EditAttributes) aria-describedby="x_int_ApptId_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_ApptId.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_ApptId.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_ApptId.Visible (end) *@
+@if (tblStudentEnrollmentAdd.course.Visible) { // tblStudentEnrollmentAdd.course.Visible (begin)
+    <div id="r_course" @Html.Raw(tblStudentEnrollmentAdd.course.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_course" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.course.Caption)@Html.Raw(tblStudentEnrollmentAdd.course.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.course.CellAttributes)>
+<span id="el_tblStudentEnrollment_course">
+<span>@{
+    if (IsRTL) {
+        tblStudentEnrollmentAdd.course.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_course" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_course" id="sv_x_course" value="@(RemoveHtml(ConvertToString(tblStudentEnrollmentAdd.course.EditValue)))" autocomplete="off" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.course.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.course.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.course.FormatPattern)" @Html.Raw(tblStudentEnrollmentAdd.course.EditAttributes) aria-describedby="x_course_help">
+</span>
+<selection-list hidden class="form-control" data-table="tblStudentEnrollment" data-field="x_course" data-input="sv_x_course" data-value-separator="@(tblStudentEnrollmentAdd.course.DisplayValueSeparatorAttribute)" name="x_course" id="x_course" value="@(HtmlEncode(tblStudentEnrollmentAdd.course.CurrentValue))"></selection-list>
+@Html.Raw(tblStudentEnrollmentAdd.course.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.course.GetErrorMessage())</div>
+<script>
+loadjs.ready(["ftblStudentEnrollmentadd"], function() {
+    ftblStudentEnrollmentadd.createAutoSuggest(Object.assign({"id":"x_course","forceSelect":false}, { lookupAllDisplayFields: @(tblStudentEnrollmentAdd.course.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblStudentEnrollment.fields.course.autoSuggestOptions));
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.course.Visible (end) *@
+@if (tblStudentEnrollmentAdd.institution.Visible) { // tblStudentEnrollmentAdd.institution.Visible (begin)
+    <div id="r_institution" @Html.Raw(tblStudentEnrollmentAdd.institution.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_institution" for="x_institution" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.institution.Caption)@Html.Raw(tblStudentEnrollmentAdd.institution.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.institution.CellAttributes)>
+<span id="el_tblStudentEnrollment_institution">
+<input type="@(tblStudentEnrollmentAdd.institution.InputTextType)" name="x_institution" id="x_institution" data-table="tblStudentEnrollment" data-field="x_institution" value="@Html.Raw(tblStudentEnrollmentAdd.institution.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.institution.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.institution.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.institution.EditAttributes) aria-describedby="x_institution_help">
+@Html.Raw(tblStudentEnrollmentAdd.institution.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.institution.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.institution.Visible (end) *@
+@if (tblStudentEnrollmentAdd.str_Notes.Visible) { // tblStudentEnrollmentAdd.str_Notes.Visible (begin)
+    <div id="r_str_Notes" @Html.Raw(tblStudentEnrollmentAdd.str_Notes.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_str_Notes" for="x_str_Notes" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.str_Notes.Caption)@Html.Raw(tblStudentEnrollmentAdd.str_Notes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.str_Notes.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Notes">
+<input type="@(tblStudentEnrollmentAdd.str_Notes.InputTextType)" name="x_str_Notes" id="x_str_Notes" data-table="tblStudentEnrollment" data-field="x_str_Notes" value="@Html.Raw(tblStudentEnrollmentAdd.str_Notes.EditValue)" size="30" maxlength="1200" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.str_Notes.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.str_Notes.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.str_Notes.EditAttributes) aria-describedby="x_str_Notes_help">
+@Html.Raw(tblStudentEnrollmentAdd.str_Notes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.str_Notes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.str_Notes.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_SoldBy.Visible) { // tblStudentEnrollmentAdd.int_SoldBy.Visible (begin)
+    <div id="r_int_SoldBy" @Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_SoldBy" for="x_int_SoldBy" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_SoldBy">
+<input type="@(tblStudentEnrollmentAdd.int_SoldBy.InputTextType)" name="x_int_SoldBy" id="x_int_SoldBy" data-table="tblStudentEnrollment" data-field="x_int_SoldBy" value="@Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_SoldBy.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_SoldBy.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.EditAttributes) aria-describedby="x_int_SoldBy_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_SoldBy.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_SoldBy.Visible (end) *@
+@if (tblStudentEnrollmentAdd.int_Bill_ID.Visible) { // tblStudentEnrollmentAdd.int_Bill_ID.Visible (begin)
+    <div id="r_int_Bill_ID" @Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_int_Bill_ID" for="x_int_Bill_ID" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.Caption)@Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_Bill_ID">
+<input type="@(tblStudentEnrollmentAdd.int_Bill_ID.InputTextType)" name="x_int_Bill_ID" id="x_int_Bill_ID" data-table="tblStudentEnrollment" data-field="x_int_Bill_ID" value="@Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.int_Bill_ID.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.int_Bill_ID.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.EditAttributes) aria-describedby="x_int_Bill_ID_help">
+@Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.int_Bill_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.int_Bill_ID.Visible (end) *@
+@if (tblStudentEnrollmentAdd.str_Amount_Pay.Visible) { // tblStudentEnrollmentAdd.str_Amount_Pay.Visible (begin)
+    <div id="r_str_Amount_Pay" @Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_str_Amount_Pay" for="x_str_Amount_Pay" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.Caption)@Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Amount_Pay">
+<input type="@(tblStudentEnrollmentAdd.str_Amount_Pay.InputTextType)" name="x_str_Amount_Pay" id="x_str_Amount_Pay" data-table="tblStudentEnrollment" data-field="x_str_Amount_Pay" value="@Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.str_Amount_Pay.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.str_Amount_Pay.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.EditAttributes) aria-describedby="x_str_Amount_Pay_help">
+@Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.str_Amount_Pay.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.str_Amount_Pay.Visible (end) *@
+@if (tblStudentEnrollmentAdd.UniqueIdx.Visible) { // tblStudentEnrollmentAdd.UniqueIdx.Visible (begin)
+    <div id="r_UniqueIdx" @Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.RowAttributes)>
+        <label id="elh_tblStudentEnrollment_UniqueIdx" for="x_UniqueIdx" class="@(tblStudentEnrollmentAdd.LeftColumnClass)">@Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.Caption)@Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentEnrollmentAdd.RightColumnClass)"><div @Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.CellAttributes)>
+<span id="el_tblStudentEnrollment_UniqueIdx">
+<input type="@(tblStudentEnrollmentAdd.UniqueIdx.InputTextType)" name="x_UniqueIdx" id="x_UniqueIdx" data-table="tblStudentEnrollment" data-field="x_UniqueIdx" value="@Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.EditValue)" size="30" maxlength="261" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAdd.UniqueIdx.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAdd.UniqueIdx.FormatPattern)"@Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.EditAttributes) aria-describedby="x_UniqueIdx_help">
+@Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAdd.UniqueIdx.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAdd.UniqueIdx.Visible (end) *@
+</div><!-- /page* -->
+@{ tblStudentEnrollmentAdd.CloseRecordset(); }
+@Html.Raw(tblStudentEnrollmentAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblStudentEnrollmentAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblStudentEnrollmentadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblStudentEnrollmentadd" data-href="@AppPath(tblStudentEnrollmentAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblStudentEnrollmentAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblStudentEnrollmentAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudentEnrollment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

@@ -1,0 +1,631 @@
+@if (tblProductInfoList.ModalGridAdd && tblProductInfoList.IsGridAdd || tblProductInfoList.ModalGridEdit && tblProductInfoList.IsGridEdit || tblProductInfoList.ModalMultiEdit && tblProductInfoList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblProductInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblProductInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblProductInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblProductInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblProductInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblProductInfoList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblProductInfoList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblProductInfoList.TableGridClass)">
+@if (!tblProductInfoList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblProductInfoList.IsGridAdd && !(tblProductInfoList.IsGridEdit && tblProductInfoList.ModalGridEdit) && !tblProductInfoList.IsMultiEdit) {
+@Html.Raw(tblProductInfoList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblProductInfoList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblProductInfoList.FormName)" id="@(tblProductInfoList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblProductInfoList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblProductInfoList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblProductInfo" class="card-body ew-grid-middle-panel @(tblProductInfoList.TableContainerClass)" style="@(tblProductInfoList.TableContainerStyle)">
+@if (tblProductInfoList.TotalRecords > 0 || tblProductInfoList.IsGridEdit || tblProductInfoList.IsMultiEdit) {
+<table id="tbl_tblProductInfolist" class="@(tblProductInfoList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblProductInfoList.RowType = RowType.Header;
+
+    // Render list options
+    await tblProductInfoList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblProductInfoList.ListOptions.RenderHeader("left")
+@if (tblProductInfoList.int_Product_Id.Visible) { // tblProductInfoList.int_Product_Id.Visible (begin)
+        <th data-name="int_Product_Id" class="@(tblProductInfoList.int_Product_Id.HeaderCellClass)"><div id="elh_tblProductInfo_int_Product_Id" class="tblProductInfo_int_Product_Id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Product_Id))</div></th>
+} @* tblProductInfoList.int_Product_Id.Visible (end) *@
+@if (tblProductInfoList.str_Product_Name.Visible) { // tblProductInfoList.str_Product_Name.Visible (begin)
+        <th data-name="str_Product_Name" class="@(tblProductInfoList.str_Product_Name.HeaderCellClass)"><div id="elh_tblProductInfo_str_Product_Name" class="tblProductInfo_str_Product_Name">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Product_Name))</div></th>
+} @* tblProductInfoList.str_Product_Name.Visible (end) *@
+@if (tblProductInfoList.str_Item_Code.Visible) { // tblProductInfoList.str_Item_Code.Visible (begin)
+        <th data-name="str_Item_Code" class="@(tblProductInfoList.str_Item_Code.HeaderCellClass)"><div id="elh_tblProductInfo_str_Item_Code" class="tblProductInfo_str_Item_Code">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Item_Code))</div></th>
+} @* tblProductInfoList.str_Item_Code.Visible (end) *@
+@if (tblProductInfoList.mny_Price.Visible) { // tblProductInfoList.mny_Price.Visible (begin)
+        <th data-name="mny_Price" class="@(tblProductInfoList.mny_Price.HeaderCellClass)"><div id="elh_tblProductInfo_mny_Price" class="tblProductInfo_mny_Price">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.mny_Price))</div></th>
+} @* tblProductInfoList.mny_Price.Visible (end) *@
+@if (tblProductInfoList.bit_IsTaxable.Visible) { // tblProductInfoList.bit_IsTaxable.Visible (begin)
+        <th data-name="bit_IsTaxable" class="@(tblProductInfoList.bit_IsTaxable.HeaderCellClass)"><div id="elh_tblProductInfo_bit_IsTaxable" class="tblProductInfo_bit_IsTaxable">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_IsTaxable))</div></th>
+} @* tblProductInfoList.bit_IsTaxable.Visible (end) *@
+@if (tblProductInfoList.str_Web_Description.Visible) { // tblProductInfoList.str_Web_Description.Visible (begin)
+        <th data-name="str_Web_Description" class="@(tblProductInfoList.str_Web_Description.HeaderCellClass)"><div id="elh_tblProductInfo_str_Web_Description" class="tblProductInfo_str_Web_Description">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Web_Description))</div></th>
+} @* tblProductInfoList.str_Web_Description.Visible (end) *@
+@if (tblProductInfoList.dec_StateTax.Visible) { // tblProductInfoList.dec_StateTax.Visible (begin)
+        <th data-name="dec_StateTax" class="@(tblProductInfoList.dec_StateTax.HeaderCellClass)"><div id="elh_tblProductInfo_dec_StateTax" class="tblProductInfo_dec_StateTax">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.dec_StateTax))</div></th>
+} @* tblProductInfoList.dec_StateTax.Visible (end) *@
+@if (tblProductInfoList.dec_AddTax.Visible) { // tblProductInfoList.dec_AddTax.Visible (begin)
+        <th data-name="dec_AddTax" class="@(tblProductInfoList.dec_AddTax.HeaderCellClass)"><div id="elh_tblProductInfo_dec_AddTax" class="tblProductInfo_dec_AddTax">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.dec_AddTax))</div></th>
+} @* tblProductInfoList.dec_AddTax.Visible (end) *@
+@if (tblProductInfoList.mny_TotalPrice.Visible) { // tblProductInfoList.mny_TotalPrice.Visible (begin)
+        <th data-name="mny_TotalPrice" class="@(tblProductInfoList.mny_TotalPrice.HeaderCellClass)"><div id="elh_tblProductInfo_mny_TotalPrice" class="tblProductInfo_mny_TotalPrice">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.mny_TotalPrice))</div></th>
+} @* tblProductInfoList.mny_TotalPrice.Visible (end) *@
+@if (tblProductInfoList.int_Product_Type.Visible) { // tblProductInfoList.int_Product_Type.Visible (begin)
+        <th data-name="int_Product_Type" class="@(tblProductInfoList.int_Product_Type.HeaderCellClass)"><div id="elh_tblProductInfo_int_Product_Type" class="tblProductInfo_int_Product_Type">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Product_Type))</div></th>
+} @* tblProductInfoList.int_Product_Type.Visible (end) *@
+@if (tblProductInfoList.int_Product_Sub_Type.Visible) { // tblProductInfoList.int_Product_Sub_Type.Visible (begin)
+        <th data-name="int_Product_Sub_Type" class="@(tblProductInfoList.int_Product_Sub_Type.HeaderCellClass)"><div id="elh_tblProductInfo_int_Product_Sub_Type" class="tblProductInfo_int_Product_Sub_Type">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Product_Sub_Type))</div></th>
+} @* tblProductInfoList.int_Product_Sub_Type.Visible (end) *@
+@if (tblProductInfoList.int_Status.Visible) { // tblProductInfoList.int_Status.Visible (begin)
+        <th data-name="int_Status" class="@(tblProductInfoList.int_Status.HeaderCellClass)"><div id="elh_tblProductInfo_int_Status" class="tblProductInfo_int_Status">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Status))</div></th>
+} @* tblProductInfoList.int_Status.Visible (end) *@
+@if (tblProductInfoList.bit_Is_Web_Purchase.Visible) { // tblProductInfoList.bit_Is_Web_Purchase.Visible (begin)
+        <th data-name="bit_Is_Web_Purchase" class="@(tblProductInfoList.bit_Is_Web_Purchase.HeaderCellClass)"><div id="elh_tblProductInfo_bit_Is_Web_Purchase" class="tblProductInfo_bit_Is_Web_Purchase">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_Is_Web_Purchase))</div></th>
+} @* tblProductInfoList.bit_Is_Web_Purchase.Visible (end) *@
+@if (tblProductInfoList.str_BTW_Hours.Visible) { // tblProductInfoList.str_BTW_Hours.Visible (begin)
+        <th data-name="str_BTW_Hours" class="@(tblProductInfoList.str_BTW_Hours.HeaderCellClass)"><div id="elh_tblProductInfo_str_BTW_Hours" class="tblProductInfo_str_BTW_Hours">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_BTW_Hours))</div></th>
+} @* tblProductInfoList.str_BTW_Hours.Visible (end) *@
+@if (tblProductInfoList.str_Hour.Visible) { // tblProductInfoList.str_Hour.Visible (begin)
+        <th data-name="str_Hour" class="@(tblProductInfoList.str_Hour.HeaderCellClass)"><div id="elh_tblProductInfo_str_Hour" class="tblProductInfo_str_Hour">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Hour))</div></th>
+} @* tblProductInfoList.str_Hour.Visible (end) *@
+@if (tblProductInfoList.Str_Minutes.Visible) { // tblProductInfoList.Str_Minutes.Visible (begin)
+        <th data-name="Str_Minutes" class="@(tblProductInfoList.Str_Minutes.HeaderCellClass)"><div id="elh_tblProductInfo_Str_Minutes" class="tblProductInfo_Str_Minutes">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.Str_Minutes))</div></th>
+} @* tblProductInfoList.Str_Minutes.Visible (end) *@
+@if (tblProductInfoList.str_Appointment_Duration.Visible) { // tblProductInfoList.str_Appointment_Duration.Visible (begin)
+        <th data-name="str_Appointment_Duration" class="@(tblProductInfoList.str_Appointment_Duration.HeaderCellClass)"><div id="elh_tblProductInfo_str_Appointment_Duration" class="tblProductInfo_str_Appointment_Duration">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Appointment_Duration))</div></th>
+} @* tblProductInfoList.str_Appointment_Duration.Visible (end) *@
+@if (tblProductInfoList.str_Notes.Visible) { // tblProductInfoList.str_Notes.Visible (begin)
+        <th data-name="str_Notes" class="@(tblProductInfoList.str_Notes.HeaderCellClass)"><div id="elh_tblProductInfo_str_Notes" class="tblProductInfo_str_Notes">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Notes))</div></th>
+} @* tblProductInfoList.str_Notes.Visible (end) *@
+@if (tblProductInfoList.int_Created_By.Visible) { // tblProductInfoList.int_Created_By.Visible (begin)
+        <th data-name="int_Created_By" class="@(tblProductInfoList.int_Created_By.HeaderCellClass)"><div id="elh_tblProductInfo_int_Created_By" class="tblProductInfo_int_Created_By">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Created_By))</div></th>
+} @* tblProductInfoList.int_Created_By.Visible (end) *@
+@if (tblProductInfoList.int_Modified_By.Visible) { // tblProductInfoList.int_Modified_By.Visible (begin)
+        <th data-name="int_Modified_By" class="@(tblProductInfoList.int_Modified_By.HeaderCellClass)"><div id="elh_tblProductInfo_int_Modified_By" class="tblProductInfo_int_Modified_By">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Modified_By))</div></th>
+} @* tblProductInfoList.int_Modified_By.Visible (end) *@
+@if (tblProductInfoList.date_Created.Visible) { // tblProductInfoList.date_Created.Visible (begin)
+        <th data-name="date_Created" class="@(tblProductInfoList.date_Created.HeaderCellClass)"><div id="elh_tblProductInfo_date_Created" class="tblProductInfo_date_Created">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.date_Created))</div></th>
+} @* tblProductInfoList.date_Created.Visible (end) *@
+@if (tblProductInfoList.date_Modified.Visible) { // tblProductInfoList.date_Modified.Visible (begin)
+        <th data-name="date_Modified" class="@(tblProductInfoList.date_Modified.HeaderCellClass)"><div id="elh_tblProductInfo_date_Modified" class="tblProductInfo_date_Modified">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.date_Modified))</div></th>
+} @* tblProductInfoList.date_Modified.Visible (end) *@
+@if (tblProductInfoList.bit_IsDeleted.Visible) { // tblProductInfoList.bit_IsDeleted.Visible (begin)
+        <th data-name="bit_IsDeleted" class="@(tblProductInfoList.bit_IsDeleted.HeaderCellClass)"><div id="elh_tblProductInfo_bit_IsDeleted" class="tblProductInfo_bit_IsDeleted">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_IsDeleted))</div></th>
+} @* tblProductInfoList.bit_IsDeleted.Visible (end) *@
+@if (tblProductInfoList.int_Dollar.Visible) { // tblProductInfoList.int_Dollar.Visible (begin)
+        <th data-name="int_Dollar" class="@(tblProductInfoList.int_Dollar.HeaderCellClass)"><div id="elh_tblProductInfo_int_Dollar" class="tblProductInfo_int_Dollar">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Dollar))</div></th>
+} @* tblProductInfoList.int_Dollar.Visible (end) *@
+@if (tblProductInfoList.bit_PortalPurchase.Visible) { // tblProductInfoList.bit_PortalPurchase.Visible (begin)
+        <th data-name="bit_PortalPurchase" class="@(tblProductInfoList.bit_PortalPurchase.HeaderCellClass)"><div id="elh_tblProductInfo_bit_PortalPurchase" class="tblProductInfo_bit_PortalPurchase">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_PortalPurchase))</div></th>
+} @* tblProductInfoList.bit_PortalPurchase.Visible (end) *@
+@if (tblProductInfoList.str_WebName.Visible) { // tblProductInfoList.str_WebName.Visible (begin)
+        <th data-name="str_WebName" class="@(tblProductInfoList.str_WebName.HeaderCellClass)"><div id="elh_tblProductInfo_str_WebName" class="tblProductInfo_str_WebName">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_WebName))</div></th>
+} @* tblProductInfoList.str_WebName.Visible (end) *@
+@if (tblProductInfoList.bit_ExtraChk1.Visible) { // tblProductInfoList.bit_ExtraChk1.Visible (begin)
+        <th data-name="bit_ExtraChk1" class="@(tblProductInfoList.bit_ExtraChk1.HeaderCellClass)"><div id="elh_tblProductInfo_bit_ExtraChk1" class="tblProductInfo_bit_ExtraChk1">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_ExtraChk1))</div></th>
+} @* tblProductInfoList.bit_ExtraChk1.Visible (end) *@
+@if (tblProductInfoList.bit_ExtraChk2.Visible) { // tblProductInfoList.bit_ExtraChk2.Visible (begin)
+        <th data-name="bit_ExtraChk2" class="@(tblProductInfoList.bit_ExtraChk2.HeaderCellClass)"><div id="elh_tblProductInfo_bit_ExtraChk2" class="tblProductInfo_bit_ExtraChk2">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_ExtraChk2))</div></th>
+} @* tblProductInfoList.bit_ExtraChk2.Visible (end) *@
+@if (tblProductInfoList.str_ExtraDrpDown1.Visible) { // tblProductInfoList.str_ExtraDrpDown1.Visible (begin)
+        <th data-name="str_ExtraDrpDown1" class="@(tblProductInfoList.str_ExtraDrpDown1.HeaderCellClass)"><div id="elh_tblProductInfo_str_ExtraDrpDown1" class="tblProductInfo_str_ExtraDrpDown1">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_ExtraDrpDown1))</div></th>
+} @* tblProductInfoList.str_ExtraDrpDown1.Visible (end) *@
+@if (tblProductInfoList.str_ExtraDrpDown2.Visible) { // tblProductInfoList.str_ExtraDrpDown2.Visible (begin)
+        <th data-name="str_ExtraDrpDown2" class="@(tblProductInfoList.str_ExtraDrpDown2.HeaderCellClass)"><div id="elh_tblProductInfo_str_ExtraDrpDown2" class="tblProductInfo_str_ExtraDrpDown2">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_ExtraDrpDown2))</div></th>
+} @* tblProductInfoList.str_ExtraDrpDown2.Visible (end) *@
+@if (tblProductInfoList.str_Extratxt1.Visible) { // tblProductInfoList.str_Extratxt1.Visible (begin)
+        <th data-name="str_Extratxt1" class="@(tblProductInfoList.str_Extratxt1.HeaderCellClass)"><div id="elh_tblProductInfo_str_Extratxt1" class="tblProductInfo_str_Extratxt1">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Extratxt1))</div></th>
+} @* tblProductInfoList.str_Extratxt1.Visible (end) *@
+@if (tblProductInfoList.str_Extratxt2.Visible) { // tblProductInfoList.str_Extratxt2.Visible (begin)
+        <th data-name="str_Extratxt2" class="@(tblProductInfoList.str_Extratxt2.HeaderCellClass)"><div id="elh_tblProductInfo_str_Extratxt2" class="tblProductInfo_str_Extratxt2">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Extratxt2))</div></th>
+} @* tblProductInfoList.str_Extratxt2.Visible (end) *@
+@if (tblProductInfoList.str_OBHours.Visible) { // tblProductInfoList.str_OBHours.Visible (begin)
+        <th data-name="str_OBHours" class="@(tblProductInfoList.str_OBHours.HeaderCellClass)"><div id="elh_tblProductInfo_str_OBHours" class="tblProductInfo_str_OBHours">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_OBHours))</div></th>
+} @* tblProductInfoList.str_OBHours.Visible (end) *@
+@if (tblProductInfoList.str_OBMinutes.Visible) { // tblProductInfoList.str_OBMinutes.Visible (begin)
+        <th data-name="str_OBMinutes" class="@(tblProductInfoList.str_OBMinutes.HeaderCellClass)"><div id="elh_tblProductInfo_str_OBMinutes" class="tblProductInfo_str_OBMinutes">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_OBMinutes))</div></th>
+} @* tblProductInfoList.str_OBMinutes.Visible (end) *@
+@if (tblProductInfoList.str_TotalOB_Mins.Visible) { // tblProductInfoList.str_TotalOB_Mins.Visible (begin)
+        <th data-name="str_TotalOB_Mins" class="@(tblProductInfoList.str_TotalOB_Mins.HeaderCellClass)"><div id="elh_tblProductInfo_str_TotalOB_Mins" class="tblProductInfo_str_TotalOB_Mins">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_TotalOB_Mins))</div></th>
+} @* tblProductInfoList.str_TotalOB_Mins.Visible (end) *@
+@if (tblProductInfoList.LMSProductID.Visible) { // tblProductInfoList.LMSProductID.Visible (begin)
+        <th data-name="LMSProductID" class="@(tblProductInfoList.LMSProductID.HeaderCellClass)"><div id="elh_tblProductInfo_LMSProductID" class="tblProductInfo_LMSProductID">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.LMSProductID))</div></th>
+} @* tblProductInfoList.LMSProductID.Visible (end) *@
+@if (tblProductInfoList.LMSNoOfAttempts.Visible) { // tblProductInfoList.LMSNoOfAttempts.Visible (begin)
+        <th data-name="LMSNoOfAttempts" class="@(tblProductInfoList.LMSNoOfAttempts.HeaderCellClass)"><div id="elh_tblProductInfo_LMSNoOfAttempts" class="tblProductInfo_LMSNoOfAttempts">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.LMSNoOfAttempts))</div></th>
+} @* tblProductInfoList.LMSNoOfAttempts.Visible (end) *@
+@if (tblProductInfoList.int_LMSLinkExpirationDays.Visible) { // tblProductInfoList.int_LMSLinkExpirationDays.Visible (begin)
+        <th data-name="int_LMSLinkExpirationDays" class="@(tblProductInfoList.int_LMSLinkExpirationDays.HeaderCellClass)"><div id="elh_tblProductInfo_int_LMSLinkExpirationDays" class="tblProductInfo_int_LMSLinkExpirationDays">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_LMSLinkExpirationDays))</div></th>
+} @* tblProductInfoList.int_LMSLinkExpirationDays.Visible (end) *@
+@if (tblProductInfoList.IGD_product_id.Visible) { // tblProductInfoList.IGD_product_id.Visible (begin)
+        <th data-name="IGD_product_id" class="@(tblProductInfoList.IGD_product_id.HeaderCellClass)"><div id="elh_tblProductInfo_IGD_product_id" class="tblProductInfo_IGD_product_id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.IGD_product_id))</div></th>
+} @* tblProductInfoList.IGD_product_id.Visible (end) *@
+@if (tblProductInfoList.IEC_product_id.Visible) { // tblProductInfoList.IEC_product_id.Visible (begin)
+        <th data-name="IEC_product_id" class="@(tblProductInfoList.IEC_product_id.HeaderCellClass)"><div id="elh_tblProductInfo_IEC_product_id" class="tblProductInfo_IEC_product_id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.IEC_product_id))</div></th>
+} @* tblProductInfoList.IEC_product_id.Visible (end) *@
+@if (tblProductInfoList.Somastream_Product_ID.Visible) { // tblProductInfoList.Somastream_Product_ID.Visible (begin)
+        <th data-name="Somastream_Product_ID" class="@(tblProductInfoList.Somastream_Product_ID.HeaderCellClass)"><div id="elh_tblProductInfo_Somastream_Product_ID" class="tblProductInfo_Somastream_Product_ID">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.Somastream_Product_ID))</div></th>
+} @* tblProductInfoList.Somastream_Product_ID.Visible (end) *@
+@if (tblProductInfoList.ProTREAD_Product_ID.Visible) { // tblProductInfoList.ProTREAD_Product_ID.Visible (begin)
+        <th data-name="ProTREAD_Product_ID" class="@(tblProductInfoList.ProTREAD_Product_ID.HeaderCellClass)"><div id="elh_tblProductInfo_ProTREAD_Product_ID" class="tblProductInfo_ProTREAD_Product_ID">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.ProTREAD_Product_ID))</div></th>
+} @* tblProductInfoList.ProTREAD_Product_ID.Visible (end) *@
+@if (tblProductInfoList.ASD_product_id.Visible) { // tblProductInfoList.ASD_product_id.Visible (begin)
+        <th data-name="ASD_product_id" class="@(tblProductInfoList.ASD_product_id.HeaderCellClass)"><div id="elh_tblProductInfo_ASD_product_id" class="tblProductInfo_ASD_product_id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.ASD_product_id))</div></th>
+} @* tblProductInfoList.ASD_product_id.Visible (end) *@
+@if (tblProductInfoList.D2L_product_Id.Visible) { // tblProductInfoList.D2L_product_Id.Visible (begin)
+        <th data-name="D2L_product_Id" class="@(tblProductInfoList.D2L_product_Id.HeaderCellClass)"><div id="elh_tblProductInfo_D2L_product_Id" class="tblProductInfo_D2L_product_Id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.D2L_product_Id))</div></th>
+} @* tblProductInfoList.D2L_product_Id.Visible (end) *@
+@if (tblProductInfoList.int_Course_Duration.Visible) { // tblProductInfoList.int_Course_Duration.Visible (begin)
+        <th data-name="int_Course_Duration" class="@(tblProductInfoList.int_Course_Duration.HeaderCellClass)"><div id="elh_tblProductInfo_int_Course_Duration" class="tblProductInfo_int_Course_Duration">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Course_Duration))</div></th>
+} @* tblProductInfoList.int_Course_Duration.Visible (end) *@
+@if (tblProductInfoList.Moodle_product_Id.Visible) { // tblProductInfoList.Moodle_product_Id.Visible (begin)
+        <th data-name="Moodle_product_Id" class="@(tblProductInfoList.Moodle_product_Id.HeaderCellClass)"><div id="elh_tblProductInfo_Moodle_product_Id" class="tblProductInfo_Moodle_product_Id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.Moodle_product_Id))</div></th>
+} @* tblProductInfoList.Moodle_product_Id.Visible (end) *@
+@* Render list options (header, right) *@
+@tblProductInfoList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblProductInfoList.PageNumber)">
+@{
+    await tblProductInfoList.SetupGrid();
+    bool eof = tblProductInfoList.Recordset == null; // DN
+}
+@while (tblProductInfoList.RecordCount < tblProductInfoList.StopRecord || SameString(tblProductInfoList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblProductInfoList.RowIndex, "$rowindex$") &&
+        (!tblProductInfoList.IsGridAdd || tblProductInfoList.CurrentMode == "copy") &&
+        (!((tblProductInfoList.IsCopy || tblProductInfoList.IsAdd) && tblProductInfoList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblProductInfoList.Recordset.ReadAsync();
+    tblProductInfoList.RecordCount++;
+    if (tblProductInfoList.RecordCount >= tblProductInfoList.StartRecord) {
+        await tblProductInfoList.SetupRow();
+    <tr @Html.Raw(tblProductInfoList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblProductInfoList.ListOptions.RenderBody("left", tblProductInfoList.RowCount)
+    @if (tblProductInfoList.int_Product_Id.Visible) { // tblProductInfoList.int_Product_Id.Visible (begin)
+        <td data-name="int_Product_Id" @Html.Raw(tblProductInfoList.int_Product_Id.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Product_Id" class="el_tblProductInfo_int_Product_Id">
+<span @Html.Raw(tblProductInfoList.int_Product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Product_Id.Visible (end) *@
+    @if (tblProductInfoList.str_Product_Name.Visible) { // tblProductInfoList.str_Product_Name.Visible (begin)
+        <td data-name="str_Product_Name" @Html.Raw(tblProductInfoList.str_Product_Name.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Product_Name" class="el_tblProductInfo_str_Product_Name">
+<span @Html.Raw(tblProductInfoList.str_Product_Name.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Product_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Product_Name.Visible (end) *@
+    @if (tblProductInfoList.str_Item_Code.Visible) { // tblProductInfoList.str_Item_Code.Visible (begin)
+        <td data-name="str_Item_Code" @Html.Raw(tblProductInfoList.str_Item_Code.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Item_Code" class="el_tblProductInfo_str_Item_Code">
+<span @Html.Raw(tblProductInfoList.str_Item_Code.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Item_Code.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Item_Code.Visible (end) *@
+    @if (tblProductInfoList.mny_Price.Visible) { // tblProductInfoList.mny_Price.Visible (begin)
+        <td data-name="mny_Price" @Html.Raw(tblProductInfoList.mny_Price.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_mny_Price" class="el_tblProductInfo_mny_Price">
+<span @Html.Raw(tblProductInfoList.mny_Price.ViewAttributes)>
+@Html.Raw(tblProductInfoList.mny_Price.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.mny_Price.Visible (end) *@
+    @if (tblProductInfoList.bit_IsTaxable.Visible) { // tblProductInfoList.bit_IsTaxable.Visible (begin)
+        <td data-name="bit_IsTaxable" @Html.Raw(tblProductInfoList.bit_IsTaxable.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_bit_IsTaxable" class="el_tblProductInfo_bit_IsTaxable">
+<span @Html.Raw(tblProductInfoList.bit_IsTaxable.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsTaxable_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_IsTaxable.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_IsTaxable.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsTaxable_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblProductInfoList.bit_IsTaxable.Visible (end) *@
+    @if (tblProductInfoList.str_Web_Description.Visible) { // tblProductInfoList.str_Web_Description.Visible (begin)
+        <td data-name="str_Web_Description" @Html.Raw(tblProductInfoList.str_Web_Description.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Web_Description" class="el_tblProductInfo_str_Web_Description">
+<span @Html.Raw(tblProductInfoList.str_Web_Description.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Web_Description.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Web_Description.Visible (end) *@
+    @if (tblProductInfoList.dec_StateTax.Visible) { // tblProductInfoList.dec_StateTax.Visible (begin)
+        <td data-name="dec_StateTax" @Html.Raw(tblProductInfoList.dec_StateTax.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_dec_StateTax" class="el_tblProductInfo_dec_StateTax">
+<span @Html.Raw(tblProductInfoList.dec_StateTax.ViewAttributes)>
+@Html.Raw(tblProductInfoList.dec_StateTax.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.dec_StateTax.Visible (end) *@
+    @if (tblProductInfoList.dec_AddTax.Visible) { // tblProductInfoList.dec_AddTax.Visible (begin)
+        <td data-name="dec_AddTax" @Html.Raw(tblProductInfoList.dec_AddTax.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_dec_AddTax" class="el_tblProductInfo_dec_AddTax">
+<span @Html.Raw(tblProductInfoList.dec_AddTax.ViewAttributes)>
+@Html.Raw(tblProductInfoList.dec_AddTax.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.dec_AddTax.Visible (end) *@
+    @if (tblProductInfoList.mny_TotalPrice.Visible) { // tblProductInfoList.mny_TotalPrice.Visible (begin)
+        <td data-name="mny_TotalPrice" @Html.Raw(tblProductInfoList.mny_TotalPrice.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_mny_TotalPrice" class="el_tblProductInfo_mny_TotalPrice">
+<span @Html.Raw(tblProductInfoList.mny_TotalPrice.ViewAttributes)>
+@Html.Raw(tblProductInfoList.mny_TotalPrice.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.mny_TotalPrice.Visible (end) *@
+    @if (tblProductInfoList.int_Product_Type.Visible) { // tblProductInfoList.int_Product_Type.Visible (begin)
+        <td data-name="int_Product_Type" @Html.Raw(tblProductInfoList.int_Product_Type.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Product_Type" class="el_tblProductInfo_int_Product_Type">
+<span @Html.Raw(tblProductInfoList.int_Product_Type.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Type.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Product_Type.Visible (end) *@
+    @if (tblProductInfoList.int_Product_Sub_Type.Visible) { // tblProductInfoList.int_Product_Sub_Type.Visible (begin)
+        <td data-name="int_Product_Sub_Type" @Html.Raw(tblProductInfoList.int_Product_Sub_Type.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Product_Sub_Type" class="el_tblProductInfo_int_Product_Sub_Type">
+<span @Html.Raw(tblProductInfoList.int_Product_Sub_Type.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Sub_Type.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Product_Sub_Type.Visible (end) *@
+    @if (tblProductInfoList.int_Status.Visible) { // tblProductInfoList.int_Status.Visible (begin)
+        <td data-name="int_Status" @Html.Raw(tblProductInfoList.int_Status.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Status" class="el_tblProductInfo_int_Status">
+<span @Html.Raw(tblProductInfoList.int_Status.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Status.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Status.Visible (end) *@
+    @if (tblProductInfoList.bit_Is_Web_Purchase.Visible) { // tblProductInfoList.bit_Is_Web_Purchase.Visible (begin)
+        <td data-name="bit_Is_Web_Purchase" @Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_bit_Is_Web_Purchase" class="el_tblProductInfo_bit_Is_Web_Purchase">
+<span @Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_Is_Web_Purchase_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_Is_Web_Purchase.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_Is_Web_Purchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_Is_Web_Purchase_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblProductInfoList.bit_Is_Web_Purchase.Visible (end) *@
+    @if (tblProductInfoList.str_BTW_Hours.Visible) { // tblProductInfoList.str_BTW_Hours.Visible (begin)
+        <td data-name="str_BTW_Hours" @Html.Raw(tblProductInfoList.str_BTW_Hours.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_BTW_Hours" class="el_tblProductInfo_str_BTW_Hours">
+<span @Html.Raw(tblProductInfoList.str_BTW_Hours.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_BTW_Hours.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_BTW_Hours.Visible (end) *@
+    @if (tblProductInfoList.str_Hour.Visible) { // tblProductInfoList.str_Hour.Visible (begin)
+        <td data-name="str_Hour" @Html.Raw(tblProductInfoList.str_Hour.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Hour" class="el_tblProductInfo_str_Hour">
+<span @Html.Raw(tblProductInfoList.str_Hour.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Hour.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Hour.Visible (end) *@
+    @if (tblProductInfoList.Str_Minutes.Visible) { // tblProductInfoList.Str_Minutes.Visible (begin)
+        <td data-name="Str_Minutes" @Html.Raw(tblProductInfoList.Str_Minutes.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_Str_Minutes" class="el_tblProductInfo_Str_Minutes">
+<span @Html.Raw(tblProductInfoList.Str_Minutes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Str_Minutes.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.Str_Minutes.Visible (end) *@
+    @if (tblProductInfoList.str_Appointment_Duration.Visible) { // tblProductInfoList.str_Appointment_Duration.Visible (begin)
+        <td data-name="str_Appointment_Duration" @Html.Raw(tblProductInfoList.str_Appointment_Duration.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Appointment_Duration" class="el_tblProductInfo_str_Appointment_Duration">
+<span @Html.Raw(tblProductInfoList.str_Appointment_Duration.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Appointment_Duration.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Appointment_Duration.Visible (end) *@
+    @if (tblProductInfoList.str_Notes.Visible) { // tblProductInfoList.str_Notes.Visible (begin)
+        <td data-name="str_Notes" @Html.Raw(tblProductInfoList.str_Notes.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Notes" class="el_tblProductInfo_str_Notes">
+<span @Html.Raw(tblProductInfoList.str_Notes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Notes.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Notes.Visible (end) *@
+    @if (tblProductInfoList.int_Created_By.Visible) { // tblProductInfoList.int_Created_By.Visible (begin)
+        <td data-name="int_Created_By" @Html.Raw(tblProductInfoList.int_Created_By.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Created_By" class="el_tblProductInfo_int_Created_By">
+<span @Html.Raw(tblProductInfoList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Created_By.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Created_By.Visible (end) *@
+    @if (tblProductInfoList.int_Modified_By.Visible) { // tblProductInfoList.int_Modified_By.Visible (begin)
+        <td data-name="int_Modified_By" @Html.Raw(tblProductInfoList.int_Modified_By.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Modified_By" class="el_tblProductInfo_int_Modified_By">
+<span @Html.Raw(tblProductInfoList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Modified_By.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Modified_By.Visible (end) *@
+    @if (tblProductInfoList.date_Created.Visible) { // tblProductInfoList.date_Created.Visible (begin)
+        <td data-name="date_Created" @Html.Raw(tblProductInfoList.date_Created.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_date_Created" class="el_tblProductInfo_date_Created">
+<span @Html.Raw(tblProductInfoList.date_Created.ViewAttributes)>
+@Html.Raw(tblProductInfoList.date_Created.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.date_Created.Visible (end) *@
+    @if (tblProductInfoList.date_Modified.Visible) { // tblProductInfoList.date_Modified.Visible (begin)
+        <td data-name="date_Modified" @Html.Raw(tblProductInfoList.date_Modified.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_date_Modified" class="el_tblProductInfo_date_Modified">
+<span @Html.Raw(tblProductInfoList.date_Modified.ViewAttributes)>
+@Html.Raw(tblProductInfoList.date_Modified.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.date_Modified.Visible (end) *@
+    @if (tblProductInfoList.bit_IsDeleted.Visible) { // tblProductInfoList.bit_IsDeleted.Visible (begin)
+        <td data-name="bit_IsDeleted" @Html.Raw(tblProductInfoList.bit_IsDeleted.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_bit_IsDeleted" class="el_tblProductInfo_bit_IsDeleted">
+<span @Html.Raw(tblProductInfoList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblProductInfoList.bit_IsDeleted.Visible (end) *@
+    @if (tblProductInfoList.int_Dollar.Visible) { // tblProductInfoList.int_Dollar.Visible (begin)
+        <td data-name="int_Dollar" @Html.Raw(tblProductInfoList.int_Dollar.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Dollar" class="el_tblProductInfo_int_Dollar">
+<span @Html.Raw(tblProductInfoList.int_Dollar.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Dollar.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Dollar.Visible (end) *@
+    @if (tblProductInfoList.bit_PortalPurchase.Visible) { // tblProductInfoList.bit_PortalPurchase.Visible (begin)
+        <td data-name="bit_PortalPurchase" @Html.Raw(tblProductInfoList.bit_PortalPurchase.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_bit_PortalPurchase" class="el_tblProductInfo_bit_PortalPurchase">
+<span @Html.Raw(tblProductInfoList.bit_PortalPurchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_PortalPurchase_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_PortalPurchase.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_PortalPurchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_PortalPurchase_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblProductInfoList.bit_PortalPurchase.Visible (end) *@
+    @if (tblProductInfoList.str_WebName.Visible) { // tblProductInfoList.str_WebName.Visible (begin)
+        <td data-name="str_WebName" @Html.Raw(tblProductInfoList.str_WebName.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_WebName" class="el_tblProductInfo_str_WebName">
+<span @Html.Raw(tblProductInfoList.str_WebName.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_WebName.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_WebName.Visible (end) *@
+    @if (tblProductInfoList.bit_ExtraChk1.Visible) { // tblProductInfoList.bit_ExtraChk1.Visible (begin)
+        <td data-name="bit_ExtraChk1" @Html.Raw(tblProductInfoList.bit_ExtraChk1.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_bit_ExtraChk1" class="el_tblProductInfo_bit_ExtraChk1">
+<span @Html.Raw(tblProductInfoList.bit_ExtraChk1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk1_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_ExtraChk1.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_ExtraChk1.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk1_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblProductInfoList.bit_ExtraChk1.Visible (end) *@
+    @if (tblProductInfoList.bit_ExtraChk2.Visible) { // tblProductInfoList.bit_ExtraChk2.Visible (begin)
+        <td data-name="bit_ExtraChk2" @Html.Raw(tblProductInfoList.bit_ExtraChk2.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_bit_ExtraChk2" class="el_tblProductInfo_bit_ExtraChk2">
+<span @Html.Raw(tblProductInfoList.bit_ExtraChk2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk2_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_ExtraChk2.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_ExtraChk2.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk2_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblProductInfoList.bit_ExtraChk2.Visible (end) *@
+    @if (tblProductInfoList.str_ExtraDrpDown1.Visible) { // tblProductInfoList.str_ExtraDrpDown1.Visible (begin)
+        <td data-name="str_ExtraDrpDown1" @Html.Raw(tblProductInfoList.str_ExtraDrpDown1.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_ExtraDrpDown1" class="el_tblProductInfo_str_ExtraDrpDown1">
+<span @Html.Raw(tblProductInfoList.str_ExtraDrpDown1.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_ExtraDrpDown1.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_ExtraDrpDown1.Visible (end) *@
+    @if (tblProductInfoList.str_ExtraDrpDown2.Visible) { // tblProductInfoList.str_ExtraDrpDown2.Visible (begin)
+        <td data-name="str_ExtraDrpDown2" @Html.Raw(tblProductInfoList.str_ExtraDrpDown2.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_ExtraDrpDown2" class="el_tblProductInfo_str_ExtraDrpDown2">
+<span @Html.Raw(tblProductInfoList.str_ExtraDrpDown2.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_ExtraDrpDown2.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_ExtraDrpDown2.Visible (end) *@
+    @if (tblProductInfoList.str_Extratxt1.Visible) { // tblProductInfoList.str_Extratxt1.Visible (begin)
+        <td data-name="str_Extratxt1" @Html.Raw(tblProductInfoList.str_Extratxt1.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Extratxt1" class="el_tblProductInfo_str_Extratxt1">
+<span @Html.Raw(tblProductInfoList.str_Extratxt1.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Extratxt1.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Extratxt1.Visible (end) *@
+    @if (tblProductInfoList.str_Extratxt2.Visible) { // tblProductInfoList.str_Extratxt2.Visible (begin)
+        <td data-name="str_Extratxt2" @Html.Raw(tblProductInfoList.str_Extratxt2.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_Extratxt2" class="el_tblProductInfo_str_Extratxt2">
+<span @Html.Raw(tblProductInfoList.str_Extratxt2.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Extratxt2.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_Extratxt2.Visible (end) *@
+    @if (tblProductInfoList.str_OBHours.Visible) { // tblProductInfoList.str_OBHours.Visible (begin)
+        <td data-name="str_OBHours" @Html.Raw(tblProductInfoList.str_OBHours.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_OBHours" class="el_tblProductInfo_str_OBHours">
+<span @Html.Raw(tblProductInfoList.str_OBHours.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_OBHours.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_OBHours.Visible (end) *@
+    @if (tblProductInfoList.str_OBMinutes.Visible) { // tblProductInfoList.str_OBMinutes.Visible (begin)
+        <td data-name="str_OBMinutes" @Html.Raw(tblProductInfoList.str_OBMinutes.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_OBMinutes" class="el_tblProductInfo_str_OBMinutes">
+<span @Html.Raw(tblProductInfoList.str_OBMinutes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_OBMinutes.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_OBMinutes.Visible (end) *@
+    @if (tblProductInfoList.str_TotalOB_Mins.Visible) { // tblProductInfoList.str_TotalOB_Mins.Visible (begin)
+        <td data-name="str_TotalOB_Mins" @Html.Raw(tblProductInfoList.str_TotalOB_Mins.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_str_TotalOB_Mins" class="el_tblProductInfo_str_TotalOB_Mins">
+<span @Html.Raw(tblProductInfoList.str_TotalOB_Mins.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_TotalOB_Mins.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.str_TotalOB_Mins.Visible (end) *@
+    @if (tblProductInfoList.LMSProductID.Visible) { // tblProductInfoList.LMSProductID.Visible (begin)
+        <td data-name="LMSProductID" @Html.Raw(tblProductInfoList.LMSProductID.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_LMSProductID" class="el_tblProductInfo_LMSProductID">
+<span @Html.Raw(tblProductInfoList.LMSProductID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.LMSProductID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.LMSProductID.Visible (end) *@
+    @if (tblProductInfoList.LMSNoOfAttempts.Visible) { // tblProductInfoList.LMSNoOfAttempts.Visible (begin)
+        <td data-name="LMSNoOfAttempts" @Html.Raw(tblProductInfoList.LMSNoOfAttempts.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_LMSNoOfAttempts" class="el_tblProductInfo_LMSNoOfAttempts">
+<span @Html.Raw(tblProductInfoList.LMSNoOfAttempts.ViewAttributes)>
+@Html.Raw(tblProductInfoList.LMSNoOfAttempts.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.LMSNoOfAttempts.Visible (end) *@
+    @if (tblProductInfoList.int_LMSLinkExpirationDays.Visible) { // tblProductInfoList.int_LMSLinkExpirationDays.Visible (begin)
+        <td data-name="int_LMSLinkExpirationDays" @Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_LMSLinkExpirationDays" class="el_tblProductInfo_int_LMSLinkExpirationDays">
+<span @Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_LMSLinkExpirationDays.Visible (end) *@
+    @if (tblProductInfoList.IGD_product_id.Visible) { // tblProductInfoList.IGD_product_id.Visible (begin)
+        <td data-name="IGD_product_id" @Html.Raw(tblProductInfoList.IGD_product_id.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_IGD_product_id" class="el_tblProductInfo_IGD_product_id">
+<span @Html.Raw(tblProductInfoList.IGD_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.IGD_product_id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.IGD_product_id.Visible (end) *@
+    @if (tblProductInfoList.IEC_product_id.Visible) { // tblProductInfoList.IEC_product_id.Visible (begin)
+        <td data-name="IEC_product_id" @Html.Raw(tblProductInfoList.IEC_product_id.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_IEC_product_id" class="el_tblProductInfo_IEC_product_id">
+<span @Html.Raw(tblProductInfoList.IEC_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.IEC_product_id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.IEC_product_id.Visible (end) *@
+    @if (tblProductInfoList.Somastream_Product_ID.Visible) { // tblProductInfoList.Somastream_Product_ID.Visible (begin)
+        <td data-name="Somastream_Product_ID" @Html.Raw(tblProductInfoList.Somastream_Product_ID.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_Somastream_Product_ID" class="el_tblProductInfo_Somastream_Product_ID">
+<span @Html.Raw(tblProductInfoList.Somastream_Product_ID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Somastream_Product_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.Somastream_Product_ID.Visible (end) *@
+    @if (tblProductInfoList.ProTREAD_Product_ID.Visible) { // tblProductInfoList.ProTREAD_Product_ID.Visible (begin)
+        <td data-name="ProTREAD_Product_ID" @Html.Raw(tblProductInfoList.ProTREAD_Product_ID.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_ProTREAD_Product_ID" class="el_tblProductInfo_ProTREAD_Product_ID">
+<span @Html.Raw(tblProductInfoList.ProTREAD_Product_ID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.ProTREAD_Product_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.ProTREAD_Product_ID.Visible (end) *@
+    @if (tblProductInfoList.ASD_product_id.Visible) { // tblProductInfoList.ASD_product_id.Visible (begin)
+        <td data-name="ASD_product_id" @Html.Raw(tblProductInfoList.ASD_product_id.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_ASD_product_id" class="el_tblProductInfo_ASD_product_id">
+<span @Html.Raw(tblProductInfoList.ASD_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.ASD_product_id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.ASD_product_id.Visible (end) *@
+    @if (tblProductInfoList.D2L_product_Id.Visible) { // tblProductInfoList.D2L_product_Id.Visible (begin)
+        <td data-name="D2L_product_Id" @Html.Raw(tblProductInfoList.D2L_product_Id.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_D2L_product_Id" class="el_tblProductInfo_D2L_product_Id">
+<span @Html.Raw(tblProductInfoList.D2L_product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.D2L_product_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.D2L_product_Id.Visible (end) *@
+    @if (tblProductInfoList.int_Course_Duration.Visible) { // tblProductInfoList.int_Course_Duration.Visible (begin)
+        <td data-name="int_Course_Duration" @Html.Raw(tblProductInfoList.int_Course_Duration.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_int_Course_Duration" class="el_tblProductInfo_int_Course_Duration">
+<span @Html.Raw(tblProductInfoList.int_Course_Duration.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Course_Duration.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.int_Course_Duration.Visible (end) *@
+    @if (tblProductInfoList.Moodle_product_Id.Visible) { // tblProductInfoList.Moodle_product_Id.Visible (begin)
+        <td data-name="Moodle_product_Id" @Html.Raw(tblProductInfoList.Moodle_product_Id.CellAttributes)>
+<span id="el@(tblProductInfoList.RowIndex == "$rowindex$" ? "$rowindex$" : tblProductInfoList.RowCount)_tblProductInfo_Moodle_product_Id" class="el_tblProductInfo_Moodle_product_Id">
+<span @Html.Raw(tblProductInfoList.Moodle_product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Moodle_product_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblProductInfoList.Moodle_product_Id.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblProductInfoList.ListOptions.RenderBody("right", tblProductInfoList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblProductInfoList.RowIndex, "$rowindex$"))
+        tblProductInfoList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblProductInfoList.IsCopy || tblProductInfoList.IsAdd) && tblProductInfoList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblProductInfoList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblProductInfoList.CurrentAction) && !tblProductInfoList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblProductInfoList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

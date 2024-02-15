@@ -1,0 +1,337 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentJourneyAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentJourneyAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentJourneyAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentJourney: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblStudentJourneyadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentJourneyadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["STDJ_ID", [fields.STDJ_ID.visible && fields.STDJ_ID.required ? ew.Validators.required(fields.STDJ_ID.caption) : null, ew.Validators.integer], fields.STDJ_ID.isInvalid],
+            ["FullName", [fields.FullName.visible && fields.FullName.required ? ew.Validators.required(fields.FullName.caption) : null], fields.FullName.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["Number_ID", [fields.Number_ID.visible && fields.Number_ID.required ? ew.Validators.required(fields.Number_ID.caption) : null, ew.Validators.integer], fields.Number_ID.isInvalid],
+            ["Journey_ID", [fields.Journey_ID.visible && fields.Journey_ID.required ? ew.Validators.required(fields.Journey_ID.caption) : null, ew.Validators.integer], fields.Journey_ID.isInvalid],
+            ["Journey", [fields.Journey.visible && fields.Journey.required ? ew.Validators.required(fields.Journey.caption) : null], fields.Journey.isInvalid],
+            ["Start_Date", [fields.Start_Date.visible && fields.Start_Date.required ? ew.Validators.required(fields.Start_Date.caption) : null, ew.Validators.datetime(fields.Start_Date.clientFormatPattern)], fields.Start_Date.isInvalid],
+            ["End_Date", [fields.End_Date.visible && fields.End_Date.required ? ew.Validators.required(fields.End_Date.caption) : null, ew.Validators.datetime(fields.End_Date.clientFormatPattern)], fields.End_Date.isInvalid],
+            ["Total_Days", [fields.Total_Days.visible && fields.Total_Days.required ? ew.Validators.required(fields.Total_Days.caption) : null, ew.Validators.integer], fields.Total_Days.isInvalid],
+            ["Status", [fields.Status.visible && fields.Status.required ? ew.Validators.required(fields.Status.caption) : null], fields.Status.isInvalid],
+            ["Package_Name", [fields.Package_Name.visible && fields.Package_Name.required ? ew.Validators.required(fields.Package_Name.caption) : null], fields.Package_Name.isInvalid],
+            ["Product_Name", [fields.Product_Name.visible && fields.Product_Name.required ? ew.Validators.required(fields.Product_Name.caption) : null], fields.Product_Name.isInvalid],
+            ["Price", [fields.Price.visible && fields.Price.required ? ew.Validators.required(fields.Price.caption) : null, ew.Validators.float], fields.Price.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStudentJourneyAdd.ShowPageHeader()
+@tblStudentJourneyAdd.ShowMessages()
+<form name="ftblStudentJourneyadd" id="ftblStudentJourneyadd" class="@(tblStudentJourneyAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblStudentJourneyAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblStudentJourneyAdd.OldKeyName)" value="@Html.Raw(tblStudentJourneyAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblStudentJourneyAdd.STDJ_ID.Visible) { // tblStudentJourneyAdd.STDJ_ID.Visible (begin)
+    <div id="r_STDJ_ID" @Html.Raw(tblStudentJourneyAdd.STDJ_ID.RowAttributes)>
+        <label id="elh_tblStudentJourney_STDJ_ID" for="x_STDJ_ID" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.STDJ_ID.Caption)@Html.Raw(tblStudentJourneyAdd.STDJ_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.STDJ_ID.CellAttributes)>
+<span id="el_tblStudentJourney_STDJ_ID">
+<input type="@(tblStudentJourneyAdd.STDJ_ID.InputTextType)" name="x_STDJ_ID" id="x_STDJ_ID" data-table="tblStudentJourney" data-field="x_STDJ_ID" value="@Html.Raw(tblStudentJourneyAdd.STDJ_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.STDJ_ID.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.STDJ_ID.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.STDJ_ID.EditAttributes) aria-describedby="x_STDJ_ID_help">
+@Html.Raw(tblStudentJourneyAdd.STDJ_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.STDJ_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.STDJ_ID.Visible (end) *@
+@if (tblStudentJourneyAdd.FullName.Visible) { // tblStudentJourneyAdd.FullName.Visible (begin)
+    <div id="r_FullName" @Html.Raw(tblStudentJourneyAdd.FullName.RowAttributes)>
+        <label id="elh_tblStudentJourney_FullName" for="x_FullName" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.FullName.Caption)@Html.Raw(tblStudentJourneyAdd.FullName.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.FullName.CellAttributes)>
+<span id="el_tblStudentJourney_FullName">
+<input type="@(tblStudentJourneyAdd.FullName.InputTextType)" name="x_FullName" id="x_FullName" data-table="tblStudentJourney" data-field="x_FullName" value="@Html.Raw(tblStudentJourneyAdd.FullName.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.FullName.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.FullName.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.FullName.EditAttributes) aria-describedby="x_FullName_help">
+@Html.Raw(tblStudentJourneyAdd.FullName.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.FullName.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.FullName.Visible (end) *@
+@if (tblStudentJourneyAdd.str_Username.Visible) { // tblStudentJourneyAdd.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(tblStudentJourneyAdd.str_Username.RowAttributes)>
+        <label id="elh_tblStudentJourney_str_Username" for="x_str_Username" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.str_Username.Caption)@Html.Raw(tblStudentJourneyAdd.str_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.str_Username.CellAttributes)>
+<span id="el_tblStudentJourney_str_Username">
+<input type="@(tblStudentJourneyAdd.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblStudentJourney" data-field="x_str_Username" value="@Html.Raw(tblStudentJourneyAdd.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.str_Username.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.str_Username.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.str_Username.EditAttributes) aria-describedby="x_str_Username_help">
+@Html.Raw(tblStudentJourneyAdd.str_Username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.str_Username.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.str_Username.Visible (end) *@
+@if (tblStudentJourneyAdd.Number_ID.Visible) { // tblStudentJourneyAdd.Number_ID.Visible (begin)
+    <div id="r_Number_ID" @Html.Raw(tblStudentJourneyAdd.Number_ID.RowAttributes)>
+        <label id="elh_tblStudentJourney_Number_ID" for="x_Number_ID" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Number_ID.Caption)@Html.Raw(tblStudentJourneyAdd.Number_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Number_ID.CellAttributes)>
+<span id="el_tblStudentJourney_Number_ID">
+<input type="@(tblStudentJourneyAdd.Number_ID.InputTextType)" name="x_Number_ID" id="x_Number_ID" data-table="tblStudentJourney" data-field="x_Number_ID" value="@Html.Raw(tblStudentJourneyAdd.Number_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Number_ID.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Number_ID.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Number_ID.EditAttributes) aria-describedby="x_Number_ID_help">
+@Html.Raw(tblStudentJourneyAdd.Number_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Number_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Number_ID.Visible (end) *@
+@if (tblStudentJourneyAdd.Journey_ID.Visible) { // tblStudentJourneyAdd.Journey_ID.Visible (begin)
+    <div id="r_Journey_ID" @Html.Raw(tblStudentJourneyAdd.Journey_ID.RowAttributes)>
+        <label id="elh_tblStudentJourney_Journey_ID" for="x_Journey_ID" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Journey_ID.Caption)@Html.Raw(tblStudentJourneyAdd.Journey_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Journey_ID.CellAttributes)>
+<span id="el_tblStudentJourney_Journey_ID">
+<input type="@(tblStudentJourneyAdd.Journey_ID.InputTextType)" name="x_Journey_ID" id="x_Journey_ID" data-table="tblStudentJourney" data-field="x_Journey_ID" value="@Html.Raw(tblStudentJourneyAdd.Journey_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Journey_ID.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Journey_ID.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Journey_ID.EditAttributes) aria-describedby="x_Journey_ID_help">
+@Html.Raw(tblStudentJourneyAdd.Journey_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Journey_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Journey_ID.Visible (end) *@
+@if (tblStudentJourneyAdd.Journey.Visible) { // tblStudentJourneyAdd.Journey.Visible (begin)
+    <div id="r_Journey" @Html.Raw(tblStudentJourneyAdd.Journey.RowAttributes)>
+        <label id="elh_tblStudentJourney_Journey" for="x_Journey" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Journey.Caption)@Html.Raw(tblStudentJourneyAdd.Journey.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Journey.CellAttributes)>
+<span id="el_tblStudentJourney_Journey">
+<input type="@(tblStudentJourneyAdd.Journey.InputTextType)" name="x_Journey" id="x_Journey" data-table="tblStudentJourney" data-field="x_Journey" value="@Html.Raw(tblStudentJourneyAdd.Journey.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Journey.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Journey.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Journey.EditAttributes) aria-describedby="x_Journey_help">
+@Html.Raw(tblStudentJourneyAdd.Journey.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Journey.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Journey.Visible (end) *@
+@if (tblStudentJourneyAdd.Start_Date.Visible) { // tblStudentJourneyAdd.Start_Date.Visible (begin)
+    <div id="r_Start_Date" @Html.Raw(tblStudentJourneyAdd.Start_Date.RowAttributes)>
+        <label id="elh_tblStudentJourney_Start_Date" for="x_Start_Date" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Start_Date.Caption)@Html.Raw(tblStudentJourneyAdd.Start_Date.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Start_Date.CellAttributes)>
+<span id="el_tblStudentJourney_Start_Date">
+<input type="@(tblStudentJourneyAdd.Start_Date.InputTextType)" name="x_Start_Date" id="x_Start_Date" data-table="tblStudentJourney" data-field="x_Start_Date" value="@Html.Raw(tblStudentJourneyAdd.Start_Date.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Start_Date.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Start_Date.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Start_Date.EditAttributes) aria-describedby="x_Start_Date_help">
+@Html.Raw(tblStudentJourneyAdd.Start_Date.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Start_Date.GetErrorMessage())</div>
+@if (!tblStudentJourneyAdd.Start_Date.ReadOnly && !tblStudentJourneyAdd.Start_Date.Disabled && !tblStudentJourneyAdd.Start_Date.EditAttrs.Is("readonly") && !tblStudentJourneyAdd.Start_Date.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblStudentJourneyadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblStudentJourneyadd", "x_Start_Date", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Start_Date.Visible (end) *@
+@if (tblStudentJourneyAdd.End_Date.Visible) { // tblStudentJourneyAdd.End_Date.Visible (begin)
+    <div id="r_End_Date" @Html.Raw(tblStudentJourneyAdd.End_Date.RowAttributes)>
+        <label id="elh_tblStudentJourney_End_Date" for="x_End_Date" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.End_Date.Caption)@Html.Raw(tblStudentJourneyAdd.End_Date.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.End_Date.CellAttributes)>
+<span id="el_tblStudentJourney_End_Date">
+<input type="@(tblStudentJourneyAdd.End_Date.InputTextType)" name="x_End_Date" id="x_End_Date" data-table="tblStudentJourney" data-field="x_End_Date" value="@Html.Raw(tblStudentJourneyAdd.End_Date.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.End_Date.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.End_Date.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.End_Date.EditAttributes) aria-describedby="x_End_Date_help">
+@Html.Raw(tblStudentJourneyAdd.End_Date.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.End_Date.GetErrorMessage())</div>
+@if (!tblStudentJourneyAdd.End_Date.ReadOnly && !tblStudentJourneyAdd.End_Date.Disabled && !tblStudentJourneyAdd.End_Date.EditAttrs.Is("readonly") && !tblStudentJourneyAdd.End_Date.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblStudentJourneyadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblStudentJourneyadd", "x_End_Date", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.End_Date.Visible (end) *@
+@if (tblStudentJourneyAdd.Total_Days.Visible) { // tblStudentJourneyAdd.Total_Days.Visible (begin)
+    <div id="r_Total_Days" @Html.Raw(tblStudentJourneyAdd.Total_Days.RowAttributes)>
+        <label id="elh_tblStudentJourney_Total_Days" for="x_Total_Days" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Total_Days.Caption)@Html.Raw(tblStudentJourneyAdd.Total_Days.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Total_Days.CellAttributes)>
+<span id="el_tblStudentJourney_Total_Days">
+<input type="@(tblStudentJourneyAdd.Total_Days.InputTextType)" name="x_Total_Days" id="x_Total_Days" data-table="tblStudentJourney" data-field="x_Total_Days" value="@Html.Raw(tblStudentJourneyAdd.Total_Days.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Total_Days.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Total_Days.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Total_Days.EditAttributes) aria-describedby="x_Total_Days_help">
+@Html.Raw(tblStudentJourneyAdd.Total_Days.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Total_Days.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Total_Days.Visible (end) *@
+@if (tblStudentJourneyAdd.Status.Visible) { // tblStudentJourneyAdd.Status.Visible (begin)
+    <div id="r_Status" @Html.Raw(tblStudentJourneyAdd.Status.RowAttributes)>
+        <label id="elh_tblStudentJourney_Status" for="x_Status" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Status.Caption)@Html.Raw(tblStudentJourneyAdd.Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Status.CellAttributes)>
+<span id="el_tblStudentJourney_Status">
+<input type="@(tblStudentJourneyAdd.Status.InputTextType)" name="x_Status" id="x_Status" data-table="tblStudentJourney" data-field="x_Status" value="@Html.Raw(tblStudentJourneyAdd.Status.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Status.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Status.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Status.EditAttributes) aria-describedby="x_Status_help">
+@Html.Raw(tblStudentJourneyAdd.Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Status.Visible (end) *@
+@if (tblStudentJourneyAdd.Package_Name.Visible) { // tblStudentJourneyAdd.Package_Name.Visible (begin)
+    <div id="r_Package_Name" @Html.Raw(tblStudentJourneyAdd.Package_Name.RowAttributes)>
+        <label id="elh_tblStudentJourney_Package_Name" for="x_Package_Name" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Package_Name.Caption)@Html.Raw(tblStudentJourneyAdd.Package_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Package_Name.CellAttributes)>
+<span id="el_tblStudentJourney_Package_Name">
+<input type="@(tblStudentJourneyAdd.Package_Name.InputTextType)" name="x_Package_Name" id="x_Package_Name" data-table="tblStudentJourney" data-field="x_Package_Name" value="@Html.Raw(tblStudentJourneyAdd.Package_Name.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Package_Name.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Package_Name.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Package_Name.EditAttributes) aria-describedby="x_Package_Name_help">
+@Html.Raw(tblStudentJourneyAdd.Package_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Package_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Package_Name.Visible (end) *@
+@if (tblStudentJourneyAdd.Product_Name.Visible) { // tblStudentJourneyAdd.Product_Name.Visible (begin)
+    <div id="r_Product_Name" @Html.Raw(tblStudentJourneyAdd.Product_Name.RowAttributes)>
+        <label id="elh_tblStudentJourney_Product_Name" for="x_Product_Name" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Product_Name.Caption)@Html.Raw(tblStudentJourneyAdd.Product_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Product_Name.CellAttributes)>
+<span id="el_tblStudentJourney_Product_Name">
+<input type="@(tblStudentJourneyAdd.Product_Name.InputTextType)" name="x_Product_Name" id="x_Product_Name" data-table="tblStudentJourney" data-field="x_Product_Name" value="@Html.Raw(tblStudentJourneyAdd.Product_Name.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Product_Name.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Product_Name.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Product_Name.EditAttributes) aria-describedby="x_Product_Name_help">
+@Html.Raw(tblStudentJourneyAdd.Product_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Product_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Product_Name.Visible (end) *@
+@if (tblStudentJourneyAdd.Price.Visible) { // tblStudentJourneyAdd.Price.Visible (begin)
+    <div id="r_Price" @Html.Raw(tblStudentJourneyAdd.Price.RowAttributes)>
+        <label id="elh_tblStudentJourney_Price" for="x_Price" class="@(tblStudentJourneyAdd.LeftColumnClass)">@Html.Raw(tblStudentJourneyAdd.Price.Caption)@Html.Raw(tblStudentJourneyAdd.Price.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStudentJourneyAdd.RightColumnClass)"><div @Html.Raw(tblStudentJourneyAdd.Price.CellAttributes)>
+<span id="el_tblStudentJourney_Price">
+<input type="@(tblStudentJourneyAdd.Price.InputTextType)" name="x_Price" id="x_Price" data-table="tblStudentJourney" data-field="x_Price" value="@Html.Raw(tblStudentJourneyAdd.Price.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentJourneyAdd.Price.PlaceHolder))" data-format-pattern="@(tblStudentJourneyAdd.Price.FormatPattern)"@Html.Raw(tblStudentJourneyAdd.Price.EditAttributes) aria-describedby="x_Price_help">
+@Html.Raw(tblStudentJourneyAdd.Price.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentJourneyAdd.Price.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblStudentJourneyAdd.Price.Visible (end) *@
+</div><!-- /page* -->
+@{ tblStudentJourneyAdd.CloseRecordset(); }
+@Html.Raw(tblStudentJourneyAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblStudentJourneyAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblStudentJourneyadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblStudentJourneyadd" data-href="@AppPath(tblStudentJourneyAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblStudentJourneyAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblStudentJourneyAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudentJourney");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

@@ -1,0 +1,203 @@
+@if (!rptqryInvoiceItemPricesList.IsExport()) {
+<div>
+@if (!rptqryInvoiceItemPricesList.IsGridAdd && !(rptqryInvoiceItemPricesList.IsGridEdit && rptqryInvoiceItemPricesList.ModalGridEdit) && !rptqryInvoiceItemPricesList.IsMultiEdit) {
+@Html.Raw(rptqryInvoiceItemPricesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@rptqryInvoiceItemPricesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (rptqryInvoiceItemPricesList.ModalGridAdd && rptqryInvoiceItemPricesList.IsGridAdd || rptqryInvoiceItemPricesList.ModalGridEdit && rptqryInvoiceItemPricesList.IsGridEdit || rptqryInvoiceItemPricesList.ModalMultiEdit && rptqryInvoiceItemPricesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(rptqryInvoiceItemPricesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { rptqryInvoiceItemPrices: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(rptqryInvoiceItemPricesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(rptqryInvoiceItemPricesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(rptqryInvoiceItemPricesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(rptqryInvoiceItemPricesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(rptqryInvoiceItemPricesList.FormName)" id="@(rptqryInvoiceItemPricesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(rptqryInvoiceItemPricesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (rptqryInvoiceItemPricesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(rptqryInvoiceItemPricesList.GetMultiColumnRowClass())">
+@if (rptqryInvoiceItemPricesList.TotalRecords > 0 || rptqryInvoiceItemPricesList.IsGridEdit || rptqryInvoiceItemPricesList.IsMultiEdit) {
+    await rptqryInvoiceItemPricesList.SetupGrid();
+    bool eof = rptqryInvoiceItemPricesList.Recordset == null; // DN
+while (rptqryInvoiceItemPricesList.RecordCount < rptqryInvoiceItemPricesList.StopRecord || SameString(rptqryInvoiceItemPricesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(rptqryInvoiceItemPricesList.RowIndex, "$rowindex$") &&
+        (!rptqryInvoiceItemPricesList.IsGridAdd || rptqryInvoiceItemPricesList.CurrentMode == "copy") &&
+        (!((rptqryInvoiceItemPricesList.IsCopy || rptqryInvoiceItemPricesList.IsAdd) && rptqryInvoiceItemPricesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await rptqryInvoiceItemPricesList.Recordset.ReadAsync();
+    rptqryInvoiceItemPricesList.RecordCount++;
+    if (rptqryInvoiceItemPricesList.RecordCount >= rptqryInvoiceItemPricesList.StartRecord) {
+        await rptqryInvoiceItemPricesList.SetupRow();
+<div class="@(rptqryInvoiceItemPricesList.GetMultiColumnColClass())" @Html.Raw(rptqryInvoiceItemPricesList.RowAttributes)>
+<div class="@(rptqryInvoiceItemPricesList.MultiColumnCardClass)">
+    @if (rptqryInvoiceItemPricesList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(rptqryInvoiceItemPricesList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    rptqryInvoiceItemPricesList.ListOptions.Tag = "div";
+    rptqryInvoiceItemPricesList.ListOptions.RenderBody(rptqryInvoiceItemPricesList.MultiColumnListOptionsPosition, rptqryInvoiceItemPricesList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (rptqryInvoiceItemPricesList.Package_No.Visible) { // rptqryInvoiceItemPricesList.Package_No.Visible (begin)
+        if (rptqryInvoiceItemPricesList.RowType == RowType.View) { // View record
+        <div class="row rptqryInvoiceItemPrices_Package_No">
+            <div class="col col-sm-4 rptqryInvoiceItemPrices_Package_No">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Package_No))</div>
+            <div class="col col-sm-8"><div @Html.Raw(rptqryInvoiceItemPricesList.Package_No.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Package_No.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Package_No.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row rptqryInvoiceItemPrices_Package_No">
+            <label class="@(rptqryInvoiceItemPricesList.LeftColumnClass)">@Html.Raw(rptqryInvoiceItemPricesList.Package_No.Caption)</label>
+            <div class="@(rptqryInvoiceItemPricesList.RightColumnClass)"><div @Html.Raw(rptqryInvoiceItemPricesList.Package_No.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Package_No.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Package_No.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (rptqryInvoiceItemPricesList.Package_Name.Visible) { // rptqryInvoiceItemPricesList.Package_Name.Visible (begin)
+        if (rptqryInvoiceItemPricesList.RowType == RowType.View) { // View record
+        <div class="row rptqryInvoiceItemPrices_Package_Name">
+            <div class="col col-sm-4 rptqryInvoiceItemPrices_Package_Name">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Package_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(rptqryInvoiceItemPricesList.Package_Name.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Package_Name.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Package_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row rptqryInvoiceItemPrices_Package_Name">
+            <label class="@(rptqryInvoiceItemPricesList.LeftColumnClass)">@Html.Raw(rptqryInvoiceItemPricesList.Package_Name.Caption)</label>
+            <div class="@(rptqryInvoiceItemPricesList.RightColumnClass)"><div @Html.Raw(rptqryInvoiceItemPricesList.Package_Name.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Package_Name.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Package_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (rptqryInvoiceItemPricesList.Item_No.Visible) { // rptqryInvoiceItemPricesList.Item_No.Visible (begin)
+        if (rptqryInvoiceItemPricesList.RowType == RowType.View) { // View record
+        <div class="row rptqryInvoiceItemPrices_Item_No">
+            <div class="col col-sm-4 rptqryInvoiceItemPrices_Item_No">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Item_No))</div>
+            <div class="col col-sm-8"><div @Html.Raw(rptqryInvoiceItemPricesList.Item_No.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Item_No.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Item_No.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row rptqryInvoiceItemPrices_Item_No">
+            <label class="@(rptqryInvoiceItemPricesList.LeftColumnClass)">@Html.Raw(rptqryInvoiceItemPricesList.Item_No.Caption)</label>
+            <div class="@(rptqryInvoiceItemPricesList.RightColumnClass)"><div @Html.Raw(rptqryInvoiceItemPricesList.Item_No.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Item_No.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Item_No.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (rptqryInvoiceItemPricesList.Service_Description.Visible) { // rptqryInvoiceItemPricesList.Service_Description.Visible (begin)
+        if (rptqryInvoiceItemPricesList.RowType == RowType.View) { // View record
+        <div class="row rptqryInvoiceItemPrices_Service_Description">
+            <div class="col col-sm-4 rptqryInvoiceItemPrices_Service_Description">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Service_Description))</div>
+            <div class="col col-sm-8"><div @Html.Raw(rptqryInvoiceItemPricesList.Service_Description.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Service_Description.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Service_Description.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row rptqryInvoiceItemPrices_Service_Description">
+            <label class="@(rptqryInvoiceItemPricesList.LeftColumnClass)">@Html.Raw(rptqryInvoiceItemPricesList.Service_Description.Caption)</label>
+            <div class="@(rptqryInvoiceItemPricesList.RightColumnClass)"><div @Html.Raw(rptqryInvoiceItemPricesList.Service_Description.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Service_Description.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Service_Description.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (rptqryInvoiceItemPricesList.Price.Visible) { // rptqryInvoiceItemPricesList.Price.Visible (begin)
+        if (rptqryInvoiceItemPricesList.RowType == RowType.View) { // View record
+        <div class="row rptqryInvoiceItemPrices_Price">
+            <div class="col col-sm-4 rptqryInvoiceItemPrices_Price">@Html.Raw(rptqryInvoiceItemPricesList.RenderFieldHeader(rptqryInvoiceItemPricesList.Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(rptqryInvoiceItemPricesList.Price.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Price.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row rptqryInvoiceItemPrices_Price">
+            <label class="@(rptqryInvoiceItemPricesList.LeftColumnClass)">@Html.Raw(rptqryInvoiceItemPricesList.Price.Caption)</label>
+            <div class="@(rptqryInvoiceItemPricesList.RightColumnClass)"><div @Html.Raw(rptqryInvoiceItemPricesList.Price.CellAttributes)>
+<span @Html.Raw(rptqryInvoiceItemPricesList.Price.ViewAttributes)>
+@Html.Raw(rptqryInvoiceItemPricesList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!rptqryInvoiceItemPricesList.IsExport()) {
+    if (rptqryInvoiceItemPricesList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(rptqryInvoiceItemPricesList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    rptqryInvoiceItemPricesList.ListOptions.Tag = "div";
+}
+@rptqryInvoiceItemPricesList.ListOptions.RenderBody(rptqryInvoiceItemPricesList.MultiColumnListOptionsPosition, rptqryInvoiceItemPricesList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(rptqryInvoiceItemPricesList.RowIndex, "$rowindex$"))
+        rptqryInvoiceItemPricesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((rptqryInvoiceItemPricesList.IsCopy || rptqryInvoiceItemPricesList.IsAdd) && rptqryInvoiceItemPricesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        rptqryInvoiceItemPricesList.RowIndex = 1;
+} @* End While *@
+} @* rptqryInvoiceItemPricesList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(rptqryInvoiceItemPricesList.CurrentAction) && !rptqryInvoiceItemPricesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ rptqryInvoiceItemPricesList.CloseRecordset(); }

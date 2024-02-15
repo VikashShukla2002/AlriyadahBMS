@@ -1,0 +1,173 @@
+@if (qryStudentJourneyListList.ModalGridAdd && qryStudentJourneyListList.IsGridAdd || qryStudentJourneyListList.ModalGridEdit && qryStudentJourneyListList.IsGridEdit || qryStudentJourneyListList.ModalMultiEdit && qryStudentJourneyListList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryStudentJourneyListList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryStudentJourneyList: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryStudentJourneyListList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryStudentJourneyListList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryStudentJourneyListList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryStudentJourneyListList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryStudentJourneyListList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryStudentJourneyListList.TableGridClass)">
+@if (!qryStudentJourneyListList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryStudentJourneyListList.IsGridAdd && !(qryStudentJourneyListList.IsGridEdit && qryStudentJourneyListList.ModalGridEdit) && !qryStudentJourneyListList.IsMultiEdit) {
+@Html.Raw(qryStudentJourneyListList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryStudentJourneyListList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryStudentJourneyListList.FormName)" id="@(qryStudentJourneyListList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryStudentJourneyListList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryStudentJourneyListList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_qryStudentJourneyList" class="card-body ew-grid-middle-panel @(qryStudentJourneyListList.TableContainerClass)" style="@(qryStudentJourneyListList.TableContainerStyle)">
+@if (qryStudentJourneyListList.TotalRecords > 0 || qryStudentJourneyListList.IsGridEdit || qryStudentJourneyListList.IsMultiEdit) {
+<table id="tbl_qryStudentJourneyListlist" class="@(qryStudentJourneyListList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryStudentJourneyListList.RowType = RowType.Header;
+
+    // Render list options
+    await qryStudentJourneyListList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryStudentJourneyListList.ListOptions.RenderHeader("left")
+@if (qryStudentJourneyListList.Package_No.Visible) { // qryStudentJourneyListList.Package_No.Visible (begin)
+        <th data-name="Package_No" class="@(qryStudentJourneyListList.Package_No.HeaderCellClass)"><div id="elh_qryStudentJourneyList_Package_No" class="qryStudentJourneyList_Package_No">@Html.Raw(qryStudentJourneyListList.RenderFieldHeader(qryStudentJourneyListList.Package_No))</div></th>
+} @* qryStudentJourneyListList.Package_No.Visible (end) *@
+@if (qryStudentJourneyListList.Package_Name.Visible) { // qryStudentJourneyListList.Package_Name.Visible (begin)
+        <th data-name="Package_Name" class="@(qryStudentJourneyListList.Package_Name.HeaderCellClass)"><div id="elh_qryStudentJourneyList_Package_Name" class="qryStudentJourneyList_Package_Name">@Html.Raw(qryStudentJourneyListList.RenderFieldHeader(qryStudentJourneyListList.Package_Name))</div></th>
+} @* qryStudentJourneyListList.Package_Name.Visible (end) *@
+@if (qryStudentJourneyListList.Item_No.Visible) { // qryStudentJourneyListList.Item_No.Visible (begin)
+        <th data-name="Item_No" class="@(qryStudentJourneyListList.Item_No.HeaderCellClass)"><div id="elh_qryStudentJourneyList_Item_No" class="qryStudentJourneyList_Item_No">@Html.Raw(qryStudentJourneyListList.RenderFieldHeader(qryStudentJourneyListList.Item_No))</div></th>
+} @* qryStudentJourneyListList.Item_No.Visible (end) *@
+@if (qryStudentJourneyListList.Service_Description.Visible) { // qryStudentJourneyListList.Service_Description.Visible (begin)
+        <th data-name="Service_Description" class="@(qryStudentJourneyListList.Service_Description.HeaderCellClass)"><div id="elh_qryStudentJourneyList_Service_Description" class="qryStudentJourneyList_Service_Description">@Html.Raw(qryStudentJourneyListList.RenderFieldHeader(qryStudentJourneyListList.Service_Description))</div></th>
+} @* qryStudentJourneyListList.Service_Description.Visible (end) *@
+@if (qryStudentJourneyListList.Price.Visible) { // qryStudentJourneyListList.Price.Visible (begin)
+        <th data-name="Price" class="@(qryStudentJourneyListList.Price.HeaderCellClass)"><div id="elh_qryStudentJourneyList_Price" class="qryStudentJourneyList_Price">@Html.Raw(qryStudentJourneyListList.RenderFieldHeader(qryStudentJourneyListList.Price))</div></th>
+} @* qryStudentJourneyListList.Price.Visible (end) *@
+@if (qryStudentJourneyListList.Journey.Visible) { // qryStudentJourneyListList.Journey.Visible (begin)
+        <th data-name="Journey" class="@(qryStudentJourneyListList.Journey.HeaderCellClass)"><div id="elh_qryStudentJourneyList_Journey" class="qryStudentJourneyList_Journey">@Html.Raw(qryStudentJourneyListList.RenderFieldHeader(qryStudentJourneyListList.Journey))</div></th>
+} @* qryStudentJourneyListList.Journey.Visible (end) *@
+@* Render list options (header, right) *@
+@qryStudentJourneyListList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryStudentJourneyListList.PageNumber)">
+@{
+    await qryStudentJourneyListList.SetupGrid();
+    bool eof = qryStudentJourneyListList.Recordset == null; // DN
+}
+@while (qryStudentJourneyListList.RecordCount < qryStudentJourneyListList.StopRecord || SameString(qryStudentJourneyListList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryStudentJourneyListList.RowIndex, "$rowindex$") &&
+        (!qryStudentJourneyListList.IsGridAdd || qryStudentJourneyListList.CurrentMode == "copy") &&
+        (!((qryStudentJourneyListList.IsCopy || qryStudentJourneyListList.IsAdd) && qryStudentJourneyListList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryStudentJourneyListList.Recordset.ReadAsync();
+    qryStudentJourneyListList.RecordCount++;
+    if (qryStudentJourneyListList.RecordCount >= qryStudentJourneyListList.StartRecord) {
+        await qryStudentJourneyListList.SetupRow();
+    <tr @Html.Raw(qryStudentJourneyListList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryStudentJourneyListList.ListOptions.RenderBody("left", qryStudentJourneyListList.RowCount)
+    @if (qryStudentJourneyListList.Package_No.Visible) { // qryStudentJourneyListList.Package_No.Visible (begin)
+        <td data-name="Package_No" @Html.Raw(qryStudentJourneyListList.Package_No.CellAttributes)>
+<span id="el@(qryStudentJourneyListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudentJourneyListList.RowCount)_qryStudentJourneyList_Package_No" class="el_qryStudentJourneyList_Package_No">
+<span @Html.Raw(qryStudentJourneyListList.Package_No.ViewAttributes)>
+@Html.Raw(qryStudentJourneyListList.Package_No.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudentJourneyListList.Package_No.Visible (end) *@
+    @if (qryStudentJourneyListList.Package_Name.Visible) { // qryStudentJourneyListList.Package_Name.Visible (begin)
+        <td data-name="Package_Name" @Html.Raw(qryStudentJourneyListList.Package_Name.CellAttributes)>
+<span id="el@(qryStudentJourneyListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudentJourneyListList.RowCount)_qryStudentJourneyList_Package_Name" class="el_qryStudentJourneyList_Package_Name">
+<span @Html.Raw(qryStudentJourneyListList.Package_Name.ViewAttributes)>
+@Html.Raw(qryStudentJourneyListList.Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudentJourneyListList.Package_Name.Visible (end) *@
+    @if (qryStudentJourneyListList.Item_No.Visible) { // qryStudentJourneyListList.Item_No.Visible (begin)
+        <td data-name="Item_No" @Html.Raw(qryStudentJourneyListList.Item_No.CellAttributes)>
+<span id="el@(qryStudentJourneyListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudentJourneyListList.RowCount)_qryStudentJourneyList_Item_No" class="el_qryStudentJourneyList_Item_No">
+<span @Html.Raw(qryStudentJourneyListList.Item_No.ViewAttributes)>
+@Html.Raw(qryStudentJourneyListList.Item_No.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudentJourneyListList.Item_No.Visible (end) *@
+    @if (qryStudentJourneyListList.Service_Description.Visible) { // qryStudentJourneyListList.Service_Description.Visible (begin)
+        <td data-name="Service_Description" @Html.Raw(qryStudentJourneyListList.Service_Description.CellAttributes)>
+<span id="el@(qryStudentJourneyListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudentJourneyListList.RowCount)_qryStudentJourneyList_Service_Description" class="el_qryStudentJourneyList_Service_Description">
+<span @Html.Raw(qryStudentJourneyListList.Service_Description.ViewAttributes)>
+@Html.Raw(qryStudentJourneyListList.Service_Description.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudentJourneyListList.Service_Description.Visible (end) *@
+    @if (qryStudentJourneyListList.Price.Visible) { // qryStudentJourneyListList.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(qryStudentJourneyListList.Price.CellAttributes)>
+<span id="el@(qryStudentJourneyListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudentJourneyListList.RowCount)_qryStudentJourneyList_Price" class="el_qryStudentJourneyList_Price">
+<span @Html.Raw(qryStudentJourneyListList.Price.ViewAttributes)>
+@Html.Raw(qryStudentJourneyListList.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudentJourneyListList.Price.Visible (end) *@
+    @if (qryStudentJourneyListList.Journey.Visible) { // qryStudentJourneyListList.Journey.Visible (begin)
+        <td data-name="Journey" @Html.Raw(qryStudentJourneyListList.Journey.CellAttributes)>
+<span id="el@(qryStudentJourneyListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudentJourneyListList.RowCount)_qryStudentJourneyList_Journey" class="el_qryStudentJourneyList_Journey">
+<span @Html.Raw(qryStudentJourneyListList.Journey.ViewAttributes)>
+@Html.Raw(qryStudentJourneyListList.Journey.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudentJourneyListList.Journey.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryStudentJourneyListList.ListOptions.RenderBody("right", qryStudentJourneyListList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryStudentJourneyListList.RowIndex, "$rowindex$"))
+        qryStudentJourneyListList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryStudentJourneyListList.IsCopy || qryStudentJourneyListList.IsAdd) && qryStudentJourneyListList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryStudentJourneyListList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryStudentJourneyListList.CurrentAction) && !qryStudentJourneyListList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryStudentJourneyListList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

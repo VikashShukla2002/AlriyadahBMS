@@ -1,0 +1,1202 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAssessmentSearch.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAssessmentSearch.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAssessmentSearch.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+var currentPageID = ew.PAGE_ID = "search";
+var currentForm;
+var ftblAssessmentsearch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblAssessmentsearch")
+        .setPageId("search")
+@if (tblAssessmentSearch.IsModal && tblAssessmentSearch.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["AssessmentID", [ew.Validators.integer], fields.AssessmentID.isInvalid],
+            ["str_Full_Name_Hdr", [], fields.str_Full_Name_Hdr.isInvalid],
+            ["str_First_Name", [], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [], fields.str_Last_Name.isInvalid],
+            ["str_Username", [], fields.str_Username.isInvalid],
+            ["int_Student_ID", [ew.Validators.integer], fields.int_Student_ID.isInvalid],
+            ["NationalID", [ew.Validators.integer], fields.NationalID.isInvalid],
+            ["Assessment_Type", [], fields.Assessment_Type.isInvalid],
+            ["AssessmentDate", [ew.Validators.datetime(fields.AssessmentDate.clientFormatPattern)], fields.AssessmentDate.isInvalid],
+            ["AssessmentTime", [], fields.AssessmentTime.isInvalid],
+            ["isAssessmentDone", [], fields.isAssessmentDone.isInvalid],
+            ["AssessmentScore", [], fields.AssessmentScore.isInvalid],
+            ["Assessment_Instructor", [], fields.Assessment_Instructor.isInvalid],
+            ["Date_Entered", [ew.Validators.datetime(fields.Date_Entered.clientFormatPattern)], fields.Date_Entered.isInvalid],
+            ["IsDrivingexperience", [], fields.IsDrivingexperience.isInvalid],
+            ["intDrivinglicenseType", [ew.Validators.integer], fields.intDrivinglicenseType.isInvalid],
+            ["AbsherApptNbr", [], fields.AbsherApptNbr.isInvalid],
+            ["Absherphoto", [], fields.Absherphoto.isInvalid],
+            ["date_Birth", [ew.Validators.datetime(fields.date_Birth.clientFormatPattern)], fields.date_Birth.isInvalid],
+            ["date_Birth_Hijri", [], fields.date_Birth_Hijri.isInvalid],
+            ["str_Cell_Phone", [], fields.str_Cell_Phone.isInvalid],
+            ["str_Email", [], fields.str_Email.isInvalid],
+            ["UserlevelID", [ew.Validators.integer], fields.UserlevelID.isInvalid],
+            ["DriveTypelink", [], fields.DriveTypelink.isInvalid],
+            ["Calendar_ID", [ew.Validators.integer], fields.Calendar_ID.isInvalid],
+            ["Assessmnt_Time", [ew.Validators.time(fields.Assessmnt_Time.clientFormatPattern)], fields.Assessmnt_Time.isInvalid],
+            ["Institution", [], fields.Institution.isInvalid],
+            ["TheoreticalScore", [ew.Validators.float], fields.TheoreticalScore.isInvalid],
+            ["dt_TheoreticalScore", [ew.Validators.datetime(fields.dt_TheoreticalScore.clientFormatPattern)], fields.dt_TheoreticalScore.isInvalid],
+            ["RoadTestScore", [ew.Validators.float], fields.RoadTestScore.isInvalid],
+            ["dt_RoadTestScore", [ew.Validators.datetime(fields.dt_RoadTestScore.clientFormatPattern)], fields.dt_RoadTestScore.isInvalid],
+            ["AccidentOccurrence", [], fields.AccidentOccurrence.isInvalid],
+            ["Dt_AccidentOccurrence", [ew.Validators.datetime(fields.Dt_AccidentOccurrence.clientFormatPattern)], fields.Dt_AccidentOccurrence.isInvalid],
+            ["AccidentNotes", [], fields.AccidentNotes.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Full_Name_Hdr": @Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.ToClientList(tblAssessmentSearch)),
+            "NationalID": @Html.Raw(tblAssessmentSearch.NationalID.ToClientList(tblAssessmentSearch)),
+            "Assessment_Type": @Html.Raw(tblAssessmentSearch.Assessment_Type.ToClientList(tblAssessmentSearch)),
+            "isAssessmentDone": @Html.Raw(tblAssessmentSearch.isAssessmentDone.ToClientList(tblAssessmentSearch)),
+            "Assessment_Instructor": @Html.Raw(tblAssessmentSearch.Assessment_Instructor.ToClientList(tblAssessmentSearch)),
+            "IsDrivingexperience": @Html.Raw(tblAssessmentSearch.IsDrivingexperience.ToClientList(tblAssessmentSearch)),
+            "AccidentOccurrence": @Html.Raw(tblAssessmentSearch.AccidentOccurrence.ToClientList(tblAssessmentSearch)),
+        })
+        .build();
+    window[form.id] = form;
+@if (tblAssessmentSearch.IsModal) {
+    <text>currentAdvancedSearchForm = form;</text>
+} else {
+    <text>currentForm = form;</text>
+}
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblAssessmentSearch.ShowPageHeader()
+@tblAssessmentSearch.ShowMessages()
+<form name="ftblAssessmentsearch" id="ftblAssessmentsearch" class="@(tblAssessmentSearch.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="search">
+@if (tblAssessmentSearch.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblAssessmentSearch.MultiPages.ContainerClasses)" id="pages_tblAssessmentSearch"><!-- multi-page tabs -->
+    <ul class="@(tblAssessmentSearch.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblAssessmentSearch.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblAssessment1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment1" aria-selected="@(ConvertToJson(tblAssessmentSearch.MultiPages.IsActive(1)))">@Html.Raw(tblAssessmentSearch.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblAssessmentSearch.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblAssessment2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment2" aria-selected="@(ConvertToJson(tblAssessmentSearch.MultiPages.IsActive(2)))">@Html.Raw(tblAssessmentSearch.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblAssessmentSearch.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblAssessment3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment3" aria-selected="@(ConvertToJson(tblAssessmentSearch.MultiPages.IsActive(3)))">@Html.Raw(tblAssessmentSearch.PageCaption(3))</button></li>
+    </ul>
+    <div class="@(tblAssessmentSearch.MultiPages.TabContentClasses)"><!-- multi-page tabs .tab-content -->
+        <div class="@(tblAssessmentSearch.MultiPages.TabPaneClasses(1))" id="tab_tblAssessment1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-search-div"><!-- page* -->
+@if (tblAssessmentSearch.AssessmentID.Visible) { // tblAssessmentSearch.AssessmentID.Visible (begin)
+    <div id="r_AssessmentID" class="row" @Html.Raw(tblAssessmentSearch.AssessmentID.RowAttributes)>
+        <label for="x_AssessmentID" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AssessmentID">@Html.Raw(tblAssessmentSearch.AssessmentID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_AssessmentID" id="z_AssessmentID" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AssessmentID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AssessmentID" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.AssessmentID.InputTextType)" name="x_AssessmentID" id="x_AssessmentID" data-table="tblAssessment" data-field="x_AssessmentID" value="@Html.Raw(tblAssessmentSearch.AssessmentID.EditValue)" data-page="1" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.AssessmentID.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.AssessmentID.FormatPattern)"@Html.Raw(tblAssessmentSearch.AssessmentID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AssessmentID.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AssessmentID.Visible (end) *@
+@if (tblAssessmentSearch.str_Full_Name_Hdr.Visible) { // tblAssessmentSearch.str_Full_Name_Hdr.Visible (begin)
+    <div id="r_str_Full_Name_Hdr" class="row" @Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.RowAttributes)>
+        <label for="x_str_Full_Name_Hdr" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_Full_Name_Hdr">@Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Full_Name_Hdr" id="z_str_Full_Name_Hdr" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_Full_Name_Hdr" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_str_Full_Name_Hdr"
+        name="x_str_Full_Name_Hdr"
+        class="form-select ew-select@(tblAssessmentSearch.str_Full_Name_Hdr.IsInvalidClass)"
+        data-select2-id="ftblAssessmentsearch_x_str_Full_Name_Hdr"
+        data-table="tblAssessment"
+        data-field="x_str_Full_Name_Hdr"
+        data-page="1"
+        data-value-separator="@(tblAssessmentSearch.str_Full_Name_Hdr.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAssessmentSearch.str_Full_Name_Hdr.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.EditAttributes)>
+        @(tblAssessmentSearch.str_Full_Name_Hdr.SelectOptionListHtml("x_str_Full_Name_Hdr"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.GetErrorMessage(false))</div>
+@Html.Raw(tblAssessmentSearch.str_Full_Name_Hdr.Lookup.GetParamTag(tblAssessmentSearch, "p_x_str_Full_Name_Hdr"))
+<script>
+loadjs.ready("ftblAssessmentsearch", function() {
+    var options = { name: "x_str_Full_Name_Hdr", selectId: "ftblAssessmentsearch_x_str_Full_Name_Hdr" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAssessmentsearch.lists.str_Full_Name_Hdr?.lookupOptions.length) {
+        options.data = { id: "x_str_Full_Name_Hdr", form: "ftblAssessmentsearch" };
+    } else {
+        options.ajax = { id: "x_str_Full_Name_Hdr", form: "ftblAssessmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.str_Full_Name_Hdr.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_Full_Name_Hdr.Visible (end) *@
+@if (tblAssessmentSearch.str_First_Name.Visible) { // tblAssessmentSearch.str_First_Name.Visible (begin)
+    <div id="r_str_First_Name" class="row" @Html.Raw(tblAssessmentSearch.str_First_Name.RowAttributes)>
+        <label for="x_str_First_Name" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_First_Name">@Html.Raw(tblAssessmentSearch.str_First_Name.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_First_Name" id="z_str_First_Name" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_First_Name.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_First_Name" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.str_First_Name.InputTextType)" name="x_str_First_Name" id="x_str_First_Name" data-table="tblAssessment" data-field="x_str_First_Name" value="@Html.Raw(tblAssessmentSearch.str_First_Name.EditValue)" data-page="1" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.str_First_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.str_First_Name.FormatPattern)"@Html.Raw(tblAssessmentSearch.str_First_Name.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_First_Name.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_First_Name.Visible (end) *@
+@if (tblAssessmentSearch.str_Middle_Name.Visible) { // tblAssessmentSearch.str_Middle_Name.Visible (begin)
+    <div id="r_str_Middle_Name" class="row" @Html.Raw(tblAssessmentSearch.str_Middle_Name.RowAttributes)>
+        <label for="x_str_Middle_Name" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_Middle_Name">@Html.Raw(tblAssessmentSearch.str_Middle_Name.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Middle_Name" id="z_str_Middle_Name" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_Middle_Name.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_Middle_Name" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.str_Middle_Name.InputTextType)" name="x_str_Middle_Name" id="x_str_Middle_Name" data-table="tblAssessment" data-field="x_str_Middle_Name" value="@Html.Raw(tblAssessmentSearch.str_Middle_Name.EditValue)" data-page="1" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.str_Middle_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.str_Middle_Name.FormatPattern)"@Html.Raw(tblAssessmentSearch.str_Middle_Name.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_Middle_Name.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_Middle_Name.Visible (end) *@
+@if (tblAssessmentSearch.str_Last_Name.Visible) { // tblAssessmentSearch.str_Last_Name.Visible (begin)
+    <div id="r_str_Last_Name" class="row" @Html.Raw(tblAssessmentSearch.str_Last_Name.RowAttributes)>
+        <label for="x_str_Last_Name" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_Last_Name">@Html.Raw(tblAssessmentSearch.str_Last_Name.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Last_Name" id="z_str_Last_Name" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_Last_Name.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_Last_Name" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.str_Last_Name.InputTextType)" name="x_str_Last_Name" id="x_str_Last_Name" data-table="tblAssessment" data-field="x_str_Last_Name" value="@Html.Raw(tblAssessmentSearch.str_Last_Name.EditValue)" data-page="1" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.str_Last_Name.FormatPattern)"@Html.Raw(tblAssessmentSearch.str_Last_Name.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_Last_Name.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_Last_Name.Visible (end) *@
+@if (tblAssessmentSearch.str_Username.Visible) { // tblAssessmentSearch.str_Username.Visible (begin)
+    <div id="r_str_Username" class="row" @Html.Raw(tblAssessmentSearch.str_Username.RowAttributes)>
+        <label for="x_str_Username" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_Username">@Html.Raw(tblAssessmentSearch.str_Username.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Username" id="z_str_Username" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_Username.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_Username" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblAssessment" data-field="x_str_Username" value="@Html.Raw(tblAssessmentSearch.str_Username.EditValue)" data-page="1" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.str_Username.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.str_Username.FormatPattern)"@Html.Raw(tblAssessmentSearch.str_Username.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_Username.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_Username.Visible (end) *@
+@if (tblAssessmentSearch.int_Student_ID.Visible) { // tblAssessmentSearch.int_Student_ID.Visible (begin)
+    <div id="r_int_Student_ID" class="row" @Html.Raw(tblAssessmentSearch.int_Student_ID.RowAttributes)>
+        <label for="x_int_Student_ID" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_int_Student_ID">@Html.Raw(tblAssessmentSearch.int_Student_ID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_int_Student_ID" id="z_int_Student_ID" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.int_Student_ID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_int_Student_ID" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.int_Student_ID.InputTextType)" name="x_int_Student_ID" id="x_int_Student_ID" data-table="tblAssessment" data-field="x_int_Student_ID" value="@Html.Raw(tblAssessmentSearch.int_Student_ID.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.int_Student_ID.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.int_Student_ID.FormatPattern)"@Html.Raw(tblAssessmentSearch.int_Student_ID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.int_Student_ID.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.int_Student_ID.Visible (end) *@
+@if (tblAssessmentSearch.NationalID.Visible) { // tblAssessmentSearch.NationalID.Visible (begin)
+    <div id="r_NationalID" class="row" @Html.Raw(tblAssessmentSearch.NationalID.RowAttributes)>
+        <label class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_NationalID">@Html.Raw(tblAssessmentSearch.NationalID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_NationalID" id="z_NationalID" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.NationalID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_NationalID" class="ew-search-field ew-search-field-single">
+<span>@{
+    if (IsRTL) {
+        tblAssessmentSearch.NationalID.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_NationalID" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_NationalID" id="sv_x_NationalID" value="@(RemoveHtml(ConvertToString(tblAssessmentSearch.NationalID.EditValue)))" autocomplete="off" size="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.NationalID.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.NationalID.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.NationalID.FormatPattern)" @Html.Raw(tblAssessmentSearch.NationalID.EditAttributes)>
+</span>
+<selection-list hidden class="form-control" data-table="tblAssessment" data-field="x_NationalID" data-input="sv_x_NationalID" data-page="1" data-value-separator="@(tblAssessmentSearch.NationalID.DisplayValueSeparatorAttribute)" name="x_NationalID" id="x_NationalID" value="@(HtmlEncode(tblAssessmentSearch.NationalID.AdvancedSearch.SearchValue))"></selection-list>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.NationalID.GetErrorMessage(false))</div>
+<script>
+loadjs.ready(["ftblAssessmentsearch"], function() {
+    ftblAssessmentsearch.createAutoSuggest(Object.assign({"id":"x_NationalID","forceSelect":false}, { lookupAllDisplayFields: @(tblAssessmentSearch.NationalID.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblAssessment.fields.NationalID.autoSuggestOptions));
+});
+</script>
+@Html.Raw(tblAssessmentSearch.NationalID.Lookup.GetParamTag(tblAssessmentSearch, "p_x_NationalID"))
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.NationalID.Visible (end) *@
+@if (tblAssessmentSearch.AssessmentTime.Visible) { // tblAssessmentSearch.AssessmentTime.Visible (begin)
+    <div id="r_AssessmentTime" class="row" @Html.Raw(tblAssessmentSearch.AssessmentTime.RowAttributes)>
+        <label for="x_AssessmentTime" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AssessmentTime">@Html.Raw(tblAssessmentSearch.AssessmentTime.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_AssessmentTime" id="z_AssessmentTime" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AssessmentTime.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AssessmentTime" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.AssessmentTime.InputTextType)" name="x_AssessmentTime" id="x_AssessmentTime" data-table="tblAssessment" data-field="x_AssessmentTime" value="@Html.Raw(tblAssessmentSearch.AssessmentTime.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.AssessmentTime.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.AssessmentTime.FormatPattern)"@Html.Raw(tblAssessmentSearch.AssessmentTime.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AssessmentTime.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AssessmentTime.Visible (end) *@
+@if (tblAssessmentSearch.Date_Entered.Visible) { // tblAssessmentSearch.Date_Entered.Visible (begin)
+    <div id="r_Date_Entered" class="row" @Html.Raw(tblAssessmentSearch.Date_Entered.RowAttributes)>
+        <label for="x_Date_Entered" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Date_Entered">@Html.Raw(tblAssessmentSearch.Date_Entered.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_Date_Entered" id="z_Date_Entered" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Date_Entered.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Date_Entered" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.Date_Entered.InputTextType)" name="x_Date_Entered" id="x_Date_Entered" data-table="tblAssessment" data-field="x_Date_Entered" value="@Html.Raw(tblAssessmentSearch.Date_Entered.EditValue)" data-page="1" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.Date_Entered.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.Date_Entered.FormatPattern)"@Html.Raw(tblAssessmentSearch.Date_Entered.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Date_Entered.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.Date_Entered.ReadOnly && !tblAssessmentSearch.Date_Entered.Disabled && !tblAssessmentSearch.Date_Entered.EditAttrs.Is("readonly") && !tblAssessmentSearch.Date_Entered.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(116))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentsearch", "x_Date_Entered", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Date_Entered.Visible (end) *@
+@if (tblAssessmentSearch.AbsherApptNbr.Visible) { // tblAssessmentSearch.AbsherApptNbr.Visible (begin)
+    <div id="r_AbsherApptNbr" class="row" @Html.Raw(tblAssessmentSearch.AbsherApptNbr.RowAttributes)>
+        <label for="x_AbsherApptNbr" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AbsherApptNbr">@Html.Raw(tblAssessmentSearch.AbsherApptNbr.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_AbsherApptNbr" id="z_AbsherApptNbr" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AbsherApptNbr.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AbsherApptNbr" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.AbsherApptNbr.InputTextType)" name="x_AbsherApptNbr" id="x_AbsherApptNbr" data-table="tblAssessment" data-field="x_AbsherApptNbr" value="@Html.Raw(tblAssessmentSearch.AbsherApptNbr.EditValue)" data-page="1" size="30" maxlength="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.AbsherApptNbr.FormatPattern)"@Html.Raw(tblAssessmentSearch.AbsherApptNbr.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AbsherApptNbr.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AbsherApptNbr.Visible (end) *@
+@if (tblAssessmentSearch.Absherphoto.Visible) { // tblAssessmentSearch.Absherphoto.Visible (begin)
+    <div id="r_Absherphoto" class="row" @Html.Raw(tblAssessmentSearch.Absherphoto.RowAttributes)>
+        <label class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Absherphoto">@Html.Raw(tblAssessmentSearch.Absherphoto.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_Absherphoto" id="z_Absherphoto" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Absherphoto.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Absherphoto" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.Absherphoto.InputTextType)" name="x_Absherphoto" id="x_Absherphoto" data-table="tblAssessment" data-field="x_Absherphoto" value="@Html.Raw(tblAssessmentSearch.Absherphoto.EditValue)" data-page="1" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.Absherphoto.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.Absherphoto.FormatPattern)"@Html.Raw(tblAssessmentSearch.Absherphoto.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Absherphoto.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Absherphoto.Visible (end) *@
+@if (tblAssessmentSearch.date_Birth.Visible) { // tblAssessmentSearch.date_Birth.Visible (begin)
+    <div id="r_date_Birth" class="row" @Html.Raw(tblAssessmentSearch.date_Birth.RowAttributes)>
+        <label for="x_date_Birth" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_date_Birth">@Html.Raw(tblAssessmentSearch.date_Birth.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_date_Birth" id="z_date_Birth" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.date_Birth.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_date_Birth" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.date_Birth.InputTextType)" name="x_date_Birth" id="x_date_Birth" data-table="tblAssessment" data-field="x_date_Birth" value="@Html.Raw(tblAssessmentSearch.date_Birth.EditValue)" data-page="1" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.date_Birth.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.date_Birth.FormatPattern)"@Html.Raw(tblAssessmentSearch.date_Birth.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.date_Birth.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.date_Birth.ReadOnly && !tblAssessmentSearch.date_Birth.Disabled && !tblAssessmentSearch.date_Birth.EditAttrs.Is("readonly") && !tblAssessmentSearch.date_Birth.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentsearch", "x_date_Birth", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.date_Birth.Visible (end) *@
+@if (tblAssessmentSearch.date_Birth_Hijri.Visible) { // tblAssessmentSearch.date_Birth_Hijri.Visible (begin)
+    <div id="r_date_Birth_Hijri" class="row" @Html.Raw(tblAssessmentSearch.date_Birth_Hijri.RowAttributes)>
+        <label for="x_date_Birth_Hijri" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_date_Birth_Hijri">@Html.Raw(tblAssessmentSearch.date_Birth_Hijri.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_date_Birth_Hijri" id="z_date_Birth_Hijri" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.date_Birth_Hijri.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_date_Birth_Hijri" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.date_Birth_Hijri.InputTextType)" name="x_date_Birth_Hijri" id="x_date_Birth_Hijri" data-table="tblAssessment" data-field="x_date_Birth_Hijri" value="@Html.Raw(tblAssessmentSearch.date_Birth_Hijri.EditValue)" data-page="1" size="30" maxlength="4000" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.date_Birth_Hijri.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.date_Birth_Hijri.FormatPattern)"@Html.Raw(tblAssessmentSearch.date_Birth_Hijri.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.date_Birth_Hijri.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.date_Birth_Hijri.Visible (end) *@
+@if (tblAssessmentSearch.str_Cell_Phone.Visible) { // tblAssessmentSearch.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" class="row" @Html.Raw(tblAssessmentSearch.str_Cell_Phone.RowAttributes)>
+        <label for="x_str_Cell_Phone" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_Cell_Phone">@Html.Raw(tblAssessmentSearch.str_Cell_Phone.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Cell_Phone" id="z_str_Cell_Phone" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_Cell_Phone.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_Cell_Phone" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblAssessment" data-field="x_str_Cell_Phone" value="@Html.Raw(tblAssessmentSearch.str_Cell_Phone.EditValue)" data-page="1" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.str_Cell_Phone.FormatPattern)"@Html.Raw(tblAssessmentSearch.str_Cell_Phone.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_Cell_Phone.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_Cell_Phone.Visible (end) *@
+@if (tblAssessmentSearch.str_Email.Visible) { // tblAssessmentSearch.str_Email.Visible (begin)
+    <div id="r_str_Email" class="row" @Html.Raw(tblAssessmentSearch.str_Email.RowAttributes)>
+        <label for="x_str_Email" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_str_Email">@Html.Raw(tblAssessmentSearch.str_Email.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Email" id="z_str_Email" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.str_Email.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_str_Email" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.str_Email.InputTextType)" name="x_str_Email" id="x_str_Email" data-table="tblAssessment" data-field="x_str_Email" value="@Html.Raw(tblAssessmentSearch.str_Email.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.str_Email.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.str_Email.FormatPattern)"@Html.Raw(tblAssessmentSearch.str_Email.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.str_Email.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.str_Email.Visible (end) *@
+@if (tblAssessmentSearch.UserlevelID.Visible) { // tblAssessmentSearch.UserlevelID.Visible (begin)
+    <div id="r_UserlevelID" class="row" @Html.Raw(tblAssessmentSearch.UserlevelID.RowAttributes)>
+        <label for="x_UserlevelID" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_UserlevelID">@Html.Raw(tblAssessmentSearch.UserlevelID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_UserlevelID" id="z_UserlevelID" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.UserlevelID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_UserlevelID" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.UserlevelID.InputTextType)" name="x_UserlevelID" id="x_UserlevelID" data-table="tblAssessment" data-field="x_UserlevelID" value="@Html.Raw(tblAssessmentSearch.UserlevelID.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.UserlevelID.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.UserlevelID.FormatPattern)"@Html.Raw(tblAssessmentSearch.UserlevelID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.UserlevelID.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.UserlevelID.Visible (end) *@
+@if (tblAssessmentSearch.DriveTypelink.Visible) { // tblAssessmentSearch.DriveTypelink.Visible (begin)
+    <div id="r_DriveTypelink" class="row" @Html.Raw(tblAssessmentSearch.DriveTypelink.RowAttributes)>
+        <label for="x_DriveTypelink" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_DriveTypelink">@Html.Raw(tblAssessmentSearch.DriveTypelink.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_DriveTypelink" id="z_DriveTypelink" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.DriveTypelink.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_DriveTypelink" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.DriveTypelink.InputTextType)" name="x_DriveTypelink" id="x_DriveTypelink" data-table="tblAssessment" data-field="x_DriveTypelink" value="@Html.Raw(tblAssessmentSearch.DriveTypelink.EditValue)" data-page="1" size="35" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.DriveTypelink.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.DriveTypelink.FormatPattern)"@Html.Raw(tblAssessmentSearch.DriveTypelink.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.DriveTypelink.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.DriveTypelink.Visible (end) *@
+@if (tblAssessmentSearch.Calendar_ID.Visible) { // tblAssessmentSearch.Calendar_ID.Visible (begin)
+    <div id="r_Calendar_ID" class="row" @Html.Raw(tblAssessmentSearch.Calendar_ID.RowAttributes)>
+        <label for="x_Calendar_ID" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Calendar_ID">@Html.Raw(tblAssessmentSearch.Calendar_ID.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_Calendar_ID" id="z_Calendar_ID" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Calendar_ID.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Calendar_ID" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.Calendar_ID.InputTextType)" name="x_Calendar_ID" id="x_Calendar_ID" data-table="tblAssessment" data-field="x_Calendar_ID" value="@Html.Raw(tblAssessmentSearch.Calendar_ID.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.Calendar_ID.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.Calendar_ID.FormatPattern)"@Html.Raw(tblAssessmentSearch.Calendar_ID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Calendar_ID.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Calendar_ID.Visible (end) *@
+@if (tblAssessmentSearch.Assessmnt_Time.Visible) { // tblAssessmentSearch.Assessmnt_Time.Visible (begin)
+    <div id="r_Assessmnt_Time" class="row" @Html.Raw(tblAssessmentSearch.Assessmnt_Time.RowAttributes)>
+        <label for="x_Assessmnt_Time" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Assessmnt_Time">@Html.Raw(tblAssessmentSearch.Assessmnt_Time.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_Assessmnt_Time" id="z_Assessmnt_Time" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Assessmnt_Time.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Assessmnt_Time" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.Assessmnt_Time.InputTextType)" name="x_Assessmnt_Time" id="x_Assessmnt_Time" data-table="tblAssessment" data-field="x_Assessmnt_Time" value="@Html.Raw(tblAssessmentSearch.Assessmnt_Time.EditValue)" data-page="1" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.Assessmnt_Time.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.Assessmnt_Time.FormatPattern)"@Html.Raw(tblAssessmentSearch.Assessmnt_Time.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Assessmnt_Time.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.Assessmnt_Time.ReadOnly && !tblAssessmentSearch.Assessmnt_Time.Disabled && !tblAssessmentSearch.Assessmnt_Time.EditAttrs.Is("readonly") && !tblAssessmentSearch.Assessmnt_Time.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "timepicker"], () => ew.createTimePicker("ftblAssessmentsearch", "x_Assessmnt_Time", Object.assign({"step":15}, { timeFormat: "@(DateFormat(4))" })));
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Assessmnt_Time.Visible (end) *@
+@if (tblAssessmentSearch.Institution.Visible) { // tblAssessmentSearch.Institution.Visible (begin)
+    <div id="r_Institution" class="row" @Html.Raw(tblAssessmentSearch.Institution.RowAttributes)>
+        <label for="x_Institution" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Institution">@Html.Raw(tblAssessmentSearch.Institution.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_Institution" id="z_Institution" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Institution.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Institution" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.Institution.InputTextType)" name="x_Institution" id="x_Institution" data-table="tblAssessment" data-field="x_Institution" value="@Html.Raw(tblAssessmentSearch.Institution.EditValue)" data-page="1" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.Institution.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.Institution.FormatPattern)"@Html.Raw(tblAssessmentSearch.Institution.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Institution.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Institution.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblAssessmentSearch.MultiPages.TabPaneClasses(2))" id="tab_tblAssessment2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-search-div"><!-- page* -->
+@if (tblAssessmentSearch.Assessment_Type.Visible) { // tblAssessmentSearch.Assessment_Type.Visible (begin)
+    <div id="r_Assessment_Type" class="row" @Html.Raw(tblAssessmentSearch.Assessment_Type.RowAttributes)>
+        <label for="x_Assessment_Type" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Assessment_Type">@Html.Raw(tblAssessmentSearch.Assessment_Type.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_Assessment_Type" id="z_Assessment_Type" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Assessment_Type.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Assessment_Type" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_Assessment_Type"
+        name="x_Assessment_Type"
+        class="form-select ew-select@(tblAssessmentSearch.Assessment_Type.IsInvalidClass)"
+        data-select2-id="ftblAssessmentsearch_x_Assessment_Type"
+        data-table="tblAssessment"
+        data-field="x_Assessment_Type"
+        data-page="2"
+        data-value-separator="@(tblAssessmentSearch.Assessment_Type.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAssessmentSearch.Assessment_Type.PlaceHolder))"
+        @Html.Raw(tblAssessmentSearch.Assessment_Type.EditAttributes)>
+        @(tblAssessmentSearch.Assessment_Type.SelectOptionListHtml("x_Assessment_Type"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Assessment_Type.GetErrorMessage(false))</div>
+<script>
+loadjs.ready("ftblAssessmentsearch", function() {
+    var options = { name: "x_Assessment_Type", selectId: "ftblAssessmentsearch_x_Assessment_Type" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAssessmentsearch.lists.Assessment_Type?.lookupOptions.length) {
+        options.data = { id: "x_Assessment_Type", form: "ftblAssessmentsearch" };
+    } else {
+        options.ajax = { id: "x_Assessment_Type", form: "ftblAssessmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.Assessment_Type.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Assessment_Type.Visible (end) *@
+@if (tblAssessmentSearch.AssessmentDate.Visible) { // tblAssessmentSearch.AssessmentDate.Visible (begin)
+    <div id="r_AssessmentDate" class="row" @Html.Raw(tblAssessmentSearch.AssessmentDate.RowAttributes)>
+        <label for="x_AssessmentDate" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AssessmentDate">@Html.Raw(tblAssessmentSearch.AssessmentDate.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_AssessmentDate" id="z_AssessmentDate" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AssessmentDate.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AssessmentDate" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.AssessmentDate.InputTextType)" name="x_AssessmentDate" id="x_AssessmentDate" data-table="tblAssessment" data-field="x_AssessmentDate" value="@Html.Raw(tblAssessmentSearch.AssessmentDate.EditValue)" data-page="2" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.AssessmentDate.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.AssessmentDate.FormatPattern)"@Html.Raw(tblAssessmentSearch.AssessmentDate.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AssessmentDate.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.AssessmentDate.ReadOnly && !tblAssessmentSearch.AssessmentDate.Disabled && !tblAssessmentSearch.AssessmentDate.EditAttrs.Is("readonly") && !tblAssessmentSearch.AssessmentDate.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(16))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentsearch", "x_AssessmentDate", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AssessmentDate.Visible (end) *@
+@if (tblAssessmentSearch.isAssessmentDone.Visible) { // tblAssessmentSearch.isAssessmentDone.Visible (begin)
+    <div id="r_isAssessmentDone" class="row" @Html.Raw(tblAssessmentSearch.isAssessmentDone.RowAttributes)>
+        <label class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_isAssessmentDone">@Html.Raw(tblAssessmentSearch.isAssessmentDone.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_isAssessmentDone" id="z_isAssessmentDone" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.isAssessmentDone.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_isAssessmentDone" class="ew-search-field ew-search-field-single">
+<template id="tp_x_isAssessmentDone">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="tblAssessment" data-field="x_isAssessmentDone" name="x_isAssessmentDone" id="x_isAssessmentDone"@Html.Raw(tblAssessmentSearch.isAssessmentDone.EditAttributes)>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_isAssessmentDone" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_isAssessmentDone"
+    name="x_isAssessmentDone"
+    value="@(HtmlEncode(tblAssessmentSearch.isAssessmentDone.AdvancedSearch.SearchValue))"
+    data-type="select-one"
+    data-template="tp_x_isAssessmentDone"
+    data-target="dsl_x_isAssessmentDone"
+    data-repeatcolumn="5"
+    class="form-control@(tblAssessmentSearch.isAssessmentDone.IsInvalidClass)"
+    data-table="tblAssessment"
+    data-field="x_isAssessmentDone"
+    data-page="2"
+    data-value-separator="@(tblAssessmentSearch.isAssessmentDone.DisplayValueSeparatorAttribute)"
+    @Html.Raw(tblAssessmentSearch.isAssessmentDone.EditAttributes)></selection-list>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.isAssessmentDone.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.isAssessmentDone.Visible (end) *@
+@if (tblAssessmentSearch.AssessmentScore.Visible) { // tblAssessmentSearch.AssessmentScore.Visible (begin)
+    <div id="r_AssessmentScore" class="row" @Html.Raw(tblAssessmentSearch.AssessmentScore.RowAttributes)>
+        <label for="x_AssessmentScore" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AssessmentScore">@Html.Raw(tblAssessmentSearch.AssessmentScore.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_AssessmentScore" id="z_AssessmentScore" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AssessmentScore.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AssessmentScore" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.AssessmentScore.InputTextType)" name="x_AssessmentScore" id="x_AssessmentScore" data-table="tblAssessment" data-field="x_AssessmentScore" value="@Html.Raw(tblAssessmentSearch.AssessmentScore.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.AssessmentScore.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.AssessmentScore.FormatPattern)"@Html.Raw(tblAssessmentSearch.AssessmentScore.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AssessmentScore.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AssessmentScore.Visible (end) *@
+@if (tblAssessmentSearch.Assessment_Instructor.Visible) { // tblAssessmentSearch.Assessment_Instructor.Visible (begin)
+    <div id="r_Assessment_Instructor" class="row" @Html.Raw(tblAssessmentSearch.Assessment_Instructor.RowAttributes)>
+        <label for="x_Assessment_Instructor" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Assessment_Instructor">@Html.Raw(tblAssessmentSearch.Assessment_Instructor.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_Assessment_Instructor" id="z_Assessment_Instructor" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Assessment_Instructor.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Assessment_Instructor" class="ew-search-field ew-search-field-single">
+    <select
+        id="x_Assessment_Instructor"
+        name="x_Assessment_Instructor"
+        class="form-select ew-select@(tblAssessmentSearch.Assessment_Instructor.IsInvalidClass)"
+        data-select2-id="ftblAssessmentsearch_x_Assessment_Instructor"
+        data-table="tblAssessment"
+        data-field="x_Assessment_Instructor"
+        data-page="2"
+        data-value-separator="@(tblAssessmentSearch.Assessment_Instructor.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAssessmentSearch.Assessment_Instructor.PlaceHolder))"
+        @Html.Raw(tblAssessmentSearch.Assessment_Instructor.EditAttributes)>
+        @(tblAssessmentSearch.Assessment_Instructor.SelectOptionListHtml("x_Assessment_Instructor"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Assessment_Instructor.GetErrorMessage(false))</div>
+@Html.Raw(tblAssessmentSearch.Assessment_Instructor.Lookup.GetParamTag(tblAssessmentSearch, "p_x_Assessment_Instructor"))
+<script>
+loadjs.ready("ftblAssessmentsearch", function() {
+    var options = { name: "x_Assessment_Instructor", selectId: "ftblAssessmentsearch_x_Assessment_Instructor" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAssessmentsearch.lists.Assessment_Instructor?.lookupOptions.length) {
+        options.data = { id: "x_Assessment_Instructor", form: "ftblAssessmentsearch" };
+    } else {
+        options.ajax = { id: "x_Assessment_Instructor", form: "ftblAssessmentsearch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.Assessment_Instructor.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Assessment_Instructor.Visible (end) *@
+@if (tblAssessmentSearch.IsDrivingexperience.Visible) { // tblAssessmentSearch.IsDrivingexperience.Visible (begin)
+    <div id="r_IsDrivingexperience" class="row" @Html.Raw(tblAssessmentSearch.IsDrivingexperience.RowAttributes)>
+        <label class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_IsDrivingexperience">@Html.Raw(tblAssessmentSearch.IsDrivingexperience.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_IsDrivingexperience" id="z_IsDrivingexperience" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.IsDrivingexperience.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_IsDrivingexperience" class="ew-search-field ew-search-field-single">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAssessmentSearch.IsDrivingexperience.IsInvalidClass)" data-table="tblAssessment" data-field="x_IsDrivingexperience" data-boolean data-page="2" name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="1" checked="@ConvertToBool(tblAssessmentSearch.IsDrivingexperience.AdvancedSearch.SearchValue)" @Html.Raw(tblAssessmentSearch.IsDrivingexperience.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.IsDrivingexperience.GetErrorMessage(false))</div>
+</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.IsDrivingexperience.Visible (end) *@
+@if (tblAssessmentSearch.intDrivinglicenseType.Visible) { // tblAssessmentSearch.intDrivinglicenseType.Visible (begin)
+    <div id="r_intDrivinglicenseType" class="row" @Html.Raw(tblAssessmentSearch.intDrivinglicenseType.RowAttributes)>
+        <label for="x_intDrivinglicenseType" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_intDrivinglicenseType">@Html.Raw(tblAssessmentSearch.intDrivinglicenseType.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_intDrivinglicenseType" id="z_intDrivinglicenseType" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.intDrivinglicenseType.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_intDrivinglicenseType" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.intDrivinglicenseType.InputTextType)" name="x_intDrivinglicenseType" id="x_intDrivinglicenseType" data-table="tblAssessment" data-field="x_intDrivinglicenseType" value="@Html.Raw(tblAssessmentSearch.intDrivinglicenseType.EditValue)" data-page="2" size="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.intDrivinglicenseType.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.intDrivinglicenseType.FormatPattern)"@Html.Raw(tblAssessmentSearch.intDrivinglicenseType.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.intDrivinglicenseType.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.intDrivinglicenseType.Visible (end) *@
+@if (tblAssessmentSearch.TheoreticalScore.Visible) { // tblAssessmentSearch.TheoreticalScore.Visible (begin)
+    <div id="r_TheoreticalScore" class="row" @Html.Raw(tblAssessmentSearch.TheoreticalScore.RowAttributes)>
+        <label for="x_TheoreticalScore" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_TheoreticalScore">@Html.Raw(tblAssessmentSearch.TheoreticalScore.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_TheoreticalScore" id="z_TheoreticalScore" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.TheoreticalScore.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_TheoreticalScore" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.TheoreticalScore.InputTextType)" name="x_TheoreticalScore" id="x_TheoreticalScore" data-table="tblAssessment" data-field="x_TheoreticalScore" value="@Html.Raw(tblAssessmentSearch.TheoreticalScore.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.TheoreticalScore.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.TheoreticalScore.FormatPattern)"@Html.Raw(tblAssessmentSearch.TheoreticalScore.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.TheoreticalScore.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.TheoreticalScore.Visible (end) *@
+@if (tblAssessmentSearch.dt_TheoreticalScore.Visible) { // tblAssessmentSearch.dt_TheoreticalScore.Visible (begin)
+    <div id="r_dt_TheoreticalScore" class="row" @Html.Raw(tblAssessmentSearch.dt_TheoreticalScore.RowAttributes)>
+        <label for="x_dt_TheoreticalScore" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_dt_TheoreticalScore">@Html.Raw(tblAssessmentSearch.dt_TheoreticalScore.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_dt_TheoreticalScore" id="z_dt_TheoreticalScore" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.dt_TheoreticalScore.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_dt_TheoreticalScore" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.dt_TheoreticalScore.InputTextType)" name="x_dt_TheoreticalScore" id="x_dt_TheoreticalScore" data-table="tblAssessment" data-field="x_dt_TheoreticalScore" value="@Html.Raw(tblAssessmentSearch.dt_TheoreticalScore.EditValue)" data-page="2" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.dt_TheoreticalScore.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.dt_TheoreticalScore.FormatPattern)"@Html.Raw(tblAssessmentSearch.dt_TheoreticalScore.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.dt_TheoreticalScore.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.dt_TheoreticalScore.ReadOnly && !tblAssessmentSearch.dt_TheoreticalScore.Disabled && !tblAssessmentSearch.dt_TheoreticalScore.EditAttrs.Is("readonly") && !tblAssessmentSearch.dt_TheoreticalScore.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentsearch", "x_dt_TheoreticalScore", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.dt_TheoreticalScore.Visible (end) *@
+@if (tblAssessmentSearch.RoadTestScore.Visible) { // tblAssessmentSearch.RoadTestScore.Visible (begin)
+    <div id="r_RoadTestScore" class="row" @Html.Raw(tblAssessmentSearch.RoadTestScore.RowAttributes)>
+        <label for="x_RoadTestScore" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_RoadTestScore">@Html.Raw(tblAssessmentSearch.RoadTestScore.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_RoadTestScore" id="z_RoadTestScore" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.RoadTestScore.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_RoadTestScore" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.RoadTestScore.InputTextType)" name="x_RoadTestScore" id="x_RoadTestScore" data-table="tblAssessment" data-field="x_RoadTestScore" value="@Html.Raw(tblAssessmentSearch.RoadTestScore.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.RoadTestScore.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.RoadTestScore.FormatPattern)"@Html.Raw(tblAssessmentSearch.RoadTestScore.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.RoadTestScore.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.RoadTestScore.Visible (end) *@
+@if (tblAssessmentSearch.dt_RoadTestScore.Visible) { // tblAssessmentSearch.dt_RoadTestScore.Visible (begin)
+    <div id="r_dt_RoadTestScore" class="row" @Html.Raw(tblAssessmentSearch.dt_RoadTestScore.RowAttributes)>
+        <label for="x_dt_RoadTestScore" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_dt_RoadTestScore">@Html.Raw(tblAssessmentSearch.dt_RoadTestScore.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_dt_RoadTestScore" id="z_dt_RoadTestScore" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.dt_RoadTestScore.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_dt_RoadTestScore" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.dt_RoadTestScore.InputTextType)" name="x_dt_RoadTestScore" id="x_dt_RoadTestScore" data-table="tblAssessment" data-field="x_dt_RoadTestScore" value="@Html.Raw(tblAssessmentSearch.dt_RoadTestScore.EditValue)" data-page="2" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.dt_RoadTestScore.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.dt_RoadTestScore.FormatPattern)"@Html.Raw(tblAssessmentSearch.dt_RoadTestScore.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.dt_RoadTestScore.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.dt_RoadTestScore.ReadOnly && !tblAssessmentSearch.dt_RoadTestScore.Disabled && !tblAssessmentSearch.dt_RoadTestScore.EditAttrs.Is("readonly") && !tblAssessmentSearch.dt_RoadTestScore.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentsearch", "x_dt_RoadTestScore", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.dt_RoadTestScore.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblAssessmentSearch.MultiPages.TabPaneClasses(3))" id="tab_tblAssessment3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-search-div"><!-- page* -->
+@if (tblAssessmentSearch.AccidentOccurrence.Visible) { // tblAssessmentSearch.AccidentOccurrence.Visible (begin)
+    <div id="r_AccidentOccurrence" class="row" @Html.Raw(tblAssessmentSearch.AccidentOccurrence.RowAttributes)>
+        <label class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AccidentOccurrence">@Html.Raw(tblAssessmentSearch.AccidentOccurrence.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_AccidentOccurrence" id="z_AccidentOccurrence" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AccidentOccurrence.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AccidentOccurrence" class="ew-search-field ew-search-field-single">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAssessmentSearch.AccidentOccurrence.IsInvalidClass)" data-table="tblAssessment" data-field="x_AccidentOccurrence" data-boolean data-page="3" name="x_AccidentOccurrence" id="x_AccidentOccurrence" value="1" checked="@ConvertToBool(tblAssessmentSearch.AccidentOccurrence.AdvancedSearch.SearchValue)" @Html.Raw(tblAssessmentSearch.AccidentOccurrence.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AccidentOccurrence.GetErrorMessage(false))</div>
+</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AccidentOccurrence.Visible (end) *@
+@if (tblAssessmentSearch.Dt_AccidentOccurrence.Visible) { // tblAssessmentSearch.Dt_AccidentOccurrence.Visible (begin)
+    <div id="r_Dt_AccidentOccurrence" class="row" @Html.Raw(tblAssessmentSearch.Dt_AccidentOccurrence.RowAttributes)>
+        <label for="x_Dt_AccidentOccurrence" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_Dt_AccidentOccurrence">@Html.Raw(tblAssessmentSearch.Dt_AccidentOccurrence.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_Dt_AccidentOccurrence" id="z_Dt_AccidentOccurrence" value="=">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.Dt_AccidentOccurrence.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_Dt_AccidentOccurrence" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.Dt_AccidentOccurrence.InputTextType)" name="x_Dt_AccidentOccurrence" id="x_Dt_AccidentOccurrence" data-table="tblAssessment" data-field="x_Dt_AccidentOccurrence" value="@Html.Raw(tblAssessmentSearch.Dt_AccidentOccurrence.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.Dt_AccidentOccurrence.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.Dt_AccidentOccurrence.FormatPattern)"@Html.Raw(tblAssessmentSearch.Dt_AccidentOccurrence.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.Dt_AccidentOccurrence.GetErrorMessage(false))</div>
+@if (!tblAssessmentSearch.Dt_AccidentOccurrence.ReadOnly && !tblAssessmentSearch.Dt_AccidentOccurrence.Disabled && !tblAssessmentSearch.Dt_AccidentOccurrence.EditAttrs.Is("readonly") && !tblAssessmentSearch.Dt_AccidentOccurrence.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentsearch", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentsearch", "x_Dt_AccidentOccurrence", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.Dt_AccidentOccurrence.Visible (end) *@
+@if (tblAssessmentSearch.AccidentNotes.Visible) { // tblAssessmentSearch.AccidentNotes.Visible (begin)
+    <div id="r_AccidentNotes" class="row" @Html.Raw(tblAssessmentSearch.AccidentNotes.RowAttributes)>
+        <label for="x_AccidentNotes" class="@(tblAssessmentSearch.LeftColumnClass)"><span id="elh_tblAssessment_AccidentNotes">@Html.Raw(tblAssessmentSearch.AccidentNotes.Caption)</span>
+        <span class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_AccidentNotes" id="z_AccidentNotes" value="LIKE">
+</span>
+        </label>
+        <div class="@(tblAssessmentSearch.RightColumnClass)">
+            <div @Html.Raw(tblAssessmentSearch.AccidentNotes.CellAttributes)>
+                <div class="d-flex align-items-start">
+                <span id="el_tblAssessment_AccidentNotes" class="ew-search-field ew-search-field-single">
+<input type="@(tblAssessmentSearch.AccidentNotes.InputTextType)" name="x_AccidentNotes" id="x_AccidentNotes" data-table="tblAssessment" data-field="x_AccidentNotes" value="@Html.Raw(tblAssessmentSearch.AccidentNotes.EditValue)" data-page="3" size="35" placeholder="@Html.Raw(HtmlEncode(tblAssessmentSearch.AccidentNotes.PlaceHolder))" data-format-pattern="@(tblAssessmentSearch.AccidentNotes.FormatPattern)"@Html.Raw(tblAssessmentSearch.AccidentNotes.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblAssessmentSearch.AccidentNotes.GetErrorMessage(false))</div>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+} @* tblAssessmentSearch.AccidentNotes.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+@Html.Raw(tblAssessmentSearch.IsModal ? Html.Raw("<template class=\"ew-modal-buttons\">") : Html.Raw("<div class=\"row ew-buttons\">"))<!-- buttons .row -->
+    <div class="@(tblAssessmentSearch.OffsetColumnClass)"><!-- buttons offset -->
+        <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblAssessmentsearch">@Html.Raw(Language.Phrase("Search"))</button>
+@if (tblAssessmentSearch.IsModal) {
+        <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblAssessmentsearch">@Html.Raw(Language.Phrase("Cancel"))</button>
+} else {
+        <button class="btn btn-default ew-btn" name="btn-reset" id="btn-reset" type="button" form="ftblAssessmentsearch" data-ew-action="reload">@Html.Raw(Language.Phrase("Reset"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblAssessmentSearch.IsModal ? Html.Raw("</template>") : Html.Raw("</div>"))<!-- /buttons .row -->
+</form>
+@tblAssessmentSearch.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblAssessment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

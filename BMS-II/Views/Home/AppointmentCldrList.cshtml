@@ -1,0 +1,172 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (appointmentCldrList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!appointmentCldrList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!appointmentCldrList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(appointmentCldrList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Appointment_Cldr: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(appointmentCldrList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(appointmentCldrList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(appointmentCldrList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(appointmentCldrList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!appointmentCldrList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (appointmentCldrList.TotalRecords > 0 && appointmentCldrList.ExportOptions.Visible) {
+    appointmentCldrList.ExportOptions.Render("body");
+}
+@if (appointmentCldrList.ImportOptions.Visible) {
+    appointmentCldrList.ImportOptions.Render("body");
+}
+@if (appointmentCldrList.SearchOptions.Visible) {
+    appointmentCldrList.SearchOptions.Render("body");
+}
+@if (appointmentCldrList.FilterOptions.Visible) {
+    appointmentCldrList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!appointmentCldrList.IsModal) {
+<form name="fAppointment_Cldrsrch" id="fAppointment_Cldrsrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="fAppointment_Cldrsrch_search_panel" class="mb-2 mb-sm-0 @(appointmentCldrList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(appointmentCldrList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Appointment_Cldr: currentTable } });
+var currentForm;
+var fAppointment_Cldrsrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("fAppointment_Cldrsrch")
+        .setPageId("list")
+@if (appointmentCldrList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await appointmentCldrList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!appointmentCldrList.IsExport() && Empty(appointmentCldrList.CurrentAction) && appointmentCldrList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(appointmentCldrList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(appointmentCldrList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(appointmentCldrList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(appointmentCldrList.BasicSearch.SessionType == "" ? " active" : "")" form="fAppointment_Cldrsrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(appointmentCldrList.BasicSearch.SessionType == "=" ? " active" : "")" form="fAppointment_Cldrsrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(appointmentCldrList.BasicSearch.SessionType == "AND" ? " active" : "")" form="fAppointment_Cldrsrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(appointmentCldrList.BasicSearch.SessionType == "OR" ? " active" : "")" form="fAppointment_Cldrsrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@appointmentCldrList.ShowPageHeader()
+@appointmentCldrList.ShowMessages()
+<main class="list @(appointmentCldrList.TotalRecords == 0 && !appointmentCldrList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (appointmentCldrList.TotalRecords > 0 || !Empty(appointmentCldrList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ appointmentCldrList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("AppointmentCldr" + TitleCaseInvariant(appointmentCldrList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@appointmentCldrList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@appointmentCldrList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!appointmentCldrList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("Appointment_Cldr");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

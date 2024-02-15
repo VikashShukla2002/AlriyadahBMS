@@ -1,0 +1,162 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (classroomCalendarCalendar.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!classroomCalendarCalendar.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!classroomCalendarCalendar.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!classroomCalendarCalendar.IsExport() && !classroomCalendarCalendar.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(classroomCalendarCalendar.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Classroom_Calendar: currentTable } });
+var currentPageID = ew.PAGE_ID = "calendar";
+var currentForm;
+var fClassroom_Calendarcalendar;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fClassroom_Calendarcalendar")
+        .setPageId("calendar")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+@classroomCalendarCalendar.ShowPageHeader()
+@classroomCalendarCalendar.ShowMessages()
+<!-- Calendar report (begin) -->
+<main class="report-calendar">
+<script>
+var currentCalendar; // FullCalendar.Calendar
+ew.loadjs([
+    [
+        ew.PATH_BASE + "fullcalendar/main.min.js?v=20.5.3",
+        ew.PATH_BASE + "fullcalendar/main.min.css?v=20.5.3"
+    ],
+    ew.PATH_BASE + "fullcalendar/main.global.min.js?v=20.5.3", // FullCalendarLuxon2
+], "fullcalendar");
+loadjs.ready(
+
+    ["luxon", "fullcalendar", "makerjs"],
+    function () {
+        FullCalendar.BootstrapTheme.prototype.classes = {
+            ...FullCalendar.BootstrapTheme.prototype.classes,
+            ...{ root: "fc-theme-bootstrap5", table: null, tableCellShaded: "fc-theme-bootstrap5-shaded" }
+        }; // Use Bootstrap 5 styles
+        FullCalendar.BootstrapTheme.prototype.baseIconClass = "fa-solid"; // Font Awesome 6 icons
+        FullCalendar.BootstrapTheme.prototype.iconClasses = {
+            close: "fa-xmark",
+            prev: "fa-angle-left",
+            next: "fa-angle-right",
+            prevYear: "fa-angles-left",
+            nextYear: "fa-angles-right",
+            add: "fa-plus"
+        };
+        FullCalendar.BootstrapTheme.prototype.rtlIconClasses = {
+            prev: "fa-angle-right",
+            next: "fa-angle-left",
+            prevYear: "fa-angles-right",
+            nextYear: "fa-angles-left",
+        };
+        FullCalendar.globalLocales.push({ code: ew.LANGUAGE_ID.toLowerCase(), ...ew.language.phrase("fullcalendar") });
+        let container = document.getElementById("full-calendar"),
+            dropdown = document.getElementById("calendar-dropdown"),
+            options = ew.deepAssign({}, ew.calendarOptions, @Html.Raw(await CurrentPage.GetCalendarOptions()));
+        try {
+            currentCalendar = ew.fullCalendar(container, options, dropdown);
+            currentCalendar.render();
+        } finally {
+            document.querySelector(".ew-calendar-card").classList.remove("border-transparent");
+            document.querySelector(".overlay").remove();
+        }
+        // Hide popover on modal shown
+        $(".modal").on("show.bs.modal", () => $(".ew-event-popover.show").popover("hide"));
+        // Enable right click
+        container.addEventListener("contextmenu", (e) => {
+            let eventEl = e.target.closest(".fc-event");
+            if (eventEl) {
+                e.preventDefault();
+                e.stopPropagation();
+                eventEl.dispatchEvent(new MouseEvent("click", e));
+            }
+        });
+    }
+);
+</script>
+<div class="overlay-wrapper ew-calendar-wrapper">
+    <div class="card p-0 ew-calendar-card border-transparent">
+        <div class="card-body p-0">
+            <!-- Calendar -->
+            <div id="full-calendar" class="ew-calendar"></div>
+        </div>
+    </div>
+    <div class="dropdown ew-calendar-dropdown">
+        <button class="dropdown-toggle d-none" type="button" id="calendar-dropdown" aria-expanded="false"></button>
+        <ul class="dropdown-menu" aria-labelledby="full-calendar">
+            <li><a class="dropdown-item" role="button" data-action="view">@Html.Raw(Language.Phrase("ViewLink", null))</a></li>
+            <li><a class="dropdown-item" role="button" data-action="edit">@Html.Raw(Language.Phrase("EditLink", null))</a></li>
+            <li><a class="dropdown-item" role="button" data-action="copy">@Html.Raw(Language.Phrase("CopyLink", null))</a></li>
+            <li><a class="dropdown-item" role="button" data-action="delete">@Html.Raw(Language.Phrase("DeleteLink", null))</a></li>
+        </ul>
+    </div>
+</div>
+<script>
+document.querySelector(".ew-calendar-wrapper").insertAdjacentHTML("afterbegin", ew.overlayTemplate());
+</script>
+</main>
+<!-- /.report-calendar -->
+<!-- Calendar report (end) -->
+</div>
+<!-- /.ew-report -->
+@classroomCalendarCalendar.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script type="text/html" data-name="event-popover" data-seq="10">
+{{if extendedProps.timeSpan}}
+<p>{{:extendedProps.timeSpan}}</p>
+{{/if}}
+{{:extendedProps.description}}
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

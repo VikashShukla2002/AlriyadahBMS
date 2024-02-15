@@ -1,0 +1,1952 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentsUpdate.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentsUpdate.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentsUpdate.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudents: currentTable } });
+var currentPageID = ew.PAGE_ID = "update";
+var currentForm;
+var ftblStudentsupdate;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentsupdate")
+        .setPageId("update")
+
+        // Add fields
+        .setFields([
+
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [fields.str_Middle_Name.visible && fields.str_Middle_Name.required ? ew.Validators.required(fields.str_Middle_Name.caption) : null], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["str_Address", [fields.str_Address.visible && fields.str_Address.required ? ew.Validators.required(fields.str_Address.caption) : null], fields.str_Address.isInvalid],
+            ["str_City", [fields.str_City.visible && fields.str_City.required ? ew.Validators.required(fields.str_City.caption) : null], fields.str_City.isInvalid],
+            ["int_State", [fields.int_State.visible && fields.int_State.required ? ew.Validators.required(fields.int_State.caption) : null], fields.int_State.isInvalid],
+            ["str_Zip", [fields.str_Zip.visible && fields.str_Zip.required ? ew.Validators.required(fields.str_Zip.caption) : null], fields.str_Zip.isInvalid],
+            ["date_Hired", [fields.date_Hired.visible && fields.date_Hired.required ? ew.Validators.required(fields.date_Hired.caption) : null], fields.date_Hired.isInvalid],
+            ["date_Left", [fields.date_Left.visible && fields.date_Left.required ? ew.Validators.required(fields.date_Left.caption) : null, ew.Validators.datetime(fields.date_Left.clientFormatPattern), ew.Validators.selected], fields.date_Left.isInvalid],
+            ["str_CertNumber", [fields.str_CertNumber.visible && fields.str_CertNumber.required ? ew.Validators.required(fields.str_CertNumber.caption) : null], fields.str_CertNumber.isInvalid],
+            ["date_CertExp", [fields.date_CertExp.visible && fields.date_CertExp.required ? ew.Validators.required(fields.date_CertExp.caption) : null], fields.date_CertExp.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["str_Home_Phone", [fields.str_Home_Phone.visible && fields.str_Home_Phone.required ? ew.Validators.required(fields.str_Home_Phone.caption) : null], fields.str_Home_Phone.isInvalid],
+            ["str_Other_Phone", [fields.str_Other_Phone.visible && fields.str_Other_Phone.required ? ew.Validators.required(fields.str_Other_Phone.caption) : null], fields.str_Other_Phone.isInvalid],
+            ["str_Email", [fields.str_Email.visible && fields.str_Email.required ? ew.Validators.required(fields.str_Email.caption) : null, ew.Validators.email, ew.Validators.selected], fields.str_Email.isInvalid],
+            ["str_Code", [fields.str_Code.visible && fields.str_Code.required ? ew.Validators.required(fields.str_Code.caption) : null], fields.str_Code.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["str_Password", [fields.str_Password.visible && fields.str_Password.required ? ew.Validators.required(fields.str_Password.caption) : null], fields.str_Password.isInvalid],
+            ["date_Birth_Hijri", [fields.date_Birth_Hijri.visible && fields.date_Birth_Hijri.required ? ew.Validators.required(fields.date_Birth_Hijri.caption) : null, ew.Validators.datetime(fields.date_Birth_Hijri.clientFormatPattern), ew.Validators.selected], fields.date_Birth_Hijri.isInvalid],
+            ["date_Birth", [fields.date_Birth.visible && fields.date_Birth.required ? ew.Validators.required(fields.date_Birth.caption) : null, ew.Validators.datetime(fields.date_Birth.clientFormatPattern), ew.Validators.selected], fields.date_Birth.isInvalid],
+            ["Hijri_Year", [fields.Hijri_Year.visible && fields.Hijri_Year.required ? ew.Validators.required(fields.Hijri_Year.caption) : null], fields.Hijri_Year.isInvalid],
+            ["Hijri_Month", [fields.Hijri_Month.visible && fields.Hijri_Month.required ? ew.Validators.required(fields.Hijri_Month.caption) : null], fields.Hijri_Month.isInvalid],
+            ["Hijri_Day", [fields.Hijri_Day.visible && fields.Hijri_Day.required ? ew.Validators.required(fields.Hijri_Day.caption) : null], fields.Hijri_Day.isInvalid],
+            ["date_Started", [fields.date_Started.visible && fields.date_Started.required ? ew.Validators.required(fields.date_Started.caption) : null], fields.date_Started.isInvalid],
+            ["str_DateHired", [fields.str_DateHired.visible && fields.str_DateHired.required ? ew.Validators.required(fields.str_DateHired.caption) : null], fields.str_DateHired.isInvalid],
+            ["str_DateLeft", [fields.str_DateLeft.visible && fields.str_DateLeft.required ? ew.Validators.required(fields.str_DateLeft.caption) : null], fields.str_DateLeft.isInvalid],
+            ["str_Emergency_Contact_Name", [fields.str_Emergency_Contact_Name.visible && fields.str_Emergency_Contact_Name.required ? ew.Validators.required(fields.str_Emergency_Contact_Name.caption) : null], fields.str_Emergency_Contact_Name.isInvalid],
+            ["str_Emergency_Contact_Phone", [fields.str_Emergency_Contact_Phone.visible && fields.str_Emergency_Contact_Phone.required ? ew.Validators.required(fields.str_Emergency_Contact_Phone.caption) : null], fields.str_Emergency_Contact_Phone.isInvalid],
+            ["str_Emergency_Contact_Relation", [fields.str_Emergency_Contact_Relation.visible && fields.str_Emergency_Contact_Relation.required ? ew.Validators.required(fields.str_Emergency_Contact_Relation.caption) : null], fields.str_Emergency_Contact_Relation.isInvalid],
+            ["str_Notes", [fields.str_Notes.visible && fields.str_Notes.required ? ew.Validators.required(fields.str_Notes.caption) : null], fields.str_Notes.isInvalid],
+            ["int_ClassType", [fields.int_ClassType.visible && fields.int_ClassType.required ? ew.Validators.required(fields.int_ClassType.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_ClassType.isInvalid],
+            ["str_ZipCodes", [fields.str_ZipCodes.visible && fields.str_ZipCodes.required ? ew.Validators.required(fields.str_ZipCodes.caption) : null], fields.str_ZipCodes.isInvalid],
+            ["int_VehicleAssigned", [fields.int_VehicleAssigned.visible && fields.int_VehicleAssigned.required ? ew.Validators.required(fields.int_VehicleAssigned.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_VehicleAssigned.isInvalid],
+            ["int_Status", [fields.int_Status.visible && fields.int_Status.required ? ew.Validators.required(fields.int_Status.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_Status.isInvalid],
+            ["int_Type", [fields.int_Type.visible && fields.int_Type.required ? ew.Validators.required(fields.int_Type.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_Type.isInvalid],
+            ["int_Location", [fields.int_Location.visible && fields.int_Location.required ? ew.Validators.required(fields.int_Location.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_Location.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null], fields.date_Modified.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null, ew.Validators.float, ew.Validators.selected], fields.int_Modified_By.isInvalid],
+            ["bit_IsDeleted", [fields.bit_IsDeleted.visible && fields.bit_IsDeleted.required ? ew.Validators.required(fields.bit_IsDeleted.caption) : null], fields.bit_IsDeleted.isInvalid],
+            ["str_InstPermitNo", [fields.str_InstPermitNo.visible && fields.str_InstPermitNo.required ? ew.Validators.required(fields.str_InstPermitNo.caption) : null], fields.str_InstPermitNo.isInvalid],
+            ["date_PermitExpiration", [fields.date_PermitExpiration.visible && fields.date_PermitExpiration.required ? ew.Validators.required(fields.date_PermitExpiration.caption) : null], fields.date_PermitExpiration.isInvalid],
+            ["date_InCarPermitIssue", [fields.date_InCarPermitIssue.visible && fields.date_InCarPermitIssue.required ? ew.Validators.required(fields.date_InCarPermitIssue.caption) : null], fields.date_InCarPermitIssue.isInvalid],
+            ["str_InClassPermitNo", [fields.str_InClassPermitNo.visible && fields.str_InClassPermitNo.required ? ew.Validators.required(fields.str_InClassPermitNo.caption) : null], fields.str_InClassPermitNo.isInvalid],
+            ["date_InClassPermitIssue", [fields.date_InClassPermitIssue.visible && fields.date_InClassPermitIssue.required ? ew.Validators.required(fields.date_InClassPermitIssue.caption) : null], fields.date_InClassPermitIssue.isInvalid],
+            ["instructor_caption", [fields.instructor_caption.visible && fields.instructor_caption.required ? ew.Validators.required(fields.instructor_caption.caption) : null], fields.instructor_caption.isInvalid],
+            ["str_LicType", [fields.str_LicType.visible && fields.str_LicType.required ? ew.Validators.required(fields.str_LicType.caption) : null], fields.str_LicType.isInvalid],
+            ["int_Order", [fields.int_Order.visible && fields.int_Order.required ? ew.Validators.required(fields.int_Order.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_Order.isInvalid],
+            ["str_InstLicenceDate", [fields.str_InstLicenceDate.visible && fields.str_InstLicenceDate.required ? ew.Validators.required(fields.str_InstLicenceDate.caption) : null], fields.str_InstLicenceDate.isInvalid],
+            ["str_DLNum", [fields.str_DLNum.visible && fields.str_DLNum.required ? ew.Validators.required(fields.str_DLNum.caption) : null], fields.str_DLNum.isInvalid],
+            ["str_DLExp", [fields.str_DLExp.visible && fields.str_DLExp.required ? ew.Validators.required(fields.str_DLExp.caption) : null], fields.str_DLExp.isInvalid],
+            ["bit_appointmentColor", [fields.bit_appointmentColor.visible && fields.bit_appointmentColor.required ? ew.Validators.required(fields.bit_appointmentColor.caption) : null], fields.bit_appointmentColor.isInvalid],
+            ["str_appointmentColorCode", [fields.str_appointmentColorCode.visible && fields.str_appointmentColorCode.required ? ew.Validators.required(fields.str_appointmentColorCode.caption) : null], fields.str_appointmentColorCode.isInvalid],
+            ["bit_IsSuperAdmin", [fields.bit_IsSuperAdmin.visible && fields.bit_IsSuperAdmin.required ? ew.Validators.required(fields.bit_IsSuperAdmin.caption) : null], fields.bit_IsSuperAdmin.isInvalid],
+            ["IsDistanceBasedScheduling", [fields.IsDistanceBasedScheduling.visible && fields.IsDistanceBasedScheduling.required ? ew.Validators.required(fields.IsDistanceBasedScheduling.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.IsDistanceBasedScheduling.isInvalid],
+            ["str_Package_Code", [fields.str_Package_Code.visible && fields.str_Package_Code.required ? ew.Validators.required(fields.str_Package_Code.caption) : null], fields.str_Package_Code.isInvalid],
+            ["str_NationalID_Iqama", [fields.str_NationalID_Iqama.visible && fields.str_NationalID_Iqama.required ? ew.Validators.required(fields.str_NationalID_Iqama.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.str_NationalID_Iqama.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.NationalID.isInvalid],
+            ["int_RoadDistanceCoverage", [fields.int_RoadDistanceCoverage.visible && fields.int_RoadDistanceCoverage.required ? ew.Validators.required(fields.int_RoadDistanceCoverage.caption) : null], fields.int_RoadDistanceCoverage.isInvalid],
+            ["str_Badge", [fields.str_Badge.visible && fields.str_Badge.required ? ew.Validators.required(fields.str_Badge.caption) : null], fields.str_Badge.isInvalid],
+            ["strZoomHostUrl", [fields.strZoomHostUrl.visible && fields.strZoomHostUrl.required ? ew.Validators.required(fields.strZoomHostUrl.caption) : null], fields.strZoomHostUrl.isInvalid],
+            ["strZoomUserUrl", [fields.strZoomUserUrl.visible && fields.strZoomUserUrl.required ? ew.Validators.required(fields.strZoomUserUrl.caption) : null], fields.strZoomUserUrl.isInvalid],
+            ["Signature", [fields.Signature.visible && fields.Signature.required ? ew.Validators.fileRequired(fields.Signature.caption) : null], fields.Signature.isInvalid],
+            ["str_VehicleType", [fields.str_VehicleType.visible && fields.str_VehicleType.required ? ew.Validators.required(fields.str_VehicleType.caption) : null], fields.str_VehicleType.isInvalid],
+            ["ProfilePicturePath", [fields.ProfilePicturePath.visible && fields.ProfilePicturePath.required ? ew.Validators.required(fields.ProfilePicturePath.caption) : null], fields.ProfilePicturePath.isInvalid],
+            ["Institution", [fields.Institution.visible && fields.Institution.required ? ew.Validators.required(fields.Institution.caption) : null], fields.Institution.isInvalid],
+            ["IsDrivingexperience", [fields.IsDrivingexperience.visible && fields.IsDrivingexperience.required ? ew.Validators.required(fields.IsDrivingexperience.caption) : null], fields.IsDrivingexperience.isInvalid],
+            ["intDrivinglicenseType", [fields.intDrivinglicenseType.visible && fields.intDrivinglicenseType.required ? ew.Validators.required(fields.intDrivinglicenseType.caption) : null], fields.intDrivinglicenseType.isInvalid],
+            ["AbsherApptNbr", [fields.AbsherApptNbr.visible && fields.AbsherApptNbr.required ? ew.Validators.required(fields.AbsherApptNbr.caption) : null], fields.AbsherApptNbr.isInvalid],
+            ["Absherphoto", [fields.Absherphoto.visible && fields.Absherphoto.required ? ew.Validators.fileRequired(fields.Absherphoto.caption) : null], fields.Absherphoto.isInvalid],
+            ["Fingerprint", [fields.Fingerprint.visible && fields.Fingerprint.required ? ew.Validators.fileRequired(fields.Fingerprint.caption) : null], fields.Fingerprint.isInvalid],
+            ["ProfileField", [fields.ProfileField.visible && fields.ProfileField.required ? ew.Validators.required(fields.ProfileField.caption) : null], fields.ProfileField.isInvalid],
+            ["UserlevelID", [fields.UserlevelID.visible && fields.UserlevelID.required ? ew.Validators.required(fields.UserlevelID.caption) : null], fields.UserlevelID.isInvalid],
+            ["Parent_Username", [fields.Parent_Username.visible && fields.Parent_Username.required ? ew.Validators.required(fields.Parent_Username.caption) : null], fields.Parent_Username.isInvalid],
+            ["Activated", [fields.Activated.visible && fields.Activated.required ? ew.Validators.required(fields.Activated.caption) : null], fields.Activated.isInvalid],
+            ["int_Nationality", [fields.int_Nationality.visible && fields.int_Nationality.required ? ew.Validators.required(fields.int_Nationality.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_Nationality.isInvalid],
+            ["User_Role", [fields.User_Role.visible && fields.User_Role.required ? ew.Validators.required(fields.User_Role.caption) : null], fields.User_Role.isInvalid],
+            ["int_Staff_Id", [fields.int_Staff_Id.visible && fields.int_Staff_Id.required ? ew.Validators.required(fields.int_Staff_Id.caption) : null, ew.Validators.integer, ew.Validators.selected], fields.int_Staff_Id.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_City": @Html.Raw(tblStudentsUpdate.str_City.ToClientList(tblStudentsUpdate)),
+            "int_State": @Html.Raw(tblStudentsUpdate.int_State.ToClientList(tblStudentsUpdate)),
+            "Hijri_Year": @Html.Raw(tblStudentsUpdate.Hijri_Year.ToClientList(tblStudentsUpdate)),
+            "Hijri_Month": @Html.Raw(tblStudentsUpdate.Hijri_Month.ToClientList(tblStudentsUpdate)),
+            "Hijri_Day": @Html.Raw(tblStudentsUpdate.Hijri_Day.ToClientList(tblStudentsUpdate)),
+            "str_Emergency_Contact_Relation": @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.ToClientList(tblStudentsUpdate)),
+            "bit_IsDeleted": @Html.Raw(tblStudentsUpdate.bit_IsDeleted.ToClientList(tblStudentsUpdate)),
+            "bit_appointmentColor": @Html.Raw(tblStudentsUpdate.bit_appointmentColor.ToClientList(tblStudentsUpdate)),
+            "bit_IsSuperAdmin": @Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.ToClientList(tblStudentsUpdate)),
+            "IsDrivingexperience": @Html.Raw(tblStudentsUpdate.IsDrivingexperience.ToClientList(tblStudentsUpdate)),
+            "intDrivinglicenseType": @Html.Raw(tblStudentsUpdate.intDrivinglicenseType.ToClientList(tblStudentsUpdate)),
+            "UserlevelID": @Html.Raw(tblStudentsUpdate.UserlevelID.ToClientList(tblStudentsUpdate)),
+            "Parent_Username": @Html.Raw(tblStudentsUpdate.Parent_Username.ToClientList(tblStudentsUpdate)),
+            "Activated": @Html.Raw(tblStudentsUpdate.Activated.ToClientList(tblStudentsUpdate)),
+            "User_Role": @Html.Raw(tblStudentsUpdate.User_Role.ToClientList(tblStudentsUpdate)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStudentsUpdate.ShowPageHeader()
+@tblStudentsUpdate.ShowMessages()
+<form name="ftblStudentsupdate" id="ftblStudentsupdate" class="@(tblStudentsUpdate.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="modal" value="@Convert.ToInt32(tblStudentsUpdate.IsModal)">
+@foreach (string recordKey in tblStudentsUpdate.RecordKeys) {
+<input type="hidden" name="key_m[]" value="@recordKey">
+}
+<div id="tbl_tblStudentsupdate" class="ew-update-div"><!-- page -->
+    @if (!tblStudentsUpdate.IsConfirm) { // Confirm page
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="u" id="u" data-ew-action="select-all" ><label class="form-check-label" for="u">@Html.Raw(Language.Phrase("SelectAll"))</label>
+    </div>
+    }
+@if (tblStudentsUpdate.str_First_Name.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_First_Name.MultiUpdateSelected)) { // tblStudentsUpdate.str_First_Name.Visible (begin)
+    <div id="r_str_First_Name" @Html.Raw(tblStudentsUpdate.str_First_Name.RowAttributes)>
+        <label for="x_str_First_Name" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_First_Name" id="u_str_First_Name" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_First_Name.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_First_Name">@Html.Raw(tblStudentsUpdate.str_First_Name.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_First_Name.CellAttributes)>
+                <span id="el_tblStudents_str_First_Name">
+                <input type="@(tblStudentsUpdate.str_First_Name.InputTextType)" name="x_str_First_Name" id="x_str_First_Name" data-table="tblStudents" data-field="x_str_First_Name" value="@Html.Raw(tblStudentsUpdate.str_First_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_First_Name.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_First_Name.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_First_Name.EditAttributes) aria-describedby="x_str_First_Name_help">
+                @Html.Raw(tblStudentsUpdate.str_First_Name.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_First_Name.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_First_Name.Visible (end) *@
+@if (tblStudentsUpdate.str_Middle_Name.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Middle_Name.MultiUpdateSelected)) { // tblStudentsUpdate.str_Middle_Name.Visible (begin)
+    <div id="r_str_Middle_Name" @Html.Raw(tblStudentsUpdate.str_Middle_Name.RowAttributes)>
+        <label for="x_str_Middle_Name" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Middle_Name" id="u_str_Middle_Name" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Middle_Name.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Middle_Name">@Html.Raw(tblStudentsUpdate.str_Middle_Name.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Middle_Name.CellAttributes)>
+                <span id="el_tblStudents_str_Middle_Name">
+                <input type="@(tblStudentsUpdate.str_Middle_Name.InputTextType)" name="x_str_Middle_Name" id="x_str_Middle_Name" data-table="tblStudents" data-field="x_str_Middle_Name" value="@Html.Raw(tblStudentsUpdate.str_Middle_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Middle_Name.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Middle_Name.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Middle_Name.EditAttributes) aria-describedby="x_str_Middle_Name_help">
+                @Html.Raw(tblStudentsUpdate.str_Middle_Name.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Middle_Name.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Middle_Name.Visible (end) *@
+@if (tblStudentsUpdate.str_Last_Name.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Last_Name.MultiUpdateSelected)) { // tblStudentsUpdate.str_Last_Name.Visible (begin)
+    <div id="r_str_Last_Name" @Html.Raw(tblStudentsUpdate.str_Last_Name.RowAttributes)>
+        <label for="x_str_Last_Name" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Last_Name" id="u_str_Last_Name" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Last_Name.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Last_Name">@Html.Raw(tblStudentsUpdate.str_Last_Name.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Last_Name.CellAttributes)>
+                <span id="el_tblStudents_str_Last_Name">
+                <input type="@(tblStudentsUpdate.str_Last_Name.InputTextType)" name="x_str_Last_Name" id="x_str_Last_Name" data-table="tblStudents" data-field="x_str_Last_Name" value="@Html.Raw(tblStudentsUpdate.str_Last_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Last_Name.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Last_Name.EditAttributes) aria-describedby="x_str_Last_Name_help">
+                @Html.Raw(tblStudentsUpdate.str_Last_Name.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Last_Name.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Last_Name.Visible (end) *@
+@if (tblStudentsUpdate.str_Address.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Address.MultiUpdateSelected)) { // tblStudentsUpdate.str_Address.Visible (begin)
+    <div id="r_str_Address" @Html.Raw(tblStudentsUpdate.str_Address.RowAttributes)>
+        <label for="x_str_Address" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Address" id="u_str_Address" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Address.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Address">@Html.Raw(tblStudentsUpdate.str_Address.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Address.CellAttributes)>
+                <span id="el_tblStudents_str_Address">
+                <input type="@(tblStudentsUpdate.str_Address.InputTextType)" name="x_str_Address" id="x_str_Address" data-table="tblStudents" data-field="x_str_Address" value="@Html.Raw(tblStudentsUpdate.str_Address.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Address.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Address.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Address.EditAttributes) aria-describedby="x_str_Address_help">
+                @Html.Raw(tblStudentsUpdate.str_Address.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Address.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Address.Visible (end) *@
+@if (tblStudentsUpdate.str_City.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_City.MultiUpdateSelected)) { // tblStudentsUpdate.str_City.Visible (begin)
+    <div id="r_str_City" @Html.Raw(tblStudentsUpdate.str_City.RowAttributes)>
+        <label for="x_str_City" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_City" id="u_str_City" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_City.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_City">@Html.Raw(tblStudentsUpdate.str_City.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_City.CellAttributes)>
+                <span id="el_tblStudents_str_City">
+                    <select
+                        id="x_str_City"
+                        name="x_str_City"
+                        class="form-select ew-select@(tblStudentsUpdate.str_City.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_str_City"
+                        data-table="tblStudents"
+                        data-field="x_str_City"
+                        data-value-separator="@(tblStudentsUpdate.str_City.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.str_City.PlaceHolder))"
+                        data-ew-action="update-options"
+                        @Html.Raw(tblStudentsUpdate.str_City.EditAttributes)>
+                        @(tblStudentsUpdate.str_City.SelectOptionListHtml("x_str_City"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.str_City.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_City.GetErrorMessage())</div>
+                @Html.Raw(tblStudentsUpdate.str_City.Lookup.GetParamTag(tblStudentsUpdate, "p_x_str_City"))
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_str_City", selectId: "ftblStudentsupdate_x_str_City" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.str_City?.lookupOptions.length) {
+                        options.data = { id: "x_str_City", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_str_City", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.str_City.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_City.Visible (end) *@
+@if (tblStudentsUpdate.int_State.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_State.MultiUpdateSelected)) { // tblStudentsUpdate.int_State.Visible (begin)
+    <div id="r_int_State" @Html.Raw(tblStudentsUpdate.int_State.RowAttributes)>
+        <label for="x_int_State" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_State" id="u_int_State" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_State.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_State">@Html.Raw(tblStudentsUpdate.int_State.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_State.CellAttributes)>
+                <span id="el_tblStudents_int_State">
+                    <select
+                        id="x_int_State"
+                        name="x_int_State"
+                        class="form-select ew-select@(tblStudentsUpdate.int_State.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_int_State"
+                        data-table="tblStudents"
+                        data-field="x_int_State"
+                        data-value-separator="@(tblStudentsUpdate.int_State.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.int_State.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.int_State.EditAttributes)>
+                        @(tblStudentsUpdate.int_State.SelectOptionListHtml("x_int_State"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.int_State.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_State.GetErrorMessage())</div>
+                @Html.Raw(tblStudentsUpdate.int_State.Lookup.GetParamTag(tblStudentsUpdate, "p_x_int_State"))
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_int_State", selectId: "ftblStudentsupdate_x_int_State" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.int_State?.lookupOptions.length) {
+                        options.data = { id: "x_int_State", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_int_State", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.int_State.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_State.Visible (end) *@
+@if (tblStudentsUpdate.str_Zip.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Zip.MultiUpdateSelected)) { // tblStudentsUpdate.str_Zip.Visible (begin)
+    <div id="r_str_Zip" @Html.Raw(tblStudentsUpdate.str_Zip.RowAttributes)>
+        <label for="x_str_Zip" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Zip" id="u_str_Zip" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Zip.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Zip">@Html.Raw(tblStudentsUpdate.str_Zip.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Zip.CellAttributes)>
+                <span id="el_tblStudents_str_Zip">
+                <input type="@(tblStudentsUpdate.str_Zip.InputTextType)" name="x_str_Zip" id="x_str_Zip" data-table="tblStudents" data-field="x_str_Zip" value="@Html.Raw(tblStudentsUpdate.str_Zip.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Zip.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Zip.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Zip.EditAttributes) aria-describedby="x_str_Zip_help">
+                @Html.Raw(tblStudentsUpdate.str_Zip.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Zip.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Zip.Visible (end) *@
+@if (tblStudentsUpdate.date_Left.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_Left.MultiUpdateSelected)) { // tblStudentsUpdate.date_Left.Visible (begin)
+    <div id="r_date_Left" @Html.Raw(tblStudentsUpdate.date_Left.RowAttributes)>
+        <label for="x_date_Left" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_Left" id="u_date_Left" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_Left.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_Left">@Html.Raw(tblStudentsUpdate.date_Left.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_Left.CellAttributes)>
+                <span id="el_tblStudents_date_Left">
+                <input type="@(tblStudentsUpdate.date_Left.InputTextType)" name="x_date_Left" id="x_date_Left" data-table="tblStudents" data-field="x_date_Left" value="@Html.Raw(tblStudentsUpdate.date_Left.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_Left.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_Left.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_Left.EditAttributes) aria-describedby="x_date_Left_help">
+                @Html.Raw(tblStudentsUpdate.date_Left.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_Left.GetErrorMessage())</div>
+                @if (!tblStudentsUpdate.date_Left.ReadOnly && !tblStudentsUpdate.date_Left.Disabled && !tblStudentsUpdate.date_Left.EditAttrs.Is("readonly") && !tblStudentsUpdate.date_Left.EditAttrs.Is("disabled")) {
+                <script>
+                loadjs.ready(["ftblStudentsupdate", "datetimepicker"], function () {
+                    let format = "@Html.Raw(DateFormat(0))", // DN
+                        options = {
+                                localization: {
+                                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                                    format,
+                                    ...ew.language.phrase("datetimepicker")
+                                },
+                                display: {
+                                    icons: {
+                                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                                    },
+                                    components: {
+                                        hours: !!format.match(/h/i),
+                                        minutes: !!format.match(/m/),
+                                        seconds: !!format.match(/s/i)
+                                    },
+                                    theme: ew.isDark() ? "dark" : "auto"
+                                }
+                            };
+                    ew.createDateTimePicker("ftblStudentsupdate", "x_date_Left", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+                });
+                </script>
+                }
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_Left.Visible (end) *@
+@if (tblStudentsUpdate.str_CertNumber.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_CertNumber.MultiUpdateSelected)) { // tblStudentsUpdate.str_CertNumber.Visible (begin)
+    <div id="r_str_CertNumber" @Html.Raw(tblStudentsUpdate.str_CertNumber.RowAttributes)>
+        <label for="x_str_CertNumber" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_CertNumber" id="u_str_CertNumber" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_CertNumber.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_CertNumber">@Html.Raw(tblStudentsUpdate.str_CertNumber.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_CertNumber.CellAttributes)>
+                <span id="el_tblStudents_str_CertNumber">
+                <input type="@(tblStudentsUpdate.str_CertNumber.InputTextType)" name="x_str_CertNumber" id="x_str_CertNumber" data-table="tblStudents" data-field="x_str_CertNumber" value="@Html.Raw(tblStudentsUpdate.str_CertNumber.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_CertNumber.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_CertNumber.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_CertNumber.EditAttributes) aria-describedby="x_str_CertNumber_help">
+                @Html.Raw(tblStudentsUpdate.str_CertNumber.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_CertNumber.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_CertNumber.Visible (end) *@
+@if (tblStudentsUpdate.date_CertExp.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_CertExp.MultiUpdateSelected)) { // tblStudentsUpdate.date_CertExp.Visible (begin)
+    <div id="r_date_CertExp" @Html.Raw(tblStudentsUpdate.date_CertExp.RowAttributes)>
+        <label for="x_date_CertExp" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_CertExp" id="u_date_CertExp" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_CertExp.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_CertExp">@Html.Raw(tblStudentsUpdate.date_CertExp.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_CertExp.CellAttributes)>
+                <span id="el_tblStudents_date_CertExp">
+                <input type="@(tblStudentsUpdate.date_CertExp.InputTextType)" name="x_date_CertExp" id="x_date_CertExp" data-table="tblStudents" data-field="x_date_CertExp" value="@Html.Raw(tblStudentsUpdate.date_CertExp.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_CertExp.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_CertExp.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_CertExp.EditAttributes) aria-describedby="x_date_CertExp_help">
+                @Html.Raw(tblStudentsUpdate.date_CertExp.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_CertExp.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_CertExp.Visible (end) *@
+@if (tblStudentsUpdate.str_Cell_Phone.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Cell_Phone.MultiUpdateSelected)) { // tblStudentsUpdate.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" @Html.Raw(tblStudentsUpdate.str_Cell_Phone.RowAttributes)>
+        <label for="x_str_Cell_Phone" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Cell_Phone" id="u_str_Cell_Phone" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Cell_Phone.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Cell_Phone">@Html.Raw(tblStudentsUpdate.str_Cell_Phone.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Cell_Phone.CellAttributes)>
+                <span id="el_tblStudents_str_Cell_Phone">
+                <input type="@(tblStudentsUpdate.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblStudents" data-field="x_str_Cell_Phone" value="@Html.Raw(tblStudentsUpdate.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Cell_Phone.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Cell_Phone.EditAttributes) aria-describedby="x_str_Cell_Phone_help">
+                @Html.Raw(tblStudentsUpdate.str_Cell_Phone.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Cell_Phone.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Cell_Phone.Visible (end) *@
+@if (tblStudentsUpdate.str_Home_Phone.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Home_Phone.MultiUpdateSelected)) { // tblStudentsUpdate.str_Home_Phone.Visible (begin)
+    <div id="r_str_Home_Phone" @Html.Raw(tblStudentsUpdate.str_Home_Phone.RowAttributes)>
+        <label for="x_str_Home_Phone" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Home_Phone" id="u_str_Home_Phone" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Home_Phone.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Home_Phone">@Html.Raw(tblStudentsUpdate.str_Home_Phone.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Home_Phone.CellAttributes)>
+                <span id="el_tblStudents_str_Home_Phone">
+                <input type="@(tblStudentsUpdate.str_Home_Phone.InputTextType)" name="x_str_Home_Phone" id="x_str_Home_Phone" data-table="tblStudents" data-field="x_str_Home_Phone" value="@Html.Raw(tblStudentsUpdate.str_Home_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Home_Phone.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Home_Phone.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Home_Phone.EditAttributes) aria-describedby="x_str_Home_Phone_help">
+                @Html.Raw(tblStudentsUpdate.str_Home_Phone.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Home_Phone.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Home_Phone.Visible (end) *@
+@if (tblStudentsUpdate.str_Other_Phone.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Other_Phone.MultiUpdateSelected)) { // tblStudentsUpdate.str_Other_Phone.Visible (begin)
+    <div id="r_str_Other_Phone" @Html.Raw(tblStudentsUpdate.str_Other_Phone.RowAttributes)>
+        <label for="x_str_Other_Phone" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Other_Phone" id="u_str_Other_Phone" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Other_Phone.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Other_Phone">@Html.Raw(tblStudentsUpdate.str_Other_Phone.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Other_Phone.CellAttributes)>
+                <span id="el_tblStudents_str_Other_Phone">
+                <input type="@(tblStudentsUpdate.str_Other_Phone.InputTextType)" name="x_str_Other_Phone" id="x_str_Other_Phone" data-table="tblStudents" data-field="x_str_Other_Phone" value="@Html.Raw(tblStudentsUpdate.str_Other_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Other_Phone.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Other_Phone.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Other_Phone.EditAttributes) aria-describedby="x_str_Other_Phone_help">
+                @Html.Raw(tblStudentsUpdate.str_Other_Phone.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Other_Phone.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Other_Phone.Visible (end) *@
+@if (tblStudentsUpdate.str_Email.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Email.MultiUpdateSelected)) { // tblStudentsUpdate.str_Email.Visible (begin)
+    <div id="r_str_Email" @Html.Raw(tblStudentsUpdate.str_Email.RowAttributes)>
+        <label for="x_str_Email" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Email" id="u_str_Email" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Email.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Email">@Html.Raw(tblStudentsUpdate.str_Email.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Email.CellAttributes)>
+                <span id="el_tblStudents_str_Email">
+                <input type="@(tblStudentsUpdate.str_Email.InputTextType)" name="x_str_Email" id="x_str_Email" data-table="tblStudents" data-field="x_str_Email" value="@Html.Raw(tblStudentsUpdate.str_Email.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Email.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Email.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Email.EditAttributes) aria-describedby="x_str_Email_help">
+                @Html.Raw(tblStudentsUpdate.str_Email.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Email.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Email.Visible (end) *@
+@if (tblStudentsUpdate.str_Code.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Code.MultiUpdateSelected)) { // tblStudentsUpdate.str_Code.Visible (begin)
+    <div id="r_str_Code" @Html.Raw(tblStudentsUpdate.str_Code.RowAttributes)>
+        <label for="x_str_Code" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Code" id="u_str_Code" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Code.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Code">@Html.Raw(tblStudentsUpdate.str_Code.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Code.CellAttributes)>
+                <span id="el_tblStudents_str_Code">
+                <input type="@(tblStudentsUpdate.str_Code.InputTextType)" name="x_str_Code" id="x_str_Code" data-table="tblStudents" data-field="x_str_Code" value="@Html.Raw(tblStudentsUpdate.str_Code.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Code.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Code.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Code.EditAttributes) aria-describedby="x_str_Code_help">
+                @Html.Raw(tblStudentsUpdate.str_Code.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Code.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Code.Visible (end) *@
+@if (tblStudentsUpdate.str_Username.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Username.MultiUpdateSelected)) { // tblStudentsUpdate.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(tblStudentsUpdate.str_Username.RowAttributes)>
+        <label for="x_str_Username" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Username" id="u_str_Username" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Username.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Username">@Html.Raw(tblStudentsUpdate.str_Username.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Username.CellAttributes)>
+                @if (!Security.IsAdmin && Security.IsLoggedIn && !tblStudentsUpdate.UserIDAllow("update")) { // Non system admin
+                <span id="el_tblStudents_str_Username">
+                    <select
+                        id="x_str_Username"
+                        name="x_str_Username"
+                        class="form-select ew-select@(tblStudentsUpdate.str_Username.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_str_Username"
+                        data-table="tblStudents"
+                        data-field="x_str_Username"
+                        data-value-separator="@(tblStudentsUpdate.str_Username.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.str_Username.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.str_Username.EditAttributes)>
+                        @(tblStudentsUpdate.str_Username.SelectOptionListHtml("x_str_Username"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.str_Username.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Username.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_str_Username", selectId: "ftblStudentsupdate_x_str_Username" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.str_Username?.lookupOptions.length) {
+                        options.data = { id: "x_str_Username", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_str_Username", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.str_Username.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+                } else {
+                <span id="el_tblStudents_str_Username">
+                <input type="@(tblStudentsUpdate.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblStudents" data-field="x_str_Username" value="@Html.Raw(tblStudentsUpdate.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Username.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Username.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Username.EditAttributes) aria-describedby="x_str_Username_help">
+                @Html.Raw(tblStudentsUpdate.str_Username.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Username.GetErrorMessage())</div>
+                </span>
+                }
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Username.Visible (end) *@
+@if (tblStudentsUpdate.str_Password.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Password.MultiUpdateSelected)) { // tblStudentsUpdate.str_Password.Visible (begin)
+    <div id="r_str_Password" @Html.Raw(tblStudentsUpdate.str_Password.RowAttributes)>
+        <label for="x_str_Password" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Password" id="u_str_Password" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Password.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Password">@Html.Raw(tblStudentsUpdate.str_Password.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Password.CellAttributes)>
+                <span id="el_tblStudents_str_Password">
+                <div class="input-group">
+                    <input type="password" name="x_str_Password" id="x_str_Password" autocomplete="new-password" data-field="x_str_Password" value="@(tblStudentsUpdate.str_Password.EditValue)" size="30" maxlength="50" placeholder="@(HtmlEncode(tblStudentsUpdate.str_Password.PlaceHolder))"@Html.Raw(tblStudentsUpdate.str_Password.EditAttributes) aria-describedby="x_str_Password_help">
+                    <button type="button" class="btn btn-default ew-toggle-password rounded-end" data-ew-action="password"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                @Html.Raw(tblStudentsUpdate.str_Password.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Password.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Password.Visible (end) *@
+@if (tblStudentsUpdate.date_Birth_Hijri.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_Birth_Hijri.MultiUpdateSelected)) { // tblStudentsUpdate.date_Birth_Hijri.Visible (begin)
+    <div id="r_date_Birth_Hijri" @Html.Raw(tblStudentsUpdate.date_Birth_Hijri.RowAttributes)>
+        <label for="x_date_Birth_Hijri" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_Birth_Hijri" id="u_date_Birth_Hijri" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_Birth_Hijri.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_Birth_Hijri">@Html.Raw(tblStudentsUpdate.date_Birth_Hijri.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_Birth_Hijri.CellAttributes)>
+                <span id="el_tblStudents_date_Birth_Hijri">
+                <input type="@(tblStudentsUpdate.date_Birth_Hijri.InputTextType)" name="x_date_Birth_Hijri" id="x_date_Birth_Hijri" data-table="tblStudents" data-field="x_date_Birth_Hijri" value="@Html.Raw(tblStudentsUpdate.date_Birth_Hijri.EditValue)" size="30" maxlength="4000" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_Birth_Hijri.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_Birth_Hijri.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_Birth_Hijri.EditAttributes) aria-describedby="x_date_Birth_Hijri_help">
+                @Html.Raw(tblStudentsUpdate.date_Birth_Hijri.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_Birth_Hijri.GetErrorMessage())</div>
+                @if (!tblStudentsUpdate.date_Birth_Hijri.ReadOnly && !tblStudentsUpdate.date_Birth_Hijri.Disabled && !tblStudentsUpdate.date_Birth_Hijri.EditAttrs.Is("readonly") && !tblStudentsUpdate.date_Birth_Hijri.EditAttrs.Is("disabled")) {
+                <script>
+                loadjs.ready(["ftblStudentsupdate", "datetimepicker"], function () {
+                    let format = "@Html.Raw(DateFormat(0))", // DN
+                        options = {
+                                localization: {
+                                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                                    format,
+                                    ...ew.language.phrase("datetimepicker")
+                                },
+                                display: {
+                                    icons: {
+                                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                                    },
+                                    components: {
+                                        hours: !!format.match(/h/i),
+                                        minutes: !!format.match(/m/),
+                                        seconds: !!format.match(/s/i)
+                                    },
+                                    theme: ew.isDark() ? "dark" : "auto"
+                                }
+                            };
+                    ew.createDateTimePicker("ftblStudentsupdate", "x_date_Birth_Hijri", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+                });
+                </script>
+                }
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_Birth_Hijri.Visible (end) *@
+@if (tblStudentsUpdate.date_Birth.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_Birth.MultiUpdateSelected)) { // tblStudentsUpdate.date_Birth.Visible (begin)
+    <div id="r_date_Birth" @Html.Raw(tblStudentsUpdate.date_Birth.RowAttributes)>
+        <label for="x_date_Birth" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_Birth" id="u_date_Birth" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_Birth.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_Birth">@Html.Raw(tblStudentsUpdate.date_Birth.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_Birth.CellAttributes)>
+                <span id="el_tblStudents_date_Birth">
+                <input type="@(tblStudentsUpdate.date_Birth.InputTextType)" name="x_date_Birth" id="x_date_Birth" data-table="tblStudents" data-field="x_date_Birth" value="@Html.Raw(tblStudentsUpdate.date_Birth.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_Birth.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_Birth.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_Birth.EditAttributes) aria-describedby="x_date_Birth_help">
+                @Html.Raw(tblStudentsUpdate.date_Birth.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_Birth.GetErrorMessage())</div>
+                @if (!tblStudentsUpdate.date_Birth.ReadOnly && !tblStudentsUpdate.date_Birth.Disabled && !tblStudentsUpdate.date_Birth.EditAttrs.Is("readonly") && !tblStudentsUpdate.date_Birth.EditAttrs.Is("disabled")) {
+                <script>
+                loadjs.ready(["ftblStudentsupdate", "datetimepicker"], function () {
+                    let format = "@Html.Raw(DateFormat(16))", // DN
+                        options = {
+                                localization: {
+                                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                                    format,
+                                    ...ew.language.phrase("datetimepicker")
+                                },
+                                display: {
+                                    icons: {
+                                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                                    },
+                                    components: {
+                                        hours: !!format.match(/h/i),
+                                        minutes: !!format.match(/m/),
+                                        seconds: !!format.match(/s/i)
+                                    },
+                                    theme: ew.isDark() ? "dark" : "auto"
+                                }
+                            };
+                    ew.createDateTimePicker("ftblStudentsupdate", "x_date_Birth", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+                });
+                </script>
+                }
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_Birth.Visible (end) *@
+@if (tblStudentsUpdate.Hijri_Year.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Hijri_Year.MultiUpdateSelected)) { // tblStudentsUpdate.Hijri_Year.Visible (begin)
+    <div id="r_Hijri_Year" @Html.Raw(tblStudentsUpdate.Hijri_Year.RowAttributes)>
+        <label for="x_Hijri_Year" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Hijri_Year" id="u_Hijri_Year" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Hijri_Year.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Hijri_Year">@Html.Raw(tblStudentsUpdate.Hijri_Year.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Hijri_Year.CellAttributes)>
+                <span id="el_tblStudents_Hijri_Year">
+                    <select
+                        id="x_Hijri_Year"
+                        name="x_Hijri_Year"
+                        class="form-select ew-select@(tblStudentsUpdate.Hijri_Year.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_Hijri_Year"
+                        data-table="tblStudents"
+                        data-field="x_Hijri_Year"
+                        data-value-separator="@(tblStudentsUpdate.Hijri_Year.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.Hijri_Year.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.Hijri_Year.EditAttributes)>
+                        @(tblStudentsUpdate.Hijri_Year.SelectOptionListHtml("x_Hijri_Year"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.Hijri_Year.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Hijri_Year.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_Hijri_Year", selectId: "ftblStudentsupdate_x_Hijri_Year" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.Hijri_Year?.lookupOptions.length) {
+                        options.data = { id: "x_Hijri_Year", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_Hijri_Year", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.Hijri_Year.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Hijri_Year.Visible (end) *@
+@if (tblStudentsUpdate.Hijri_Month.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Hijri_Month.MultiUpdateSelected)) { // tblStudentsUpdate.Hijri_Month.Visible (begin)
+    <div id="r_Hijri_Month" @Html.Raw(tblStudentsUpdate.Hijri_Month.RowAttributes)>
+        <label for="x_Hijri_Month" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Hijri_Month" id="u_Hijri_Month" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Hijri_Month.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Hijri_Month">@Html.Raw(tblStudentsUpdate.Hijri_Month.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Hijri_Month.CellAttributes)>
+                <span id="el_tblStudents_Hijri_Month">
+                    <select
+                        id="x_Hijri_Month"
+                        name="x_Hijri_Month"
+                        class="form-select ew-select@(tblStudentsUpdate.Hijri_Month.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_Hijri_Month"
+                        data-table="tblStudents"
+                        data-field="x_Hijri_Month"
+                        data-value-separator="@(tblStudentsUpdate.Hijri_Month.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.Hijri_Month.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.Hijri_Month.EditAttributes)>
+                        @(tblStudentsUpdate.Hijri_Month.SelectOptionListHtml("x_Hijri_Month"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.Hijri_Month.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Hijri_Month.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_Hijri_Month", selectId: "ftblStudentsupdate_x_Hijri_Month" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.Hijri_Month?.lookupOptions.length) {
+                        options.data = { id: "x_Hijri_Month", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_Hijri_Month", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.Hijri_Month.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Hijri_Month.Visible (end) *@
+@if (tblStudentsUpdate.Hijri_Day.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Hijri_Day.MultiUpdateSelected)) { // tblStudentsUpdate.Hijri_Day.Visible (begin)
+    <div id="r_Hijri_Day" @Html.Raw(tblStudentsUpdate.Hijri_Day.RowAttributes)>
+        <label for="x_Hijri_Day" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Hijri_Day" id="u_Hijri_Day" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Hijri_Day.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Hijri_Day">@Html.Raw(tblStudentsUpdate.Hijri_Day.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Hijri_Day.CellAttributes)>
+                <span id="el_tblStudents_Hijri_Day">
+                    <select
+                        id="x_Hijri_Day"
+                        name="x_Hijri_Day"
+                        class="form-select ew-select@(tblStudentsUpdate.Hijri_Day.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_Hijri_Day"
+                        data-table="tblStudents"
+                        data-field="x_Hijri_Day"
+                        data-value-separator="@(tblStudentsUpdate.Hijri_Day.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.Hijri_Day.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.Hijri_Day.EditAttributes)>
+                        @(tblStudentsUpdate.Hijri_Day.SelectOptionListHtml("x_Hijri_Day"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.Hijri_Day.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Hijri_Day.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_Hijri_Day", selectId: "ftblStudentsupdate_x_Hijri_Day" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.Hijri_Day?.lookupOptions.length) {
+                        options.data = { id: "x_Hijri_Day", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_Hijri_Day", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.Hijri_Day.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Hijri_Day.Visible (end) *@
+@if (tblStudentsUpdate.str_Emergency_Contact_Name.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Emergency_Contact_Name.MultiUpdateSelected)) { // tblStudentsUpdate.str_Emergency_Contact_Name.Visible (begin)
+    <div id="r_str_Emergency_Contact_Name" @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.RowAttributes)>
+        <label for="x_str_Emergency_Contact_Name" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Emergency_Contact_Name" id="u_str_Emergency_Contact_Name" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Emergency_Contact_Name.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Emergency_Contact_Name">@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.CellAttributes)>
+                <span id="el_tblStudents_str_Emergency_Contact_Name">
+                <input type="@(tblStudentsUpdate.str_Emergency_Contact_Name.InputTextType)" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" data-table="tblStudents" data-field="x_str_Emergency_Contact_Name" value="@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Emergency_Contact_Name.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Emergency_Contact_Name.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.EditAttributes) aria-describedby="x_str_Emergency_Contact_Name_help">
+                @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Name.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Emergency_Contact_Name.Visible (end) *@
+@if (tblStudentsUpdate.str_Emergency_Contact_Phone.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Emergency_Contact_Phone.MultiUpdateSelected)) { // tblStudentsUpdate.str_Emergency_Contact_Phone.Visible (begin)
+    <div id="r_str_Emergency_Contact_Phone" @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.RowAttributes)>
+        <label for="x_str_Emergency_Contact_Phone" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Emergency_Contact_Phone" id="u_str_Emergency_Contact_Phone" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Emergency_Contact_Phone.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Emergency_Contact_Phone">@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.CellAttributes)>
+                <span id="el_tblStudents_str_Emergency_Contact_Phone">
+                <input type="@(tblStudentsUpdate.str_Emergency_Contact_Phone.InputTextType)" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" data-table="tblStudents" data-field="x_str_Emergency_Contact_Phone" value="@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Emergency_Contact_Phone.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Emergency_Contact_Phone.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.EditAttributes) aria-describedby="x_str_Emergency_Contact_Phone_help">
+                @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Phone.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Emergency_Contact_Phone.Visible (end) *@
+@if (tblStudentsUpdate.str_Emergency_Contact_Relation.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Emergency_Contact_Relation.MultiUpdateSelected)) { // tblStudentsUpdate.str_Emergency_Contact_Relation.Visible (begin)
+    <div id="r_str_Emergency_Contact_Relation" @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.RowAttributes)>
+        <label for="x_str_Emergency_Contact_Relation" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Emergency_Contact_Relation" id="u_str_Emergency_Contact_Relation" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Emergency_Contact_Relation.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Emergency_Contact_Relation">@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.CellAttributes)>
+                <span id="el_tblStudents_str_Emergency_Contact_Relation">
+                    <select
+                        id="x_str_Emergency_Contact_Relation"
+                        name="x_str_Emergency_Contact_Relation"
+                        class="form-select ew-select@(tblStudentsUpdate.str_Emergency_Contact_Relation.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_str_Emergency_Contact_Relation"
+                        data-table="tblStudents"
+                        data-field="x_str_Emergency_Contact_Relation"
+                        data-value-separator="@(tblStudentsUpdate.str_Emergency_Contact_Relation.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.str_Emergency_Contact_Relation.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.EditAttributes)>
+                        @(tblStudentsUpdate.str_Emergency_Contact_Relation.SelectOptionListHtml("x_str_Emergency_Contact_Relation"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Emergency_Contact_Relation.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_str_Emergency_Contact_Relation", selectId: "ftblStudentsupdate_x_str_Emergency_Contact_Relation" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.str_Emergency_Contact_Relation?.lookupOptions.length) {
+                        options.data = { id: "x_str_Emergency_Contact_Relation", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_str_Emergency_Contact_Relation", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.str_Emergency_Contact_Relation.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Emergency_Contact_Relation.Visible (end) *@
+@if (tblStudentsUpdate.str_Notes.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Notes.MultiUpdateSelected)) { // tblStudentsUpdate.str_Notes.Visible (begin)
+    <div id="r_str_Notes" @Html.Raw(tblStudentsUpdate.str_Notes.RowAttributes)>
+        <label for="x_str_Notes" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Notes" id="u_str_Notes" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Notes.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Notes">@Html.Raw(tblStudentsUpdate.str_Notes.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Notes.CellAttributes)>
+                <span id="el_tblStudents_str_Notes">
+                <textarea data-table="tblStudents" data-field="x_str_Notes" name="x_str_Notes" id="x_str_Notes" cols="4" rows="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Notes.PlaceHolder))"@Html.Raw(tblStudentsUpdate.str_Notes.EditAttributes) aria-describedby="x_str_Notes_help">@(tblStudentsUpdate.str_Notes.EditValue)</textarea>
+                @Html.Raw(tblStudentsUpdate.str_Notes.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Notes.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Notes.Visible (end) *@
+@if (tblStudentsUpdate.int_ClassType.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_ClassType.MultiUpdateSelected)) { // tblStudentsUpdate.int_ClassType.Visible (begin)
+    <div id="r_int_ClassType" @Html.Raw(tblStudentsUpdate.int_ClassType.RowAttributes)>
+        <label for="x_int_ClassType" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_ClassType" id="u_int_ClassType" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_ClassType.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_ClassType">@Html.Raw(tblStudentsUpdate.int_ClassType.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_ClassType.CellAttributes)>
+                <span id="el_tblStudents_int_ClassType">
+                <input type="@(tblStudentsUpdate.int_ClassType.InputTextType)" name="x_int_ClassType" id="x_int_ClassType" data-table="tblStudents" data-field="x_int_ClassType" value="@Html.Raw(tblStudentsUpdate.int_ClassType.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_ClassType.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_ClassType.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_ClassType.EditAttributes) aria-describedby="x_int_ClassType_help">
+                @Html.Raw(tblStudentsUpdate.int_ClassType.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_ClassType.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_ClassType.Visible (end) *@
+@if (tblStudentsUpdate.str_ZipCodes.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_ZipCodes.MultiUpdateSelected)) { // tblStudentsUpdate.str_ZipCodes.Visible (begin)
+    <div id="r_str_ZipCodes" @Html.Raw(tblStudentsUpdate.str_ZipCodes.RowAttributes)>
+        <label for="x_str_ZipCodes" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_ZipCodes" id="u_str_ZipCodes" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_ZipCodes.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_ZipCodes">@Html.Raw(tblStudentsUpdate.str_ZipCodes.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_ZipCodes.CellAttributes)>
+                <span id="el_tblStudents_str_ZipCodes">
+                <textarea data-table="tblStudents" data-field="x_str_ZipCodes" name="x_str_ZipCodes" id="x_str_ZipCodes" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_ZipCodes.PlaceHolder))"@Html.Raw(tblStudentsUpdate.str_ZipCodes.EditAttributes) aria-describedby="x_str_ZipCodes_help">@(tblStudentsUpdate.str_ZipCodes.EditValue)</textarea>
+                @Html.Raw(tblStudentsUpdate.str_ZipCodes.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_ZipCodes.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_ZipCodes.Visible (end) *@
+@if (tblStudentsUpdate.int_VehicleAssigned.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_VehicleAssigned.MultiUpdateSelected)) { // tblStudentsUpdate.int_VehicleAssigned.Visible (begin)
+    <div id="r_int_VehicleAssigned" @Html.Raw(tblStudentsUpdate.int_VehicleAssigned.RowAttributes)>
+        <label for="x_int_VehicleAssigned" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_VehicleAssigned" id="u_int_VehicleAssigned" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_VehicleAssigned.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_VehicleAssigned">@Html.Raw(tblStudentsUpdate.int_VehicleAssigned.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_VehicleAssigned.CellAttributes)>
+                <span id="el_tblStudents_int_VehicleAssigned">
+                <input type="@(tblStudentsUpdate.int_VehicleAssigned.InputTextType)" name="x_int_VehicleAssigned" id="x_int_VehicleAssigned" data-table="tblStudents" data-field="x_int_VehicleAssigned" value="@Html.Raw(tblStudentsUpdate.int_VehicleAssigned.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_VehicleAssigned.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_VehicleAssigned.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_VehicleAssigned.EditAttributes) aria-describedby="x_int_VehicleAssigned_help">
+                @Html.Raw(tblStudentsUpdate.int_VehicleAssigned.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_VehicleAssigned.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_VehicleAssigned.Visible (end) *@
+@if (tblStudentsUpdate.int_Status.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Status.MultiUpdateSelected)) { // tblStudentsUpdate.int_Status.Visible (begin)
+    <div id="r_int_Status" @Html.Raw(tblStudentsUpdate.int_Status.RowAttributes)>
+        <label for="x_int_Status" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Status" id="u_int_Status" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Status.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Status">@Html.Raw(tblStudentsUpdate.int_Status.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Status.CellAttributes)>
+                <span id="el_tblStudents_int_Status">
+                <input type="@(tblStudentsUpdate.int_Status.InputTextType)" name="x_int_Status" id="x_int_Status" data-table="tblStudents" data-field="x_int_Status" value="@Html.Raw(tblStudentsUpdate.int_Status.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Status.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Status.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Status.EditAttributes) aria-describedby="x_int_Status_help">
+                @Html.Raw(tblStudentsUpdate.int_Status.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Status.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Status.Visible (end) *@
+@if (tblStudentsUpdate.int_Type.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Type.MultiUpdateSelected)) { // tblStudentsUpdate.int_Type.Visible (begin)
+    <div id="r_int_Type" @Html.Raw(tblStudentsUpdate.int_Type.RowAttributes)>
+        <label for="x_int_Type" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Type" id="u_int_Type" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Type.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Type">@Html.Raw(tblStudentsUpdate.int_Type.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Type.CellAttributes)>
+                <span id="el_tblStudents_int_Type">
+                <input type="@(tblStudentsUpdate.int_Type.InputTextType)" name="x_int_Type" id="x_int_Type" data-table="tblStudents" data-field="x_int_Type" value="@Html.Raw(tblStudentsUpdate.int_Type.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Type.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Type.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Type.EditAttributes) aria-describedby="x_int_Type_help">
+                @Html.Raw(tblStudentsUpdate.int_Type.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Type.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Type.Visible (end) *@
+@if (tblStudentsUpdate.int_Location.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Location.MultiUpdateSelected)) { // tblStudentsUpdate.int_Location.Visible (begin)
+    <div id="r_int_Location" @Html.Raw(tblStudentsUpdate.int_Location.RowAttributes)>
+        <label for="x_int_Location" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Location" id="u_int_Location" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Location.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Location">@Html.Raw(tblStudentsUpdate.int_Location.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Location.CellAttributes)>
+                <span id="el_tblStudents_int_Location">
+                <input type="@(tblStudentsUpdate.int_Location.InputTextType)" name="x_int_Location" id="x_int_Location" data-table="tblStudents" data-field="x_int_Location" value="@Html.Raw(tblStudentsUpdate.int_Location.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Location.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Location.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Location.EditAttributes) aria-describedby="x_int_Location_help">
+                @Html.Raw(tblStudentsUpdate.int_Location.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Location.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Location.Visible (end) *@
+@if (tblStudentsUpdate.int_Modified_By.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Modified_By.MultiUpdateSelected)) { // tblStudentsUpdate.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" @Html.Raw(tblStudentsUpdate.int_Modified_By.RowAttributes)>
+        <label for="x_int_Modified_By" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Modified_By" id="u_int_Modified_By" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Modified_By.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Modified_By">@Html.Raw(tblStudentsUpdate.int_Modified_By.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Modified_By.CellAttributes)>
+                <span id="el_tblStudents_int_Modified_By">
+                <input type="@(tblStudentsUpdate.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblStudents" data-field="x_int_Modified_By" value="@Html.Raw(tblStudentsUpdate.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Modified_By.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Modified_By.EditAttributes) aria-describedby="x_int_Modified_By_help">
+                @Html.Raw(tblStudentsUpdate.int_Modified_By.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Modified_By.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Modified_By.Visible (end) *@
+@if (tblStudentsUpdate.bit_IsDeleted.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.bit_IsDeleted.MultiUpdateSelected)) { // tblStudentsUpdate.bit_IsDeleted.Visible (begin)
+    <div id="r_bit_IsDeleted" @Html.Raw(tblStudentsUpdate.bit_IsDeleted.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_bit_IsDeleted" id="u_bit_IsDeleted" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.bit_IsDeleted.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_bit_IsDeleted">@Html.Raw(tblStudentsUpdate.bit_IsDeleted.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.bit_IsDeleted.CellAttributes)>
+                <span id="el_tblStudents_bit_IsDeleted">
+                <div class="form-check d-inline-block">
+                    <input type="checkbox" class="form-check-input@(tblStudentsUpdate.bit_IsDeleted.IsInvalidClass)" data-table="tblStudents" data-field="x_bit_IsDeleted" data-boolean name="x_bit_IsDeleted" id="x_bit_IsDeleted" value="1" checked="@ConvertToBool(tblStudentsUpdate.bit_IsDeleted.CurrentValue)" @Html.Raw(tblStudentsUpdate.bit_IsDeleted.EditAttributes) aria-describedby="x_bit_IsDeleted_help">
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.bit_IsDeleted.GetErrorMessage())</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.bit_IsDeleted.GetCustomMessage)
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.bit_IsDeleted.Visible (end) *@
+@if (tblStudentsUpdate.str_InstPermitNo.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_InstPermitNo.MultiUpdateSelected)) { // tblStudentsUpdate.str_InstPermitNo.Visible (begin)
+    <div id="r_str_InstPermitNo" @Html.Raw(tblStudentsUpdate.str_InstPermitNo.RowAttributes)>
+        <label for="x_str_InstPermitNo" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_InstPermitNo" id="u_str_InstPermitNo" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_InstPermitNo.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_InstPermitNo">@Html.Raw(tblStudentsUpdate.str_InstPermitNo.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_InstPermitNo.CellAttributes)>
+                <span id="el_tblStudents_str_InstPermitNo">
+                <input type="@(tblStudentsUpdate.str_InstPermitNo.InputTextType)" name="x_str_InstPermitNo" id="x_str_InstPermitNo" data-table="tblStudents" data-field="x_str_InstPermitNo" value="@Html.Raw(tblStudentsUpdate.str_InstPermitNo.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_InstPermitNo.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_InstPermitNo.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_InstPermitNo.EditAttributes) aria-describedby="x_str_InstPermitNo_help">
+                @Html.Raw(tblStudentsUpdate.str_InstPermitNo.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_InstPermitNo.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_InstPermitNo.Visible (end) *@
+@if (tblStudentsUpdate.date_PermitExpiration.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_PermitExpiration.MultiUpdateSelected)) { // tblStudentsUpdate.date_PermitExpiration.Visible (begin)
+    <div id="r_date_PermitExpiration" @Html.Raw(tblStudentsUpdate.date_PermitExpiration.RowAttributes)>
+        <label for="x_date_PermitExpiration" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_PermitExpiration" id="u_date_PermitExpiration" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_PermitExpiration.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_PermitExpiration">@Html.Raw(tblStudentsUpdate.date_PermitExpiration.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_PermitExpiration.CellAttributes)>
+                <span id="el_tblStudents_date_PermitExpiration">
+                <input type="@(tblStudentsUpdate.date_PermitExpiration.InputTextType)" name="x_date_PermitExpiration" id="x_date_PermitExpiration" data-table="tblStudents" data-field="x_date_PermitExpiration" value="@Html.Raw(tblStudentsUpdate.date_PermitExpiration.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_PermitExpiration.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_PermitExpiration.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_PermitExpiration.EditAttributes) aria-describedby="x_date_PermitExpiration_help">
+                @Html.Raw(tblStudentsUpdate.date_PermitExpiration.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_PermitExpiration.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_PermitExpiration.Visible (end) *@
+@if (tblStudentsUpdate.date_InCarPermitIssue.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_InCarPermitIssue.MultiUpdateSelected)) { // tblStudentsUpdate.date_InCarPermitIssue.Visible (begin)
+    <div id="r_date_InCarPermitIssue" @Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.RowAttributes)>
+        <label for="x_date_InCarPermitIssue" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_InCarPermitIssue" id="u_date_InCarPermitIssue" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_InCarPermitIssue.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_InCarPermitIssue">@Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.CellAttributes)>
+                <span id="el_tblStudents_date_InCarPermitIssue">
+                <input type="@(tblStudentsUpdate.date_InCarPermitIssue.InputTextType)" name="x_date_InCarPermitIssue" id="x_date_InCarPermitIssue" data-table="tblStudents" data-field="x_date_InCarPermitIssue" value="@Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_InCarPermitIssue.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_InCarPermitIssue.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.EditAttributes) aria-describedby="x_date_InCarPermitIssue_help">
+                @Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_InCarPermitIssue.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_InCarPermitIssue.Visible (end) *@
+@if (tblStudentsUpdate.str_InClassPermitNo.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_InClassPermitNo.MultiUpdateSelected)) { // tblStudentsUpdate.str_InClassPermitNo.Visible (begin)
+    <div id="r_str_InClassPermitNo" @Html.Raw(tblStudentsUpdate.str_InClassPermitNo.RowAttributes)>
+        <label for="x_str_InClassPermitNo" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_InClassPermitNo" id="u_str_InClassPermitNo" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_InClassPermitNo.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_InClassPermitNo">@Html.Raw(tblStudentsUpdate.str_InClassPermitNo.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_InClassPermitNo.CellAttributes)>
+                <span id="el_tblStudents_str_InClassPermitNo">
+                <input type="@(tblStudentsUpdate.str_InClassPermitNo.InputTextType)" name="x_str_InClassPermitNo" id="x_str_InClassPermitNo" data-table="tblStudents" data-field="x_str_InClassPermitNo" value="@Html.Raw(tblStudentsUpdate.str_InClassPermitNo.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_InClassPermitNo.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_InClassPermitNo.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_InClassPermitNo.EditAttributes) aria-describedby="x_str_InClassPermitNo_help">
+                @Html.Raw(tblStudentsUpdate.str_InClassPermitNo.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_InClassPermitNo.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_InClassPermitNo.Visible (end) *@
+@if (tblStudentsUpdate.date_InClassPermitIssue.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.date_InClassPermitIssue.MultiUpdateSelected)) { // tblStudentsUpdate.date_InClassPermitIssue.Visible (begin)
+    <div id="r_date_InClassPermitIssue" @Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.RowAttributes)>
+        <label for="x_date_InClassPermitIssue" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_date_InClassPermitIssue" id="u_date_InClassPermitIssue" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.date_InClassPermitIssue.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_date_InClassPermitIssue">@Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.CellAttributes)>
+                <span id="el_tblStudents_date_InClassPermitIssue">
+                <input type="@(tblStudentsUpdate.date_InClassPermitIssue.InputTextType)" name="x_date_InClassPermitIssue" id="x_date_InClassPermitIssue" data-table="tblStudents" data-field="x_date_InClassPermitIssue" value="@Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.date_InClassPermitIssue.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.date_InClassPermitIssue.FormatPattern)"@Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.EditAttributes) aria-describedby="x_date_InClassPermitIssue_help">
+                @Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.date_InClassPermitIssue.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.date_InClassPermitIssue.Visible (end) *@
+@if (tblStudentsUpdate.instructor_caption.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.instructor_caption.MultiUpdateSelected)) { // tblStudentsUpdate.instructor_caption.Visible (begin)
+    <div id="r_instructor_caption" @Html.Raw(tblStudentsUpdate.instructor_caption.RowAttributes)>
+        <label for="x_instructor_caption" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_instructor_caption" id="u_instructor_caption" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.instructor_caption.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_instructor_caption">@Html.Raw(tblStudentsUpdate.instructor_caption.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.instructor_caption.CellAttributes)>
+                <span id="el_tblStudents_instructor_caption">
+                <input type="@(tblStudentsUpdate.instructor_caption.InputTextType)" name="x_instructor_caption" id="x_instructor_caption" data-table="tblStudents" data-field="x_instructor_caption" value="@Html.Raw(tblStudentsUpdate.instructor_caption.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.instructor_caption.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.instructor_caption.FormatPattern)"@Html.Raw(tblStudentsUpdate.instructor_caption.EditAttributes) aria-describedby="x_instructor_caption_help">
+                @Html.Raw(tblStudentsUpdate.instructor_caption.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.instructor_caption.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.instructor_caption.Visible (end) *@
+@if (tblStudentsUpdate.str_LicType.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_LicType.MultiUpdateSelected)) { // tblStudentsUpdate.str_LicType.Visible (begin)
+    <div id="r_str_LicType" @Html.Raw(tblStudentsUpdate.str_LicType.RowAttributes)>
+        <label for="x_str_LicType" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_LicType" id="u_str_LicType" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_LicType.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_LicType">@Html.Raw(tblStudentsUpdate.str_LicType.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_LicType.CellAttributes)>
+                <span id="el_tblStudents_str_LicType">
+                <input type="@(tblStudentsUpdate.str_LicType.InputTextType)" name="x_str_LicType" id="x_str_LicType" data-table="tblStudents" data-field="x_str_LicType" value="@Html.Raw(tblStudentsUpdate.str_LicType.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_LicType.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_LicType.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_LicType.EditAttributes) aria-describedby="x_str_LicType_help">
+                @Html.Raw(tblStudentsUpdate.str_LicType.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_LicType.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_LicType.Visible (end) *@
+@if (tblStudentsUpdate.int_Order.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Order.MultiUpdateSelected)) { // tblStudentsUpdate.int_Order.Visible (begin)
+    <div id="r_int_Order" @Html.Raw(tblStudentsUpdate.int_Order.RowAttributes)>
+        <label for="x_int_Order" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Order" id="u_int_Order" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Order.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Order">@Html.Raw(tblStudentsUpdate.int_Order.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Order.CellAttributes)>
+                <span id="el_tblStudents_int_Order">
+                <input type="@(tblStudentsUpdate.int_Order.InputTextType)" name="x_int_Order" id="x_int_Order" data-table="tblStudents" data-field="x_int_Order" value="@Html.Raw(tblStudentsUpdate.int_Order.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Order.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Order.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Order.EditAttributes) aria-describedby="x_int_Order_help">
+                @Html.Raw(tblStudentsUpdate.int_Order.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Order.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Order.Visible (end) *@
+@if (tblStudentsUpdate.str_InstLicenceDate.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_InstLicenceDate.MultiUpdateSelected)) { // tblStudentsUpdate.str_InstLicenceDate.Visible (begin)
+    <div id="r_str_InstLicenceDate" @Html.Raw(tblStudentsUpdate.str_InstLicenceDate.RowAttributes)>
+        <label for="x_str_InstLicenceDate" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_InstLicenceDate" id="u_str_InstLicenceDate" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_InstLicenceDate.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_InstLicenceDate">@Html.Raw(tblStudentsUpdate.str_InstLicenceDate.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_InstLicenceDate.CellAttributes)>
+                <span id="el_tblStudents_str_InstLicenceDate">
+                <input type="@(tblStudentsUpdate.str_InstLicenceDate.InputTextType)" name="x_str_InstLicenceDate" id="x_str_InstLicenceDate" data-table="tblStudents" data-field="x_str_InstLicenceDate" value="@Html.Raw(tblStudentsUpdate.str_InstLicenceDate.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_InstLicenceDate.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_InstLicenceDate.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_InstLicenceDate.EditAttributes) aria-describedby="x_str_InstLicenceDate_help">
+                @Html.Raw(tblStudentsUpdate.str_InstLicenceDate.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_InstLicenceDate.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_InstLicenceDate.Visible (end) *@
+@if (tblStudentsUpdate.str_DLNum.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_DLNum.MultiUpdateSelected)) { // tblStudentsUpdate.str_DLNum.Visible (begin)
+    <div id="r_str_DLNum" @Html.Raw(tblStudentsUpdate.str_DLNum.RowAttributes)>
+        <label for="x_str_DLNum" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_DLNum" id="u_str_DLNum" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_DLNum.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_DLNum">@Html.Raw(tblStudentsUpdate.str_DLNum.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_DLNum.CellAttributes)>
+                <span id="el_tblStudents_str_DLNum">
+                <input type="@(tblStudentsUpdate.str_DLNum.InputTextType)" name="x_str_DLNum" id="x_str_DLNum" data-table="tblStudents" data-field="x_str_DLNum" value="@Html.Raw(tblStudentsUpdate.str_DLNum.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_DLNum.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_DLNum.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_DLNum.EditAttributes) aria-describedby="x_str_DLNum_help">
+                @Html.Raw(tblStudentsUpdate.str_DLNum.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_DLNum.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_DLNum.Visible (end) *@
+@if (tblStudentsUpdate.str_DLExp.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_DLExp.MultiUpdateSelected)) { // tblStudentsUpdate.str_DLExp.Visible (begin)
+    <div id="r_str_DLExp" @Html.Raw(tblStudentsUpdate.str_DLExp.RowAttributes)>
+        <label for="x_str_DLExp" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_DLExp" id="u_str_DLExp" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_DLExp.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_DLExp">@Html.Raw(tblStudentsUpdate.str_DLExp.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_DLExp.CellAttributes)>
+                <span id="el_tblStudents_str_DLExp">
+                <input type="@(tblStudentsUpdate.str_DLExp.InputTextType)" name="x_str_DLExp" id="x_str_DLExp" data-table="tblStudents" data-field="x_str_DLExp" value="@Html.Raw(tblStudentsUpdate.str_DLExp.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_DLExp.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_DLExp.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_DLExp.EditAttributes) aria-describedby="x_str_DLExp_help">
+                @Html.Raw(tblStudentsUpdate.str_DLExp.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_DLExp.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_DLExp.Visible (end) *@
+@if (tblStudentsUpdate.bit_appointmentColor.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.bit_appointmentColor.MultiUpdateSelected)) { // tblStudentsUpdate.bit_appointmentColor.Visible (begin)
+    <div id="r_bit_appointmentColor" @Html.Raw(tblStudentsUpdate.bit_appointmentColor.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_bit_appointmentColor" id="u_bit_appointmentColor" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.bit_appointmentColor.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_bit_appointmentColor">@Html.Raw(tblStudentsUpdate.bit_appointmentColor.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.bit_appointmentColor.CellAttributes)>
+                <span id="el_tblStudents_bit_appointmentColor">
+                <div class="form-check d-inline-block">
+                    <input type="checkbox" class="form-check-input@(tblStudentsUpdate.bit_appointmentColor.IsInvalidClass)" data-table="tblStudents" data-field="x_bit_appointmentColor" data-boolean name="x_bit_appointmentColor" id="x_bit_appointmentColor" value="1" checked="@ConvertToBool(tblStudentsUpdate.bit_appointmentColor.CurrentValue)" @Html.Raw(tblStudentsUpdate.bit_appointmentColor.EditAttributes) aria-describedby="x_bit_appointmentColor_help">
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.bit_appointmentColor.GetErrorMessage())</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.bit_appointmentColor.GetCustomMessage)
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.bit_appointmentColor.Visible (end) *@
+@if (tblStudentsUpdate.str_appointmentColorCode.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_appointmentColorCode.MultiUpdateSelected)) { // tblStudentsUpdate.str_appointmentColorCode.Visible (begin)
+    <div id="r_str_appointmentColorCode" @Html.Raw(tblStudentsUpdate.str_appointmentColorCode.RowAttributes)>
+        <label for="x_str_appointmentColorCode" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_appointmentColorCode" id="u_str_appointmentColorCode" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_appointmentColorCode.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_appointmentColorCode">@Html.Raw(tblStudentsUpdate.str_appointmentColorCode.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_appointmentColorCode.CellAttributes)>
+                <span id="el_tblStudents_str_appointmentColorCode">
+                <input type="@(tblStudentsUpdate.str_appointmentColorCode.InputTextType)" name="x_str_appointmentColorCode" id="x_str_appointmentColorCode" data-table="tblStudents" data-field="x_str_appointmentColorCode" value="@Html.Raw(tblStudentsUpdate.str_appointmentColorCode.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_appointmentColorCode.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_appointmentColorCode.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_appointmentColorCode.EditAttributes) aria-describedby="x_str_appointmentColorCode_help">
+                @Html.Raw(tblStudentsUpdate.str_appointmentColorCode.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_appointmentColorCode.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_appointmentColorCode.Visible (end) *@
+@if (tblStudentsUpdate.bit_IsSuperAdmin.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.bit_IsSuperAdmin.MultiUpdateSelected)) { // tblStudentsUpdate.bit_IsSuperAdmin.Visible (begin)
+    <div id="r_bit_IsSuperAdmin" @Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_bit_IsSuperAdmin" id="u_bit_IsSuperAdmin" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.bit_IsSuperAdmin.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_bit_IsSuperAdmin">@Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.CellAttributes)>
+                <span id="el_tblStudents_bit_IsSuperAdmin">
+                <div class="form-check d-inline-block">
+                    <input type="checkbox" class="form-check-input@(tblStudentsUpdate.bit_IsSuperAdmin.IsInvalidClass)" data-table="tblStudents" data-field="x_bit_IsSuperAdmin" data-boolean name="x_bit_IsSuperAdmin" id="x_bit_IsSuperAdmin" value="1" checked="@ConvertToBool(tblStudentsUpdate.bit_IsSuperAdmin.CurrentValue)" @Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.EditAttributes) aria-describedby="x_bit_IsSuperAdmin_help">
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.GetErrorMessage())</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.bit_IsSuperAdmin.GetCustomMessage)
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.bit_IsSuperAdmin.Visible (end) *@
+@if (tblStudentsUpdate.IsDistanceBasedScheduling.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.IsDistanceBasedScheduling.MultiUpdateSelected)) { // tblStudentsUpdate.IsDistanceBasedScheduling.Visible (begin)
+    <div id="r_IsDistanceBasedScheduling" @Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.RowAttributes)>
+        <label for="x_IsDistanceBasedScheduling" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_IsDistanceBasedScheduling" id="u_IsDistanceBasedScheduling" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.IsDistanceBasedScheduling.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_IsDistanceBasedScheduling">@Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.CellAttributes)>
+                <span id="el_tblStudents_IsDistanceBasedScheduling">
+                <input type="@(tblStudentsUpdate.IsDistanceBasedScheduling.InputTextType)" name="x_IsDistanceBasedScheduling" id="x_IsDistanceBasedScheduling" data-table="tblStudents" data-field="x_IsDistanceBasedScheduling" value="@Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.IsDistanceBasedScheduling.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.IsDistanceBasedScheduling.FormatPattern)"@Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.EditAttributes) aria-describedby="x_IsDistanceBasedScheduling_help">
+                @Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.IsDistanceBasedScheduling.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.IsDistanceBasedScheduling.Visible (end) *@
+@if (tblStudentsUpdate.str_Package_Code.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Package_Code.MultiUpdateSelected)) { // tblStudentsUpdate.str_Package_Code.Visible (begin)
+    <div id="r_str_Package_Code" @Html.Raw(tblStudentsUpdate.str_Package_Code.RowAttributes)>
+        <label for="x_str_Package_Code" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Package_Code" id="u_str_Package_Code" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Package_Code.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Package_Code">@Html.Raw(tblStudentsUpdate.str_Package_Code.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Package_Code.CellAttributes)>
+                <span id="el_tblStudents_str_Package_Code">
+                <input type="@(tblStudentsUpdate.str_Package_Code.InputTextType)" name="x_str_Package_Code" id="x_str_Package_Code" data-table="tblStudents" data-field="x_str_Package_Code" value="@Html.Raw(tblStudentsUpdate.str_Package_Code.EditValue)" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Package_Code.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Package_Code.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Package_Code.EditAttributes) aria-describedby="x_str_Package_Code_help">
+                @Html.Raw(tblStudentsUpdate.str_Package_Code.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Package_Code.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Package_Code.Visible (end) *@
+@if (tblStudentsUpdate.str_NationalID_Iqama.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_NationalID_Iqama.MultiUpdateSelected)) { // tblStudentsUpdate.str_NationalID_Iqama.Visible (begin)
+    <div id="r_str_NationalID_Iqama" @Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.RowAttributes)>
+        <label for="x_str_NationalID_Iqama" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_NationalID_Iqama" id="u_str_NationalID_Iqama" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_NationalID_Iqama.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_NationalID_Iqama">@Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.CellAttributes)>
+                <span id="el_tblStudents_str_NationalID_Iqama">
+                <input type="@(tblStudentsUpdate.str_NationalID_Iqama.InputTextType)" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" data-table="tblStudents" data-field="x_str_NationalID_Iqama" value="@Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.EditValue)" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_NationalID_Iqama.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_NationalID_Iqama.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.EditAttributes) aria-describedby="x_str_NationalID_Iqama_help">
+                @Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_NationalID_Iqama.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_NationalID_Iqama.Visible (end) *@
+@if (tblStudentsUpdate.NationalID.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.NationalID.MultiUpdateSelected)) { // tblStudentsUpdate.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblStudentsUpdate.NationalID.RowAttributes)>
+        <label for="x_NationalID" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_NationalID" id="u_NationalID" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.NationalID.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_NationalID">@Html.Raw(tblStudentsUpdate.NationalID.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.NationalID.CellAttributes)>
+                <span id="el_tblStudents_NationalID">
+                <input type="@(tblStudentsUpdate.NationalID.InputTextType)" name="x_NationalID" id="x_NationalID" data-table="tblStudents" data-field="x_NationalID" value="@Html.Raw(tblStudentsUpdate.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.NationalID.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.NationalID.FormatPattern)"@Html.Raw(tblStudentsUpdate.NationalID.EditAttributes) aria-describedby="x_NationalID_help">
+                @Html.Raw(tblStudentsUpdate.NationalID.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.NationalID.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.NationalID.Visible (end) *@
+@if (tblStudentsUpdate.int_RoadDistanceCoverage.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_RoadDistanceCoverage.MultiUpdateSelected)) { // tblStudentsUpdate.int_RoadDistanceCoverage.Visible (begin)
+    <div id="r_int_RoadDistanceCoverage" @Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.RowAttributes)>
+        <label for="x_int_RoadDistanceCoverage" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_RoadDistanceCoverage" id="u_int_RoadDistanceCoverage" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_RoadDistanceCoverage.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_RoadDistanceCoverage">@Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.CellAttributes)>
+                <span id="el_tblStudents_int_RoadDistanceCoverage">
+                <input type="@(tblStudentsUpdate.int_RoadDistanceCoverage.InputTextType)" name="x_int_RoadDistanceCoverage" id="x_int_RoadDistanceCoverage" data-table="tblStudents" data-field="x_int_RoadDistanceCoverage" value="@Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_RoadDistanceCoverage.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_RoadDistanceCoverage.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.EditAttributes) aria-describedby="x_int_RoadDistanceCoverage_help">
+                @Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_RoadDistanceCoverage.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_RoadDistanceCoverage.Visible (end) *@
+@if (tblStudentsUpdate.str_Badge.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_Badge.MultiUpdateSelected)) { // tblStudentsUpdate.str_Badge.Visible (begin)
+    <div id="r_str_Badge" @Html.Raw(tblStudentsUpdate.str_Badge.RowAttributes)>
+        <label for="x_str_Badge" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_Badge" id="u_str_Badge" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_Badge.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_Badge">@Html.Raw(tblStudentsUpdate.str_Badge.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_Badge.CellAttributes)>
+                <span id="el_tblStudents_str_Badge">
+                <input type="@(tblStudentsUpdate.str_Badge.InputTextType)" name="x_str_Badge" id="x_str_Badge" data-table="tblStudents" data-field="x_str_Badge" value="@Html.Raw(tblStudentsUpdate.str_Badge.EditValue)" size="30" maxlength="1000" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_Badge.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_Badge.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_Badge.EditAttributes) aria-describedby="x_str_Badge_help">
+                @Html.Raw(tblStudentsUpdate.str_Badge.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_Badge.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_Badge.Visible (end) *@
+@if (tblStudentsUpdate.strZoomHostUrl.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.strZoomHostUrl.MultiUpdateSelected)) { // tblStudentsUpdate.strZoomHostUrl.Visible (begin)
+    <div id="r_strZoomHostUrl" @Html.Raw(tblStudentsUpdate.strZoomHostUrl.RowAttributes)>
+        <label for="x_strZoomHostUrl" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_strZoomHostUrl" id="u_strZoomHostUrl" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.strZoomHostUrl.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_strZoomHostUrl">@Html.Raw(tblStudentsUpdate.strZoomHostUrl.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.strZoomHostUrl.CellAttributes)>
+                <span id="el_tblStudents_strZoomHostUrl">
+                <textarea data-table="tblStudents" data-field="x_strZoomHostUrl" name="x_strZoomHostUrl" id="x_strZoomHostUrl" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.strZoomHostUrl.PlaceHolder))"@Html.Raw(tblStudentsUpdate.strZoomHostUrl.EditAttributes) aria-describedby="x_strZoomHostUrl_help">@(tblStudentsUpdate.strZoomHostUrl.EditValue)</textarea>
+                @Html.Raw(tblStudentsUpdate.strZoomHostUrl.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.strZoomHostUrl.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.strZoomHostUrl.Visible (end) *@
+@if (tblStudentsUpdate.strZoomUserUrl.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.strZoomUserUrl.MultiUpdateSelected)) { // tblStudentsUpdate.strZoomUserUrl.Visible (begin)
+    <div id="r_strZoomUserUrl" @Html.Raw(tblStudentsUpdate.strZoomUserUrl.RowAttributes)>
+        <label for="x_strZoomUserUrl" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_strZoomUserUrl" id="u_strZoomUserUrl" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.strZoomUserUrl.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_strZoomUserUrl">@Html.Raw(tblStudentsUpdate.strZoomUserUrl.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.strZoomUserUrl.CellAttributes)>
+                <span id="el_tblStudents_strZoomUserUrl">
+                <textarea data-table="tblStudents" data-field="x_strZoomUserUrl" name="x_strZoomUserUrl" id="x_strZoomUserUrl" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.strZoomUserUrl.PlaceHolder))"@Html.Raw(tblStudentsUpdate.strZoomUserUrl.EditAttributes) aria-describedby="x_strZoomUserUrl_help">@(tblStudentsUpdate.strZoomUserUrl.EditValue)</textarea>
+                @Html.Raw(tblStudentsUpdate.strZoomUserUrl.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.strZoomUserUrl.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.strZoomUserUrl.Visible (end) *@
+@if (tblStudentsUpdate.Signature.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Signature.MultiUpdateSelected)) { // tblStudentsUpdate.Signature.Visible (begin)
+    <div id="r_Signature" @Html.Raw(tblStudentsUpdate.Signature.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Signature" id="u_Signature" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Signature.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Signature">@Html.Raw(tblStudentsUpdate.Signature.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Signature.CellAttributes)>
+                <span id="el_tblStudents_Signature">
+                <div id="fd_x_Signature" class="fileinput-button ew-file-drop-zone">
+                    <input
+                        type="file"
+                        id="x_Signature"
+                        name="x_Signature"
+                        class="form-control ew-file-input"
+                        title="@(tblStudentsUpdate.Signature.Title)"
+                        lang="@(CurrentLanguageID)"
+                        data-table="tblStudents"
+                        data-field="x_Signature"
+                        data-size="0"
+                        data-accept-file-types="@(tblStudentsUpdate.Signature.AcceptFileTypes)"
+                        data-max-file-size="@(tblStudentsUpdate.Signature.UploadMaxFileSize)"
+                        data-max-number-of-files="null"
+                        data-disable-image-crop="@(tblStudentsUpdate.Signature.ImageCropper ? 0 : 1)"
+                        aria-describedby="x_Signature_help"
+                        @Html.Raw((tblStudentsUpdate.Signature.ReadOnly || tblStudentsUpdate.Signature.Disabled) ? " disabled" : "")
+                        @Html.Raw(tblStudentsUpdate.Signature.EditAttributes)
+                    >
+                    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.Signature.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Signature.GetErrorMessage())</div>
+                <input type="hidden" name="fn_x_Signature" id= "fn_x_Signature" value="@(tblStudentsUpdate.Signature.Upload.FileName)">
+                <input type="hidden" name="fa_x_Signature" id= "fa_x_Signature" value="@(Post("fa_x_Signature") == "0" ? "0" : "1")">
+                <table id="ft_x_Signature" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Signature.Visible (end) *@
+@if (tblStudentsUpdate.str_VehicleType.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.str_VehicleType.MultiUpdateSelected)) { // tblStudentsUpdate.str_VehicleType.Visible (begin)
+    <div id="r_str_VehicleType" @Html.Raw(tblStudentsUpdate.str_VehicleType.RowAttributes)>
+        <label for="x_str_VehicleType" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_str_VehicleType" id="u_str_VehicleType" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.str_VehicleType.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_str_VehicleType">@Html.Raw(tblStudentsUpdate.str_VehicleType.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.str_VehicleType.CellAttributes)>
+                <span id="el_tblStudents_str_VehicleType">
+                <input type="@(tblStudentsUpdate.str_VehicleType.InputTextType)" name="x_str_VehicleType" id="x_str_VehicleType" data-table="tblStudents" data-field="x_str_VehicleType" value="@Html.Raw(tblStudentsUpdate.str_VehicleType.EditValue)" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.str_VehicleType.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.str_VehicleType.FormatPattern)"@Html.Raw(tblStudentsUpdate.str_VehicleType.EditAttributes) aria-describedby="x_str_VehicleType_help">
+                @Html.Raw(tblStudentsUpdate.str_VehicleType.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.str_VehicleType.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.str_VehicleType.Visible (end) *@
+@if (tblStudentsUpdate.ProfilePicturePath.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.ProfilePicturePath.MultiUpdateSelected)) { // tblStudentsUpdate.ProfilePicturePath.Visible (begin)
+    <div id="r_ProfilePicturePath" @Html.Raw(tblStudentsUpdate.ProfilePicturePath.RowAttributes)>
+        <label for="x_ProfilePicturePath" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_ProfilePicturePath" id="u_ProfilePicturePath" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.ProfilePicturePath.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_ProfilePicturePath">@Html.Raw(tblStudentsUpdate.ProfilePicturePath.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.ProfilePicturePath.CellAttributes)>
+                <span id="el_tblStudents_ProfilePicturePath">
+                <input type="@(tblStudentsUpdate.ProfilePicturePath.InputTextType)" name="x_ProfilePicturePath" id="x_ProfilePicturePath" data-table="tblStudents" data-field="x_ProfilePicturePath" value="@Html.Raw(tblStudentsUpdate.ProfilePicturePath.EditValue)" size="30" maxlength="350" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.ProfilePicturePath.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.ProfilePicturePath.FormatPattern)"@Html.Raw(tblStudentsUpdate.ProfilePicturePath.EditAttributes) aria-describedby="x_ProfilePicturePath_help">
+                @Html.Raw(tblStudentsUpdate.ProfilePicturePath.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.ProfilePicturePath.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.ProfilePicturePath.Visible (end) *@
+@if (tblStudentsUpdate.Institution.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Institution.MultiUpdateSelected)) { // tblStudentsUpdate.Institution.Visible (begin)
+    <div id="r_Institution" @Html.Raw(tblStudentsUpdate.Institution.RowAttributes)>
+        <label for="x_Institution" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Institution" id="u_Institution" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Institution.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Institution">@Html.Raw(tblStudentsUpdate.Institution.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Institution.CellAttributes)>
+                <span id="el_tblStudents_Institution">
+                <input type="@(tblStudentsUpdate.Institution.InputTextType)" name="x_Institution" id="x_Institution" data-table="tblStudents" data-field="x_Institution" value="@Html.Raw(tblStudentsUpdate.Institution.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.Institution.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.Institution.FormatPattern)"@Html.Raw(tblStudentsUpdate.Institution.EditAttributes) aria-describedby="x_Institution_help">
+                @Html.Raw(tblStudentsUpdate.Institution.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Institution.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Institution.Visible (end) *@
+@if (tblStudentsUpdate.IsDrivingexperience.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.IsDrivingexperience.MultiUpdateSelected)) { // tblStudentsUpdate.IsDrivingexperience.Visible (begin)
+    <div id="r_IsDrivingexperience" @Html.Raw(tblStudentsUpdate.IsDrivingexperience.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_IsDrivingexperience" id="u_IsDrivingexperience" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.IsDrivingexperience.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_IsDrivingexperience">@Html.Raw(tblStudentsUpdate.IsDrivingexperience.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.IsDrivingexperience.CellAttributes)>
+                <span id="el_tblStudents_IsDrivingexperience">
+                <div class="form-check d-inline-block">
+                    <input type="checkbox" class="form-check-input@(tblStudentsUpdate.IsDrivingexperience.IsInvalidClass)" data-table="tblStudents" data-field="x_IsDrivingexperience" data-boolean name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="1" checked="@ConvertToBool(tblStudentsUpdate.IsDrivingexperience.CurrentValue)" @Html.Raw(tblStudentsUpdate.IsDrivingexperience.EditAttributes) aria-describedby="x_IsDrivingexperience_help">
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.IsDrivingexperience.GetErrorMessage())</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.IsDrivingexperience.GetCustomMessage)
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.IsDrivingexperience.Visible (end) *@
+@if (tblStudentsUpdate.intDrivinglicenseType.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.intDrivinglicenseType.MultiUpdateSelected)) { // tblStudentsUpdate.intDrivinglicenseType.Visible (begin)
+    <div id="r_intDrivinglicenseType" @Html.Raw(tblStudentsUpdate.intDrivinglicenseType.RowAttributes)>
+        <label for="x_intDrivinglicenseType" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_intDrivinglicenseType" id="u_intDrivinglicenseType" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.intDrivinglicenseType.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_intDrivinglicenseType">@Html.Raw(tblStudentsUpdate.intDrivinglicenseType.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.intDrivinglicenseType.CellAttributes)>
+                <span id="el_tblStudents_intDrivinglicenseType">
+                    <select
+                        id="x_intDrivinglicenseType"
+                        name="x_intDrivinglicenseType"
+                        class="form-select ew-select@(tblStudentsUpdate.intDrivinglicenseType.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_intDrivinglicenseType"
+                        data-table="tblStudents"
+                        data-field="x_intDrivinglicenseType"
+                        data-value-separator="@(tblStudentsUpdate.intDrivinglicenseType.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.intDrivinglicenseType.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.intDrivinglicenseType.EditAttributes)>
+                        @(tblStudentsUpdate.intDrivinglicenseType.SelectOptionListHtml("x_intDrivinglicenseType"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.intDrivinglicenseType.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.intDrivinglicenseType.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_intDrivinglicenseType", selectId: "ftblStudentsupdate_x_intDrivinglicenseType" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.intDrivinglicenseType?.lookupOptions.length) {
+                        options.data = { id: "x_intDrivinglicenseType", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_intDrivinglicenseType", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.intDrivinglicenseType.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.intDrivinglicenseType.Visible (end) *@
+@if (tblStudentsUpdate.AbsherApptNbr.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.AbsherApptNbr.MultiUpdateSelected)) { // tblStudentsUpdate.AbsherApptNbr.Visible (begin)
+    <div id="r_AbsherApptNbr" @Html.Raw(tblStudentsUpdate.AbsherApptNbr.RowAttributes)>
+        <label for="x_AbsherApptNbr" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_AbsherApptNbr" id="u_AbsherApptNbr" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.AbsherApptNbr.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_AbsherApptNbr">@Html.Raw(tblStudentsUpdate.AbsherApptNbr.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.AbsherApptNbr.CellAttributes)>
+                <span id="el_tblStudents_AbsherApptNbr">
+                <input type="@(tblStudentsUpdate.AbsherApptNbr.InputTextType)" name="x_AbsherApptNbr" id="x_AbsherApptNbr" data-table="tblStudents" data-field="x_AbsherApptNbr" value="@Html.Raw(tblStudentsUpdate.AbsherApptNbr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.AbsherApptNbr.FormatPattern)"@Html.Raw(tblStudentsUpdate.AbsherApptNbr.EditAttributes) aria-describedby="x_AbsherApptNbr_help">
+                @Html.Raw(tblStudentsUpdate.AbsherApptNbr.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.AbsherApptNbr.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.AbsherApptNbr.Visible (end) *@
+@if (tblStudentsUpdate.Absherphoto.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Absherphoto.MultiUpdateSelected)) { // tblStudentsUpdate.Absherphoto.Visible (begin)
+    <div id="r_Absherphoto" @Html.Raw(tblStudentsUpdate.Absherphoto.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Absherphoto" id="u_Absherphoto" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Absherphoto.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Absherphoto">@Html.Raw(tblStudentsUpdate.Absherphoto.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Absherphoto.CellAttributes)>
+                <span id="el_tblStudents_Absherphoto">
+                <div id="fd_x_Absherphoto" class="fileinput-button ew-file-drop-zone">
+                    <input
+                        type="file"
+                        id="x_Absherphoto"
+                        name="x_Absherphoto"
+                        class="form-control ew-file-input"
+                        title="@(tblStudentsUpdate.Absherphoto.Title)"
+                        lang="@(CurrentLanguageID)"
+                        data-table="tblStudents"
+                        data-field="x_Absherphoto"
+                        data-size="500"
+                        data-accept-file-types="@(tblStudentsUpdate.Absherphoto.AcceptFileTypes)"
+                        data-max-file-size="@(tblStudentsUpdate.Absherphoto.UploadMaxFileSize)"
+                        data-max-number-of-files="null"
+                        data-disable-image-crop="@(tblStudentsUpdate.Absherphoto.ImageCropper ? 0 : 1)"
+                        aria-describedby="x_Absherphoto_help"
+                        @Html.Raw((tblStudentsUpdate.Absherphoto.ReadOnly || tblStudentsUpdate.Absherphoto.Disabled) ? " disabled" : "")
+                        @Html.Raw(tblStudentsUpdate.Absherphoto.EditAttributes)
+                    >
+                    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.Absherphoto.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Absherphoto.GetErrorMessage())</div>
+                <input type="hidden" name="fn_x_Absherphoto" id= "fn_x_Absherphoto" value="@(tblStudentsUpdate.Absherphoto.Upload.FileName)">
+                <input type="hidden" name="fa_x_Absherphoto" id= "fa_x_Absherphoto" value="@(Post("fa_x_Absherphoto") == "0" ? "0" : "1")">
+                <table id="ft_x_Absherphoto" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Absherphoto.Visible (end) *@
+@if (tblStudentsUpdate.Fingerprint.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.Fingerprint.MultiUpdateSelected)) { // tblStudentsUpdate.Fingerprint.Visible (begin)
+    <div id="r_Fingerprint" @Html.Raw(tblStudentsUpdate.Fingerprint.RowAttributes)>
+        <label class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_Fingerprint" id="u_Fingerprint" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.Fingerprint.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_Fingerprint">@Html.Raw(tblStudentsUpdate.Fingerprint.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.Fingerprint.CellAttributes)>
+                <span id="el_tblStudents_Fingerprint">
+                <div id="fd_x_Fingerprint" class="fileinput-button ew-file-drop-zone">
+                    <input
+                        type="file"
+                        id="x_Fingerprint"
+                        name="x_Fingerprint"
+                        class="form-control ew-file-input"
+                        title="@(tblStudentsUpdate.Fingerprint.Title)"
+                        lang="@(CurrentLanguageID)"
+                        data-table="tblStudents"
+                        data-field="x_Fingerprint"
+                        data-size="500"
+                        data-accept-file-types="@(tblStudentsUpdate.Fingerprint.AcceptFileTypes)"
+                        data-max-file-size="@(tblStudentsUpdate.Fingerprint.UploadMaxFileSize)"
+                        data-max-number-of-files="null"
+                        data-disable-image-crop="@(tblStudentsUpdate.Fingerprint.ImageCropper ? 0 : 1)"
+                        aria-describedby="x_Fingerprint_help"
+                        @Html.Raw((tblStudentsUpdate.Fingerprint.ReadOnly || tblStudentsUpdate.Fingerprint.Disabled) ? " disabled" : "")
+                        @Html.Raw(tblStudentsUpdate.Fingerprint.EditAttributes)
+                    >
+                    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+                </div>
+                @Html.Raw(tblStudentsUpdate.Fingerprint.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.Fingerprint.GetErrorMessage())</div>
+                <input type="hidden" name="fn_x_Fingerprint" id= "fn_x_Fingerprint" value="@(tblStudentsUpdate.Fingerprint.Upload.FileName)">
+                <input type="hidden" name="fa_x_Fingerprint" id= "fa_x_Fingerprint" value="@(Post("fa_x_Fingerprint") == "0" ? "0" : "1")">
+                <table id="ft_x_Fingerprint" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.Fingerprint.Visible (end) *@
+@if (tblStudentsUpdate.ProfileField.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.ProfileField.MultiUpdateSelected)) { // tblStudentsUpdate.ProfileField.Visible (begin)
+    <div id="r_ProfileField" @Html.Raw(tblStudentsUpdate.ProfileField.RowAttributes)>
+        <label for="x_ProfileField" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_ProfileField" id="u_ProfileField" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.ProfileField.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_ProfileField">@Html.Raw(tblStudentsUpdate.ProfileField.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.ProfileField.CellAttributes)>
+                <span id="el_tblStudents_ProfileField">
+                <textarea data-table="tblStudents" data-field="x_ProfileField" name="x_ProfileField" id="x_ProfileField" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.ProfileField.PlaceHolder))"@Html.Raw(tblStudentsUpdate.ProfileField.EditAttributes) aria-describedby="x_ProfileField_help">@(tblStudentsUpdate.ProfileField.EditValue)</textarea>
+                @Html.Raw(tblStudentsUpdate.ProfileField.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.ProfileField.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.ProfileField.Visible (end) *@
+@if (tblStudentsUpdate.int_Nationality.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Nationality.MultiUpdateSelected)) { // tblStudentsUpdate.int_Nationality.Visible (begin)
+    <div id="r_int_Nationality" @Html.Raw(tblStudentsUpdate.int_Nationality.RowAttributes)>
+        <label for="x_int_Nationality" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Nationality" id="u_int_Nationality" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Nationality.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Nationality">@Html.Raw(tblStudentsUpdate.int_Nationality.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Nationality.CellAttributes)>
+                <span id="el_tblStudents_int_Nationality">
+                <input type="@(tblStudentsUpdate.int_Nationality.InputTextType)" name="x_int_Nationality" id="x_int_Nationality" data-table="tblStudents" data-field="x_int_Nationality" value="@Html.Raw(tblStudentsUpdate.int_Nationality.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Nationality.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Nationality.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Nationality.EditAttributes) aria-describedby="x_int_Nationality_help">
+                @Html.Raw(tblStudentsUpdate.int_Nationality.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Nationality.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Nationality.Visible (end) *@
+@if (tblStudentsUpdate.User_Role.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.User_Role.MultiUpdateSelected)) { // tblStudentsUpdate.User_Role.Visible (begin)
+    <div id="r_User_Role" @Html.Raw(tblStudentsUpdate.User_Role.RowAttributes)>
+        <label for="x_User_Role" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_User_Role" id="u_User_Role" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.User_Role.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_User_Role">@Html.Raw(tblStudentsUpdate.User_Role.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.User_Role.CellAttributes)>
+                <span id="el_tblStudents_User_Role">
+                    <select
+                        id="x_User_Role"
+                        name="x_User_Role"
+                        class="form-select ew-select@(tblStudentsUpdate.User_Role.IsInvalidClass)"
+                        data-select2-id="ftblStudentsupdate_x_User_Role"
+                        data-table="tblStudents"
+                        data-field="x_User_Role"
+                        data-value-separator="@(tblStudentsUpdate.User_Role.DisplayValueSeparatorAttribute)"
+                        data-placeholder="@(HtmlEncode(tblStudentsUpdate.User_Role.PlaceHolder))"
+                        @Html.Raw(tblStudentsUpdate.User_Role.EditAttributes)>
+                        @(tblStudentsUpdate.User_Role.SelectOptionListHtml("x_User_Role"))
+                    </select>
+                    @Html.Raw(tblStudentsUpdate.User_Role.GetCustomMessage)
+                    <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.User_Role.GetErrorMessage())</div>
+                <script>
+                loadjs.ready("ftblStudentsupdate", function() {
+                    var options = { name: "x_User_Role", selectId: "ftblStudentsupdate_x_User_Role" },
+                        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+                    if (!el)
+                        return;
+                    options.closeOnSelect = !options.multiple;
+                    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+                    if (ftblStudentsupdate.lists.User_Role?.lookupOptions.length) {
+                        options.data = { id: "x_User_Role", form: "ftblStudentsupdate" };
+                    } else {
+                        options.ajax = { id: "x_User_Role", form: "ftblStudentsupdate", limit: ew.LOOKUP_PAGE_SIZE };
+                    }
+                    options.minimumResultsForSearch = Infinity;
+                    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.User_Role.selectOptions);
+                    ew.createSelect(options);
+                });
+                </script>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.User_Role.Visible (end) *@
+@if (tblStudentsUpdate.int_Staff_Id.Visible && (!tblStudentsUpdate.IsConfirm || tblStudentsUpdate.int_Staff_Id.MultiUpdateSelected)) { // tblStudentsUpdate.int_Staff_Id.Visible (begin)
+    <div id="r_int_Staff_Id" @Html.Raw(tblStudentsUpdate.int_Staff_Id.RowAttributes)>
+        <label for="x_int_Staff_Id" class="@(tblStudentsUpdate.LeftColumnClass)">
+            <div class="form-check">
+                <input type="checkbox" name="u_int_Staff_Id" id="u_int_Staff_Id" class="form-check-input ew-multi-select" value="1"@(tblStudentsUpdate.int_Staff_Id.MultiUpdateSelected ? " checked" : "")>
+                <label class="form-check-label" for="u_int_Staff_Id">@Html.Raw(tblStudentsUpdate.int_Staff_Id.Caption)</label>
+            </div>
+        </label>
+        <div class="@(tblStudentsUpdate.RightColumnClass)">
+            <div @Html.Raw(tblStudentsUpdate.int_Staff_Id.CellAttributes)>
+                <span id="el_tblStudents_int_Staff_Id">
+                <input type="@(tblStudentsUpdate.int_Staff_Id.InputTextType)" name="x_int_Staff_Id" id="x_int_Staff_Id" data-table="tblStudents" data-field="x_int_Staff_Id" value="@Html.Raw(tblStudentsUpdate.int_Staff_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblStudentsUpdate.int_Staff_Id.PlaceHolder))" data-format-pattern="@(tblStudentsUpdate.int_Staff_Id.FormatPattern)"@Html.Raw(tblStudentsUpdate.int_Staff_Id.EditAttributes) aria-describedby="x_int_Staff_Id_help">
+                @Html.Raw(tblStudentsUpdate.int_Staff_Id.GetCustomMessage)
+                <div class="invalid-feedback">@Html.Raw(tblStudentsUpdate.int_Staff_Id.GetErrorMessage())</div>
+                </span>
+            </div>
+        </div>
+    </div>
+} @* tblStudentsUpdate.int_Staff_Id.Visible (end) *@
+</div><!-- /page -->
+@Html.Raw(tblStudentsUpdate.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblStudentsUpdate.OffsetColumnClass)"><!-- buttons offset -->
+<button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblStudentsupdate">@Html.Raw(Language.Phrase("UpdateBtn"))</button>
+<button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblStudentsupdate"data-href="@AppPath(tblStudentsUpdate.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+    </div><!-- /buttons offset -->
+@Html.Raw(tblStudentsUpdate.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblStudentsUpdate.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudents");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

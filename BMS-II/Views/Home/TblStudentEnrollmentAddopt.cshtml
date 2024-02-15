@@ -1,0 +1,189 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentEnrollmentAddopt.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentEnrollmentAddopt.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentEnrollment: currentTable } });
+var currentPageID = ew.PAGE_ID = "addopt";
+var currentForm;
+var ftblStudentEnrollmentaddopt;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentEnrollmentaddopt")
+        .setPageId("addopt")
+
+        // Add fields
+        .setFields([
+
+            ["int_Package_Id", [fields.int_Package_Id.visible && fields.int_Package_Id.required ? ew.Validators.required(fields.int_Package_Id.caption) : null], fields.int_Package_Id.isInvalid],
+            ["str_Package_Name", [fields.str_Package_Name.visible && fields.str_Package_Name.required ? ew.Validators.required(fields.str_Package_Name.caption) : null], fields.str_Package_Name.isInvalid],
+            ["course", [fields.course.visible && fields.course.required ? ew.Validators.required(fields.course.caption) : null], fields.course.isInvalid],
+            ["institution", [fields.institution.visible && fields.institution.required ? ew.Validators.required(fields.institution.caption) : null], fields.institution.isInvalid],
+            ["UniqueIdx", [fields.UniqueIdx.visible && fields.UniqueIdx.required ? ew.Validators.required(fields.UniqueIdx.caption) : null], fields.UniqueIdx.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_Package_Id": @Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.ToClientList(tblStudentEnrollmentAddopt)),
+            "course": @Html.Raw(tblStudentEnrollmentAddopt.course.ToClientList(tblStudentEnrollmentAddopt)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStudentEnrollmentAddopt.ShowPageHeader()
+<form name="ftblStudentEnrollmentaddopt" id="ftblStudentEnrollmentaddopt" class="ew-form" action="@AppPath(Config.ApiUrl + Config.ApiAddAction)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="@Config.ApiActionName" id="@Config.ApiActionName" value="@Config.ApiAddAction">
+<input type="hidden" name="@Config.ApiObjectName" id="@Config.ApiObjectName" value="tblStudentEnrollment">
+<input type="hidden" name="addopt" id="addopt" value="1">
+@if (tblStudentEnrollmentAddopt.int_Package_Id.Visible) { // tblStudentEnrollmentAddopt.int_Package_Id.Visible (begin)
+    <div @Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.RowAttributes)>
+        <label class="col-sm-2 col-form-label ew-label" for="x_int_Package_Id">@Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.Caption)@Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="col-sm-10"><div @Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.CellAttributes)>
+    <select
+        id="x_int_Package_Id"
+        name="x_int_Package_Id"
+        class="form-select ew-select@(tblStudentEnrollmentAddopt.int_Package_Id.IsInvalidClass)"
+        data-select2-id="ftblStudentEnrollmentaddopt_x_int_Package_Id"
+        data-table="tblStudentEnrollment"
+        data-field="x_int_Package_Id"
+        data-value-separator="@(tblStudentEnrollmentAddopt.int_Package_Id.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStudentEnrollmentAddopt.int_Package_Id.PlaceHolder))"
+        @Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.EditAttributes)>
+        @(tblStudentEnrollmentAddopt.int_Package_Id.SelectOptionListHtml("x_int_Package_Id"))
+    </select>
+    @Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.GetErrorMessage())</div>
+@Html.Raw(tblStudentEnrollmentAddopt.int_Package_Id.Lookup.GetParamTag(tblStudentEnrollmentAddopt, "p_x_int_Package_Id"))
+<script>
+loadjs.ready("ftblStudentEnrollmentaddopt", function() {
+    var options = { name: "x_int_Package_Id", selectId: "ftblStudentEnrollmentaddopt_x_int_Package_Id" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStudentEnrollmentaddopt.lists.int_Package_Id?.lookupOptions.length) {
+        options.data = { id: "x_int_Package_Id", form: "ftblStudentEnrollmentaddopt" };
+    } else {
+        options.ajax = { id: "x_int_Package_Id", form: "ftblStudentEnrollmentaddopt", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.int_Package_Id.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAddopt.int_Package_Id.Visible (end) *@
+@if (tblStudentEnrollmentAddopt.str_Package_Name.Visible) { // tblStudentEnrollmentAddopt.str_Package_Name.Visible (begin)
+    <div @Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.RowAttributes)>
+        <label class="col-sm-2 col-form-label ew-label" for="x_str_Package_Name">@Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.Caption)@Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="col-sm-10"><div @Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.CellAttributes)>
+<input type="@(tblStudentEnrollmentAddopt.str_Package_Name.InputTextType)" name="x_str_Package_Name" id="x_str_Package_Name" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" value="@Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAddopt.str_Package_Name.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAddopt.str_Package_Name.FormatPattern)"@Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.EditAttributes) aria-describedby="x_str_Package_Name_help">
+@Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAddopt.str_Package_Name.GetErrorMessage())</div>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAddopt.str_Package_Name.Visible (end) *@
+@if (tblStudentEnrollmentAddopt.course.Visible) { // tblStudentEnrollmentAddopt.course.Visible (begin)
+    <div @Html.Raw(tblStudentEnrollmentAddopt.course.RowAttributes)>
+        <label class="col-sm-2 col-form-label ew-label">@Html.Raw(tblStudentEnrollmentAddopt.course.Caption)@Html.Raw(tblStudentEnrollmentAddopt.course.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="col-sm-10"><div @Html.Raw(tblStudentEnrollmentAddopt.course.CellAttributes)>
+<span>@{
+    if (IsRTL) {
+        tblStudentEnrollmentAddopt.course.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_course" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_course" id="sv_x_course" value="@(RemoveHtml(ConvertToString(tblStudentEnrollmentAddopt.course.EditValue)))" autocomplete="off" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAddopt.course.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAddopt.course.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAddopt.course.FormatPattern)" @Html.Raw(tblStudentEnrollmentAddopt.course.EditAttributes) aria-describedby="x_course_help">
+</span>
+<selection-list hidden class="form-control" data-table="tblStudentEnrollment" data-field="x_course" data-input="sv_x_course" data-value-separator="@(tblStudentEnrollmentAddopt.course.DisplayValueSeparatorAttribute)" name="x_course" id="x_course" value="@(HtmlEncode(tblStudentEnrollmentAddopt.course.CurrentValue))"></selection-list>
+@Html.Raw(tblStudentEnrollmentAddopt.course.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAddopt.course.GetErrorMessage())</div>
+<script>
+loadjs.ready(["ftblStudentEnrollmentaddopt"], function() {
+    ftblStudentEnrollmentaddopt.createAutoSuggest(Object.assign({"id":"x_course","forceSelect":false}, { lookupAllDisplayFields: @(tblStudentEnrollmentAddopt.course.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblStudentEnrollment.fields.course.autoSuggestOptions));
+});
+</script>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAddopt.course.Visible (end) *@
+@if (tblStudentEnrollmentAddopt.institution.Visible) { // tblStudentEnrollmentAddopt.institution.Visible (begin)
+    <div @Html.Raw(tblStudentEnrollmentAddopt.institution.RowAttributes)>
+        <label class="col-sm-2 col-form-label ew-label" for="x_institution">@Html.Raw(tblStudentEnrollmentAddopt.institution.Caption)@Html.Raw(tblStudentEnrollmentAddopt.institution.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="col-sm-10"><div @Html.Raw(tblStudentEnrollmentAddopt.institution.CellAttributes)>
+<input type="@(tblStudentEnrollmentAddopt.institution.InputTextType)" name="x_institution" id="x_institution" data-table="tblStudentEnrollment" data-field="x_institution" value="@Html.Raw(tblStudentEnrollmentAddopt.institution.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAddopt.institution.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAddopt.institution.FormatPattern)"@Html.Raw(tblStudentEnrollmentAddopt.institution.EditAttributes) aria-describedby="x_institution_help">
+@Html.Raw(tblStudentEnrollmentAddopt.institution.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAddopt.institution.GetErrorMessage())</div>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAddopt.institution.Visible (end) *@
+@if (tblStudentEnrollmentAddopt.UniqueIdx.Visible) { // tblStudentEnrollmentAddopt.UniqueIdx.Visible (begin)
+    <div @Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.RowAttributes)>
+        <label class="col-sm-2 col-form-label ew-label" for="x_UniqueIdx">@Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.Caption)@Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="col-sm-10"><div @Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.CellAttributes)>
+<input type="@(tblStudentEnrollmentAddopt.UniqueIdx.InputTextType)" name="x_UniqueIdx" id="x_UniqueIdx" data-table="tblStudentEnrollment" data-field="x_UniqueIdx" value="@Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.EditValue)" size="30" maxlength="261" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentAddopt.UniqueIdx.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentAddopt.UniqueIdx.FormatPattern)"@Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.EditAttributes) aria-describedby="x_UniqueIdx_help">
+@Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentAddopt.UniqueIdx.GetErrorMessage())</div>
+</div></div>
+    </div>
+} @* tblStudentEnrollmentAddopt.UniqueIdx.Visible (end) *@
+</form>
+@tblStudentEnrollmentAddopt.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudentEnrollment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

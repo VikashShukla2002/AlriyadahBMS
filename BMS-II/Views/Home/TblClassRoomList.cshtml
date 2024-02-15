@@ -1,0 +1,206 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblClassRoomList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblClassRoomList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblClassRoomList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblClassRoomList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblClassRoom: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblClassRoomList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblClassRoomList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblClassRoomList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblClassRoomList.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_CR_Number", [fields.str_CR_Number.visible && fields.str_CR_Number.required ? ew.Validators.required(fields.str_CR_Number.caption) : null], fields.str_CR_Number.isInvalid],
+            ["int_CR_Product_ID", [fields.int_CR_Product_ID.visible && fields.int_CR_Product_ID.required ? ew.Validators.required(fields.int_CR_Product_ID.caption) : null], fields.int_CR_Product_ID.isInvalid],
+            ["date_Start", [fields.date_Start.visible && fields.date_Start.required ? ew.Validators.required(fields.date_Start.caption) : null, ew.Validators.datetime(fields.date_Start.clientFormatPattern)], fields.date_Start.isInvalid],
+            ["mon_CR_Price", [fields.mon_CR_Price.visible && fields.mon_CR_Price.required ? ew.Validators.required(fields.mon_CR_Price.caption) : null], fields.mon_CR_Price.isInvalid],
+            ["int_CR_Size", [fields.int_CR_Size.visible && fields.int_CR_Size.required ? ew.Validators.required(fields.int_CR_Size.caption) : null], fields.int_CR_Size.isInvalid],
+            ["int_CR_Status", [fields.int_CR_Status.visible && fields.int_CR_Status.required ? ew.Validators.required(fields.int_CR_Status.caption) : null], fields.int_CR_Status.isInvalid],
+            ["int_Location_ID", [fields.int_Location_ID.visible && fields.int_Location_ID.required ? ew.Validators.required(fields.int_Location_ID.caption) : null], fields.int_Location_ID.isInvalid],
+            ["int_Teacher_ID", [fields.int_Teacher_ID.visible && fields.int_Teacher_ID.required ? ew.Validators.required(fields.int_Teacher_ID.caption) : null], fields.int_Teacher_ID.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_CR_Product_ID": @Html.Raw(tblClassRoomList.int_CR_Product_ID.ToClientList(tblClassRoomList)),
+            "mon_CR_Price": @Html.Raw(tblClassRoomList.mon_CR_Price.ToClientList(tblClassRoomList)),
+            "int_CR_Size": @Html.Raw(tblClassRoomList.int_CR_Size.ToClientList(tblClassRoomList)),
+            "int_CR_Status": @Html.Raw(tblClassRoomList.int_CR_Status.ToClientList(tblClassRoomList)),
+            "int_Location_ID": @Html.Raw(tblClassRoomList.int_Location_ID.ToClientList(tblClassRoomList)),
+            "int_Teacher_ID": @Html.Raw(tblClassRoomList.int_Teacher_ID.ToClientList(tblClassRoomList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblClassRoomList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblClassRoomList.TotalRecords > 0 && tblClassRoomList.ExportOptions.Visible) {
+    tblClassRoomList.ExportOptions.Render("body");
+}
+@if (tblClassRoomList.ImportOptions.Visible) {
+    tblClassRoomList.ImportOptions.Render("body");
+}
+@if (tblClassRoomList.SearchOptions.Visible) {
+    tblClassRoomList.SearchOptions.Render("body");
+}
+@if (tblClassRoomList.FilterOptions.Visible) {
+    tblClassRoomList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblClassRoomList.IsModal) {
+<form name="ftblClassRoomsrch" id="ftblClassRoomsrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblClassRoomsrch_search_panel" class="mb-2 mb-sm-0 @(tblClassRoomList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblClassRoomList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblClassRoom: currentTable } });
+var currentForm;
+var ftblClassRoomsrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblClassRoomsrch")
+        .setPageId("list")
+@if (tblClassRoomList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblClassRoomList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblClassRoomList.IsExport() && Empty(tblClassRoomList.CurrentAction) && tblClassRoomList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblClassRoomList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblClassRoomList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblClassRoomList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblClassRoomList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblClassRoomsrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblClassRoomList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblClassRoomsrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblClassRoomList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblClassRoomsrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblClassRoomList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblClassRoomsrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblClassRoomList.ShowPageHeader()
+@tblClassRoomList.ShowMessages()
+<main class="list @(tblClassRoomList.TotalRecords == 0 && !tblClassRoomList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblClassRoomList.TotalRecords > 0 || !Empty(tblClassRoomList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblClassRoomList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblClassRoom" + TitleCaseInvariant(tblClassRoomList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblClassRoomList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblClassRoomList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblClassRoomList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblClassRoom");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

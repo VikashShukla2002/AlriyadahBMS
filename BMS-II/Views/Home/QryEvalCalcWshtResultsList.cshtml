@@ -1,0 +1,172 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (qryEvalCalcWshtResultsList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!qryEvalCalcWshtResultsList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!qryEvalCalcWshtResultsList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryEvalCalcWshtResultsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryEvalCalcWsht_Results: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryEvalCalcWshtResultsList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryEvalCalcWshtResultsList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryEvalCalcWshtResultsList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryEvalCalcWshtResultsList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!qryEvalCalcWshtResultsList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (qryEvalCalcWshtResultsList.TotalRecords > 0 && qryEvalCalcWshtResultsList.ExportOptions.Visible) {
+    qryEvalCalcWshtResultsList.ExportOptions.Render("body");
+}
+@if (qryEvalCalcWshtResultsList.ImportOptions.Visible) {
+    qryEvalCalcWshtResultsList.ImportOptions.Render("body");
+}
+@if (qryEvalCalcWshtResultsList.SearchOptions.Visible) {
+    qryEvalCalcWshtResultsList.SearchOptions.Render("body");
+}
+@if (qryEvalCalcWshtResultsList.FilterOptions.Visible) {
+    qryEvalCalcWshtResultsList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!qryEvalCalcWshtResultsList.IsModal) {
+<form name="fqryEvalCalcWsht_Resultssrch" id="fqryEvalCalcWsht_Resultssrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="fqryEvalCalcWsht_Resultssrch_search_panel" class="mb-2 mb-sm-0 @(qryEvalCalcWshtResultsList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryEvalCalcWshtResultsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryEvalCalcWsht_Results: currentTable } });
+var currentForm;
+var fqryEvalCalcWsht_Resultssrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("fqryEvalCalcWsht_Resultssrch")
+        .setPageId("list")
+@if (qryEvalCalcWshtResultsList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await qryEvalCalcWshtResultsList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!qryEvalCalcWshtResultsList.IsExport() && Empty(qryEvalCalcWshtResultsList.CurrentAction) && qryEvalCalcWshtResultsList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(qryEvalCalcWshtResultsList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(qryEvalCalcWshtResultsList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(qryEvalCalcWshtResultsList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(qryEvalCalcWshtResultsList.BasicSearch.SessionType == "" ? " active" : "")" form="fqryEvalCalcWsht_Resultssrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(qryEvalCalcWshtResultsList.BasicSearch.SessionType == "=" ? " active" : "")" form="fqryEvalCalcWsht_Resultssrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(qryEvalCalcWshtResultsList.BasicSearch.SessionType == "AND" ? " active" : "")" form="fqryEvalCalcWsht_Resultssrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(qryEvalCalcWshtResultsList.BasicSearch.SessionType == "OR" ? " active" : "")" form="fqryEvalCalcWsht_Resultssrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@qryEvalCalcWshtResultsList.ShowPageHeader()
+@qryEvalCalcWshtResultsList.ShowMessages()
+<main class="list @(qryEvalCalcWshtResultsList.TotalRecords == 0 && !qryEvalCalcWshtResultsList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (qryEvalCalcWshtResultsList.TotalRecords > 0 || !Empty(qryEvalCalcWshtResultsList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ qryEvalCalcWshtResultsList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("QryEvalCalcWshtResults" + TitleCaseInvariant(qryEvalCalcWshtResultsList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@qryEvalCalcWshtResultsList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@qryEvalCalcWshtResultsList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!qryEvalCalcWshtResultsList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("qryEvalCalcWsht_Results");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

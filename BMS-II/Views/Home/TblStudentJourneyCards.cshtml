@@ -1,0 +1,355 @@
+@if (!tblStudentJourneyList.IsExport()) {
+<div>
+@if (!tblStudentJourneyList.IsGridAdd && !(tblStudentJourneyList.IsGridEdit && tblStudentJourneyList.ModalGridEdit) && !tblStudentJourneyList.IsMultiEdit) {
+@Html.Raw(tblStudentJourneyList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblStudentJourneyList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblStudentJourneyList.ModalGridAdd && tblStudentJourneyList.IsGridAdd || tblStudentJourneyList.ModalGridEdit && tblStudentJourneyList.IsGridEdit || tblStudentJourneyList.ModalMultiEdit && tblStudentJourneyList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentJourneyList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentJourney: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblStudentJourneyList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblStudentJourneyList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblStudentJourneyList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblStudentJourneyList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblStudentJourneyList.FormName)" id="@(tblStudentJourneyList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblStudentJourneyList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblStudentJourneyList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblStudentJourneyList.GetMultiColumnRowClass())">
+@if (tblStudentJourneyList.TotalRecords > 0 || tblStudentJourneyList.IsGridEdit || tblStudentJourneyList.IsMultiEdit) {
+    await tblStudentJourneyList.SetupGrid();
+    bool eof = tblStudentJourneyList.Recordset == null; // DN
+while (tblStudentJourneyList.RecordCount < tblStudentJourneyList.StopRecord || SameString(tblStudentJourneyList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblStudentJourneyList.RowIndex, "$rowindex$") &&
+        (!tblStudentJourneyList.IsGridAdd || tblStudentJourneyList.CurrentMode == "copy") &&
+        (!((tblStudentJourneyList.IsCopy || tblStudentJourneyList.IsAdd) && tblStudentJourneyList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblStudentJourneyList.Recordset.ReadAsync();
+    tblStudentJourneyList.RecordCount++;
+    if (tblStudentJourneyList.RecordCount >= tblStudentJourneyList.StartRecord) {
+        await tblStudentJourneyList.SetupRow();
+<div class="@(tblStudentJourneyList.GetMultiColumnColClass())" @Html.Raw(tblStudentJourneyList.RowAttributes)>
+<div class="@(tblStudentJourneyList.MultiColumnCardClass)">
+    @if (tblStudentJourneyList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblStudentJourneyList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblStudentJourneyList.ListOptions.Tag = "div";
+    tblStudentJourneyList.ListOptions.RenderBody(tblStudentJourneyList.MultiColumnListOptionsPosition, tblStudentJourneyList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblStudentJourneyList.STDJ_ID.Visible) { // tblStudentJourneyList.STDJ_ID.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_STDJ_ID">
+            <div class="col col-sm-4 tblStudentJourney_STDJ_ID">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.STDJ_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.STDJ_ID.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.STDJ_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.STDJ_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_STDJ_ID">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.STDJ_ID.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.STDJ_ID.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.STDJ_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.STDJ_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.FullName.Visible) { // tblStudentJourneyList.FullName.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_FullName">
+            <div class="col col-sm-4 tblStudentJourney_FullName">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.FullName))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.FullName.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.FullName.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.FullName.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_FullName">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.FullName.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.FullName.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.FullName.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.FullName.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.str_Username.Visible) { // tblStudentJourneyList.str_Username.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_str_Username">
+            <div class="col col-sm-4 tblStudentJourney_str_Username">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.str_Username))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.str_Username.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.str_Username.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.str_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_str_Username">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.str_Username.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.str_Username.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.str_Username.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.str_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Number_ID.Visible) { // tblStudentJourneyList.Number_ID.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Number_ID">
+            <div class="col col-sm-4 tblStudentJourney_Number_ID">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Number_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Number_ID.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Number_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Number_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Number_ID">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Number_ID.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Number_ID.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Number_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Number_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Journey_ID.Visible) { // tblStudentJourneyList.Journey_ID.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Journey_ID">
+            <div class="col col-sm-4 tblStudentJourney_Journey_ID">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Journey_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Journey_ID.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Journey_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Journey_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Journey_ID">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Journey_ID.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Journey_ID.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Journey_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Journey_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Journey.Visible) { // tblStudentJourneyList.Journey.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Journey">
+            <div class="col col-sm-4 tblStudentJourney_Journey">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Journey))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Journey.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Journey.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Journey.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Journey">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Journey.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Journey.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Journey.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Journey.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Start_Date.Visible) { // tblStudentJourneyList.Start_Date.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Start_Date">
+            <div class="col col-sm-4 tblStudentJourney_Start_Date">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Start_Date))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Start_Date.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Start_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Start_Date.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Start_Date">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Start_Date.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Start_Date.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Start_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Start_Date.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.End_Date.Visible) { // tblStudentJourneyList.End_Date.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_End_Date">
+            <div class="col col-sm-4 tblStudentJourney_End_Date">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.End_Date))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.End_Date.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.End_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.End_Date.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_End_Date">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.End_Date.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.End_Date.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.End_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.End_Date.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Total_Days.Visible) { // tblStudentJourneyList.Total_Days.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Total_Days">
+            <div class="col col-sm-4 tblStudentJourney_Total_Days">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Total_Days))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Total_Days.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Total_Days.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Total_Days.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Total_Days">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Total_Days.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Total_Days.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Total_Days.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Total_Days.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Status.Visible) { // tblStudentJourneyList.Status.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Status">
+            <div class="col col-sm-4 tblStudentJourney_Status">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Status))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Status.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Status.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Status.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Status">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Status.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Status.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Status.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Status.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Package_Name.Visible) { // tblStudentJourneyList.Package_Name.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Package_Name">
+            <div class="col col-sm-4 tblStudentJourney_Package_Name">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Package_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Package_Name.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Package_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Package_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Package_Name">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Package_Name.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Package_Name.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Package_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Package_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Product_Name.Visible) { // tblStudentJourneyList.Product_Name.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Product_Name">
+            <div class="col col-sm-4 tblStudentJourney_Product_Name">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Product_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Product_Name.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Product_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Product_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Product_Name">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Product_Name.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Product_Name.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Product_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Product_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentJourneyList.Price.Visible) { // tblStudentJourneyList.Price.Visible (begin)
+        if (tblStudentJourneyList.RowType == RowType.View) { // View record
+        <div class="row tblStudentJourney_Price">
+            <div class="col col-sm-4 tblStudentJourney_Price">@Html.Raw(tblStudentJourneyList.RenderFieldHeader(tblStudentJourneyList.Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentJourneyList.Price.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Price.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudentJourney_Price">
+            <label class="@(tblStudentJourneyList.LeftColumnClass)">@Html.Raw(tblStudentJourneyList.Price.Caption)</label>
+            <div class="@(tblStudentJourneyList.RightColumnClass)"><div @Html.Raw(tblStudentJourneyList.Price.CellAttributes)>
+<span @Html.Raw(tblStudentJourneyList.Price.ViewAttributes)>
+@Html.Raw(tblStudentJourneyList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblStudentJourneyList.IsExport()) {
+    if (tblStudentJourneyList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblStudentJourneyList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblStudentJourneyList.ListOptions.Tag = "div";
+}
+@tblStudentJourneyList.ListOptions.RenderBody(tblStudentJourneyList.MultiColumnListOptionsPosition, tblStudentJourneyList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblStudentJourneyList.RowIndex, "$rowindex$"))
+        tblStudentJourneyList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblStudentJourneyList.IsCopy || tblStudentJourneyList.IsAdd) && tblStudentJourneyList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblStudentJourneyList.RowIndex = 1;
+} @* End While *@
+} @* tblStudentJourneyList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblStudentJourneyList.CurrentAction) && !tblStudentJourneyList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblStudentJourneyList.CloseRecordset(); }

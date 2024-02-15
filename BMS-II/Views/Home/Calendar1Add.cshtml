@@ -1,0 +1,345 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (calendar1Add.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!calendar1Add.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!calendar1Add.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(calendar1Add.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Calendar1: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var fCalendar1add;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fCalendar1add")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["_Title", [fields._Title.visible && fields._Title.required ? ew.Validators.required(fields._Title.caption) : null], fields._Title.isInvalid],
+            ["Start", [fields.Start.visible && fields.Start.required ? ew.Validators.required(fields.Start.caption) : null, ew.Validators.datetime(fields.Start.clientFormatPattern)], fields.Start.isInvalid],
+            ["End", [fields.End.visible && fields.End.required ? ew.Validators.required(fields.End.caption) : null, ew.Validators.datetime(fields.End.clientFormatPattern)], fields.End.isInvalid],
+            ["AllDay", [fields.AllDay.visible && fields.AllDay.required ? ew.Validators.required(fields.AllDay.caption) : null], fields.AllDay.isInvalid],
+            ["Description", [fields.Description.visible && fields.Description.required ? ew.Validators.required(fields.Description.caption) : null], fields.Description.isInvalid],
+            ["_Url", [fields._Url.visible && fields._Url.required ? ew.Validators.required(fields._Url.caption) : null], fields._Url.isInvalid],
+            ["ClassNames", [fields.ClassNames.visible && fields.ClassNames.required ? ew.Validators.required(fields.ClassNames.caption) : null], fields.ClassNames.isInvalid],
+            ["Display", [fields.Display.visible && fields.Display.required ? ew.Validators.required(fields.Display.caption) : null], fields.Display.isInvalid],
+            ["BackgroundColor", [fields.BackgroundColor.visible && fields.BackgroundColor.required ? ew.Validators.required(fields.BackgroundColor.caption) : null], fields.BackgroundColor.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "AllDay": @Html.Raw(calendar1Add.AllDay.ToClientList(calendar1Add)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@calendar1Add.ShowPageHeader()
+@calendar1Add.ShowMessages()
+<form name="fCalendar1add" id="fCalendar1add" class="@(calendar1Add.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(calendar1Add.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(calendar1Add.OldKeyName)" value="@Html.Raw(calendar1Add.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (calendar1Add._Title.Visible) { // calendar1Add._Title.Visible (begin)
+    <div id="r__Title" @Html.Raw(calendar1Add._Title.RowAttributes)>
+        <label id="elh_Calendar1__Title" for="x__Title" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add._Title.Caption)@Html.Raw(calendar1Add._Title.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add._Title.CellAttributes)>
+<span id="el_Calendar1__Title">
+<input type="@(calendar1Add._Title.InputTextType)" name="x__Title" id="x__Title" data-table="Calendar1" data-field="x__Title" value="@Html.Raw(calendar1Add._Title.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(calendar1Add._Title.PlaceHolder))" data-format-pattern="@(calendar1Add._Title.FormatPattern)"@Html.Raw(calendar1Add._Title.EditAttributes) aria-describedby="x__Title_help">
+@Html.Raw(calendar1Add._Title.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add._Title.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* calendar1Add._Title.Visible (end) *@
+@if (calendar1Add.Start.Visible) { // calendar1Add.Start.Visible (begin)
+    <div id="r_Start" @Html.Raw(calendar1Add.Start.RowAttributes)>
+        <label id="elh_Calendar1_Start" for="x_Start" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.Start.Caption)@Html.Raw(calendar1Add.Start.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.Start.CellAttributes)>
+<span id="el_Calendar1_Start">
+<input type="@(calendar1Add.Start.InputTextType)" name="x_Start" id="x_Start" data-table="Calendar1" data-field="x_Start" value="@Html.Raw(calendar1Add.Start.EditValue)" placeholder="@Html.Raw(HtmlEncode(calendar1Add.Start.PlaceHolder))" data-format-pattern="@(calendar1Add.Start.FormatPattern)"@Html.Raw(calendar1Add.Start.EditAttributes) aria-describedby="x_Start_help">
+@Html.Raw(calendar1Add.Start.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.Start.GetErrorMessage())</div>
+@if (!calendar1Add.Start.ReadOnly && !calendar1Add.Start.Disabled && !calendar1Add.Start.EditAttrs.Is("readonly") && !calendar1Add.Start.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["fCalendar1add", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(1))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("fCalendar1add", "x_Start", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":true}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.Start.Visible (end) *@
+@if (calendar1Add.End.Visible) { // calendar1Add.End.Visible (begin)
+    <div id="r_End" @Html.Raw(calendar1Add.End.RowAttributes)>
+        <label id="elh_Calendar1_End" for="x_End" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.End.Caption)@Html.Raw(calendar1Add.End.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.End.CellAttributes)>
+<span id="el_Calendar1_End">
+<input type="@(calendar1Add.End.InputTextType)" name="x_End" id="x_End" data-table="Calendar1" data-field="x_End" value="@Html.Raw(calendar1Add.End.EditValue)" placeholder="@Html.Raw(HtmlEncode(calendar1Add.End.PlaceHolder))" data-format-pattern="@(calendar1Add.End.FormatPattern)"@Html.Raw(calendar1Add.End.EditAttributes) aria-describedby="x_End_help">
+@Html.Raw(calendar1Add.End.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.End.GetErrorMessage())</div>
+@if (!calendar1Add.End.ReadOnly && !calendar1Add.End.Disabled && !calendar1Add.End.EditAttrs.Is("readonly") && !calendar1Add.End.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["fCalendar1add", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(1))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("fCalendar1add", "x_End", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":true}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.End.Visible (end) *@
+@if (calendar1Add.AllDay.Visible) { // calendar1Add.AllDay.Visible (begin)
+    <div id="r_AllDay" @Html.Raw(calendar1Add.AllDay.RowAttributes)>
+        <label id="elh_Calendar1_AllDay" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.AllDay.Caption)@Html.Raw(calendar1Add.AllDay.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.AllDay.CellAttributes)>
+<span id="el_Calendar1_AllDay">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(calendar1Add.AllDay.IsInvalidClass)" data-table="Calendar1" data-field="x_AllDay" data-boolean name="x_AllDay" id="x_AllDay" value="1" checked="@ConvertToBool(calendar1Add.AllDay.CurrentValue)" @Html.Raw(calendar1Add.AllDay.EditAttributes) aria-describedby="x_AllDay_help">
+    <div class="invalid-feedback">@Html.Raw(calendar1Add.AllDay.GetErrorMessage())</div>
+</div>
+@Html.Raw(calendar1Add.AllDay.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.AllDay.Visible (end) *@
+@if (calendar1Add.Description.Visible) { // calendar1Add.Description.Visible (begin)
+    <div id="r_Description" @Html.Raw(calendar1Add.Description.RowAttributes)>
+        <label id="elh_Calendar1_Description" for="x_Description" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.Description.Caption)@Html.Raw(calendar1Add.Description.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.Description.CellAttributes)>
+<span id="el_Calendar1_Description">
+<textarea data-table="Calendar1" data-field="x_Description" name="x_Description" id="x_Description" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(calendar1Add.Description.PlaceHolder))"@Html.Raw(calendar1Add.Description.EditAttributes) aria-describedby="x_Description_help">@(calendar1Add.Description.EditValue)</textarea>
+@Html.Raw(calendar1Add.Description.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.Description.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.Description.Visible (end) *@
+@if (calendar1Add._Url.Visible) { // calendar1Add._Url.Visible (begin)
+    <div id="r__Url" @Html.Raw(calendar1Add._Url.RowAttributes)>
+        <label id="elh_Calendar1__Url" for="x__Url" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add._Url.Caption)@Html.Raw(calendar1Add._Url.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add._Url.CellAttributes)>
+<span id="el_Calendar1__Url">
+<input type="@(calendar1Add._Url.InputTextType)" name="x__Url" id="x__Url" data-table="Calendar1" data-field="x__Url" value="@Html.Raw(calendar1Add._Url.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(calendar1Add._Url.PlaceHolder))" data-format-pattern="@(calendar1Add._Url.FormatPattern)"@Html.Raw(calendar1Add._Url.EditAttributes) aria-describedby="x__Url_help">
+@Html.Raw(calendar1Add._Url.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add._Url.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* calendar1Add._Url.Visible (end) *@
+@if (calendar1Add.ClassNames.Visible) { // calendar1Add.ClassNames.Visible (begin)
+    <div id="r_ClassNames" @Html.Raw(calendar1Add.ClassNames.RowAttributes)>
+        <label id="elh_Calendar1_ClassNames" for="x_ClassNames" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.ClassNames.Caption)@Html.Raw(calendar1Add.ClassNames.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.ClassNames.CellAttributes)>
+<span id="el_Calendar1_ClassNames">
+<input type="@(calendar1Add.ClassNames.InputTextType)" name="x_ClassNames" id="x_ClassNames" data-table="Calendar1" data-field="x_ClassNames" value="@Html.Raw(calendar1Add.ClassNames.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(calendar1Add.ClassNames.PlaceHolder))" data-format-pattern="@(calendar1Add.ClassNames.FormatPattern)"@Html.Raw(calendar1Add.ClassNames.EditAttributes) aria-describedby="x_ClassNames_help">
+@Html.Raw(calendar1Add.ClassNames.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.ClassNames.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.ClassNames.Visible (end) *@
+@if (calendar1Add.Display.Visible) { // calendar1Add.Display.Visible (begin)
+    <div id="r_Display" @Html.Raw(calendar1Add.Display.RowAttributes)>
+        <label id="elh_Calendar1_Display" for="x_Display" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.Display.Caption)@Html.Raw(calendar1Add.Display.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.Display.CellAttributes)>
+<span id="el_Calendar1_Display">
+<input type="@(calendar1Add.Display.InputTextType)" name="x_Display" id="x_Display" data-table="Calendar1" data-field="x_Display" value="@Html.Raw(calendar1Add.Display.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(calendar1Add.Display.PlaceHolder))" data-format-pattern="@(calendar1Add.Display.FormatPattern)"@Html.Raw(calendar1Add.Display.EditAttributes) aria-describedby="x_Display_help">
+@Html.Raw(calendar1Add.Display.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.Display.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.Display.Visible (end) *@
+@if (calendar1Add.BackgroundColor.Visible) { // calendar1Add.BackgroundColor.Visible (begin)
+    <div id="r_BackgroundColor" @Html.Raw(calendar1Add.BackgroundColor.RowAttributes)>
+        <label id="elh_Calendar1_BackgroundColor" for="x_BackgroundColor" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.BackgroundColor.Caption)@Html.Raw(calendar1Add.BackgroundColor.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.BackgroundColor.CellAttributes)>
+<span id="el_Calendar1_BackgroundColor">
+<input type="@(calendar1Add.BackgroundColor.InputTextType)" name="x_BackgroundColor" id="x_BackgroundColor" data-table="Calendar1" data-field="x_BackgroundColor" value="@Html.Raw(calendar1Add.BackgroundColor.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(calendar1Add.BackgroundColor.PlaceHolder))" data-format-pattern="@(calendar1Add.BackgroundColor.FormatPattern)"@Html.Raw(calendar1Add.BackgroundColor.EditAttributes) aria-describedby="x_BackgroundColor_help">
+@Html.Raw(calendar1Add.BackgroundColor.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.BackgroundColor.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* calendar1Add.BackgroundColor.Visible (end) *@
+@if (calendar1Add.str_Username.Visible) { // calendar1Add.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(calendar1Add.str_Username.RowAttributes)>
+        <label id="elh_Calendar1_str_Username" for="x_str_Username" class="@(calendar1Add.LeftColumnClass)">@Html.Raw(calendar1Add.str_Username.Caption)@Html.Raw(calendar1Add.str_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(calendar1Add.RightColumnClass)"><div @Html.Raw(calendar1Add.str_Username.CellAttributes)>
+@if (!Security.IsAdmin && Security.IsLoggedIn && !calendar1Add.UserIDAllow("add")) { // Non system admin
+<span id="el_Calendar1_str_Username">
+    <select
+        id="x_str_Username"
+        name="x_str_Username"
+        class="form-select ew-select@(calendar1Add.str_Username.IsInvalidClass)"
+        data-select2-id="fCalendar1add_x_str_Username"
+        data-table="Calendar1"
+        data-field="x_str_Username"
+        data-value-separator="@(calendar1Add.str_Username.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(calendar1Add.str_Username.PlaceHolder))"
+        @Html.Raw(calendar1Add.str_Username.EditAttributes)>
+        @(calendar1Add.str_Username.SelectOptionListHtml("x_str_Username"))
+    </select>
+    @Html.Raw(calendar1Add.str_Username.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(calendar1Add.str_Username.GetErrorMessage())</div>
+<script>
+loadjs.ready("fCalendar1add", function() {
+    var options = { name: "x_str_Username", selectId: "fCalendar1add_x_str_Username" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fCalendar1add.lists.str_Username?.lookupOptions.length) {
+        options.data = { id: "x_str_Username", form: "fCalendar1add" };
+    } else {
+        options.ajax = { id: "x_str_Username", form: "fCalendar1add", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Calendar1.fields.str_Username.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else {
+<span id="el_Calendar1_str_Username">
+<input type="@(calendar1Add.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="Calendar1" data-field="x_str_Username" value="@Html.Raw(calendar1Add.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(calendar1Add.str_Username.PlaceHolder))" data-format-pattern="@(calendar1Add.str_Username.FormatPattern)"@Html.Raw(calendar1Add.str_Username.EditAttributes) aria-describedby="x_str_Username_help">
+@Html.Raw(calendar1Add.str_Username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(calendar1Add.str_Username.GetErrorMessage())</div>
+</span>
+}
+</div></div>
+    </div>
+} @* calendar1Add.str_Username.Visible (end) *@
+</div><!-- /page* -->
+@{ calendar1Add.CloseRecordset(); }
+@Html.Raw(calendar1Add.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(calendar1Add.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="fCalendar1add">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="fCalendar1add" data-href="@AppPath(calendar1Add.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(calendar1Add.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@calendar1Add.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("Calendar1");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

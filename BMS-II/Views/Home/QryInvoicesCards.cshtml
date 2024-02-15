@@ -1,0 +1,412 @@
+@if (!qryInvoicesList.IsExport()) {
+<div>
+@if (!qryInvoicesList.IsGridAdd && !(qryInvoicesList.IsGridEdit && qryInvoicesList.ModalGridEdit) && !qryInvoicesList.IsMultiEdit) {
+@Html.Raw(qryInvoicesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryInvoicesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (qryInvoicesList.ModalGridAdd && qryInvoicesList.IsGridAdd || qryInvoicesList.ModalGridEdit && qryInvoicesList.IsGridEdit || qryInvoicesList.ModalMultiEdit && qryInvoicesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryInvoicesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryInvoices: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryInvoicesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryInvoicesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryInvoicesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryInvoicesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(qryInvoicesList.FormName)" id="@(qryInvoicesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryInvoicesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryInvoicesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(qryInvoicesList.GetMultiColumnRowClass())">
+@if (qryInvoicesList.TotalRecords > 0 || qryInvoicesList.IsGridEdit || qryInvoicesList.IsMultiEdit) {
+    await qryInvoicesList.SetupGrid();
+    bool eof = qryInvoicesList.Recordset == null; // DN
+while (qryInvoicesList.RecordCount < qryInvoicesList.StopRecord || SameString(qryInvoicesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryInvoicesList.RowIndex, "$rowindex$") &&
+        (!qryInvoicesList.IsGridAdd || qryInvoicesList.CurrentMode == "copy") &&
+        (!((qryInvoicesList.IsCopy || qryInvoicesList.IsAdd) && qryInvoicesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryInvoicesList.Recordset.ReadAsync();
+    qryInvoicesList.RecordCount++;
+    if (qryInvoicesList.RecordCount >= qryInvoicesList.StartRecord) {
+        await qryInvoicesList.SetupRow();
+<div class="@(qryInvoicesList.GetMultiColumnColClass())" @Html.Raw(qryInvoicesList.RowAttributes)>
+<div class="@(qryInvoicesList.MultiColumnCardClass)">
+    @if (qryInvoicesList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(qryInvoicesList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    qryInvoicesList.ListOptions.Tag = "div";
+    qryInvoicesList.ListOptions.RenderBody(qryInvoicesList.MultiColumnListOptionsPosition, qryInvoicesList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (qryInvoicesList.str_First_Name.Visible) { // qryInvoicesList.str_First_Name.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_str_First_Name">
+            <div class="col col-sm-4 qryInvoices_str_First_Name">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.str_First_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.str_First_Name.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_First_Name.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_First_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_str_First_Name">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.str_First_Name.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.str_First_Name.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_First_Name.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_First_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.str_Middle_Name.Visible) { // qryInvoicesList.str_Middle_Name.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_str_Middle_Name">
+            <div class="col col-sm-4 qryInvoices_str_Middle_Name">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.str_Middle_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.str_Middle_Name.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Middle_Name.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Middle_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_str_Middle_Name">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.str_Middle_Name.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.str_Middle_Name.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Middle_Name.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Middle_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.str_Last_Name.Visible) { // qryInvoicesList.str_Last_Name.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_str_Last_Name">
+            <div class="col col-sm-4 qryInvoices_str_Last_Name">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.str_Last_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.str_Last_Name.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Last_Name.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Last_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_str_Last_Name">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.str_Last_Name.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.str_Last_Name.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Last_Name.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Last_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.str_Cell_Phone.Visible) { // qryInvoicesList.str_Cell_Phone.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_str_Cell_Phone">
+            <div class="col col-sm-4 qryInvoices_str_Cell_Phone">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.str_Cell_Phone))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Cell_Phone.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_str_Cell_Phone">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.str_Cell_Phone.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Cell_Phone.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.NationalID.Visible) { // qryInvoicesList.NationalID.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_NationalID">
+            <div class="col col-sm-4 qryInvoices_NationalID">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.NationalID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.NationalID.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.NationalID.ViewAttributes)>
+@Html.Raw(qryInvoicesList.NationalID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_NationalID">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.NationalID.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.NationalID.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.NationalID.ViewAttributes)>
+@Html.Raw(qryInvoicesList.NationalID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.Required_Program.Visible) { // qryInvoicesList.Required_Program.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_Required_Program">
+            <div class="col col-sm-4 qryInvoices_Required_Program">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.Required_Program))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.Required_Program.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Required_Program.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Required_Program.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_Required_Program">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.Required_Program.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.Required_Program.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Required_Program.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Required_Program.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.Course_Price.Visible) { // qryInvoicesList.Course_Price.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_Course_Price">
+            <div class="col col-sm-4 qryInvoices_Course_Price">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.Course_Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.Course_Price.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Course_Price.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Course_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_Course_Price">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.Course_Price.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.Course_Price.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Course_Price.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Course_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.Vat_Tax_15.Visible) { // qryInvoicesList.Vat_Tax_15.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_Vat_Tax_15">
+            <div class="col col-sm-4 qryInvoices_Vat_Tax_15">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.Vat_Tax_15))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.Vat_Tax_15.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Vat_Tax_15.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Vat_Tax_15.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_Vat_Tax_15">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.Vat_Tax_15.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.Vat_Tax_15.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Vat_Tax_15.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Vat_Tax_15.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.Total_Price.Visible) { // qryInvoicesList.Total_Price.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_Total_Price">
+            <div class="col col-sm-4 qryInvoices_Total_Price">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.Total_Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.Total_Price.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Total_Price.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Total_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_Total_Price">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.Total_Price.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.Total_Price.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Total_Price.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Total_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.str_ApprovalCode.Visible) { // qryInvoicesList.str_ApprovalCode.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_str_ApprovalCode">
+            <div class="col col-sm-4 qryInvoices_str_ApprovalCode">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.str_ApprovalCode))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.str_ApprovalCode.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_ApprovalCode.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_str_ApprovalCode">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.str_ApprovalCode.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.str_ApprovalCode.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_ApprovalCode.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.str_Amount_Pay.Visible) { // qryInvoicesList.str_Amount_Pay.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_str_Amount_Pay">
+            <div class="col col-sm-4 qryInvoices_str_Amount_Pay">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.str_Amount_Pay))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.str_Amount_Pay.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Amount_Pay.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Amount_Pay.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_str_Amount_Pay">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.str_Amount_Pay.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.str_Amount_Pay.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.str_Amount_Pay.ViewAttributes)>
+@Html.Raw(qryInvoicesList.str_Amount_Pay.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.date_Paid.Visible) { // qryInvoicesList.date_Paid.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_date_Paid">
+            <div class="col col-sm-4 qryInvoices_date_Paid">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.date_Paid))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.date_Paid.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.date_Paid.ViewAttributes)>
+@Html.Raw(qryInvoicesList.date_Paid.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_date_Paid">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.date_Paid.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.date_Paid.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.date_Paid.ViewAttributes)>
+@Html.Raw(qryInvoicesList.date_Paid.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.int_Package_ID.Visible) { // qryInvoicesList.int_Package_ID.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_int_Package_ID">
+            <div class="col col-sm-4 qryInvoices_int_Package_ID">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.int_Package_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.int_Package_ID.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.int_Package_ID.ViewAttributes)>
+@Html.Raw(qryInvoicesList.int_Package_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_int_Package_ID">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.int_Package_ID.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.int_Package_ID.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.int_Package_ID.ViewAttributes)>
+@Html.Raw(qryInvoicesList.int_Package_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.Invoice_Nbr.Visible) { // qryInvoicesList.Invoice_Nbr.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_Invoice_Nbr">
+            <div class="col col-sm-4 qryInvoices_Invoice_Nbr">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.Invoice_Nbr))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.Invoice_Nbr.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Invoice_Nbr.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Invoice_Nbr.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_Invoice_Nbr">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.Invoice_Nbr.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.Invoice_Nbr.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Invoice_Nbr.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Invoice_Nbr.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.InvoiceDate.Visible) { // qryInvoicesList.InvoiceDate.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_InvoiceDate">
+            <div class="col col-sm-4 qryInvoices_InvoiceDate">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.InvoiceDate))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.InvoiceDate.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.InvoiceDate.ViewAttributes)>
+@Html.Raw(qryInvoicesList.InvoiceDate.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_InvoiceDate">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.InvoiceDate.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.InvoiceDate.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.InvoiceDate.ViewAttributes)>
+@Html.Raw(qryInvoicesList.InvoiceDate.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryInvoicesList.Price.Visible) { // qryInvoicesList.Price.Visible (begin)
+        if (qryInvoicesList.RowType == RowType.View) { // View record
+        <div class="row qryInvoices_Price">
+            <div class="col col-sm-4 qryInvoices_Price">@Html.Raw(qryInvoicesList.RenderFieldHeader(qryInvoicesList.Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryInvoicesList.Price.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Price.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryInvoices_Price">
+            <label class="@(qryInvoicesList.LeftColumnClass)">@Html.Raw(qryInvoicesList.Price.Caption)</label>
+            <div class="@(qryInvoicesList.RightColumnClass)"><div @Html.Raw(qryInvoicesList.Price.CellAttributes)>
+<span @Html.Raw(qryInvoicesList.Price.ViewAttributes)>
+@Html.Raw(qryInvoicesList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!qryInvoicesList.IsExport()) {
+    if (qryInvoicesList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(qryInvoicesList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    qryInvoicesList.ListOptions.Tag = "div";
+}
+@qryInvoicesList.ListOptions.RenderBody(qryInvoicesList.MultiColumnListOptionsPosition, qryInvoicesList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryInvoicesList.RowIndex, "$rowindex$"))
+        qryInvoicesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryInvoicesList.IsCopy || qryInvoicesList.IsAdd) && qryInvoicesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryInvoicesList.RowIndex = 1;
+} @* End While *@
+} @* qryInvoicesList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(qryInvoicesList.CurrentAction) && !qryInvoicesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryInvoicesList.CloseRecordset(); }

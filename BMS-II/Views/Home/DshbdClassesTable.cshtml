@@ -1,0 +1,140 @@
+@if (dshbdClassesList.ModalGridAdd && dshbdClassesList.IsGridAdd || dshbdClassesList.ModalGridEdit && dshbdClassesList.IsGridEdit || dshbdClassesList.ModalMultiEdit && dshbdClassesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(dshbdClassesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { dshbdClasses: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(dshbdClassesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(dshbdClassesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(dshbdClassesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(dshbdClassesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(dshbdClassesList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(dshbdClassesList.TableGridClass)">
+@if (!dshbdClassesList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!dshbdClassesList.IsGridAdd && !(dshbdClassesList.IsGridEdit && dshbdClassesList.ModalGridEdit) && !dshbdClassesList.IsMultiEdit) {
+@Html.Raw(dshbdClassesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@dshbdClassesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(dshbdClassesList.FormName)" id="@(dshbdClassesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(dshbdClassesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (dshbdClassesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_dshbdClasses" class="card-body ew-grid-middle-panel @(dshbdClassesList.TableContainerClass)" style="@(dshbdClassesList.TableContainerStyle)">
+@if (dshbdClassesList.TotalRecords > 0 || dshbdClassesList.IsGridEdit || dshbdClassesList.IsMultiEdit) {
+<table id="tbl_dshbdClasseslist" class="@(dshbdClassesList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    dshbdClassesList.RowType = RowType.Header;
+
+    // Render list options
+    await dshbdClassesList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@dshbdClassesList.ListOptions.RenderHeader("left")
+@if (dshbdClassesList.ClassStatus.Visible) { // dshbdClassesList.ClassStatus.Visible (begin)
+        <th data-name="ClassStatus" class="@(dshbdClassesList.ClassStatus.HeaderCellClass)"><div id="elh_dshbdClasses_ClassStatus" class="dshbdClasses_ClassStatus">@Html.Raw(dshbdClassesList.RenderFieldHeader(dshbdClassesList.ClassStatus))</div></th>
+} @* dshbdClassesList.ClassStatus.Visible (end) *@
+@if (dshbdClassesList.str_Package_Name.Visible) { // dshbdClassesList.str_Package_Name.Visible (begin)
+        <th data-name="str_Package_Name" class="@(dshbdClassesList.str_Package_Name.HeaderCellClass)"><div id="elh_dshbdClasses_str_Package_Name" class="dshbdClasses_str_Package_Name">@Html.Raw(dshbdClassesList.RenderFieldHeader(dshbdClassesList.str_Package_Name))</div></th>
+} @* dshbdClassesList.str_Package_Name.Visible (end) *@
+@if (dshbdClassesList.Numberofopenclasses.Visible) { // dshbdClassesList.Numberofopenclasses.Visible (begin)
+        <th data-name="Numberofopenclasses" class="@(dshbdClassesList.Numberofopenclasses.HeaderCellClass)"><div id="elh_dshbdClasses_Numberofopenclasses" class="dshbdClasses_Numberofopenclasses">@Html.Raw(dshbdClassesList.RenderFieldHeader(dshbdClassesList.Numberofopenclasses))</div></th>
+} @* dshbdClassesList.Numberofopenclasses.Visible (end) *@
+@* Render list options (header, right) *@
+@dshbdClassesList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(dshbdClassesList.PageNumber)">
+@{
+    await dshbdClassesList.SetupGrid();
+    bool eof = dshbdClassesList.Recordset == null; // DN
+}
+@while (dshbdClassesList.RecordCount < dshbdClassesList.StopRecord || SameString(dshbdClassesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(dshbdClassesList.RowIndex, "$rowindex$") &&
+        (!dshbdClassesList.IsGridAdd || dshbdClassesList.CurrentMode == "copy") &&
+        (!((dshbdClassesList.IsCopy || dshbdClassesList.IsAdd) && dshbdClassesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await dshbdClassesList.Recordset.ReadAsync();
+    dshbdClassesList.RecordCount++;
+    if (dshbdClassesList.RecordCount >= dshbdClassesList.StartRecord) {
+        await dshbdClassesList.SetupRow();
+    <tr @Html.Raw(dshbdClassesList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @dshbdClassesList.ListOptions.RenderBody("left", dshbdClassesList.RowCount)
+    @if (dshbdClassesList.ClassStatus.Visible) { // dshbdClassesList.ClassStatus.Visible (begin)
+        <td data-name="ClassStatus" @Html.Raw(dshbdClassesList.ClassStatus.CellAttributes)>
+<span id="el@(dshbdClassesList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdClassesList.RowCount)_dshbdClasses_ClassStatus" class="el_dshbdClasses_ClassStatus">
+<span @Html.Raw(dshbdClassesList.ClassStatus.ViewAttributes)>
+@Html.Raw(dshbdClassesList.ClassStatus.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdClassesList.ClassStatus.Visible (end) *@
+    @if (dshbdClassesList.str_Package_Name.Visible) { // dshbdClassesList.str_Package_Name.Visible (begin)
+        <td data-name="str_Package_Name" @Html.Raw(dshbdClassesList.str_Package_Name.CellAttributes)>
+<span id="el@(dshbdClassesList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdClassesList.RowCount)_dshbdClasses_str_Package_Name" class="el_dshbdClasses_str_Package_Name">
+<span @Html.Raw(dshbdClassesList.str_Package_Name.ViewAttributes)>
+@Html.Raw(dshbdClassesList.str_Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdClassesList.str_Package_Name.Visible (end) *@
+    @if (dshbdClassesList.Numberofopenclasses.Visible) { // dshbdClassesList.Numberofopenclasses.Visible (begin)
+        <td data-name="Numberofopenclasses" @Html.Raw(dshbdClassesList.Numberofopenclasses.CellAttributes)>
+<span id="el@(dshbdClassesList.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdClassesList.RowCount)_dshbdClasses_Numberofopenclasses" class="el_dshbdClasses_Numberofopenclasses">
+<span @Html.Raw(dshbdClassesList.Numberofopenclasses.ViewAttributes)>
+@Html.Raw(dshbdClassesList.Numberofopenclasses.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdClassesList.Numberofopenclasses.Visible (end) *@
+    @* Render list options (body, right) *@
+    @dshbdClassesList.ListOptions.RenderBody("right", dshbdClassesList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(dshbdClassesList.RowIndex, "$rowindex$"))
+        dshbdClassesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((dshbdClassesList.IsCopy || dshbdClassesList.IsAdd) && dshbdClassesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        dshbdClassesList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(dshbdClassesList.CurrentAction) && !dshbdClassesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ dshbdClassesList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

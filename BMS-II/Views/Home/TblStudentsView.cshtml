@@ -1,0 +1,293 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentsView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentsView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblStudentsView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblStudentsView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblStudentsView.ExportOptions.RenderBody()
+    @tblStudentsView.OtherOptions.RenderBody()
+</div>
+}
+@tblStudentsView.ShowPageHeader()
+@tblStudentsView.ShowMessages()
+<main class="view">
+<form name="ftblStudentsview" id="ftblStudentsview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblStudentsView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentsView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudents: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblStudentsview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentsview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblStudentsView.IsModal)">
+@if (!tblStudentsView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblStudentsView.MultiPages.ContainerClasses)" id="pages_tblStudentsView"><!-- multi-page tabs -->
+    <ul class="@(tblStudentsView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblStudentsView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblStudents1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStudents1" aria-selected="@(ConvertToJson(tblStudentsView.MultiPages.IsActive(1)))">@Html.Raw(tblStudentsView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblStudentsView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblStudents2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStudents2" aria-selected="@(ConvertToJson(tblStudentsView.MultiPages.IsActive(2)))">@Html.Raw(tblStudentsView.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblStudentsView.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblStudents3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStudents3" aria-selected="@(ConvertToJson(tblStudentsView.MultiPages.IsActive(3)))">@Html.Raw(tblStudentsView.PageCaption(3))</button></li>
+    </ul>
+    @:<div class="@(tblStudentsView.MultiPages.TabContentClasses)"">
+}
+@if (!tblStudentsView.IsExport()) {
+    @:<div class="@(tblStudentsView.MultiPages.TabPaneClasses(1))" id="tab_tblStudents1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStudentsView.TableClass)">
+@if (tblStudentsView.str_Full_Name.Visible) { // tblStudentsView.str_Full_Name.Visible (begin)
+    <tr id="r_str_Full_Name" @Html.Raw(tblStudentsView.str_Full_Name.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_str_Full_Name">@Html.Raw(tblStudentsView.str_Full_Name.Caption)</span></td>
+        <td data-name="str_Full_Name" @Html.Raw(tblStudentsView.str_Full_Name.CellAttributes)>
+<span id="el_tblStudents_str_Full_Name" data-page="1">
+<span @Html.Raw(tblStudentsView.str_Full_Name.ViewAttributes)>
+@Html.Raw(tblStudentsView.str_Full_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.str_Full_Name.Visible (end) *@
+@if (tblStudentsView.str_Cell_Phone.Visible) { // tblStudentsView.str_Cell_Phone.Visible (begin)
+    <tr id="r_str_Cell_Phone" @Html.Raw(tblStudentsView.str_Cell_Phone.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_str_Cell_Phone">@Html.Raw(tblStudentsView.str_Cell_Phone.Caption)</span></td>
+        <td data-name="str_Cell_Phone" @Html.Raw(tblStudentsView.str_Cell_Phone.CellAttributes)>
+<span id="el_tblStudents_str_Cell_Phone" data-page="1">
+<span @Html.Raw(tblStudentsView.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStudentsView.str_Cell_Phone.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.str_Cell_Phone.Visible (end) *@
+@if (tblStudentsView.str_Email.Visible) { // tblStudentsView.str_Email.Visible (begin)
+    <tr id="r_str_Email" @Html.Raw(tblStudentsView.str_Email.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_str_Email">@Html.Raw(tblStudentsView.str_Email.Caption)</span></td>
+        <td data-name="str_Email" @Html.Raw(tblStudentsView.str_Email.CellAttributes)>
+<span id="el_tblStudents_str_Email" data-page="1">
+<span @Html.Raw(tblStudentsView.str_Email.ViewAttributes)>
+@Html.Raw(tblStudentsView.str_Email.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.str_Email.Visible (end) *@
+@if (tblStudentsView.int_Nationality.Visible) { // tblStudentsView.int_Nationality.Visible (begin)
+    <tr id="r_int_Nationality" @Html.Raw(tblStudentsView.int_Nationality.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_int_Nationality">@Html.Raw(tblStudentsView.int_Nationality.Caption)</span></td>
+        <td data-name="int_Nationality" @Html.Raw(tblStudentsView.int_Nationality.CellAttributes)>
+<span id="el_tblStudents_int_Nationality" data-page="1">
+<span @Html.Raw(tblStudentsView.int_Nationality.ViewAttributes)>
+@Html.Raw(tblStudentsView.int_Nationality.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.int_Nationality.Visible (end) *@
+@if (tblStudentsView.User_Role.Visible) { // tblStudentsView.User_Role.Visible (begin)
+    <tr id="r_User_Role" @Html.Raw(tblStudentsView.User_Role.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_User_Role">@Html.Raw(tblStudentsView.User_Role.Caption)</span></td>
+        <td data-name="User_Role" @Html.Raw(tblStudentsView.User_Role.CellAttributes)>
+<span id="el_tblStudents_User_Role" data-page="1">
+<span @Html.Raw(tblStudentsView.User_Role.ViewAttributes)>
+@Html.Raw(tblStudentsView.User_Role.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.User_Role.Visible (end) *@
+@if (tblStudentsView.int_Staff_Id.Visible) { // tblStudentsView.int_Staff_Id.Visible (begin)
+    <tr id="r_int_Staff_Id" @Html.Raw(tblStudentsView.int_Staff_Id.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_int_Staff_Id">@Html.Raw(tblStudentsView.int_Staff_Id.Caption)</span></td>
+        <td data-name="int_Staff_Id" @Html.Raw(tblStudentsView.int_Staff_Id.CellAttributes)>
+<span id="el_tblStudents_int_Staff_Id" data-page="1">
+<span @Html.Raw(tblStudentsView.int_Staff_Id.ViewAttributes)>
+@Html.Raw(tblStudentsView.int_Staff_Id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.int_Staff_Id.Visible (end) *@
+</table>
+@if (!tblStudentsView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStudentsView.IsExport()) {
+    @:<div class="@(tblStudentsView.MultiPages.TabPaneClasses(2))" id="tab_tblStudents2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStudentsView.TableClass)">
+@if (tblStudentsView.str_Username.Visible) { // tblStudentsView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(tblStudentsView.str_Username.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_str_Username">@Html.Raw(tblStudentsView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(tblStudentsView.str_Username.CellAttributes)>
+<span id="el_tblStudents_str_Username" data-page="2">
+<span @Html.Raw(tblStudentsView.str_Username.ViewAttributes)>
+@Html.Raw(tblStudentsView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.str_Username.Visible (end) *@
+@if (tblStudentsView.date_Birth_Hijri.Visible) { // tblStudentsView.date_Birth_Hijri.Visible (begin)
+    <tr id="r_date_Birth_Hijri" @Html.Raw(tblStudentsView.date_Birth_Hijri.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_date_Birth_Hijri">@Html.Raw(tblStudentsView.date_Birth_Hijri.Caption)</span></td>
+        <td data-name="date_Birth_Hijri" @Html.Raw(tblStudentsView.date_Birth_Hijri.CellAttributes)>
+<span id="el_tblStudents_date_Birth_Hijri" data-page="2">
+<span @Html.Raw(tblStudentsView.date_Birth_Hijri.ViewAttributes)>
+@Html.Raw(tblStudentsView.date_Birth_Hijri.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.date_Birth_Hijri.Visible (end) *@
+@if (tblStudentsView.date_Birth.Visible) { // tblStudentsView.date_Birth.Visible (begin)
+    <tr id="r_date_Birth" @Html.Raw(tblStudentsView.date_Birth.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_date_Birth">@Html.Raw(tblStudentsView.date_Birth.Caption)</span></td>
+        <td data-name="date_Birth" @Html.Raw(tblStudentsView.date_Birth.CellAttributes)>
+<span id="el_tblStudents_date_Birth" data-page="2">
+<span @Html.Raw(tblStudentsView.date_Birth.ViewAttributes)>
+@Html.Raw(tblStudentsView.date_Birth.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.date_Birth.Visible (end) *@
+@if (tblStudentsView.str_NationalID_Iqama.Visible) { // tblStudentsView.str_NationalID_Iqama.Visible (begin)
+    <tr id="r_str_NationalID_Iqama" @Html.Raw(tblStudentsView.str_NationalID_Iqama.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_str_NationalID_Iqama">@Html.Raw(tblStudentsView.str_NationalID_Iqama.Caption)</span></td>
+        <td data-name="str_NationalID_Iqama" @Html.Raw(tblStudentsView.str_NationalID_Iqama.CellAttributes)>
+<span id="el_tblStudents_str_NationalID_Iqama" data-page="2">
+<span @Html.Raw(tblStudentsView.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStudentsView.str_NationalID_Iqama.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.str_NationalID_Iqama.Visible (end) *@
+@if (tblStudentsView.Parent_Username.Visible) { // tblStudentsView.Parent_Username.Visible (begin)
+    <tr id="r_Parent_Username" @Html.Raw(tblStudentsView.Parent_Username.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_Parent_Username">@Html.Raw(tblStudentsView.Parent_Username.Caption)</span></td>
+        <td data-name="Parent_Username" @Html.Raw(tblStudentsView.Parent_Username.CellAttributes)>
+<span id="el_tblStudents_Parent_Username" data-page="2">
+<span @Html.Raw(tblStudentsView.Parent_Username.ViewAttributes)>
+@Html.Raw(tblStudentsView.Parent_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.Parent_Username.Visible (end) *@
+</table>
+@if (!tblStudentsView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStudentsView.IsExport()) {
+    @:<div class="@(tblStudentsView.MultiPages.TabPaneClasses(3))" id="tab_tblStudents3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblStudentsView.TableClass)">
+@if (tblStudentsView.Institution.Visible) { // tblStudentsView.Institution.Visible (begin)
+    <tr id="r_Institution" @Html.Raw(tblStudentsView.Institution.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_Institution">@Html.Raw(tblStudentsView.Institution.Caption)</span></td>
+        <td data-name="Institution" @Html.Raw(tblStudentsView.Institution.CellAttributes)>
+<span id="el_tblStudents_Institution" data-page="3">
+<span @Html.Raw(tblStudentsView.Institution.ViewAttributes)>
+@Html.Raw(tblStudentsView.Institution.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.Institution.Visible (end) *@
+@if (tblStudentsView.IsDrivingexperience.Visible) { // tblStudentsView.IsDrivingexperience.Visible (begin)
+    <tr id="r_IsDrivingexperience" @Html.Raw(tblStudentsView.IsDrivingexperience.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_IsDrivingexperience">@Html.Raw(tblStudentsView.IsDrivingexperience.Caption)</span></td>
+        <td data-name="IsDrivingexperience" @Html.Raw(tblStudentsView.IsDrivingexperience.CellAttributes)>
+<span id="el_tblStudents_IsDrivingexperience" data-page="3">
+<span @Html.Raw(tblStudentsView.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblStudentsView.RowCount)" class="form-check-input" value="@(tblStudentsView.IsDrivingexperience.GetViewValue())" disabled checked="@(ConvertToBool(tblStudentsView.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblStudentsView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblStudentsView.IsDrivingexperience.Visible (end) *@
+@if (tblStudentsView.intDrivinglicenseType.Visible) { // tblStudentsView.intDrivinglicenseType.Visible (begin)
+    <tr id="r_intDrivinglicenseType" @Html.Raw(tblStudentsView.intDrivinglicenseType.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_intDrivinglicenseType">@Html.Raw(tblStudentsView.intDrivinglicenseType.Caption)</span></td>
+        <td data-name="intDrivinglicenseType" @Html.Raw(tblStudentsView.intDrivinglicenseType.CellAttributes)>
+<span id="el_tblStudents_intDrivinglicenseType" data-page="3">
+<span @Html.Raw(tblStudentsView.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(tblStudentsView.intDrivinglicenseType.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.intDrivinglicenseType.Visible (end) *@
+@if (tblStudentsView.AbsherApptNbr.Visible) { // tblStudentsView.AbsherApptNbr.Visible (begin)
+    <tr id="r_AbsherApptNbr" @Html.Raw(tblStudentsView.AbsherApptNbr.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_AbsherApptNbr">@Html.Raw(tblStudentsView.AbsherApptNbr.Caption)</span></td>
+        <td data-name="AbsherApptNbr" @Html.Raw(tblStudentsView.AbsherApptNbr.CellAttributes)>
+<span id="el_tblStudents_AbsherApptNbr" data-page="3">
+<span @Html.Raw(tblStudentsView.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblStudentsView.AbsherApptNbr.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.AbsherApptNbr.Visible (end) *@
+@if (tblStudentsView.Absherphoto.Visible) { // tblStudentsView.Absherphoto.Visible (begin)
+    <tr id="r_Absherphoto" @Html.Raw(tblStudentsView.Absherphoto.RowAttributes)>
+        <td class="@(tblStudentsView.TableLeftColumnClass)"><span id="elh_tblStudents_Absherphoto">@Html.Raw(tblStudentsView.Absherphoto.Caption)</span></td>
+        <td data-name="Absherphoto" @Html.Raw(tblStudentsView.Absherphoto.CellAttributes)>
+<span id="el_tblStudents_Absherphoto" data-page="3">
+<span @Html.Raw(tblStudentsView.Absherphoto.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblStudentsView.Absherphoto, ConvertToString(tblStudentsView.Absherphoto.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblStudentsView.Absherphoto.Visible (end) *@
+</table>
+@if (!tblStudentsView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblStudentsView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblStudentsView.CloseRecordset(); }
+@if (tblStudentsView.CurrentDetailTables.Contains("tblAssessment") && tblAssessment.DetailView) {
+    if (!Empty(tblStudentsView.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblAssessment", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblAssessmentGrid")
+    View = this;
+}
+</form>
+</main>
+@tblStudentsView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblStudentsView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

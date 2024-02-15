@@ -1,0 +1,590 @@
+@{
+    // View
+    View = this;
+
+    // Set up CurrentGrid
+    CurrentGrid = qryBillingDetailsV2Grid;
+
+    // Run
+    await qryBillingDetailsV2Grid.Run();
+
+    // Check action result
+    if (qryBillingDetailsV2Grid.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!qryBillingDetailsV2Grid.IsExport()) {
+<script>
+var fqryBillingDetails_v2grid;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let currentTable = @Html.Raw(ConvertToJson(qryBillingDetailsV2Grid.ToClientVar()));
+    ew.deepAssign(ew.vars, { tables: { qryBillingDetails_v2: currentTable } });
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fqryBillingDetails_v2grid")
+        .setPageId("grid")
+        .setFormKeyCountName("@(qryBillingDetailsV2Grid.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["Payment_Number", [fields.Payment_Number.visible && fields.Payment_Number.required ? ew.Validators.required(fields.Payment_Number.caption) : null, ew.Validators.integer], fields.Payment_Number.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null, ew.Validators.integer], fields.NationalID.isInvalid],
+            ["date_Paid", [fields.date_Paid.visible && fields.date_Paid.required ? ew.Validators.required(fields.date_Paid.caption) : null, ew.Validators.datetime(fields.date_Paid.clientFormatPattern)], fields.date_Paid.isInvalid],
+            ["Amount_Paid", [fields.Amount_Paid.visible && fields.Amount_Paid.required ? ew.Validators.required(fields.Amount_Paid.caption) : null, ew.Validators.float], fields.Amount_Paid.isInvalid],
+            ["running_payments", [fields.running_payments.visible && fields.running_payments.required ? ew.Validators.required(fields.running_payments.caption) : null, ew.Validators.float], fields.running_payments.isInvalid],
+            ["running_balance", [fields.running_balance.visible && fields.running_balance.required ? ew.Validators.required(fields.running_balance.caption) : null, ew.Validators.float], fields.running_balance.isInvalid],
+            ["str_ApprovalCode", [fields.str_ApprovalCode.visible && fields.str_ApprovalCode.required ? ew.Validators.required(fields.str_ApprovalCode.caption) : null], fields.str_ApprovalCode.isInvalid],
+            ["Package_Name", [fields.Package_Name.visible && fields.Package_Name.required ? ew.Validators.required(fields.Package_Name.caption) : null], fields.Package_Name.isInvalid],
+            ["int_Package_ID", [fields.int_Package_ID.visible && fields.int_Package_ID.required ? ew.Validators.required(fields.int_Package_ID.caption) : null, ew.Validators.integer], fields.int_Package_ID.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["Payment_Number",false],["NationalID",false],["date_Paid",false],["Amount_Paid",false],["running_payments",false],["running_balance",false],["str_ApprovalCode",false],["Package_Name",false],["int_Package_ID",false]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+        })
+        .build();
+    window[form.id] = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+<main class="list">
+<div id="ew-list">
+@if (qryBillingDetailsV2Grid.TotalRecords > 0 || !Empty(qryBillingDetailsV2Grid.CurrentAction)) {
+<div class="card ew-card ew-grid@(qryBillingDetailsV2Grid.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryBillingDetailsV2Grid.TableGridClass)">
+@if (qryBillingDetailsV2Grid.ShowOtherOptions) {
+<div class="card-header ew-grid-upper-panel">
+    @qryBillingDetailsV2Grid.OtherOptions.RenderBody()
+</div>
+}
+<div id="fqryBillingDetails_v2grid" class="ew-form ew-list-form">
+<div id="gmp_qryBillingDetails_v2" class="card-body ew-grid-middle-panel @(qryBillingDetailsV2Grid.TableContainerClass)" style="@(qryBillingDetailsV2Grid.TableContainerStyle)">
+<table id="tbl_qryBillingDetails_v2grid" class="@(qryBillingDetailsV2Grid.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryBillingDetailsV2Grid.RowType = RowType.Header;
+
+    // Render list options
+    await qryBillingDetailsV2Grid.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryBillingDetailsV2Grid.ListOptions.RenderHeader("left")
+@if (qryBillingDetailsV2Grid.Payment_Number.Visible) { // qryBillingDetailsV2Grid.Payment_Number.Visible (begin)
+        <th data-name="Payment_Number" class="@(qryBillingDetailsV2Grid.Payment_Number.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_Payment_Number" class="qryBillingDetails_v2_Payment_Number">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.Payment_Number))</div></th>
+} @* qryBillingDetailsV2Grid.Payment_Number.Visible (end) *@
+@if (qryBillingDetailsV2Grid.NationalID.Visible) { // qryBillingDetailsV2Grid.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(qryBillingDetailsV2Grid.NationalID.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_NationalID" class="qryBillingDetails_v2_NationalID">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.NationalID))</div></th>
+} @* qryBillingDetailsV2Grid.NationalID.Visible (end) *@
+@if (qryBillingDetailsV2Grid.date_Paid.Visible) { // qryBillingDetailsV2Grid.date_Paid.Visible (begin)
+        <th data-name="date_Paid" class="@(qryBillingDetailsV2Grid.date_Paid.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_date_Paid" class="qryBillingDetails_v2_date_Paid">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.date_Paid))</div></th>
+} @* qryBillingDetailsV2Grid.date_Paid.Visible (end) *@
+@if (qryBillingDetailsV2Grid.Amount_Paid.Visible) { // qryBillingDetailsV2Grid.Amount_Paid.Visible (begin)
+        <th data-name="Amount_Paid" class="@(qryBillingDetailsV2Grid.Amount_Paid.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_Amount_Paid" class="qryBillingDetails_v2_Amount_Paid">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.Amount_Paid))</div></th>
+} @* qryBillingDetailsV2Grid.Amount_Paid.Visible (end) *@
+@if (qryBillingDetailsV2Grid.running_payments.Visible) { // qryBillingDetailsV2Grid.running_payments.Visible (begin)
+        <th data-name="running_payments" class="@(qryBillingDetailsV2Grid.running_payments.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_running_payments" class="qryBillingDetails_v2_running_payments">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.running_payments))</div></th>
+} @* qryBillingDetailsV2Grid.running_payments.Visible (end) *@
+@if (qryBillingDetailsV2Grid.running_balance.Visible) { // qryBillingDetailsV2Grid.running_balance.Visible (begin)
+        <th data-name="running_balance" class="@(qryBillingDetailsV2Grid.running_balance.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_running_balance" class="qryBillingDetails_v2_running_balance">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.running_balance))</div></th>
+} @* qryBillingDetailsV2Grid.running_balance.Visible (end) *@
+@if (qryBillingDetailsV2Grid.str_ApprovalCode.Visible) { // qryBillingDetailsV2Grid.str_ApprovalCode.Visible (begin)
+        <th data-name="str_ApprovalCode" class="@(qryBillingDetailsV2Grid.str_ApprovalCode.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_str_ApprovalCode" class="qryBillingDetails_v2_str_ApprovalCode">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.str_ApprovalCode))</div></th>
+} @* qryBillingDetailsV2Grid.str_ApprovalCode.Visible (end) *@
+@if (qryBillingDetailsV2Grid.Package_Name.Visible) { // qryBillingDetailsV2Grid.Package_Name.Visible (begin)
+        <th data-name="Package_Name" class="@(qryBillingDetailsV2Grid.Package_Name.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_Package_Name" class="qryBillingDetails_v2_Package_Name">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.Package_Name))</div></th>
+} @* qryBillingDetailsV2Grid.Package_Name.Visible (end) *@
+@if (qryBillingDetailsV2Grid.int_Package_ID.Visible) { // qryBillingDetailsV2Grid.int_Package_ID.Visible (begin)
+        <th data-name="int_Package_ID" class="@(qryBillingDetailsV2Grid.int_Package_ID.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_int_Package_ID" class="qryBillingDetails_v2_int_Package_ID">@Html.Raw(qryBillingDetailsV2Grid.RenderFieldHeader(qryBillingDetailsV2Grid.int_Package_ID))</div></th>
+} @* qryBillingDetailsV2Grid.int_Package_ID.Visible (end) *@
+@* Render list options (header, right) *@
+@qryBillingDetailsV2Grid.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryBillingDetailsV2Grid.PageNumber)">
+@{
+    await qryBillingDetailsV2Grid.SetupGrid();
+    bool eof = qryBillingDetailsV2Grid.Recordset == null; // DN
+}
+@while (qryBillingDetailsV2Grid.RecordCount < qryBillingDetailsV2Grid.StopRecord || SameString(qryBillingDetailsV2Grid.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryBillingDetailsV2Grid.RowIndex, "$rowindex$") &&
+        (!qryBillingDetailsV2Grid.IsGridAdd || qryBillingDetailsV2Grid.CurrentMode == "copy") &&
+        (!((qryBillingDetailsV2Grid.IsCopy || qryBillingDetailsV2Grid.IsAdd) && qryBillingDetailsV2Grid.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryBillingDetailsV2Grid.Recordset.ReadAsync();
+    qryBillingDetailsV2Grid.RecordCount++;
+    if (qryBillingDetailsV2Grid.RecordCount >= qryBillingDetailsV2Grid.StartRecord) {
+        await qryBillingDetailsV2Grid.SetupRow();
+
+        // Skip 1) delete row / empty row for confirm page, 2) hidden row
+        if (qryBillingDetailsV2Grid.RowAction != "delete" &&
+            qryBillingDetailsV2Grid.RowAction != "insertdelete" &&
+            !(qryBillingDetailsV2Grid.RowAction == "insert" && qryBillingDetailsV2Grid.IsConfirm && qryBillingDetailsV2Grid.EmptyRow()) &&
+            qryBillingDetailsV2Grid.RowAction != "hide") {
+    <tr @Html.Raw(qryBillingDetailsV2Grid.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryBillingDetailsV2Grid.ListOptions.RenderBody("left", qryBillingDetailsV2Grid.RowCount)
+    @if (qryBillingDetailsV2Grid.Payment_Number.Visible) { // qryBillingDetailsV2Grid.Payment_Number.Visible (begin)
+        <td data-name="Payment_Number" @Html.Raw(qryBillingDetailsV2Grid.Payment_Number.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* Payment_Number (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Payment_Number" class="el_qryBillingDetails_v2_Payment_Number">
+    <input type="@(qryBillingDetailsV2Grid.Payment_Number.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" id="x@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" data-table="qryBillingDetails_v2" data-field="x_Payment_Number" value="@Html.Raw(qryBillingDetailsV2Grid.Payment_Number.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Payment_Number.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.Payment_Number.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.Payment_Number.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.Payment_Number.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Payment_Number" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" id="o@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Payment_Number.OldValue))">
+    @* Payment_Number (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* Payment_Number (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Payment_Number" class="el_qryBillingDetails_v2_Payment_Number">
+    <input type="@(qryBillingDetailsV2Grid.Payment_Number.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" id="x@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" data-table="qryBillingDetails_v2" data-field="x_Payment_Number" value="@Html.Raw(qryBillingDetailsV2Grid.Payment_Number.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Payment_Number.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.Payment_Number.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.Payment_Number.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.Payment_Number.GetErrorMessage())</div>
+    </span>
+    @* Payment_Number (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* Payment_Number (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Payment_Number" class="el_qryBillingDetails_v2_Payment_Number">
+    <span @Html.Raw(qryBillingDetailsV2Grid.Payment_Number.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.Payment_Number.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Payment_Number" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Payment_Number.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Payment_Number" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_Payment_Number" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Payment_Number.OldValue))">
+    }
+    @* Payment_Number (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.Payment_Number.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.NationalID.Visible) { // qryBillingDetailsV2Grid.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(qryBillingDetailsV2Grid.NationalID.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* NationalID (begin) *@
+    @if (!Empty(qryBillingDetailsV2Grid.NationalID.SessionValue)) {
+    <span @Html.Raw(qryBillingDetailsV2Grid.NationalID.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(qryBillingDetailsV2Grid.NationalID.ViewValue)))"></span>
+    <input type="hidden" id="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" name="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" value="@(HtmlEncode(qryBillingDetailsV2Grid.NationalID.CurrentValue))" data-hidden="1">
+    } else {
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_NationalID" class="el_qryBillingDetails_v2_NationalID">
+    <input type="@(qryBillingDetailsV2Grid.NationalID.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" id="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" data-table="qryBillingDetails_v2" data-field="x_NationalID" value="@Html.Raw(qryBillingDetailsV2Grid.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.NationalID.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.NationalID.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.NationalID.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.NationalID.GetErrorMessage())</div>
+    </span>
+    }
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_NationalID" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_NationalID" id="o@(qryBillingDetailsV2Grid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.NationalID.OldValue))">
+    @* NationalID (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* NationalID (begin) *@
+    @if (!Empty(qryBillingDetailsV2Grid.NationalID.SessionValue)) {
+    <span @Html.Raw(qryBillingDetailsV2Grid.NationalID.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(qryBillingDetailsV2Grid.NationalID.ViewValue)))"></span>
+    <input type="hidden" id="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" name="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" value="@(HtmlEncode(qryBillingDetailsV2Grid.NationalID.CurrentValue))" data-hidden="1">
+    } else {
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_NationalID" class="el_qryBillingDetails_v2_NationalID">
+    <input type="@(qryBillingDetailsV2Grid.NationalID.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" id="x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" data-table="qryBillingDetails_v2" data-field="x_NationalID" value="@Html.Raw(qryBillingDetailsV2Grid.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.NationalID.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.NationalID.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.NationalID.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.NationalID.GetErrorMessage())</div>
+    </span>
+    }
+    @* NationalID (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* NationalID (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_NationalID" class="el_qryBillingDetails_v2_NationalID">
+    <span @Html.Raw(qryBillingDetailsV2Grid.NationalID.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.NationalID.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_NationalID" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.NationalID.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_NationalID" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_NationalID" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.NationalID.OldValue))">
+    }
+    @* NationalID (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.NationalID.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.date_Paid.Visible) { // qryBillingDetailsV2Grid.date_Paid.Visible (begin)
+        <td data-name="date_Paid" @Html.Raw(qryBillingDetailsV2Grid.date_Paid.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* date_Paid (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_date_Paid" class="el_qryBillingDetails_v2_date_Paid">
+    <input type="@(qryBillingDetailsV2Grid.date_Paid.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" id="x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" data-table="qryBillingDetails_v2" data-field="x_date_Paid" value="@Html.Raw(qryBillingDetailsV2Grid.date_Paid.EditValue)" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.date_Paid.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.date_Paid.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.date_Paid.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.date_Paid.GetErrorMessage())</div>
+    @if (!qryBillingDetailsV2Grid.date_Paid.ReadOnly && !qryBillingDetailsV2Grid.date_Paid.Disabled && !qryBillingDetailsV2Grid.date_Paid.EditAttrs.Is("readonly") && !qryBillingDetailsV2Grid.date_Paid.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["fqryBillingDetails_v2grid", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(0))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("fqryBillingDetails_v2grid", "x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_date_Paid" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" id="o@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.date_Paid.OldValue))">
+    @* date_Paid (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* date_Paid (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_date_Paid" class="el_qryBillingDetails_v2_date_Paid">
+    <input type="@(qryBillingDetailsV2Grid.date_Paid.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" id="x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" data-table="qryBillingDetails_v2" data-field="x_date_Paid" value="@Html.Raw(qryBillingDetailsV2Grid.date_Paid.EditValue)" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.date_Paid.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.date_Paid.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.date_Paid.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.date_Paid.GetErrorMessage())</div>
+    @if (!qryBillingDetailsV2Grid.date_Paid.ReadOnly && !qryBillingDetailsV2Grid.date_Paid.Disabled && !qryBillingDetailsV2Grid.date_Paid.EditAttrs.Is("readonly") && !qryBillingDetailsV2Grid.date_Paid.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["fqryBillingDetails_v2grid", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(0))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("fqryBillingDetails_v2grid", "x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    @* date_Paid (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* date_Paid (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_date_Paid" class="el_qryBillingDetails_v2_date_Paid">
+    <span @Html.Raw(qryBillingDetailsV2Grid.date_Paid.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.date_Paid.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_date_Paid" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.date_Paid.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_date_Paid" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_date_Paid" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.date_Paid.OldValue))">
+    }
+    @* date_Paid (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.date_Paid.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.Amount_Paid.Visible) { // qryBillingDetailsV2Grid.Amount_Paid.Visible (begin)
+        <td data-name="Amount_Paid" @Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* Amount_Paid (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Amount_Paid" class="el_qryBillingDetails_v2_Amount_Paid">
+    <input type="@(qryBillingDetailsV2Grid.Amount_Paid.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" id="x@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" data-table="qryBillingDetails_v2" data-field="x_Amount_Paid" value="@Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Amount_Paid.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.Amount_Paid.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Amount_Paid" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" id="o@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Amount_Paid.OldValue))">
+    @* Amount_Paid (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* Amount_Paid (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Amount_Paid" class="el_qryBillingDetails_v2_Amount_Paid">
+    <input type="@(qryBillingDetailsV2Grid.Amount_Paid.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" id="x@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" data-table="qryBillingDetails_v2" data-field="x_Amount_Paid" value="@Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Amount_Paid.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.Amount_Paid.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.GetErrorMessage())</div>
+    </span>
+    @* Amount_Paid (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* Amount_Paid (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Amount_Paid" class="el_qryBillingDetails_v2_Amount_Paid">
+    <span @Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.Amount_Paid.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Amount_Paid" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Amount_Paid.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Amount_Paid" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_Amount_Paid" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Amount_Paid.OldValue))">
+    }
+    @* Amount_Paid (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.Amount_Paid.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.running_payments.Visible) { // qryBillingDetailsV2Grid.running_payments.Visible (begin)
+        <td data-name="running_payments" @Html.Raw(qryBillingDetailsV2Grid.running_payments.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* running_payments (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_running_payments" class="el_qryBillingDetails_v2_running_payments">
+    <input type="@(qryBillingDetailsV2Grid.running_payments.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_running_payments" id="x@(qryBillingDetailsV2Grid.RowIndex)_running_payments" data-table="qryBillingDetails_v2" data-field="x_running_payments" value="@Html.Raw(qryBillingDetailsV2Grid.running_payments.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_payments.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.running_payments.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.running_payments.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.running_payments.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_running_payments" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_running_payments" id="o@(qryBillingDetailsV2Grid.RowIndex)_running_payments" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_payments.OldValue))">
+    @* running_payments (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* running_payments (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_running_payments" class="el_qryBillingDetails_v2_running_payments">
+    <input type="@(qryBillingDetailsV2Grid.running_payments.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_running_payments" id="x@(qryBillingDetailsV2Grid.RowIndex)_running_payments" data-table="qryBillingDetails_v2" data-field="x_running_payments" value="@Html.Raw(qryBillingDetailsV2Grid.running_payments.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_payments.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.running_payments.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.running_payments.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.running_payments.GetErrorMessage())</div>
+    </span>
+    @* running_payments (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* running_payments (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_running_payments" class="el_qryBillingDetails_v2_running_payments">
+    <span @Html.Raw(qryBillingDetailsV2Grid.running_payments.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.running_payments.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_running_payments" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_running_payments" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_running_payments" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_payments.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_running_payments" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_running_payments" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_running_payments" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_payments.OldValue))">
+    }
+    @* running_payments (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.running_payments.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.running_balance.Visible) { // qryBillingDetailsV2Grid.running_balance.Visible (begin)
+        <td data-name="running_balance" @Html.Raw(qryBillingDetailsV2Grid.running_balance.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* running_balance (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_running_balance" class="el_qryBillingDetails_v2_running_balance">
+    <input type="@(qryBillingDetailsV2Grid.running_balance.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_running_balance" id="x@(qryBillingDetailsV2Grid.RowIndex)_running_balance" data-table="qryBillingDetails_v2" data-field="x_running_balance" value="@Html.Raw(qryBillingDetailsV2Grid.running_balance.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_balance.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.running_balance.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.running_balance.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.running_balance.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_running_balance" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_running_balance" id="o@(qryBillingDetailsV2Grid.RowIndex)_running_balance" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_balance.OldValue))">
+    @* running_balance (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* running_balance (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_running_balance" class="el_qryBillingDetails_v2_running_balance">
+    <input type="@(qryBillingDetailsV2Grid.running_balance.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_running_balance" id="x@(qryBillingDetailsV2Grid.RowIndex)_running_balance" data-table="qryBillingDetails_v2" data-field="x_running_balance" value="@Html.Raw(qryBillingDetailsV2Grid.running_balance.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_balance.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.running_balance.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.running_balance.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.running_balance.GetErrorMessage())</div>
+    </span>
+    @* running_balance (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* running_balance (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_running_balance" class="el_qryBillingDetails_v2_running_balance">
+    <span @Html.Raw(qryBillingDetailsV2Grid.running_balance.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.running_balance.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_running_balance" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_running_balance" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_running_balance" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_balance.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_running_balance" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_running_balance" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_running_balance" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.running_balance.OldValue))">
+    }
+    @* running_balance (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.running_balance.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.str_ApprovalCode.Visible) { // qryBillingDetailsV2Grid.str_ApprovalCode.Visible (begin)
+        <td data-name="str_ApprovalCode" @Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* str_ApprovalCode (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_str_ApprovalCode" class="el_qryBillingDetails_v2_str_ApprovalCode">
+    <input type="@(qryBillingDetailsV2Grid.str_ApprovalCode.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" id="x@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" data-table="qryBillingDetails_v2" data-field="x_str_ApprovalCode" value="@Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.str_ApprovalCode.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.str_ApprovalCode.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_str_ApprovalCode" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" id="o@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.str_ApprovalCode.OldValue))">
+    @* str_ApprovalCode (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_ApprovalCode (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_str_ApprovalCode" class="el_qryBillingDetails_v2_str_ApprovalCode">
+    <input type="@(qryBillingDetailsV2Grid.str_ApprovalCode.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" id="x@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" data-table="qryBillingDetails_v2" data-field="x_str_ApprovalCode" value="@Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.str_ApprovalCode.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.str_ApprovalCode.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.GetErrorMessage())</div>
+    </span>
+    @* str_ApprovalCode (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* str_ApprovalCode (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_str_ApprovalCode" class="el_qryBillingDetails_v2_str_ApprovalCode">
+    <span @Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.str_ApprovalCode.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_str_ApprovalCode" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.str_ApprovalCode.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_str_ApprovalCode" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_str_ApprovalCode" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.str_ApprovalCode.OldValue))">
+    }
+    @* str_ApprovalCode (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.str_ApprovalCode.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.Package_Name.Visible) { // qryBillingDetailsV2Grid.Package_Name.Visible (begin)
+        <td data-name="Package_Name" @Html.Raw(qryBillingDetailsV2Grid.Package_Name.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* Package_Name (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Package_Name" class="el_qryBillingDetails_v2_Package_Name">
+    <input type="@(qryBillingDetailsV2Grid.Package_Name.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" id="x@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" data-table="qryBillingDetails_v2" data-field="x_Package_Name" value="@Html.Raw(qryBillingDetailsV2Grid.Package_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Package_Name.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.Package_Name.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.Package_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.Package_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Package_Name" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" id="o@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Package_Name.OldValue))">
+    @* Package_Name (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* Package_Name (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Package_Name" class="el_qryBillingDetails_v2_Package_Name">
+    <input type="@(qryBillingDetailsV2Grid.Package_Name.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" id="x@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" data-table="qryBillingDetails_v2" data-field="x_Package_Name" value="@Html.Raw(qryBillingDetailsV2Grid.Package_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Package_Name.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.Package_Name.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.Package_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.Package_Name.GetErrorMessage())</div>
+    </span>
+    @* Package_Name (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* Package_Name (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_Package_Name" class="el_qryBillingDetails_v2_Package_Name">
+    <span @Html.Raw(qryBillingDetailsV2Grid.Package_Name.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.Package_Name.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Package_Name" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Package_Name.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_Package_Name" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_Package_Name" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.Package_Name.OldValue))">
+    }
+    @* Package_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.Package_Name.Visible (end) *@
+    @if (qryBillingDetailsV2Grid.int_Package_ID.Visible) { // qryBillingDetailsV2Grid.int_Package_ID.Visible (begin)
+        <td data-name="int_Package_ID" @Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.CellAttributes)>
+@if (qryBillingDetailsV2Grid.RowType == RowType.Add) { // Add (begin)
+    @* int_Package_ID (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_int_Package_ID" class="el_qryBillingDetails_v2_int_Package_ID">
+    <input type="@(qryBillingDetailsV2Grid.int_Package_ID.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" id="x@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" data-table="qryBillingDetails_v2" data-field="x_int_Package_ID" value="@Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.int_Package_ID.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.int_Package_ID.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_int_Package_ID" data-hidden="1" data-old name="o@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" id="o@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.int_Package_ID.OldValue))">
+    @* int_Package_ID (end) *@
+} @* Add (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.Edit) { // Edit (begin)
+    @* int_Package_ID (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_int_Package_ID" class="el_qryBillingDetails_v2_int_Package_ID">
+    <input type="@(qryBillingDetailsV2Grid.int_Package_ID.InputTextType)" name="x@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" id="x@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" data-table="qryBillingDetails_v2" data-field="x_int_Package_ID" value="@Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.int_Package_ID.PlaceHolder))" data-format-pattern="@(qryBillingDetailsV2Grid.int_Package_ID.FormatPattern)"@Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.GetErrorMessage())</div>
+    </span>
+    @* int_Package_ID (end) *@
+} @* Edit (end) *@
+@if (qryBillingDetailsV2Grid.RowType == RowType.View) { // View (begin)
+    @* int_Package_ID (begin) *@
+    <span id="el@(qryBillingDetailsV2Grid.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2Grid.RowCount)_qryBillingDetails_v2_int_Package_ID" class="el_qryBillingDetails_v2_int_Package_ID">
+    <span @Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.ViewAttributes)>
+    @Html.Raw(qryBillingDetailsV2Grid.int_Package_ID.GetViewValue())</span>
+    </span>
+    if (qryBillingDetailsV2Grid.IsConfirm) {
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_int_Package_ID" data-hidden="1" name="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" id="fqryBillingDetails_v2grid$x@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.int_Package_ID.FormValue))">
+    <input type="hidden" data-table="qryBillingDetails_v2" data-field="x_int_Package_ID" data-hidden="1" data-old name="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" id="fqryBillingDetails_v2grid$o@(qryBillingDetailsV2Grid.RowIndex)_int_Package_ID" value="@Html.Raw(HtmlEncode(qryBillingDetailsV2Grid.int_Package_ID.OldValue))">
+    }
+    @* int_Package_ID (end) *@
+} @* View (end) *@
+</td>
+    } @* qryBillingDetailsV2Grid.int_Package_ID.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryBillingDetailsV2Grid.ListOptions.RenderBody("right", qryBillingDetailsV2Grid.RowCount)
+    </tr>
+if (qryBillingDetailsV2Grid.RowType == RowType.Add || qryBillingDetailsV2Grid.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["fqryBillingDetails_v2grid","load"], () => fqryBillingDetails_v2grid.updateLists(@(qryBillingDetailsV2Grid.RowIndex)@(qryBillingDetailsV2Grid.IsAdd || qryBillingDetailsV2Grid.IsEdit || qryBillingDetailsV2Grid.IsCopy || SameString(qryBillingDetailsV2Grid.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End delete row checking *@
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryBillingDetailsV2Grid.RowIndex, "$rowindex$"))
+        qryBillingDetailsV2Grid.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryBillingDetailsV2Grid.IsCopy || qryBillingDetailsV2Grid.IsAdd) && qryBillingDetailsV2Grid.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryBillingDetailsV2Grid.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+@if (qryBillingDetailsV2Grid.CurrentMode == "add" || qryBillingDetailsV2Grid.CurrentMode == "copy") {
+<input type="hidden" name="@(qryBillingDetailsV2Grid.FormKeyCountName)" id="@(qryBillingDetailsV2Grid.FormKeyCountName)" value="@(qryBillingDetailsV2Grid.KeyCount)">
+@Html.Raw(qryBillingDetailsV2Grid.MultiSelectKey)
+}
+@if (qryBillingDetailsV2Grid.CurrentMode == "edit") {
+<input type="hidden" name="@(qryBillingDetailsV2Grid.FormKeyCountName)" id="@(qryBillingDetailsV2Grid.FormKeyCountName)" value="@(qryBillingDetailsV2Grid.KeyCount)">
+@Html.Raw(qryBillingDetailsV2Grid.MultiSelectKey)
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryBillingDetailsV2Grid.CurrentMode)) {
+<input type="hidden" name="action" id="action" value="">
+}
+<input type="hidden" name="detailpage" value="fqryBillingDetails_v2grid">
+</div><!-- /.ew-list-form -->
+@{ qryBillingDetailsV2Grid.CloseRecordset(); }
+</div><!-- /.ew-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@qryBillingDetailsV2Grid.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@if (!qryBillingDetailsV2Grid.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("qryBillingDetails_v2");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}
+@{
+    // Close Recordset
+    qryBillingDetailsV2Grid.CloseRecordset(); // DN
+    // Clear CurrentGrid
+    CurrentGrid = null;
+}

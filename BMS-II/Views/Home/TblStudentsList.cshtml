@@ -1,0 +1,368 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentsList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentsList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblStudentsList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudents: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblStudentsList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblStudentsList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblStudentsList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblStudentsList.FormKeyCountName)")
+
+        // Dynamic selection lists
+        .setLists({
+            "intDrivinglicenseType": @Html.Raw(tblStudentsList.intDrivinglicenseType.ToClientList(tblStudentsList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblStudentsList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblStudentsList.TotalRecords > 0 && tblStudentsList.ExportOptions.Visible) {
+    tblStudentsList.ExportOptions.Render("body");
+}
+@if (tblStudentsList.ImportOptions.Visible) {
+    tblStudentsList.ImportOptions.Render("body");
+}
+@if (tblStudentsList.SearchOptions.Visible) {
+    tblStudentsList.SearchOptions.Render("body");
+}
+@if (tblStudentsList.FilterOptions.Visible) {
+    tblStudentsList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (tblStudentsList.ShowCurrentFilter) {
+    tblStudentsList.ShowFilterList();
+}
+@if (!tblStudentsList.IsModal) {
+<form name="ftblStudentssrch" id="ftblStudentssrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblStudentssrch_search_panel" class="mb-2 mb-sm-0 @(tblStudentsList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudents: currentTable } });
+var currentForm;
+var ftblStudentssrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentssrch")
+        .setPageId("list")
+@if (tblStudentsList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["str_First_Name", [], fields.str_First_Name.isInvalid],
+            ["str_Last_Name", [], fields.str_Last_Name.isInvalid],
+            ["str_Cell_Phone", [], fields.str_Cell_Phone.isInvalid],
+            ["str_Email", [], fields.str_Email.isInvalid],
+            ["str_NationalID_Iqama", [], fields.str_NationalID_Iqama.isInvalid],
+            ["intDrivinglicenseType", [], fields.intDrivinglicenseType.isInvalid],
+            ["y_intDrivinglicenseType", [ew.Validators.between], false],
+            ["AbsherApptNbr", [], fields.AbsherApptNbr.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "intDrivinglicenseType": @Html.Raw(tblStudentsList.intDrivinglicenseType.ToClientList(tblStudentsList)),
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblStudentsList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblStudentsList.IsExport() && Empty(tblStudentsList.CurrentAction) && tblStudentsList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0@(tblStudentsList.SearchFieldsPerRow > 0 ? " row-cols-sm-" + tblStudentsList.SearchFieldsPerRow : "")">
+@{
+    // Render search row
+    tblStudentsList.RowType = RowType.Search;
+    tblStudentsList.ResetAttributes();
+    await tblStudentsList.RenderRow();
+}
+@if (tblStudentsList.str_First_Name.Visible) { // tblStudentsList.str_First_Name.Visible (begin)
+    if (!tblStudentsList.str_First_Name.UseFilter) {
+        tblStudentsList.SearchColumnCount++;
+    }
+    <div id="xs_str_First_Name" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblStudentsList.str_First_Name.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_First_Name" class="ew-search-caption ew-label">@Html.Raw(tblStudentsList.str_First_Name.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_First_Name" id="z_str_First_Name" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblStudents_str_First_Name" class="ew-search-field">
+<input type="@(tblStudentsList.str_First_Name.InputTextType)" name="x_str_First_Name" id="x_str_First_Name" data-table="tblStudents" data-field="x_str_First_Name" value="@Html.Raw(tblStudentsList.str_First_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStudentsList.str_First_Name.PlaceHolder))" data-format-pattern="@(tblStudentsList.str_First_Name.FormatPattern)"@Html.Raw(tblStudentsList.str_First_Name.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentsList.str_First_Name.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblStudentsList.str_First_Name.Visible (end) *@
+@if (tblStudentsList.str_Last_Name.Visible) { // tblStudentsList.str_Last_Name.Visible (begin)
+    if (!tblStudentsList.str_Last_Name.UseFilter) {
+        tblStudentsList.SearchColumnCount++;
+    }
+    <div id="xs_str_Last_Name" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblStudentsList.str_Last_Name.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_Last_Name" class="ew-search-caption ew-label">@Html.Raw(tblStudentsList.str_Last_Name.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Last_Name" id="z_str_Last_Name" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblStudents_str_Last_Name" class="ew-search-field">
+<input type="@(tblStudentsList.str_Last_Name.InputTextType)" name="x_str_Last_Name" id="x_str_Last_Name" data-table="tblStudents" data-field="x_str_Last_Name" value="@Html.Raw(tblStudentsList.str_Last_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStudentsList.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblStudentsList.str_Last_Name.FormatPattern)"@Html.Raw(tblStudentsList.str_Last_Name.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentsList.str_Last_Name.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblStudentsList.str_Last_Name.Visible (end) *@
+@if (tblStudentsList.str_Cell_Phone.Visible) { // tblStudentsList.str_Cell_Phone.Visible (begin)
+    if (!tblStudentsList.str_Cell_Phone.UseFilter) {
+        tblStudentsList.SearchColumnCount++;
+    }
+    <div id="xs_str_Cell_Phone" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblStudentsList.str_Cell_Phone.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_Cell_Phone" class="ew-search-caption ew-label">@Html.Raw(tblStudentsList.str_Cell_Phone.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Cell_Phone" id="z_str_Cell_Phone" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblStudents_str_Cell_Phone" class="ew-search-field">
+<input type="@(tblStudentsList.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblStudents" data-field="x_str_Cell_Phone" value="@Html.Raw(tblStudentsList.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStudentsList.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblStudentsList.str_Cell_Phone.FormatPattern)"@Html.Raw(tblStudentsList.str_Cell_Phone.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentsList.str_Cell_Phone.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblStudentsList.str_Cell_Phone.Visible (end) *@
+@if (tblStudentsList.str_Email.Visible) { // tblStudentsList.str_Email.Visible (begin)
+    if (!tblStudentsList.str_Email.UseFilter) {
+        tblStudentsList.SearchColumnCount++;
+    }
+    <div id="xs_str_Email" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblStudentsList.str_Email.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_Email" class="ew-search-caption ew-label">@Html.Raw(tblStudentsList.str_Email.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Email" id="z_str_Email" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblStudents_str_Email" class="ew-search-field">
+<input type="@(tblStudentsList.str_Email.InputTextType)" name="x_str_Email" id="x_str_Email" data-table="tblStudents" data-field="x_str_Email" value="@Html.Raw(tblStudentsList.str_Email.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStudentsList.str_Email.PlaceHolder))" data-format-pattern="@(tblStudentsList.str_Email.FormatPattern)"@Html.Raw(tblStudentsList.str_Email.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentsList.str_Email.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblStudentsList.str_Email.Visible (end) *@
+@if (tblStudentsList.intDrivinglicenseType.Visible) { // tblStudentsList.intDrivinglicenseType.Visible (begin)
+    if (!tblStudentsList.intDrivinglicenseType.UseFilter) {
+        tblStudentsList.SearchColumnCount++;
+    }
+    <div id="xs_intDrivinglicenseType" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblStudentsList.intDrivinglicenseType.UseFilter ? " ew-filter-field" : "")">
+        <select
+            id="x_intDrivinglicenseType"
+            name="x_intDrivinglicenseType[]"
+            class="form-control ew-select@(tblStudentsList.intDrivinglicenseType.IsInvalidClass)"
+            data-select2-id="ftblStudentssrch_x_intDrivinglicenseType"
+            data-table="tblStudents"
+            data-field="x_intDrivinglicenseType"
+            data-caption="@Html.Raw(HtmlEncode(RemoveHtml(tblStudentsList.intDrivinglicenseType.Caption)))"
+            data-filter="true"
+            multiple
+            size="1"
+            data-value-separator="@(tblStudentsList.intDrivinglicenseType.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblStudentsList.intDrivinglicenseType.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblStudentsList.intDrivinglicenseType.EditAttributes)>
+            @(tblStudentsList.intDrivinglicenseType.SelectOptionListHtml("x_intDrivinglicenseType", true))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblStudentsList.intDrivinglicenseType.GetErrorMessage(false))</div>
+        <script>
+        loadjs.ready("ftblStudentssrch", function() {
+            var options = {
+                name: "x_intDrivinglicenseType",
+                selectId: "ftblStudentssrch_x_intDrivinglicenseType",
+                ajax: { id: "x_intDrivinglicenseType", form: "ftblStudentssrch", limit: ew.FILTER_PAGE_SIZE, data: { ajax: "filter" } }
+            };
+            options = Object.assign({}, ew.filterOptions, options, ew.vars.tables.tblStudents.fields.intDrivinglicenseType.filterOptions);
+            ew.createFilter(options);
+        });
+        </script>
+    </div><!-- /.col-sm-auto -->
+} @* tblStudentsList.intDrivinglicenseType.Visible (end) *@
+@if (tblStudentsList.AbsherApptNbr.Visible) { // tblStudentsList.AbsherApptNbr.Visible (begin)
+    if (!tblStudentsList.AbsherApptNbr.UseFilter) {
+        tblStudentsList.SearchColumnCount++;
+    }
+    <div id="xs_AbsherApptNbr" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblStudentsList.AbsherApptNbr.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_AbsherApptNbr" class="ew-search-caption ew-label">@Html.Raw(tblStudentsList.AbsherApptNbr.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_AbsherApptNbr" id="z_AbsherApptNbr" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblStudents_AbsherApptNbr" class="ew-search-field">
+<input type="@(tblStudentsList.AbsherApptNbr.InputTextType)" name="x_AbsherApptNbr" id="x_AbsherApptNbr" data-table="tblStudents" data-field="x_AbsherApptNbr" value="@Html.Raw(tblStudentsList.AbsherApptNbr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblStudentsList.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(tblStudentsList.AbsherApptNbr.FormatPattern)"@Html.Raw(tblStudentsList.AbsherApptNbr.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblStudentsList.AbsherApptNbr.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblStudentsList.AbsherApptNbr.Visible (end) *@
+</div><!-- /.row -->
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblStudentsList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblStudentsList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblStudentsList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblStudentsList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblStudentssrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblStudentsList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblStudentssrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblStudentsList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblStudentssrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblStudentsList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblStudentssrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblStudentsList.ShowPageHeader()
+@tblStudentsList.ShowMessages()
+<main class="list @(tblStudentsList.TotalRecords == 0 && !tblStudentsList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblStudentsList.TotalRecords > 0 || !Empty(tblStudentsList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblStudentsList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblStudents" + TitleCaseInvariant(tblStudentsList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblStudentsList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblStudentsList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblStudentsList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudents");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

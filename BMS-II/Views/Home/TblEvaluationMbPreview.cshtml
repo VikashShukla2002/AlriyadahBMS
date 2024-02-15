@@ -1,0 +1,220 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblEvaluationMbPreview.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+ew.deepAssign(ew.vars, { tables: { tblEvaluationMB: @Html.Raw(ConvertToJson(tblEvaluationMbPreview.ToClientVar())) } });
+</script>
+@tblEvaluationMbPreview.ShowPageHeader()
+@if (tblEvaluationMbPreview.TotalRecords > 0) {
+<div class="card ew-grid @(tblEvaluationMbPreview.TableGridClass)"><!-- .card -->
+<div class="card-header ew-grid-upper-panel ew-preview-upper-panel"><!-- .card-header -->
+@Html.Raw(tblEvaluationMbPreview.Pager.Render())
+<div class="ew-preview-other-options">
+@tblEvaluationMbPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card-header -->
+<div class="card-body ew-preview-middle-panel ew-grid-middle-panel @(tblEvaluationMbPreview.TableContainerClass)" style="@(tblEvaluationMbPreview.TableContainerStyle)"><!-- .card-body -->
+<table class="@(tblEvaluationMbPreview.TableClass)"><!-- .table -->
+    <thead><!-- Table header -->
+        <tr class="ew-table-header">
+@{
+    await tblEvaluationMbPreview.RenderListOptions(); // Render list options
+}
+@tblEvaluationMbPreview.ListOptions.RenderHeader("left")
+@if (tblEvaluationMbPreview.str_Full_Name_Hdr.Visible) { // tblEvaluationMbPreview.str_Full_Name_Hdr.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.str_Full_Name_Hdr))) {
+        <th class="@tblEvaluationMbPreview.str_Full_Name_Hdr.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.str_Full_Name_Hdr.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.str_Full_Name_Hdr.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.str_Full_Name_Hdr.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.str_Full_Name_Hdr.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.str_Full_Name_Hdr.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.str_Full_Name_Hdr.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.str_Full_Name_Hdr.Visible (end) *@
+@if (tblEvaluationMbPreview.NationalID.Visible) { // tblEvaluationMbPreview.NationalID.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.NationalID))) {
+        <th class="@tblEvaluationMbPreview.NationalID.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.NationalID.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.NationalID.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.NationalID.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.NationalID.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.NationalID.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.NationalID.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.NationalID.Visible (end) *@
+@if (tblEvaluationMbPreview.str_Cell_Phone.Visible) { // tblEvaluationMbPreview.str_Cell_Phone.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.str_Cell_Phone))) {
+        <th class="@tblEvaluationMbPreview.str_Cell_Phone.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.str_Cell_Phone.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.str_Cell_Phone.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.str_Cell_Phone.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.str_Cell_Phone.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.str_Cell_Phone.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.str_Cell_Phone.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationMbPreview.intDrivinglicenseType.Visible) { // tblEvaluationMbPreview.intDrivinglicenseType.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.intDrivinglicenseType))) {
+        <th class="@tblEvaluationMbPreview.intDrivinglicenseType.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.intDrivinglicenseType.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.intDrivinglicenseType.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.intDrivinglicenseType.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.intDrivinglicenseType.Visible (end) *@
+@if (tblEvaluationMbPreview.Retake.Visible) { // tblEvaluationMbPreview.Retake.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.Retake))) {
+        <th class="@tblEvaluationMbPreview.Retake.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.Retake.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.Retake.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.Retake.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.Retake.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.Retake.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.Retake.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.Retake.Visible (end) *@
+@if (tblEvaluationMbPreview.AbsherApptNbr.Visible) { // tblEvaluationMbPreview.AbsherApptNbr.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.AbsherApptNbr))) {
+        <th class="@tblEvaluationMbPreview.AbsherApptNbr.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.AbsherApptNbr.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.AbsherApptNbr.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.AbsherApptNbr.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.AbsherApptNbr.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.AbsherApptNbr.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.AbsherApptNbr.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.AbsherApptNbr.Visible (end) *@
+@if (tblEvaluationMbPreview.IsDrivingexperience.Visible) { // tblEvaluationMbPreview.IsDrivingexperience.Visible (begin)
+    if (Empty(tblEvaluationMbPreview.SortUrl(tblEvaluationMbPreview.IsDrivingexperience))) {
+        <th class="@tblEvaluationMbPreview.IsDrivingexperience.HeaderCellClass">@Html.Raw(tblEvaluationMbPreview.IsDrivingexperience.Caption)</th>
+    } else {
+        <th class="@tblEvaluationMbPreview.IsDrivingexperience.HeaderCellClass"><div role="button" data-table="tblEvaluationMB" data-sort="@tblEvaluationMbPreview.IsDrivingexperience.Name" data-sort-type="2" data-sort-order="@tblEvaluationMbPreview.IsDrivingexperience.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblEvaluationMbPreview.IsDrivingexperience.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblEvaluationMbPreview.IsDrivingexperience.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblEvaluationMbPreview.IsDrivingexperience.Visible (end) *@
+@tblEvaluationMbPreview.ListOptions.RenderHeader("right")
+        </tr>
+    </thead>
+    <tbody><!-- Table body -->
+@{
+    tblEvaluationMbPreview.RecordCount = 0;
+    tblEvaluationMbPreview.RowCount = 0;
+}
+@do {
+    // Init row class and style
+    tblEvaluationMbPreview.RecordCount++;
+    tblEvaluationMbPreview.RowCount++;
+    tblEvaluationMbPreview.CssStyle = "";
+    tblEvaluationMbPreview.LoadListRowValues(tblEvaluationMbPreview.Recordset);
+
+    // Render row
+    tblEvaluationMbPreview.RowType = RowType.Preview; // Preview record
+    tblEvaluationMbPreview.ResetAttributes();
+    await tblEvaluationMbPreview.RenderListRow();
+
+    // Render list options
+    await tblEvaluationMbPreview.RenderListOptions();
+    <tr @Html.Raw(tblEvaluationMbPreview.RowAttributes)>
+    @tblEvaluationMbPreview.ListOptions.RenderBody("left", tblEvaluationMbPreview.RowCount)
+    @if (tblEvaluationMbPreview.str_Full_Name_Hdr.Visible) { // tblEvaluationMbPreview.str_Full_Name_Hdr.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.str_Full_Name_Hdr.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.str_Full_Name_Hdr.ViewAttributes)>
+@Html.Raw(tblEvaluationMbPreview.str_Full_Name_Hdr.GetViewValue())</span>
+</td>
+    } @* tblEvaluationMbPreview.str_Full_Name_Hdr.Visible (end) *@
+    @if (tblEvaluationMbPreview.NationalID.Visible) { // tblEvaluationMbPreview.NationalID.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.NationalID.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.NationalID.ViewAttributes)>
+@Html.Raw(tblEvaluationMbPreview.NationalID.GetViewValue())</span>
+</td>
+    } @* tblEvaluationMbPreview.NationalID.Visible (end) *@
+    @if (tblEvaluationMbPreview.str_Cell_Phone.Visible) { // tblEvaluationMbPreview.str_Cell_Phone.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblEvaluationMbPreview.str_Cell_Phone.GetViewValue())</span>
+</td>
+    } @* tblEvaluationMbPreview.str_Cell_Phone.Visible (end) *@
+    @if (tblEvaluationMbPreview.intDrivinglicenseType.Visible) { // tblEvaluationMbPreview.intDrivinglicenseType.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.ViewAttributes)>
+@if ((!EmptyString(tblEvaluationMbPreview.intDrivinglicenseType.GetViewValue()) || !EmptyString(tblEvaluationMbPreview.intDrivinglicenseType.TooltipValue)) && !Empty(tblEvaluationMbPreview.intDrivinglicenseType.LinkAttributes)) {
+<a @Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.LinkAttributes)>@Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.GetViewValue())</a>
+} else {
+@Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.GetViewValue())
+}
+<span id="tt_tblEvaluationMB_x@(tblEvaluationMbPreview.RowCount)_intDrivinglicenseType" class="d-none">
+@Html.Raw(tblEvaluationMbPreview.intDrivinglicenseType.TooltipValue)
+</span></span>
+</td>
+    } @* tblEvaluationMbPreview.intDrivinglicenseType.Visible (end) *@
+    @if (tblEvaluationMbPreview.Retake.Visible) { // tblEvaluationMbPreview.Retake.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.Retake.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.Retake.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Retake_@(tblEvaluationMbPreview.RowCount)" class="form-check-input" value="@(tblEvaluationMbPreview.Retake.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbPreview.Retake.CurrentValue))">
+    <label class="form-check-label" for="x_Retake_@(tblEvaluationMbPreview.RowCount)"></label>
+</div></span>
+</td>
+    } @* tblEvaluationMbPreview.Retake.Visible (end) *@
+    @if (tblEvaluationMbPreview.AbsherApptNbr.Visible) { // tblEvaluationMbPreview.AbsherApptNbr.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.AbsherApptNbr.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblEvaluationMbPreview.AbsherApptNbr.GetViewValue())</span>
+</td>
+    } @* tblEvaluationMbPreview.AbsherApptNbr.Visible (end) *@
+    @if (tblEvaluationMbPreview.IsDrivingexperience.Visible) { // tblEvaluationMbPreview.IsDrivingexperience.Visible (begin)
+            <td @Html.Raw(tblEvaluationMbPreview.IsDrivingexperience.CellAttributes)>
+<span @Html.Raw(tblEvaluationMbPreview.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationMbPreview.RowCount)" class="form-check-input" value="@(tblEvaluationMbPreview.IsDrivingexperience.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbPreview.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationMbPreview.RowCount)"></label>
+</div></span>
+</td>
+    } @* tblEvaluationMbPreview.IsDrivingexperience.Visible (end) *@
+    @tblEvaluationMbPreview.ListOptions.RenderBody("right", tblEvaluationMbPreview.RowCount)
+    </tr>
+} while (await tblEvaluationMbPreview.Recordset.ReadAsync());
+    </tbody>
+</table><!-- /.table -->
+</div><!-- /.card-body -->
+</div><!-- /.card -->
+} else { @* No record *@
+<div class="card border-0"><!-- .card -->
+<div class="ew-detail-count">@Html.Raw(Language.Phrase("NoRecord"))</div>
+<div class="ew-preview-other-options">
+@tblEvaluationMbPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card -->
+}
+@tblEvaluationMbPreview.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()

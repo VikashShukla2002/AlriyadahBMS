@@ -1,0 +1,185 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAppointmentsInfoDelete.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAppointmentsInfoDelete.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAppointmentsInfoDelete.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAppointmentsInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "delete";
+var currentForm;
+var ftblAppointmentsInfodelete;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblAppointmentsInfodelete")
+        .setPageId("delete")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblAppointmentsInfoDelete.ShowPageHeader()
+@tblAppointmentsInfoDelete.ShowMessages()
+<form name="ftblAppointmentsInfodelete" id="ftblAppointmentsInfodelete" class="ew-form ew-delete-form" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="delete">
+@foreach (string key in tblAppointmentsInfoDelete.RecordKeys) {
+<input type="hidden" name="key_m[]" value="@key">
+}
+<div class="card ew-card ew-grid @(tblAppointmentsInfoDelete.TableGridClass)">
+<div class="card-body ew-grid-middle-panel @(tblAppointmentsInfoDelete.TableContainerClass)" style="@(tblAppointmentsInfoDelete.TableContainerStyle)">
+<table class="@(tblAppointmentsInfoDelete.TableClass)">
+    <thead>
+    <tr class="ew-table-header">
+@if (tblAppointmentsInfoDelete.str_AppName.Visible) { // tblAppointmentsInfoDelete.str_AppName.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.str_AppName.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_str_AppName" class="tblAppointmentsInfo_str_AppName">@Html.Raw(tblAppointmentsInfoDelete.str_AppName.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.str_AppName.Visible (end) *@
+@if (tblAppointmentsInfoDelete.str_App_Date.Visible) { // tblAppointmentsInfoDelete.str_App_Date.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.str_App_Date.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_str_App_Date" class="tblAppointmentsInfo_str_App_Date">@Html.Raw(tblAppointmentsInfoDelete.str_App_Date.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.str_App_Date.Visible (end) *@
+@if (tblAppointmentsInfoDelete.str_StartTime.Visible) { // tblAppointmentsInfoDelete.str_StartTime.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.str_StartTime.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_str_StartTime" class="tblAppointmentsInfo_str_StartTime">@Html.Raw(tblAppointmentsInfoDelete.str_StartTime.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.str_StartTime.Visible (end) *@
+@if (tblAppointmentsInfoDelete.int_Apptype.Visible) { // tblAppointmentsInfoDelete.int_Apptype.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.int_Apptype.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_int_Apptype" class="tblAppointmentsInfo_int_Apptype">@Html.Raw(tblAppointmentsInfoDelete.int_Apptype.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.int_Apptype.Visible (end) *@
+@if (tblAppointmentsInfoDelete.int_AppStatus.Visible) { // tblAppointmentsInfoDelete.int_AppStatus.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.int_AppStatus.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_int_AppStatus" class="tblAppointmentsInfo_int_AppStatus">@Html.Raw(tblAppointmentsInfoDelete.int_AppStatus.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.int_AppStatus.Visible (end) *@
+@if (tblAppointmentsInfoDelete.mny_AppCost.Visible) { // tblAppointmentsInfoDelete.mny_AppCost.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.mny_AppCost.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_mny_AppCost" class="tblAppointmentsInfo_mny_AppCost">@Html.Raw(tblAppointmentsInfoDelete.mny_AppCost.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.mny_AppCost.Visible (end) *@
+@if (tblAppointmentsInfoDelete.mny_AmountPaid.Visible) { // tblAppointmentsInfoDelete.mny_AmountPaid.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.mny_AmountPaid.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_mny_AmountPaid" class="tblAppointmentsInfo_mny_AmountPaid">@Html.Raw(tblAppointmentsInfoDelete.mny_AmountPaid.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.mny_AmountPaid.Visible (end) *@
+@if (tblAppointmentsInfoDelete.NationalID.Visible) { // tblAppointmentsInfoDelete.NationalID.Visible (begin)
+        <th class="@Html.Raw(tblAppointmentsInfoDelete.NationalID.HeaderCellClass)"><span id="elh_tblAppointmentsInfo_NationalID" class="tblAppointmentsInfo_NationalID">@Html.Raw(tblAppointmentsInfoDelete.NationalID.Caption)</span></th>
+} @* tblAppointmentsInfoDelete.NationalID.Visible (end) *@
+    </tr>
+    </thead>
+    <tbody>
+@{ tblAppointmentsInfoDelete.RecordCount = 0; }
+@while (tblAppointmentsInfoDelete.Recordset != null && await tblAppointmentsInfoDelete.Recordset.ReadAsync()) { // DN
+    tblAppointmentsInfoDelete.RecordCount++;
+    tblAppointmentsInfoDelete.RowCount++;
+
+    // Set row properties
+    tblAppointmentsInfoDelete.ResetAttributes();
+    tblAppointmentsInfoDelete.RowType = RowType.View; // View
+
+    // Get the field contents
+    await tblAppointmentsInfoDelete.LoadRowValues(tblAppointmentsInfoDelete.Recordset);
+
+    // Render row
+    await tblAppointmentsInfoDelete.RenderRow();
+    <tr @Html.Raw(tblAppointmentsInfoDelete.RowAttributes)>
+@if (tblAppointmentsInfoDelete.str_AppName.Visible) { // tblAppointmentsInfoDelete.str_AppName.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.str_AppName.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.str_AppName.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.str_AppName.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.str_AppName.Visible (end) *@
+@if (tblAppointmentsInfoDelete.str_App_Date.Visible) { // tblAppointmentsInfoDelete.str_App_Date.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.str_App_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.str_App_Date.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.str_App_Date.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.str_App_Date.Visible (end) *@
+@if (tblAppointmentsInfoDelete.str_StartTime.Visible) { // tblAppointmentsInfoDelete.str_StartTime.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.str_StartTime.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.str_StartTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.str_StartTime.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.str_StartTime.Visible (end) *@
+@if (tblAppointmentsInfoDelete.int_Apptype.Visible) { // tblAppointmentsInfoDelete.int_Apptype.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.int_Apptype.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.int_Apptype.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.int_Apptype.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.int_Apptype.Visible (end) *@
+@if (tblAppointmentsInfoDelete.int_AppStatus.Visible) { // tblAppointmentsInfoDelete.int_AppStatus.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.int_AppStatus.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.int_AppStatus.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.int_AppStatus.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.int_AppStatus.Visible (end) *@
+@if (tblAppointmentsInfoDelete.mny_AppCost.Visible) { // tblAppointmentsInfoDelete.mny_AppCost.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.mny_AppCost.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.mny_AppCost.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.mny_AppCost.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.mny_AppCost.Visible (end) *@
+@if (tblAppointmentsInfoDelete.mny_AmountPaid.Visible) { // tblAppointmentsInfoDelete.mny_AmountPaid.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.mny_AmountPaid.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.mny_AmountPaid.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.mny_AmountPaid.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.mny_AmountPaid.Visible (end) *@
+@if (tblAppointmentsInfoDelete.NationalID.Visible) { // tblAppointmentsInfoDelete.NationalID.Visible (begin)
+        <td @Html.Raw(tblAppointmentsInfoDelete.NationalID.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblAppointmentsInfoDelete.NationalID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoDelete.NationalID.GetViewValue())</span>
+</span></td>
+} @* tblAppointmentsInfoDelete.NationalID.Visible (end) *@
+    </tr>
+}
+@{ tblAppointmentsInfoDelete.CloseRecordset(); }
+</tbody>
+</table>
+</div>
+</div>
+<div class="ew-buttons ew-desktop-buttons">
+<button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit">@Html.Raw(Language.Phrase("DeleteBtn"))</button>
+<button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-href="@AppPath(tblAppointmentsInfoDelete.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+</div>
+</form>
+@tblAppointmentsInfoDelete.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

@@ -1,0 +1,146 @@
+@if (!userLevelsList.IsExport()) {
+<div>
+@if (!userLevelsList.IsGridAdd && !(userLevelsList.IsGridEdit && userLevelsList.ModalGridEdit) && !userLevelsList.IsMultiEdit) {
+@Html.Raw(userLevelsList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@userLevelsList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (userLevelsList.ModalGridAdd && userLevelsList.IsGridAdd || userLevelsList.ModalGridEdit && userLevelsList.IsGridEdit || userLevelsList.ModalMultiEdit && userLevelsList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(userLevelsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { UserLevels: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(userLevelsList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(userLevelsList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(userLevelsList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(userLevelsList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(userLevelsList.FormName)" id="@(userLevelsList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(userLevelsList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (userLevelsList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(userLevelsList.GetMultiColumnRowClass())">
+@if (userLevelsList.TotalRecords > 0 || userLevelsList.IsGridEdit || userLevelsList.IsMultiEdit) {
+    await userLevelsList.SetupGrid();
+    bool eof = userLevelsList.Recordset == null; // DN
+while (userLevelsList.RecordCount < userLevelsList.StopRecord || SameString(userLevelsList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(userLevelsList.RowIndex, "$rowindex$") &&
+        (!userLevelsList.IsGridAdd || userLevelsList.CurrentMode == "copy") &&
+        (!((userLevelsList.IsCopy || userLevelsList.IsAdd) && userLevelsList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await userLevelsList.Recordset.ReadAsync();
+    userLevelsList.RecordCount++;
+    if (userLevelsList.RecordCount >= userLevelsList.StartRecord) {
+        await userLevelsList.SetupRow();
+<div class="@(userLevelsList.GetMultiColumnColClass())" @Html.Raw(userLevelsList.RowAttributes)>
+<div class="@(userLevelsList.MultiColumnCardClass)">
+    @if (userLevelsList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(userLevelsList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    userLevelsList.ListOptions.Tag = "div";
+    userLevelsList.ListOptions.RenderBody(userLevelsList.MultiColumnListOptionsPosition, userLevelsList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (userLevelsList.UserLevelID.Visible) { // userLevelsList.UserLevelID.Visible (begin)
+        if (userLevelsList.RowType == RowType.View) { // View record
+        <div class="row UserLevels_UserLevelID">
+            <div class="col col-sm-4 UserLevels_UserLevelID">@Html.Raw(userLevelsList.RenderFieldHeader(userLevelsList.UserLevelID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(userLevelsList.UserLevelID.CellAttributes)>
+<span @Html.Raw(userLevelsList.UserLevelID.ViewAttributes)>
+@Html.Raw(userLevelsList.UserLevelID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row UserLevels_UserLevelID">
+            <label class="@(userLevelsList.LeftColumnClass)">@Html.Raw(userLevelsList.UserLevelID.Caption)</label>
+            <div class="@(userLevelsList.RightColumnClass)"><div @Html.Raw(userLevelsList.UserLevelID.CellAttributes)>
+<span @Html.Raw(userLevelsList.UserLevelID.ViewAttributes)>
+@Html.Raw(userLevelsList.UserLevelID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (userLevelsList.UserLevelName.Visible) { // userLevelsList.UserLevelName.Visible (begin)
+        if (userLevelsList.RowType == RowType.View) { // View record
+        <div class="row UserLevels_UserLevelName">
+            <div class="col col-sm-4 UserLevels_UserLevelName">@Html.Raw(userLevelsList.RenderFieldHeader(userLevelsList.UserLevelName))</div>
+            <div class="col col-sm-8"><div @Html.Raw(userLevelsList.UserLevelName.CellAttributes)>
+<span @Html.Raw(userLevelsList.UserLevelName.ViewAttributes)>
+@Html.Raw(userLevelsList.UserLevelName.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row UserLevels_UserLevelName">
+            <label class="@(userLevelsList.LeftColumnClass)">@Html.Raw(userLevelsList.UserLevelName.Caption)</label>
+            <div class="@(userLevelsList.RightColumnClass)"><div @Html.Raw(userLevelsList.UserLevelName.CellAttributes)>
+<span @Html.Raw(userLevelsList.UserLevelName.ViewAttributes)>
+@Html.Raw(userLevelsList.UserLevelName.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!userLevelsList.IsExport()) {
+    if (userLevelsList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(userLevelsList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    userLevelsList.ListOptions.Tag = "div";
+}
+@userLevelsList.ListOptions.RenderBody(userLevelsList.MultiColumnListOptionsPosition, userLevelsList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(userLevelsList.RowIndex, "$rowindex$"))
+        userLevelsList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((userLevelsList.IsCopy || userLevelsList.IsAdd) && userLevelsList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        userLevelsList.RowIndex = 1;
+} @* End While *@
+} @* userLevelsList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(userLevelsList.CurrentAction) && !userLevelsList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ userLevelsList.CloseRecordset(); }

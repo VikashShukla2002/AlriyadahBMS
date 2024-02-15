@@ -1,0 +1,367 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblBillingInfoList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblBillingInfoList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblBillingInfoList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblBillingInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblBillingInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblBillingInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblBillingInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblBillingInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblBillingInfoList.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["date_Paid", [fields.date_Paid.visible && fields.date_Paid.required ? ew.Validators.required(fields.date_Paid.caption) : null, ew.Validators.datetime(fields.date_Paid.clientFormatPattern)], fields.date_Paid.isInvalid],
+            ["str_ApprovalCode", [fields.str_ApprovalCode.visible && fields.str_ApprovalCode.required ? ew.Validators.required(fields.str_ApprovalCode.caption) : null], fields.str_ApprovalCode.isInvalid],
+            ["Payment_Number", [fields.Payment_Number.visible && fields.Payment_Number.required ? ew.Validators.required(fields.Payment_Number.caption) : null, ew.Validators.integer], fields.Payment_Number.isInvalid],
+            ["Pricelist", [fields.Pricelist.visible && fields.Pricelist.required ? ew.Validators.required(fields.Pricelist.caption) : null, ew.Validators.float], fields.Pricelist.isInvalid],
+            ["str_Amount_Pay", [fields.str_Amount_Pay.visible && fields.str_Amount_Pay.required ? ew.Validators.required(fields.str_Amount_Pay.caption) : null], fields.str_Amount_Pay.isInvalid],
+            ["mny_Running_Payments", [fields.mny_Running_Payments.visible && fields.mny_Running_Payments.required ? ew.Validators.required(fields.mny_Running_Payments.caption) : null, ew.Validators.float], fields.mny_Running_Payments.isInvalid],
+            ["mny_Running_Balance", [fields.mny_Running_Balance.visible && fields.mny_Running_Balance.required ? ew.Validators.required(fields.mny_Running_Balance.caption) : null], fields.mny_Running_Balance.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["NationalID",false],["str_First_Name",false],["str_Last_Name",false],["date_Paid",false],["str_ApprovalCode",false],["Payment_Number",false],["Pricelist",false],["str_Amount_Pay",false],["mny_Running_Payments",false],["mny_Running_Balance",false]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "NationalID": @Html.Raw(tblBillingInfoList.NationalID.ToClientList(tblBillingInfoList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblBillingInfoList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblBillingInfoList.TotalRecords > 0 && tblBillingInfoList.ExportOptions.Visible) {
+    tblBillingInfoList.ExportOptions.Render("body");
+}
+@if (tblBillingInfoList.ImportOptions.Visible) {
+    tblBillingInfoList.ImportOptions.Render("body");
+}
+@if (tblBillingInfoList.SearchOptions.Visible) {
+    tblBillingInfoList.SearchOptions.Render("body");
+}
+@if (tblBillingInfoList.FilterOptions.Visible) {
+    tblBillingInfoList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblBillingInfoList.IsExport() || Config.ExportMasterRecord && tblBillingInfoList.IsExport("print")) {
+if (!Empty(tblBillingInfoList.DbMasterFilter) && tblBillingInfoList.CurrentMasterTable == "tblPotentialStudentInfo") {
+    if (tblBillingInfoList.MasterRecordExists) {
+        @await Html.PartialAsync("TblPotentialStudentInfoMaster.cshtml")
+    }
+}
+}
+@if (tblBillingInfoList.ShowCurrentFilter) {
+    tblBillingInfoList.ShowFilterList();
+}
+@if (!tblBillingInfoList.IsModal) {
+<form name="ftblBillingInfosrch" id="ftblBillingInfosrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblBillingInfosrch_search_panel" class="mb-2 mb-sm-0 @(tblBillingInfoList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblBillingInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblBillingInfo: currentTable } });
+var currentForm;
+var ftblBillingInfosrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblBillingInfosrch")
+        .setPageId("list")
+@if (tblBillingInfoList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["NationalID", [], fields.NationalID.isInvalid],
+            ["y_NationalID", [ew.Validators.between], false],
+            ["str_First_Name", [], fields.str_First_Name.isInvalid],
+            ["str_Last_Name", [], fields.str_Last_Name.isInvalid],
+            ["date_Paid", [], fields.date_Paid.isInvalid],
+            ["str_ApprovalCode", [], fields.str_ApprovalCode.isInvalid],
+            ["Payment_Number", [], fields.Payment_Number.isInvalid],
+            ["Pricelist", [], fields.Pricelist.isInvalid],
+            ["str_Amount_Pay", [], fields.str_Amount_Pay.isInvalid],
+            ["mny_Running_Payments", [], fields.mny_Running_Payments.isInvalid],
+            ["mny_Running_Balance", [], fields.mny_Running_Balance.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "NationalID": @Html.Raw(tblBillingInfoList.NationalID.ToClientList(tblBillingInfoList)),
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblBillingInfoList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblBillingInfoList.IsExport() && Empty(tblBillingInfoList.CurrentAction) && tblBillingInfoList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0@(tblBillingInfoList.SearchFieldsPerRow > 0 ? " row-cols-sm-" + tblBillingInfoList.SearchFieldsPerRow : "")">
+@{
+    // Render search row
+    tblBillingInfoList.RowType = RowType.Search;
+    tblBillingInfoList.ResetAttributes();
+    await tblBillingInfoList.RenderRow();
+}
+@if (tblBillingInfoList.NationalID.Visible) { // tblBillingInfoList.NationalID.Visible (begin)
+    if (!tblBillingInfoList.NationalID.UseFilter) {
+        tblBillingInfoList.SearchColumnCount++;
+    }
+    <div id="xs_NationalID" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblBillingInfoList.NationalID.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_NationalID" class="ew-search-caption ew-label">@Html.Raw(tblBillingInfoList.NationalID.Caption)</label>
+            <div class="ew-search-operator">
+<select name="z_NationalID" id="z_NationalID" class="form-select ew-operator-select" data-ew-action="search-operator">
+@foreach (string opr in tblBillingInfoList.NationalID.SearchOperators) {
+<option value="@opr" selected="@SameText(tblBillingInfoList.NationalID.AdvancedSearch.SearchOperator, opr)">@Html.Raw(Language.Phrase(opr == "=" ? "EQUAL" : opr))</option>
+}
+</select>
+</div>
+        </div>
+        <div id="el_tblBillingInfo_NationalID" class="ew-search-field">
+    <select
+        id="x_NationalID"
+        name="x_NationalID"
+        class="form-select ew-select@(tblBillingInfoList.NationalID.IsInvalidClass)"
+        data-select2-id="ftblBillingInfosrch_x_NationalID"
+        data-table="tblBillingInfo"
+        data-field="x_NationalID"
+        data-value-separator="@(tblBillingInfoList.NationalID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblBillingInfoList.NationalID.PlaceHolder))"
+        @Html.Raw(tblBillingInfoList.NationalID.EditAttributes)>
+        @(tblBillingInfoList.NationalID.SelectOptionListHtml("x_NationalID"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoList.NationalID.GetErrorMessage(false))</div>
+@Html.Raw(tblBillingInfoList.NationalID.Lookup.GetParamTag(tblBillingInfoList, "p_x_NationalID"))
+<script>
+loadjs.ready("ftblBillingInfosrch", function() {
+    var options = { name: "x_NationalID", selectId: "ftblBillingInfosrch_x_NationalID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblBillingInfosrch.lists.NationalID?.lookupOptions.length) {
+        options.data = { id: "x_NationalID", form: "ftblBillingInfosrch" };
+    } else {
+        options.ajax = { id: "x_NationalID", form: "ftblBillingInfosrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblBillingInfo.fields.NationalID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+            <div class="ew-search-and d-none"><label>@Html.Raw(Language.Phrase("AND"))</label></div>
+        </div><!-- /.ew-search-field -->
+        <div id="el2_tblBillingInfo_NationalID" class="ew-search-field2 d-none">
+    <select
+        id="y_NationalID"
+        name="y_NationalID"
+        class="form-select ew-select@(tblBillingInfoList.NationalID.IsInvalidClass)"
+        data-select2-id="ftblBillingInfosrch_y_NationalID"
+        data-table="tblBillingInfo"
+        data-field="x_NationalID"
+        data-value-separator="@(tblBillingInfoList.NationalID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblBillingInfoList.NationalID.PlaceHolder))"
+        @Html.Raw(tblBillingInfoList.NationalID.EditAttributes)>
+        @(tblBillingInfoList.NationalID.SelectOptionListHtml("y_NationalID"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoList.NationalID.GetErrorMessage(false))</div>
+@Html.Raw(tblBillingInfoList.NationalID.Lookup.GetParamTag(tblBillingInfoList, "p_y_NationalID"))
+<script>
+loadjs.ready("ftblBillingInfosrch", function() {
+    var options = { name: "y_NationalID", selectId: "ftblBillingInfosrch_y_NationalID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblBillingInfosrch.lists.NationalID?.lookupOptions.length) {
+        options.data = { id: "y_NationalID", form: "ftblBillingInfosrch" };
+    } else {
+        options.ajax = { id: "y_NationalID", form: "ftblBillingInfosrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblBillingInfo.fields.NationalID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</div>
+    </div><!-- /.col-sm-auto -->
+} @* tblBillingInfoList.NationalID.Visible (end) *@
+</div><!-- /.row -->
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblBillingInfoList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblBillingInfoList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblBillingInfoList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblBillingInfoList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblBillingInfosrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblBillingInfoList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblBillingInfosrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblBillingInfoList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblBillingInfosrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblBillingInfoList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblBillingInfosrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblBillingInfoList.ShowPageHeader()
+@tblBillingInfoList.ShowMessages()
+<main class="list @(tblBillingInfoList.TotalRecords == 0 && !tblBillingInfoList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblBillingInfoList.TotalRecords > 0 || !Empty(tblBillingInfoList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblBillingInfoList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblBillingInfo" + TitleCaseInvariant(tblBillingInfoList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblBillingInfoList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblBillingInfoList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblBillingInfoList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblBillingInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

@@ -1,0 +1,183 @@
+@if (tblEvaluationList.ModalGridAdd && tblEvaluationList.IsGridAdd || tblEvaluationList.ModalGridEdit && tblEvaluationList.IsGridEdit || tblEvaluationList.ModalMultiEdit && tblEvaluationList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluation: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblEvaluationList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblEvaluationList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblEvaluationList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblEvaluationList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblEvaluationList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblEvaluationList.TableGridClass)">
+@if (!tblEvaluationList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblEvaluationList.IsGridAdd && !(tblEvaluationList.IsGridEdit && tblEvaluationList.ModalGridEdit) && !tblEvaluationList.IsMultiEdit) {
+@Html.Raw(tblEvaluationList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblEvaluationList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblEvaluationList.FormName)" id="@(tblEvaluationList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblEvaluationList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblEvaluationList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+@if (tblEvaluationList.CurrentMasterTable == "tblAssessment" && !Empty(tblEvaluationList.CurrentAction)) {
+<input type="hidden" name="@(Config.TableShowMaster)" value="tblAssessment">
+<input type="hidden" name="fk_AssessmentID" value="@(HtmlEncode(tblEvaluationList.AssessmentID.SessionValue))">
+}
+<div id="gmp_tblEvaluation" class="card-body ew-grid-middle-panel @(tblEvaluationList.TableContainerClass)" style="@(tblEvaluationList.TableContainerStyle)">
+@if (tblEvaluationList.TotalRecords > 0 || tblEvaluationList.IsGridEdit || tblEvaluationList.IsMultiEdit) {
+<table id="tbl_tblEvaluationlist" class="@(tblEvaluationList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblEvaluationList.RowType = RowType.Header;
+
+    // Render list options
+    await tblEvaluationList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblEvaluationList.ListOptions.RenderHeader("left")
+@if (tblEvaluationList.str_Full_Name_Hdr.Visible) { // tblEvaluationList.str_Full_Name_Hdr.Visible (begin)
+        <th data-name="str_Full_Name_Hdr" class="@(tblEvaluationList.str_Full_Name_Hdr.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluation_str_Full_Name_Hdr" class="tblEvaluation_str_Full_Name_Hdr">@Html.Raw(tblEvaluationList.RenderFieldHeader(tblEvaluationList.str_Full_Name_Hdr))</div></th>
+} @* tblEvaluationList.str_Full_Name_Hdr.Visible (end) *@
+@if (tblEvaluationList.NationalID.Visible) { // tblEvaluationList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(tblEvaluationList.NationalID.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluation_NationalID" class="tblEvaluation_NationalID">@Html.Raw(tblEvaluationList.RenderFieldHeader(tblEvaluationList.NationalID))</div></th>
+} @* tblEvaluationList.NationalID.Visible (end) *@
+@if (tblEvaluationList.str_Cell_Phone.Visible) { // tblEvaluationList.str_Cell_Phone.Visible (begin)
+        <th data-name="str_Cell_Phone" class="@(tblEvaluationList.str_Cell_Phone.HeaderCellClass)"><div id="elh_tblEvaluation_str_Cell_Phone" class="tblEvaluation_str_Cell_Phone">@Html.Raw(tblEvaluationList.RenderFieldHeader(tblEvaluationList.str_Cell_Phone))</div></th>
+} @* tblEvaluationList.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationList.Retake.Visible) { // tblEvaluationList.Retake.Visible (begin)
+        <th data-name="Retake" class="@(tblEvaluationList.Retake.HeaderCellClass)"><div id="elh_tblEvaluation_Retake" class="tblEvaluation_Retake">@Html.Raw(tblEvaluationList.RenderFieldHeader(tblEvaluationList.Retake))</div></th>
+} @* tblEvaluationList.Retake.Visible (end) *@
+@if (tblEvaluationList.AbsherApptNbr.Visible) { // tblEvaluationList.AbsherApptNbr.Visible (begin)
+        <th data-name="AbsherApptNbr" class="@(tblEvaluationList.AbsherApptNbr.HeaderCellClass)"><div id="elh_tblEvaluation_AbsherApptNbr" class="tblEvaluation_AbsherApptNbr">@Html.Raw(tblEvaluationList.RenderFieldHeader(tblEvaluationList.AbsherApptNbr))</div></th>
+} @* tblEvaluationList.AbsherApptNbr.Visible (end) *@
+@if (tblEvaluationList.IsDrivingexperience.Visible) { // tblEvaluationList.IsDrivingexperience.Visible (begin)
+        <th data-name="IsDrivingexperience" class="@(tblEvaluationList.IsDrivingexperience.HeaderCellClass)"><div id="elh_tblEvaluation_IsDrivingexperience" class="tblEvaluation_IsDrivingexperience">@Html.Raw(tblEvaluationList.RenderFieldHeader(tblEvaluationList.IsDrivingexperience))</div></th>
+} @* tblEvaluationList.IsDrivingexperience.Visible (end) *@
+@* Render list options (header, right) *@
+@tblEvaluationList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblEvaluationList.PageNumber)">
+@{
+    await tblEvaluationList.SetupGrid();
+    bool eof = tblEvaluationList.Recordset == null; // DN
+}
+@while (tblEvaluationList.RecordCount < tblEvaluationList.StopRecord || SameString(tblEvaluationList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblEvaluationList.RowIndex, "$rowindex$") &&
+        (!tblEvaluationList.IsGridAdd || tblEvaluationList.CurrentMode == "copy") &&
+        (!((tblEvaluationList.IsCopy || tblEvaluationList.IsAdd) && tblEvaluationList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblEvaluationList.Recordset.ReadAsync();
+    tblEvaluationList.RecordCount++;
+    if (tblEvaluationList.RecordCount >= tblEvaluationList.StartRecord) {
+        await tblEvaluationList.SetupRow();
+    <tr @Html.Raw(tblEvaluationList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblEvaluationList.ListOptions.RenderBody("left", tblEvaluationList.RowCount)
+    @if (tblEvaluationList.str_Full_Name_Hdr.Visible) { // tblEvaluationList.str_Full_Name_Hdr.Visible (begin)
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(tblEvaluationList.str_Full_Name_Hdr.CellAttributes)>
+<span id="el@(tblEvaluationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationList.RowCount)_tblEvaluation_str_Full_Name_Hdr" class="el_tblEvaluation_str_Full_Name_Hdr">
+<span @Html.Raw(tblEvaluationList.str_Full_Name_Hdr.ViewAttributes)>
+@Html.Raw(tblEvaluationList.str_Full_Name_Hdr.GetViewValue())</span>
+</span>
+</td>
+    } @* tblEvaluationList.str_Full_Name_Hdr.Visible (end) *@
+    @if (tblEvaluationList.NationalID.Visible) { // tblEvaluationList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(tblEvaluationList.NationalID.CellAttributes)>
+<span id="el@(tblEvaluationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationList.RowCount)_tblEvaluation_NationalID" class="el_tblEvaluation_NationalID">
+<span @Html.Raw(tblEvaluationList.NationalID.ViewAttributes)>
+@Html.Raw(tblEvaluationList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblEvaluationList.NationalID.Visible (end) *@
+    @if (tblEvaluationList.str_Cell_Phone.Visible) { // tblEvaluationList.str_Cell_Phone.Visible (begin)
+        <td data-name="str_Cell_Phone" @Html.Raw(tblEvaluationList.str_Cell_Phone.CellAttributes)>
+<span id="el@(tblEvaluationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationList.RowCount)_tblEvaluation_str_Cell_Phone" class="el_tblEvaluation_str_Cell_Phone">
+<span @Html.Raw(tblEvaluationList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblEvaluationList.str_Cell_Phone.GetViewValue())</span>
+</span>
+</td>
+    } @* tblEvaluationList.str_Cell_Phone.Visible (end) *@
+    @if (tblEvaluationList.Retake.Visible) { // tblEvaluationList.Retake.Visible (begin)
+        <td data-name="Retake" @Html.Raw(tblEvaluationList.Retake.CellAttributes)>
+<span id="el@(tblEvaluationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationList.RowCount)_tblEvaluation_Retake" class="el_tblEvaluation_Retake">
+<span @Html.Raw(tblEvaluationList.Retake.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Retake_@(tblEvaluationList.RowCount)" class="form-check-input" value="@(tblEvaluationList.Retake.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationList.Retake.CurrentValue))">
+    <label class="form-check-label" for="x_Retake_@(tblEvaluationList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblEvaluationList.Retake.Visible (end) *@
+    @if (tblEvaluationList.AbsherApptNbr.Visible) { // tblEvaluationList.AbsherApptNbr.Visible (begin)
+        <td data-name="AbsherApptNbr" @Html.Raw(tblEvaluationList.AbsherApptNbr.CellAttributes)>
+<span id="el@(tblEvaluationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationList.RowCount)_tblEvaluation_AbsherApptNbr" class="el_tblEvaluation_AbsherApptNbr">
+<span @Html.Raw(tblEvaluationList.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblEvaluationList.AbsherApptNbr.GetViewValue())</span>
+</span>
+</td>
+    } @* tblEvaluationList.AbsherApptNbr.Visible (end) *@
+    @if (tblEvaluationList.IsDrivingexperience.Visible) { // tblEvaluationList.IsDrivingexperience.Visible (begin)
+        <td data-name="IsDrivingexperience" @Html.Raw(tblEvaluationList.IsDrivingexperience.CellAttributes)>
+<span id="el@(tblEvaluationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationList.RowCount)_tblEvaluation_IsDrivingexperience" class="el_tblEvaluation_IsDrivingexperience">
+<span @Html.Raw(tblEvaluationList.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationList.RowCount)" class="form-check-input" value="@(tblEvaluationList.IsDrivingexperience.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationList.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblEvaluationList.IsDrivingexperience.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblEvaluationList.ListOptions.RenderBody("right", tblEvaluationList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblEvaluationList.RowIndex, "$rowindex$"))
+        tblEvaluationList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblEvaluationList.IsCopy || tblEvaluationList.IsAdd) && tblEvaluationList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblEvaluationList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblEvaluationList.CurrentAction) && !tblEvaluationList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblEvaluationList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

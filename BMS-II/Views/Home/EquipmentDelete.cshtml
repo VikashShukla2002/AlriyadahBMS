@@ -1,0 +1,255 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (equipmentDelete.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!equipmentDelete.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(equipmentDelete.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Equipment: currentTable } });
+var currentPageID = ew.PAGE_ID = "delete";
+var currentForm;
+var fEquipmentdelete;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fEquipmentdelete")
+        .setPageId("delete")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@equipmentDelete.ShowPageHeader()
+@equipmentDelete.ShowMessages()
+<form name="fEquipmentdelete" id="fEquipmentdelete" class="ew-form ew-delete-form" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="delete">
+@foreach (string key in equipmentDelete.RecordKeys) {
+<input type="hidden" name="key_m[]" value="@key">
+}
+<div class="card ew-card ew-grid @(equipmentDelete.TableGridClass)">
+<div class="card-body ew-grid-middle-panel @(equipmentDelete.TableContainerClass)" style="@(equipmentDelete.TableContainerStyle)">
+<table class="@(equipmentDelete.TableClass)">
+    <thead>
+    <tr class="ew-table-header">
+@if (equipmentDelete.int_Location.Visible) { // equipmentDelete.int_Location.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.int_Location.HeaderCellClass)"><span id="elh_Equipment_int_Location" class="Equipment_int_Location">@Html.Raw(equipmentDelete.int_Location.Caption)</span></th>
+} @* equipmentDelete.int_Location.Visible (end) *@
+@if (equipmentDelete.Equipment_Type_ID.Visible) { // equipmentDelete.Equipment_Type_ID.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Equipment_Type_ID.HeaderCellClass)"><span id="elh_Equipment_Equipment_Type_ID" class="Equipment_Equipment_Type_ID">@Html.Raw(equipmentDelete.Equipment_Type_ID.Caption)</span></th>
+} @* equipmentDelete.Equipment_Type_ID.Visible (end) *@
+@if (equipmentDelete.Equipment_Type_Name.Visible) { // equipmentDelete.Equipment_Type_Name.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Equipment_Type_Name.HeaderCellClass)"><span id="elh_Equipment_Equipment_Type_Name" class="Equipment_Equipment_Type_Name">@Html.Raw(equipmentDelete.Equipment_Type_Name.Caption)</span></th>
+} @* equipmentDelete.Equipment_Type_Name.Visible (end) *@
+@if (equipmentDelete.Manufacturer_Name.Visible) { // equipmentDelete.Manufacturer_Name.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Manufacturer_Name.HeaderCellClass)"><span id="elh_Equipment_Manufacturer_Name" class="Equipment_Manufacturer_Name">@Html.Raw(equipmentDelete.Manufacturer_Name.Caption)</span></th>
+} @* equipmentDelete.Manufacturer_Name.Visible (end) *@
+@if (equipmentDelete.Serial_VIN_Number.Visible) { // equipmentDelete.Serial_VIN_Number.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Serial_VIN_Number.HeaderCellClass)"><span id="elh_Equipment_Serial_VIN_Number" class="Equipment_Serial_VIN_Number">@Html.Raw(equipmentDelete.Serial_VIN_Number.Caption)</span></th>
+} @* equipmentDelete.Serial_VIN_Number.Visible (end) *@
+@if (equipmentDelete.Retailer_Name.Visible) { // equipmentDelete.Retailer_Name.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Retailer_Name.HeaderCellClass)"><span id="elh_Equipment_Retailer_Name" class="Equipment_Retailer_Name">@Html.Raw(equipmentDelete.Retailer_Name.Caption)</span></th>
+} @* equipmentDelete.Retailer_Name.Visible (end) *@
+@if (equipmentDelete.DatePurchased.Visible) { // equipmentDelete.DatePurchased.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.DatePurchased.HeaderCellClass)"><span id="elh_Equipment_DatePurchased" class="Equipment_DatePurchased">@Html.Raw(equipmentDelete.DatePurchased.Caption)</span></th>
+} @* equipmentDelete.DatePurchased.Visible (end) *@
+@if (equipmentDelete.ServiceInception_Date.Visible) { // equipmentDelete.ServiceInception_Date.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.ServiceInception_Date.HeaderCellClass)"><span id="elh_Equipment_ServiceInception_Date" class="Equipment_ServiceInception_Date">@Html.Raw(equipmentDelete.ServiceInception_Date.Caption)</span></th>
+} @* equipmentDelete.ServiceInception_Date.Visible (end) *@
+@if (equipmentDelete.UsefulLife.Visible) { // equipmentDelete.UsefulLife.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.UsefulLife.HeaderCellClass)"><span id="elh_Equipment_UsefulLife" class="Equipment_UsefulLife">@Html.Raw(equipmentDelete.UsefulLife.Caption)</span></th>
+} @* equipmentDelete.UsefulLife.Visible (end) *@
+@if (equipmentDelete.Price.Visible) { // equipmentDelete.Price.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Price.HeaderCellClass)"><span id="elh_Equipment_Price" class="Equipment_Price">@Html.Raw(equipmentDelete.Price.Caption)</span></th>
+} @* equipmentDelete.Price.Visible (end) *@
+@if (equipmentDelete.VAT.Visible) { // equipmentDelete.VAT.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.VAT.HeaderCellClass)"><span id="elh_Equipment_VAT" class="Equipment_VAT">@Html.Raw(equipmentDelete.VAT.Caption)</span></th>
+} @* equipmentDelete.VAT.Visible (end) *@
+@if (equipmentDelete.Creation_Date.Visible) { // equipmentDelete.Creation_Date.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Creation_Date.HeaderCellClass)"><span id="elh_Equipment_Creation_Date" class="Equipment_Creation_Date">@Html.Raw(equipmentDelete.Creation_Date.Caption)</span></th>
+} @* equipmentDelete.Creation_Date.Visible (end) *@
+@if (equipmentDelete.Modified_Date.Visible) { // equipmentDelete.Modified_Date.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Modified_Date.HeaderCellClass)"><span id="elh_Equipment_Modified_Date" class="Equipment_Modified_Date">@Html.Raw(equipmentDelete.Modified_Date.Caption)</span></th>
+} @* equipmentDelete.Modified_Date.Visible (end) *@
+@if (equipmentDelete.Created_by.Visible) { // equipmentDelete.Created_by.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Created_by.HeaderCellClass)"><span id="elh_Equipment_Created_by" class="Equipment_Created_by">@Html.Raw(equipmentDelete.Created_by.Caption)</span></th>
+} @* equipmentDelete.Created_by.Visible (end) *@
+@if (equipmentDelete.Modified_by.Visible) { // equipmentDelete.Modified_by.Visible (begin)
+        <th class="@Html.Raw(equipmentDelete.Modified_by.HeaderCellClass)"><span id="elh_Equipment_Modified_by" class="Equipment_Modified_by">@Html.Raw(equipmentDelete.Modified_by.Caption)</span></th>
+} @* equipmentDelete.Modified_by.Visible (end) *@
+    </tr>
+    </thead>
+    <tbody>
+@{ equipmentDelete.RecordCount = 0; }
+@while (equipmentDelete.Recordset != null && await equipmentDelete.Recordset.ReadAsync()) { // DN
+    equipmentDelete.RecordCount++;
+    equipmentDelete.RowCount++;
+
+    // Set row properties
+    equipmentDelete.ResetAttributes();
+    equipmentDelete.RowType = RowType.View; // View
+
+    // Get the field contents
+    await equipmentDelete.LoadRowValues(equipmentDelete.Recordset);
+
+    // Render row
+    await equipmentDelete.RenderRow();
+    <tr @Html.Raw(equipmentDelete.RowAttributes)>
+@if (equipmentDelete.int_Location.Visible) { // equipmentDelete.int_Location.Visible (begin)
+        <td @Html.Raw(equipmentDelete.int_Location.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.int_Location.ViewAttributes)>
+@Html.Raw(equipmentDelete.int_Location.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.int_Location.Visible (end) *@
+@if (equipmentDelete.Equipment_Type_ID.Visible) { // equipmentDelete.Equipment_Type_ID.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Equipment_Type_ID.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Equipment_Type_ID.ViewAttributes)>
+@Html.Raw(equipmentDelete.Equipment_Type_ID.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Equipment_Type_ID.Visible (end) *@
+@if (equipmentDelete.Equipment_Type_Name.Visible) { // equipmentDelete.Equipment_Type_Name.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Equipment_Type_Name.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Equipment_Type_Name.ViewAttributes)>
+@Html.Raw(equipmentDelete.Equipment_Type_Name.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Equipment_Type_Name.Visible (end) *@
+@if (equipmentDelete.Manufacturer_Name.Visible) { // equipmentDelete.Manufacturer_Name.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Manufacturer_Name.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Manufacturer_Name.ViewAttributes)>
+@Html.Raw(equipmentDelete.Manufacturer_Name.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Manufacturer_Name.Visible (end) *@
+@if (equipmentDelete.Serial_VIN_Number.Visible) { // equipmentDelete.Serial_VIN_Number.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Serial_VIN_Number.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Serial_VIN_Number.ViewAttributes)>
+@Html.Raw(equipmentDelete.Serial_VIN_Number.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Serial_VIN_Number.Visible (end) *@
+@if (equipmentDelete.Retailer_Name.Visible) { // equipmentDelete.Retailer_Name.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Retailer_Name.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Retailer_Name.ViewAttributes)>
+@Html.Raw(equipmentDelete.Retailer_Name.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Retailer_Name.Visible (end) *@
+@if (equipmentDelete.DatePurchased.Visible) { // equipmentDelete.DatePurchased.Visible (begin)
+        <td @Html.Raw(equipmentDelete.DatePurchased.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.DatePurchased.ViewAttributes)>
+@Html.Raw(equipmentDelete.DatePurchased.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.DatePurchased.Visible (end) *@
+@if (equipmentDelete.ServiceInception_Date.Visible) { // equipmentDelete.ServiceInception_Date.Visible (begin)
+        <td @Html.Raw(equipmentDelete.ServiceInception_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.ServiceInception_Date.ViewAttributes)>
+@Html.Raw(equipmentDelete.ServiceInception_Date.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.ServiceInception_Date.Visible (end) *@
+@if (equipmentDelete.UsefulLife.Visible) { // equipmentDelete.UsefulLife.Visible (begin)
+        <td @Html.Raw(equipmentDelete.UsefulLife.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.UsefulLife.ViewAttributes)>
+@Html.Raw(equipmentDelete.UsefulLife.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.UsefulLife.Visible (end) *@
+@if (equipmentDelete.Price.Visible) { // equipmentDelete.Price.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Price.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Price.ViewAttributes)>
+@Html.Raw(equipmentDelete.Price.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Price.Visible (end) *@
+@if (equipmentDelete.VAT.Visible) { // equipmentDelete.VAT.Visible (begin)
+        <td @Html.Raw(equipmentDelete.VAT.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.VAT.ViewAttributes)>
+@Html.Raw(equipmentDelete.VAT.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.VAT.Visible (end) *@
+@if (equipmentDelete.Creation_Date.Visible) { // equipmentDelete.Creation_Date.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Creation_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Creation_Date.ViewAttributes)>
+@Html.Raw(equipmentDelete.Creation_Date.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Creation_Date.Visible (end) *@
+@if (equipmentDelete.Modified_Date.Visible) { // equipmentDelete.Modified_Date.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Modified_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Modified_Date.ViewAttributes)>
+@Html.Raw(equipmentDelete.Modified_Date.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Modified_Date.Visible (end) *@
+@if (equipmentDelete.Created_by.Visible) { // equipmentDelete.Created_by.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Created_by.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Created_by.ViewAttributes)>
+@Html.Raw(equipmentDelete.Created_by.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Created_by.Visible (end) *@
+@if (equipmentDelete.Modified_by.Visible) { // equipmentDelete.Modified_by.Visible (begin)
+        <td @Html.Raw(equipmentDelete.Modified_by.CellAttributes)>
+<span id="">
+<span @Html.Raw(equipmentDelete.Modified_by.ViewAttributes)>
+@Html.Raw(equipmentDelete.Modified_by.GetViewValue())</span>
+</span></td>
+} @* equipmentDelete.Modified_by.Visible (end) *@
+    </tr>
+}
+@{ equipmentDelete.CloseRecordset(); }
+</tbody>
+</table>
+</div>
+</div>
+<div class="ew-buttons ew-desktop-buttons">
+<button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit">@Html.Raw(Language.Phrase("DeleteBtn"))</button>
+<button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-href="@AppPath(equipmentDelete.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+</div>
+</form>
+@equipmentDelete.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

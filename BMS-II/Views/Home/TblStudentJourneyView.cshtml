@@ -1,0 +1,215 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentJourneyView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentJourneyView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblStudentJourneyView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblStudentJourneyView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblStudentJourneyView.ExportOptions.RenderBody()
+    @tblStudentJourneyView.OtherOptions.RenderBody()
+</div>
+}
+@tblStudentJourneyView.ShowPageHeader()
+@tblStudentJourneyView.ShowMessages()
+<main class="view">
+<form name="ftblStudentJourneyview" id="ftblStudentJourneyview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblStudentJourneyView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentJourneyView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentJourney: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblStudentJourneyview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentJourneyview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblStudentJourneyView.IsModal)">
+<table class="@(tblStudentJourneyView.TableClass)">
+@if (tblStudentJourneyView.STDJ_ID.Visible) { // tblStudentJourneyView.STDJ_ID.Visible (begin)
+    <tr id="r_STDJ_ID" @Html.Raw(tblStudentJourneyView.STDJ_ID.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_STDJ_ID">@Html.Raw(tblStudentJourneyView.STDJ_ID.Caption)</span></td>
+        <td data-name="STDJ_ID" @Html.Raw(tblStudentJourneyView.STDJ_ID.CellAttributes)>
+<span id="el_tblStudentJourney_STDJ_ID">
+<span @Html.Raw(tblStudentJourneyView.STDJ_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.STDJ_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.STDJ_ID.Visible (end) *@
+@if (tblStudentJourneyView.FullName.Visible) { // tblStudentJourneyView.FullName.Visible (begin)
+    <tr id="r_FullName" @Html.Raw(tblStudentJourneyView.FullName.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_FullName">@Html.Raw(tblStudentJourneyView.FullName.Caption)</span></td>
+        <td data-name="FullName" @Html.Raw(tblStudentJourneyView.FullName.CellAttributes)>
+<span id="el_tblStudentJourney_FullName">
+<span @Html.Raw(tblStudentJourneyView.FullName.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.FullName.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.FullName.Visible (end) *@
+@if (tblStudentJourneyView.str_Username.Visible) { // tblStudentJourneyView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(tblStudentJourneyView.str_Username.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_str_Username">@Html.Raw(tblStudentJourneyView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(tblStudentJourneyView.str_Username.CellAttributes)>
+<span id="el_tblStudentJourney_str_Username">
+<span @Html.Raw(tblStudentJourneyView.str_Username.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.str_Username.Visible (end) *@
+@if (tblStudentJourneyView.Number_ID.Visible) { // tblStudentJourneyView.Number_ID.Visible (begin)
+    <tr id="r_Number_ID" @Html.Raw(tblStudentJourneyView.Number_ID.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Number_ID">@Html.Raw(tblStudentJourneyView.Number_ID.Caption)</span></td>
+        <td data-name="Number_ID" @Html.Raw(tblStudentJourneyView.Number_ID.CellAttributes)>
+<span id="el_tblStudentJourney_Number_ID">
+<span @Html.Raw(tblStudentJourneyView.Number_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Number_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Number_ID.Visible (end) *@
+@if (tblStudentJourneyView.Journey_ID.Visible) { // tblStudentJourneyView.Journey_ID.Visible (begin)
+    <tr id="r_Journey_ID" @Html.Raw(tblStudentJourneyView.Journey_ID.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Journey_ID">@Html.Raw(tblStudentJourneyView.Journey_ID.Caption)</span></td>
+        <td data-name="Journey_ID" @Html.Raw(tblStudentJourneyView.Journey_ID.CellAttributes)>
+<span id="el_tblStudentJourney_Journey_ID">
+<span @Html.Raw(tblStudentJourneyView.Journey_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Journey_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Journey_ID.Visible (end) *@
+@if (tblStudentJourneyView.Journey.Visible) { // tblStudentJourneyView.Journey.Visible (begin)
+    <tr id="r_Journey" @Html.Raw(tblStudentJourneyView.Journey.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Journey">@Html.Raw(tblStudentJourneyView.Journey.Caption)</span></td>
+        <td data-name="Journey" @Html.Raw(tblStudentJourneyView.Journey.CellAttributes)>
+<span id="el_tblStudentJourney_Journey">
+<span @Html.Raw(tblStudentJourneyView.Journey.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Journey.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Journey.Visible (end) *@
+@if (tblStudentJourneyView.Start_Date.Visible) { // tblStudentJourneyView.Start_Date.Visible (begin)
+    <tr id="r_Start_Date" @Html.Raw(tblStudentJourneyView.Start_Date.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Start_Date">@Html.Raw(tblStudentJourneyView.Start_Date.Caption)</span></td>
+        <td data-name="Start_Date" @Html.Raw(tblStudentJourneyView.Start_Date.CellAttributes)>
+<span id="el_tblStudentJourney_Start_Date">
+<span @Html.Raw(tblStudentJourneyView.Start_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Start_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Start_Date.Visible (end) *@
+@if (tblStudentJourneyView.End_Date.Visible) { // tblStudentJourneyView.End_Date.Visible (begin)
+    <tr id="r_End_Date" @Html.Raw(tblStudentJourneyView.End_Date.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_End_Date">@Html.Raw(tblStudentJourneyView.End_Date.Caption)</span></td>
+        <td data-name="End_Date" @Html.Raw(tblStudentJourneyView.End_Date.CellAttributes)>
+<span id="el_tblStudentJourney_End_Date">
+<span @Html.Raw(tblStudentJourneyView.End_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.End_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.End_Date.Visible (end) *@
+@if (tblStudentJourneyView.Total_Days.Visible) { // tblStudentJourneyView.Total_Days.Visible (begin)
+    <tr id="r_Total_Days" @Html.Raw(tblStudentJourneyView.Total_Days.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Total_Days">@Html.Raw(tblStudentJourneyView.Total_Days.Caption)</span></td>
+        <td data-name="Total_Days" @Html.Raw(tblStudentJourneyView.Total_Days.CellAttributes)>
+<span id="el_tblStudentJourney_Total_Days">
+<span @Html.Raw(tblStudentJourneyView.Total_Days.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Total_Days.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Total_Days.Visible (end) *@
+@if (tblStudentJourneyView.Status.Visible) { // tblStudentJourneyView.Status.Visible (begin)
+    <tr id="r_Status" @Html.Raw(tblStudentJourneyView.Status.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Status">@Html.Raw(tblStudentJourneyView.Status.Caption)</span></td>
+        <td data-name="Status" @Html.Raw(tblStudentJourneyView.Status.CellAttributes)>
+<span id="el_tblStudentJourney_Status">
+<span @Html.Raw(tblStudentJourneyView.Status.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Status.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Status.Visible (end) *@
+@if (tblStudentJourneyView.Package_Name.Visible) { // tblStudentJourneyView.Package_Name.Visible (begin)
+    <tr id="r_Package_Name" @Html.Raw(tblStudentJourneyView.Package_Name.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Package_Name">@Html.Raw(tblStudentJourneyView.Package_Name.Caption)</span></td>
+        <td data-name="Package_Name" @Html.Raw(tblStudentJourneyView.Package_Name.CellAttributes)>
+<span id="el_tblStudentJourney_Package_Name">
+<span @Html.Raw(tblStudentJourneyView.Package_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Package_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Package_Name.Visible (end) *@
+@if (tblStudentJourneyView.Product_Name.Visible) { // tblStudentJourneyView.Product_Name.Visible (begin)
+    <tr id="r_Product_Name" @Html.Raw(tblStudentJourneyView.Product_Name.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Product_Name">@Html.Raw(tblStudentJourneyView.Product_Name.Caption)</span></td>
+        <td data-name="Product_Name" @Html.Raw(tblStudentJourneyView.Product_Name.CellAttributes)>
+<span id="el_tblStudentJourney_Product_Name">
+<span @Html.Raw(tblStudentJourneyView.Product_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Product_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Product_Name.Visible (end) *@
+@if (tblStudentJourneyView.Price.Visible) { // tblStudentJourneyView.Price.Visible (begin)
+    <tr id="r_Price" @Html.Raw(tblStudentJourneyView.Price.RowAttributes)>
+        <td class="@(tblStudentJourneyView.TableLeftColumnClass)"><span id="elh_tblStudentJourney_Price">@Html.Raw(tblStudentJourneyView.Price.Caption)</span></td>
+        <td data-name="Price" @Html.Raw(tblStudentJourneyView.Price.CellAttributes)>
+<span id="el_tblStudentJourney_Price">
+<span @Html.Raw(tblStudentJourneyView.Price.ViewAttributes)>
+@Html.Raw(tblStudentJourneyView.Price.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentJourneyView.Price.Visible (end) *@
+</table>
+@{ tblStudentJourneyView.CloseRecordset(); }
+</form>
+</main>
+@tblStudentJourneyView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblStudentJourneyView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

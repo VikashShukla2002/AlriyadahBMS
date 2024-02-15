@@ -1,0 +1,246 @@
+@if (!tblStudentsList.IsExport()) {
+<div>
+@if (!tblStudentsList.IsGridAdd && !(tblStudentsList.IsGridEdit && tblStudentsList.ModalGridEdit) && !tblStudentsList.IsMultiEdit) {
+@Html.Raw(tblStudentsList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblStudentsList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblStudentsList.ModalGridAdd && tblStudentsList.IsGridAdd || tblStudentsList.ModalGridEdit && tblStudentsList.IsGridEdit || tblStudentsList.ModalMultiEdit && tblStudentsList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudents: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblStudentsList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblStudentsList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblStudentsList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblStudentsList.FormKeyCountName)")
+
+        // Dynamic selection lists
+        .setLists({
+            "intDrivinglicenseType": @Html.Raw(tblStudentsList.intDrivinglicenseType.ToClientList(tblStudentsList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblStudentsList.FormName)" id="@(tblStudentsList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblStudentsList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblStudentsList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblStudentsList.GetMultiColumnRowClass())">
+@if (tblStudentsList.TotalRecords > 0 || tblStudentsList.IsGridEdit || tblStudentsList.IsMultiEdit) {
+    await tblStudentsList.SetupGrid();
+    bool eof = tblStudentsList.Recordset == null; // DN
+while (tblStudentsList.RecordCount < tblStudentsList.StopRecord || SameString(tblStudentsList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblStudentsList.RowIndex, "$rowindex$") &&
+        (!tblStudentsList.IsGridAdd || tblStudentsList.CurrentMode == "copy") &&
+        (!((tblStudentsList.IsCopy || tblStudentsList.IsAdd) && tblStudentsList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblStudentsList.Recordset.ReadAsync();
+    tblStudentsList.RecordCount++;
+    if (tblStudentsList.RecordCount >= tblStudentsList.StartRecord) {
+        await tblStudentsList.SetupRow();
+<div class="@(tblStudentsList.GetMultiColumnColClass())" @Html.Raw(tblStudentsList.RowAttributes)>
+<div class="@(tblStudentsList.MultiColumnCardClass)">
+    @if (tblStudentsList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblStudentsList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblStudentsList.ListOptions.Tag = "div";
+    tblStudentsList.ListOptions.RenderBody(tblStudentsList.MultiColumnListOptionsPosition, tblStudentsList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblStudentsList.str_First_Name.Visible) { // tblStudentsList.str_First_Name.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_str_First_Name">
+            <div class="col col-sm-4 tblStudents_str_First_Name">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.str_First_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.str_First_Name.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_First_Name.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_First_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_str_First_Name">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.str_First_Name.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.str_First_Name.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_First_Name.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_First_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentsList.str_Last_Name.Visible) { // tblStudentsList.str_Last_Name.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_str_Last_Name">
+            <div class="col col-sm-4 tblStudents_str_Last_Name">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.str_Last_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.str_Last_Name.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_Last_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_str_Last_Name">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.str_Last_Name.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.str_Last_Name.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_Last_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentsList.str_Cell_Phone.Visible) { // tblStudentsList.str_Cell_Phone.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_str_Cell_Phone">
+            <div class="col col-sm-4 tblStudents_str_Cell_Phone">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.str_Cell_Phone))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_Cell_Phone.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_str_Cell_Phone">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.str_Cell_Phone.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_Cell_Phone.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentsList.str_Email.Visible) { // tblStudentsList.str_Email.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_str_Email">
+            <div class="col col-sm-4 tblStudents_str_Email">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.str_Email))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.str_Email.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_Email.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_Email.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_str_Email">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.str_Email.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.str_Email.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_Email.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_Email.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentsList.str_NationalID_Iqama.Visible) { // tblStudentsList.str_NationalID_Iqama.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_str_NationalID_Iqama">
+            <div class="col col-sm-4 tblStudents_str_NationalID_Iqama">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.str_NationalID_Iqama))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.str_NationalID_Iqama.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_NationalID_Iqama.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_str_NationalID_Iqama">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.str_NationalID_Iqama.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.str_NationalID_Iqama.CellAttributes)>
+<span @Html.Raw(tblStudentsList.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStudentsList.str_NationalID_Iqama.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentsList.intDrivinglicenseType.Visible) { // tblStudentsList.intDrivinglicenseType.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_intDrivinglicenseType">
+            <div class="col col-sm-4 tblStudents_intDrivinglicenseType">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.intDrivinglicenseType))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.intDrivinglicenseType.CellAttributes)>
+<span @Html.Raw(tblStudentsList.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(tblStudentsList.intDrivinglicenseType.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_intDrivinglicenseType">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.intDrivinglicenseType.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.intDrivinglicenseType.CellAttributes)>
+<span @Html.Raw(tblStudentsList.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(tblStudentsList.intDrivinglicenseType.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStudentsList.AbsherApptNbr.Visible) { // tblStudentsList.AbsherApptNbr.Visible (begin)
+        if (tblStudentsList.RowType == RowType.View) { // View record
+        <div class="row tblStudents_AbsherApptNbr">
+            <div class="col col-sm-4 tblStudents_AbsherApptNbr">@Html.Raw(tblStudentsList.RenderFieldHeader(tblStudentsList.AbsherApptNbr))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStudentsList.AbsherApptNbr.CellAttributes)>
+<span @Html.Raw(tblStudentsList.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblStudentsList.AbsherApptNbr.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStudents_AbsherApptNbr">
+            <label class="@(tblStudentsList.LeftColumnClass)">@Html.Raw(tblStudentsList.AbsherApptNbr.Caption)</label>
+            <div class="@(tblStudentsList.RightColumnClass)"><div @Html.Raw(tblStudentsList.AbsherApptNbr.CellAttributes)>
+<span @Html.Raw(tblStudentsList.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblStudentsList.AbsherApptNbr.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblStudentsList.IsExport()) {
+    if (tblStudentsList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblStudentsList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblStudentsList.ListOptions.Tag = "div";
+}
+@tblStudentsList.ListOptions.RenderBody(tblStudentsList.MultiColumnListOptionsPosition, tblStudentsList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblStudentsList.RowIndex, "$rowindex$"))
+        tblStudentsList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblStudentsList.IsCopy || tblStudentsList.IsAdd) && tblStudentsList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblStudentsList.RowIndex = 1;
+} @* End While *@
+} @* tblStudentsList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblStudentsList.CurrentAction) && !tblStudentsList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblStudentsList.CloseRecordset(); }

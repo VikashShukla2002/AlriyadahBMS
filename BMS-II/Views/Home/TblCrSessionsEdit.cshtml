@@ -1,0 +1,387 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrSessionsEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrSessionsEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblCrSessionsEdit.ShowPageHeader()
+@tblCrSessionsEdit.ShowMessages()
+<main class="edit">
+<form name="ftblCRSessionsedit" id="ftblCRSessionsedit" class="@(tblCrSessionsEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrSessionsEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRSessions: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var ftblCRSessionsedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblCRSessionsedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["int_Status", [fields.int_Status.visible && fields.int_Status.required ? ew.Validators.required(fields.int_Status.caption) : null, ew.Validators.integer], fields.int_Status.isInvalid],
+            ["int_Staff_Id", [fields.int_Staff_Id.visible && fields.int_Staff_Id.required ? ew.Validators.required(fields.int_Staff_Id.caption) : null, ew.Validators.integer], fields.int_Staff_Id.isInvalid],
+            ["Instructor", [fields.Instructor.visible && fields.Instructor.required ? ew.Validators.required(fields.Instructor.caption) : null], fields.Instructor.isInvalid],
+            ["int_Location_Id", [fields.int_Location_Id.visible && fields.int_Location_Id.required ? ew.Validators.required(fields.int_Location_Id.caption) : null, ew.Validators.integer], fields.int_Location_Id.isInvalid],
+            ["Location", [fields.Location.visible && fields.Location.required ? ew.Validators.required(fields.Location.caption) : null], fields.Location.isInvalid],
+            ["str_Session_Date", [fields.str_Session_Date.visible && fields.str_Session_Date.required ? ew.Validators.required(fields.str_Session_Date.caption) : null], fields.str_Session_Date.isInvalid],
+            ["str_Time_Start", [fields.str_Time_Start.visible && fields.str_Time_Start.required ? ew.Validators.required(fields.str_Time_Start.caption) : null], fields.str_Time_Start.isInvalid],
+            ["str_Time_End", [fields.str_Time_End.visible && fields.str_Time_End.required ? ew.Validators.required(fields.str_Time_End.caption) : null], fields.str_Time_End.isInvalid],
+            ["str_Session_Notes", [fields.str_Session_Notes.visible && fields.str_Session_Notes.required ? ew.Validators.required(fields.str_Session_Notes.caption) : null], fields.str_Session_Notes.isInvalid],
+            ["is_Rescheduled", [fields.is_Rescheduled.visible && fields.is_Rescheduled.required ? ew.Validators.required(fields.is_Rescheduled.caption) : null, ew.Validators.integer], fields.is_Rescheduled.isInvalid],
+            ["instructorSignature", [fields.instructorSignature.visible && fields.instructorSignature.required ? ew.Validators.fileRequired(fields.instructorSignature.caption) : null], fields.instructorSignature.isInvalid],
+            ["IsZoomMeet", [fields.IsZoomMeet.visible && fields.IsZoomMeet.required ? ew.Validators.required(fields.IsZoomMeet.caption) : null], fields.IsZoomMeet.isInvalid],
+            ["str_ZoomHostUrl", [fields.str_ZoomHostUrl.visible && fields.str_ZoomHostUrl.required ? ew.Validators.required(fields.str_ZoomHostUrl.caption) : null], fields.str_ZoomHostUrl.isInvalid],
+            ["str_ZoomUserUrl", [fields.str_ZoomUserUrl.visible && fields.str_ZoomUserUrl.required ? ew.Validators.required(fields.str_ZoomUserUrl.caption) : null], fields.str_ZoomUserUrl.isInvalid],
+            ["int_Student_Id", [fields.int_Student_Id.visible && fields.int_Student_Id.required ? ew.Validators.required(fields.int_Student_Id.caption) : null, ew.Validators.integer], fields.int_Student_Id.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["str_Status", [fields.str_Status.visible && fields.str_Status.required ? ew.Validators.required(fields.str_Status.caption) : null], fields.str_Status.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "IsZoomMeet": @Html.Raw(tblCrSessionsEdit.IsZoomMeet.ToClientList(tblCrSessionsEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="modal" value="@ConvertToInt(tblCrSessionsEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblCrSessionsEdit.OldKeyName)" value="@Html.Raw(tblCrSessionsEdit.OldKey)">
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblCrSessionsEdit.MultiPages.ContainerClasses)" id="pages_tblCrSessionsEdit"><!-- multi-page tabs -->
+    <ul class="@(tblCrSessionsEdit.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblCrSessionsEdit.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblCRSessions1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblCRSessions1" aria-selected="@(ConvertToJson(tblCrSessionsEdit.MultiPages.IsActive(1)))">@Html.Raw(tblCrSessionsEdit.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblCrSessionsEdit.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblCRSessions2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblCRSessions2" aria-selected="@(ConvertToJson(tblCrSessionsEdit.MultiPages.IsActive(2)))">@Html.Raw(tblCrSessionsEdit.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblCrSessionsEdit.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblCRSessions3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblCRSessions3" aria-selected="@(ConvertToJson(tblCrSessionsEdit.MultiPages.IsActive(3)))">@Html.Raw(tblCrSessionsEdit.PageCaption(3))</button></li>
+    </ul>
+    <div class="@(tblCrSessionsEdit.MultiPages.TabContentClasses)"><!-- multi-page tabs .tab-content -->
+        <div class="@(tblCrSessionsEdit.MultiPages.TabPaneClasses(1))" id="tab_tblCRSessions1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblCrSessionsEdit.int_Status.Visible) { // tblCrSessionsEdit.int_Status.Visible (begin)
+    <div id="r_int_Status" @Html.Raw(tblCrSessionsEdit.int_Status.RowAttributes)>
+        <label id="elh_tblCRSessions_int_Status" for="x_int_Status" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.int_Status.Caption)@Html.Raw(tblCrSessionsEdit.int_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.int_Status.CellAttributes)>
+<span id="el_tblCRSessions_int_Status">
+<input type="@(tblCrSessionsEdit.int_Status.InputTextType)" name="x_int_Status" id="x_int_Status" data-table="tblCRSessions" data-field="x_int_Status" value="@Html.Raw(tblCrSessionsEdit.int_Status.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.int_Status.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.int_Status.FormatPattern)"@Html.Raw(tblCrSessionsEdit.int_Status.EditAttributes) aria-describedby="x_int_Status_help">
+@Html.Raw(tblCrSessionsEdit.int_Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.int_Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.int_Status.Visible (end) *@
+@if (tblCrSessionsEdit.int_Staff_Id.Visible) { // tblCrSessionsEdit.int_Staff_Id.Visible (begin)
+    <div id="r_int_Staff_Id" @Html.Raw(tblCrSessionsEdit.int_Staff_Id.RowAttributes)>
+        <label id="elh_tblCRSessions_int_Staff_Id" for="x_int_Staff_Id" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.int_Staff_Id.Caption)@Html.Raw(tblCrSessionsEdit.int_Staff_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.int_Staff_Id.CellAttributes)>
+<span id="el_tblCRSessions_int_Staff_Id">
+<input type="@(tblCrSessionsEdit.int_Staff_Id.InputTextType)" name="x_int_Staff_Id" id="x_int_Staff_Id" data-table="tblCRSessions" data-field="x_int_Staff_Id" value="@Html.Raw(tblCrSessionsEdit.int_Staff_Id.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.int_Staff_Id.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.int_Staff_Id.FormatPattern)"@Html.Raw(tblCrSessionsEdit.int_Staff_Id.EditAttributes) aria-describedby="x_int_Staff_Id_help">
+@Html.Raw(tblCrSessionsEdit.int_Staff_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.int_Staff_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.int_Staff_Id.Visible (end) *@
+@if (tblCrSessionsEdit.Instructor.Visible) { // tblCrSessionsEdit.Instructor.Visible (begin)
+    <div id="r_Instructor" @Html.Raw(tblCrSessionsEdit.Instructor.RowAttributes)>
+        <label id="elh_tblCRSessions_Instructor" for="x_Instructor" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.Instructor.Caption)@Html.Raw(tblCrSessionsEdit.Instructor.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.Instructor.CellAttributes)>
+<span id="el_tblCRSessions_Instructor">
+<input type="@(tblCrSessionsEdit.Instructor.InputTextType)" name="x_Instructor" id="x_Instructor" data-table="tblCRSessions" data-field="x_Instructor" value="@Html.Raw(tblCrSessionsEdit.Instructor.EditValue)" data-page="1" size="30" maxlength="122" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.Instructor.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.Instructor.FormatPattern)"@Html.Raw(tblCrSessionsEdit.Instructor.EditAttributes) aria-describedby="x_Instructor_help">
+@Html.Raw(tblCrSessionsEdit.Instructor.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.Instructor.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.Instructor.Visible (end) *@
+@if (tblCrSessionsEdit.int_Location_Id.Visible) { // tblCrSessionsEdit.int_Location_Id.Visible (begin)
+    <div id="r_int_Location_Id" @Html.Raw(tblCrSessionsEdit.int_Location_Id.RowAttributes)>
+        <label id="elh_tblCRSessions_int_Location_Id" for="x_int_Location_Id" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.int_Location_Id.Caption)@Html.Raw(tblCrSessionsEdit.int_Location_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.int_Location_Id.CellAttributes)>
+<span id="el_tblCRSessions_int_Location_Id">
+<input type="@(tblCrSessionsEdit.int_Location_Id.InputTextType)" name="x_int_Location_Id" id="x_int_Location_Id" data-table="tblCRSessions" data-field="x_int_Location_Id" value="@Html.Raw(tblCrSessionsEdit.int_Location_Id.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.int_Location_Id.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.int_Location_Id.FormatPattern)"@Html.Raw(tblCrSessionsEdit.int_Location_Id.EditAttributes) aria-describedby="x_int_Location_Id_help">
+@Html.Raw(tblCrSessionsEdit.int_Location_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.int_Location_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.int_Location_Id.Visible (end) *@
+@if (tblCrSessionsEdit.Location.Visible) { // tblCrSessionsEdit.Location.Visible (begin)
+    <div id="r_Location" @Html.Raw(tblCrSessionsEdit.Location.RowAttributes)>
+        <label id="elh_tblCRSessions_Location" for="x_Location" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.Location.Caption)@Html.Raw(tblCrSessionsEdit.Location.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.Location.CellAttributes)>
+<span id="el_tblCRSessions_Location">
+<input type="@(tblCrSessionsEdit.Location.InputTextType)" name="x_Location" id="x_Location" data-table="tblCRSessions" data-field="x_Location" value="@Html.Raw(tblCrSessionsEdit.Location.EditValue)" data-page="1" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.Location.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.Location.FormatPattern)"@Html.Raw(tblCrSessionsEdit.Location.EditAttributes) aria-describedby="x_Location_help">
+@Html.Raw(tblCrSessionsEdit.Location.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.Location.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.Location.Visible (end) *@
+@if (tblCrSessionsEdit.int_Student_Id.Visible) { // tblCrSessionsEdit.int_Student_Id.Visible (begin)
+    <div id="r_int_Student_Id" @Html.Raw(tblCrSessionsEdit.int_Student_Id.RowAttributes)>
+        <label id="elh_tblCRSessions_int_Student_Id" for="x_int_Student_Id" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.int_Student_Id.Caption)@Html.Raw(tblCrSessionsEdit.int_Student_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.int_Student_Id.CellAttributes)>
+<span id="el_tblCRSessions_int_Student_Id">
+<input type="@(tblCrSessionsEdit.int_Student_Id.InputTextType)" name="x_int_Student_Id" id="x_int_Student_Id" data-table="tblCRSessions" data-field="x_int_Student_Id" value="@Html.Raw(tblCrSessionsEdit.int_Student_Id.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.int_Student_Id.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.int_Student_Id.FormatPattern)"@Html.Raw(tblCrSessionsEdit.int_Student_Id.EditAttributes) aria-describedby="x_int_Student_Id_help">
+@Html.Raw(tblCrSessionsEdit.int_Student_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.int_Student_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.int_Student_Id.Visible (end) *@
+@if (tblCrSessionsEdit.str_Username.Visible) { // tblCrSessionsEdit.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(tblCrSessionsEdit.str_Username.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Username" for="x_str_Username" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_Username.Caption)@Html.Raw(tblCrSessionsEdit.str_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_Username.CellAttributes)>
+<span id="el_tblCRSessions_str_Username">
+<input type="@(tblCrSessionsEdit.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblCRSessions" data-field="x_str_Username" value="@Html.Raw(tblCrSessionsEdit.str_Username.EditValue)" data-page="1" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_Username.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_Username.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_Username.EditAttributes) aria-describedby="x_str_Username_help">
+@Html.Raw(tblCrSessionsEdit.str_Username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_Username.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_Username.Visible (end) *@
+@if (tblCrSessionsEdit.str_Status.Visible) { // tblCrSessionsEdit.str_Status.Visible (begin)
+    <div id="r_str_Status" @Html.Raw(tblCrSessionsEdit.str_Status.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Status" for="x_str_Status" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_Status.Caption)@Html.Raw(tblCrSessionsEdit.str_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_Status.CellAttributes)>
+<span id="el_tblCRSessions_str_Status">
+<input type="@(tblCrSessionsEdit.str_Status.InputTextType)" name="x_str_Status" id="x_str_Status" data-table="tblCRSessions" data-field="x_str_Status" value="@Html.Raw(tblCrSessionsEdit.str_Status.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_Status.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_Status.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_Status.EditAttributes) aria-describedby="x_str_Status_help">
+@Html.Raw(tblCrSessionsEdit.str_Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_Status.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblCrSessionsEdit.MultiPages.TabPaneClasses(2))" id="tab_tblCRSessions2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblCrSessionsEdit.str_Session_Date.Visible) { // tblCrSessionsEdit.str_Session_Date.Visible (begin)
+    <div id="r_str_Session_Date" @Html.Raw(tblCrSessionsEdit.str_Session_Date.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Session_Date" for="x_str_Session_Date" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_Session_Date.Caption)@Html.Raw(tblCrSessionsEdit.str_Session_Date.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_Session_Date.CellAttributes)>
+<span id="el_tblCRSessions_str_Session_Date">
+<input type="@(tblCrSessionsEdit.str_Session_Date.InputTextType)" name="x_str_Session_Date" id="x_str_Session_Date" data-table="tblCRSessions" data-field="x_str_Session_Date" value="@Html.Raw(tblCrSessionsEdit.str_Session_Date.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_Session_Date.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_Session_Date.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_Session_Date.EditAttributes) aria-describedby="x_str_Session_Date_help">
+@Html.Raw(tblCrSessionsEdit.str_Session_Date.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_Session_Date.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_Session_Date.Visible (end) *@
+@if (tblCrSessionsEdit.str_Time_Start.Visible) { // tblCrSessionsEdit.str_Time_Start.Visible (begin)
+    <div id="r_str_Time_Start" @Html.Raw(tblCrSessionsEdit.str_Time_Start.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Time_Start" for="x_str_Time_Start" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_Time_Start.Caption)@Html.Raw(tblCrSessionsEdit.str_Time_Start.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_Time_Start.CellAttributes)>
+<span id="el_tblCRSessions_str_Time_Start">
+<input type="@(tblCrSessionsEdit.str_Time_Start.InputTextType)" name="x_str_Time_Start" id="x_str_Time_Start" data-table="tblCRSessions" data-field="x_str_Time_Start" value="@Html.Raw(tblCrSessionsEdit.str_Time_Start.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_Time_Start.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_Time_Start.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_Time_Start.EditAttributes) aria-describedby="x_str_Time_Start_help">
+@Html.Raw(tblCrSessionsEdit.str_Time_Start.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_Time_Start.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_Time_Start.Visible (end) *@
+@if (tblCrSessionsEdit.str_Time_End.Visible) { // tblCrSessionsEdit.str_Time_End.Visible (begin)
+    <div id="r_str_Time_End" @Html.Raw(tblCrSessionsEdit.str_Time_End.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Time_End" for="x_str_Time_End" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_Time_End.Caption)@Html.Raw(tblCrSessionsEdit.str_Time_End.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_Time_End.CellAttributes)>
+<span id="el_tblCRSessions_str_Time_End">
+<input type="@(tblCrSessionsEdit.str_Time_End.InputTextType)" name="x_str_Time_End" id="x_str_Time_End" data-table="tblCRSessions" data-field="x_str_Time_End" value="@Html.Raw(tblCrSessionsEdit.str_Time_End.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_Time_End.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_Time_End.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_Time_End.EditAttributes) aria-describedby="x_str_Time_End_help">
+@Html.Raw(tblCrSessionsEdit.str_Time_End.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_Time_End.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_Time_End.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblCrSessionsEdit.MultiPages.TabPaneClasses(3))" id="tab_tblCRSessions3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblCrSessionsEdit.str_Session_Notes.Visible) { // tblCrSessionsEdit.str_Session_Notes.Visible (begin)
+    <div id="r_str_Session_Notes" @Html.Raw(tblCrSessionsEdit.str_Session_Notes.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Session_Notes" for="x_str_Session_Notes" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_Session_Notes.Caption)@Html.Raw(tblCrSessionsEdit.str_Session_Notes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_Session_Notes.CellAttributes)>
+<span id="el_tblCRSessions_str_Session_Notes">
+<input type="@(tblCrSessionsEdit.str_Session_Notes.InputTextType)" name="x_str_Session_Notes" id="x_str_Session_Notes" data-table="tblCRSessions" data-field="x_str_Session_Notes" value="@Html.Raw(tblCrSessionsEdit.str_Session_Notes.EditValue)" data-page="3" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_Session_Notes.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_Session_Notes.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_Session_Notes.EditAttributes) aria-describedby="x_str_Session_Notes_help">
+@Html.Raw(tblCrSessionsEdit.str_Session_Notes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_Session_Notes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_Session_Notes.Visible (end) *@
+@if (tblCrSessionsEdit.is_Rescheduled.Visible) { // tblCrSessionsEdit.is_Rescheduled.Visible (begin)
+    <div id="r_is_Rescheduled" @Html.Raw(tblCrSessionsEdit.is_Rescheduled.RowAttributes)>
+        <label id="elh_tblCRSessions_is_Rescheduled" for="x_is_Rescheduled" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.is_Rescheduled.Caption)@Html.Raw(tblCrSessionsEdit.is_Rescheduled.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.is_Rescheduled.CellAttributes)>
+<span id="el_tblCRSessions_is_Rescheduled">
+<input type="@(tblCrSessionsEdit.is_Rescheduled.InputTextType)" name="x_is_Rescheduled" id="x_is_Rescheduled" data-table="tblCRSessions" data-field="x_is_Rescheduled" value="@Html.Raw(tblCrSessionsEdit.is_Rescheduled.EditValue)" data-page="3" size="30" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.is_Rescheduled.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.is_Rescheduled.FormatPattern)"@Html.Raw(tblCrSessionsEdit.is_Rescheduled.EditAttributes) aria-describedby="x_is_Rescheduled_help">
+@Html.Raw(tblCrSessionsEdit.is_Rescheduled.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.is_Rescheduled.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.is_Rescheduled.Visible (end) *@
+@if (tblCrSessionsEdit.instructorSignature.Visible) { // tblCrSessionsEdit.instructorSignature.Visible (begin)
+    <div id="r_instructorSignature" @Html.Raw(tblCrSessionsEdit.instructorSignature.RowAttributes)>
+        <label id="elh_tblCRSessions_instructorSignature" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.instructorSignature.Caption)@Html.Raw(tblCrSessionsEdit.instructorSignature.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.instructorSignature.CellAttributes)>
+<span id="el_tblCRSessions_instructorSignature">
+<div id="fd_x_instructorSignature" class="fileinput-button ew-file-drop-zone">
+    <input
+        type="file"
+        id="x_instructorSignature"
+        name="x_instructorSignature"
+        class="form-control ew-file-input"
+        title="@(tblCrSessionsEdit.instructorSignature.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblCRSessions"
+        data-field="x_instructorSignature"
+        data-size="0"
+        data-accept-file-types="@(tblCrSessionsEdit.instructorSignature.AcceptFileTypes)"
+        data-max-file-size="@(tblCrSessionsEdit.instructorSignature.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(tblCrSessionsEdit.instructorSignature.ImageCropper ? 0 : 1)"
+        data-page="3"
+        aria-describedby="x_instructorSignature_help"
+        @Html.Raw((tblCrSessionsEdit.instructorSignature.ReadOnly || tblCrSessionsEdit.instructorSignature.Disabled) ? " disabled" : "")
+        @Html.Raw(tblCrSessionsEdit.instructorSignature.EditAttributes)
+    >
+    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+</div>
+@Html.Raw(tblCrSessionsEdit.instructorSignature.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.instructorSignature.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_instructorSignature" id= "fn_x_instructorSignature" value="@(tblCrSessionsEdit.instructorSignature.Upload.FileName)">
+<input type="hidden" name="fa_x_instructorSignature" id= "fa_x_instructorSignature" value="@(Post("fa_x_instructorSignature") == "0" ? "0" : "1")">
+<table id="ft_x_instructorSignature" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.instructorSignature.Visible (end) *@
+@if (tblCrSessionsEdit.IsZoomMeet.Visible) { // tblCrSessionsEdit.IsZoomMeet.Visible (begin)
+    <div id="r_IsZoomMeet" @Html.Raw(tblCrSessionsEdit.IsZoomMeet.RowAttributes)>
+        <label id="elh_tblCRSessions_IsZoomMeet" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.IsZoomMeet.Caption)@Html.Raw(tblCrSessionsEdit.IsZoomMeet.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.IsZoomMeet.CellAttributes)>
+<span id="el_tblCRSessions_IsZoomMeet">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblCrSessionsEdit.IsZoomMeet.IsInvalidClass)" data-table="tblCRSessions" data-field="x_IsZoomMeet" data-boolean data-page="3" name="x_IsZoomMeet" id="x_IsZoomMeet" value="1" checked="@ConvertToBool(tblCrSessionsEdit.IsZoomMeet.CurrentValue)" @Html.Raw(tblCrSessionsEdit.IsZoomMeet.EditAttributes) aria-describedby="x_IsZoomMeet_help">
+    <div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.IsZoomMeet.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblCrSessionsEdit.IsZoomMeet.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.IsZoomMeet.Visible (end) *@
+@if (tblCrSessionsEdit.str_ZoomHostUrl.Visible) { // tblCrSessionsEdit.str_ZoomHostUrl.Visible (begin)
+    <div id="r_str_ZoomHostUrl" @Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.RowAttributes)>
+        <label id="elh_tblCRSessions_str_ZoomHostUrl" for="x_str_ZoomHostUrl" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.Caption)@Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.CellAttributes)>
+<span id="el_tblCRSessions_str_ZoomHostUrl">
+<input type="@(tblCrSessionsEdit.str_ZoomHostUrl.InputTextType)" name="x_str_ZoomHostUrl" id="x_str_ZoomHostUrl" data-table="tblCRSessions" data-field="x_str_ZoomHostUrl" value="@Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.EditValue)" data-page="3" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_ZoomHostUrl.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_ZoomHostUrl.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.EditAttributes) aria-describedby="x_str_ZoomHostUrl_help">
+@Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_ZoomHostUrl.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_ZoomHostUrl.Visible (end) *@
+@if (tblCrSessionsEdit.str_ZoomUserUrl.Visible) { // tblCrSessionsEdit.str_ZoomUserUrl.Visible (begin)
+    <div id="r_str_ZoomUserUrl" @Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.RowAttributes)>
+        <label id="elh_tblCRSessions_str_ZoomUserUrl" for="x_str_ZoomUserUrl" class="@(tblCrSessionsEdit.LeftColumnClass)">@Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.Caption)@Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsEdit.RightColumnClass)"><div @Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.CellAttributes)>
+<span id="el_tblCRSessions_str_ZoomUserUrl">
+<input type="@(tblCrSessionsEdit.str_ZoomUserUrl.InputTextType)" name="x_str_ZoomUserUrl" id="x_str_ZoomUserUrl" data-table="tblCRSessions" data-field="x_str_ZoomUserUrl" value="@Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.EditValue)" data-page="3" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsEdit.str_ZoomUserUrl.PlaceHolder))" data-format-pattern="@(tblCrSessionsEdit.str_ZoomUserUrl.FormatPattern)"@Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.EditAttributes) aria-describedby="x_str_ZoomUserUrl_help">
+@Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsEdit.str_ZoomUserUrl.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsEdit.str_ZoomUserUrl.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+    <input type="hidden" data-table="tblCRSessions" data-field="x_int_CRSession_ID" data-hidden="1" name="x_int_CRSession_ID" id="x_int_CRSession_ID" value="@Html.Raw(HtmlEncode(tblCrSessionsEdit.int_CRSession_ID.CurrentValue))">
+@{ tblCrSessionsEdit.CloseRecordset(); }
+@Html.Raw(tblCrSessionsEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblCrSessionsEdit.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblCRSessionsedit">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblCRSessionsedit" data-href="@AppPath(tblCrSessionsEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblCrSessionsEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@tblCrSessionsEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblCRSessions");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

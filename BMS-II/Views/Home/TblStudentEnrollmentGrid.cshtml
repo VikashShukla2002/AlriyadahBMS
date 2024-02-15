@@ -1,0 +1,325 @@
+@{
+    // View
+    View = this;
+
+    // Set up CurrentGrid
+    CurrentGrid = tblStudentEnrollmentGrid;
+
+    // Run
+    await tblStudentEnrollmentGrid.Run();
+
+    // Check action result
+    if (tblStudentEnrollmentGrid.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblStudentEnrollmentGrid.IsExport()) {
+<script>
+var ftblStudentEnrollmentgrid;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let currentTable = @Html.Raw(ConvertToJson(tblStudentEnrollmentGrid.ToClientVar()));
+    ew.deepAssign(ew.vars, { tables: { tblStudentEnrollment: currentTable } });
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentEnrollmentgrid")
+        .setPageId("grid")
+        .setFormKeyCountName("@(tblStudentEnrollmentGrid.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name", [fields.str_Full_Name.visible && fields.str_Full_Name.required ? ew.Validators.required(fields.str_Full_Name.caption) : null], fields.str_Full_Name.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["str_Package_Name", [fields.str_Package_Name.visible && fields.str_Package_Name.required ? ew.Validators.required(fields.str_Package_Name.caption) : null], fields.str_Package_Name.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["str_Full_Name",false],["str_Package_Name",false]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Full_Name": @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.ToClientList(tblStudentEnrollmentGrid)),
+        })
+        .build();
+    window[form.id] = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+<main class="list">
+<div id="ew-list">
+@if (tblStudentEnrollmentGrid.TotalRecords > 0 || !Empty(tblStudentEnrollmentGrid.CurrentAction)) {
+<div class="card ew-card ew-grid@(tblStudentEnrollmentGrid.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblStudentEnrollmentGrid.TableGridClass)">
+@if (tblStudentEnrollmentGrid.ShowOtherOptions) {
+<div class="card-header ew-grid-upper-panel">
+    @tblStudentEnrollmentGrid.OtherOptions.RenderBody()
+</div>
+}
+<div id="ftblStudentEnrollmentgrid" class="ew-form ew-list-form">
+<div id="gmp_tblStudentEnrollment" class="card-body ew-grid-middle-panel @(tblStudentEnrollmentGrid.TableContainerClass)" style="@(tblStudentEnrollmentGrid.TableContainerStyle)">
+<table id="tbl_tblStudentEnrollmentgrid" class="@(tblStudentEnrollmentGrid.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblStudentEnrollmentGrid.RowType = RowType.Header;
+
+    // Render list options
+    await tblStudentEnrollmentGrid.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblStudentEnrollmentGrid.ListOptions.RenderHeader("left")
+@if (tblStudentEnrollmentGrid.str_Full_Name.Visible) { // tblStudentEnrollmentGrid.str_Full_Name.Visible (begin)
+        <th data-name="str_Full_Name" class="@(tblStudentEnrollmentGrid.str_Full_Name.HeaderCellClass)"><div id="elh_tblStudentEnrollment_str_Full_Name" class="tblStudentEnrollment_str_Full_Name">@Html.Raw(tblStudentEnrollmentGrid.RenderFieldHeader(tblStudentEnrollmentGrid.str_Full_Name))</div></th>
+} @* tblStudentEnrollmentGrid.str_Full_Name.Visible (end) *@
+@if (tblStudentEnrollmentGrid.str_Username.Visible) { // tblStudentEnrollmentGrid.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(tblStudentEnrollmentGrid.str_Username.HeaderCellClass)"><div id="elh_tblStudentEnrollment_str_Username" class="tblStudentEnrollment_str_Username">@Html.Raw(tblStudentEnrollmentGrid.RenderFieldHeader(tblStudentEnrollmentGrid.str_Username))</div></th>
+} @* tblStudentEnrollmentGrid.str_Username.Visible (end) *@
+@if (tblStudentEnrollmentGrid.str_Package_Name.Visible) { // tblStudentEnrollmentGrid.str_Package_Name.Visible (begin)
+        <th data-name="str_Package_Name" class="@(tblStudentEnrollmentGrid.str_Package_Name.HeaderCellClass)"><div id="elh_tblStudentEnrollment_str_Package_Name" class="tblStudentEnrollment_str_Package_Name">@Html.Raw(tblStudentEnrollmentGrid.RenderFieldHeader(tblStudentEnrollmentGrid.str_Package_Name))</div></th>
+} @* tblStudentEnrollmentGrid.str_Package_Name.Visible (end) *@
+@* Render list options (header, right) *@
+@tblStudentEnrollmentGrid.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblStudentEnrollmentGrid.PageNumber)">
+@{
+    await tblStudentEnrollmentGrid.SetupGrid();
+    bool eof = tblStudentEnrollmentGrid.Recordset == null; // DN
+}
+@while (tblStudentEnrollmentGrid.RecordCount < tblStudentEnrollmentGrid.StopRecord || SameString(tblStudentEnrollmentGrid.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblStudentEnrollmentGrid.RowIndex, "$rowindex$") &&
+        (!tblStudentEnrollmentGrid.IsGridAdd || tblStudentEnrollmentGrid.CurrentMode == "copy") &&
+        (!((tblStudentEnrollmentGrid.IsCopy || tblStudentEnrollmentGrid.IsAdd) && tblStudentEnrollmentGrid.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblStudentEnrollmentGrid.Recordset.ReadAsync();
+    tblStudentEnrollmentGrid.RecordCount++;
+    if (tblStudentEnrollmentGrid.RecordCount >= tblStudentEnrollmentGrid.StartRecord) {
+        await tblStudentEnrollmentGrid.SetupRow();
+
+        // Skip 1) delete row / empty row for confirm page, 2) hidden row
+        if (tblStudentEnrollmentGrid.RowAction != "delete" &&
+            tblStudentEnrollmentGrid.RowAction != "insertdelete" &&
+            !(tblStudentEnrollmentGrid.RowAction == "insert" && tblStudentEnrollmentGrid.IsConfirm && tblStudentEnrollmentGrid.EmptyRow()) &&
+            tblStudentEnrollmentGrid.RowAction != "hide") {
+    <tr @Html.Raw(tblStudentEnrollmentGrid.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblStudentEnrollmentGrid.ListOptions.RenderBody("left", tblStudentEnrollmentGrid.RowCount)
+    @if (tblStudentEnrollmentGrid.str_Full_Name.Visible) { // tblStudentEnrollmentGrid.str_Full_Name.Visible (begin)
+        <td data-name="str_Full_Name" @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.CellAttributes)>
+@if (tblStudentEnrollmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Full_Name (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Full_Name" class="el_tblStudentEnrollment_str_Full_Name">
+        <select
+            id="x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name"
+            name="x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name"
+            class="form-select ew-select@(tblStudentEnrollmentGrid.str_Full_Name.IsInvalidClass)"
+            data-select2-id="ftblStudentEnrollmentgrid_x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name"
+            data-table="tblStudentEnrollment"
+            data-field="x_str_Full_Name"
+            data-value-separator="@(tblStudentEnrollmentGrid.str_Full_Name.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblStudentEnrollmentGrid.str_Full_Name.PlaceHolder))"
+            @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.EditAttributes)>
+            @(tblStudentEnrollmentGrid.str_Full_Name.SelectOptionListHtml("x" + tblStudentEnrollmentGrid.RowIndex + "_str_Full_Name"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.GetErrorMessage())</div>
+    @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.Lookup.GetParamTag(tblStudentEnrollmentGrid, "p_x" + tblStudentEnrollmentGrid.RowIndex + "_str_Full_Name"))
+    <script>
+    loadjs.ready("ftblStudentEnrollmentgrid", function() {
+        var options = { name: "x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name", selectId: "ftblStudentEnrollmentgrid_x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (ftblStudentEnrollmentgrid.lists.str_Full_Name?.lookupOptions.length) {
+            options.data = { id: "x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name", form: "ftblStudentEnrollmentgrid" };
+        } else {
+            options.ajax = { id: "x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name", form: "ftblStudentEnrollmentgrid", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudentEnrollment.fields.str_Full_Name.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Full_Name" data-hidden="1" data-old name="o@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" id="o@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Full_Name.OldValue))">
+    @* str_Full_Name (end) *@
+} @* Add (end) *@
+@if (tblStudentEnrollmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Full_Name (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Full_Name" class="el_tblStudentEnrollment_str_Full_Name">
+    <span @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.ViewAttributes)>
+    <span class="form-control-plaintext">@Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.DisplayValue(tblStudentEnrollmentGrid.str_Full_Name.EditValue))</span></span>
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Full_Name" data-hidden="1" name="x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" id="x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Full_Name.CurrentValue))">
+    </span>
+    @* str_Full_Name (end) *@
+} @* Edit (end) *@
+@if (tblStudentEnrollmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_Full_Name (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Full_Name" class="el_tblStudentEnrollment_str_Full_Name">
+    <span @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.ViewAttributes)>
+    @Html.Raw(tblStudentEnrollmentGrid.str_Full_Name.GetViewValue())</span>
+    </span>
+    if (tblStudentEnrollmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Full_Name" data-hidden="1" name="ftblStudentEnrollmentgrid$x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" id="ftblStudentEnrollmentgrid$x@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Full_Name.FormValue))">
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Full_Name" data-hidden="1" data-old name="ftblStudentEnrollmentgrid$o@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" id="ftblStudentEnrollmentgrid$o@(tblStudentEnrollmentGrid.RowIndex)_str_Full_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Full_Name.OldValue))">
+    }
+    @* str_Full_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblStudentEnrollmentGrid.str_Full_Name.Visible (end) *@
+    @if (tblStudentEnrollmentGrid.str_Username.Visible) { // tblStudentEnrollmentGrid.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(tblStudentEnrollmentGrid.str_Username.CellAttributes)>
+@if (tblStudentEnrollmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Username (begin) *@
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Username" data-hidden="1" data-old name="o@(tblStudentEnrollmentGrid.RowIndex)_str_Username" id="o@(tblStudentEnrollmentGrid.RowIndex)_str_Username" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Username.OldValue))">
+    @* str_Username (end) *@
+} @* Add (end) *@
+@if (tblStudentEnrollmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Username (begin) *@
+    @* str_Username (end) *@
+} @* Edit (end) *@
+@if (tblStudentEnrollmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_Username (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Username" class="el_tblStudentEnrollment_str_Username">
+    <span @Html.Raw(tblStudentEnrollmentGrid.str_Username.ViewAttributes)>
+    @Html.Raw(tblStudentEnrollmentGrid.str_Username.GetViewValue())</span>
+    </span>
+    if (tblStudentEnrollmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Username" data-hidden="1" name="ftblStudentEnrollmentgrid$x@(tblStudentEnrollmentGrid.RowIndex)_str_Username" id="ftblStudentEnrollmentgrid$x@(tblStudentEnrollmentGrid.RowIndex)_str_Username" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Username.FormValue))">
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Username" data-hidden="1" data-old name="ftblStudentEnrollmentgrid$o@(tblStudentEnrollmentGrid.RowIndex)_str_Username" id="ftblStudentEnrollmentgrid$o@(tblStudentEnrollmentGrid.RowIndex)_str_Username" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Username.OldValue))">
+    }
+    @* str_Username (end) *@
+} @* View (end) *@
+</td>
+    } @* tblStudentEnrollmentGrid.str_Username.Visible (end) *@
+    @if (tblStudentEnrollmentGrid.str_Package_Name.Visible) { // tblStudentEnrollmentGrid.str_Package_Name.Visible (begin)
+        <td data-name="str_Package_Name" @Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.CellAttributes)>
+@if (tblStudentEnrollmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Package_Name (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Package_Name" class="el_tblStudentEnrollment_str_Package_Name">
+    <input type="@(tblStudentEnrollmentGrid.str_Package_Name.InputTextType)" name="x@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" id="x@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" value="@Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Package_Name.PlaceHolder))" data-format-pattern="@(tblStudentEnrollmentGrid.str_Package_Name.FormatPattern)"@Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" data-hidden="1" data-old name="o@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" id="o@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Package_Name.OldValue))">
+    @* str_Package_Name (end) *@
+} @* Add (end) *@
+@if (tblStudentEnrollmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Package_Name (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Package_Name" class="el_tblStudentEnrollment_str_Package_Name">
+    <span @Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStudentEnrollmentGrid.str_Package_Name.EditValue)))"></span>
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" data-hidden="1" name="x@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" id="x@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Package_Name.CurrentValue))">
+    </span>
+    @* str_Package_Name (end) *@
+} @* Edit (end) *@
+@if (tblStudentEnrollmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_Package_Name (begin) *@
+    <span id="el@(tblStudentEnrollmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblStudentEnrollmentGrid.RowCount)_tblStudentEnrollment_str_Package_Name" class="el_tblStudentEnrollment_str_Package_Name">
+    <span @Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.ViewAttributes)>
+    @Html.Raw(tblStudentEnrollmentGrid.str_Package_Name.GetViewValue())</span>
+    </span>
+    if (tblStudentEnrollmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" data-hidden="1" name="ftblStudentEnrollmentgrid$x@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" id="ftblStudentEnrollmentgrid$x@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Package_Name.FormValue))">
+    <input type="hidden" data-table="tblStudentEnrollment" data-field="x_str_Package_Name" data-hidden="1" data-old name="ftblStudentEnrollmentgrid$o@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" id="ftblStudentEnrollmentgrid$o@(tblStudentEnrollmentGrid.RowIndex)_str_Package_Name" value="@Html.Raw(HtmlEncode(tblStudentEnrollmentGrid.str_Package_Name.OldValue))">
+    }
+    @* str_Package_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblStudentEnrollmentGrid.str_Package_Name.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblStudentEnrollmentGrid.ListOptions.RenderBody("right", tblStudentEnrollmentGrid.RowCount)
+    </tr>
+if (tblStudentEnrollmentGrid.RowType == RowType.Add || tblStudentEnrollmentGrid.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["ftblStudentEnrollmentgrid","load"], () => ftblStudentEnrollmentgrid.updateLists(@(tblStudentEnrollmentGrid.RowIndex)@(tblStudentEnrollmentGrid.IsAdd || tblStudentEnrollmentGrid.IsEdit || tblStudentEnrollmentGrid.IsCopy || SameString(tblStudentEnrollmentGrid.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End delete row checking *@
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblStudentEnrollmentGrid.RowIndex, "$rowindex$"))
+        tblStudentEnrollmentGrid.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblStudentEnrollmentGrid.IsCopy || tblStudentEnrollmentGrid.IsAdd) && tblStudentEnrollmentGrid.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblStudentEnrollmentGrid.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+@if (tblStudentEnrollmentGrid.CurrentMode == "add" || tblStudentEnrollmentGrid.CurrentMode == "copy") {
+<input type="hidden" name="@(tblStudentEnrollmentGrid.FormKeyCountName)" id="@(tblStudentEnrollmentGrid.FormKeyCountName)" value="@(tblStudentEnrollmentGrid.KeyCount)">
+@Html.Raw(tblStudentEnrollmentGrid.MultiSelectKey)
+}
+@if (tblStudentEnrollmentGrid.CurrentMode == "edit") {
+<input type="hidden" name="@(tblStudentEnrollmentGrid.FormKeyCountName)" id="@(tblStudentEnrollmentGrid.FormKeyCountName)" value="@(tblStudentEnrollmentGrid.KeyCount)">
+@Html.Raw(tblStudentEnrollmentGrid.MultiSelectKey)
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblStudentEnrollmentGrid.CurrentMode)) {
+<input type="hidden" name="action" id="action" value="">
+}
+<input type="hidden" name="detailpage" value="ftblStudentEnrollmentgrid">
+</div><!-- /.ew-list-form -->
+@{ tblStudentEnrollmentGrid.CloseRecordset(); }
+</div><!-- /.ew-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblStudentEnrollmentGrid.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@if (!tblStudentEnrollmentGrid.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudentEnrollment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}
+@{
+    // Close Recordset
+    tblStudentEnrollmentGrid.CloseRecordset(); // DN
+    // Clear CurrentGrid
+    CurrentGrid = null;
+}

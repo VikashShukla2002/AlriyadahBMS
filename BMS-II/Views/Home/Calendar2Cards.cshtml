@@ -1,0 +1,304 @@
+@if (!calendar2List.IsExport()) {
+<div>
+@if (!calendar2List.IsGridAdd && !(calendar2List.IsGridEdit && calendar2List.ModalGridEdit) && !calendar2List.IsMultiEdit) {
+@Html.Raw(calendar2List.Pager.Render())
+}
+<div class="ew-list-other-options">
+@calendar2List.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (calendar2List.ModalGridAdd && calendar2List.IsGridAdd || calendar2List.ModalGridEdit && calendar2List.IsGridEdit || calendar2List.ModalMultiEdit && calendar2List.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(calendar2List.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Calendar2: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(calendar2List.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(calendar2List.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(calendar2List.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(calendar2List.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(calendar2List.FormName)" id="@(calendar2List.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(calendar2List.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (calendar2List.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(calendar2List.GetMultiColumnRowClass())">
+@if (calendar2List.TotalRecords > 0 || calendar2List.IsGridEdit || calendar2List.IsMultiEdit) {
+    await calendar2List.SetupGrid();
+    bool eof = calendar2List.Recordset == null; // DN
+while (calendar2List.RecordCount < calendar2List.StopRecord || SameString(calendar2List.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(calendar2List.RowIndex, "$rowindex$") &&
+        (!calendar2List.IsGridAdd || calendar2List.CurrentMode == "copy") &&
+        (!((calendar2List.IsCopy || calendar2List.IsAdd) && calendar2List.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await calendar2List.Recordset.ReadAsync();
+    calendar2List.RecordCount++;
+    if (calendar2List.RecordCount >= calendar2List.StartRecord) {
+        await calendar2List.SetupRow();
+<div class="@(calendar2List.GetMultiColumnColClass())" @Html.Raw(calendar2List.RowAttributes)>
+<div class="@(calendar2List.MultiColumnCardClass)">
+    @if (calendar2List.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(calendar2List.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    calendar2List.ListOptions.Tag = "div";
+    calendar2List.ListOptions.RenderBody(calendar2List.MultiColumnListOptionsPosition, calendar2List.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (calendar2List.Id.Visible) { // calendar2List.Id.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_Id">
+            <div class="col col-sm-4 Calendar2_Id">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.Id.CellAttributes)>
+<span @Html.Raw(calendar2List.Id.ViewAttributes)>
+@Html.Raw(calendar2List.Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_Id">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.Id.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.Id.CellAttributes)>
+<span @Html.Raw(calendar2List.Id.ViewAttributes)>
+@Html.Raw(calendar2List.Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List._Title.Visible) { // calendar2List._Title.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2__Title">
+            <div class="col col-sm-4 Calendar2__Title">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List._Title))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List._Title.CellAttributes)>
+<span @Html.Raw(calendar2List._Title.ViewAttributes)>
+@Html.Raw(calendar2List._Title.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2__Title">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List._Title.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List._Title.CellAttributes)>
+<span @Html.Raw(calendar2List._Title.ViewAttributes)>
+@Html.Raw(calendar2List._Title.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.Start.Visible) { // calendar2List.Start.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_Start">
+            <div class="col col-sm-4 Calendar2_Start">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.Start))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.Start.CellAttributes)>
+<span @Html.Raw(calendar2List.Start.ViewAttributes)>
+@Html.Raw(calendar2List.Start.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_Start">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.Start.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.Start.CellAttributes)>
+<span @Html.Raw(calendar2List.Start.ViewAttributes)>
+@Html.Raw(calendar2List.Start.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.End.Visible) { // calendar2List.End.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_End">
+            <div class="col col-sm-4 Calendar2_End">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.End))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.End.CellAttributes)>
+<span @Html.Raw(calendar2List.End.ViewAttributes)>
+@Html.Raw(calendar2List.End.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_End">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.End.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.End.CellAttributes)>
+<span @Html.Raw(calendar2List.End.ViewAttributes)>
+@Html.Raw(calendar2List.End.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.AllDay.Visible) { // calendar2List.AllDay.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_AllDay">
+            <div class="col col-sm-4 Calendar2_AllDay">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.AllDay))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.AllDay.CellAttributes)>
+<span @Html.Raw(calendar2List.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(calendar2List.RowCount)" class="form-check-input" value="@(calendar2List.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(calendar2List.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(calendar2List.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_AllDay">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.AllDay.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.AllDay.CellAttributes)>
+<span @Html.Raw(calendar2List.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(calendar2List.RowCount)" class="form-check-input" value="@(calendar2List.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(calendar2List.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(calendar2List.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.str_Username.Visible) { // calendar2List.str_Username.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_str_Username">
+            <div class="col col-sm-4 Calendar2_str_Username">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.str_Username))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.str_Username.CellAttributes)>
+<span @Html.Raw(calendar2List.str_Username.ViewAttributes)>
+@Html.Raw(calendar2List.str_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_str_Username">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.str_Username.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.str_Username.CellAttributes)>
+<span @Html.Raw(calendar2List.str_Username.ViewAttributes)>
+@Html.Raw(calendar2List.str_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List._Url.Visible) { // calendar2List._Url.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2__Url">
+            <div class="col col-sm-4 Calendar2__Url">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List._Url))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List._Url.CellAttributes)>
+<span @Html.Raw(calendar2List._Url.ViewAttributes)>
+@Html.Raw(calendar2List._Url.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2__Url">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List._Url.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List._Url.CellAttributes)>
+<span @Html.Raw(calendar2List._Url.ViewAttributes)>
+@Html.Raw(calendar2List._Url.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.ClassNames.Visible) { // calendar2List.ClassNames.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_ClassNames">
+            <div class="col col-sm-4 Calendar2_ClassNames">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.ClassNames))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.ClassNames.CellAttributes)>
+<span @Html.Raw(calendar2List.ClassNames.ViewAttributes)>
+@Html.Raw(calendar2List.ClassNames.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_ClassNames">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.ClassNames.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.ClassNames.CellAttributes)>
+<span @Html.Raw(calendar2List.ClassNames.ViewAttributes)>
+@Html.Raw(calendar2List.ClassNames.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.Display.Visible) { // calendar2List.Display.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_Display">
+            <div class="col col-sm-4 Calendar2_Display">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.Display))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.Display.CellAttributes)>
+<span @Html.Raw(calendar2List.Display.ViewAttributes)>
+@Html.Raw(calendar2List.Display.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_Display">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.Display.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.Display.CellAttributes)>
+<span @Html.Raw(calendar2List.Display.ViewAttributes)>
+@Html.Raw(calendar2List.Display.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (calendar2List.BackgroundColor.Visible) { // calendar2List.BackgroundColor.Visible (begin)
+        if (calendar2List.RowType == RowType.View) { // View record
+        <div class="row Calendar2_BackgroundColor">
+            <div class="col col-sm-4 Calendar2_BackgroundColor">@Html.Raw(calendar2List.RenderFieldHeader(calendar2List.BackgroundColor))</div>
+            <div class="col col-sm-8"><div @Html.Raw(calendar2List.BackgroundColor.CellAttributes)>
+<span @Html.Raw(calendar2List.BackgroundColor.ViewAttributes)>
+@Html.Raw(calendar2List.BackgroundColor.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row Calendar2_BackgroundColor">
+            <label class="@(calendar2List.LeftColumnClass)">@Html.Raw(calendar2List.BackgroundColor.Caption)</label>
+            <div class="@(calendar2List.RightColumnClass)"><div @Html.Raw(calendar2List.BackgroundColor.CellAttributes)>
+<span @Html.Raw(calendar2List.BackgroundColor.ViewAttributes)>
+@Html.Raw(calendar2List.BackgroundColor.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!calendar2List.IsExport()) {
+    if (calendar2List.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(calendar2List.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    calendar2List.ListOptions.Tag = "div";
+}
+@calendar2List.ListOptions.RenderBody(calendar2List.MultiColumnListOptionsPosition, calendar2List.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(calendar2List.RowIndex, "$rowindex$"))
+        calendar2List.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((calendar2List.IsCopy || calendar2List.IsAdd) && calendar2List.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        calendar2List.RowIndex = 1;
+} @* End While *@
+} @* calendar2List.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(calendar2List.CurrentAction) && !calendar2List.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ calendar2List.CloseRecordset(); }

@@ -1,0 +1,260 @@
+@if (!tblAppointmentsInfoList.IsExport()) {
+<div>
+@if (!tblAppointmentsInfoList.IsGridAdd && !(tblAppointmentsInfoList.IsGridEdit && tblAppointmentsInfoList.ModalGridEdit) && !tblAppointmentsInfoList.IsMultiEdit) {
+@Html.Raw(tblAppointmentsInfoList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblAppointmentsInfoList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblAppointmentsInfoList.ModalGridAdd && tblAppointmentsInfoList.IsGridAdd || tblAppointmentsInfoList.ModalGridEdit && tblAppointmentsInfoList.IsGridEdit || tblAppointmentsInfoList.ModalMultiEdit && tblAppointmentsInfoList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAppointmentsInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAppointmentsInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblAppointmentsInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblAppointmentsInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblAppointmentsInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblAppointmentsInfoList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblAppointmentsInfoList.FormName)" id="@(tblAppointmentsInfoList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblAppointmentsInfoList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblAppointmentsInfoList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblAppointmentsInfoList.GetMultiColumnRowClass())">
+@if (tblAppointmentsInfoList.TotalRecords > 0 || tblAppointmentsInfoList.IsGridEdit || tblAppointmentsInfoList.IsMultiEdit) {
+    await tblAppointmentsInfoList.SetupGrid();
+    bool eof = tblAppointmentsInfoList.Recordset == null; // DN
+while (tblAppointmentsInfoList.RecordCount < tblAppointmentsInfoList.StopRecord || SameString(tblAppointmentsInfoList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblAppointmentsInfoList.RowIndex, "$rowindex$") &&
+        (!tblAppointmentsInfoList.IsGridAdd || tblAppointmentsInfoList.CurrentMode == "copy") &&
+        (!((tblAppointmentsInfoList.IsCopy || tblAppointmentsInfoList.IsAdd) && tblAppointmentsInfoList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblAppointmentsInfoList.Recordset.ReadAsync();
+    tblAppointmentsInfoList.RecordCount++;
+    if (tblAppointmentsInfoList.RecordCount >= tblAppointmentsInfoList.StartRecord) {
+        await tblAppointmentsInfoList.SetupRow();
+<div class="@(tblAppointmentsInfoList.GetMultiColumnColClass())" @Html.Raw(tblAppointmentsInfoList.RowAttributes)>
+<div class="@(tblAppointmentsInfoList.MultiColumnCardClass)">
+    @if (tblAppointmentsInfoList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblAppointmentsInfoList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblAppointmentsInfoList.ListOptions.Tag = "div";
+    tblAppointmentsInfoList.ListOptions.RenderBody(tblAppointmentsInfoList.MultiColumnListOptionsPosition, tblAppointmentsInfoList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblAppointmentsInfoList.str_AppName.Visible) { // tblAppointmentsInfoList.str_AppName.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_str_AppName">
+            <div class="col col-sm-4 tblAppointmentsInfo_str_AppName">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.str_AppName))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.str_AppName.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.str_AppName.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.str_AppName.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_str_AppName">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.str_AppName.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.str_AppName.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.str_AppName.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.str_AppName.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.str_App_Date.Visible) { // tblAppointmentsInfoList.str_App_Date.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_str_App_Date">
+            <div class="col col-sm-4 tblAppointmentsInfo_str_App_Date">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.str_App_Date))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.str_App_Date.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.str_App_Date.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.str_App_Date.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_str_App_Date">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.str_App_Date.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.str_App_Date.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.str_App_Date.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.str_App_Date.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.str_StartTime.Visible) { // tblAppointmentsInfoList.str_StartTime.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_str_StartTime">
+            <div class="col col-sm-4 tblAppointmentsInfo_str_StartTime">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.str_StartTime))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.str_StartTime.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.str_StartTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.str_StartTime.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_str_StartTime">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.str_StartTime.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.str_StartTime.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.str_StartTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.str_StartTime.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.int_Apptype.Visible) { // tblAppointmentsInfoList.int_Apptype.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_int_Apptype">
+            <div class="col col-sm-4 tblAppointmentsInfo_int_Apptype">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.int_Apptype))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.int_Apptype.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.int_Apptype.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.int_Apptype.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_int_Apptype">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.int_Apptype.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.int_Apptype.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.int_Apptype.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.int_Apptype.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.int_AppStatus.Visible) { // tblAppointmentsInfoList.int_AppStatus.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_int_AppStatus">
+            <div class="col col-sm-4 tblAppointmentsInfo_int_AppStatus">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.int_AppStatus))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.int_AppStatus.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.int_AppStatus.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.int_AppStatus.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_int_AppStatus">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.int_AppStatus.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.int_AppStatus.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.int_AppStatus.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.int_AppStatus.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.mny_AppCost.Visible) { // tblAppointmentsInfoList.mny_AppCost.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_mny_AppCost">
+            <div class="col col-sm-4 tblAppointmentsInfo_mny_AppCost">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.mny_AppCost))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.mny_AppCost.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.mny_AppCost.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.mny_AppCost.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_mny_AppCost">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.mny_AppCost.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.mny_AppCost.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.mny_AppCost.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.mny_AppCost.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.mny_AmountPaid.Visible) { // tblAppointmentsInfoList.mny_AmountPaid.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_mny_AmountPaid">
+            <div class="col col-sm-4 tblAppointmentsInfo_mny_AmountPaid">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.mny_AmountPaid))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_mny_AmountPaid">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.mny_AmountPaid.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblAppointmentsInfoList.NationalID.Visible) { // tblAppointmentsInfoList.NationalID.Visible (begin)
+        if (tblAppointmentsInfoList.RowType == RowType.View) { // View record
+        <div class="row tblAppointmentsInfo_NationalID">
+            <div class="col col-sm-4 tblAppointmentsInfo_NationalID">@Html.Raw(tblAppointmentsInfoList.RenderFieldHeader(tblAppointmentsInfoList.NationalID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblAppointmentsInfoList.NationalID.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.NationalID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.NationalID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblAppointmentsInfo_NationalID">
+            <label class="@(tblAppointmentsInfoList.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoList.NationalID.Caption)</label>
+            <div class="@(tblAppointmentsInfoList.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoList.NationalID.CellAttributes)>
+<span @Html.Raw(tblAppointmentsInfoList.NationalID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoList.NationalID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblAppointmentsInfoList.IsExport()) {
+    if (tblAppointmentsInfoList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblAppointmentsInfoList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblAppointmentsInfoList.ListOptions.Tag = "div";
+}
+@tblAppointmentsInfoList.ListOptions.RenderBody(tblAppointmentsInfoList.MultiColumnListOptionsPosition, tblAppointmentsInfoList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblAppointmentsInfoList.RowIndex, "$rowindex$"))
+        tblAppointmentsInfoList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblAppointmentsInfoList.IsCopy || tblAppointmentsInfoList.IsAdd) && tblAppointmentsInfoList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblAppointmentsInfoList.RowIndex = 1;
+} @* End While *@
+} @* tblAppointmentsInfoList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblAppointmentsInfoList.CurrentAction) && !tblAppointmentsInfoList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblAppointmentsInfoList.CloseRecordset(); }

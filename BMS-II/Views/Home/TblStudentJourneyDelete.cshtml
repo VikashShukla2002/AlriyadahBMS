@@ -1,0 +1,235 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentJourneyDelete.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentJourneyDelete.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentJourneyDelete.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentJourney: currentTable } });
+var currentPageID = ew.PAGE_ID = "delete";
+var currentForm;
+var ftblStudentJourneydelete;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentJourneydelete")
+        .setPageId("delete")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStudentJourneyDelete.ShowPageHeader()
+@tblStudentJourneyDelete.ShowMessages()
+<form name="ftblStudentJourneydelete" id="ftblStudentJourneydelete" class="ew-form ew-delete-form" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="delete">
+@foreach (string key in tblStudentJourneyDelete.RecordKeys) {
+<input type="hidden" name="key_m[]" value="@key">
+}
+<div class="card ew-card ew-grid @(tblStudentJourneyDelete.TableGridClass)">
+<div class="card-body ew-grid-middle-panel @(tblStudentJourneyDelete.TableContainerClass)" style="@(tblStudentJourneyDelete.TableContainerStyle)">
+<table class="@(tblStudentJourneyDelete.TableClass)">
+    <thead>
+    <tr class="ew-table-header">
+@if (tblStudentJourneyDelete.STDJ_ID.Visible) { // tblStudentJourneyDelete.STDJ_ID.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.STDJ_ID.HeaderCellClass)"><span id="elh_tblStudentJourney_STDJ_ID" class="tblStudentJourney_STDJ_ID">@Html.Raw(tblStudentJourneyDelete.STDJ_ID.Caption)</span></th>
+} @* tblStudentJourneyDelete.STDJ_ID.Visible (end) *@
+@if (tblStudentJourneyDelete.FullName.Visible) { // tblStudentJourneyDelete.FullName.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.FullName.HeaderCellClass)"><span id="elh_tblStudentJourney_FullName" class="tblStudentJourney_FullName">@Html.Raw(tblStudentJourneyDelete.FullName.Caption)</span></th>
+} @* tblStudentJourneyDelete.FullName.Visible (end) *@
+@if (tblStudentJourneyDelete.str_Username.Visible) { // tblStudentJourneyDelete.str_Username.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.str_Username.HeaderCellClass)"><span id="elh_tblStudentJourney_str_Username" class="tblStudentJourney_str_Username">@Html.Raw(tblStudentJourneyDelete.str_Username.Caption)</span></th>
+} @* tblStudentJourneyDelete.str_Username.Visible (end) *@
+@if (tblStudentJourneyDelete.Number_ID.Visible) { // tblStudentJourneyDelete.Number_ID.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Number_ID.HeaderCellClass)"><span id="elh_tblStudentJourney_Number_ID" class="tblStudentJourney_Number_ID">@Html.Raw(tblStudentJourneyDelete.Number_ID.Caption)</span></th>
+} @* tblStudentJourneyDelete.Number_ID.Visible (end) *@
+@if (tblStudentJourneyDelete.Journey_ID.Visible) { // tblStudentJourneyDelete.Journey_ID.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Journey_ID.HeaderCellClass)"><span id="elh_tblStudentJourney_Journey_ID" class="tblStudentJourney_Journey_ID">@Html.Raw(tblStudentJourneyDelete.Journey_ID.Caption)</span></th>
+} @* tblStudentJourneyDelete.Journey_ID.Visible (end) *@
+@if (tblStudentJourneyDelete.Journey.Visible) { // tblStudentJourneyDelete.Journey.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Journey.HeaderCellClass)"><span id="elh_tblStudentJourney_Journey" class="tblStudentJourney_Journey">@Html.Raw(tblStudentJourneyDelete.Journey.Caption)</span></th>
+} @* tblStudentJourneyDelete.Journey.Visible (end) *@
+@if (tblStudentJourneyDelete.Start_Date.Visible) { // tblStudentJourneyDelete.Start_Date.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Start_Date.HeaderCellClass)"><span id="elh_tblStudentJourney_Start_Date" class="tblStudentJourney_Start_Date">@Html.Raw(tblStudentJourneyDelete.Start_Date.Caption)</span></th>
+} @* tblStudentJourneyDelete.Start_Date.Visible (end) *@
+@if (tblStudentJourneyDelete.End_Date.Visible) { // tblStudentJourneyDelete.End_Date.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.End_Date.HeaderCellClass)"><span id="elh_tblStudentJourney_End_Date" class="tblStudentJourney_End_Date">@Html.Raw(tblStudentJourneyDelete.End_Date.Caption)</span></th>
+} @* tblStudentJourneyDelete.End_Date.Visible (end) *@
+@if (tblStudentJourneyDelete.Total_Days.Visible) { // tblStudentJourneyDelete.Total_Days.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Total_Days.HeaderCellClass)"><span id="elh_tblStudentJourney_Total_Days" class="tblStudentJourney_Total_Days">@Html.Raw(tblStudentJourneyDelete.Total_Days.Caption)</span></th>
+} @* tblStudentJourneyDelete.Total_Days.Visible (end) *@
+@if (tblStudentJourneyDelete.Status.Visible) { // tblStudentJourneyDelete.Status.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Status.HeaderCellClass)"><span id="elh_tblStudentJourney_Status" class="tblStudentJourney_Status">@Html.Raw(tblStudentJourneyDelete.Status.Caption)</span></th>
+} @* tblStudentJourneyDelete.Status.Visible (end) *@
+@if (tblStudentJourneyDelete.Package_Name.Visible) { // tblStudentJourneyDelete.Package_Name.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Package_Name.HeaderCellClass)"><span id="elh_tblStudentJourney_Package_Name" class="tblStudentJourney_Package_Name">@Html.Raw(tblStudentJourneyDelete.Package_Name.Caption)</span></th>
+} @* tblStudentJourneyDelete.Package_Name.Visible (end) *@
+@if (tblStudentJourneyDelete.Product_Name.Visible) { // tblStudentJourneyDelete.Product_Name.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Product_Name.HeaderCellClass)"><span id="elh_tblStudentJourney_Product_Name" class="tblStudentJourney_Product_Name">@Html.Raw(tblStudentJourneyDelete.Product_Name.Caption)</span></th>
+} @* tblStudentJourneyDelete.Product_Name.Visible (end) *@
+@if (tblStudentJourneyDelete.Price.Visible) { // tblStudentJourneyDelete.Price.Visible (begin)
+        <th class="@Html.Raw(tblStudentJourneyDelete.Price.HeaderCellClass)"><span id="elh_tblStudentJourney_Price" class="tblStudentJourney_Price">@Html.Raw(tblStudentJourneyDelete.Price.Caption)</span></th>
+} @* tblStudentJourneyDelete.Price.Visible (end) *@
+    </tr>
+    </thead>
+    <tbody>
+@{ tblStudentJourneyDelete.RecordCount = 0; }
+@while (tblStudentJourneyDelete.Recordset != null && await tblStudentJourneyDelete.Recordset.ReadAsync()) { // DN
+    tblStudentJourneyDelete.RecordCount++;
+    tblStudentJourneyDelete.RowCount++;
+
+    // Set row properties
+    tblStudentJourneyDelete.ResetAttributes();
+    tblStudentJourneyDelete.RowType = RowType.View; // View
+
+    // Get the field contents
+    await tblStudentJourneyDelete.LoadRowValues(tblStudentJourneyDelete.Recordset);
+
+    // Render row
+    await tblStudentJourneyDelete.RenderRow();
+    <tr @Html.Raw(tblStudentJourneyDelete.RowAttributes)>
+@if (tblStudentJourneyDelete.STDJ_ID.Visible) { // tblStudentJourneyDelete.STDJ_ID.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.STDJ_ID.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.STDJ_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.STDJ_ID.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.STDJ_ID.Visible (end) *@
+@if (tblStudentJourneyDelete.FullName.Visible) { // tblStudentJourneyDelete.FullName.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.FullName.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.FullName.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.FullName.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.FullName.Visible (end) *@
+@if (tblStudentJourneyDelete.str_Username.Visible) { // tblStudentJourneyDelete.str_Username.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.str_Username.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.str_Username.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.str_Username.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.str_Username.Visible (end) *@
+@if (tblStudentJourneyDelete.Number_ID.Visible) { // tblStudentJourneyDelete.Number_ID.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Number_ID.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Number_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Number_ID.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Number_ID.Visible (end) *@
+@if (tblStudentJourneyDelete.Journey_ID.Visible) { // tblStudentJourneyDelete.Journey_ID.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Journey_ID.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Journey_ID.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Journey_ID.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Journey_ID.Visible (end) *@
+@if (tblStudentJourneyDelete.Journey.Visible) { // tblStudentJourneyDelete.Journey.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Journey.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Journey.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Journey.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Journey.Visible (end) *@
+@if (tblStudentJourneyDelete.Start_Date.Visible) { // tblStudentJourneyDelete.Start_Date.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Start_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Start_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Start_Date.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Start_Date.Visible (end) *@
+@if (tblStudentJourneyDelete.End_Date.Visible) { // tblStudentJourneyDelete.End_Date.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.End_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.End_Date.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.End_Date.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.End_Date.Visible (end) *@
+@if (tblStudentJourneyDelete.Total_Days.Visible) { // tblStudentJourneyDelete.Total_Days.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Total_Days.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Total_Days.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Total_Days.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Total_Days.Visible (end) *@
+@if (tblStudentJourneyDelete.Status.Visible) { // tblStudentJourneyDelete.Status.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Status.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Status.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Status.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Status.Visible (end) *@
+@if (tblStudentJourneyDelete.Package_Name.Visible) { // tblStudentJourneyDelete.Package_Name.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Package_Name.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Package_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Package_Name.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Package_Name.Visible (end) *@
+@if (tblStudentJourneyDelete.Product_Name.Visible) { // tblStudentJourneyDelete.Product_Name.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Product_Name.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Product_Name.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Product_Name.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Product_Name.Visible (end) *@
+@if (tblStudentJourneyDelete.Price.Visible) { // tblStudentJourneyDelete.Price.Visible (begin)
+        <td @Html.Raw(tblStudentJourneyDelete.Price.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblStudentJourneyDelete.Price.ViewAttributes)>
+@Html.Raw(tblStudentJourneyDelete.Price.GetViewValue())</span>
+</span></td>
+} @* tblStudentJourneyDelete.Price.Visible (end) *@
+    </tr>
+}
+@{ tblStudentJourneyDelete.CloseRecordset(); }
+</tbody>
+</table>
+</div>
+</div>
+<div class="ew-buttons ew-desktop-buttons">
+<button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit">@Html.Raw(Language.Phrase("DeleteBtn"))</button>
+<button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-href="@AppPath(tblStudentJourneyDelete.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+</div>
+</form>
+@tblStudentJourneyDelete.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

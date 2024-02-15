@@ -1,0 +1,521 @@
+@if (qryClassRoomListList.ModalGridAdd && qryClassRoomListList.IsGridAdd || qryClassRoomListList.ModalGridEdit && qryClassRoomListList.IsGridEdit || qryClassRoomListList.ModalMultiEdit && qryClassRoomListList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryClassRoomListList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryClassRoomList: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryClassRoomListList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryClassRoomListList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryClassRoomListList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryClassRoomListList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryClassRoomListList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryClassRoomListList.TableGridClass)">
+@if (!qryClassRoomListList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryClassRoomListList.IsGridAdd && !(qryClassRoomListList.IsGridEdit && qryClassRoomListList.ModalGridEdit) && !qryClassRoomListList.IsMultiEdit) {
+@Html.Raw(qryClassRoomListList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryClassRoomListList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryClassRoomListList.FormName)" id="@(qryClassRoomListList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryClassRoomListList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryClassRoomListList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_qryClassRoomList" class="card-body ew-grid-middle-panel @(qryClassRoomListList.TableContainerClass)" style="@(qryClassRoomListList.TableContainerStyle)">
+@if (qryClassRoomListList.TotalRecords > 0 || qryClassRoomListList.IsGridEdit || qryClassRoomListList.IsMultiEdit) {
+<table id="tbl_qryClassRoomListlist" class="@(qryClassRoomListList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryClassRoomListList.RowType = RowType.Header;
+
+    // Render list options
+    await qryClassRoomListList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryClassRoomListList.ListOptions.RenderHeader("left")
+@if (qryClassRoomListList.int_CR_ID.Visible) { // qryClassRoomListList.int_CR_ID.Visible (begin)
+        <th data-name="int_CR_ID" class="@(qryClassRoomListList.int_CR_ID.HeaderCellClass)"><div id="elh_qryClassRoomList_int_CR_ID" class="qryClassRoomList_int_CR_ID">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_CR_ID))</div></th>
+} @* qryClassRoomListList.int_CR_ID.Visible (end) *@
+@if (qryClassRoomListList.int_CR_Product_ID.Visible) { // qryClassRoomListList.int_CR_Product_ID.Visible (begin)
+        <th data-name="int_CR_Product_ID" class="@(qryClassRoomListList.int_CR_Product_ID.HeaderCellClass)"><div id="elh_qryClassRoomList_int_CR_Product_ID" class="qryClassRoomList_int_CR_Product_ID">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_CR_Product_ID))</div></th>
+} @* qryClassRoomListList.int_CR_Product_ID.Visible (end) *@
+@if (qryClassRoomListList.str_CR_Number.Visible) { // qryClassRoomListList.str_CR_Number.Visible (begin)
+        <th data-name="str_CR_Number" class="@(qryClassRoomListList.str_CR_Number.HeaderCellClass)"><div id="elh_qryClassRoomList_str_CR_Number" class="qryClassRoomList_str_CR_Number">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.str_CR_Number))</div></th>
+} @* qryClassRoomListList.str_CR_Number.Visible (end) *@
+@if (qryClassRoomListList.mon_CR_Price.Visible) { // qryClassRoomListList.mon_CR_Price.Visible (begin)
+        <th data-name="mon_CR_Price" class="@(qryClassRoomListList.mon_CR_Price.HeaderCellClass)"><div id="elh_qryClassRoomList_mon_CR_Price" class="qryClassRoomList_mon_CR_Price">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.mon_CR_Price))</div></th>
+} @* qryClassRoomListList.mon_CR_Price.Visible (end) *@
+@if (qryClassRoomListList.int_CR_Size.Visible) { // qryClassRoomListList.int_CR_Size.Visible (begin)
+        <th data-name="int_CR_Size" class="@(qryClassRoomListList.int_CR_Size.HeaderCellClass)"><div id="elh_qryClassRoomList_int_CR_Size" class="qryClassRoomList_int_CR_Size">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_CR_Size))</div></th>
+} @* qryClassRoomListList.int_CR_Size.Visible (end) *@
+@if (qryClassRoomListList.int_MU_Size.Visible) { // qryClassRoomListList.int_MU_Size.Visible (begin)
+        <th data-name="int_MU_Size" class="@(qryClassRoomListList.int_MU_Size.HeaderCellClass)"><div id="elh_qryClassRoomList_int_MU_Size" class="qryClassRoomList_int_MU_Size">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_MU_Size))</div></th>
+} @* qryClassRoomListList.int_MU_Size.Visible (end) *@
+@if (qryClassRoomListList.int_CR_Status.Visible) { // qryClassRoomListList.int_CR_Status.Visible (begin)
+        <th data-name="int_CR_Status" class="@(qryClassRoomListList.int_CR_Status.HeaderCellClass)"><div id="elh_qryClassRoomList_int_CR_Status" class="qryClassRoomList_int_CR_Status">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_CR_Status))</div></th>
+} @* qryClassRoomListList.int_CR_Status.Visible (end) *@
+@if (qryClassRoomListList.Is_Web_SignUp.Visible) { // qryClassRoomListList.Is_Web_SignUp.Visible (begin)
+        <th data-name="Is_Web_SignUp" class="@(qryClassRoomListList.Is_Web_SignUp.HeaderCellClass)"><div id="elh_qryClassRoomList_Is_Web_SignUp" class="qryClassRoomList_Is_Web_SignUp">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.Is_Web_SignUp))</div></th>
+} @* qryClassRoomListList.Is_Web_SignUp.Visible (end) *@
+@if (qryClassRoomListList.int_Location_ID.Visible) { // qryClassRoomListList.int_Location_ID.Visible (begin)
+        <th data-name="int_Location_ID" class="@(qryClassRoomListList.int_Location_ID.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Location_ID" class="qryClassRoomList_int_Location_ID">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Location_ID))</div></th>
+} @* qryClassRoomListList.int_Location_ID.Visible (end) *@
+@if (qryClassRoomListList.int_Teacher_ID.Visible) { // qryClassRoomListList.int_Teacher_ID.Visible (begin)
+        <th data-name="int_Teacher_ID" class="@(qryClassRoomListList.int_Teacher_ID.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Teacher_ID" class="qryClassRoomList_int_Teacher_ID">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Teacher_ID))</div></th>
+} @* qryClassRoomListList.int_Teacher_ID.Visible (end) *@
+@if (qryClassRoomListList.date_Start.Visible) { // qryClassRoomListList.date_Start.Visible (begin)
+        <th data-name="date_Start" class="@(qryClassRoomListList.date_Start.HeaderCellClass)"><div id="elh_qryClassRoomList_date_Start" class="qryClassRoomList_date_Start">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.date_Start))</div></th>
+} @* qryClassRoomListList.date_Start.Visible (end) *@
+@if (qryClassRoomListList.int_TotSession.Visible) { // qryClassRoomListList.int_TotSession.Visible (begin)
+        <th data-name="int_TotSession" class="@(qryClassRoomListList.int_TotSession.HeaderCellClass)"><div id="elh_qryClassRoomList_int_TotSession" class="qryClassRoomList_int_TotSession">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_TotSession))</div></th>
+} @* qryClassRoomListList.int_TotSession.Visible (end) *@
+@if (qryClassRoomListList.int_PerDaySession.Visible) { // qryClassRoomListList.int_PerDaySession.Visible (begin)
+        <th data-name="int_PerDaySession" class="@(qryClassRoomListList.int_PerDaySession.HeaderCellClass)"><div id="elh_qryClassRoomList_int_PerDaySession" class="qryClassRoomList_int_PerDaySession">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_PerDaySession))</div></th>
+} @* qryClassRoomListList.int_PerDaySession.Visible (end) *@
+@if (qryClassRoomListList.str_CR_Days.Visible) { // qryClassRoomListList.str_CR_Days.Visible (begin)
+        <th data-name="str_CR_Days" class="@(qryClassRoomListList.str_CR_Days.HeaderCellClass)"><div id="elh_qryClassRoomList_str_CR_Days" class="qryClassRoomList_str_CR_Days">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.str_CR_Days))</div></th>
+} @* qryClassRoomListList.str_CR_Days.Visible (end) *@
+@if (qryClassRoomListList.str_CR_Notes.Visible) { // qryClassRoomListList.str_CR_Notes.Visible (begin)
+        <th data-name="str_CR_Notes" class="@(qryClassRoomListList.str_CR_Notes.HeaderCellClass)"><div id="elh_qryClassRoomList_str_CR_Notes" class="qryClassRoomList_str_CR_Notes">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.str_CR_Notes))</div></th>
+} @* qryClassRoomListList.str_CR_Notes.Visible (end) *@
+@if (qryClassRoomListList.int_Created_By.Visible) { // qryClassRoomListList.int_Created_By.Visible (begin)
+        <th data-name="int_Created_By" class="@(qryClassRoomListList.int_Created_By.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Created_By" class="qryClassRoomList_int_Created_By">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Created_By))</div></th>
+} @* qryClassRoomListList.int_Created_By.Visible (end) *@
+@if (qryClassRoomListList.int_Modified_By.Visible) { // qryClassRoomListList.int_Modified_By.Visible (begin)
+        <th data-name="int_Modified_By" class="@(qryClassRoomListList.int_Modified_By.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Modified_By" class="qryClassRoomList_int_Modified_By">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Modified_By))</div></th>
+} @* qryClassRoomListList.int_Modified_By.Visible (end) *@
+@if (qryClassRoomListList.date_Created.Visible) { // qryClassRoomListList.date_Created.Visible (begin)
+        <th data-name="date_Created" class="@(qryClassRoomListList.date_Created.HeaderCellClass)"><div id="elh_qryClassRoomList_date_Created" class="qryClassRoomList_date_Created">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.date_Created))</div></th>
+} @* qryClassRoomListList.date_Created.Visible (end) *@
+@if (qryClassRoomListList.date_Modified.Visible) { // qryClassRoomListList.date_Modified.Visible (begin)
+        <th data-name="date_Modified" class="@(qryClassRoomListList.date_Modified.HeaderCellClass)"><div id="elh_qryClassRoomList_date_Modified" class="qryClassRoomList_date_Modified">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.date_Modified))</div></th>
+} @* qryClassRoomListList.date_Modified.Visible (end) *@
+@if (qryClassRoomListList.bit_IsDeleted.Visible) { // qryClassRoomListList.bit_IsDeleted.Visible (begin)
+        <th data-name="bit_IsDeleted" class="@(qryClassRoomListList.bit_IsDeleted.HeaderCellClass)"><div id="elh_qryClassRoomList_bit_IsDeleted" class="qryClassRoomList_bit_IsDeleted">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.bit_IsDeleted))</div></th>
+} @* qryClassRoomListList.bit_IsDeleted.Visible (end) *@
+@if (qryClassRoomListList.bit_AllTeacher.Visible) { // qryClassRoomListList.bit_AllTeacher.Visible (begin)
+        <th data-name="bit_AllTeacher" class="@(qryClassRoomListList.bit_AllTeacher.HeaderCellClass)"><div id="elh_qryClassRoomList_bit_AllTeacher" class="qryClassRoomList_bit_AllTeacher">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.bit_AllTeacher))</div></th>
+} @* qryClassRoomListList.bit_AllTeacher.Visible (end) *@
+@if (qryClassRoomListList.int_Manual_Change.Visible) { // qryClassRoomListList.int_Manual_Change.Visible (begin)
+        <th data-name="int_Manual_Change" class="@(qryClassRoomListList.int_Manual_Change.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Manual_Change" class="qryClassRoomList_int_Manual_Change">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Manual_Change))</div></th>
+} @* qryClassRoomListList.int_Manual_Change.Visible (end) *@
+@if (qryClassRoomListList.str_WebDesc.Visible) { // qryClassRoomListList.str_WebDesc.Visible (begin)
+        <th data-name="str_WebDesc" class="@(qryClassRoomListList.str_WebDesc.HeaderCellClass)"><div id="elh_qryClassRoomList_str_WebDesc" class="qryClassRoomList_str_WebDesc">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.str_WebDesc))</div></th>
+} @* qryClassRoomListList.str_WebDesc.Visible (end) *@
+@if (qryClassRoomListList.is_Show.Visible) { // qryClassRoomListList.is_Show.Visible (begin)
+        <th data-name="is_Show" class="@(qryClassRoomListList.is_Show.HeaderCellClass)"><div id="elh_qryClassRoomList_is_Show" class="qryClassRoomList_is_Show">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.is_Show))</div></th>
+} @* qryClassRoomListList.is_Show.Visible (end) *@
+@if (qryClassRoomListList.is_ShowGridColumn.Visible) { // qryClassRoomListList.is_ShowGridColumn.Visible (begin)
+        <th data-name="is_ShowGridColumn" class="@(qryClassRoomListList.is_ShowGridColumn.HeaderCellClass)"><div id="elh_qryClassRoomList_is_ShowGridColumn" class="qryClassRoomList_is_ShowGridColumn">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.is_ShowGridColumn))</div></th>
+} @* qryClassRoomListList.is_ShowGridColumn.Visible (end) *@
+@if (qryClassRoomListList.rowIndex.Visible) { // qryClassRoomListList.rowIndex.Visible (begin)
+        <th data-name="rowIndex" class="@(qryClassRoomListList.rowIndex.HeaderCellClass)"><div id="elh_qryClassRoomList_rowIndex" class="qryClassRoomList_rowIndex">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.rowIndex))</div></th>
+} @* qryClassRoomListList.rowIndex.Visible (end) *@
+@if (qryClassRoomListList.is_ZoomMeet.Visible) { // qryClassRoomListList.is_ZoomMeet.Visible (begin)
+        <th data-name="is_ZoomMeet" class="@(qryClassRoomListList.is_ZoomMeet.HeaderCellClass)"><div id="elh_qryClassRoomList_is_ZoomMeet" class="qryClassRoomList_is_ZoomMeet">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.is_ZoomMeet))</div></th>
+} @* qryClassRoomListList.is_ZoomMeet.Visible (end) *@
+@if (qryClassRoomListList.BulkCR_Set.Visible) { // qryClassRoomListList.BulkCR_Set.Visible (begin)
+        <th data-name="BulkCR_Set" class="@(qryClassRoomListList.BulkCR_Set.HeaderCellClass)"><div id="elh_qryClassRoomList_BulkCR_Set" class="qryClassRoomList_BulkCR_Set">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.BulkCR_Set))</div></th>
+} @* qryClassRoomListList.BulkCR_Set.Visible (end) *@
+@if (qryClassRoomListList.int_Day_Incremental.Visible) { // qryClassRoomListList.int_Day_Incremental.Visible (begin)
+        <th data-name="int_Day_Incremental" class="@(qryClassRoomListList.int_Day_Incremental.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Day_Incremental" class="qryClassRoomList_int_Day_Incremental">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Day_Incremental))</div></th>
+} @* qryClassRoomListList.int_Day_Incremental.Visible (end) *@
+@if (qryClassRoomListList.int_Reoccurrence.Visible) { // qryClassRoomListList.int_Reoccurrence.Visible (begin)
+        <th data-name="int_Reoccurrence" class="@(qryClassRoomListList.int_Reoccurrence.HeaderCellClass)"><div id="elh_qryClassRoomList_int_Reoccurrence" class="qryClassRoomList_int_Reoccurrence">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.int_Reoccurrence))</div></th>
+} @* qryClassRoomListList.int_Reoccurrence.Visible (end) *@
+@if (qryClassRoomListList.str_Username.Visible) { // qryClassRoomListList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(qryClassRoomListList.str_Username.HeaderCellClass)"><div id="elh_qryClassRoomList_str_Username" class="qryClassRoomList_str_Username">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.str_Username))</div></th>
+} @* qryClassRoomListList.str_Username.Visible (end) *@
+@if (qryClassRoomListList.Calendar_ID.Visible) { // qryClassRoomListList.Calendar_ID.Visible (begin)
+        <th data-name="Calendar_ID" class="@(qryClassRoomListList.Calendar_ID.HeaderCellClass)"><div id="elh_qryClassRoomList_Calendar_ID" class="qryClassRoomList_Calendar_ID">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.Calendar_ID))</div></th>
+} @* qryClassRoomListList.Calendar_ID.Visible (end) *@
+@if (qryClassRoomListList.str_Package_Name.Visible) { // qryClassRoomListList.str_Package_Name.Visible (begin)
+        <th data-name="str_Package_Name" class="@(qryClassRoomListList.str_Package_Name.HeaderCellClass)"><div id="elh_qryClassRoomList_str_Package_Name" class="qryClassRoomList_str_Package_Name">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.str_Package_Name))</div></th>
+} @* qryClassRoomListList.str_Package_Name.Visible (end) *@
+@if (qryClassRoomListList.date_Start2.Visible) { // qryClassRoomListList.date_Start2.Visible (begin)
+        <th data-name="date_Start2" class="@(qryClassRoomListList.date_Start2.HeaderCellClass)"><div id="elh_qryClassRoomList_date_Start2" class="qryClassRoomList_date_Start2">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.date_Start2))</div></th>
+} @* qryClassRoomListList.date_Start2.Visible (end) *@
+@if (qryClassRoomListList.date_Start3.Visible) { // qryClassRoomListList.date_Start3.Visible (begin)
+        <th data-name="date_Start3" class="@(qryClassRoomListList.date_Start3.HeaderCellClass)"><div id="elh_qryClassRoomList_date_Start3" class="qryClassRoomList_date_Start3">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.date_Start3))</div></th>
+} @* qryClassRoomListList.date_Start3.Visible (end) *@
+@if (qryClassRoomListList.date_Start4.Visible) { // qryClassRoomListList.date_Start4.Visible (begin)
+        <th data-name="date_Start4" class="@(qryClassRoomListList.date_Start4.HeaderCellClass)"><div id="elh_qryClassRoomList_date_Start4" class="qryClassRoomList_date_Start4">@Html.Raw(qryClassRoomListList.RenderFieldHeader(qryClassRoomListList.date_Start4))</div></th>
+} @* qryClassRoomListList.date_Start4.Visible (end) *@
+@* Render list options (header, right) *@
+@qryClassRoomListList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryClassRoomListList.PageNumber)">
+@{
+    await qryClassRoomListList.SetupGrid();
+    bool eof = qryClassRoomListList.Recordset == null; // DN
+}
+@while (qryClassRoomListList.RecordCount < qryClassRoomListList.StopRecord || SameString(qryClassRoomListList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryClassRoomListList.RowIndex, "$rowindex$") &&
+        (!qryClassRoomListList.IsGridAdd || qryClassRoomListList.CurrentMode == "copy") &&
+        (!((qryClassRoomListList.IsCopy || qryClassRoomListList.IsAdd) && qryClassRoomListList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryClassRoomListList.Recordset.ReadAsync();
+    qryClassRoomListList.RecordCount++;
+    if (qryClassRoomListList.RecordCount >= qryClassRoomListList.StartRecord) {
+        await qryClassRoomListList.SetupRow();
+    <tr @Html.Raw(qryClassRoomListList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryClassRoomListList.ListOptions.RenderBody("left", qryClassRoomListList.RowCount)
+    @if (qryClassRoomListList.int_CR_ID.Visible) { // qryClassRoomListList.int_CR_ID.Visible (begin)
+        <td data-name="int_CR_ID" @Html.Raw(qryClassRoomListList.int_CR_ID.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_CR_ID" class="el_qryClassRoomList_int_CR_ID">
+<span @Html.Raw(qryClassRoomListList.int_CR_ID.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_CR_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_CR_ID.Visible (end) *@
+    @if (qryClassRoomListList.int_CR_Product_ID.Visible) { // qryClassRoomListList.int_CR_Product_ID.Visible (begin)
+        <td data-name="int_CR_Product_ID" @Html.Raw(qryClassRoomListList.int_CR_Product_ID.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_CR_Product_ID" class="el_qryClassRoomList_int_CR_Product_ID">
+<span @Html.Raw(qryClassRoomListList.int_CR_Product_ID.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_CR_Product_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_CR_Product_ID.Visible (end) *@
+    @if (qryClassRoomListList.str_CR_Number.Visible) { // qryClassRoomListList.str_CR_Number.Visible (begin)
+        <td data-name="str_CR_Number" @Html.Raw(qryClassRoomListList.str_CR_Number.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_str_CR_Number" class="el_qryClassRoomList_str_CR_Number">
+<span @Html.Raw(qryClassRoomListList.str_CR_Number.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.str_CR_Number.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.str_CR_Number.Visible (end) *@
+    @if (qryClassRoomListList.mon_CR_Price.Visible) { // qryClassRoomListList.mon_CR_Price.Visible (begin)
+        <td data-name="mon_CR_Price" @Html.Raw(qryClassRoomListList.mon_CR_Price.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_mon_CR_Price" class="el_qryClassRoomList_mon_CR_Price">
+<span @Html.Raw(qryClassRoomListList.mon_CR_Price.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.mon_CR_Price.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.mon_CR_Price.Visible (end) *@
+    @if (qryClassRoomListList.int_CR_Size.Visible) { // qryClassRoomListList.int_CR_Size.Visible (begin)
+        <td data-name="int_CR_Size" @Html.Raw(qryClassRoomListList.int_CR_Size.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_CR_Size" class="el_qryClassRoomList_int_CR_Size">
+<span @Html.Raw(qryClassRoomListList.int_CR_Size.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_CR_Size.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_CR_Size.Visible (end) *@
+    @if (qryClassRoomListList.int_MU_Size.Visible) { // qryClassRoomListList.int_MU_Size.Visible (begin)
+        <td data-name="int_MU_Size" @Html.Raw(qryClassRoomListList.int_MU_Size.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_MU_Size" class="el_qryClassRoomList_int_MU_Size">
+<span @Html.Raw(qryClassRoomListList.int_MU_Size.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_MU_Size.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_MU_Size.Visible (end) *@
+    @if (qryClassRoomListList.int_CR_Status.Visible) { // qryClassRoomListList.int_CR_Status.Visible (begin)
+        <td data-name="int_CR_Status" @Html.Raw(qryClassRoomListList.int_CR_Status.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_CR_Status" class="el_qryClassRoomList_int_CR_Status">
+<span @Html.Raw(qryClassRoomListList.int_CR_Status.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_CR_Status.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_CR_Status.Visible (end) *@
+    @if (qryClassRoomListList.Is_Web_SignUp.Visible) { // qryClassRoomListList.Is_Web_SignUp.Visible (begin)
+        <td data-name="Is_Web_SignUp" @Html.Raw(qryClassRoomListList.Is_Web_SignUp.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_Is_Web_SignUp" class="el_qryClassRoomList_Is_Web_SignUp">
+<span @Html.Raw(qryClassRoomListList.Is_Web_SignUp.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Is_Web_SignUp_@(qryClassRoomListList.RowCount)" class="form-check-input" value="@(qryClassRoomListList.Is_Web_SignUp.GetViewValue())" disabled checked="@(ConvertToBool(qryClassRoomListList.Is_Web_SignUp.CurrentValue))">
+    <label class="form-check-label" for="x_Is_Web_SignUp_@(qryClassRoomListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryClassRoomListList.Is_Web_SignUp.Visible (end) *@
+    @if (qryClassRoomListList.int_Location_ID.Visible) { // qryClassRoomListList.int_Location_ID.Visible (begin)
+        <td data-name="int_Location_ID" @Html.Raw(qryClassRoomListList.int_Location_ID.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Location_ID" class="el_qryClassRoomList_int_Location_ID">
+<span @Html.Raw(qryClassRoomListList.int_Location_ID.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Location_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Location_ID.Visible (end) *@
+    @if (qryClassRoomListList.int_Teacher_ID.Visible) { // qryClassRoomListList.int_Teacher_ID.Visible (begin)
+        <td data-name="int_Teacher_ID" @Html.Raw(qryClassRoomListList.int_Teacher_ID.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Teacher_ID" class="el_qryClassRoomList_int_Teacher_ID">
+<span @Html.Raw(qryClassRoomListList.int_Teacher_ID.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Teacher_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Teacher_ID.Visible (end) *@
+    @if (qryClassRoomListList.date_Start.Visible) { // qryClassRoomListList.date_Start.Visible (begin)
+        <td data-name="date_Start" @Html.Raw(qryClassRoomListList.date_Start.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_date_Start" class="el_qryClassRoomList_date_Start">
+<span @Html.Raw(qryClassRoomListList.date_Start.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.date_Start.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.date_Start.Visible (end) *@
+    @if (qryClassRoomListList.int_TotSession.Visible) { // qryClassRoomListList.int_TotSession.Visible (begin)
+        <td data-name="int_TotSession" @Html.Raw(qryClassRoomListList.int_TotSession.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_TotSession" class="el_qryClassRoomList_int_TotSession">
+<span @Html.Raw(qryClassRoomListList.int_TotSession.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_TotSession.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_TotSession.Visible (end) *@
+    @if (qryClassRoomListList.int_PerDaySession.Visible) { // qryClassRoomListList.int_PerDaySession.Visible (begin)
+        <td data-name="int_PerDaySession" @Html.Raw(qryClassRoomListList.int_PerDaySession.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_PerDaySession" class="el_qryClassRoomList_int_PerDaySession">
+<span @Html.Raw(qryClassRoomListList.int_PerDaySession.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_PerDaySession.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_PerDaySession.Visible (end) *@
+    @if (qryClassRoomListList.str_CR_Days.Visible) { // qryClassRoomListList.str_CR_Days.Visible (begin)
+        <td data-name="str_CR_Days" @Html.Raw(qryClassRoomListList.str_CR_Days.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_str_CR_Days" class="el_qryClassRoomList_str_CR_Days">
+<span @Html.Raw(qryClassRoomListList.str_CR_Days.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.str_CR_Days.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.str_CR_Days.Visible (end) *@
+    @if (qryClassRoomListList.str_CR_Notes.Visible) { // qryClassRoomListList.str_CR_Notes.Visible (begin)
+        <td data-name="str_CR_Notes" @Html.Raw(qryClassRoomListList.str_CR_Notes.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_str_CR_Notes" class="el_qryClassRoomList_str_CR_Notes">
+<span @Html.Raw(qryClassRoomListList.str_CR_Notes.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.str_CR_Notes.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.str_CR_Notes.Visible (end) *@
+    @if (qryClassRoomListList.int_Created_By.Visible) { // qryClassRoomListList.int_Created_By.Visible (begin)
+        <td data-name="int_Created_By" @Html.Raw(qryClassRoomListList.int_Created_By.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Created_By" class="el_qryClassRoomList_int_Created_By">
+<span @Html.Raw(qryClassRoomListList.int_Created_By.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Created_By.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Created_By.Visible (end) *@
+    @if (qryClassRoomListList.int_Modified_By.Visible) { // qryClassRoomListList.int_Modified_By.Visible (begin)
+        <td data-name="int_Modified_By" @Html.Raw(qryClassRoomListList.int_Modified_By.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Modified_By" class="el_qryClassRoomList_int_Modified_By">
+<span @Html.Raw(qryClassRoomListList.int_Modified_By.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Modified_By.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Modified_By.Visible (end) *@
+    @if (qryClassRoomListList.date_Created.Visible) { // qryClassRoomListList.date_Created.Visible (begin)
+        <td data-name="date_Created" @Html.Raw(qryClassRoomListList.date_Created.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_date_Created" class="el_qryClassRoomList_date_Created">
+<span @Html.Raw(qryClassRoomListList.date_Created.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.date_Created.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.date_Created.Visible (end) *@
+    @if (qryClassRoomListList.date_Modified.Visible) { // qryClassRoomListList.date_Modified.Visible (begin)
+        <td data-name="date_Modified" @Html.Raw(qryClassRoomListList.date_Modified.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_date_Modified" class="el_qryClassRoomList_date_Modified">
+<span @Html.Raw(qryClassRoomListList.date_Modified.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.date_Modified.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.date_Modified.Visible (end) *@
+    @if (qryClassRoomListList.bit_IsDeleted.Visible) { // qryClassRoomListList.bit_IsDeleted.Visible (begin)
+        <td data-name="bit_IsDeleted" @Html.Raw(qryClassRoomListList.bit_IsDeleted.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_bit_IsDeleted" class="el_qryClassRoomList_bit_IsDeleted">
+<span @Html.Raw(qryClassRoomListList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(qryClassRoomListList.RowCount)" class="form-check-input" value="@(qryClassRoomListList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(qryClassRoomListList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(qryClassRoomListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryClassRoomListList.bit_IsDeleted.Visible (end) *@
+    @if (qryClassRoomListList.bit_AllTeacher.Visible) { // qryClassRoomListList.bit_AllTeacher.Visible (begin)
+        <td data-name="bit_AllTeacher" @Html.Raw(qryClassRoomListList.bit_AllTeacher.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_bit_AllTeacher" class="el_qryClassRoomList_bit_AllTeacher">
+<span @Html.Raw(qryClassRoomListList.bit_AllTeacher.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_AllTeacher_@(qryClassRoomListList.RowCount)" class="form-check-input" value="@(qryClassRoomListList.bit_AllTeacher.GetViewValue())" disabled checked="@(ConvertToBool(qryClassRoomListList.bit_AllTeacher.CurrentValue))">
+    <label class="form-check-label" for="x_bit_AllTeacher_@(qryClassRoomListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryClassRoomListList.bit_AllTeacher.Visible (end) *@
+    @if (qryClassRoomListList.int_Manual_Change.Visible) { // qryClassRoomListList.int_Manual_Change.Visible (begin)
+        <td data-name="int_Manual_Change" @Html.Raw(qryClassRoomListList.int_Manual_Change.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Manual_Change" class="el_qryClassRoomList_int_Manual_Change">
+<span @Html.Raw(qryClassRoomListList.int_Manual_Change.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Manual_Change.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Manual_Change.Visible (end) *@
+    @if (qryClassRoomListList.str_WebDesc.Visible) { // qryClassRoomListList.str_WebDesc.Visible (begin)
+        <td data-name="str_WebDesc" @Html.Raw(qryClassRoomListList.str_WebDesc.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_str_WebDesc" class="el_qryClassRoomList_str_WebDesc">
+<span @Html.Raw(qryClassRoomListList.str_WebDesc.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.str_WebDesc.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.str_WebDesc.Visible (end) *@
+    @if (qryClassRoomListList.is_Show.Visible) { // qryClassRoomListList.is_Show.Visible (begin)
+        <td data-name="is_Show" @Html.Raw(qryClassRoomListList.is_Show.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_is_Show" class="el_qryClassRoomList_is_Show">
+<span @Html.Raw(qryClassRoomListList.is_Show.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_Show_@(qryClassRoomListList.RowCount)" class="form-check-input" value="@(qryClassRoomListList.is_Show.GetViewValue())" disabled checked="@(ConvertToBool(qryClassRoomListList.is_Show.CurrentValue))">
+    <label class="form-check-label" for="x_is_Show_@(qryClassRoomListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryClassRoomListList.is_Show.Visible (end) *@
+    @if (qryClassRoomListList.is_ShowGridColumn.Visible) { // qryClassRoomListList.is_ShowGridColumn.Visible (begin)
+        <td data-name="is_ShowGridColumn" @Html.Raw(qryClassRoomListList.is_ShowGridColumn.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_is_ShowGridColumn" class="el_qryClassRoomList_is_ShowGridColumn">
+<span @Html.Raw(qryClassRoomListList.is_ShowGridColumn.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_ShowGridColumn_@(qryClassRoomListList.RowCount)" class="form-check-input" value="@(qryClassRoomListList.is_ShowGridColumn.GetViewValue())" disabled checked="@(ConvertToBool(qryClassRoomListList.is_ShowGridColumn.CurrentValue))">
+    <label class="form-check-label" for="x_is_ShowGridColumn_@(qryClassRoomListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryClassRoomListList.is_ShowGridColumn.Visible (end) *@
+    @if (qryClassRoomListList.rowIndex.Visible) { // qryClassRoomListList.rowIndex.Visible (begin)
+        <td data-name="rowIndex" @Html.Raw(qryClassRoomListList.rowIndex.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_rowIndex" class="el_qryClassRoomList_rowIndex">
+<span @Html.Raw(qryClassRoomListList.rowIndex.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.rowIndex.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.rowIndex.Visible (end) *@
+    @if (qryClassRoomListList.is_ZoomMeet.Visible) { // qryClassRoomListList.is_ZoomMeet.Visible (begin)
+        <td data-name="is_ZoomMeet" @Html.Raw(qryClassRoomListList.is_ZoomMeet.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_is_ZoomMeet" class="el_qryClassRoomList_is_ZoomMeet">
+<span @Html.Raw(qryClassRoomListList.is_ZoomMeet.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_ZoomMeet_@(qryClassRoomListList.RowCount)" class="form-check-input" value="@(qryClassRoomListList.is_ZoomMeet.GetViewValue())" disabled checked="@(ConvertToBool(qryClassRoomListList.is_ZoomMeet.CurrentValue))">
+    <label class="form-check-label" for="x_is_ZoomMeet_@(qryClassRoomListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryClassRoomListList.is_ZoomMeet.Visible (end) *@
+    @if (qryClassRoomListList.BulkCR_Set.Visible) { // qryClassRoomListList.BulkCR_Set.Visible (begin)
+        <td data-name="BulkCR_Set" @Html.Raw(qryClassRoomListList.BulkCR_Set.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_BulkCR_Set" class="el_qryClassRoomList_BulkCR_Set">
+<span @Html.Raw(qryClassRoomListList.BulkCR_Set.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.BulkCR_Set.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.BulkCR_Set.Visible (end) *@
+    @if (qryClassRoomListList.int_Day_Incremental.Visible) { // qryClassRoomListList.int_Day_Incremental.Visible (begin)
+        <td data-name="int_Day_Incremental" @Html.Raw(qryClassRoomListList.int_Day_Incremental.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Day_Incremental" class="el_qryClassRoomList_int_Day_Incremental">
+<span @Html.Raw(qryClassRoomListList.int_Day_Incremental.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Day_Incremental.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Day_Incremental.Visible (end) *@
+    @if (qryClassRoomListList.int_Reoccurrence.Visible) { // qryClassRoomListList.int_Reoccurrence.Visible (begin)
+        <td data-name="int_Reoccurrence" @Html.Raw(qryClassRoomListList.int_Reoccurrence.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_int_Reoccurrence" class="el_qryClassRoomList_int_Reoccurrence">
+<span @Html.Raw(qryClassRoomListList.int_Reoccurrence.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.int_Reoccurrence.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.int_Reoccurrence.Visible (end) *@
+    @if (qryClassRoomListList.str_Username.Visible) { // qryClassRoomListList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(qryClassRoomListList.str_Username.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_str_Username" class="el_qryClassRoomList_str_Username">
+<span @Html.Raw(qryClassRoomListList.str_Username.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.str_Username.Visible (end) *@
+    @if (qryClassRoomListList.Calendar_ID.Visible) { // qryClassRoomListList.Calendar_ID.Visible (begin)
+        <td data-name="Calendar_ID" @Html.Raw(qryClassRoomListList.Calendar_ID.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_Calendar_ID" class="el_qryClassRoomList_Calendar_ID">
+<span @Html.Raw(qryClassRoomListList.Calendar_ID.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.Calendar_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.Calendar_ID.Visible (end) *@
+    @if (qryClassRoomListList.str_Package_Name.Visible) { // qryClassRoomListList.str_Package_Name.Visible (begin)
+        <td data-name="str_Package_Name" @Html.Raw(qryClassRoomListList.str_Package_Name.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_str_Package_Name" class="el_qryClassRoomList_str_Package_Name">
+<span @Html.Raw(qryClassRoomListList.str_Package_Name.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.str_Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.str_Package_Name.Visible (end) *@
+    @if (qryClassRoomListList.date_Start2.Visible) { // qryClassRoomListList.date_Start2.Visible (begin)
+        <td data-name="date_Start2" @Html.Raw(qryClassRoomListList.date_Start2.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_date_Start2" class="el_qryClassRoomList_date_Start2">
+<span @Html.Raw(qryClassRoomListList.date_Start2.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.date_Start2.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.date_Start2.Visible (end) *@
+    @if (qryClassRoomListList.date_Start3.Visible) { // qryClassRoomListList.date_Start3.Visible (begin)
+        <td data-name="date_Start3" @Html.Raw(qryClassRoomListList.date_Start3.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_date_Start3" class="el_qryClassRoomList_date_Start3">
+<span @Html.Raw(qryClassRoomListList.date_Start3.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.date_Start3.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.date_Start3.Visible (end) *@
+    @if (qryClassRoomListList.date_Start4.Visible) { // qryClassRoomListList.date_Start4.Visible (begin)
+        <td data-name="date_Start4" @Html.Raw(qryClassRoomListList.date_Start4.CellAttributes)>
+<span id="el@(qryClassRoomListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryClassRoomListList.RowCount)_qryClassRoomList_date_Start4" class="el_qryClassRoomList_date_Start4">
+<span @Html.Raw(qryClassRoomListList.date_Start4.ViewAttributes)>
+@Html.Raw(qryClassRoomListList.date_Start4.GetViewValue())</span>
+</span>
+</td>
+    } @* qryClassRoomListList.date_Start4.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryClassRoomListList.ListOptions.RenderBody("right", qryClassRoomListList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryClassRoomListList.RowIndex, "$rowindex$"))
+        qryClassRoomListList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryClassRoomListList.IsCopy || qryClassRoomListList.IsAdd) && qryClassRoomListList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryClassRoomListList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryClassRoomListList.CurrentAction) && !qryClassRoomListList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryClassRoomListList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

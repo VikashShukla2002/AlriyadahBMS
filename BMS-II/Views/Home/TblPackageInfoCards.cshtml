@@ -1,0 +1,1307 @@
+@if (!tblPackageInfoList.IsExport()) {
+<div>
+@if (!tblPackageInfoList.IsGridAdd && !(tblPackageInfoList.IsGridEdit && tblPackageInfoList.ModalGridEdit) && !tblPackageInfoList.IsMultiEdit) {
+@Html.Raw(tblPackageInfoList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblPackageInfoList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblPackageInfoList.ModalGridAdd && tblPackageInfoList.IsGridAdd || tblPackageInfoList.ModalGridEdit && tblPackageInfoList.IsGridEdit || tblPackageInfoList.ModalMultiEdit && tblPackageInfoList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblPackageInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblPackageInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblPackageInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblPackageInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblPackageInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblPackageInfoList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblPackageInfoList.FormName)" id="@(tblPackageInfoList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblPackageInfoList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblPackageInfoList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblPackageInfoList.GetMultiColumnRowClass())">
+@if (tblPackageInfoList.TotalRecords > 0 || tblPackageInfoList.IsGridEdit || tblPackageInfoList.IsMultiEdit) {
+    await tblPackageInfoList.SetupGrid();
+    bool eof = tblPackageInfoList.Recordset == null; // DN
+while (tblPackageInfoList.RecordCount < tblPackageInfoList.StopRecord || SameString(tblPackageInfoList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblPackageInfoList.RowIndex, "$rowindex$") &&
+        (!tblPackageInfoList.IsGridAdd || tblPackageInfoList.CurrentMode == "copy") &&
+        (!((tblPackageInfoList.IsCopy || tblPackageInfoList.IsAdd) && tblPackageInfoList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblPackageInfoList.Recordset.ReadAsync();
+    tblPackageInfoList.RecordCount++;
+    if (tblPackageInfoList.RecordCount >= tblPackageInfoList.StartRecord) {
+        await tblPackageInfoList.SetupRow();
+<div class="@(tblPackageInfoList.GetMultiColumnColClass())" @Html.Raw(tblPackageInfoList.RowAttributes)>
+<div class="@(tblPackageInfoList.MultiColumnCardClass)">
+    @if (tblPackageInfoList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblPackageInfoList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblPackageInfoList.ListOptions.Tag = "div";
+    tblPackageInfoList.ListOptions.RenderBody(tblPackageInfoList.MultiColumnListOptionsPosition, tblPackageInfoList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblPackageInfoList.int_Package_Id.Visible) { // tblPackageInfoList.int_Package_Id.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_Package_Id">
+            <div class="col col-sm-4 tblPackageInfo_int_Package_Id">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_Package_Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_Package_Id.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Package_Id.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Package_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_Package_Id">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_Package_Id.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_Package_Id.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Package_Id.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Package_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Package_Name.Visible) { // tblPackageInfoList.str_Package_Name.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Package_Name">
+            <div class="col col-sm-4 tblPackageInfo_str_Package_Name">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Package_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Package_Name.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Package_Name.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Package_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Package_Name">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Package_Name.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Package_Name.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Package_Name.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Package_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Package_Code.Visible) { // tblPackageInfoList.str_Package_Code.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Package_Code">
+            <div class="col col-sm-4 tblPackageInfo_str_Package_Code">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Package_Code))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Package_Code.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Package_Code.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Package_Code.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Package_Code">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Package_Code.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Package_Code.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Package_Code.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Package_Code.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_Status.Visible) { // tblPackageInfoList.int_Status.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_Status">
+            <div class="col col-sm-4 tblPackageInfo_int_Status">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_Status))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_Status.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Status.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_Status">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_Status.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_Status.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Status.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Discount.Visible) { // tblPackageInfoList.str_Discount.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Discount">
+            <div class="col col-sm-4 tblPackageInfo_str_Discount">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Discount))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Discount.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Discount.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Discount.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Discount">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Discount.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Discount.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Discount.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Discount.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.mny_Price.Visible) { // tblPackageInfoList.mny_Price.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_mny_Price">
+            <div class="col col-sm-4 tblPackageInfo_mny_Price">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.mny_Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.mny_Price.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.mny_Price.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.mny_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_mny_Price">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.mny_Price.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.mny_Price.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.mny_Price.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.mny_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Notes.Visible) { // tblPackageInfoList.str_Notes.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Notes">
+            <div class="col col-sm-4 tblPackageInfo_str_Notes">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Notes))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Notes.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Notes.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Notes.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Notes">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Notes.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Notes.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Notes.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Notes.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_IswebSignUp.Visible) { // tblPackageInfoList.bit_IswebSignUp.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_IswebSignUp">
+            <div class="col col-sm-4 tblPackageInfo_bit_IswebSignUp">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_IswebSignUp))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_IswebSignUp.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IswebSignUp.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IswebSignUp_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IswebSignUp.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IswebSignUp.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IswebSignUp_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_IswebSignUp">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_IswebSignUp.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_IswebSignUp.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IswebSignUp.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IswebSignUp_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IswebSignUp.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IswebSignUp.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IswebSignUp_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Items.Visible) { // tblPackageInfoList.str_Items.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Items">
+            <div class="col col-sm-4 tblPackageInfo_str_Items">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Items))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Items.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Items.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Items.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Items">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Items.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Items.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Items.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Items.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_Created_By.Visible) { // tblPackageInfoList.int_Created_By.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_Created_By">
+            <div class="col col-sm-4 tblPackageInfo_int_Created_By">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_Created_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_Created_By">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_Created_By.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_Modified_By.Visible) { // tblPackageInfoList.int_Modified_By.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_Modified_By">
+            <div class="col col-sm-4 tblPackageInfo_int_Modified_By">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_Modified_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_Modified_By">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_Modified_By.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.date_Created.Visible) { // tblPackageInfoList.date_Created.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_date_Created">
+            <div class="col col-sm-4 tblPackageInfo_date_Created">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.date_Created))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.date_Created.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.date_Created.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_date_Created">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.date_Created.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.date_Created.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.date_Created.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.date_Modified.Visible) { // tblPackageInfoList.date_Modified.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_date_Modified">
+            <div class="col col-sm-4 tblPackageInfo_date_Modified">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.date_Modified))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.date_Modified.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_date_Modified">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.date_Modified.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.date_Modified.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_IsDeleted.Visible) { // tblPackageInfoList.bit_IsDeleted.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_IsDeleted">
+            <div class="col col-sm-4 tblPackageInfo_bit_IsDeleted">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_IsDeleted))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_IsDeleted.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_IsDeleted">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_IsDeleted.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_IsDeleted.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_PortalPurchase.Visible) { // tblPackageInfoList.bit_PortalPurchase.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_PortalPurchase">
+            <div class="col col-sm-4 tblPackageInfo_bit_PortalPurchase">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_PortalPurchase))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_PortalPurchase.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_PortalPurchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_PortalPurchase_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_PortalPurchase.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_PortalPurchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_PortalPurchase_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_PortalPurchase">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_PortalPurchase.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_PortalPurchase.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_PortalPurchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_PortalPurchase_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_PortalPurchase.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_PortalPurchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_PortalPurchase_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_WebName.Visible) { // tblPackageInfoList.str_WebName.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_WebName">
+            <div class="col col-sm-4 tblPackageInfo_str_WebName">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_WebName))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_WebName.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_WebName.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_WebName.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_WebName">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_WebName.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_WebName.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_WebName.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_WebName.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_ExtraChk1.Visible) { // tblPackageInfoList.bit_ExtraChk1.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_ExtraChk1">
+            <div class="col col-sm-4 tblPackageInfo_bit_ExtraChk1">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_ExtraChk1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_ExtraChk1.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_ExtraChk1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk1_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_ExtraChk1.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_ExtraChk1.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk1_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_ExtraChk1">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_ExtraChk1.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_ExtraChk1.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_ExtraChk1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk1_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_ExtraChk1.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_ExtraChk1.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk1_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_ExtraChk2.Visible) { // tblPackageInfoList.bit_ExtraChk2.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_ExtraChk2">
+            <div class="col col-sm-4 tblPackageInfo_bit_ExtraChk2">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_ExtraChk2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_ExtraChk2.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_ExtraChk2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk2_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_ExtraChk2.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_ExtraChk2.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk2_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_ExtraChk2">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_ExtraChk2.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_ExtraChk2.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_ExtraChk2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk2_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_ExtraChk2.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_ExtraChk2.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk2_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_ExtraDrpDown1.Visible) { // tblPackageInfoList.str_ExtraDrpDown1.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_ExtraDrpDown1">
+            <div class="col col-sm-4 tblPackageInfo_str_ExtraDrpDown1">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_ExtraDrpDown1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_ExtraDrpDown1">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_ExtraDrpDown1.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_ExtraDrpDown2.Visible) { // tblPackageInfoList.str_ExtraDrpDown2.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_ExtraDrpDown2">
+            <div class="col col-sm-4 tblPackageInfo_str_ExtraDrpDown2">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_ExtraDrpDown2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_ExtraDrpDown2">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_ExtraDrpDown2.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Extratxt1.Visible) { // tblPackageInfoList.str_Extratxt1.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Extratxt1">
+            <div class="col col-sm-4 tblPackageInfo_str_Extratxt1">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Extratxt1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Extratxt1.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Extratxt1.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Extratxt1.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Extratxt1">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Extratxt1.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Extratxt1.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Extratxt1.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Extratxt1.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Extratxt2.Visible) { // tblPackageInfoList.str_Extratxt2.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Extratxt2">
+            <div class="col col-sm-4 tblPackageInfo_str_Extratxt2">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Extratxt2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Extratxt2.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Extratxt2.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Extratxt2.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Extratxt2">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Extratxt2.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Extratxt2.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Extratxt2.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Extratxt2.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.is_Show.Visible) { // tblPackageInfoList.is_Show.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_is_Show">
+            <div class="col col-sm-4 tblPackageInfo_is_Show">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.is_Show))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.is_Show.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.is_Show.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_Show_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.is_Show.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.is_Show.CurrentValue))">
+    <label class="form-check-label" for="x_is_Show_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_is_Show">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.is_Show.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.is_Show.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.is_Show.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_Show_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.is_Show.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.is_Show.CurrentValue))">
+    <label class="form-check-label" for="x_is_Show_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.is_ShowGridColumn.Visible) { // tblPackageInfoList.is_ShowGridColumn.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_is_ShowGridColumn">
+            <div class="col col-sm-4 tblPackageInfo_is_ShowGridColumn">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.is_ShowGridColumn))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.is_ShowGridColumn.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.is_ShowGridColumn.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_ShowGridColumn_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.is_ShowGridColumn.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.is_ShowGridColumn.CurrentValue))">
+    <label class="form-check-label" for="x_is_ShowGridColumn_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_is_ShowGridColumn">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.is_ShowGridColumn.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.is_ShowGridColumn.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.is_ShowGridColumn.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_ShowGridColumn_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.is_ShowGridColumn.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.is_ShowGridColumn.CurrentValue))">
+    <label class="form-check-label" for="x_is_ShowGridColumn_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.rowIndex.Visible) { // tblPackageInfoList.rowIndex.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_rowIndex">
+            <div class="col col-sm-4 tblPackageInfo_rowIndex">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.rowIndex))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.rowIndex.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.rowIndex.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.rowIndex.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_rowIndex">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.rowIndex.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.rowIndex.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.rowIndex.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.rowIndex.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_referral.Visible) { // tblPackageInfoList.bit_referral.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_referral">
+            <div class="col col-sm-4 tblPackageInfo_bit_referral">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_referral))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_referral.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_referral.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_referral_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_referral.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_referral.CurrentValue))">
+    <label class="form-check-label" for="x_bit_referral_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_referral">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_referral.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_referral.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_referral.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_referral_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_referral.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_referral.CurrentValue))">
+    <label class="form-check-label" for="x_bit_referral_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_PackageType.Visible) { // tblPackageInfoList.str_PackageType.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_PackageType">
+            <div class="col col-sm-4 tblPackageInfo_str_PackageType">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_PackageType))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_PackageType.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_PackageType.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_PackageType.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_PackageType">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_PackageType.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_PackageType.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_PackageType.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_PackageType.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_ParentClass_Id.Visible) { // tblPackageInfoList.int_ParentClass_Id.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_ParentClass_Id">
+            <div class="col col-sm-4 tblPackageInfo_int_ParentClass_Id">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_ParentClass_Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_ParentClass_Id.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_ParentClass_Id.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_ParentClass_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_ParentClass_Id">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_ParentClass_Id.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_ParentClass_Id.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_ParentClass_Id.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_ParentClass_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_CRcostHour.Visible) { // tblPackageInfoList.str_CRcostHour.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_CRcostHour">
+            <div class="col col-sm-4 tblPackageInfo_str_CRcostHour">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_CRcostHour))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_CRcostHour.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_CRcostHour.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_CRcostHour.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_CRcostHour">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_CRcostHour.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_CRcostHour.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_CRcostHour.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_CRcostHour.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_BTWcostHour.Visible) { // tblPackageInfoList.str_BTWcostHour.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_BTWcostHour">
+            <div class="col col-sm-4 tblPackageInfo_str_BTWcostHour">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_BTWcostHour))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_BTWcostHour.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_BTWcostHour.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_BTWcostHour.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_BTWcostHour">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_BTWcostHour.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_BTWcostHour.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_BTWcostHour.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_BTWcostHour.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_OfferSpanishServices.Visible) { // tblPackageInfoList.bit_OfferSpanishServices.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_OfferSpanishServices">
+            <div class="col col-sm-4 tblPackageInfo_bit_OfferSpanishServices">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_OfferSpanishServices))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_OfferSpanishServices.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_OfferSpanishServices.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_OfferSpanishServices_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_OfferSpanishServices.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_OfferSpanishServices.CurrentValue))">
+    <label class="form-check-label" for="x_bit_OfferSpanishServices_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_OfferSpanishServices">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_OfferSpanishServices.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_OfferSpanishServices.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_OfferSpanishServices.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_OfferSpanishServices_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_OfferSpanishServices.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_OfferSpanishServices.CurrentValue))">
+    <label class="form-check-label" for="x_bit_OfferSpanishServices_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.ByPassCRSelectionCentralizedOE.Visible) { // tblPackageInfoList.ByPassCRSelectionCentralizedOE.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_ByPassCRSelectionCentralizedOE">
+            <div class="col col-sm-4 tblPackageInfo_ByPassCRSelectionCentralizedOE">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.ByPassCRSelectionCentralizedOE))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.ByPassCRSelectionCentralizedOE.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ByPassCRSelectionCentralizedOE.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_ByPassCRSelectionCentralizedOE_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.ByPassCRSelectionCentralizedOE.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.ByPassCRSelectionCentralizedOE.CurrentValue))">
+    <label class="form-check-label" for="x_ByPassCRSelectionCentralizedOE_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_ByPassCRSelectionCentralizedOE">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.ByPassCRSelectionCentralizedOE.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.ByPassCRSelectionCentralizedOE.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ByPassCRSelectionCentralizedOE.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_ByPassCRSelectionCentralizedOE_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.ByPassCRSelectionCentralizedOE.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.ByPassCRSelectionCentralizedOE.CurrentValue))">
+    <label class="form-check-label" for="x_ByPassCRSelectionCentralizedOE_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_WebNameArabic.Visible) { // tblPackageInfoList.str_WebNameArabic.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_WebNameArabic">
+            <div class="col col-sm-4 tblPackageInfo_str_WebNameArabic">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_WebNameArabic))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_WebNameArabic.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_WebNameArabic.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_WebNameArabic.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_WebNameArabic">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_WebNameArabic.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_WebNameArabic.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_WebNameArabic.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_WebNameArabic.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.PackageContractType.Visible) { // tblPackageInfoList.PackageContractType.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_PackageContractType">
+            <div class="col col-sm-4 tblPackageInfo_PackageContractType">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.PackageContractType))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.PackageContractType.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.PackageContractType.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.PackageContractType.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_PackageContractType">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.PackageContractType.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.PackageContractType.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.PackageContractType.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.PackageContractType.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.StudentSignXCordinate.Visible) { // tblPackageInfoList.StudentSignXCordinate.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_StudentSignXCordinate">
+            <div class="col col-sm-4 tblPackageInfo_StudentSignXCordinate">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.StudentSignXCordinate))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.StudentSignXCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.StudentSignXCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.StudentSignXCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_StudentSignXCordinate">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.StudentSignXCordinate.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.StudentSignXCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.StudentSignXCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.StudentSignXCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.StudentSignYCordinate.Visible) { // tblPackageInfoList.StudentSignYCordinate.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_StudentSignYCordinate">
+            <div class="col col-sm-4 tblPackageInfo_StudentSignYCordinate">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.StudentSignYCordinate))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.StudentSignYCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.StudentSignYCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.StudentSignYCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_StudentSignYCordinate">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.StudentSignYCordinate.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.StudentSignYCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.StudentSignYCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.StudentSignYCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.ParentSignXCordinate.Visible) { // tblPackageInfoList.ParentSignXCordinate.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_ParentSignXCordinate">
+            <div class="col col-sm-4 tblPackageInfo_ParentSignXCordinate">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.ParentSignXCordinate))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.ParentSignXCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ParentSignXCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.ParentSignXCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_ParentSignXCordinate">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.ParentSignXCordinate.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.ParentSignXCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ParentSignXCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.ParentSignXCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.ParentSignYCordinate.Visible) { // tblPackageInfoList.ParentSignYCordinate.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_ParentSignYCordinate">
+            <div class="col col-sm-4 tblPackageInfo_ParentSignYCordinate">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.ParentSignYCordinate))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.ParentSignYCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ParentSignYCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.ParentSignYCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_ParentSignYCordinate">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.ParentSignYCordinate.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.ParentSignYCordinate.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ParentSignYCordinate.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.ParentSignYCordinate.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.ParentSignPageNo.Visible) { // tblPackageInfoList.ParentSignPageNo.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_ParentSignPageNo">
+            <div class="col col-sm-4 tblPackageInfo_ParentSignPageNo">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.ParentSignPageNo))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.ParentSignPageNo.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ParentSignPageNo.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.ParentSignPageNo.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_ParentSignPageNo">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.ParentSignPageNo.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.ParentSignPageNo.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.ParentSignPageNo.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.ParentSignPageNo.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.StudentSignPageNo.Visible) { // tblPackageInfoList.StudentSignPageNo.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_StudentSignPageNo">
+            <div class="col col-sm-4 tblPackageInfo_StudentSignPageNo">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.StudentSignPageNo))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.StudentSignPageNo.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.StudentSignPageNo.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.StudentSignPageNo.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_StudentSignPageNo">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.StudentSignPageNo.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.StudentSignPageNo.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.StudentSignPageNo.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.StudentSignPageNo.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_CDLProgramType.Visible) { // tblPackageInfoList.int_CDLProgramType.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_CDLProgramType">
+            <div class="col col-sm-4 tblPackageInfo_int_CDLProgramType">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_CDLProgramType))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_CDLProgramType.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLProgramType.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLProgramType.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_CDLProgramType">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_CDLProgramType.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_CDLProgramType.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLProgramType.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLProgramType.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_CDLEndorsementCode.Visible) { // tblPackageInfoList.int_CDLEndorsementCode.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_CDLEndorsementCode">
+            <div class="col col-sm-4 tblPackageInfo_int_CDLEndorsementCode">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_CDLEndorsementCode))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_CDLEndorsementCode">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLEndorsementCode.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_CDLClassroom.Visible) { // tblPackageInfoList.int_CDLClassroom.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_CDLClassroom">
+            <div class="col col-sm-4 tblPackageInfo_int_CDLClassroom">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_CDLClassroom))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_CDLClassroom.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLClassroom.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLClassroom.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_CDLClassroom">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_CDLClassroom.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_CDLClassroom.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLClassroom.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLClassroom.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_CDLRange.Visible) { // tblPackageInfoList.int_CDLRange.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_CDLRange">
+            <div class="col col-sm-4 tblPackageInfo_int_CDLRange">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_CDLRange))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_CDLRange.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLRange.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLRange.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_CDLRange">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_CDLRange.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_CDLRange.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLRange.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLRange.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.int_CDLRoad.Visible) { // tblPackageInfoList.int_CDLRoad.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_int_CDLRoad">
+            <div class="col col-sm-4 tblPackageInfo_int_CDLRoad">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.int_CDLRoad))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.int_CDLRoad.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLRoad.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLRoad.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_int_CDLRoad">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.int_CDLRoad.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.int_CDLRoad.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.int_CDLRoad.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.int_CDLRoad.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_TPR_Package.Visible) { // tblPackageInfoList.bit_TPR_Package.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_TPR_Package">
+            <div class="col col-sm-4 tblPackageInfo_bit_TPR_Package">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_TPR_Package))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_TPR_Package.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_TPR_Package.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_TPR_Package_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_TPR_Package.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_TPR_Package.CurrentValue))">
+    <label class="form-check-label" for="x_bit_TPR_Package_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_TPR_Package">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_TPR_Package.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_TPR_Package.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_TPR_Package.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_TPR_Package_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_TPR_Package.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_TPR_Package.CurrentValue))">
+    <label class="form-check-label" for="x_bit_TPR_Package_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.licenseTypeId.Visible) { // tblPackageInfoList.licenseTypeId.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_licenseTypeId">
+            <div class="col col-sm-4 tblPackageInfo_licenseTypeId">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.licenseTypeId))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.licenseTypeId.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.licenseTypeId.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.licenseTypeId.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_licenseTypeId">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.licenseTypeId.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.licenseTypeId.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.licenseTypeId.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.licenseTypeId.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_IsServiceForCertification.Visible) { // tblPackageInfoList.bit_IsServiceForCertification.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_IsServiceForCertification">
+            <div class="col col-sm-4 tblPackageInfo_bit_IsServiceForCertification">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_IsServiceForCertification))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_IsServiceForCertification.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IsServiceForCertification.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsServiceForCertification_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IsServiceForCertification.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IsServiceForCertification.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsServiceForCertification_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_IsServiceForCertification">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_IsServiceForCertification.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_IsServiceForCertification.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IsServiceForCertification.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsServiceForCertification_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IsServiceForCertification.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IsServiceForCertification.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsServiceForCertification_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intMinAgeYearToEnroll.Visible) { // tblPackageInfoList.intMinAgeYearToEnroll.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intMinAgeYearToEnroll">
+            <div class="col col-sm-4 tblPackageInfo_intMinAgeYearToEnroll">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intMinAgeYearToEnroll))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intMinAgeYearToEnroll">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMinAgeYearToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intMinAgeMonthToEnroll.Visible) { // tblPackageInfoList.intMinAgeMonthToEnroll.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intMinAgeMonthToEnroll">
+            <div class="col col-sm-4 tblPackageInfo_intMinAgeMonthToEnroll">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intMinAgeMonthToEnroll))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intMinAgeMonthToEnroll">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMinAgeMonthToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intMaxAgeYearToEnroll.Visible) { // tblPackageInfoList.intMaxAgeYearToEnroll.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intMaxAgeYearToEnroll">
+            <div class="col col-sm-4 tblPackageInfo_intMaxAgeYearToEnroll">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intMaxAgeYearToEnroll))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intMaxAgeYearToEnroll">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMaxAgeYearToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intMaxAgeMonthToEnroll.Visible) { // tblPackageInfoList.intMaxAgeMonthToEnroll.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intMaxAgeMonthToEnroll">
+            <div class="col col-sm-4 tblPackageInfo_intMaxAgeMonthToEnroll">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intMaxAgeMonthToEnroll))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intMaxAgeMonthToEnroll">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intMaxAgeMonthToEnroll.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intCompletionDeadlineYear.Visible) { // tblPackageInfoList.intCompletionDeadlineYear.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intCompletionDeadlineYear">
+            <div class="col col-sm-4 tblPackageInfo_intCompletionDeadlineYear">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intCompletionDeadlineYear))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intCompletionDeadlineYear">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineYear.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intCompletionDeadlineMonth.Visible) { // tblPackageInfoList.intCompletionDeadlineMonth.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intCompletionDeadlineMonth">
+            <div class="col col-sm-4 tblPackageInfo_intCompletionDeadlineMonth">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intCompletionDeadlineMonth))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intCompletionDeadlineMonth">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineMonth.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intCompletionDeadlineDay.Visible) { // tblPackageInfoList.intCompletionDeadlineDay.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intCompletionDeadlineDay">
+            <div class="col col-sm-4 tblPackageInfo_intCompletionDeadlineDay">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intCompletionDeadlineDay))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intCompletionDeadlineDay">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineDay.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.intCompletionDeadlineFrom.Visible) { // tblPackageInfoList.intCompletionDeadlineFrom.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_intCompletionDeadlineFrom">
+            <div class="col col-sm-4 tblPackageInfo_intCompletionDeadlineFrom">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.intCompletionDeadlineFrom))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_intCompletionDeadlineFrom">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.intCompletionDeadlineFrom.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.bit_IsTexable.Visible) { // tblPackageInfoList.bit_IsTexable.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_bit_IsTexable">
+            <div class="col col-sm-4 tblPackageInfo_bit_IsTexable">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.bit_IsTexable))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.bit_IsTexable.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IsTexable.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsTexable_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IsTexable.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IsTexable.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsTexable_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_bit_IsTexable">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.bit_IsTexable.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.bit_IsTexable.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.bit_IsTexable.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsTexable_@(tblPackageInfoList.RowCount)" class="form-check-input" value="@(tblPackageInfoList.bit_IsTexable.GetViewValue())" disabled checked="@(ConvertToBool(tblPackageInfoList.bit_IsTexable.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsTexable_@(tblPackageInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Base_price.Visible) { // tblPackageInfoList.str_Base_price.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Base_price">
+            <div class="col col-sm-4 tblPackageInfo_str_Base_price">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Base_price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Base_price.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Base_price.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Base_price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Base_price">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Base_price.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Base_price.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Base_price.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Base_price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblPackageInfoList.str_Tax.Visible) { // tblPackageInfoList.str_Tax.Visible (begin)
+        if (tblPackageInfoList.RowType == RowType.View) { // View record
+        <div class="row tblPackageInfo_str_Tax">
+            <div class="col col-sm-4 tblPackageInfo_str_Tax">@Html.Raw(tblPackageInfoList.RenderFieldHeader(tblPackageInfoList.str_Tax))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblPackageInfoList.str_Tax.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Tax.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Tax.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblPackageInfo_str_Tax">
+            <label class="@(tblPackageInfoList.LeftColumnClass)">@Html.Raw(tblPackageInfoList.str_Tax.Caption)</label>
+            <div class="@(tblPackageInfoList.RightColumnClass)"><div @Html.Raw(tblPackageInfoList.str_Tax.CellAttributes)>
+<span @Html.Raw(tblPackageInfoList.str_Tax.ViewAttributes)>
+@Html.Raw(tblPackageInfoList.str_Tax.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblPackageInfoList.IsExport()) {
+    if (tblPackageInfoList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblPackageInfoList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblPackageInfoList.ListOptions.Tag = "div";
+}
+@tblPackageInfoList.ListOptions.RenderBody(tblPackageInfoList.MultiColumnListOptionsPosition, tblPackageInfoList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblPackageInfoList.RowIndex, "$rowindex$"))
+        tblPackageInfoList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblPackageInfoList.IsCopy || tblPackageInfoList.IsAdd) && tblPackageInfoList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblPackageInfoList.RowIndex = 1;
+} @* End While *@
+} @* tblPackageInfoList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblPackageInfoList.CurrentAction) && !tblPackageInfoList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblPackageInfoList.CloseRecordset(); }

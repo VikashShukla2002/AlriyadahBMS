@@ -1,0 +1,291 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblEvaluationList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblEvaluationList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblEvaluationList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluation: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblEvaluationList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblEvaluationList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblEvaluationList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblEvaluationList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblEvaluationList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblEvaluationList.TotalRecords > 0 && tblEvaluationList.ExportOptions.Visible) {
+    tblEvaluationList.ExportOptions.Render("body");
+}
+@if (tblEvaluationList.ImportOptions.Visible) {
+    tblEvaluationList.ImportOptions.Render("body");
+}
+@if (tblEvaluationList.SearchOptions.Visible) {
+    tblEvaluationList.SearchOptions.Render("body");
+}
+@if (tblEvaluationList.FilterOptions.Visible) {
+    tblEvaluationList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblEvaluationList.IsExport() || Config.ExportMasterRecord && tblEvaluationList.IsExport("print")) {
+if (!Empty(tblEvaluationList.DbMasterFilter) && tblEvaluationList.CurrentMasterTable == "tblAssessment") {
+    if (tblEvaluationList.MasterRecordExists) {
+        @await Html.PartialAsync("TblAssessmentMaster.cshtml")
+    }
+}
+}
+@if (tblEvaluationList.ShowCurrentFilter) {
+    tblEvaluationList.ShowFilterList();
+}
+@if (!tblEvaluationList.IsModal) {
+<form name="ftblEvaluationsrch" id="ftblEvaluationsrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblEvaluationsrch_search_panel" class="mb-2 mb-sm-0 @(tblEvaluationList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluation: currentTable } });
+var currentForm;
+var ftblEvaluationsrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblEvaluationsrch")
+        .setPageId("list")
+@if (tblEvaluationList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name_Hdr", [], fields.str_Full_Name_Hdr.isInvalid],
+            ["NationalID", [ew.Validators.integer], fields.NationalID.isInvalid],
+            ["str_Cell_Phone", [], fields.str_Cell_Phone.isInvalid],
+            ["Retake", [], fields.Retake.isInvalid],
+            ["AbsherApptNbr", [], fields.AbsherApptNbr.isInvalid],
+            ["IsDrivingexperience", [], fields.IsDrivingexperience.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblEvaluationList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblEvaluationList.IsExport() && Empty(tblEvaluationList.CurrentAction) && tblEvaluationList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0@(tblEvaluationList.SearchFieldsPerRow > 0 ? " row-cols-sm-" + tblEvaluationList.SearchFieldsPerRow : "")">
+@{
+    // Render search row
+    tblEvaluationList.RowType = RowType.Search;
+    tblEvaluationList.ResetAttributes();
+    await tblEvaluationList.RenderRow();
+}
+@if (tblEvaluationList.NationalID.Visible) { // tblEvaluationList.NationalID.Visible (begin)
+    if (!tblEvaluationList.NationalID.UseFilter) {
+        tblEvaluationList.SearchColumnCount++;
+    }
+    <div id="xs_NationalID" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationList.NationalID.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_NationalID" class="ew-search-caption ew-label">@Html.Raw(tblEvaluationList.NationalID.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_NationalID" id="z_NationalID" value="=">
+</div>
+        </div>
+        <div id="el_tblEvaluation_NationalID" class="ew-search-field">
+<input type="@(tblEvaluationList.NationalID.InputTextType)" name="x_NationalID" id="x_NationalID" data-table="tblEvaluation" data-field="x_NationalID" value="@Html.Raw(tblEvaluationList.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblEvaluationList.NationalID.PlaceHolder))" data-format-pattern="@(tblEvaluationList.NationalID.FormatPattern)"@Html.Raw(tblEvaluationList.NationalID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblEvaluationList.NationalID.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationList.NationalID.Visible (end) *@
+@if (tblEvaluationList.str_Cell_Phone.Visible) { // tblEvaluationList.str_Cell_Phone.Visible (begin)
+    if (!tblEvaluationList.str_Cell_Phone.UseFilter) {
+        tblEvaluationList.SearchColumnCount++;
+    }
+    <div id="xs_str_Cell_Phone" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationList.str_Cell_Phone.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_Cell_Phone" class="ew-search-caption ew-label">@Html.Raw(tblEvaluationList.str_Cell_Phone.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Cell_Phone" id="z_str_Cell_Phone" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblEvaluation_str_Cell_Phone" class="ew-search-field">
+<input type="@(tblEvaluationList.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblEvaluation" data-field="x_str_Cell_Phone" value="@Html.Raw(tblEvaluationList.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblEvaluationList.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblEvaluationList.str_Cell_Phone.FormatPattern)"@Html.Raw(tblEvaluationList.str_Cell_Phone.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblEvaluationList.str_Cell_Phone.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationList.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationList.AbsherApptNbr.Visible) { // tblEvaluationList.AbsherApptNbr.Visible (begin)
+    if (!tblEvaluationList.AbsherApptNbr.UseFilter) {
+        tblEvaluationList.SearchColumnCount++;
+    }
+    <div id="xs_AbsherApptNbr" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationList.AbsherApptNbr.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_AbsherApptNbr" class="ew-search-caption ew-label">@Html.Raw(tblEvaluationList.AbsherApptNbr.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_AbsherApptNbr" id="z_AbsherApptNbr" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblEvaluation_AbsherApptNbr" class="ew-search-field">
+<input type="@(tblEvaluationList.AbsherApptNbr.InputTextType)" name="x_AbsherApptNbr" id="x_AbsherApptNbr" data-table="tblEvaluation" data-field="x_AbsherApptNbr" value="@Html.Raw(tblEvaluationList.AbsherApptNbr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblEvaluationList.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(tblEvaluationList.AbsherApptNbr.FormatPattern)"@Html.Raw(tblEvaluationList.AbsherApptNbr.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblEvaluationList.AbsherApptNbr.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationList.AbsherApptNbr.Visible (end) *@
+</div><!-- /.row -->
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblEvaluationList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblEvaluationList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblEvaluationList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblEvaluationList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblEvaluationsrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblEvaluationList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblEvaluationsrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblEvaluationList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblEvaluationsrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblEvaluationList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblEvaluationsrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblEvaluationList.ShowPageHeader()
+@tblEvaluationList.ShowMessages()
+<main class="list @(tblEvaluationList.TotalRecords == 0 && !tblEvaluationList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblEvaluationList.TotalRecords > 0 || !Empty(tblEvaluationList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblEvaluationList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblEvaluation" + TitleCaseInvariant(tblEvaluationList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblEvaluationList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblEvaluationList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblEvaluationList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblEvaluation");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

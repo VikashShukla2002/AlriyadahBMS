@@ -1,0 +1,349 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrAttendanceList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrAttendanceList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblCrAttendanceList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrAttendanceList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRAttendance: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblCrAttendanceList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblCrAttendanceList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblCrAttendanceList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblCrAttendanceList.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_FullName", [fields.str_FullName.visible && fields.str_FullName.required ? ew.Validators.required(fields.str_FullName.caption) : null], fields.str_FullName.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["int_CR_ID", [fields.int_CR_ID.visible && fields.int_CR_ID.required ? ew.Validators.required(fields.int_CR_ID.caption) : null], fields.int_CR_ID.isInvalid],
+            ["int_CRSession_ID", [fields.int_CRSession_ID.visible && fields.int_CRSession_ID.required ? ew.Validators.required(fields.int_CRSession_ID.caption) : null], fields.int_CRSession_ID.isInvalid],
+            ["Is_All_Attend", [fields.Is_All_Attend.visible && fields.Is_All_Attend.required ? ew.Validators.required(fields.Is_All_Attend.caption) : null], fields.Is_All_Attend.isInvalid],
+            ["idnumber", [fields.idnumber.visible && fields.idnumber.required ? ew.Validators.required(fields.idnumber.caption) : null], fields.idnumber.isInvalid],
+            ["bit_IsMakeUP", [fields.bit_IsMakeUP.visible && fields.bit_IsMakeUP.required ? ew.Validators.required(fields.bit_IsMakeUP.caption) : null], fields.bit_IsMakeUP.isInvalid],
+            ["RemM1", [fields.RemM1.visible && fields.RemM1.required ? ew.Validators.required(fields.RemM1.caption) : null], fields.RemM1.isInvalid],
+            ["SMSReminder1", [fields.SMSReminder1.visible && fields.SMSReminder1.required ? ew.Validators.required(fields.SMSReminder1.caption) : null], fields.SMSReminder1.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Username": @Html.Raw(tblCrAttendanceList.str_Username.ToClientList(tblCrAttendanceList)),
+            "Is_All_Attend": @Html.Raw(tblCrAttendanceList.Is_All_Attend.ToClientList(tblCrAttendanceList)),
+            "idnumber": @Html.Raw(tblCrAttendanceList.idnumber.ToClientList(tblCrAttendanceList)),
+            "bit_IsMakeUP": @Html.Raw(tblCrAttendanceList.bit_IsMakeUP.ToClientList(tblCrAttendanceList)),
+            "RemM1": @Html.Raw(tblCrAttendanceList.RemM1.ToClientList(tblCrAttendanceList)),
+            "SMSReminder1": @Html.Raw(tblCrAttendanceList.SMSReminder1.ToClientList(tblCrAttendanceList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblCrAttendanceList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblCrAttendanceList.TotalRecords > 0 && tblCrAttendanceList.ExportOptions.Visible) {
+    tblCrAttendanceList.ExportOptions.Render("body");
+}
+@if (tblCrAttendanceList.ImportOptions.Visible) {
+    tblCrAttendanceList.ImportOptions.Render("body");
+}
+@if (tblCrAttendanceList.SearchOptions.Visible) {
+    tblCrAttendanceList.SearchOptions.Render("body");
+}
+@if (tblCrAttendanceList.FilterOptions.Visible) {
+    tblCrAttendanceList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (tblCrAttendanceList.ShowCurrentFilter) {
+    tblCrAttendanceList.ShowFilterList();
+}
+@if (!tblCrAttendanceList.IsModal) {
+<form name="ftblCRAttendancesrch" id="ftblCRAttendancesrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblCRAttendancesrch_search_panel" class="mb-2 mb-sm-0 @(tblCrAttendanceList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrAttendanceList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRAttendance: currentTable } });
+var currentForm;
+var ftblCRAttendancesrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblCRAttendancesrch")
+        .setPageId("list")
+@if (tblCrAttendanceList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["str_FullName", [], fields.str_FullName.isInvalid],
+            ["str_Username", [], fields.str_Username.isInvalid],
+            ["int_CR_ID", [], fields.int_CR_ID.isInvalid],
+            ["int_CRSession_ID", [], fields.int_CRSession_ID.isInvalid],
+            ["Is_All_Attend", [], fields.Is_All_Attend.isInvalid],
+            ["idnumber", [], fields.idnumber.isInvalid],
+            ["bit_IsMakeUP", [], fields.bit_IsMakeUP.isInvalid],
+            ["RemM1", [], fields.RemM1.isInvalid],
+            ["SMSReminder1", [], fields.SMSReminder1.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Username": @Html.Raw(tblCrAttendanceList.str_Username.ToClientList(tblCrAttendanceList)),
+            "idnumber": @Html.Raw(tblCrAttendanceList.idnumber.ToClientList(tblCrAttendanceList)),
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblCrAttendanceList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblCrAttendanceList.IsExport() && Empty(tblCrAttendanceList.CurrentAction) && tblCrAttendanceList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0@(tblCrAttendanceList.SearchFieldsPerRow > 0 ? " row-cols-sm-" + tblCrAttendanceList.SearchFieldsPerRow : "")">
+@{
+    // Render search row
+    tblCrAttendanceList.RowType = RowType.Search;
+    tblCrAttendanceList.ResetAttributes();
+    await tblCrAttendanceList.RenderRow();
+}
+@if (tblCrAttendanceList.str_Username.Visible) { // tblCrAttendanceList.str_Username.Visible (begin)
+    if (!tblCrAttendanceList.str_Username.UseFilter) {
+        tblCrAttendanceList.SearchColumnCount++;
+    }
+    <div id="xs_str_Username" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblCrAttendanceList.str_Username.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_Username" class="ew-search-caption ew-label">@Html.Raw(tblCrAttendanceList.str_Username.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Username" id="z_str_Username" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblCRAttendance_str_Username" class="ew-search-field">
+    <select
+        id="x_str_Username"
+        name="x_str_Username"
+        class="form-select ew-select@(tblCrAttendanceList.str_Username.IsInvalidClass)"
+        data-select2-id="ftblCRAttendancesrch_x_str_Username"
+        data-table="tblCRAttendance"
+        data-field="x_str_Username"
+        data-value-separator="@(tblCrAttendanceList.str_Username.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblCrAttendanceList.str_Username.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblCrAttendanceList.str_Username.EditAttributes)>
+        @(tblCrAttendanceList.str_Username.SelectOptionListHtml("x_str_Username"))
+    </select>
+    <div class="invalid-feedback">@Html.Raw(tblCrAttendanceList.str_Username.GetErrorMessage(false))</div>
+@Html.Raw(tblCrAttendanceList.str_Username.Lookup.GetParamTag(tblCrAttendanceList, "p_x_str_Username"))
+<script>
+loadjs.ready("ftblCRAttendancesrch", function() {
+    var options = { name: "x_str_Username", selectId: "ftblCRAttendancesrch_x_str_Username" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblCRAttendancesrch.lists.str_Username?.lookupOptions.length) {
+        options.data = { id: "x_str_Username", form: "ftblCRAttendancesrch" };
+    } else {
+        options.ajax = { id: "x_str_Username", form: "ftblCRAttendancesrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblCRAttendance.fields.str_Username.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblCrAttendanceList.str_Username.Visible (end) *@
+@if (tblCrAttendanceList.idnumber.Visible) { // tblCrAttendanceList.idnumber.Visible (begin)
+    if (!tblCrAttendanceList.idnumber.UseFilter) {
+        tblCrAttendanceList.SearchColumnCount++;
+    }
+    <div id="xs_idnumber" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblCrAttendanceList.idnumber.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label class="ew-search-caption ew-label">@Html.Raw(tblCrAttendanceList.idnumber.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_idnumber" id="z_idnumber" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblCRAttendance_idnumber" class="ew-search-field">
+<span>@{
+    if (IsRTL) {
+        tblCrAttendanceList.idnumber.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_idnumber" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_idnumber" id="sv_x_idnumber" value="@(RemoveHtml(ConvertToString(tblCrAttendanceList.idnumber.EditValue)))" autocomplete="off" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblCrAttendanceList.idnumber.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblCrAttendanceList.idnumber.PlaceHolder))" data-format-pattern="@(tblCrAttendanceList.idnumber.FormatPattern)" @Html.Raw(tblCrAttendanceList.idnumber.EditAttributes)>
+</span>
+<selection-list hidden class="form-control" data-table="tblCRAttendance" data-field="x_idnumber" data-input="sv_x_idnumber" data-value-separator="@(tblCrAttendanceList.idnumber.DisplayValueSeparatorAttribute)" name="x_idnumber" id="x_idnumber" value="@(HtmlEncode(tblCrAttendanceList.idnumber.AdvancedSearch.SearchValue))" data-ew-action="update-options"></selection-list>
+<div class="invalid-feedback">@Html.Raw(tblCrAttendanceList.idnumber.GetErrorMessage(false))</div>
+<script>
+loadjs.ready(["ftblCRAttendancesrch"], function() {
+    ftblCRAttendancesrch.createAutoSuggest(Object.assign({"id":"x_idnumber","forceSelect":false}, { lookupAllDisplayFields: @(tblCrAttendanceList.idnumber.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblCRAttendance.fields.idnumber.autoSuggestOptions));
+});
+</script>
+@Html.Raw(tblCrAttendanceList.idnumber.Lookup.GetParamTag(tblCrAttendanceList, "p_x_idnumber"))
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblCrAttendanceList.idnumber.Visible (end) *@
+</div><!-- /.row -->
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblCrAttendanceList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblCrAttendanceList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblCrAttendanceList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblCrAttendanceList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblCRAttendancesrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblCrAttendanceList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblCRAttendancesrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblCrAttendanceList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblCRAttendancesrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblCrAttendanceList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblCRAttendancesrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblCrAttendanceList.ShowPageHeader()
+@tblCrAttendanceList.ShowMessages()
+<main class="list @(tblCrAttendanceList.TotalRecords == 0 && !tblCrAttendanceList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblCrAttendanceList.TotalRecords > 0 || !Empty(tblCrAttendanceList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblCrAttendanceList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblCrAttendance" + TitleCaseInvariant(tblCrAttendanceList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblCrAttendanceList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblCrAttendanceList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblCrAttendanceList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblCRAttendance");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

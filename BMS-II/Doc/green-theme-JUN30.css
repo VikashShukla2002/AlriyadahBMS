@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+html, body {
+  font-family: "Poppins", sans-serif;
+}
+
+[class*=sidebar-dark] .brand-link, [class*=sidebar-dark] .brand-link .pushmenu {
+  color: rgb(227, 236, 221);
+}
+
+[class*=sidebar-dark-] .user-panel a:hover {
+  color: $gray-700;
+}
+
+[class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link:focus, [class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link:hover {
+  background-color: #3d9970;
+  color: #fff;
+}
+
+[class*=sidebar-dark] .user-panel {
+  border-bottom: 1px solid #e3ecdd;
+  font-weight: bolder;
+}
+
+[class*=sidebar-dark] .brand-link {
+  border-bottom: 1px solid #e3ecdd;
+}
+
+.brand-container {
+  text-align: center;
+  font-size: 18px;
+}
+
+.brand-image {
+  max-height: 100px !important;
+}
+
+.nav-sidebar .nav-header {
+  border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  font-weight: bolder;
+}
+
+.select2-container--bootstrap5.select2-container--focus .select2-selection {
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+.navbar-green {
+	background-color: $green-700;
+}

@@ -1,0 +1,146 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (classStatusSummary.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!classStatusSummary.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!classStatusSummary.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!classStatusSummary.IsExport() && !classStatusSummary.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(classStatusSummary.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Class_Status: currentTable } });
+var currentPageID = ew.PAGE_ID = "summary";
+var currentForm;
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<a id="top"></a>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+<div class="btn-toolbar ew-toolbar">
+@if (!classStatusSummary.DrillDownInPanel) {
+    classStatusSummary.ExportOptions.Render("body");
+    classStatusSummary.SearchOptions.Render("body");
+    classStatusSummary.FilterOptions.Render("body");
+}
+</div>
+@if (!classStatusSummary.IsExport() && !classStatusSummary.DrillDown && !DashboardReport) {
+}
+@classStatusSummary.ShowPageHeader()
+@classStatusSummary.ShowMessages()
+@if (classStatusSummary.ShowReport) {
+<!-- Summary report (begin) -->
+@if (!classStatusSummary.IsExport("pdf")) {
+@:<main class="report-summary @(classStatusSummary.TotalGroups == 0 ? " ew-no-record" : "")">
+}
+@while (IsList(classStatusSummary.DetailRecords) && classStatusSummary.RecordCount < classStatusSummary.DetailRecords.Count && classStatusSummary.RecordCount < classStatusSummary.DisplayGroups) {
+    // Show header
+    if (classStatusSummary.ShowHeader) {
+if (!classStatusSummary.IsExport("pdf")) {
+@:<div class="@Html.Raw(classStatusSummary.ReportContainerClass)">
+}
+if (!classStatusSummary.IsExport() && !(classStatusSummary.DrillDown && classStatusSummary.TotalGroups > 0)) {
+<!-- Top pager -->
+<div class="card-header ew-grid-upper-panel">
+@classStatusSummary.Pager.Render()
+</div>
+}
+if (!classStatusSummary.IsExport("pdf")) {
+<!-- Report grid (begin) -->
+@:<div id="gmp_Class_Status" class="card-body ew-grid-middle-panel @(classStatusSummary.TableContainerClass)">
+}
+@:<table class="@(classStatusSummary.TableClass)">
+<thead>
+    <!-- Table header -->
+    <tr class="ew-table-header">
+@if (classStatusSummary.Numberofopenclasses.Visible) { // classStatusSummary.Numberofopenclasses.Visible (begin)
+    <th data-name="Numberofopenclasses" class="@(classStatusSummary.Numberofopenclasses.HeaderCellClass)"><div class="Class_Status_Numberofopenclasses">@Html.Raw(classStatusSummary.RenderFieldHeader(classStatusSummary.Numberofopenclasses))</div></th>
+} @* classStatusSummary.Numberofopenclasses.Visible (end) *@
+    </tr>
+</thead>
+@:<tbody>
+        if (classStatusSummary.TotalGroups == 0) {
+            break; // Show header only
+        }
+        classStatusSummary.ShowHeader = false;
+    } // End show header
+    classStatusSummary.LoadRowValues(classStatusSummary.DetailRecords[classStatusSummary.RecordCount]);
+    classStatusSummary.RecordCount++;
+    classStatusSummary.RecordIndex++;
+
+        // Render detail row
+        classStatusSummary.ResetAttributes();
+        classStatusSummary.RowType = RowType.Detail;
+        await classStatusSummary.RenderRow();
+    @:<tr @Html.Raw(classStatusSummary.RowAttributes)>
+if (classStatusSummary.Numberofopenclasses.Visible) {
+        <td data-field="Numberofopenclasses" @Html.Raw(classStatusSummary.Numberofopenclasses.CellAttributes)>
+<span @Html.Raw(classStatusSummary.Numberofopenclasses.ViewAttributes)>
+@Html.Raw(classStatusSummary.Numberofopenclasses.GetViewValue())</span>
+</td>
+}
+    @:</tr>
+} @* End while *@
+@if (classStatusSummary.TotalGroups > 0) {
+@:</tbody>
+@:<tfoot>
+@:</tfoot>
+@:</table>
+if (!classStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!classStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+}
+@if (!classStatusSummary.IsExport("pdf")) {
+@:</main>
+<!-- /.report-summary -->
+}
+<!-- Summary report (end) -->
+}
+</div>
+<!-- /.ew-report -->
+@classStatusSummary.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!classStatusSummary.IsExport() && !classStatusSummary.DrillDown && !DashboardReport) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

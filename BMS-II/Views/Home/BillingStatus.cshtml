@@ -1,0 +1,300 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (billingStatusSummary.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!billingStatusSummary.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!billingStatusSummary.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!billingStatusSummary.IsExport() && !billingStatusSummary.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(billingStatusSummary.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Billing_Status: currentTable } });
+var currentPageID = ew.PAGE_ID = "summary";
+var currentForm;
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<a id="top"></a>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+<div class="btn-toolbar ew-toolbar">
+@if (!billingStatusSummary.DrillDownInPanel) {
+    billingStatusSummary.ExportOptions.Render("body");
+    billingStatusSummary.SearchOptions.Render("body");
+    billingStatusSummary.FilterOptions.Render("body");
+}
+</div>
+@if (!billingStatusSummary.IsExport() && !billingStatusSummary.DrillDown && !DashboardReport) {
+}
+@billingStatusSummary.ShowPageHeader()
+@billingStatusSummary.ShowMessages()
+@if (billingStatusSummary.ShowReport) {
+<!-- Summary report (begin) -->
+@if (!billingStatusSummary.IsExport("pdf")) {
+@:<main class="report-summary @(billingStatusSummary.TotalGroups == 0 ? " ew-no-record" : "")">
+}
+@while (billingStatusSummary.GroupCount <= billingStatusSummary.GroupRecords.Count && billingStatusSummary.GroupCount <= billingStatusSummary.DisplayGroups) {
+    // Show header
+    if (billingStatusSummary.ShowHeader) {
+if (billingStatusSummary.GroupCount > 1) {
+@:</tbody>
+@:</table>
+if (!billingStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!billingStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+@Html.Raw(billingStatusSummary.PageBreakHtml)
+}
+if (!billingStatusSummary.IsExport("pdf")) {
+@:<div class="@Html.Raw(billingStatusSummary.ReportContainerClass)">
+}
+if (!billingStatusSummary.IsExport() && !(billingStatusSummary.DrillDown && billingStatusSummary.TotalGroups > 0)) {
+<!-- Top pager -->
+<div class="card-header ew-grid-upper-panel">
+@billingStatusSummary.Pager.Render()
+</div>
+}
+if (!billingStatusSummary.IsExport("pdf")) {
+<!-- Report grid (begin) -->
+@:<div id="gmp_Billing_Status" class="card-body ew-grid-middle-panel @(billingStatusSummary.TableContainerClass)">
+}
+@:<table class="@(billingStatusSummary.TableClass)">
+<thead>
+    <!-- Table header -->
+    <tr class="ew-table-header">
+@if (billingStatusSummary.str_Username.Visible) { // billingStatusSummary.str_Username.Visible (begin)
+    if (billingStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    <th data-name="str_Username">&nbsp;</th>
+    } else {
+    <th data-name="str_Username" class="@(billingStatusSummary.str_Username.HeaderCellClass)"><div class="Billing_Status_str_Username">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.str_Username))</div></th>
+    }
+} @* billingStatusSummary.str_Username.Visible (end) *@
+@if (billingStatusSummary.date_Paid.Visible) { // billingStatusSummary.date_Paid.Visible (begin)
+    if (billingStatusSummary.date_Paid.ShowGroupHeaderAsRow) {
+    <th data-name="date_Paid">&nbsp;</th>
+    } else {
+    <th data-name="date_Paid" class="@(billingStatusSummary.date_Paid.HeaderCellClass)"><div class="Billing_Status_date_Paid">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.date_Paid))</div></th>
+    }
+} @* billingStatusSummary.date_Paid.Visible (end) *@
+@if (billingStatusSummary.str_ApprovalCode.Visible) { // billingStatusSummary.str_ApprovalCode.Visible (begin)
+    if (billingStatusSummary.str_ApprovalCode.ShowGroupHeaderAsRow) {
+    <th data-name="str_ApprovalCode">&nbsp;</th>
+    } else {
+    <th data-name="str_ApprovalCode" class="@(billingStatusSummary.str_ApprovalCode.HeaderCellClass)"><div class="Billing_Status_str_ApprovalCode">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.str_ApprovalCode))</div></th>
+    }
+} @* billingStatusSummary.str_ApprovalCode.Visible (end) *@
+@if (billingStatusSummary.Price.Visible) { // billingStatusSummary.Price.Visible (begin)
+    <th data-name="Price" class="@(billingStatusSummary.Price.HeaderCellClass)"><div class="Billing_Status_Price">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.Price))</div></th>
+} @* billingStatusSummary.Price.Visible (end) *@
+    </tr>
+</thead>
+@:<tbody>
+        if (billingStatusSummary.TotalGroups == 0) {
+            break; // Show header only
+        }
+        billingStatusSummary.ShowHeader = false;
+    } // End show header
+
+    // Build detail SQL
+    string where = DetailFilterSql(billingStatusSummary.str_Username, billingStatusSummary.SqlFirstGroupField, billingStatusSummary.str_Username?.GroupValue, billingStatusSummary.DbId); // DN
+    if (!Empty(billingStatusSummary.PageFirstGroupFilter)) {
+        billingStatusSummary.PageFirstGroupFilter += " OR ";
+    }
+    billingStatusSummary.PageFirstGroupFilter += where;
+    if (!Empty(billingStatusSummary.Filter)) {
+        where = "(" + billingStatusSummary.Filter + ") AND (" + where + ")";
+    }
+    sqlWrk = BuildReportSql(billingStatusSummary.SqlSelect, billingStatusSummary.SqlWhere, billingStatusSummary.SqlGroupBy, billingStatusSummary.SqlHaving, billingStatusSummary.SqlOrderBy, where, billingStatusSummary.Sort);
+    billingStatusSummary.DetailRecords = await billingStatusSummary.Connection.GetRowsAsync(sqlWrk); // DN
+    billingStatusSummary.DetailRecordCount = billingStatusSummary.DetailRecords?.Count ?? 0; // DN
+
+    // Load detail records
+    billingStatusSummary.str_Username.Records = billingStatusSummary.DetailRecords;
+    billingStatusSummary.str_Username.LevelBreak = true; // Set field level break
+        billingStatusSummary.GroupCounter[1] = billingStatusSummary.GroupCount;
+        billingStatusSummary.str_Username.GetCnt(billingStatusSummary.str_Username.Records); // Get record count
+if (billingStatusSummary.str_Username.Visible && billingStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    // Render header row
+    billingStatusSummary.ResetAttributes();
+    billingStatusSummary.RowType = RowType.Total;
+    billingStatusSummary.RowTotalType = RowSummary.Group;
+    billingStatusSummary.RowTotalSubType = RowTotal.Header;
+    billingStatusSummary.RowGroupLevel = 1;
+    await billingStatusSummary.RenderRow();
+    @:<tr @Html.Raw(billingStatusSummary.RowAttributes)>
+if (billingStatusSummary.str_Username.Visible) {
+    billingStatusSummary.str_Username.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_Username" @Html.Raw(billingStatusSummary.str_Username.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    billingStatusSummary.str_Username.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_Username" colspan="@(billingStatusSummary.GroupColumnCount + billingStatusSummary.DetailColumnCount - 1)" @Html.Raw(billingStatusSummary.str_Username.CellAttributes)>
+        <span class="ew-summary-caption Billing_Status_str_Username">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.str_Username))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(billingStatusSummary.str_Username.ViewAttributes)>@Html.Raw(billingStatusSummary.str_Username.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(billingStatusSummary.str_Username.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    billingStatusSummary.date_Paid.GetDistinctValues(billingStatusSummary.str_Username.Records, billingStatusSummary.date_Paid.Sort);
+    billingStatusSummary.SetGroupCount(billingStatusSummary.date_Paid.DistinctValues.Count, billingStatusSummary.GroupCounter[1]);
+    billingStatusSummary.GroupCounter[2] = 0; // Init group count index
+    foreach (var date_Paid in billingStatusSummary.date_Paid.DistinctValues) { // Load records for this distinct value
+        billingStatusSummary.date_Paid.GroupValue = date_Paid; // Set group value
+        billingStatusSummary.date_Paid.GetDistinctRecords(billingStatusSummary.str_Username.Records, billingStatusSummary.date_Paid.GroupValue);
+        billingStatusSummary.date_Paid.LevelBreak = true; // Set field level break
+        billingStatusSummary.GroupCounter[2]++;
+        billingStatusSummary.date_Paid.GetCnt(billingStatusSummary.date_Paid.Records); // Get record count
+if (billingStatusSummary.date_Paid.Visible && billingStatusSummary.date_Paid.ShowGroupHeaderAsRow) {
+    // Render header row
+    billingStatusSummary.date_Paid.SetDbValue(date_Paid); // Set current value for date_Paid
+    billingStatusSummary.ResetAttributes();
+    billingStatusSummary.RowType = RowType.Total;
+    billingStatusSummary.RowTotalType = RowSummary.Group;
+    billingStatusSummary.RowTotalSubType = RowTotal.Header;
+    billingStatusSummary.RowGroupLevel = 2;
+    await billingStatusSummary.RenderRow();
+    @:<tr @Html.Raw(billingStatusSummary.RowAttributes)>
+if (billingStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(billingStatusSummary.str_Username.CellAttributes)></td>
+}
+if (billingStatusSummary.date_Paid.Visible) {
+    billingStatusSummary.date_Paid.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="date_Paid" @Html.Raw(billingStatusSummary.date_Paid.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    billingStatusSummary.date_Paid.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="date_Paid" colspan="@(billingStatusSummary.GroupColumnCount + billingStatusSummary.DetailColumnCount - 2)" @Html.Raw(billingStatusSummary.date_Paid.CellAttributes)>
+        <span class="ew-summary-caption Billing_Status_date_Paid">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.date_Paid))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(billingStatusSummary.date_Paid.ViewAttributes)>@Html.Raw(billingStatusSummary.date_Paid.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(billingStatusSummary.date_Paid.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    billingStatusSummary.str_ApprovalCode.GetDistinctValues(billingStatusSummary.date_Paid.Records, billingStatusSummary.str_ApprovalCode.Sort);
+    billingStatusSummary.SetGroupCount(billingStatusSummary.str_ApprovalCode.DistinctValues.Count, billingStatusSummary.GroupCounter[1], billingStatusSummary.GroupCounter[2]);
+    billingStatusSummary.GroupCounter[3] = 0; // Init group count index
+    foreach (var str_ApprovalCode in billingStatusSummary.str_ApprovalCode.DistinctValues) { // Load records for this distinct value
+        billingStatusSummary.str_ApprovalCode.GroupValue = str_ApprovalCode; // Set group value
+        billingStatusSummary.str_ApprovalCode.GetDistinctRecords(billingStatusSummary.date_Paid.Records, billingStatusSummary.str_ApprovalCode.GroupValue);
+        billingStatusSummary.str_ApprovalCode.LevelBreak = true; // Set field level break
+        billingStatusSummary.GroupCounter[3]++;
+        billingStatusSummary.str_ApprovalCode.GetCnt(billingStatusSummary.str_ApprovalCode.Records); // Get record count
+        billingStatusSummary.SetGroupCount(billingStatusSummary.str_ApprovalCode.Count, billingStatusSummary.GroupCounter[1], billingStatusSummary.GroupCounter[2], billingStatusSummary.GroupCounter[3]);
+if (billingStatusSummary.str_ApprovalCode.Visible && billingStatusSummary.str_ApprovalCode.ShowGroupHeaderAsRow) {
+    // Render header row
+    billingStatusSummary.str_ApprovalCode.SetDbValue(str_ApprovalCode); // Set current value for str_ApprovalCode
+    billingStatusSummary.ResetAttributes();
+    billingStatusSummary.RowType = RowType.Total;
+    billingStatusSummary.RowTotalType = RowSummary.Group;
+    billingStatusSummary.RowTotalSubType = RowTotal.Header;
+    billingStatusSummary.RowGroupLevel = 3;
+    await billingStatusSummary.RenderRow();
+    @:<tr @Html.Raw(billingStatusSummary.RowAttributes)>
+if (billingStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(billingStatusSummary.str_Username.CellAttributes)></td>
+}
+if (billingStatusSummary.date_Paid.Visible) {
+        <td data-field="date_Paid" @Html.Raw(billingStatusSummary.date_Paid.CellAttributes)></td>
+}
+if (billingStatusSummary.str_ApprovalCode.Visible) {
+    billingStatusSummary.str_ApprovalCode.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_ApprovalCode" @Html.Raw(billingStatusSummary.str_ApprovalCode.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    billingStatusSummary.str_ApprovalCode.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_ApprovalCode" colspan="@(billingStatusSummary.GroupColumnCount + billingStatusSummary.DetailColumnCount - 3)" @Html.Raw(billingStatusSummary.str_ApprovalCode.CellAttributes)>
+        <span class="ew-summary-caption Billing_Status_str_ApprovalCode">@Html.Raw(billingStatusSummary.RenderFieldHeader(billingStatusSummary.str_ApprovalCode))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(billingStatusSummary.str_ApprovalCode.ViewAttributes)>@Html.Raw(billingStatusSummary.str_ApprovalCode.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(billingStatusSummary.str_ApprovalCode.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    billingStatusSummary.RecordCount = 0; // Reset record count
+    foreach (var record in billingStatusSummary.str_ApprovalCode.Records) {
+        billingStatusSummary.RecordCount++;
+        billingStatusSummary.RecordIndex++;
+        billingStatusSummary.LoadRowValues(record);
+    }
+    } // End group level 2
+    } // End group level 1
+
+    // Next group
+    billingStatusSummary.LoadGroupRowValues();
+
+    // Show header if page break
+    if (billingStatusSummary.IsExport()) {
+        billingStatusSummary.ShowHeader = (billingStatusSummary.ExportPageBreakCount == 0) ? false : (billingStatusSummary.GroupCount % billingStatusSummary.ExportPageBreakCount == 0);
+    }
+
+    // Page Breaking server event
+    if (billingStatusSummary.ShowHeader) {
+        bool pageShowHeader = billingStatusSummary.ShowHeader;
+        string pageBreakHtml = billingStatusSummary.PageBreakHtml;
+        billingStatusSummary.PageBreaking(ref pageShowHeader, ref pageBreakHtml);
+        billingStatusSummary.ShowHeader = pageShowHeader;
+        billingStatusSummary.PageBreakHtml = pageBreakHtml;
+    }
+    billingStatusSummary.GroupCount++;
+} @* End while *@
+@if (billingStatusSummary.TotalGroups > 0) {
+@:</tbody>
+@:<tfoot>
+@:</tfoot>
+@:</table>
+if (!billingStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!billingStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+}
+@if (!billingStatusSummary.IsExport("pdf")) {
+@:</main>
+<!-- /.report-summary -->
+}
+<!-- Summary report (end) -->
+}
+</div>
+<!-- /.ew-report -->
+@billingStatusSummary.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!billingStatusSummary.IsExport() && !billingStatusSummary.DrillDown && !DashboardReport) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

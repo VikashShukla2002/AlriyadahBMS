@@ -1,0 +1,184 @@
+@if (!qryBillingNamesList.IsExport()) {
+<div>
+@if (!qryBillingNamesList.IsGridAdd && !(qryBillingNamesList.IsGridEdit && qryBillingNamesList.ModalGridEdit) && !qryBillingNamesList.IsMultiEdit) {
+@Html.Raw(qryBillingNamesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryBillingNamesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (qryBillingNamesList.ModalGridAdd && qryBillingNamesList.IsGridAdd || qryBillingNamesList.ModalGridEdit && qryBillingNamesList.IsGridEdit || qryBillingNamesList.ModalMultiEdit && qryBillingNamesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryBillingNamesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryBillingNames: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryBillingNamesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryBillingNamesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryBillingNamesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryBillingNamesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(qryBillingNamesList.FormName)" id="@(qryBillingNamesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryBillingNamesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryBillingNamesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(qryBillingNamesList.GetMultiColumnRowClass())">
+@if (qryBillingNamesList.TotalRecords > 0 || qryBillingNamesList.IsGridEdit || qryBillingNamesList.IsMultiEdit) {
+    await qryBillingNamesList.SetupGrid();
+    bool eof = qryBillingNamesList.Recordset == null; // DN
+while (qryBillingNamesList.RecordCount < qryBillingNamesList.StopRecord || SameString(qryBillingNamesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryBillingNamesList.RowIndex, "$rowindex$") &&
+        (!qryBillingNamesList.IsGridAdd || qryBillingNamesList.CurrentMode == "copy") &&
+        (!((qryBillingNamesList.IsCopy || qryBillingNamesList.IsAdd) && qryBillingNamesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryBillingNamesList.Recordset.ReadAsync();
+    qryBillingNamesList.RecordCount++;
+    if (qryBillingNamesList.RecordCount >= qryBillingNamesList.StartRecord) {
+        await qryBillingNamesList.SetupRow();
+<div class="@(qryBillingNamesList.GetMultiColumnColClass())" @Html.Raw(qryBillingNamesList.RowAttributes)>
+<div class="@(qryBillingNamesList.MultiColumnCardClass)">
+    @if (qryBillingNamesList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(qryBillingNamesList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    qryBillingNamesList.ListOptions.Tag = "div";
+    qryBillingNamesList.ListOptions.RenderBody(qryBillingNamesList.MultiColumnListOptionsPosition, qryBillingNamesList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (qryBillingNamesList.int_Student_ID.Visible) { // qryBillingNamesList.int_Student_ID.Visible (begin)
+        if (qryBillingNamesList.RowType == RowType.View) { // View record
+        <div class="row qryBillingNames_int_Student_ID">
+            <div class="col col-sm-4 qryBillingNames_int_Student_ID">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.int_Student_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryBillingNamesList.int_Student_ID.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.int_Student_ID.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.int_Student_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryBillingNames_int_Student_ID">
+            <label class="@(qryBillingNamesList.LeftColumnClass)">@Html.Raw(qryBillingNamesList.int_Student_ID.Caption)</label>
+            <div class="@(qryBillingNamesList.RightColumnClass)"><div @Html.Raw(qryBillingNamesList.int_Student_ID.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.int_Student_ID.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.int_Student_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryBillingNamesList.str_Full_Name.Visible) { // qryBillingNamesList.str_Full_Name.Visible (begin)
+        if (qryBillingNamesList.RowType == RowType.View) { // View record
+        <div class="row qryBillingNames_str_Full_Name">
+            <div class="col col-sm-4 qryBillingNames_str_Full_Name">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.str_Full_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryBillingNamesList.str_Full_Name.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.str_Full_Name.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.str_Full_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryBillingNames_str_Full_Name">
+            <label class="@(qryBillingNamesList.LeftColumnClass)">@Html.Raw(qryBillingNamesList.str_Full_Name.Caption)</label>
+            <div class="@(qryBillingNamesList.RightColumnClass)"><div @Html.Raw(qryBillingNamesList.str_Full_Name.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.str_Full_Name.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.str_Full_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryBillingNamesList.NationalID.Visible) { // qryBillingNamesList.NationalID.Visible (begin)
+        if (qryBillingNamesList.RowType == RowType.View) { // View record
+        <div class="row qryBillingNames_NationalID">
+            <div class="col col-sm-4 qryBillingNames_NationalID">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.NationalID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryBillingNamesList.NationalID.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.NationalID.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.NationalID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryBillingNames_NationalID">
+            <label class="@(qryBillingNamesList.LeftColumnClass)">@Html.Raw(qryBillingNamesList.NationalID.Caption)</label>
+            <div class="@(qryBillingNamesList.RightColumnClass)"><div @Html.Raw(qryBillingNamesList.NationalID.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.NationalID.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.NationalID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (qryBillingNamesList.str_Username.Visible) { // qryBillingNamesList.str_Username.Visible (begin)
+        if (qryBillingNamesList.RowType == RowType.View) { // View record
+        <div class="row qryBillingNames_str_Username">
+            <div class="col col-sm-4 qryBillingNames_str_Username">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.str_Username))</div>
+            <div class="col col-sm-8"><div @Html.Raw(qryBillingNamesList.str_Username.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.str_Username.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.str_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row qryBillingNames_str_Username">
+            <label class="@(qryBillingNamesList.LeftColumnClass)">@Html.Raw(qryBillingNamesList.str_Username.Caption)</label>
+            <div class="@(qryBillingNamesList.RightColumnClass)"><div @Html.Raw(qryBillingNamesList.str_Username.CellAttributes)>
+<span @Html.Raw(qryBillingNamesList.str_Username.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.str_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!qryBillingNamesList.IsExport()) {
+    if (qryBillingNamesList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(qryBillingNamesList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    qryBillingNamesList.ListOptions.Tag = "div";
+}
+@qryBillingNamesList.ListOptions.RenderBody(qryBillingNamesList.MultiColumnListOptionsPosition, qryBillingNamesList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryBillingNamesList.RowIndex, "$rowindex$"))
+        qryBillingNamesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryBillingNamesList.IsCopy || qryBillingNamesList.IsAdd) && qryBillingNamesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryBillingNamesList.RowIndex = 1;
+} @* End While *@
+} @* qryBillingNamesList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(qryBillingNamesList.CurrentAction) && !qryBillingNamesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryBillingNamesList.CloseRecordset(); }

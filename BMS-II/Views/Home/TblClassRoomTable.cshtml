@@ -1,0 +1,824 @@
+@if (tblClassRoomList.ModalGridAdd && tblClassRoomList.IsGridAdd || tblClassRoomList.ModalGridEdit && tblClassRoomList.IsGridEdit || tblClassRoomList.ModalMultiEdit && tblClassRoomList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblClassRoomList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblClassRoom: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblClassRoomList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblClassRoomList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblClassRoomList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblClassRoomList.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_CR_Number", [fields.str_CR_Number.visible && fields.str_CR_Number.required ? ew.Validators.required(fields.str_CR_Number.caption) : null], fields.str_CR_Number.isInvalid],
+            ["int_CR_Product_ID", [fields.int_CR_Product_ID.visible && fields.int_CR_Product_ID.required ? ew.Validators.required(fields.int_CR_Product_ID.caption) : null], fields.int_CR_Product_ID.isInvalid],
+            ["date_Start", [fields.date_Start.visible && fields.date_Start.required ? ew.Validators.required(fields.date_Start.caption) : null, ew.Validators.datetime(fields.date_Start.clientFormatPattern)], fields.date_Start.isInvalid],
+            ["mon_CR_Price", [fields.mon_CR_Price.visible && fields.mon_CR_Price.required ? ew.Validators.required(fields.mon_CR_Price.caption) : null], fields.mon_CR_Price.isInvalid],
+            ["int_CR_Size", [fields.int_CR_Size.visible && fields.int_CR_Size.required ? ew.Validators.required(fields.int_CR_Size.caption) : null], fields.int_CR_Size.isInvalid],
+            ["int_CR_Status", [fields.int_CR_Status.visible && fields.int_CR_Status.required ? ew.Validators.required(fields.int_CR_Status.caption) : null], fields.int_CR_Status.isInvalid],
+            ["int_Location_ID", [fields.int_Location_ID.visible && fields.int_Location_ID.required ? ew.Validators.required(fields.int_Location_ID.caption) : null], fields.int_Location_ID.isInvalid],
+            ["int_Teacher_ID", [fields.int_Teacher_ID.visible && fields.int_Teacher_ID.required ? ew.Validators.required(fields.int_Teacher_ID.caption) : null], fields.int_Teacher_ID.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_CR_Product_ID": @Html.Raw(tblClassRoomList.int_CR_Product_ID.ToClientList(tblClassRoomList)),
+            "mon_CR_Price": @Html.Raw(tblClassRoomList.mon_CR_Price.ToClientList(tblClassRoomList)),
+            "int_CR_Size": @Html.Raw(tblClassRoomList.int_CR_Size.ToClientList(tblClassRoomList)),
+            "int_CR_Status": @Html.Raw(tblClassRoomList.int_CR_Status.ToClientList(tblClassRoomList)),
+            "int_Location_ID": @Html.Raw(tblClassRoomList.int_Location_ID.ToClientList(tblClassRoomList)),
+            "int_Teacher_ID": @Html.Raw(tblClassRoomList.int_Teacher_ID.ToClientList(tblClassRoomList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblClassRoomList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblClassRoomList.TableGridClass)">
+@if (!tblClassRoomList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblClassRoomList.IsGridAdd && !(tblClassRoomList.IsGridEdit && tblClassRoomList.ModalGridEdit) && !tblClassRoomList.IsMultiEdit) {
+@Html.Raw(tblClassRoomList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblClassRoomList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblClassRoomList.FormName)" id="@(tblClassRoomList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblClassRoomList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblClassRoomList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblClassRoom" class="card-body ew-grid-middle-panel @(tblClassRoomList.TableContainerClass)" style="@(tblClassRoomList.TableContainerStyle)">
+@if (tblClassRoomList.TotalRecords > 0 || tblClassRoomList.IsAdd || tblClassRoomList.IsCopy || tblClassRoomList.IsGridEdit || tblClassRoomList.IsMultiEdit) {
+<table id="tbl_tblClassRoomlist" class="@(tblClassRoomList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblClassRoomList.RowType = RowType.Header;
+
+    // Render list options
+    await tblClassRoomList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblClassRoomList.ListOptions.RenderHeader("left")
+@if (tblClassRoomList.str_CR_Number.Visible) { // tblClassRoomList.str_CR_Number.Visible (begin)
+        <th data-name="str_CR_Number" class="@(tblClassRoomList.str_CR_Number.HeaderCellClass)"><div id="elh_tblClassRoom_str_CR_Number" class="tblClassRoom_str_CR_Number">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.str_CR_Number))</div></th>
+} @* tblClassRoomList.str_CR_Number.Visible (end) *@
+@if (tblClassRoomList.int_CR_Product_ID.Visible) { // tblClassRoomList.int_CR_Product_ID.Visible (begin)
+        <th data-name="int_CR_Product_ID" class="@(tblClassRoomList.int_CR_Product_ID.HeaderCellClass)"><div id="elh_tblClassRoom_int_CR_Product_ID" class="tblClassRoom_int_CR_Product_ID">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.int_CR_Product_ID))</div></th>
+} @* tblClassRoomList.int_CR_Product_ID.Visible (end) *@
+@if (tblClassRoomList.date_Start.Visible) { // tblClassRoomList.date_Start.Visible (begin)
+        <th data-name="date_Start" class="@(tblClassRoomList.date_Start.HeaderCellClass)"><div id="elh_tblClassRoom_date_Start" class="tblClassRoom_date_Start">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.date_Start))</div></th>
+} @* tblClassRoomList.date_Start.Visible (end) *@
+@if (tblClassRoomList.mon_CR_Price.Visible) { // tblClassRoomList.mon_CR_Price.Visible (begin)
+        <th data-name="mon_CR_Price" class="@(tblClassRoomList.mon_CR_Price.HeaderCellClass)"><div id="elh_tblClassRoom_mon_CR_Price" class="tblClassRoom_mon_CR_Price">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.mon_CR_Price))</div></th>
+} @* tblClassRoomList.mon_CR_Price.Visible (end) *@
+@if (tblClassRoomList.int_CR_Size.Visible) { // tblClassRoomList.int_CR_Size.Visible (begin)
+        <th data-name="int_CR_Size" class="@(tblClassRoomList.int_CR_Size.HeaderCellClass)"><div id="elh_tblClassRoom_int_CR_Size" class="tblClassRoom_int_CR_Size">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.int_CR_Size))</div></th>
+} @* tblClassRoomList.int_CR_Size.Visible (end) *@
+@if (tblClassRoomList.int_CR_Status.Visible) { // tblClassRoomList.int_CR_Status.Visible (begin)
+        <th data-name="int_CR_Status" class="@(tblClassRoomList.int_CR_Status.HeaderCellClass)"><div id="elh_tblClassRoom_int_CR_Status" class="tblClassRoom_int_CR_Status">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.int_CR_Status))</div></th>
+} @* tblClassRoomList.int_CR_Status.Visible (end) *@
+@if (tblClassRoomList.int_Location_ID.Visible) { // tblClassRoomList.int_Location_ID.Visible (begin)
+        <th data-name="int_Location_ID" class="@(tblClassRoomList.int_Location_ID.HeaderCellClass)"><div id="elh_tblClassRoom_int_Location_ID" class="tblClassRoom_int_Location_ID">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.int_Location_ID))</div></th>
+} @* tblClassRoomList.int_Location_ID.Visible (end) *@
+@if (tblClassRoomList.int_Teacher_ID.Visible) { // tblClassRoomList.int_Teacher_ID.Visible (begin)
+        <th data-name="int_Teacher_ID" class="@(tblClassRoomList.int_Teacher_ID.HeaderCellClass)"><div id="elh_tblClassRoom_int_Teacher_ID" class="tblClassRoom_int_Teacher_ID">@Html.Raw(tblClassRoomList.RenderFieldHeader(tblClassRoomList.int_Teacher_ID))</div></th>
+} @* tblClassRoomList.int_Teacher_ID.Visible (end) *@
+@* Render list options (header, right) *@
+@tblClassRoomList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblClassRoomList.PageNumber)">
+@{
+    await tblClassRoomList.SetupGrid();
+    bool eof = tblClassRoomList.Recordset == null; // DN
+}
+@while (tblClassRoomList.RecordCount < tblClassRoomList.StopRecord || SameString(tblClassRoomList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblClassRoomList.RowIndex, "$rowindex$") &&
+        (!tblClassRoomList.IsGridAdd || tblClassRoomList.CurrentMode == "copy") &&
+        (!((tblClassRoomList.IsCopy || tblClassRoomList.IsAdd) && tblClassRoomList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblClassRoomList.Recordset.ReadAsync();
+    tblClassRoomList.RecordCount++;
+    if (tblClassRoomList.RecordCount >= tblClassRoomList.StartRecord) {
+        await tblClassRoomList.SetupRow();
+    <tr @Html.Raw(tblClassRoomList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblClassRoomList.ListOptions.RenderBody("left", tblClassRoomList.RowCount)
+    @if (tblClassRoomList.str_CR_Number.Visible) { // tblClassRoomList.str_CR_Number.Visible (begin)
+        <td data-name="str_CR_Number" @Html.Raw(tblClassRoomList.str_CR_Number.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* str_CR_Number (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_str_CR_Number" class="el_tblClassRoom_str_CR_Number">
+    <input type="@(tblClassRoomList.str_CR_Number.InputTextType)" name="x@(tblClassRoomList.RowIndex)_str_CR_Number" id="x@(tblClassRoomList.RowIndex)_str_CR_Number" data-table="tblClassRoom" data-field="x_str_CR_Number" value="@Html.Raw(tblClassRoomList.str_CR_Number.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblClassRoomList.str_CR_Number.PlaceHolder))" data-format-pattern="@(tblClassRoomList.str_CR_Number.FormatPattern)"@Html.Raw(tblClassRoomList.str_CR_Number.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomList.str_CR_Number.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_str_CR_Number" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_str_CR_Number" id="o@(tblClassRoomList.RowIndex)_str_CR_Number" value="@Html.Raw(HtmlEncode(tblClassRoomList.str_CR_Number.OldValue))">
+    @* str_CR_Number (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* str_CR_Number (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_str_CR_Number" class="el_tblClassRoom_str_CR_Number">
+    <span @Html.Raw(tblClassRoomList.str_CR_Number.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblClassRoomList.str_CR_Number.EditValue)))"></span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_str_CR_Number" data-hidden="1" name="x@(tblClassRoomList.RowIndex)_str_CR_Number" id="x@(tblClassRoomList.RowIndex)_str_CR_Number" value="@Html.Raw(HtmlEncode(tblClassRoomList.str_CR_Number.CurrentValue))">
+    </span>
+    @* str_CR_Number (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* str_CR_Number (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_str_CR_Number" class="el_tblClassRoom_str_CR_Number">
+    <span @Html.Raw(tblClassRoomList.str_CR_Number.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.str_CR_Number.GetViewValue())</span>
+    </span>
+    @* str_CR_Number (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.str_CR_Number.Visible (end) *@
+    @if (tblClassRoomList.int_CR_Product_ID.Visible) { // tblClassRoomList.int_CR_Product_ID.Visible (begin)
+        <td data-name="int_CR_Product_ID" @Html.Raw(tblClassRoomList.int_CR_Product_ID.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* int_CR_Product_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Product_ID" class="el_tblClassRoom_int_CR_Product_ID">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_CR_Product_ID"
+            name="x@(tblClassRoomList.RowIndex)_int_CR_Product_ID"
+            class="form-select ew-select@(tblClassRoomList.int_CR_Product_ID.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Product_ID"
+            data-table="tblClassRoom"
+            data-field="x_int_CR_Product_ID"
+            data-value-separator="@(tblClassRoomList.int_CR_Product_ID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_CR_Product_ID.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblClassRoomList.int_CR_Product_ID.EditAttributes)>
+            @(tblClassRoomList.int_CR_Product_ID.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_CR_Product_ID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_CR_Product_ID.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.int_CR_Product_ID.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_int_CR_Product_ID"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_CR_Product_ID", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Product_ID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_CR_Product_ID?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Product_ID", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Product_ID", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Product_ID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_int_CR_Product_ID" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_int_CR_Product_ID" id="o@(tblClassRoomList.RowIndex)_int_CR_Product_ID" value="@Html.Raw(HtmlEncode(tblClassRoomList.int_CR_Product_ID.OldValue))">
+    @* int_CR_Product_ID (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* int_CR_Product_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Product_ID" class="el_tblClassRoom_int_CR_Product_ID">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_CR_Product_ID"
+            name="x@(tblClassRoomList.RowIndex)_int_CR_Product_ID"
+            class="form-select ew-select@(tblClassRoomList.int_CR_Product_ID.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Product_ID"
+            data-table="tblClassRoom"
+            data-field="x_int_CR_Product_ID"
+            data-value-separator="@(tblClassRoomList.int_CR_Product_ID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_CR_Product_ID.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblClassRoomList.int_CR_Product_ID.EditAttributes)>
+            @(tblClassRoomList.int_CR_Product_ID.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_CR_Product_ID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_CR_Product_ID.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.int_CR_Product_ID.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_int_CR_Product_ID"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_CR_Product_ID", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Product_ID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_CR_Product_ID?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Product_ID", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Product_ID", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Product_ID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* int_CR_Product_ID (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* int_CR_Product_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Product_ID" class="el_tblClassRoom_int_CR_Product_ID">
+    <span @Html.Raw(tblClassRoomList.int_CR_Product_ID.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.int_CR_Product_ID.GetViewValue())</span>
+    </span>
+    @* int_CR_Product_ID (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.int_CR_Product_ID.Visible (end) *@
+    @if (tblClassRoomList.date_Start.Visible) { // tblClassRoomList.date_Start.Visible (begin)
+        <td data-name="date_Start" @Html.Raw(tblClassRoomList.date_Start.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* date_Start (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_date_Start" class="el_tblClassRoom_date_Start">
+    <input type="@(tblClassRoomList.date_Start.InputTextType)" name="x@(tblClassRoomList.RowIndex)_date_Start" id="x@(tblClassRoomList.RowIndex)_date_Start" data-table="tblClassRoom" data-field="x_date_Start" value="@Html.Raw(tblClassRoomList.date_Start.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblClassRoomList.date_Start.PlaceHolder))" data-format-pattern="@(tblClassRoomList.date_Start.FormatPattern)"@Html.Raw(tblClassRoomList.date_Start.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomList.date_Start.GetErrorMessage())</div>
+    @if (!tblClassRoomList.date_Start.ReadOnly && !tblClassRoomList.date_Start.Disabled && !tblClassRoomList.date_Start.EditAttrs.Is("readonly") && !tblClassRoomList.date_Start.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["@(tblClassRoomList.FormName)", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(16))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("@(tblClassRoomList.FormName)", "x@(tblClassRoomList.RowIndex)_date_Start", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_date_Start" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_date_Start" id="o@(tblClassRoomList.RowIndex)_date_Start" value="@Html.Raw(HtmlEncode(tblClassRoomList.date_Start.OldValue))">
+    @* date_Start (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* date_Start (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_date_Start" class="el_tblClassRoom_date_Start">
+    <input type="@(tblClassRoomList.date_Start.InputTextType)" name="x@(tblClassRoomList.RowIndex)_date_Start" id="x@(tblClassRoomList.RowIndex)_date_Start" data-table="tblClassRoom" data-field="x_date_Start" value="@Html.Raw(tblClassRoomList.date_Start.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblClassRoomList.date_Start.PlaceHolder))" data-format-pattern="@(tblClassRoomList.date_Start.FormatPattern)"@Html.Raw(tblClassRoomList.date_Start.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomList.date_Start.GetErrorMessage())</div>
+    @if (!tblClassRoomList.date_Start.ReadOnly && !tblClassRoomList.date_Start.Disabled && !tblClassRoomList.date_Start.EditAttrs.Is("readonly") && !tblClassRoomList.date_Start.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["@(tblClassRoomList.FormName)", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(16))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("@(tblClassRoomList.FormName)", "x@(tblClassRoomList.RowIndex)_date_Start", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    @* date_Start (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* date_Start (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_date_Start" class="el_tblClassRoom_date_Start">
+    <span @Html.Raw(tblClassRoomList.date_Start.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.date_Start.GetViewValue())</span>
+    </span>
+    @* date_Start (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.date_Start.Visible (end) *@
+    @if (tblClassRoomList.mon_CR_Price.Visible) { // tblClassRoomList.mon_CR_Price.Visible (begin)
+        <td data-name="mon_CR_Price" @Html.Raw(tblClassRoomList.mon_CR_Price.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* mon_CR_Price (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_mon_CR_Price" class="el_tblClassRoom_mon_CR_Price">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_mon_CR_Price"
+            name="x@(tblClassRoomList.RowIndex)_mon_CR_Price"
+            class="form-select ew-select@(tblClassRoomList.mon_CR_Price.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_mon_CR_Price"
+            data-table="tblClassRoom"
+            data-field="x_mon_CR_Price"
+            data-value-separator="@(tblClassRoomList.mon_CR_Price.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.mon_CR_Price.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.mon_CR_Price.EditAttributes)>
+            @(tblClassRoomList.mon_CR_Price.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_mon_CR_Price"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.mon_CR_Price.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.mon_CR_Price.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_mon_CR_Price"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_mon_CR_Price", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_mon_CR_Price" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.mon_CR_Price?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_mon_CR_Price", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_mon_CR_Price", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.mon_CR_Price.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_mon_CR_Price" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_mon_CR_Price" id="o@(tblClassRoomList.RowIndex)_mon_CR_Price" value="@Html.Raw(HtmlEncode(tblClassRoomList.mon_CR_Price.OldValue))">
+    @* mon_CR_Price (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* mon_CR_Price (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_mon_CR_Price" class="el_tblClassRoom_mon_CR_Price">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_mon_CR_Price"
+            name="x@(tblClassRoomList.RowIndex)_mon_CR_Price"
+            class="form-select ew-select@(tblClassRoomList.mon_CR_Price.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_mon_CR_Price"
+            data-table="tblClassRoom"
+            data-field="x_mon_CR_Price"
+            data-value-separator="@(tblClassRoomList.mon_CR_Price.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.mon_CR_Price.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.mon_CR_Price.EditAttributes)>
+            @(tblClassRoomList.mon_CR_Price.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_mon_CR_Price"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.mon_CR_Price.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.mon_CR_Price.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_mon_CR_Price"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_mon_CR_Price", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_mon_CR_Price" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.mon_CR_Price?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_mon_CR_Price", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_mon_CR_Price", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.mon_CR_Price.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* mon_CR_Price (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* mon_CR_Price (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_mon_CR_Price" class="el_tblClassRoom_mon_CR_Price">
+    <span @Html.Raw(tblClassRoomList.mon_CR_Price.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.mon_CR_Price.GetViewValue())</span>
+    </span>
+    @* mon_CR_Price (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.mon_CR_Price.Visible (end) *@
+    @if (tblClassRoomList.int_CR_Size.Visible) { // tblClassRoomList.int_CR_Size.Visible (begin)
+        <td data-name="int_CR_Size" @Html.Raw(tblClassRoomList.int_CR_Size.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* int_CR_Size (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Size" class="el_tblClassRoom_int_CR_Size">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_CR_Size"
+            name="x@(tblClassRoomList.RowIndex)_int_CR_Size"
+            class="form-select ew-select@(tblClassRoomList.int_CR_Size.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Size"
+            data-table="tblClassRoom"
+            data-field="x_int_CR_Size"
+            data-value-separator="@(tblClassRoomList.int_CR_Size.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_CR_Size.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_CR_Size.EditAttributes)>
+            @(tblClassRoomList.int_CR_Size.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_CR_Size"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_CR_Size.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_CR_Size", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Size" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_CR_Size?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Size", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Size", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Size.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_int_CR_Size" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_int_CR_Size" id="o@(tblClassRoomList.RowIndex)_int_CR_Size" value="@Html.Raw(HtmlEncode(tblClassRoomList.int_CR_Size.OldValue))">
+    @* int_CR_Size (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* int_CR_Size (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Size" class="el_tblClassRoom_int_CR_Size">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_CR_Size"
+            name="x@(tblClassRoomList.RowIndex)_int_CR_Size"
+            class="form-select ew-select@(tblClassRoomList.int_CR_Size.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Size"
+            data-table="tblClassRoom"
+            data-field="x_int_CR_Size"
+            data-value-separator="@(tblClassRoomList.int_CR_Size.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_CR_Size.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_CR_Size.EditAttributes)>
+            @(tblClassRoomList.int_CR_Size.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_CR_Size"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_CR_Size.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_CR_Size", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Size" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_CR_Size?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Size", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Size", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Size.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* int_CR_Size (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* int_CR_Size (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Size" class="el_tblClassRoom_int_CR_Size">
+    <span @Html.Raw(tblClassRoomList.int_CR_Size.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.int_CR_Size.GetViewValue())</span>
+    </span>
+    @* int_CR_Size (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.int_CR_Size.Visible (end) *@
+    @if (tblClassRoomList.int_CR_Status.Visible) { // tblClassRoomList.int_CR_Status.Visible (begin)
+        <td data-name="int_CR_Status" @Html.Raw(tblClassRoomList.int_CR_Status.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* int_CR_Status (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Status" class="el_tblClassRoom_int_CR_Status">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_CR_Status"
+            name="x@(tblClassRoomList.RowIndex)_int_CR_Status"
+            class="form-select ew-select@(tblClassRoomList.int_CR_Status.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Status"
+            data-table="tblClassRoom"
+            data-field="x_int_CR_Status"
+            data-value-separator="@(tblClassRoomList.int_CR_Status.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_CR_Status.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_CR_Status.EditAttributes)>
+            @(tblClassRoomList.int_CR_Status.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_CR_Status"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_CR_Status.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_CR_Status", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Status" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_CR_Status?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Status", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Status", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Status.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_int_CR_Status" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_int_CR_Status" id="o@(tblClassRoomList.RowIndex)_int_CR_Status" value="@Html.Raw(HtmlEncode(tblClassRoomList.int_CR_Status.OldValue))">
+    @* int_CR_Status (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* int_CR_Status (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Status" class="el_tblClassRoom_int_CR_Status">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_CR_Status"
+            name="x@(tblClassRoomList.RowIndex)_int_CR_Status"
+            class="form-select ew-select@(tblClassRoomList.int_CR_Status.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Status"
+            data-table="tblClassRoom"
+            data-field="x_int_CR_Status"
+            data-value-separator="@(tblClassRoomList.int_CR_Status.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_CR_Status.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_CR_Status.EditAttributes)>
+            @(tblClassRoomList.int_CR_Status.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_CR_Status"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_CR_Status.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_CR_Status", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_CR_Status" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_CR_Status?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Status", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_CR_Status", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Status.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* int_CR_Status (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* int_CR_Status (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_CR_Status" class="el_tblClassRoom_int_CR_Status">
+    <span @Html.Raw(tblClassRoomList.int_CR_Status.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.int_CR_Status.GetViewValue())</span>
+    </span>
+    @* int_CR_Status (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.int_CR_Status.Visible (end) *@
+    @if (tblClassRoomList.int_Location_ID.Visible) { // tblClassRoomList.int_Location_ID.Visible (begin)
+        <td data-name="int_Location_ID" @Html.Raw(tblClassRoomList.int_Location_ID.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* int_Location_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_Location_ID" class="el_tblClassRoom_int_Location_ID">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_Location_ID"
+            name="x@(tblClassRoomList.RowIndex)_int_Location_ID"
+            class="form-select ew-select@(tblClassRoomList.int_Location_ID.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Location_ID"
+            data-table="tblClassRoom"
+            data-field="x_int_Location_ID"
+            data-value-separator="@(tblClassRoomList.int_Location_ID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_Location_ID.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_Location_ID.EditAttributes)>
+            @(tblClassRoomList.int_Location_ID.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_Location_ID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_Location_ID.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.int_Location_ID.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_int_Location_ID"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_Location_ID", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Location_ID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_Location_ID?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_Location_ID", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_Location_ID", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_Location_ID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_int_Location_ID" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_int_Location_ID" id="o@(tblClassRoomList.RowIndex)_int_Location_ID" value="@Html.Raw(HtmlEncode(tblClassRoomList.int_Location_ID.OldValue))">
+    @* int_Location_ID (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* int_Location_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_Location_ID" class="el_tblClassRoom_int_Location_ID">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_Location_ID"
+            name="x@(tblClassRoomList.RowIndex)_int_Location_ID"
+            class="form-select ew-select@(tblClassRoomList.int_Location_ID.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Location_ID"
+            data-table="tblClassRoom"
+            data-field="x_int_Location_ID"
+            data-value-separator="@(tblClassRoomList.int_Location_ID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_Location_ID.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_Location_ID.EditAttributes)>
+            @(tblClassRoomList.int_Location_ID.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_Location_ID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_Location_ID.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.int_Location_ID.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_int_Location_ID"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_Location_ID", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Location_ID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_Location_ID?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_Location_ID", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_Location_ID", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_Location_ID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* int_Location_ID (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* int_Location_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_Location_ID" class="el_tblClassRoom_int_Location_ID">
+    <span @Html.Raw(tblClassRoomList.int_Location_ID.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.int_Location_ID.GetViewValue())</span>
+    </span>
+    @* int_Location_ID (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.int_Location_ID.Visible (end) *@
+    @if (tblClassRoomList.int_Teacher_ID.Visible) { // tblClassRoomList.int_Teacher_ID.Visible (begin)
+        <td data-name="int_Teacher_ID" @Html.Raw(tblClassRoomList.int_Teacher_ID.CellAttributes)>
+@if (tblClassRoomList.RowType == RowType.Add) { // Add (begin)
+    @* int_Teacher_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_Teacher_ID" class="el_tblClassRoom_int_Teacher_ID">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_Teacher_ID"
+            name="x@(tblClassRoomList.RowIndex)_int_Teacher_ID"
+            class="form-select ew-select@(tblClassRoomList.int_Teacher_ID.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Teacher_ID"
+            data-table="tblClassRoom"
+            data-field="x_int_Teacher_ID"
+            data-value-separator="@(tblClassRoomList.int_Teacher_ID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_Teacher_ID.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_Teacher_ID.EditAttributes)>
+            @(tblClassRoomList.int_Teacher_ID.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_Teacher_ID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_Teacher_ID.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.int_Teacher_ID.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_int_Teacher_ID"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_Teacher_ID", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Teacher_ID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_Teacher_ID?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_Teacher_ID", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_Teacher_ID", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_Teacher_ID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblClassRoom" data-field="x_int_Teacher_ID" data-hidden="1" data-old name="o@(tblClassRoomList.RowIndex)_int_Teacher_ID" id="o@(tblClassRoomList.RowIndex)_int_Teacher_ID" value="@Html.Raw(HtmlEncode(tblClassRoomList.int_Teacher_ID.OldValue))">
+    @* int_Teacher_ID (end) *@
+} @* Add (end) *@
+@if (tblClassRoomList.RowType == RowType.Edit) { // Edit (begin)
+    @* int_Teacher_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_Teacher_ID" class="el_tblClassRoom_int_Teacher_ID">
+        <select
+            id="x@(tblClassRoomList.RowIndex)_int_Teacher_ID"
+            name="x@(tblClassRoomList.RowIndex)_int_Teacher_ID"
+            class="form-select ew-select@(tblClassRoomList.int_Teacher_ID.IsInvalidClass)"
+            data-select2-id="@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Teacher_ID"
+            data-table="tblClassRoom"
+            data-field="x_int_Teacher_ID"
+            data-value-separator="@(tblClassRoomList.int_Teacher_ID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblClassRoomList.int_Teacher_ID.PlaceHolder))"
+            @Html.Raw(tblClassRoomList.int_Teacher_ID.EditAttributes)>
+            @(tblClassRoomList.int_Teacher_ID.SelectOptionListHtml("x" + tblClassRoomList.RowIndex + "_int_Teacher_ID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblClassRoomList.int_Teacher_ID.GetErrorMessage())</div>
+    @Html.Raw(tblClassRoomList.int_Teacher_ID.Lookup.GetParamTag(tblClassRoomList, "p_x" + tblClassRoomList.RowIndex + "_int_Teacher_ID"))
+    <script>
+    loadjs.ready("@(tblClassRoomList.FormName)", function() {
+        var options = { name: "x@(tblClassRoomList.RowIndex)_int_Teacher_ID", selectId: "@(tblClassRoomList.FormName)_x@(tblClassRoomList.RowIndex)_int_Teacher_ID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (@(tblClassRoomList.FormName).lists.int_Teacher_ID?.lookupOptions.length) {
+            options.data = { id: "x@(tblClassRoomList.RowIndex)_int_Teacher_ID", form: "@(tblClassRoomList.FormName)" };
+        } else {
+            options.ajax = { id: "x@(tblClassRoomList.RowIndex)_int_Teacher_ID", form: "@(tblClassRoomList.FormName)", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_Teacher_ID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* int_Teacher_ID (end) *@
+} @* Edit (end) *@
+@if (tblClassRoomList.RowType == RowType.View) { // View (begin)
+    @* int_Teacher_ID (begin) *@
+    <span id="el@(tblClassRoomList.RowIndex == "$rowindex$" ? "$rowindex$" : tblClassRoomList.RowCount)_tblClassRoom_int_Teacher_ID" class="el_tblClassRoom_int_Teacher_ID">
+    <span @Html.Raw(tblClassRoomList.int_Teacher_ID.ViewAttributes)>
+    @Html.Raw(tblClassRoomList.int_Teacher_ID.GetViewValue())</span>
+    </span>
+    @* int_Teacher_ID (end) *@
+} @* View (end) *@
+</td>
+    } @* tblClassRoomList.int_Teacher_ID.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblClassRoomList.ListOptions.RenderBody("right", tblClassRoomList.RowCount)
+    </tr>
+if (tblClassRoomList.RowType == RowType.Add || tblClassRoomList.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["@(tblClassRoomList.FormName)","load"], () => @(tblClassRoomList.FormName).updateLists(@(tblClassRoomList.RowIndex)@(tblClassRoomList.IsAdd || tblClassRoomList.IsEdit || tblClassRoomList.IsCopy || SameString(tblClassRoomList.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblClassRoomList.RowIndex, "$rowindex$"))
+        tblClassRoomList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblClassRoomList.IsCopy || tblClassRoomList.IsAdd) && tblClassRoomList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblClassRoomList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+@if (tblClassRoomList.IsAdd || tblClassRoomList.IsCopy) {
+<input type="hidden" name="@(tblClassRoomList.FormKeyCountName)" id="@(tblClassRoomList.FormKeyCountName)" value="@(tblClassRoomList.KeyCount)">
+<input type="hidden" name="@(tblClassRoomList.OldKeyName)" value="@Html.Raw(tblClassRoomList.OldKey)">
+}
+@if (tblClassRoomList.IsEdit) {
+<input type="hidden" name="@(tblClassRoomList.FormKeyCountName)" id="@(tblClassRoomList.FormKeyCountName)" value="@(tblClassRoomList.KeyCount)">
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblClassRoomList.CurrentAction) && !tblClassRoomList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblClassRoomList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

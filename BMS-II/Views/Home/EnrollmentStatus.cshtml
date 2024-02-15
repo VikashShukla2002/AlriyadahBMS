@@ -1,0 +1,312 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (enrollmentStatusSummary.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!enrollmentStatusSummary.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!enrollmentStatusSummary.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!enrollmentStatusSummary.IsExport() && !enrollmentStatusSummary.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(enrollmentStatusSummary.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Enrollment_Status: currentTable } });
+var currentPageID = ew.PAGE_ID = "summary";
+var currentForm;
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<a id="top"></a>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+<div class="btn-toolbar ew-toolbar">
+@if (!enrollmentStatusSummary.DrillDownInPanel) {
+    enrollmentStatusSummary.ExportOptions.Render("body");
+    enrollmentStatusSummary.SearchOptions.Render("body");
+    enrollmentStatusSummary.FilterOptions.Render("body");
+}
+</div>
+@if (!enrollmentStatusSummary.IsExport() && !enrollmentStatusSummary.DrillDown && !DashboardReport) {
+}
+@enrollmentStatusSummary.ShowPageHeader()
+@enrollmentStatusSummary.ShowMessages()
+@if (enrollmentStatusSummary.ShowReport) {
+<!-- Summary report (begin) -->
+@if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:<main class="report-summary @(enrollmentStatusSummary.TotalGroups == 0 ? " ew-no-record" : "")">
+}
+@while (enrollmentStatusSummary.GroupCount <= enrollmentStatusSummary.GroupRecords.Count && enrollmentStatusSummary.GroupCount <= enrollmentStatusSummary.DisplayGroups) {
+    // Show header
+    if (enrollmentStatusSummary.ShowHeader) {
+if (enrollmentStatusSummary.GroupCount > 1) {
+@:</tbody>
+@:</table>
+if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+@Html.Raw(enrollmentStatusSummary.PageBreakHtml)
+}
+if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:<div class="@Html.Raw(enrollmentStatusSummary.ReportContainerClass)">
+}
+if (!enrollmentStatusSummary.IsExport() && !(enrollmentStatusSummary.DrillDown && enrollmentStatusSummary.TotalGroups > 0)) {
+<!-- Top pager -->
+<div class="card-header ew-grid-upper-panel">
+@enrollmentStatusSummary.Pager.Render()
+</div>
+}
+if (!enrollmentStatusSummary.IsExport("pdf")) {
+<!-- Report grid (begin) -->
+@:<div id="gmp_Enrollment_Status" class="card-body ew-grid-middle-panel @(enrollmentStatusSummary.TableContainerClass)">
+}
+@:<table class="@(enrollmentStatusSummary.TableClass)">
+<thead>
+    <!-- Table header -->
+    <tr class="ew-table-header">
+@if (enrollmentStatusSummary.str_Username.Visible) { // enrollmentStatusSummary.str_Username.Visible (begin)
+    if (enrollmentStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    <th data-name="str_Username">&nbsp;</th>
+    } else {
+    <th data-name="str_Username" class="@(enrollmentStatusSummary.str_Username.HeaderCellClass)"><div class="Enrollment_Status_str_Username">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.str_Username))</div></th>
+    }
+} @* enrollmentStatusSummary.str_Username.Visible (end) *@
+@if (enrollmentStatusSummary.int_Package_Id.Visible) { // enrollmentStatusSummary.int_Package_Id.Visible (begin)
+    if (enrollmentStatusSummary.int_Package_Id.ShowGroupHeaderAsRow) {
+    <th data-name="int_Package_Id">&nbsp;</th>
+    } else {
+    <th data-name="int_Package_Id" class="@(enrollmentStatusSummary.int_Package_Id.HeaderCellClass)"><div class="Enrollment_Status_int_Package_Id">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.int_Package_Id))</div></th>
+    }
+} @* enrollmentStatusSummary.int_Package_Id.Visible (end) *@
+@if (enrollmentStatusSummary.date_Created.Visible) { // enrollmentStatusSummary.date_Created.Visible (begin)
+    if (enrollmentStatusSummary.date_Created.ShowGroupHeaderAsRow) {
+    <th data-name="date_Created">&nbsp;</th>
+    } else {
+    <th data-name="date_Created" class="@(enrollmentStatusSummary.date_Created.HeaderCellClass)"><div class="Enrollment_Status_date_Created">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.date_Created))</div></th>
+    }
+} @* enrollmentStatusSummary.date_Created.Visible (end) *@
+@if (enrollmentStatusSummary.str_PurchaseAmount.Visible) { // enrollmentStatusSummary.str_PurchaseAmount.Visible (begin)
+    <th data-name="str_PurchaseAmount" class="@(enrollmentStatusSummary.str_PurchaseAmount.HeaderCellClass)"><div class="Enrollment_Status_str_PurchaseAmount">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.str_PurchaseAmount))</div></th>
+} @* enrollmentStatusSummary.str_PurchaseAmount.Visible (end) *@
+@if (enrollmentStatusSummary.str_Package_Name.Visible) { // enrollmentStatusSummary.str_Package_Name.Visible (begin)
+    <th data-name="str_Package_Name" class="@(enrollmentStatusSummary.str_Package_Name.HeaderCellClass)"><div class="Enrollment_Status_str_Package_Name">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.str_Package_Name))</div></th>
+} @* enrollmentStatusSummary.str_Package_Name.Visible (end) *@
+@if (enrollmentStatusSummary.course.Visible) { // enrollmentStatusSummary.course.Visible (begin)
+    <th data-name="course" class="@(enrollmentStatusSummary.course.HeaderCellClass)"><div class="Enrollment_Status_course">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.course))</div></th>
+} @* enrollmentStatusSummary.course.Visible (end) *@
+@if (enrollmentStatusSummary.institution.Visible) { // enrollmentStatusSummary.institution.Visible (begin)
+    <th data-name="institution" class="@(enrollmentStatusSummary.institution.HeaderCellClass)"><div class="Enrollment_Status_institution">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.institution))</div></th>
+} @* enrollmentStatusSummary.institution.Visible (end) *@
+@if (enrollmentStatusSummary.UniqueIdx.Visible) { // enrollmentStatusSummary.UniqueIdx.Visible (begin)
+    <th data-name="UniqueIdx" class="@(enrollmentStatusSummary.UniqueIdx.HeaderCellClass)"><div class="Enrollment_Status_UniqueIdx">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.UniqueIdx))</div></th>
+} @* enrollmentStatusSummary.UniqueIdx.Visible (end) *@
+    </tr>
+</thead>
+@:<tbody>
+        if (enrollmentStatusSummary.TotalGroups == 0) {
+            break; // Show header only
+        }
+        enrollmentStatusSummary.ShowHeader = false;
+    } // End show header
+
+    // Build detail SQL
+    string where = DetailFilterSql(enrollmentStatusSummary.str_Username, enrollmentStatusSummary.SqlFirstGroupField, enrollmentStatusSummary.str_Username?.GroupValue, enrollmentStatusSummary.DbId); // DN
+    if (!Empty(enrollmentStatusSummary.PageFirstGroupFilter)) {
+        enrollmentStatusSummary.PageFirstGroupFilter += " OR ";
+    }
+    enrollmentStatusSummary.PageFirstGroupFilter += where;
+    if (!Empty(enrollmentStatusSummary.Filter)) {
+        where = "(" + enrollmentStatusSummary.Filter + ") AND (" + where + ")";
+    }
+    sqlWrk = BuildReportSql(enrollmentStatusSummary.SqlSelect, enrollmentStatusSummary.SqlWhere, enrollmentStatusSummary.SqlGroupBy, enrollmentStatusSummary.SqlHaving, enrollmentStatusSummary.SqlOrderBy, where, enrollmentStatusSummary.Sort);
+    enrollmentStatusSummary.DetailRecords = await enrollmentStatusSummary.Connection.GetRowsAsync(sqlWrk); // DN
+    enrollmentStatusSummary.DetailRecordCount = enrollmentStatusSummary.DetailRecords?.Count ?? 0; // DN
+
+    // Load detail records
+    enrollmentStatusSummary.str_Username.Records = enrollmentStatusSummary.DetailRecords;
+    enrollmentStatusSummary.str_Username.LevelBreak = true; // Set field level break
+        enrollmentStatusSummary.GroupCounter[1] = enrollmentStatusSummary.GroupCount;
+        enrollmentStatusSummary.str_Username.GetCnt(enrollmentStatusSummary.str_Username.Records); // Get record count
+if (enrollmentStatusSummary.str_Username.Visible && enrollmentStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    // Render header row
+    enrollmentStatusSummary.ResetAttributes();
+    enrollmentStatusSummary.RowType = RowType.Total;
+    enrollmentStatusSummary.RowTotalType = RowSummary.Group;
+    enrollmentStatusSummary.RowTotalSubType = RowTotal.Header;
+    enrollmentStatusSummary.RowGroupLevel = 1;
+    await enrollmentStatusSummary.RenderRow();
+    @:<tr @Html.Raw(enrollmentStatusSummary.RowAttributes)>
+if (enrollmentStatusSummary.str_Username.Visible) {
+    enrollmentStatusSummary.str_Username.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_Username" @Html.Raw(enrollmentStatusSummary.str_Username.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    enrollmentStatusSummary.str_Username.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_Username" colspan="@(enrollmentStatusSummary.GroupColumnCount + enrollmentStatusSummary.DetailColumnCount - 1)" @Html.Raw(enrollmentStatusSummary.str_Username.CellAttributes)>
+        <span class="ew-summary-caption Enrollment_Status_str_Username">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.str_Username))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(enrollmentStatusSummary.str_Username.ViewAttributes)>@Html.Raw(enrollmentStatusSummary.str_Username.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(enrollmentStatusSummary.str_Username.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    enrollmentStatusSummary.int_Package_Id.GetDistinctValues(enrollmentStatusSummary.str_Username.Records, enrollmentStatusSummary.int_Package_Id.Sort);
+    enrollmentStatusSummary.SetGroupCount(enrollmentStatusSummary.int_Package_Id.DistinctValues.Count, enrollmentStatusSummary.GroupCounter[1]);
+    enrollmentStatusSummary.GroupCounter[2] = 0; // Init group count index
+    foreach (var int_Package_Id in enrollmentStatusSummary.int_Package_Id.DistinctValues) { // Load records for this distinct value
+        enrollmentStatusSummary.int_Package_Id.GroupValue = int_Package_Id; // Set group value
+        enrollmentStatusSummary.int_Package_Id.GetDistinctRecords(enrollmentStatusSummary.str_Username.Records, enrollmentStatusSummary.int_Package_Id.GroupValue);
+        enrollmentStatusSummary.int_Package_Id.LevelBreak = true; // Set field level break
+        enrollmentStatusSummary.GroupCounter[2]++;
+        enrollmentStatusSummary.int_Package_Id.GetCnt(enrollmentStatusSummary.int_Package_Id.Records); // Get record count
+if (enrollmentStatusSummary.int_Package_Id.Visible && enrollmentStatusSummary.int_Package_Id.ShowGroupHeaderAsRow) {
+    // Render header row
+    enrollmentStatusSummary.int_Package_Id.SetDbValue(int_Package_Id); // Set current value for int_Package_Id
+    enrollmentStatusSummary.ResetAttributes();
+    enrollmentStatusSummary.RowType = RowType.Total;
+    enrollmentStatusSummary.RowTotalType = RowSummary.Group;
+    enrollmentStatusSummary.RowTotalSubType = RowTotal.Header;
+    enrollmentStatusSummary.RowGroupLevel = 2;
+    await enrollmentStatusSummary.RenderRow();
+    @:<tr @Html.Raw(enrollmentStatusSummary.RowAttributes)>
+if (enrollmentStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(enrollmentStatusSummary.str_Username.CellAttributes)></td>
+}
+if (enrollmentStatusSummary.int_Package_Id.Visible) {
+    enrollmentStatusSummary.int_Package_Id.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="int_Package_Id" @Html.Raw(enrollmentStatusSummary.int_Package_Id.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    enrollmentStatusSummary.int_Package_Id.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="int_Package_Id" colspan="@(enrollmentStatusSummary.GroupColumnCount + enrollmentStatusSummary.DetailColumnCount - 2)" @Html.Raw(enrollmentStatusSummary.int_Package_Id.CellAttributes)>
+        <span class="ew-summary-caption Enrollment_Status_int_Package_Id">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.int_Package_Id))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(enrollmentStatusSummary.int_Package_Id.ViewAttributes)>@Html.Raw(enrollmentStatusSummary.int_Package_Id.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(enrollmentStatusSummary.int_Package_Id.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    enrollmentStatusSummary.date_Created.GetDistinctValues(enrollmentStatusSummary.int_Package_Id.Records, enrollmentStatusSummary.date_Created.Sort);
+    enrollmentStatusSummary.SetGroupCount(enrollmentStatusSummary.date_Created.DistinctValues.Count, enrollmentStatusSummary.GroupCounter[1], enrollmentStatusSummary.GroupCounter[2]);
+    enrollmentStatusSummary.GroupCounter[3] = 0; // Init group count index
+    foreach (var date_Created in enrollmentStatusSummary.date_Created.DistinctValues) { // Load records for this distinct value
+        enrollmentStatusSummary.date_Created.GroupValue = date_Created; // Set group value
+        enrollmentStatusSummary.date_Created.GetDistinctRecords(enrollmentStatusSummary.int_Package_Id.Records, enrollmentStatusSummary.date_Created.GroupValue);
+        enrollmentStatusSummary.date_Created.LevelBreak = true; // Set field level break
+        enrollmentStatusSummary.GroupCounter[3]++;
+        enrollmentStatusSummary.date_Created.GetCnt(enrollmentStatusSummary.date_Created.Records); // Get record count
+        enrollmentStatusSummary.SetGroupCount(enrollmentStatusSummary.date_Created.Count, enrollmentStatusSummary.GroupCounter[1], enrollmentStatusSummary.GroupCounter[2], enrollmentStatusSummary.GroupCounter[3]);
+if (enrollmentStatusSummary.date_Created.Visible && enrollmentStatusSummary.date_Created.ShowGroupHeaderAsRow) {
+    // Render header row
+    enrollmentStatusSummary.date_Created.SetDbValue(date_Created); // Set current value for date_Created
+    enrollmentStatusSummary.ResetAttributes();
+    enrollmentStatusSummary.RowType = RowType.Total;
+    enrollmentStatusSummary.RowTotalType = RowSummary.Group;
+    enrollmentStatusSummary.RowTotalSubType = RowTotal.Header;
+    enrollmentStatusSummary.RowGroupLevel = 3;
+    await enrollmentStatusSummary.RenderRow();
+    @:<tr @Html.Raw(enrollmentStatusSummary.RowAttributes)>
+if (enrollmentStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(enrollmentStatusSummary.str_Username.CellAttributes)></td>
+}
+if (enrollmentStatusSummary.int_Package_Id.Visible) {
+        <td data-field="int_Package_Id" @Html.Raw(enrollmentStatusSummary.int_Package_Id.CellAttributes)></td>
+}
+if (enrollmentStatusSummary.date_Created.Visible) {
+    enrollmentStatusSummary.date_Created.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="date_Created" @Html.Raw(enrollmentStatusSummary.date_Created.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    enrollmentStatusSummary.date_Created.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="date_Created" colspan="@(enrollmentStatusSummary.GroupColumnCount + enrollmentStatusSummary.DetailColumnCount - 3)" @Html.Raw(enrollmentStatusSummary.date_Created.CellAttributes)>
+        <span class="ew-summary-caption Enrollment_Status_date_Created">@Html.Raw(enrollmentStatusSummary.RenderFieldHeader(enrollmentStatusSummary.date_Created))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(enrollmentStatusSummary.date_Created.ViewAttributes)>@Html.Raw(enrollmentStatusSummary.date_Created.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(enrollmentStatusSummary.date_Created.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    enrollmentStatusSummary.RecordCount = 0; // Reset record count
+    foreach (var record in enrollmentStatusSummary.date_Created.Records) {
+        enrollmentStatusSummary.RecordCount++;
+        enrollmentStatusSummary.RecordIndex++;
+        enrollmentStatusSummary.LoadRowValues(record);
+    }
+    } // End group level 2
+    } // End group level 1
+
+    // Next group
+    enrollmentStatusSummary.LoadGroupRowValues();
+
+    // Show header if page break
+    if (enrollmentStatusSummary.IsExport()) {
+        enrollmentStatusSummary.ShowHeader = (enrollmentStatusSummary.ExportPageBreakCount == 0) ? false : (enrollmentStatusSummary.GroupCount % enrollmentStatusSummary.ExportPageBreakCount == 0);
+    }
+
+    // Page Breaking server event
+    if (enrollmentStatusSummary.ShowHeader) {
+        bool pageShowHeader = enrollmentStatusSummary.ShowHeader;
+        string pageBreakHtml = enrollmentStatusSummary.PageBreakHtml;
+        enrollmentStatusSummary.PageBreaking(ref pageShowHeader, ref pageBreakHtml);
+        enrollmentStatusSummary.ShowHeader = pageShowHeader;
+        enrollmentStatusSummary.PageBreakHtml = pageBreakHtml;
+    }
+    enrollmentStatusSummary.GroupCount++;
+} @* End while *@
+@if (enrollmentStatusSummary.TotalGroups > 0) {
+@:</tbody>
+@:<tfoot>
+@:</tfoot>
+@:</table>
+if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+}
+@if (!enrollmentStatusSummary.IsExport("pdf")) {
+@:</main>
+<!-- /.report-summary -->
+}
+<!-- Summary report (end) -->
+}
+</div>
+<!-- /.ew-report -->
+@enrollmentStatusSummary.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!enrollmentStatusSummary.IsExport() && !enrollmentStatusSummary.DrillDown && !DashboardReport) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

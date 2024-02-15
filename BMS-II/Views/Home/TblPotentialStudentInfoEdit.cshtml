@@ -1,0 +1,1284 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblPotentialStudentInfoEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblPotentialStudentInfoEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblPotentialStudentInfoEdit.ShowPageHeader()
+@tblPotentialStudentInfoEdit.ShowMessages()
+<main class="edit">
+<form name="ftblPotentialStudentInfoedit" id="ftblPotentialStudentInfoedit" class="@(tblPotentialStudentInfoEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblPotentialStudentInfoEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblPotentialStudentInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var ftblPotentialStudentInfoedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblPotentialStudentInfoedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["str_NationalID_Iqama", [fields.str_NationalID_Iqama.visible && fields.str_NationalID_Iqama.required ? ew.Validators.required(fields.str_NationalID_Iqama.caption) : null], fields.str_NationalID_Iqama.isInvalid],
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [fields.str_Middle_Name.visible && fields.str_Middle_Name.required ? ew.Validators.required(fields.str_Middle_Name.caption) : null], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["str_Address1", [fields.str_Address1.visible && fields.str_Address1.required ? ew.Validators.required(fields.str_Address1.caption) : null], fields.str_Address1.isInvalid],
+            ["str_Address2", [fields.str_Address2.visible && fields.str_Address2.required ? ew.Validators.required(fields.str_Address2.caption) : null], fields.str_Address2.isInvalid],
+            ["int_State", [fields.int_State.visible && fields.int_State.required ? ew.Validators.required(fields.int_State.caption) : null], fields.int_State.isInvalid],
+            ["str_City", [fields.str_City.visible && fields.str_City.required ? ew.Validators.required(fields.str_City.caption) : null], fields.str_City.isInvalid],
+            ["str_Zip", [fields.str_Zip.visible && fields.str_Zip.required ? ew.Validators.required(fields.str_Zip.caption) : null], fields.str_Zip.isInvalid],
+            ["str_Home_Phone", [fields.str_Home_Phone.visible && fields.str_Home_Phone.required ? ew.Validators.required(fields.str_Home_Phone.caption) : null], fields.str_Home_Phone.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["str_Parent_Phone", [fields.str_Parent_Phone.visible && fields.str_Parent_Phone.required ? ew.Validators.required(fields.str_Parent_Phone.caption) : null], fields.str_Parent_Phone.isInvalid],
+            ["str_Email", [fields.str_Email.visible && fields.str_Email.required ? ew.Validators.required(fields.str_Email.caption) : null], fields.str_Email.isInvalid],
+            ["str_ParentName", [fields.str_ParentName.visible && fields.str_ParentName.required ? ew.Validators.required(fields.str_ParentName.caption) : null], fields.str_ParentName.isInvalid],
+            ["str_DOB", [fields.str_DOB.visible && fields.str_DOB.required ? ew.Validators.required(fields.str_DOB.caption) : null], fields.str_DOB.isInvalid],
+            ["int_Age", [fields.int_Age.visible && fields.int_Age.required ? ew.Validators.required(fields.int_Age.caption) : null], fields.int_Age.isInvalid],
+            ["int_Sex", [fields.int_Sex.visible && fields.int_Sex.required ? ew.Validators.required(fields.int_Sex.caption) : null], fields.int_Sex.isInvalid],
+            ["str_Emergency_Contact_Name", [fields.str_Emergency_Contact_Name.visible && fields.str_Emergency_Contact_Name.required ? ew.Validators.required(fields.str_Emergency_Contact_Name.caption) : null], fields.str_Emergency_Contact_Name.isInvalid],
+            ["str_Emergency_Contact_Phone", [fields.str_Emergency_Contact_Phone.visible && fields.str_Emergency_Contact_Phone.required ? ew.Validators.required(fields.str_Emergency_Contact_Phone.caption) : null], fields.str_Emergency_Contact_Phone.isInvalid],
+            ["str_Emergency_Contact_Relation", [fields.str_Emergency_Contact_Relation.visible && fields.str_Emergency_Contact_Relation.required ? ew.Validators.required(fields.str_Emergency_Contact_Relation.caption) : null], fields.str_Emergency_Contact_Relation.isInvalid],
+            ["str_Student_Notes", [fields.str_Student_Notes.visible && fields.str_Student_Notes.required ? ew.Validators.required(fields.str_Student_Notes.caption) : null], fields.str_Student_Notes.isInvalid],
+            ["int_Location_Id", [fields.int_Location_Id.visible && fields.int_Location_Id.required ? ew.Validators.required(fields.int_Location_Id.caption) : null], fields.int_Location_Id.isInvalid],
+            ["date_Activated", [fields.date_Activated.visible && fields.date_Activated.required ? ew.Validators.required(fields.date_Activated.caption) : null], fields.date_Activated.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null], fields.date_Modified.isInvalid],
+            ["strSMSNotification", [fields.strSMSNotification.visible && fields.strSMSNotification.required ? ew.Validators.required(fields.strSMSNotification.caption) : null], fields.strSMSNotification.isInvalid],
+            ["str_Weight", [fields.str_Weight.visible && fields.str_Weight.required ? ew.Validators.required(fields.str_Weight.caption) : null], fields.str_Weight.isInvalid],
+            ["str_SpecialNeeds", [fields.str_SpecialNeeds.visible && fields.str_SpecialNeeds.required ? ew.Validators.required(fields.str_SpecialNeeds.caption) : null], fields.str_SpecialNeeds.isInvalid],
+            ["str_MedicalConditions", [fields.str_MedicalConditions.visible && fields.str_MedicalConditions.required ? ew.Validators.required(fields.str_MedicalConditions.caption) : null], fields.str_MedicalConditions.isInvalid],
+            ["int_Nationality", [fields.int_Nationality.visible && fields.int_Nationality.required ? ew.Validators.required(fields.int_Nationality.caption) : null], fields.int_Nationality.isInvalid],
+            ["IsDrivingexperience", [fields.IsDrivingexperience.visible && fields.IsDrivingexperience.required ? ew.Validators.required(fields.IsDrivingexperience.caption) : null], fields.IsDrivingexperience.isInvalid],
+            ["IsScheduleassessment", [fields.IsScheduleassessment.visible && fields.IsScheduleassessment.required ? ew.Validators.required(fields.IsScheduleassessment.caption) : null], fields.IsScheduleassessment.isInvalid],
+            ["AssessmentDate", [fields.AssessmentDate.visible && fields.AssessmentDate.required ? ew.Validators.required(fields.AssessmentDate.caption) : null], fields.AssessmentDate.isInvalid],
+            ["isAssessmentDone", [fields.isAssessmentDone.visible && fields.isAssessmentDone.required ? ew.Validators.required(fields.isAssessmentDone.caption) : null], fields.isAssessmentDone.isInvalid],
+            ["AssessmentScore", [fields.AssessmentScore.visible && fields.AssessmentScore.required ? ew.Validators.required(fields.AssessmentScore.caption) : null], fields.AssessmentScore.isInvalid],
+            ["dt_WrittenTestPassed", [fields.dt_WrittenTestPassed.visible && fields.dt_WrittenTestPassed.required ? ew.Validators.required(fields.dt_WrittenTestPassed.caption) : null], fields.dt_WrittenTestPassed.isInvalid],
+            ["dt_RoadTestPassed", [fields.dt_RoadTestPassed.visible && fields.dt_RoadTestPassed.required ? ew.Validators.required(fields.dt_RoadTestPassed.caption) : null], fields.dt_RoadTestPassed.isInvalid],
+            ["Absher_Appointment_number", [fields.Absher_Appointment_number.visible && fields.Absher_Appointment_number.required ? ew.Validators.required(fields.Absher_Appointment_number.caption) : null], fields.Absher_Appointment_number.isInvalid],
+            ["date_Birth_Hijri", [fields.date_Birth_Hijri.visible && fields.date_Birth_Hijri.required ? ew.Validators.required(fields.date_Birth_Hijri.caption) : null], fields.date_Birth_Hijri.isInvalid],
+            ["Activated", [fields.Activated.visible && fields.Activated.required ? ew.Validators.required(fields.Activated.caption) : null], fields.Activated.isInvalid],
+            ["Absherphoto", [fields.Absherphoto.visible && fields.Absherphoto.required ? ew.Validators.required(fields.Absherphoto.caption) : null], fields.Absherphoto.isInvalid],
+            ["Required_Program", [fields.Required_Program.visible && fields.Required_Program.required ? ew.Validators.required(fields.Required_Program.caption) : null], fields.Required_Program.isInvalid],
+            ["Price", [fields.Price.visible && fields.Price.required ? ew.Validators.required(fields.Price.caption) : null], fields.Price.isInvalid],
+            ["Hijri_Day", [fields.Hijri_Day.visible && fields.Hijri_Day.required ? ew.Validators.required(fields.Hijri_Day.caption) : null], fields.Hijri_Day.isInvalid],
+            ["Hijri_Month", [fields.Hijri_Month.visible && fields.Hijri_Month.required ? ew.Validators.required(fields.Hijri_Month.caption) : null], fields.Hijri_Month.isInvalid],
+            ["Hijri_Year", [fields.Hijri_Year.visible && fields.Hijri_Year.required ? ew.Validators.required(fields.Hijri_Year.caption) : null], fields.Hijri_Year.isInvalid],
+            ["dec_Balance", [fields.dec_Balance.visible && fields.dec_Balance.required ? ew.Validators.required(fields.dec_Balance.caption) : null], fields.dec_Balance.isInvalid],
+            ["Payment_Online", [fields.Payment_Online.visible && fields.Payment_Online.required ? ew.Validators.required(fields.Payment_Online.caption) : null], fields.Payment_Online.isInvalid],
+            ["Institution", [fields.Institution.visible && fields.Institution.required ? ew.Validators.required(fields.Institution.caption) : null], fields.Institution.isInvalid],
+            ["WaitingList", [fields.WaitingList.visible && fields.WaitingList.required ? ew.Validators.required(fields.WaitingList.caption) : null], fields.WaitingList.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_State": @Html.Raw(tblPotentialStudentInfoEdit.int_State.ToClientList(tblPotentialStudentInfoEdit)),
+            "str_City": @Html.Raw(tblPotentialStudentInfoEdit.str_City.ToClientList(tblPotentialStudentInfoEdit)),
+            "int_Sex": @Html.Raw(tblPotentialStudentInfoEdit.int_Sex.ToClientList(tblPotentialStudentInfoEdit)),
+            "str_SpecialNeeds": @Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.ToClientList(tblPotentialStudentInfoEdit)),
+            "WaitingList": @Html.Raw(tblPotentialStudentInfoEdit.WaitingList.ToClientList(tblPotentialStudentInfoEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblPotentialStudentInfoEdit.IsConfirm) { // Confirm page
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="confirm" id="confirm" value="confirm">
+} else {
+<input type="hidden" name="action" id="action" value="confirm">
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblPotentialStudentInfoEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblPotentialStudentInfoEdit.OldKeyName)" value="@Html.Raw(tblPotentialStudentInfoEdit.OldKey)">
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblPotentialStudentInfoEdit.MultiPages.ContainerClasses)" id="pages_tblPotentialStudentInfoEdit"><!-- multi-page tabs -->
+    <ul class="@(tblPotentialStudentInfoEdit.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblPotentialStudentInfoEdit.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblPotentialStudentInfo1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblPotentialStudentInfo1" aria-selected="@(ConvertToJson(tblPotentialStudentInfoEdit.MultiPages.IsActive(1)))">@Html.Raw(tblPotentialStudentInfoEdit.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblPotentialStudentInfoEdit.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblPotentialStudentInfo2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblPotentialStudentInfo2" aria-selected="@(ConvertToJson(tblPotentialStudentInfoEdit.MultiPages.IsActive(2)))">@Html.Raw(tblPotentialStudentInfoEdit.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblPotentialStudentInfoEdit.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblPotentialStudentInfo3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblPotentialStudentInfo3" aria-selected="@(ConvertToJson(tblPotentialStudentInfoEdit.MultiPages.IsActive(3)))">@Html.Raw(tblPotentialStudentInfoEdit.PageCaption(3))</button></li>
+        <li class="nav-item"><button class="@(tblPotentialStudentInfoEdit.MultiPages.NavLinkClasses(4))" data-bs-target="#tab_tblPotentialStudentInfo4" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblPotentialStudentInfo4" aria-selected="@(ConvertToJson(tblPotentialStudentInfoEdit.MultiPages.IsActive(4)))">@Html.Raw(tblPotentialStudentInfoEdit.PageCaption(4))</button></li>
+    </ul>
+    <div class="@(tblPotentialStudentInfoEdit.MultiPages.TabContentClasses)"><!-- multi-page tabs .tab-content -->
+        <div class="@(tblPotentialStudentInfoEdit.MultiPages.TabPaneClasses(1))" id="tab_tblPotentialStudentInfo1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblPotentialStudentInfoEdit.str_NationalID_Iqama.Visible) { // tblPotentialStudentInfoEdit.str_NationalID_Iqama.Visible (begin)
+    <div id="r_str_NationalID_Iqama" @Html.Raw(tblPotentialStudentInfoEdit.str_NationalID_Iqama.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_NationalID_Iqama" for="x_str_NationalID_Iqama" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_NationalID_Iqama.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_NationalID_Iqama.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_NationalID_Iqama.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_NationalID_Iqama (begin)
+<span id="el_tblPotentialStudentInfo_str_NationalID_Iqama">
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_NationalID_Iqama.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_NationalID_Iqama.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_NationalID_Iqama" data-hidden="1" data-page="1" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_NationalID_Iqama.CurrentValue))">
+</span>
+} else { // str_NationalID_Iqama (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_NationalID_Iqama.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_NationalID_Iqama.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_NationalID_Iqama" data-hidden="1" data-page="1" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_NationalID_Iqama.FormValue))">
+} @* str_NationalID_Iqama (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_NationalID_Iqama.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_First_Name.Visible) { // tblPotentialStudentInfoEdit.str_First_Name.Visible (begin)
+    <div id="r_str_First_Name" @Html.Raw(tblPotentialStudentInfoEdit.str_First_Name.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_First_Name" for="x_str_First_Name" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_First_Name.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_First_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_First_Name.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_First_Name (begin)
+<span id="el_tblPotentialStudentInfo_str_First_Name">
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_First_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_First_Name.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_First_Name" data-hidden="1" data-page="1" name="x_str_First_Name" id="x_str_First_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_First_Name.CurrentValue))">
+</span>
+} else { // str_First_Name (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_First_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_First_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_First_Name" data-hidden="1" data-page="1" name="x_str_First_Name" id="x_str_First_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_First_Name.FormValue))">
+} @* str_First_Name (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_First_Name.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Middle_Name.Visible) { // tblPotentialStudentInfoEdit.str_Middle_Name.Visible (begin)
+    <div id="r_str_Middle_Name" @Html.Raw(tblPotentialStudentInfoEdit.str_Middle_Name.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Middle_Name" for="x_str_Middle_Name" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Middle_Name.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Middle_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Middle_Name.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Middle_Name (begin)
+<span id="el_tblPotentialStudentInfo_str_Middle_Name">
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Middle_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Middle_Name.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Middle_Name" data-hidden="1" data-page="1" name="x_str_Middle_Name" id="x_str_Middle_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Middle_Name.CurrentValue))">
+</span>
+} else { // str_Middle_Name (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Middle_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Middle_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Middle_Name" data-hidden="1" data-page="1" name="x_str_Middle_Name" id="x_str_Middle_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Middle_Name.FormValue))">
+} @* str_Middle_Name (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Middle_Name.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Last_Name.Visible) { // tblPotentialStudentInfoEdit.str_Last_Name.Visible (begin)
+    <div id="r_str_Last_Name" @Html.Raw(tblPotentialStudentInfoEdit.str_Last_Name.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Last_Name" for="x_str_Last_Name" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Last_Name.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Last_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Last_Name.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Last_Name (begin)
+<span id="el_tblPotentialStudentInfo_str_Last_Name">
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Last_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Last_Name.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Last_Name" data-hidden="1" data-page="1" name="x_str_Last_Name" id="x_str_Last_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Last_Name.CurrentValue))">
+</span>
+} else { // str_Last_Name (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Last_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Last_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Last_Name" data-hidden="1" data-page="1" name="x_str_Last_Name" id="x_str_Last_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Last_Name.FormValue))">
+} @* str_Last_Name (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Last_Name.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Address1.Visible) { // tblPotentialStudentInfoEdit.str_Address1.Visible (begin)
+    <div id="r_str_Address1" @Html.Raw(tblPotentialStudentInfoEdit.str_Address1.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Address1" for="x_str_Address1" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Address1.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Address1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Address1.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Address1 (begin)
+<span id="el_tblPotentialStudentInfo_str_Address1">
+<input type="@(tblPotentialStudentInfoEdit.str_Address1.InputTextType)" name="x_str_Address1" id="x_str_Address1" data-table="tblPotentialStudentInfo" data-field="x_str_Address1" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Address1.EditValue)" data-page="1" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Address1.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Address1.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Address1.EditAttributes) aria-describedby="x_str_Address1_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Address1.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Address1.GetErrorMessage())</div>
+</span>
+} else { // str_Address1 (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Address1.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Address1.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Address1" data-hidden="1" data-page="1" name="x_str_Address1" id="x_str_Address1" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Address1.FormValue))">
+} @* str_Address1 (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Address1.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Address2.Visible) { // tblPotentialStudentInfoEdit.str_Address2.Visible (begin)
+    <div id="r_str_Address2" @Html.Raw(tblPotentialStudentInfoEdit.str_Address2.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Address2" for="x_str_Address2" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Address2.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Address2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Address2.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Address2 (begin)
+<span id="el_tblPotentialStudentInfo_str_Address2">
+<input type="@(tblPotentialStudentInfoEdit.str_Address2.InputTextType)" name="x_str_Address2" id="x_str_Address2" data-table="tblPotentialStudentInfo" data-field="x_str_Address2" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Address2.EditValue)" data-page="1" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Address2.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Address2.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Address2.EditAttributes) aria-describedby="x_str_Address2_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Address2.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Address2.GetErrorMessage())</div>
+</span>
+} else { // str_Address2 (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Address2.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Address2.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Address2" data-hidden="1" data-page="1" name="x_str_Address2" id="x_str_Address2" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Address2.FormValue))">
+} @* str_Address2 (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Address2.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.int_State.Visible) { // tblPotentialStudentInfoEdit.int_State.Visible (begin)
+    <div id="r_int_State" @Html.Raw(tblPotentialStudentInfoEdit.int_State.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_int_State" for="x_int_State" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.int_State.Caption)@Html.Raw(tblPotentialStudentInfoEdit.int_State.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.int_State.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // int_State (begin)
+<span id="el_tblPotentialStudentInfo_int_State">
+    <select
+        id="x_int_State"
+        name="x_int_State"
+        class="form-select ew-select@(tblPotentialStudentInfoEdit.int_State.IsInvalidClass)"
+        data-select2-id="ftblPotentialStudentInfoedit_x_int_State"
+        data-table="tblPotentialStudentInfo"
+        data-field="x_int_State"
+        data-page="1"
+        data-value-separator="@(tblPotentialStudentInfoEdit.int_State.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblPotentialStudentInfoEdit.int_State.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblPotentialStudentInfoEdit.int_State.EditAttributes)>
+        @(tblPotentialStudentInfoEdit.int_State.SelectOptionListHtml("x_int_State"))
+    </select>
+    @Html.Raw(tblPotentialStudentInfoEdit.int_State.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.int_State.GetErrorMessage())</div>
+@Html.Raw(tblPotentialStudentInfoEdit.int_State.Lookup.GetParamTag(tblPotentialStudentInfoEdit, "p_x_int_State"))
+<script>
+loadjs.ready("ftblPotentialStudentInfoedit", function() {
+    var options = { name: "x_int_State", selectId: "ftblPotentialStudentInfoedit_x_int_State" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblPotentialStudentInfoedit.lists.int_State?.lookupOptions.length) {
+        options.data = { id: "x_int_State", form: "ftblPotentialStudentInfoedit" };
+    } else {
+        options.ajax = { id: "x_int_State", form: "ftblPotentialStudentInfoedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblPotentialStudentInfo.fields.int_State.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // int_State (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_State.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.int_State.DisplayValue(tblPotentialStudentInfoEdit.int_State.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_State" data-hidden="1" data-page="1" name="x_int_State" id="x_int_State" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_State.FormValue))">
+} @* int_State (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.int_State.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_City.Visible) { // tblPotentialStudentInfoEdit.str_City.Visible (begin)
+    <div id="r_str_City" @Html.Raw(tblPotentialStudentInfoEdit.str_City.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_City" for="x_str_City" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_City.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_City.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_City.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_City (begin)
+<span id="el_tblPotentialStudentInfo_str_City">
+    <select
+        id="x_str_City"
+        name="x_str_City"
+        class="form-select ew-select@(tblPotentialStudentInfoEdit.str_City.IsInvalidClass)"
+        data-select2-id="ftblPotentialStudentInfoedit_x_str_City"
+        data-table="tblPotentialStudentInfo"
+        data-field="x_str_City"
+        data-page="1"
+        data-value-separator="@(tblPotentialStudentInfoEdit.str_City.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblPotentialStudentInfoEdit.str_City.PlaceHolder))"
+        @Html.Raw(tblPotentialStudentInfoEdit.str_City.EditAttributes)>
+        @(tblPotentialStudentInfoEdit.str_City.SelectOptionListHtml("x_str_City"))
+    </select>
+    @Html.Raw(tblPotentialStudentInfoEdit.str_City.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_City.GetErrorMessage())</div>
+@Html.Raw(tblPotentialStudentInfoEdit.str_City.Lookup.GetParamTag(tblPotentialStudentInfoEdit, "p_x_str_City"))
+<script>
+loadjs.ready("ftblPotentialStudentInfoedit", function() {
+    var options = { name: "x_str_City", selectId: "ftblPotentialStudentInfoedit_x_str_City" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblPotentialStudentInfoedit.lists.str_City?.lookupOptions.length) {
+        options.data = { id: "x_str_City", form: "ftblPotentialStudentInfoedit" };
+    } else {
+        options.ajax = { id: "x_str_City", form: "ftblPotentialStudentInfoedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblPotentialStudentInfo.fields.str_City.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // str_City (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_City.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.str_City.DisplayValue(tblPotentialStudentInfoEdit.str_City.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_City" data-hidden="1" data-page="1" name="x_str_City" id="x_str_City" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_City.FormValue))">
+} @* str_City (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_City.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Zip.Visible) { // tblPotentialStudentInfoEdit.str_Zip.Visible (begin)
+    <div id="r_str_Zip" @Html.Raw(tblPotentialStudentInfoEdit.str_Zip.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Zip" for="x_str_Zip" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Zip.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Zip.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Zip.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Zip (begin)
+<span id="el_tblPotentialStudentInfo_str_Zip">
+<input type="@(tblPotentialStudentInfoEdit.str_Zip.InputTextType)" name="x_str_Zip" id="x_str_Zip" data-table="tblPotentialStudentInfo" data-field="x_str_Zip" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Zip.EditValue)" data-page="1" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Zip.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Zip.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Zip.EditAttributes) aria-describedby="x_str_Zip_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Zip.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Zip.GetErrorMessage())</div>
+</span>
+} else { // str_Zip (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Zip.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Zip.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Zip" data-hidden="1" data-page="1" name="x_str_Zip" id="x_str_Zip" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Zip.FormValue))">
+} @* str_Zip (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Zip.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Home_Phone.Visible) { // tblPotentialStudentInfoEdit.str_Home_Phone.Visible (begin)
+    <div id="r_str_Home_Phone" @Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Home_Phone" for="x_str_Home_Phone" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Home_Phone (begin)
+<span id="el_tblPotentialStudentInfo_str_Home_Phone">
+<input type="@(tblPotentialStudentInfoEdit.str_Home_Phone.InputTextType)" name="x_str_Home_Phone" id="x_str_Home_Phone" data-table="tblPotentialStudentInfo" data-field="x_str_Home_Phone" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Home_Phone.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Home_Phone.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.EditAttributes) aria-describedby="x_str_Home_Phone_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Home_Phone (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Home_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Home_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Home_Phone" data-hidden="1" data-page="1" name="x_str_Home_Phone" id="x_str_Home_Phone" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Home_Phone.FormValue))">
+} @* str_Home_Phone (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Home_Phone.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Cell_Phone.Visible) { // tblPotentialStudentInfoEdit.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" @Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Cell_Phone" for="x_str_Cell_Phone" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Cell_Phone (begin)
+<span id="el_tblPotentialStudentInfo_str_Cell_Phone">
+<input type="@(tblPotentialStudentInfoEdit.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblPotentialStudentInfo" data-field="x_str_Cell_Phone" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Cell_Phone.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.EditAttributes) aria-describedby="x_str_Cell_Phone_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Cell_Phone (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Cell_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Cell_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Cell_Phone" data-hidden="1" data-page="1" name="x_str_Cell_Phone" id="x_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Cell_Phone.FormValue))">
+} @* str_Cell_Phone (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Cell_Phone.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Parent_Phone.Visible) { // tblPotentialStudentInfoEdit.str_Parent_Phone.Visible (begin)
+    <div id="r_str_Parent_Phone" @Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Parent_Phone" for="x_str_Parent_Phone" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Parent_Phone (begin)
+<span id="el_tblPotentialStudentInfo_str_Parent_Phone">
+<input type="@(tblPotentialStudentInfoEdit.str_Parent_Phone.InputTextType)" name="x_str_Parent_Phone" id="x_str_Parent_Phone" data-table="tblPotentialStudentInfo" data-field="x_str_Parent_Phone" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Parent_Phone.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Parent_Phone.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.EditAttributes) aria-describedby="x_str_Parent_Phone_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Parent_Phone (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Parent_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Parent_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Parent_Phone" data-hidden="1" data-page="1" name="x_str_Parent_Phone" id="x_str_Parent_Phone" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Parent_Phone.FormValue))">
+} @* str_Parent_Phone (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Parent_Phone.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Email.Visible) { // tblPotentialStudentInfoEdit.str_Email.Visible (begin)
+    <div id="r_str_Email" @Html.Raw(tblPotentialStudentInfoEdit.str_Email.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Email" for="x_str_Email" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Email.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Email.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Email.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Email (begin)
+<span id="el_tblPotentialStudentInfo_str_Email">
+<input type="@(tblPotentialStudentInfoEdit.str_Email.InputTextType)" name="x_str_Email" id="x_str_Email" data-table="tblPotentialStudentInfo" data-field="x_str_Email" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Email.EditValue)" data-page="1" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Email.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Email.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Email.EditAttributes) aria-describedby="x_str_Email_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Email.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Email.GetErrorMessage())</div>
+@if (!tblPotentialStudentInfoEdit.str_Email.ReadOnly && !tblPotentialStudentInfoEdit.str_Email.Disabled && !tblPotentialStudentInfoEdit.str_Email.EditAttrs.Is("readonly") && !tblPotentialStudentInfoEdit.str_Email.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblPotentialStudentInfoedit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(14))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblPotentialStudentInfoedit", "x_str_Email", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+} else { // str_Email (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Email.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Email.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Email" data-hidden="1" data-page="1" name="x_str_Email" id="x_str_Email" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Email.FormValue))">
+} @* str_Email (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Email.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_ParentName.Visible) { // tblPotentialStudentInfoEdit.str_ParentName.Visible (begin)
+    <div id="r_str_ParentName" @Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_ParentName" for="x_str_ParentName" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_ParentName (begin)
+<span id="el_tblPotentialStudentInfo_str_ParentName">
+<input type="@(tblPotentialStudentInfoEdit.str_ParentName.InputTextType)" name="x_str_ParentName" id="x_str_ParentName" data-table="tblPotentialStudentInfo" data-field="x_str_ParentName" value="@Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.EditValue)" data-page="1" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_ParentName.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_ParentName.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.EditAttributes) aria-describedby="x_str_ParentName_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.GetErrorMessage())</div>
+</span>
+} else { // str_ParentName (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_ParentName.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_ParentName.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_ParentName" data-hidden="1" data-page="1" name="x_str_ParentName" id="x_str_ParentName" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_ParentName.FormValue))">
+} @* str_ParentName (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_ParentName.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_DOB.Visible) { // tblPotentialStudentInfoEdit.str_DOB.Visible (begin)
+    <div id="r_str_DOB" @Html.Raw(tblPotentialStudentInfoEdit.str_DOB.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_DOB" for="x_str_DOB" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_DOB.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_DOB.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_DOB.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_DOB (begin)
+<span id="el_tblPotentialStudentInfo_str_DOB">
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_DOB.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_DOB.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_DOB" data-hidden="1" data-page="1" name="x_str_DOB" id="x_str_DOB" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_DOB.CurrentValue))">
+</span>
+} else { // str_DOB (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_DOB.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_DOB.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_DOB" data-hidden="1" data-page="1" name="x_str_DOB" id="x_str_DOB" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_DOB.FormValue))">
+} @* str_DOB (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_DOB.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.int_Age.Visible) { // tblPotentialStudentInfoEdit.int_Age.Visible (begin)
+    <div id="r_int_Age" @Html.Raw(tblPotentialStudentInfoEdit.int_Age.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_int_Age" for="x_int_Age" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.int_Age.Caption)@Html.Raw(tblPotentialStudentInfoEdit.int_Age.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.int_Age.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // int_Age (begin)
+<span id="el_tblPotentialStudentInfo_int_Age">
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Age.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.int_Age.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Age" data-hidden="1" data-page="1" name="x_int_Age" id="x_int_Age" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Age.CurrentValue))">
+</span>
+} else { // int_Age (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Age.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.int_Age.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Age" data-hidden="1" data-page="1" name="x_int_Age" id="x_int_Age" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Age.FormValue))">
+} @* int_Age (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.int_Age.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.int_Sex.Visible) { // tblPotentialStudentInfoEdit.int_Sex.Visible (begin)
+    <div id="r_int_Sex" @Html.Raw(tblPotentialStudentInfoEdit.int_Sex.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_int_Sex" for="x_int_Sex" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.int_Sex.Caption)@Html.Raw(tblPotentialStudentInfoEdit.int_Sex.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.int_Sex.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // int_Sex (begin)
+<span id="el_tblPotentialStudentInfo_int_Sex">
+    <select
+        id="x_int_Sex"
+        name="x_int_Sex"
+        class="form-select ew-select@(tblPotentialStudentInfoEdit.int_Sex.IsInvalidClass)"
+        data-select2-id="ftblPotentialStudentInfoedit_x_int_Sex"
+        data-table="tblPotentialStudentInfo"
+        data-field="x_int_Sex"
+        data-page="1"
+        data-value-separator="@(tblPotentialStudentInfoEdit.int_Sex.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblPotentialStudentInfoEdit.int_Sex.PlaceHolder))"
+        @Html.Raw(tblPotentialStudentInfoEdit.int_Sex.EditAttributes)>
+        @(tblPotentialStudentInfoEdit.int_Sex.SelectOptionListHtml("x_int_Sex"))
+    </select>
+    @Html.Raw(tblPotentialStudentInfoEdit.int_Sex.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.int_Sex.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblPotentialStudentInfoedit", function() {
+    var options = { name: "x_int_Sex", selectId: "ftblPotentialStudentInfoedit_x_int_Sex" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblPotentialStudentInfoedit.lists.int_Sex?.lookupOptions.length) {
+        options.data = { id: "x_int_Sex", form: "ftblPotentialStudentInfoedit" };
+    } else {
+        options.ajax = { id: "x_int_Sex", form: "ftblPotentialStudentInfoedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblPotentialStudentInfo.fields.int_Sex.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // int_Sex (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Sex.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.int_Sex.DisplayValue(tblPotentialStudentInfoEdit.int_Sex.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Sex" data-hidden="1" data-page="1" name="x_int_Sex" id="x_int_Sex" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Sex.FormValue))">
+} @* int_Sex (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.int_Sex.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.int_Location_Id.Visible) { // tblPotentialStudentInfoEdit.int_Location_Id.Visible (begin)
+    <div id="r_int_Location_Id" @Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_int_Location_Id" for="x_int_Location_Id" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.Caption)@Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // int_Location_Id (begin)
+<span id="el_tblPotentialStudentInfo_int_Location_Id">
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.DisplayValue(tblPotentialStudentInfoEdit.int_Location_Id.EditValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Location_Id" data-hidden="1" data-page="1" name="x_int_Location_Id" id="x_int_Location_Id" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Location_Id.CurrentValue))">
+</span>
+} else { // int_Location_Id (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.int_Location_Id.DisplayValue(tblPotentialStudentInfoEdit.int_Location_Id.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Location_Id" data-hidden="1" data-page="1" name="x_int_Location_Id" id="x_int_Location_Id" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Location_Id.FormValue))">
+} @* int_Location_Id (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.int_Location_Id.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.int_Nationality.Visible) { // tblPotentialStudentInfoEdit.int_Nationality.Visible (begin)
+    <div id="r_int_Nationality" @Html.Raw(tblPotentialStudentInfoEdit.int_Nationality.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_int_Nationality" for="x_int_Nationality" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.int_Nationality.Caption)@Html.Raw(tblPotentialStudentInfoEdit.int_Nationality.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.int_Nationality.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // int_Nationality (begin)
+<span id="el_tblPotentialStudentInfo_int_Nationality">
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Nationality.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.int_Nationality.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Nationality" data-hidden="1" data-page="1" name="x_int_Nationality" id="x_int_Nationality" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Nationality.CurrentValue))">
+</span>
+} else { // int_Nationality (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.int_Nationality.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.int_Nationality.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Nationality" data-hidden="1" data-page="1" name="x_int_Nationality" id="x_int_Nationality" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Nationality.FormValue))">
+} @* int_Nationality (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.int_Nationality.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.IsDrivingexperience.Visible) { // tblPotentialStudentInfoEdit.IsDrivingexperience.Visible (begin)
+    <div id="r_IsDrivingexperience" @Html.Raw(tblPotentialStudentInfoEdit.IsDrivingexperience.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_IsDrivingexperience" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.IsDrivingexperience.Caption)@Html.Raw(tblPotentialStudentInfoEdit.IsDrivingexperience.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.IsDrivingexperience.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // IsDrivingexperience (begin)
+<span id="el_tblPotentialStudentInfo_IsDrivingexperience">
+<span @Html.Raw(tblPotentialStudentInfoEdit.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.IsDrivingexperience.EditValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_IsDrivingexperience" data-hidden="1" data-page="1" name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.IsDrivingexperience.CurrentValue))">
+</span>
+} else { // IsDrivingexperience (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.IsDrivingexperience.ViewValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_IsDrivingexperience" data-hidden="1" data-page="1" name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.IsDrivingexperience.FormValue))">
+} @* IsDrivingexperience (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.IsDrivingexperience.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.IsScheduleassessment.Visible) { // tblPotentialStudentInfoEdit.IsScheduleassessment.Visible (begin)
+    <div id="r_IsScheduleassessment" @Html.Raw(tblPotentialStudentInfoEdit.IsScheduleassessment.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_IsScheduleassessment" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.IsScheduleassessment.Caption)@Html.Raw(tblPotentialStudentInfoEdit.IsScheduleassessment.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.IsScheduleassessment.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // IsScheduleassessment (begin)
+<span id="el_tblPotentialStudentInfo_IsScheduleassessment">
+<span @Html.Raw(tblPotentialStudentInfoEdit.IsScheduleassessment.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsScheduleassessment_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.IsScheduleassessment.EditValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.IsScheduleassessment.CurrentValue))">
+    <label class="form-check-label" for="x_IsScheduleassessment_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_IsScheduleassessment" data-hidden="1" data-page="1" name="x_IsScheduleassessment" id="x_IsScheduleassessment" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.IsScheduleassessment.CurrentValue))">
+</span>
+} else { // IsScheduleassessment (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.IsScheduleassessment.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsScheduleassessment_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.IsScheduleassessment.ViewValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.IsScheduleassessment.CurrentValue))">
+    <label class="form-check-label" for="x_IsScheduleassessment_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_IsScheduleassessment" data-hidden="1" data-page="1" name="x_IsScheduleassessment" id="x_IsScheduleassessment" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.IsScheduleassessment.FormValue))">
+} @* IsScheduleassessment (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.IsScheduleassessment.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Absher_Appointment_number.Visible) { // tblPotentialStudentInfoEdit.Absher_Appointment_number.Visible (begin)
+    <div id="r_Absher_Appointment_number" @Html.Raw(tblPotentialStudentInfoEdit.Absher_Appointment_number.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Absher_Appointment_number" for="x_Absher_Appointment_number" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Absher_Appointment_number.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Absher_Appointment_number.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Absher_Appointment_number.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Absher_Appointment_number (begin)
+<span id="el_tblPotentialStudentInfo_Absher_Appointment_number">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Absher_Appointment_number.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Absher_Appointment_number.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Absher_Appointment_number" data-hidden="1" data-page="1" name="x_Absher_Appointment_number" id="x_Absher_Appointment_number" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Absher_Appointment_number.CurrentValue))">
+</span>
+} else { // Absher_Appointment_number (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Absher_Appointment_number.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Absher_Appointment_number.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Absher_Appointment_number" data-hidden="1" data-page="1" name="x_Absher_Appointment_number" id="x_Absher_Appointment_number" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Absher_Appointment_number.FormValue))">
+} @* Absher_Appointment_number (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Absher_Appointment_number.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.date_Birth_Hijri.Visible) { // tblPotentialStudentInfoEdit.date_Birth_Hijri.Visible (begin)
+    <div id="r_date_Birth_Hijri" @Html.Raw(tblPotentialStudentInfoEdit.date_Birth_Hijri.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_date_Birth_Hijri" for="x_date_Birth_Hijri" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.date_Birth_Hijri.Caption)@Html.Raw(tblPotentialStudentInfoEdit.date_Birth_Hijri.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.date_Birth_Hijri.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // date_Birth_Hijri (begin)
+<span id="el_tblPotentialStudentInfo_date_Birth_Hijri">
+<span @Html.Raw(tblPotentialStudentInfoEdit.date_Birth_Hijri.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.date_Birth_Hijri.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Birth_Hijri" data-hidden="1" data-page="1" name="x_date_Birth_Hijri" id="x_date_Birth_Hijri" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Birth_Hijri.CurrentValue))">
+</span>
+} else { // date_Birth_Hijri (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.date_Birth_Hijri.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.date_Birth_Hijri.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Birth_Hijri" data-hidden="1" data-page="1" name="x_date_Birth_Hijri" id="x_date_Birth_Hijri" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Birth_Hijri.FormValue))">
+} @* date_Birth_Hijri (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.date_Birth_Hijri.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Activated.Visible) { // tblPotentialStudentInfoEdit.Activated.Visible (begin)
+    <div id="r_Activated" @Html.Raw(tblPotentialStudentInfoEdit.Activated.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Activated" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Activated.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Activated.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Activated.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Activated (begin)
+<span id="el_tblPotentialStudentInfo_Activated">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.Activated.EditValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Activated" data-hidden="1" data-page="1" name="x_Activated" id="x_Activated" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Activated.CurrentValue))">
+</span>
+} else { // Activated (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.Activated.ViewValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Activated" data-hidden="1" data-page="1" name="x_Activated" id="x_Activated" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Activated.FormValue))">
+} @* Activated (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Activated.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Absherphoto.Visible) { // tblPotentialStudentInfoEdit.Absherphoto.Visible (begin)
+    <div id="r_Absherphoto" @Html.Raw(tblPotentialStudentInfoEdit.Absherphoto.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Absherphoto" for="x_Absherphoto" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Absherphoto.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Absherphoto.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Absherphoto.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Absherphoto (begin)
+<span id="el_tblPotentialStudentInfo_Absherphoto">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Absherphoto.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Absherphoto.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Absherphoto" data-hidden="1" data-page="1" name="x_Absherphoto" id="x_Absherphoto" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Absherphoto.CurrentValue))">
+</span>
+} else { // Absherphoto (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Absherphoto.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Absherphoto.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Absherphoto" data-hidden="1" data-page="1" name="x_Absherphoto" id="x_Absherphoto" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Absherphoto.FormValue))">
+} @* Absherphoto (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Absherphoto.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Hijri_Day.Visible) { // tblPotentialStudentInfoEdit.Hijri_Day.Visible (begin)
+    <div id="r_Hijri_Day" @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Day.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Hijri_Day" for="x_Hijri_Day" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Hijri_Day.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Hijri_Day.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Day.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Hijri_Day (begin)
+<span id="el_tblPotentialStudentInfo_Hijri_Day">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Day.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Hijri_Day.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Hijri_Day" data-hidden="1" data-page="1" name="x_Hijri_Day" id="x_Hijri_Day" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Hijri_Day.CurrentValue))">
+</span>
+} else { // Hijri_Day (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Day.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Hijri_Day.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Hijri_Day" data-hidden="1" data-page="1" name="x_Hijri_Day" id="x_Hijri_Day" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Hijri_Day.FormValue))">
+} @* Hijri_Day (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Hijri_Day.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Hijri_Month.Visible) { // tblPotentialStudentInfoEdit.Hijri_Month.Visible (begin)
+    <div id="r_Hijri_Month" @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Month.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Hijri_Month" for="x_Hijri_Month" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Hijri_Month.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Hijri_Month.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Month.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Hijri_Month (begin)
+<span id="el_tblPotentialStudentInfo_Hijri_Month">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Month.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Hijri_Month.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Hijri_Month" data-hidden="1" data-page="1" name="x_Hijri_Month" id="x_Hijri_Month" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Hijri_Month.CurrentValue))">
+</span>
+} else { // Hijri_Month (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Month.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Hijri_Month.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Hijri_Month" data-hidden="1" data-page="1" name="x_Hijri_Month" id="x_Hijri_Month" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Hijri_Month.FormValue))">
+} @* Hijri_Month (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Hijri_Month.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Hijri_Year.Visible) { // tblPotentialStudentInfoEdit.Hijri_Year.Visible (begin)
+    <div id="r_Hijri_Year" @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Year.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Hijri_Year" for="x_Hijri_Year" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Hijri_Year.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Hijri_Year.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Year.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Hijri_Year (begin)
+<span id="el_tblPotentialStudentInfo_Hijri_Year">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Year.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Hijri_Year.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Hijri_Year" data-hidden="1" data-page="1" name="x_Hijri_Year" id="x_Hijri_Year" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Hijri_Year.CurrentValue))">
+</span>
+} else { // Hijri_Year (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Hijri_Year.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Hijri_Year.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Hijri_Year" data-hidden="1" data-page="1" name="x_Hijri_Year" id="x_Hijri_Year" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Hijri_Year.FormValue))">
+} @* Hijri_Year (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Hijri_Year.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Institution.Visible) { // tblPotentialStudentInfoEdit.Institution.Visible (begin)
+    <div id="r_Institution" @Html.Raw(tblPotentialStudentInfoEdit.Institution.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Institution" for="x_Institution" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Institution.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Institution.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Institution.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Institution (begin)
+<span id="el_tblPotentialStudentInfo_Institution">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Institution.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Institution.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Institution" data-hidden="1" data-page="1" name="x_Institution" id="x_Institution" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Institution.CurrentValue))">
+</span>
+} else { // Institution (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Institution.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Institution.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Institution" data-hidden="1" data-page="1" name="x_Institution" id="x_Institution" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Institution.FormValue))">
+} @* Institution (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Institution.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblPotentialStudentInfoEdit.MultiPages.TabPaneClasses(2))" id="tab_tblPotentialStudentInfo2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblPotentialStudentInfoEdit.date_Activated.Visible) { // tblPotentialStudentInfoEdit.date_Activated.Visible (begin)
+    <div id="r_date_Activated" @Html.Raw(tblPotentialStudentInfoEdit.date_Activated.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_date_Activated" for="x_date_Activated" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.date_Activated.Caption)@Html.Raw(tblPotentialStudentInfoEdit.date_Activated.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.date_Activated.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // date_Activated (begin)
+<span id="el_tblPotentialStudentInfo_date_Activated">
+<span @Html.Raw(tblPotentialStudentInfoEdit.date_Activated.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.date_Activated.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Activated" data-hidden="1" data-page="2" name="x_date_Activated" id="x_date_Activated" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Activated.CurrentValue))">
+</span>
+} else { // date_Activated (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.date_Activated.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.date_Activated.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Activated" data-hidden="1" data-page="2" name="x_date_Activated" id="x_date_Activated" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Activated.FormValue))">
+} @* date_Activated (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.date_Activated.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.strSMSNotification.Visible) { // tblPotentialStudentInfoEdit.strSMSNotification.Visible (begin)
+    <div id="r_strSMSNotification" @Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_strSMSNotification" for="x_strSMSNotification" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.Caption)@Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // strSMSNotification (begin)
+<span id="el_tblPotentialStudentInfo_strSMSNotification">
+<span @Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.DisplayValue(tblPotentialStudentInfoEdit.strSMSNotification.EditValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_strSMSNotification" data-hidden="1" data-page="2" name="x_strSMSNotification" id="x_strSMSNotification" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.strSMSNotification.CurrentValue))">
+</span>
+} else { // strSMSNotification (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.strSMSNotification.DisplayValue(tblPotentialStudentInfoEdit.strSMSNotification.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_strSMSNotification" data-hidden="1" data-page="2" name="x_strSMSNotification" id="x_strSMSNotification" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.strSMSNotification.FormValue))">
+} @* strSMSNotification (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.strSMSNotification.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Price.Visible) { // tblPotentialStudentInfoEdit.Price.Visible (begin)
+    <div id="r_Price" @Html.Raw(tblPotentialStudentInfoEdit.Price.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Price" for="x_Price" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Price.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Price.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Price.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Price (begin)
+<span id="el_tblPotentialStudentInfo_Price">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Price.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Price.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Price" data-hidden="1" data-page="2" name="x_Price" id="x_Price" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Price.CurrentValue))">
+</span>
+} else { // Price (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Price.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Price.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Price" data-hidden="1" data-page="2" name="x_Price" id="x_Price" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Price.FormValue))">
+} @* Price (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Price.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.dec_Balance.Visible) { // tblPotentialStudentInfoEdit.dec_Balance.Visible (begin)
+    <div id="r_dec_Balance" @Html.Raw(tblPotentialStudentInfoEdit.dec_Balance.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_dec_Balance" for="x_dec_Balance" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.dec_Balance.Caption)@Html.Raw(tblPotentialStudentInfoEdit.dec_Balance.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.dec_Balance.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // dec_Balance (begin)
+<span id="el_tblPotentialStudentInfo_dec_Balance">
+<span @Html.Raw(tblPotentialStudentInfoEdit.dec_Balance.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.dec_Balance.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_dec_Balance" data-hidden="1" data-page="2" name="x_dec_Balance" id="x_dec_Balance" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.dec_Balance.CurrentValue))">
+</span>
+} else { // dec_Balance (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.dec_Balance.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.dec_Balance.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_dec_Balance" data-hidden="1" data-page="2" name="x_dec_Balance" id="x_dec_Balance" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.dec_Balance.FormValue))">
+} @* dec_Balance (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.dec_Balance.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Payment_Online.Visible) { // tblPotentialStudentInfoEdit.Payment_Online.Visible (begin)
+    <div id="r_Payment_Online" @Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Payment_Online" for="x_Payment_Online" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Payment_Online (begin)
+<span id="el_tblPotentialStudentInfo_Payment_Online">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.ViewAttributes)>
+@if (!EmptyString(tblPotentialStudentInfoEdit.Payment_Online.EditValue) && !Empty(tblPotentialStudentInfoEdit.Payment_Online.LinkAttributes)) {
+<a @Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.LinkAttributes)><input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Payment_Online.EditValue)))"></a>
+} else {
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Payment_Online.EditValue)))">
+}
+</span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Payment_Online" data-hidden="1" data-page="2" name="x_Payment_Online" id="x_Payment_Online" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Payment_Online.CurrentValue))">
+</span>
+} else { // Payment_Online (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.ViewAttributes)>
+@if (!EmptyString(tblPotentialStudentInfoEdit.Payment_Online.ViewValue) && !Empty(tblPotentialStudentInfoEdit.Payment_Online.LinkAttributes)) {
+<a @Html.Raw(tblPotentialStudentInfoEdit.Payment_Online.LinkAttributes)><input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Payment_Online.ViewValue)))"></a>
+} else {
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Payment_Online.ViewValue)))">
+}
+</span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Payment_Online" data-hidden="1" data-page="2" name="x_Payment_Online" id="x_Payment_Online" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Payment_Online.FormValue))">
+} @* Payment_Online (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Payment_Online.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblPotentialStudentInfoEdit.MultiPages.TabPaneClasses(3))" id="tab_tblPotentialStudentInfo3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblPotentialStudentInfoEdit.AssessmentDate.Visible) { // tblPotentialStudentInfoEdit.AssessmentDate.Visible (begin)
+    <div id="r_AssessmentDate" @Html.Raw(tblPotentialStudentInfoEdit.AssessmentDate.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_AssessmentDate" for="x_AssessmentDate" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.AssessmentDate.Caption)@Html.Raw(tblPotentialStudentInfoEdit.AssessmentDate.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.AssessmentDate.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // AssessmentDate (begin)
+<span id="el_tblPotentialStudentInfo_AssessmentDate">
+<span @Html.Raw(tblPotentialStudentInfoEdit.AssessmentDate.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.AssessmentDate.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_AssessmentDate" data-hidden="1" data-page="3" name="x_AssessmentDate" id="x_AssessmentDate" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.AssessmentDate.CurrentValue))">
+</span>
+} else { // AssessmentDate (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.AssessmentDate.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.AssessmentDate.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_AssessmentDate" data-hidden="1" data-page="3" name="x_AssessmentDate" id="x_AssessmentDate" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.AssessmentDate.FormValue))">
+} @* AssessmentDate (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.AssessmentDate.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.isAssessmentDone.Visible) { // tblPotentialStudentInfoEdit.isAssessmentDone.Visible (begin)
+    <div id="r_isAssessmentDone" @Html.Raw(tblPotentialStudentInfoEdit.isAssessmentDone.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_isAssessmentDone" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.isAssessmentDone.Caption)@Html.Raw(tblPotentialStudentInfoEdit.isAssessmentDone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.isAssessmentDone.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // isAssessmentDone (begin)
+<span id="el_tblPotentialStudentInfo_isAssessmentDone">
+<span @Html.Raw(tblPotentialStudentInfoEdit.isAssessmentDone.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isAssessmentDone_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.isAssessmentDone.EditValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.isAssessmentDone.CurrentValue))">
+    <label class="form-check-label" for="x_isAssessmentDone_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_isAssessmentDone" data-hidden="1" data-page="3" name="x_isAssessmentDone" id="x_isAssessmentDone" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.isAssessmentDone.CurrentValue))">
+</span>
+} else { // isAssessmentDone (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.isAssessmentDone.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isAssessmentDone_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.isAssessmentDone.ViewValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.isAssessmentDone.CurrentValue))">
+    <label class="form-check-label" for="x_isAssessmentDone_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_isAssessmentDone" data-hidden="1" data-page="3" name="x_isAssessmentDone" id="x_isAssessmentDone" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.isAssessmentDone.FormValue))">
+} @* isAssessmentDone (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.isAssessmentDone.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.AssessmentScore.Visible) { // tblPotentialStudentInfoEdit.AssessmentScore.Visible (begin)
+    <div id="r_AssessmentScore" @Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_AssessmentScore" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.Caption)@Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // AssessmentScore (begin)
+<span id="el_tblPotentialStudentInfo_AssessmentScore">
+<span @Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.DisplayValue(tblPotentialStudentInfoEdit.AssessmentScore.EditValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_AssessmentScore" data-hidden="1" data-page="3" name="x_AssessmentScore" id="x_AssessmentScore" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.AssessmentScore.CurrentValue))">
+</span>
+} else { // AssessmentScore (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.AssessmentScore.DisplayValue(tblPotentialStudentInfoEdit.AssessmentScore.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_AssessmentScore" data-hidden="1" data-page="3" name="x_AssessmentScore" id="x_AssessmentScore" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.AssessmentScore.FormValue))">
+} @* AssessmentScore (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.AssessmentScore.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.dt_WrittenTestPassed.Visible) { // tblPotentialStudentInfoEdit.dt_WrittenTestPassed.Visible (begin)
+    <div id="r_dt_WrittenTestPassed" @Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_dt_WrittenTestPassed" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.Caption)@Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // dt_WrittenTestPassed (begin)
+<span id="el_tblPotentialStudentInfo_dt_WrittenTestPassed">
+<span @Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.DisplayValue(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.EditValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_dt_WrittenTestPassed" data-hidden="1" data-page="3" name="x_dt_WrittenTestPassed" id="x_dt_WrittenTestPassed" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.CurrentValue))">
+</span>
+} else { // dt_WrittenTestPassed (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.DisplayValue(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_dt_WrittenTestPassed" data-hidden="1" data-page="3" name="x_dt_WrittenTestPassed[]" id="x_dt_WrittenTestPassed[]" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.dt_WrittenTestPassed.FormValue))">
+} @* dt_WrittenTestPassed (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.dt_WrittenTestPassed.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.dt_RoadTestPassed.Visible) { // tblPotentialStudentInfoEdit.dt_RoadTestPassed.Visible (begin)
+    <div id="r_dt_RoadTestPassed" @Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_dt_RoadTestPassed" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.Caption)@Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // dt_RoadTestPassed (begin)
+<span id="el_tblPotentialStudentInfo_dt_RoadTestPassed">
+<span @Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.DisplayValue(tblPotentialStudentInfoEdit.dt_RoadTestPassed.EditValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_dt_RoadTestPassed" data-hidden="1" data-page="3" name="x_dt_RoadTestPassed" id="x_dt_RoadTestPassed" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.dt_RoadTestPassed.CurrentValue))">
+</span>
+} else { // dt_RoadTestPassed (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.dt_RoadTestPassed.DisplayValue(tblPotentialStudentInfoEdit.dt_RoadTestPassed.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_dt_RoadTestPassed" data-hidden="1" data-page="3" name="x_dt_RoadTestPassed[]" id="x_dt_RoadTestPassed[]" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.dt_RoadTestPassed.FormValue))">
+} @* dt_RoadTestPassed (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.dt_RoadTestPassed.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.Required_Program.Visible) { // tblPotentialStudentInfoEdit.Required_Program.Visible (begin)
+    <div id="r_Required_Program" @Html.Raw(tblPotentialStudentInfoEdit.Required_Program.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_Required_Program" for="x_Required_Program" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.Required_Program.Caption)@Html.Raw(tblPotentialStudentInfoEdit.Required_Program.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.Required_Program.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Required_Program (begin)
+<span id="el_tblPotentialStudentInfo_Required_Program">
+<span @Html.Raw(tblPotentialStudentInfoEdit.Required_Program.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Required_Program.EditValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Required_Program" data-hidden="1" data-page="3" name="x_Required_Program" id="x_Required_Program" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Required_Program.CurrentValue))">
+</span>
+} else { // Required_Program (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.Required_Program.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.Required_Program.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_Required_Program" data-hidden="1" data-page="3" name="x_Required_Program" id="x_Required_Program" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.Required_Program.FormValue))">
+} @* Required_Program (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.Required_Program.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.WaitingList.Visible) { // tblPotentialStudentInfoEdit.WaitingList.Visible (begin)
+    <div id="r_WaitingList" @Html.Raw(tblPotentialStudentInfoEdit.WaitingList.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_WaitingList" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.WaitingList.Caption)@Html.Raw(tblPotentialStudentInfoEdit.WaitingList.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.WaitingList.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // WaitingList (begin)
+<span id="el_tblPotentialStudentInfo_WaitingList">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblPotentialStudentInfoEdit.WaitingList.IsInvalidClass)" data-table="tblPotentialStudentInfo" data-field="x_WaitingList" data-boolean data-page="3" name="x_WaitingList" id="x_WaitingList" value="1" checked="@ConvertToBool(tblPotentialStudentInfoEdit.WaitingList.CurrentValue)" @Html.Raw(tblPotentialStudentInfoEdit.WaitingList.EditAttributes) aria-describedby="x_WaitingList_help">
+    <div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.WaitingList.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblPotentialStudentInfoEdit.WaitingList.GetCustomMessage)
+</span>
+} else { // WaitingList (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.WaitingList.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_WaitingList_@(tblPotentialStudentInfoEdit.RowCount)" class="form-check-input" value="@(tblPotentialStudentInfoEdit.WaitingList.ViewValue)" disabled checked="@(ConvertToBool(tblPotentialStudentInfoEdit.WaitingList.CurrentValue))">
+    <label class="form-check-label" for="x_WaitingList_@(tblPotentialStudentInfoEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_WaitingList" data-hidden="1" data-page="3" name="x_WaitingList" id="x_WaitingList" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.WaitingList.FormValue))">
+} @* WaitingList (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.WaitingList.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblPotentialStudentInfoEdit.MultiPages.TabPaneClasses(4))" id="tab_tblPotentialStudentInfo4" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.Visible) { // tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.Visible (begin)
+    <div id="r_str_Emergency_Contact_Name" @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Emergency_Contact_Name" for="x_str_Emergency_Contact_Name" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Emergency_Contact_Name (begin)
+<span id="el_tblPotentialStudentInfo_str_Emergency_Contact_Name">
+<input type="@(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.InputTextType)" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" data-table="tblPotentialStudentInfo" data-field="x_str_Emergency_Contact_Name" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.EditValue)" data-page="4" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.EditAttributes) aria-describedby="x_str_Emergency_Contact_Name_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.GetErrorMessage())</div>
+</span>
+} else { // str_Emergency_Contact_Name (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Emergency_Contact_Name" data-hidden="1" data-page="4" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.FormValue))">
+} @* str_Emergency_Contact_Name (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Emergency_Contact_Name.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.Visible) { // tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.Visible (begin)
+    <div id="r_str_Emergency_Contact_Phone" @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Emergency_Contact_Phone" for="x_str_Emergency_Contact_Phone" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Emergency_Contact_Phone (begin)
+<span id="el_tblPotentialStudentInfo_str_Emergency_Contact_Phone">
+<input type="@(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.InputTextType)" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" data-table="tblPotentialStudentInfo" data-field="x_str_Emergency_Contact_Phone" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.EditValue)" data-page="4" size="30" maxlength="15" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.EditAttributes) aria-describedby="x_str_Emergency_Contact_Phone_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Emergency_Contact_Phone (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Emergency_Contact_Phone" data-hidden="1" data-page="4" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.FormValue))">
+} @* str_Emergency_Contact_Phone (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Emergency_Contact_Phone.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.Visible) { // tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.Visible (begin)
+    <div id="r_str_Emergency_Contact_Relation" @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Emergency_Contact_Relation" for="x_str_Emergency_Contact_Relation" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Emergency_Contact_Relation (begin)
+<span id="el_tblPotentialStudentInfo_str_Emergency_Contact_Relation">
+<input type="@(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.InputTextType)" name="x_str_Emergency_Contact_Relation" id="x_str_Emergency_Contact_Relation" data-table="tblPotentialStudentInfo" data-field="x_str_Emergency_Contact_Relation" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.EditValue)" data-page="4" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.EditAttributes) aria-describedby="x_str_Emergency_Contact_Relation_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.GetErrorMessage())</div>
+</span>
+} else { // str_Emergency_Contact_Relation (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Emergency_Contact_Relation" data-hidden="1" data-page="4" name="x_str_Emergency_Contact_Relation" id="x_str_Emergency_Contact_Relation" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.FormValue))">
+} @* str_Emergency_Contact_Relation (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Emergency_Contact_Relation.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Student_Notes.Visible) { // tblPotentialStudentInfoEdit.str_Student_Notes.Visible (begin)
+    <div id="r_str_Student_Notes" @Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Student_Notes" for="x_str_Student_Notes" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Student_Notes (begin)
+<span id="el_tblPotentialStudentInfo_str_Student_Notes">
+<textarea data-table="tblPotentialStudentInfo" data-field="x_str_Student_Notes" data-page="4" name="x_str_Student_Notes" id="x_str_Student_Notes" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Student_Notes.PlaceHolder))"@Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.EditAttributes) aria-describedby="x_str_Student_Notes_help">@(tblPotentialStudentInfoEdit.str_Student_Notes.EditValue)</textarea>
+@Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.GetErrorMessage())</div>
+</span>
+} else { // str_Student_Notes (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoEdit.str_Student_Notes.ViewValue)</span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Student_Notes" data-hidden="1" data-page="4" name="x_str_Student_Notes" id="x_str_Student_Notes" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Student_Notes.FormValue))">
+} @* str_Student_Notes (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Student_Notes.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_Weight.Visible) { // tblPotentialStudentInfoEdit.str_Weight.Visible (begin)
+    <div id="r_str_Weight" @Html.Raw(tblPotentialStudentInfoEdit.str_Weight.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_Weight" for="x_str_Weight" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_Weight.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_Weight.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_Weight.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_Weight (begin)
+<span id="el_tblPotentialStudentInfo_str_Weight">
+<input type="@(tblPotentialStudentInfoEdit.str_Weight.InputTextType)" name="x_str_Weight" id="x_str_Weight" data-table="tblPotentialStudentInfo" data-field="x_str_Weight" value="@Html.Raw(tblPotentialStudentInfoEdit.str_Weight.EditValue)" data-page="4" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Weight.PlaceHolder))" data-format-pattern="@(tblPotentialStudentInfoEdit.str_Weight.FormatPattern)"@Html.Raw(tblPotentialStudentInfoEdit.str_Weight.EditAttributes) aria-describedby="x_str_Weight_help">
+@Html.Raw(tblPotentialStudentInfoEdit.str_Weight.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_Weight.GetErrorMessage())</div>
+</span>
+} else { // str_Weight (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_Weight.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblPotentialStudentInfoEdit.str_Weight.ViewValue)))"></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_Weight" data-hidden="1" data-page="4" name="x_str_Weight" id="x_str_Weight" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_Weight.FormValue))">
+} @* str_Weight (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_Weight.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_SpecialNeeds.Visible) { // tblPotentialStudentInfoEdit.str_SpecialNeeds.Visible (begin)
+    <div id="r_str_SpecialNeeds" @Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_SpecialNeeds" for="x_str_SpecialNeeds" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_SpecialNeeds (begin)
+<span id="el_tblPotentialStudentInfo_str_SpecialNeeds">
+    <select
+        id="x_str_SpecialNeeds"
+        name="x_str_SpecialNeeds"
+        class="form-select ew-select@(tblPotentialStudentInfoEdit.str_SpecialNeeds.IsInvalidClass)"
+        data-select2-id="ftblPotentialStudentInfoedit_x_str_SpecialNeeds"
+        data-table="tblPotentialStudentInfo"
+        data-field="x_str_SpecialNeeds"
+        data-page="4"
+        data-value-separator="@(tblPotentialStudentInfoEdit.str_SpecialNeeds.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblPotentialStudentInfoEdit.str_SpecialNeeds.PlaceHolder))"
+        @Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.EditAttributes)>
+        @(tblPotentialStudentInfoEdit.str_SpecialNeeds.SelectOptionListHtml("x_str_SpecialNeeds"))
+    </select>
+    @Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblPotentialStudentInfoedit", function() {
+    var options = { name: "x_str_SpecialNeeds", selectId: "ftblPotentialStudentInfoedit_x_str_SpecialNeeds" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblPotentialStudentInfoedit.lists.str_SpecialNeeds?.lookupOptions.length) {
+        options.data = { id: "x_str_SpecialNeeds", form: "ftblPotentialStudentInfoedit" };
+    } else {
+        options.ajax = { id: "x_str_SpecialNeeds", form: "ftblPotentialStudentInfoedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblPotentialStudentInfo.fields.str_SpecialNeeds.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // str_SpecialNeeds (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblPotentialStudentInfoEdit.str_SpecialNeeds.DisplayValue(tblPotentialStudentInfoEdit.str_SpecialNeeds.ViewValue))</span></span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_SpecialNeeds" data-hidden="1" data-page="4" name="x_str_SpecialNeeds" id="x_str_SpecialNeeds" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_SpecialNeeds.FormValue))">
+} @* str_SpecialNeeds (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_SpecialNeeds.Visible (end) *@
+@if (tblPotentialStudentInfoEdit.str_MedicalConditions.Visible) { // tblPotentialStudentInfoEdit.str_MedicalConditions.Visible (begin)
+    <div id="r_str_MedicalConditions" @Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.RowAttributes)>
+        <label id="elh_tblPotentialStudentInfo_str_MedicalConditions" for="x_str_MedicalConditions" class="@(tblPotentialStudentInfoEdit.LeftColumnClass)">@Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.Caption)@Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblPotentialStudentInfoEdit.RightColumnClass)"><div @Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.CellAttributes)>
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // str_MedicalConditions (begin)
+<span id="el_tblPotentialStudentInfo_str_MedicalConditions">
+<textarea data-table="tblPotentialStudentInfo" data-field="x_str_MedicalConditions" data-page="4" name="x_str_MedicalConditions" id="x_str_MedicalConditions" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_MedicalConditions.PlaceHolder))"@Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.EditAttributes) aria-describedby="x_str_MedicalConditions_help">@(tblPotentialStudentInfoEdit.str_MedicalConditions.EditValue)</textarea>
+@Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.GetErrorMessage())</div>
+</span>
+} else { // str_MedicalConditions (confirm)
+<span @Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.ViewAttributes)>
+@Html.Raw(tblPotentialStudentInfoEdit.str_MedicalConditions.ViewValue)</span>
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_str_MedicalConditions" data-hidden="1" data-page="4" name="x_str_MedicalConditions" id="x_str_MedicalConditions" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.str_MedicalConditions.FormValue))">
+} @* str_MedicalConditions (end) *@
+</div></div>
+    </div>
+} @* tblPotentialStudentInfoEdit.str_MedicalConditions.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // date_Created (begin)
+<span id="el_tblPotentialStudentInfo_date_Created">
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Created" data-hidden="1" data-page="2" name="x_date_Created" id="x_date_Created" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Created.CurrentValue))">
+</span>
+} else { // date_Created (confirm)
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Created" data-hidden="1" data-page="2" name="x_date_Created" id="x_date_Created" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Created.FormValue))">
+} @* date_Created (end) *@
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // date_Modified (begin)
+<span id="el_tblPotentialStudentInfo_date_Modified">
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Modified" data-hidden="1" data-page="2" name="x_date_Modified" id="x_date_Modified" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Modified.CurrentValue))">
+</span>
+} else { // date_Modified (confirm)
+<input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_date_Modified" data-hidden="1" data-page="2" name="x_date_Modified" id="x_date_Modified" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.date_Modified.FormValue))">
+} @* date_Modified (end) *@
+    <input type="hidden" data-table="tblPotentialStudentInfo" data-field="x_int_Potential_Student_ID" data-hidden="1" name="x_int_Potential_Student_ID" id="x_int_Potential_Student_ID" value="@Html.Raw(HtmlEncode(tblPotentialStudentInfoEdit.int_Potential_Student_ID.CurrentValue))">
+@{ tblPotentialStudentInfoEdit.CloseRecordset(); }
+@if (tblPotentialStudentInfoEdit.CurrentDetailTables.Contains("tblBillingInfo") && tblBillingInfo.DetailEdit) {
+    if (!Empty(tblPotentialStudentInfoEdit.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblBillingInfo", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblBillingInfoGrid")
+    View = this;
+}
+@Html.Raw(tblPotentialStudentInfoEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblPotentialStudentInfoEdit.OffsetColumnClass)"><!-- buttons offset -->
+@if (!tblPotentialStudentInfoEdit.IsConfirm) { // Confirm page
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblPotentialStudentInfoedit" data-ew-action="set-action" data-value="confirm">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblPotentialStudentInfoedit" data-href="@AppPath(tblPotentialStudentInfoEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+} else {
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblPotentialStudentInfoedit">@Html.Raw(Language.Phrase("ConfirmBtn"))</button>
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="submit" form="ftblPotentialStudentInfoedit" data-ew-action="set-action" data-value="cancel">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblPotentialStudentInfoEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@tblPotentialStudentInfoEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblPotentialStudentInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

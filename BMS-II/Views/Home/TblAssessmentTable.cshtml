@@ -1,0 +1,208 @@
+@if (tblAssessmentList.ModalGridAdd && tblAssessmentList.IsGridAdd || tblAssessmentList.ModalGridEdit && tblAssessmentList.IsGridEdit || tblAssessmentList.ModalMultiEdit && tblAssessmentList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAssessmentList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblAssessmentList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblAssessmentList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblAssessmentList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblAssessmentList.FormKeyCountName)")
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Username": @Html.Raw(tblAssessmentList.str_Username.ToClientList(tblAssessmentList)),
+            "Assessment_Type": @Html.Raw(tblAssessmentList.Assessment_Type.ToClientList(tblAssessmentList)),
+            "AssessmentDate": @Html.Raw(tblAssessmentList.AssessmentDate.ToClientList(tblAssessmentList)),
+            "isAssessmentDone": @Html.Raw(tblAssessmentList.isAssessmentDone.ToClientList(tblAssessmentList)),
+            "AssessmentScore": @Html.Raw(tblAssessmentList.AssessmentScore.ToClientList(tblAssessmentList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblAssessmentList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblAssessmentList.TableGridClass)">
+@if (!tblAssessmentList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblAssessmentList.IsGridAdd && !(tblAssessmentList.IsGridEdit && tblAssessmentList.ModalGridEdit) && !tblAssessmentList.IsMultiEdit) {
+@Html.Raw(tblAssessmentList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblAssessmentList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblAssessmentList.FormName)" id="@(tblAssessmentList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblAssessmentList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblAssessmentList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+@if (tblAssessmentList.CurrentMasterTable == "tblStudents" && !Empty(tblAssessmentList.CurrentAction)) {
+<input type="hidden" name="@(Config.TableShowMaster)" value="tblStudents">
+<input type="hidden" name="fk_str_Username" value="@(HtmlEncode(tblAssessmentList.str_Username.SessionValue))">
+}
+<div id="gmp_tblAssessment" class="card-body ew-grid-middle-panel @(tblAssessmentList.TableContainerClass)" style="@(tblAssessmentList.TableContainerStyle)">
+@if (tblAssessmentList.TotalRecords > 0 || tblAssessmentList.IsGridEdit || tblAssessmentList.IsMultiEdit) {
+<table id="tbl_tblAssessmentlist" class="@(tblAssessmentList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblAssessmentList.RowType = RowType.Header;
+
+    // Render list options
+    await tblAssessmentList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblAssessmentList.ListOptions.RenderHeader("left")
+@if (tblAssessmentList.str_First_Name.Visible) { // tblAssessmentList.str_First_Name.Visible (begin)
+        <th data-name="str_First_Name" class="@(tblAssessmentList.str_First_Name.HeaderCellClass)"><div id="elh_tblAssessment_str_First_Name" class="tblAssessment_str_First_Name">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.str_First_Name))</div></th>
+} @* tblAssessmentList.str_First_Name.Visible (end) *@
+@if (tblAssessmentList.str_Middle_Name.Visible) { // tblAssessmentList.str_Middle_Name.Visible (begin)
+        <th data-name="str_Middle_Name" class="@(tblAssessmentList.str_Middle_Name.HeaderCellClass)"><div id="elh_tblAssessment_str_Middle_Name" class="tblAssessment_str_Middle_Name">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.str_Middle_Name))</div></th>
+} @* tblAssessmentList.str_Middle_Name.Visible (end) *@
+@if (tblAssessmentList.str_Last_Name.Visible) { // tblAssessmentList.str_Last_Name.Visible (begin)
+        <th data-name="str_Last_Name" class="@(tblAssessmentList.str_Last_Name.HeaderCellClass)"><div id="elh_tblAssessment_str_Last_Name" class="tblAssessment_str_Last_Name">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.str_Last_Name))</div></th>
+} @* tblAssessmentList.str_Last_Name.Visible (end) *@
+@if (tblAssessmentList.str_Username.Visible) { // tblAssessmentList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(tblAssessmentList.str_Username.HeaderCellClass)"><div id="elh_tblAssessment_str_Username" class="tblAssessment_str_Username">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.str_Username))</div></th>
+} @* tblAssessmentList.str_Username.Visible (end) *@
+@if (tblAssessmentList.Assessment_Type.Visible) { // tblAssessmentList.Assessment_Type.Visible (begin)
+        <th data-name="Assessment_Type" class="@(tblAssessmentList.Assessment_Type.HeaderCellClass)"><div id="elh_tblAssessment_Assessment_Type" class="tblAssessment_Assessment_Type">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.Assessment_Type))</div></th>
+} @* tblAssessmentList.Assessment_Type.Visible (end) *@
+@if (tblAssessmentList.AssessmentDate.Visible) { // tblAssessmentList.AssessmentDate.Visible (begin)
+        <th data-name="AssessmentDate" class="@(tblAssessmentList.AssessmentDate.HeaderCellClass)"><div id="elh_tblAssessment_AssessmentDate" class="tblAssessment_AssessmentDate">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.AssessmentDate))</div></th>
+} @* tblAssessmentList.AssessmentDate.Visible (end) *@
+@if (tblAssessmentList.isAssessmentDone.Visible) { // tblAssessmentList.isAssessmentDone.Visible (begin)
+        <th data-name="isAssessmentDone" class="@(tblAssessmentList.isAssessmentDone.HeaderCellClass)"><div id="elh_tblAssessment_isAssessmentDone" class="tblAssessment_isAssessmentDone">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.isAssessmentDone))</div></th>
+} @* tblAssessmentList.isAssessmentDone.Visible (end) *@
+@if (tblAssessmentList.AssessmentScore.Visible) { // tblAssessmentList.AssessmentScore.Visible (begin)
+        <th data-name="AssessmentScore" class="@(tblAssessmentList.AssessmentScore.HeaderCellClass)"><div id="elh_tblAssessment_AssessmentScore" class="tblAssessment_AssessmentScore">@Html.Raw(tblAssessmentList.RenderFieldHeader(tblAssessmentList.AssessmentScore))</div></th>
+} @* tblAssessmentList.AssessmentScore.Visible (end) *@
+@* Render list options (header, right) *@
+@tblAssessmentList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblAssessmentList.PageNumber)">
+@{
+    await tblAssessmentList.SetupGrid();
+    bool eof = tblAssessmentList.Recordset == null; // DN
+}
+@while (tblAssessmentList.RecordCount < tblAssessmentList.StopRecord || SameString(tblAssessmentList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblAssessmentList.RowIndex, "$rowindex$") &&
+        (!tblAssessmentList.IsGridAdd || tblAssessmentList.CurrentMode == "copy") &&
+        (!((tblAssessmentList.IsCopy || tblAssessmentList.IsAdd) && tblAssessmentList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblAssessmentList.Recordset.ReadAsync();
+    tblAssessmentList.RecordCount++;
+    if (tblAssessmentList.RecordCount >= tblAssessmentList.StartRecord) {
+        await tblAssessmentList.SetupRow();
+    <tr @Html.Raw(tblAssessmentList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblAssessmentList.ListOptions.RenderBody("left", tblAssessmentList.RowCount)
+    @if (tblAssessmentList.str_First_Name.Visible) { // tblAssessmentList.str_First_Name.Visible (begin)
+        <td data-name="str_First_Name" @Html.Raw(tblAssessmentList.str_First_Name.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_str_First_Name" class="el_tblAssessment_str_First_Name">
+<span @Html.Raw(tblAssessmentList.str_First_Name.ViewAttributes)>
+@Html.Raw(tblAssessmentList.str_First_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.str_First_Name.Visible (end) *@
+    @if (tblAssessmentList.str_Middle_Name.Visible) { // tblAssessmentList.str_Middle_Name.Visible (begin)
+        <td data-name="str_Middle_Name" @Html.Raw(tblAssessmentList.str_Middle_Name.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_str_Middle_Name" class="el_tblAssessment_str_Middle_Name">
+<span @Html.Raw(tblAssessmentList.str_Middle_Name.ViewAttributes)>
+@Html.Raw(tblAssessmentList.str_Middle_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.str_Middle_Name.Visible (end) *@
+    @if (tblAssessmentList.str_Last_Name.Visible) { // tblAssessmentList.str_Last_Name.Visible (begin)
+        <td data-name="str_Last_Name" @Html.Raw(tblAssessmentList.str_Last_Name.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_str_Last_Name" class="el_tblAssessment_str_Last_Name">
+<span @Html.Raw(tblAssessmentList.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblAssessmentList.str_Last_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.str_Last_Name.Visible (end) *@
+    @if (tblAssessmentList.str_Username.Visible) { // tblAssessmentList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(tblAssessmentList.str_Username.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_str_Username" class="el_tblAssessment_str_Username">
+<span @Html.Raw(tblAssessmentList.str_Username.ViewAttributes)>
+@Html.Raw(tblAssessmentList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.str_Username.Visible (end) *@
+    @if (tblAssessmentList.Assessment_Type.Visible) { // tblAssessmentList.Assessment_Type.Visible (begin)
+        <td data-name="Assessment_Type" @Html.Raw(tblAssessmentList.Assessment_Type.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_Assessment_Type" class="el_tblAssessment_Assessment_Type">
+<span @Html.Raw(tblAssessmentList.Assessment_Type.ViewAttributes)>
+@Html.Raw(tblAssessmentList.Assessment_Type.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.Assessment_Type.Visible (end) *@
+    @if (tblAssessmentList.AssessmentDate.Visible) { // tblAssessmentList.AssessmentDate.Visible (begin)
+        <td data-name="AssessmentDate" @Html.Raw(tblAssessmentList.AssessmentDate.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_AssessmentDate" class="el_tblAssessment_AssessmentDate">
+<span @Html.Raw(tblAssessmentList.AssessmentDate.ViewAttributes)>
+@Html.Raw(tblAssessmentList.AssessmentDate.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.AssessmentDate.Visible (end) *@
+    @if (tblAssessmentList.isAssessmentDone.Visible) { // tblAssessmentList.isAssessmentDone.Visible (begin)
+        <td data-name="isAssessmentDone" @Html.Raw(tblAssessmentList.isAssessmentDone.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_isAssessmentDone" class="el_tblAssessment_isAssessmentDone">
+<span @Html.Raw(tblAssessmentList.isAssessmentDone.ViewAttributes)>
+@Html.Raw(tblAssessmentList.isAssessmentDone.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.isAssessmentDone.Visible (end) *@
+    @if (tblAssessmentList.AssessmentScore.Visible) { // tblAssessmentList.AssessmentScore.Visible (begin)
+        <td data-name="AssessmentScore" @Html.Raw(tblAssessmentList.AssessmentScore.CellAttributes)>
+<span id="el@(tblAssessmentList.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentList.RowCount)_tblAssessment_AssessmentScore" class="el_tblAssessment_AssessmentScore">
+<span @Html.Raw(tblAssessmentList.AssessmentScore.ViewAttributes)>
+@Html.Raw(tblAssessmentList.AssessmentScore.GetViewValue())</span>
+</span>
+</td>
+    } @* tblAssessmentList.AssessmentScore.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblAssessmentList.ListOptions.RenderBody("right", tblAssessmentList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblAssessmentList.RowIndex, "$rowindex$"))
+        tblAssessmentList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblAssessmentList.IsCopy || tblAssessmentList.IsAdd) && tblAssessmentList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblAssessmentList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblAssessmentList.CurrentAction) && !tblAssessmentList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblAssessmentList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

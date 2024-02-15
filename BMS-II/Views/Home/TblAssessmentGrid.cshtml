@@ -1,0 +1,720 @@
+@{
+    // View
+    View = this;
+
+    // Set up CurrentGrid
+    CurrentGrid = tblAssessmentGrid;
+
+    // Run
+    await tblAssessmentGrid.Run();
+
+    // Check action result
+    if (tblAssessmentGrid.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblAssessmentGrid.IsExport()) {
+<script>
+var ftblAssessmentgrid;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let currentTable = @Html.Raw(ConvertToJson(tblAssessmentGrid.ToClientVar()));
+    ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblAssessmentgrid")
+        .setPageId("grid")
+        .setFormKeyCountName("@(tblAssessmentGrid.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [fields.str_Middle_Name.visible && fields.str_Middle_Name.required ? ew.Validators.required(fields.str_Middle_Name.caption) : null], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["Assessment_Type", [fields.Assessment_Type.visible && fields.Assessment_Type.required ? ew.Validators.required(fields.Assessment_Type.caption) : null], fields.Assessment_Type.isInvalid],
+            ["AssessmentDate", [fields.AssessmentDate.visible && fields.AssessmentDate.required ? ew.Validators.required(fields.AssessmentDate.caption) : null, ew.Validators.datetime(fields.AssessmentDate.clientFormatPattern)], fields.AssessmentDate.isInvalid],
+            ["isAssessmentDone", [fields.isAssessmentDone.visible && fields.isAssessmentDone.required ? ew.Validators.required(fields.isAssessmentDone.caption) : null], fields.isAssessmentDone.isInvalid],
+            ["AssessmentScore", [fields.AssessmentScore.visible && fields.AssessmentScore.required ? ew.Validators.required(fields.AssessmentScore.caption) : null], fields.AssessmentScore.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["str_First_Name",false],["str_Middle_Name",false],["str_Last_Name",false],["str_Username",false],["Assessment_Type",false],["AssessmentDate",false],["isAssessmentDone",false],["AssessmentScore",false]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Assessment_Type": @Html.Raw(tblAssessmentGrid.Assessment_Type.ToClientList(tblAssessmentGrid)),
+            "isAssessmentDone": @Html.Raw(tblAssessmentGrid.isAssessmentDone.ToClientList(tblAssessmentGrid)),
+        })
+        .build();
+    window[form.id] = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+<main class="list">
+<div id="ew-list">
+@if (tblAssessmentGrid.TotalRecords > 0 || !Empty(tblAssessmentGrid.CurrentAction)) {
+<div class="card ew-card ew-grid@(tblAssessmentGrid.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblAssessmentGrid.TableGridClass)">
+@if (tblAssessmentGrid.ShowOtherOptions) {
+<div class="card-header ew-grid-upper-panel">
+    @tblAssessmentGrid.OtherOptions.RenderBody()
+</div>
+}
+<div id="ftblAssessmentgrid" class="ew-form ew-list-form">
+<div id="gmp_tblAssessment" class="card-body ew-grid-middle-panel @(tblAssessmentGrid.TableContainerClass)" style="@(tblAssessmentGrid.TableContainerStyle)">
+<table id="tbl_tblAssessmentgrid" class="@(tblAssessmentGrid.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblAssessmentGrid.RowType = RowType.Header;
+
+    // Render list options
+    await tblAssessmentGrid.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblAssessmentGrid.ListOptions.RenderHeader("left")
+@if (tblAssessmentGrid.str_First_Name.Visible) { // tblAssessmentGrid.str_First_Name.Visible (begin)
+        <th data-name="str_First_Name" class="@(tblAssessmentGrid.str_First_Name.HeaderCellClass)"><div id="elh_tblAssessment_str_First_Name" class="tblAssessment_str_First_Name">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.str_First_Name))</div></th>
+} @* tblAssessmentGrid.str_First_Name.Visible (end) *@
+@if (tblAssessmentGrid.str_Middle_Name.Visible) { // tblAssessmentGrid.str_Middle_Name.Visible (begin)
+        <th data-name="str_Middle_Name" class="@(tblAssessmentGrid.str_Middle_Name.HeaderCellClass)"><div id="elh_tblAssessment_str_Middle_Name" class="tblAssessment_str_Middle_Name">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.str_Middle_Name))</div></th>
+} @* tblAssessmentGrid.str_Middle_Name.Visible (end) *@
+@if (tblAssessmentGrid.str_Last_Name.Visible) { // tblAssessmentGrid.str_Last_Name.Visible (begin)
+        <th data-name="str_Last_Name" class="@(tblAssessmentGrid.str_Last_Name.HeaderCellClass)"><div id="elh_tblAssessment_str_Last_Name" class="tblAssessment_str_Last_Name">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.str_Last_Name))</div></th>
+} @* tblAssessmentGrid.str_Last_Name.Visible (end) *@
+@if (tblAssessmentGrid.str_Username.Visible) { // tblAssessmentGrid.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(tblAssessmentGrid.str_Username.HeaderCellClass)"><div id="elh_tblAssessment_str_Username" class="tblAssessment_str_Username">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.str_Username))</div></th>
+} @* tblAssessmentGrid.str_Username.Visible (end) *@
+@if (tblAssessmentGrid.Assessment_Type.Visible) { // tblAssessmentGrid.Assessment_Type.Visible (begin)
+        <th data-name="Assessment_Type" class="@(tblAssessmentGrid.Assessment_Type.HeaderCellClass)"><div id="elh_tblAssessment_Assessment_Type" class="tblAssessment_Assessment_Type">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.Assessment_Type))</div></th>
+} @* tblAssessmentGrid.Assessment_Type.Visible (end) *@
+@if (tblAssessmentGrid.AssessmentDate.Visible) { // tblAssessmentGrid.AssessmentDate.Visible (begin)
+        <th data-name="AssessmentDate" class="@(tblAssessmentGrid.AssessmentDate.HeaderCellClass)"><div id="elh_tblAssessment_AssessmentDate" class="tblAssessment_AssessmentDate">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.AssessmentDate))</div></th>
+} @* tblAssessmentGrid.AssessmentDate.Visible (end) *@
+@if (tblAssessmentGrid.isAssessmentDone.Visible) { // tblAssessmentGrid.isAssessmentDone.Visible (begin)
+        <th data-name="isAssessmentDone" class="@(tblAssessmentGrid.isAssessmentDone.HeaderCellClass)"><div id="elh_tblAssessment_isAssessmentDone" class="tblAssessment_isAssessmentDone">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.isAssessmentDone))</div></th>
+} @* tblAssessmentGrid.isAssessmentDone.Visible (end) *@
+@if (tblAssessmentGrid.AssessmentScore.Visible) { // tblAssessmentGrid.AssessmentScore.Visible (begin)
+        <th data-name="AssessmentScore" class="@(tblAssessmentGrid.AssessmentScore.HeaderCellClass)"><div id="elh_tblAssessment_AssessmentScore" class="tblAssessment_AssessmentScore">@Html.Raw(tblAssessmentGrid.RenderFieldHeader(tblAssessmentGrid.AssessmentScore))</div></th>
+} @* tblAssessmentGrid.AssessmentScore.Visible (end) *@
+@* Render list options (header, right) *@
+@tblAssessmentGrid.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblAssessmentGrid.PageNumber)">
+@{
+    await tblAssessmentGrid.SetupGrid();
+    bool eof = tblAssessmentGrid.Recordset == null; // DN
+}
+@while (tblAssessmentGrid.RecordCount < tblAssessmentGrid.StopRecord || SameString(tblAssessmentGrid.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblAssessmentGrid.RowIndex, "$rowindex$") &&
+        (!tblAssessmentGrid.IsGridAdd || tblAssessmentGrid.CurrentMode == "copy") &&
+        (!((tblAssessmentGrid.IsCopy || tblAssessmentGrid.IsAdd) && tblAssessmentGrid.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblAssessmentGrid.Recordset.ReadAsync();
+    tblAssessmentGrid.RecordCount++;
+    if (tblAssessmentGrid.RecordCount >= tblAssessmentGrid.StartRecord) {
+        await tblAssessmentGrid.SetupRow();
+
+        // Skip 1) delete row / empty row for confirm page, 2) hidden row
+        if (tblAssessmentGrid.RowAction != "delete" &&
+            tblAssessmentGrid.RowAction != "insertdelete" &&
+            !(tblAssessmentGrid.RowAction == "insert" && tblAssessmentGrid.IsConfirm && tblAssessmentGrid.EmptyRow()) &&
+            tblAssessmentGrid.RowAction != "hide") {
+    <tr @Html.Raw(tblAssessmentGrid.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblAssessmentGrid.ListOptions.RenderBody("left", tblAssessmentGrid.RowCount)
+    @if (tblAssessmentGrid.str_First_Name.Visible) { // tblAssessmentGrid.str_First_Name.Visible (begin)
+        <td data-name="str_First_Name" @Html.Raw(tblAssessmentGrid.str_First_Name.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_First_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_First_Name" class="el_tblAssessment_str_First_Name">
+    <input type="@(tblAssessmentGrid.str_First_Name.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_First_Name" id="x@(tblAssessmentGrid.RowIndex)_str_First_Name" data-table="tblAssessment" data-field="x_str_First_Name" value="@Html.Raw(tblAssessmentGrid.str_First_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_First_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_First_Name.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_First_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_First_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_First_Name" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_str_First_Name" id="o@(tblAssessmentGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_First_Name.OldValue))">
+    @* str_First_Name (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_First_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_First_Name" class="el_tblAssessment_str_First_Name">
+    <input type="@(tblAssessmentGrid.str_First_Name.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_First_Name" id="x@(tblAssessmentGrid.RowIndex)_str_First_Name" data-table="tblAssessment" data-field="x_str_First_Name" value="@Html.Raw(tblAssessmentGrid.str_First_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_First_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_First_Name.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_First_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_First_Name.GetErrorMessage())</div>
+    </span>
+    @* str_First_Name (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_First_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_First_Name" class="el_tblAssessment_str_First_Name">
+    <span @Html.Raw(tblAssessmentGrid.str_First_Name.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.str_First_Name.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_First_Name" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_First_Name" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_First_Name.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_First_Name" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_First_Name" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_First_Name.OldValue))">
+    }
+    @* str_First_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.str_First_Name.Visible (end) *@
+    @if (tblAssessmentGrid.str_Middle_Name.Visible) { // tblAssessmentGrid.str_Middle_Name.Visible (begin)
+        <td data-name="str_Middle_Name" @Html.Raw(tblAssessmentGrid.str_Middle_Name.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Middle_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Middle_Name" class="el_tblAssessment_str_Middle_Name">
+    <input type="@(tblAssessmentGrid.str_Middle_Name.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_Middle_Name" id="x@(tblAssessmentGrid.RowIndex)_str_Middle_Name" data-table="tblAssessment" data-field="x_str_Middle_Name" value="@Html.Raw(tblAssessmentGrid.str_Middle_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Middle_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_Middle_Name.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_Middle_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Middle_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Middle_Name" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_str_Middle_Name" id="o@(tblAssessmentGrid.RowIndex)_str_Middle_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Middle_Name.OldValue))">
+    @* str_Middle_Name (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Middle_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Middle_Name" class="el_tblAssessment_str_Middle_Name">
+    <input type="@(tblAssessmentGrid.str_Middle_Name.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_Middle_Name" id="x@(tblAssessmentGrid.RowIndex)_str_Middle_Name" data-table="tblAssessment" data-field="x_str_Middle_Name" value="@Html.Raw(tblAssessmentGrid.str_Middle_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Middle_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_Middle_Name.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_Middle_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Middle_Name.GetErrorMessage())</div>
+    </span>
+    @* str_Middle_Name (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_Middle_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Middle_Name" class="el_tblAssessment_str_Middle_Name">
+    <span @Html.Raw(tblAssessmentGrid.str_Middle_Name.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.str_Middle_Name.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Middle_Name" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_Middle_Name" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_Middle_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Middle_Name.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Middle_Name" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_Middle_Name" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_Middle_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Middle_Name.OldValue))">
+    }
+    @* str_Middle_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.str_Middle_Name.Visible (end) *@
+    @if (tblAssessmentGrid.str_Last_Name.Visible) { // tblAssessmentGrid.str_Last_Name.Visible (begin)
+        <td data-name="str_Last_Name" @Html.Raw(tblAssessmentGrid.str_Last_Name.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Last_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Last_Name" class="el_tblAssessment_str_Last_Name">
+    <input type="@(tblAssessmentGrid.str_Last_Name.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_Last_Name" id="x@(tblAssessmentGrid.RowIndex)_str_Last_Name" data-table="tblAssessment" data-field="x_str_Last_Name" value="@Html.Raw(tblAssessmentGrid.str_Last_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_Last_Name.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_Last_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Last_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Last_Name" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_str_Last_Name" id="o@(tblAssessmentGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Last_Name.OldValue))">
+    @* str_Last_Name (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Last_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Last_Name" class="el_tblAssessment_str_Last_Name">
+    <input type="@(tblAssessmentGrid.str_Last_Name.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_Last_Name" id="x@(tblAssessmentGrid.RowIndex)_str_Last_Name" data-table="tblAssessment" data-field="x_str_Last_Name" value="@Html.Raw(tblAssessmentGrid.str_Last_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_Last_Name.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_Last_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Last_Name.GetErrorMessage())</div>
+    </span>
+    @* str_Last_Name (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_Last_Name (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Last_Name" class="el_tblAssessment_str_Last_Name">
+    <span @Html.Raw(tblAssessmentGrid.str_Last_Name.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.str_Last_Name.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Last_Name" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_Last_Name" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Last_Name.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Last_Name" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_Last_Name" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Last_Name.OldValue))">
+    }
+    @* str_Last_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.str_Last_Name.Visible (end) *@
+    @if (tblAssessmentGrid.str_Username.Visible) { // tblAssessmentGrid.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(tblAssessmentGrid.str_Username.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Username (begin) *@
+    @if (!Empty(tblAssessmentGrid.str_Username.SessionValue)) {
+    <span @Html.Raw(tblAssessmentGrid.str_Username.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentGrid.str_Username.ViewValue)))"></span>
+    <input type="hidden" id="x@(tblAssessmentGrid.RowIndex)_str_Username" name="x@(tblAssessmentGrid.RowIndex)_str_Username" value="@(HtmlEncode(tblAssessmentGrid.str_Username.CurrentValue))" data-hidden="1">
+    } else if (!Security.IsAdmin && Security.IsLoggedIn && !tblAssessmentGrid.UserIDAllow("grid")) { // Non system admin
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Username" class="el_tblAssessment_str_Username">
+        <select
+            id="x@(tblAssessmentGrid.RowIndex)_str_Username"
+            name="x@(tblAssessmentGrid.RowIndex)_str_Username"
+            class="form-select ew-select@(tblAssessmentGrid.str_Username.IsInvalidClass)"
+            data-select2-id="ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_str_Username"
+            data-table="tblAssessment"
+            data-field="x_str_Username"
+            data-value-separator="@(tblAssessmentGrid.str_Username.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentGrid.str_Username.PlaceHolder))"
+            @Html.Raw(tblAssessmentGrid.str_Username.EditAttributes)>
+            @(tblAssessmentGrid.str_Username.SelectOptionListHtml("x" + tblAssessmentGrid.RowIndex + "_str_Username"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Username.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("ftblAssessmentgrid", function() {
+        var options = { name: "x@(tblAssessmentGrid.RowIndex)_str_Username", selectId: "ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_str_Username" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (ftblAssessmentgrid.lists.str_Username?.lookupOptions.length) {
+            options.data = { id: "x@(tblAssessmentGrid.RowIndex)_str_Username", form: "ftblAssessmentgrid" };
+        } else {
+            options.ajax = { id: "x@(tblAssessmentGrid.RowIndex)_str_Username", form: "ftblAssessmentgrid", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.str_Username.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    } else {
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Username" class="el_tblAssessment_str_Username">
+    <input type="@(tblAssessmentGrid.str_Username.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_Username" id="x@(tblAssessmentGrid.RowIndex)_str_Username" data-table="tblAssessment" data-field="x_str_Username" value="@Html.Raw(tblAssessmentGrid.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Username.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_Username.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_Username.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Username.GetErrorMessage())</div>
+    </span>
+    }
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Username" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_str_Username" id="o@(tblAssessmentGrid.RowIndex)_str_Username" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Username.OldValue))">
+    @* str_Username (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Username (begin) *@
+    @if (!Empty(tblAssessmentGrid.str_Username.SessionValue)) {
+    <span @Html.Raw(tblAssessmentGrid.str_Username.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentGrid.str_Username.ViewValue)))"></span>
+    <input type="hidden" id="x@(tblAssessmentGrid.RowIndex)_str_Username" name="x@(tblAssessmentGrid.RowIndex)_str_Username" value="@(HtmlEncode(tblAssessmentGrid.str_Username.CurrentValue))" data-hidden="1">
+    } else if (!Security.IsAdmin && Security.IsLoggedIn && !tblAssessmentGrid.UserIDAllow("grid")) { // Non system admin
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Username" class="el_tblAssessment_str_Username">
+        <select
+            id="x@(tblAssessmentGrid.RowIndex)_str_Username"
+            name="x@(tblAssessmentGrid.RowIndex)_str_Username"
+            class="form-select ew-select@(tblAssessmentGrid.str_Username.IsInvalidClass)"
+            data-select2-id="ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_str_Username"
+            data-table="tblAssessment"
+            data-field="x_str_Username"
+            data-value-separator="@(tblAssessmentGrid.str_Username.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentGrid.str_Username.PlaceHolder))"
+            @Html.Raw(tblAssessmentGrid.str_Username.EditAttributes)>
+            @(tblAssessmentGrid.str_Username.SelectOptionListHtml("x" + tblAssessmentGrid.RowIndex + "_str_Username"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Username.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("ftblAssessmentgrid", function() {
+        var options = { name: "x@(tblAssessmentGrid.RowIndex)_str_Username", selectId: "ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_str_Username" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (ftblAssessmentgrid.lists.str_Username?.lookupOptions.length) {
+            options.data = { id: "x@(tblAssessmentGrid.RowIndex)_str_Username", form: "ftblAssessmentgrid" };
+        } else {
+            options.ajax = { id: "x@(tblAssessmentGrid.RowIndex)_str_Username", form: "ftblAssessmentgrid", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.str_Username.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    } else {
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Username" class="el_tblAssessment_str_Username">
+    <input type="@(tblAssessmentGrid.str_Username.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_str_Username" id="x@(tblAssessmentGrid.RowIndex)_str_Username" data-table="tblAssessment" data-field="x_str_Username" value="@Html.Raw(tblAssessmentGrid.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Username.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.str_Username.FormatPattern)"@Html.Raw(tblAssessmentGrid.str_Username.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.str_Username.GetErrorMessage())</div>
+    </span>
+    }
+    @* str_Username (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* str_Username (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_str_Username" class="el_tblAssessment_str_Username">
+    <span @Html.Raw(tblAssessmentGrid.str_Username.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.str_Username.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Username" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_Username" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_str_Username" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Username.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_str_Username" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_Username" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_str_Username" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.str_Username.OldValue))">
+    }
+    @* str_Username (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.str_Username.Visible (end) *@
+    @if (tblAssessmentGrid.Assessment_Type.Visible) { // tblAssessmentGrid.Assessment_Type.Visible (begin)
+        <td data-name="Assessment_Type" @Html.Raw(tblAssessmentGrid.Assessment_Type.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* Assessment_Type (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_Assessment_Type" class="el_tblAssessment_Assessment_Type">
+        <select
+            id="x@(tblAssessmentGrid.RowIndex)_Assessment_Type"
+            name="x@(tblAssessmentGrid.RowIndex)_Assessment_Type"
+            class="form-select ew-select@(tblAssessmentGrid.Assessment_Type.IsInvalidClass)"
+            data-select2-id="ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_Assessment_Type"
+            data-table="tblAssessment"
+            data-field="x_Assessment_Type"
+            data-value-separator="@(tblAssessmentGrid.Assessment_Type.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentGrid.Assessment_Type.PlaceHolder))"
+            @Html.Raw(tblAssessmentGrid.Assessment_Type.EditAttributes)>
+            @(tblAssessmentGrid.Assessment_Type.SelectOptionListHtml("x" + tblAssessmentGrid.RowIndex + "_Assessment_Type"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.Assessment_Type.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("ftblAssessmentgrid", function() {
+        var options = { name: "x@(tblAssessmentGrid.RowIndex)_Assessment_Type", selectId: "ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_Assessment_Type" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (ftblAssessmentgrid.lists.Assessment_Type?.lookupOptions.length) {
+            options.data = { id: "x@(tblAssessmentGrid.RowIndex)_Assessment_Type", form: "ftblAssessmentgrid" };
+        } else {
+            options.ajax = { id: "x@(tblAssessmentGrid.RowIndex)_Assessment_Type", form: "ftblAssessmentgrid", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.Assessment_Type.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_Assessment_Type" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_Assessment_Type" id="o@(tblAssessmentGrid.RowIndex)_Assessment_Type" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.Assessment_Type.OldValue))">
+    @* Assessment_Type (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* Assessment_Type (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_Assessment_Type" class="el_tblAssessment_Assessment_Type">
+        <select
+            id="x@(tblAssessmentGrid.RowIndex)_Assessment_Type"
+            name="x@(tblAssessmentGrid.RowIndex)_Assessment_Type"
+            class="form-select ew-select@(tblAssessmentGrid.Assessment_Type.IsInvalidClass)"
+            data-select2-id="ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_Assessment_Type"
+            data-table="tblAssessment"
+            data-field="x_Assessment_Type"
+            data-value-separator="@(tblAssessmentGrid.Assessment_Type.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentGrid.Assessment_Type.PlaceHolder))"
+            @Html.Raw(tblAssessmentGrid.Assessment_Type.EditAttributes)>
+            @(tblAssessmentGrid.Assessment_Type.SelectOptionListHtml("x" + tblAssessmentGrid.RowIndex + "_Assessment_Type"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.Assessment_Type.GetErrorMessage())</div>
+    <script>
+    loadjs.ready("ftblAssessmentgrid", function() {
+        var options = { name: "x@(tblAssessmentGrid.RowIndex)_Assessment_Type", selectId: "ftblAssessmentgrid_x@(tblAssessmentGrid.RowIndex)_Assessment_Type" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (ftblAssessmentgrid.lists.Assessment_Type?.lookupOptions.length) {
+            options.data = { id: "x@(tblAssessmentGrid.RowIndex)_Assessment_Type", form: "ftblAssessmentgrid" };
+        } else {
+            options.ajax = { id: "x@(tblAssessmentGrid.RowIndex)_Assessment_Type", form: "ftblAssessmentgrid", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.Assessment_Type.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    @* Assessment_Type (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* Assessment_Type (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_Assessment_Type" class="el_tblAssessment_Assessment_Type">
+    <span @Html.Raw(tblAssessmentGrid.Assessment_Type.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.Assessment_Type.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_Assessment_Type" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_Assessment_Type" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_Assessment_Type" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.Assessment_Type.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_Assessment_Type" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_Assessment_Type" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_Assessment_Type" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.Assessment_Type.OldValue))">
+    }
+    @* Assessment_Type (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.Assessment_Type.Visible (end) *@
+    @if (tblAssessmentGrid.AssessmentDate.Visible) { // tblAssessmentGrid.AssessmentDate.Visible (begin)
+        <td data-name="AssessmentDate" @Html.Raw(tblAssessmentGrid.AssessmentDate.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* AssessmentDate (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_AssessmentDate" class="el_tblAssessment_AssessmentDate">
+    <input type="@(tblAssessmentGrid.AssessmentDate.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_AssessmentDate" id="x@(tblAssessmentGrid.RowIndex)_AssessmentDate" data-table="tblAssessment" data-field="x_AssessmentDate" value="@Html.Raw(tblAssessmentGrid.AssessmentDate.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentDate.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.AssessmentDate.FormatPattern)"@Html.Raw(tblAssessmentGrid.AssessmentDate.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.AssessmentDate.GetErrorMessage())</div>
+    @if (!tblAssessmentGrid.AssessmentDate.ReadOnly && !tblAssessmentGrid.AssessmentDate.Disabled && !tblAssessmentGrid.AssessmentDate.EditAttrs.Is("readonly") && !tblAssessmentGrid.AssessmentDate.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["ftblAssessmentgrid", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(16))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("ftblAssessmentgrid", "x@(tblAssessmentGrid.RowIndex)_AssessmentDate", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentDate" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_AssessmentDate" id="o@(tblAssessmentGrid.RowIndex)_AssessmentDate" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentDate.OldValue))">
+    @* AssessmentDate (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* AssessmentDate (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_AssessmentDate" class="el_tblAssessment_AssessmentDate">
+    <input type="@(tblAssessmentGrid.AssessmentDate.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_AssessmentDate" id="x@(tblAssessmentGrid.RowIndex)_AssessmentDate" data-table="tblAssessment" data-field="x_AssessmentDate" value="@Html.Raw(tblAssessmentGrid.AssessmentDate.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentDate.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.AssessmentDate.FormatPattern)"@Html.Raw(tblAssessmentGrid.AssessmentDate.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.AssessmentDate.GetErrorMessage())</div>
+    @if (!tblAssessmentGrid.AssessmentDate.ReadOnly && !tblAssessmentGrid.AssessmentDate.Disabled && !tblAssessmentGrid.AssessmentDate.EditAttrs.Is("readonly") && !tblAssessmentGrid.AssessmentDate.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["ftblAssessmentgrid", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(16))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("ftblAssessmentgrid", "x@(tblAssessmentGrid.RowIndex)_AssessmentDate", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    @* AssessmentDate (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* AssessmentDate (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_AssessmentDate" class="el_tblAssessment_AssessmentDate">
+    <span @Html.Raw(tblAssessmentGrid.AssessmentDate.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.AssessmentDate.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentDate" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_AssessmentDate" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_AssessmentDate" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentDate.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentDate" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_AssessmentDate" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_AssessmentDate" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentDate.OldValue))">
+    }
+    @* AssessmentDate (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.AssessmentDate.Visible (end) *@
+    @if (tblAssessmentGrid.isAssessmentDone.Visible) { // tblAssessmentGrid.isAssessmentDone.Visible (begin)
+        <td data-name="isAssessmentDone" @Html.Raw(tblAssessmentGrid.isAssessmentDone.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* isAssessmentDone (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_isAssessmentDone" class="el_tblAssessment_isAssessmentDone">
+    <template id="tp_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" data-table="tblAssessment" data-field="x_isAssessmentDone" name="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone" id="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"@Html.Raw(tblAssessmentGrid.isAssessmentDone.EditAttributes)>
+            <label class="form-check-label"></label>
+        </div>
+    </template>
+    <div id="dsl_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone" class="ew-item-list"></div>
+    <selection-list hidden
+        id="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        name="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        value="@(HtmlEncode(tblAssessmentGrid.isAssessmentDone.CurrentValue))"
+        data-type="select-one"
+        data-template="tp_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        data-target="dsl_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        data-repeatcolumn="5"
+        class="form-control@(tblAssessmentGrid.isAssessmentDone.IsInvalidClass)"
+        data-table="tblAssessment"
+        data-field="x_isAssessmentDone"
+        data-value-separator="@(tblAssessmentGrid.isAssessmentDone.DisplayValueSeparatorAttribute)"
+        @Html.Raw(tblAssessmentGrid.isAssessmentDone.EditAttributes)></selection-list>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.isAssessmentDone.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_isAssessmentDone" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_isAssessmentDone" id="o@(tblAssessmentGrid.RowIndex)_isAssessmentDone" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.isAssessmentDone.OldValue))">
+    @* isAssessmentDone (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* isAssessmentDone (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_isAssessmentDone" class="el_tblAssessment_isAssessmentDone">
+    <template id="tp_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" data-table="tblAssessment" data-field="x_isAssessmentDone" name="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone" id="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"@Html.Raw(tblAssessmentGrid.isAssessmentDone.EditAttributes)>
+            <label class="form-check-label"></label>
+        </div>
+    </template>
+    <div id="dsl_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone" class="ew-item-list"></div>
+    <selection-list hidden
+        id="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        name="x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        value="@(HtmlEncode(tblAssessmentGrid.isAssessmentDone.CurrentValue))"
+        data-type="select-one"
+        data-template="tp_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        data-target="dsl_x@(tblAssessmentGrid.RowIndex)_isAssessmentDone"
+        data-repeatcolumn="5"
+        class="form-control@(tblAssessmentGrid.isAssessmentDone.IsInvalidClass)"
+        data-table="tblAssessment"
+        data-field="x_isAssessmentDone"
+        data-value-separator="@(tblAssessmentGrid.isAssessmentDone.DisplayValueSeparatorAttribute)"
+        @Html.Raw(tblAssessmentGrid.isAssessmentDone.EditAttributes)></selection-list>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.isAssessmentDone.GetErrorMessage())</div>
+    </span>
+    @* isAssessmentDone (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* isAssessmentDone (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_isAssessmentDone" class="el_tblAssessment_isAssessmentDone">
+    <span @Html.Raw(tblAssessmentGrid.isAssessmentDone.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.isAssessmentDone.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_isAssessmentDone" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_isAssessmentDone" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_isAssessmentDone" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.isAssessmentDone.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_isAssessmentDone" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_isAssessmentDone" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_isAssessmentDone" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.isAssessmentDone.OldValue))">
+    }
+    @* isAssessmentDone (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.isAssessmentDone.Visible (end) *@
+    @if (tblAssessmentGrid.AssessmentScore.Visible) { // tblAssessmentGrid.AssessmentScore.Visible (begin)
+        <td data-name="AssessmentScore" @Html.Raw(tblAssessmentGrid.AssessmentScore.CellAttributes)>
+@if (tblAssessmentGrid.RowType == RowType.Add) { // Add (begin)
+    @* AssessmentScore (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_AssessmentScore" class="el_tblAssessment_AssessmentScore">
+    <input type="@(tblAssessmentGrid.AssessmentScore.InputTextType)" name="x@(tblAssessmentGrid.RowIndex)_AssessmentScore" id="x@(tblAssessmentGrid.RowIndex)_AssessmentScore" data-table="tblAssessment" data-field="x_AssessmentScore" value="@Html.Raw(tblAssessmentGrid.AssessmentScore.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentScore.PlaceHolder))" data-format-pattern="@(tblAssessmentGrid.AssessmentScore.FormatPattern)"@Html.Raw(tblAssessmentGrid.AssessmentScore.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentGrid.AssessmentScore.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentScore" data-hidden="1" data-old name="o@(tblAssessmentGrid.RowIndex)_AssessmentScore" id="o@(tblAssessmentGrid.RowIndex)_AssessmentScore" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentScore.OldValue))">
+    @* AssessmentScore (end) *@
+} @* Add (end) *@
+@if (tblAssessmentGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* AssessmentScore (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_AssessmentScore" class="el_tblAssessment_AssessmentScore">
+    <span @Html.Raw(tblAssessmentGrid.AssessmentScore.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentGrid.AssessmentScore.EditValue)))"></span>
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentScore" data-hidden="1" name="x@(tblAssessmentGrid.RowIndex)_AssessmentScore" id="x@(tblAssessmentGrid.RowIndex)_AssessmentScore" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentScore.CurrentValue))">
+    </span>
+    @* AssessmentScore (end) *@
+} @* Edit (end) *@
+@if (tblAssessmentGrid.RowType == RowType.View) { // View (begin)
+    @* AssessmentScore (begin) *@
+    <span id="el@(tblAssessmentGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblAssessmentGrid.RowCount)_tblAssessment_AssessmentScore" class="el_tblAssessment_AssessmentScore">
+    <span @Html.Raw(tblAssessmentGrid.AssessmentScore.ViewAttributes)>
+    @Html.Raw(tblAssessmentGrid.AssessmentScore.GetViewValue())</span>
+    </span>
+    if (tblAssessmentGrid.IsConfirm) {
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentScore" data-hidden="1" name="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_AssessmentScore" id="ftblAssessmentgrid$x@(tblAssessmentGrid.RowIndex)_AssessmentScore" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentScore.FormValue))">
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentScore" data-hidden="1" data-old name="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_AssessmentScore" id="ftblAssessmentgrid$o@(tblAssessmentGrid.RowIndex)_AssessmentScore" value="@Html.Raw(HtmlEncode(tblAssessmentGrid.AssessmentScore.OldValue))">
+    }
+    @* AssessmentScore (end) *@
+} @* View (end) *@
+</td>
+    } @* tblAssessmentGrid.AssessmentScore.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblAssessmentGrid.ListOptions.RenderBody("right", tblAssessmentGrid.RowCount)
+    </tr>
+if (tblAssessmentGrid.RowType == RowType.Add || tblAssessmentGrid.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["ftblAssessmentgrid","load"], () => ftblAssessmentgrid.updateLists(@(tblAssessmentGrid.RowIndex)@(tblAssessmentGrid.IsAdd || tblAssessmentGrid.IsEdit || tblAssessmentGrid.IsCopy || SameString(tblAssessmentGrid.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End delete row checking *@
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblAssessmentGrid.RowIndex, "$rowindex$"))
+        tblAssessmentGrid.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblAssessmentGrid.IsCopy || tblAssessmentGrid.IsAdd) && tblAssessmentGrid.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblAssessmentGrid.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+@if (tblAssessmentGrid.CurrentMode == "add" || tblAssessmentGrid.CurrentMode == "copy") {
+<input type="hidden" name="@(tblAssessmentGrid.FormKeyCountName)" id="@(tblAssessmentGrid.FormKeyCountName)" value="@(tblAssessmentGrid.KeyCount)">
+@Html.Raw(tblAssessmentGrid.MultiSelectKey)
+}
+@if (tblAssessmentGrid.CurrentMode == "edit") {
+<input type="hidden" name="@(tblAssessmentGrid.FormKeyCountName)" id="@(tblAssessmentGrid.FormKeyCountName)" value="@(tblAssessmentGrid.KeyCount)">
+@Html.Raw(tblAssessmentGrid.MultiSelectKey)
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblAssessmentGrid.CurrentMode)) {
+<input type="hidden" name="action" id="action" value="">
+}
+<input type="hidden" name="detailpage" value="ftblAssessmentgrid">
+</div><!-- /.ew-list-form -->
+@{ tblAssessmentGrid.CloseRecordset(); }
+</div><!-- /.ew-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblAssessmentGrid.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@if (!tblAssessmentGrid.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblAssessment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}
+@{
+    // Close Recordset
+    tblAssessmentGrid.CloseRecordset(); // DN
+    // Clear CurrentGrid
+    CurrentGrid = null;
+}

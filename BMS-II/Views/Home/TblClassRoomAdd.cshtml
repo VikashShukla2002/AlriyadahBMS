@@ -1,0 +1,819 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblClassRoomAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblClassRoomAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblClassRoomAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblClassRoom: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblClassRoomadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblClassRoomadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["int_CR_Product_ID", [fields.int_CR_Product_ID.visible && fields.int_CR_Product_ID.required ? ew.Validators.required(fields.int_CR_Product_ID.caption) : null], fields.int_CR_Product_ID.isInvalid],
+            ["date_Start", [fields.date_Start.visible && fields.date_Start.required ? ew.Validators.required(fields.date_Start.caption) : null, ew.Validators.datetime(fields.date_Start.clientFormatPattern)], fields.date_Start.isInvalid],
+            ["mon_CR_Price", [fields.mon_CR_Price.visible && fields.mon_CR_Price.required ? ew.Validators.required(fields.mon_CR_Price.caption) : null], fields.mon_CR_Price.isInvalid],
+            ["int_CR_Size", [fields.int_CR_Size.visible && fields.int_CR_Size.required ? ew.Validators.required(fields.int_CR_Size.caption) : null], fields.int_CR_Size.isInvalid],
+            ["int_MU_Size", [fields.int_MU_Size.visible && fields.int_MU_Size.required ? ew.Validators.required(fields.int_MU_Size.caption) : null], fields.int_MU_Size.isInvalid],
+            ["int_CR_Status", [fields.int_CR_Status.visible && fields.int_CR_Status.required ? ew.Validators.required(fields.int_CR_Status.caption) : null], fields.int_CR_Status.isInvalid],
+            ["Is_Web_SignUp", [fields.Is_Web_SignUp.visible && fields.Is_Web_SignUp.required ? ew.Validators.required(fields.Is_Web_SignUp.caption) : null], fields.Is_Web_SignUp.isInvalid],
+            ["int_TotSession", [fields.int_TotSession.visible && fields.int_TotSession.required ? ew.Validators.required(fields.int_TotSession.caption) : null], fields.int_TotSession.isInvalid],
+            ["int_PerDaySession", [fields.int_PerDaySession.visible && fields.int_PerDaySession.required ? ew.Validators.required(fields.int_PerDaySession.caption) : null], fields.int_PerDaySession.isInvalid],
+            ["int_Location_ID", [fields.int_Location_ID.visible && fields.int_Location_ID.required ? ew.Validators.required(fields.int_Location_ID.caption) : null], fields.int_Location_ID.isInvalid],
+            ["int_Teacher_ID", [fields.int_Teacher_ID.visible && fields.int_Teacher_ID.required ? ew.Validators.required(fields.int_Teacher_ID.caption) : null], fields.int_Teacher_ID.isInvalid],
+            ["str_CR_Notes", [fields.str_CR_Notes.visible && fields.str_CR_Notes.required ? ew.Validators.required(fields.str_CR_Notes.caption) : null], fields.str_CR_Notes.isInvalid],
+            ["is_ZoomMeet", [fields.is_ZoomMeet.visible && fields.is_ZoomMeet.required ? ew.Validators.required(fields.is_ZoomMeet.caption) : null], fields.is_ZoomMeet.isInvalid],
+            ["BulkCR_Set", [fields.BulkCR_Set.visible && fields.BulkCR_Set.required ? ew.Validators.required(fields.BulkCR_Set.caption) : null], fields.BulkCR_Set.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["int_Day_Incremental", [fields.int_Day_Incremental.visible && fields.int_Day_Incremental.required ? ew.Validators.required(fields.int_Day_Incremental.caption) : null, ew.Validators.integer], fields.int_Day_Incremental.isInvalid],
+            ["int_Reoccurrence", [fields.int_Reoccurrence.visible && fields.int_Reoccurrence.required ? ew.Validators.required(fields.int_Reoccurrence.caption) : null, ew.Validators.integer], fields.int_Reoccurrence.isInvalid],
+            ["date_Start2", [fields.date_Start2.visible && fields.date_Start2.required ? ew.Validators.required(fields.date_Start2.caption) : null, ew.Validators.datetime(fields.date_Start2.clientFormatPattern)], fields.date_Start2.isInvalid],
+            ["date_Start3", [fields.date_Start3.visible && fields.date_Start3.required ? ew.Validators.required(fields.date_Start3.caption) : null, ew.Validators.datetime(fields.date_Start3.clientFormatPattern)], fields.date_Start3.isInvalid],
+            ["date_Start4", [fields.date_Start4.visible && fields.date_Start4.required ? ew.Validators.required(fields.date_Start4.caption) : null, ew.Validators.datetime(fields.date_Start4.clientFormatPattern)], fields.date_Start4.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_CR_Product_ID": @Html.Raw(tblClassRoomAdd.int_CR_Product_ID.ToClientList(tblClassRoomAdd)),
+            "mon_CR_Price": @Html.Raw(tblClassRoomAdd.mon_CR_Price.ToClientList(tblClassRoomAdd)),
+            "int_CR_Size": @Html.Raw(tblClassRoomAdd.int_CR_Size.ToClientList(tblClassRoomAdd)),
+            "int_MU_Size": @Html.Raw(tblClassRoomAdd.int_MU_Size.ToClientList(tblClassRoomAdd)),
+            "int_CR_Status": @Html.Raw(tblClassRoomAdd.int_CR_Status.ToClientList(tblClassRoomAdd)),
+            "Is_Web_SignUp": @Html.Raw(tblClassRoomAdd.Is_Web_SignUp.ToClientList(tblClassRoomAdd)),
+            "int_TotSession": @Html.Raw(tblClassRoomAdd.int_TotSession.ToClientList(tblClassRoomAdd)),
+            "int_PerDaySession": @Html.Raw(tblClassRoomAdd.int_PerDaySession.ToClientList(tblClassRoomAdd)),
+            "int_Location_ID": @Html.Raw(tblClassRoomAdd.int_Location_ID.ToClientList(tblClassRoomAdd)),
+            "int_Teacher_ID": @Html.Raw(tblClassRoomAdd.int_Teacher_ID.ToClientList(tblClassRoomAdd)),
+            "is_ZoomMeet": @Html.Raw(tblClassRoomAdd.is_ZoomMeet.ToClientList(tblClassRoomAdd)),
+            "BulkCR_Set": @Html.Raw(tblClassRoomAdd.BulkCR_Set.ToClientList(tblClassRoomAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblClassRoomAdd.ShowPageHeader()
+@tblClassRoomAdd.ShowMessages()
+<form name="ftblClassRoomadd" id="ftblClassRoomadd" class="@(tblClassRoomAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblClassRoomAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblClassRoomAdd.OldKeyName)" value="@Html.Raw(tblClassRoomAdd.OldKey)">
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblClassRoomAdd.MultiPages.ContainerClasses)" id="pages_tblClassRoomAdd"><!-- multi-page tabs -->
+    <ul class="@(tblClassRoomAdd.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblClassRoomAdd.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblClassRoom1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom1" aria-selected="@(ConvertToJson(tblClassRoomAdd.MultiPages.IsActive(1)))">@Html.Raw(tblClassRoomAdd.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomAdd.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblClassRoom2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom2" aria-selected="@(ConvertToJson(tblClassRoomAdd.MultiPages.IsActive(2)))">@Html.Raw(tblClassRoomAdd.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomAdd.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblClassRoom3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom3" aria-selected="@(ConvertToJson(tblClassRoomAdd.MultiPages.IsActive(3)))">@Html.Raw(tblClassRoomAdd.PageCaption(3))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomAdd.MultiPages.NavLinkClasses(5))" data-bs-target="#tab_tblClassRoom5" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom5" aria-selected="@(ConvertToJson(tblClassRoomAdd.MultiPages.IsActive(5)))">@Html.Raw(tblClassRoomAdd.PageCaption(5))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomAdd.MultiPages.NavLinkClasses(6))" data-bs-target="#tab_tblClassRoom6" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom6" aria-selected="@(ConvertToJson(tblClassRoomAdd.MultiPages.IsActive(6)))">@Html.Raw(tblClassRoomAdd.PageCaption(6))</button></li>
+    </ul>
+    <div class="@(tblClassRoomAdd.MultiPages.TabContentClasses)"><!-- multi-page .tab-content -->
+        <div class="@(tblClassRoomAdd.MultiPages.TabPaneClasses(1))" id="tab_tblClassRoom1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblClassRoomAdd.int_CR_Product_ID.Visible) { // tblClassRoomAdd.int_CR_Product_ID.Visible (begin)
+    <div id="r_int_CR_Product_ID" @Html.Raw(tblClassRoomAdd.int_CR_Product_ID.RowAttributes)>
+        <label id="elh_tblClassRoom_int_CR_Product_ID" for="x_int_CR_Product_ID" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_CR_Product_ID.Caption)@Html.Raw(tblClassRoomAdd.int_CR_Product_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_CR_Product_ID.CellAttributes)>
+<span id="el_tblClassRoom_int_CR_Product_ID">
+    <select
+        id="x_int_CR_Product_ID"
+        name="x_int_CR_Product_ID"
+        class="form-select ew-select@(tblClassRoomAdd.int_CR_Product_ID.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_CR_Product_ID"
+        data-table="tblClassRoom"
+        data-field="x_int_CR_Product_ID"
+        data-page="1"
+        data-value-separator="@(tblClassRoomAdd.int_CR_Product_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_CR_Product_ID.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblClassRoomAdd.int_CR_Product_ID.EditAttributes)>
+        @(tblClassRoomAdd.int_CR_Product_ID.SelectOptionListHtml("x_int_CR_Product_ID"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_CR_Product_ID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_CR_Product_ID.GetErrorMessage())</div>
+@Html.Raw(tblClassRoomAdd.int_CR_Product_ID.Lookup.GetParamTag(tblClassRoomAdd, "p_x_int_CR_Product_ID"))
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_CR_Product_ID", selectId: "ftblClassRoomadd_x_int_CR_Product_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_CR_Product_ID?.lookupOptions.length) {
+        options.data = { id: "x_int_CR_Product_ID", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_CR_Product_ID", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Product_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_CR_Product_ID.Visible (end) *@
+@if (tblClassRoomAdd.int_Location_ID.Visible) { // tblClassRoomAdd.int_Location_ID.Visible (begin)
+    <div id="r_int_Location_ID" @Html.Raw(tblClassRoomAdd.int_Location_ID.RowAttributes)>
+        <label id="elh_tblClassRoom_int_Location_ID" for="x_int_Location_ID" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_Location_ID.Caption)@Html.Raw(tblClassRoomAdd.int_Location_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_Location_ID.CellAttributes)>
+<span id="el_tblClassRoom_int_Location_ID">
+    <select
+        id="x_int_Location_ID"
+        name="x_int_Location_ID"
+        class="form-select ew-select@(tblClassRoomAdd.int_Location_ID.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_Location_ID"
+        data-table="tblClassRoom"
+        data-field="x_int_Location_ID"
+        data-page="1"
+        data-value-separator="@(tblClassRoomAdd.int_Location_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_Location_ID.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_Location_ID.EditAttributes)>
+        @(tblClassRoomAdd.int_Location_ID.SelectOptionListHtml("x_int_Location_ID"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_Location_ID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_Location_ID.GetErrorMessage())</div>
+@Html.Raw(tblClassRoomAdd.int_Location_ID.Lookup.GetParamTag(tblClassRoomAdd, "p_x_int_Location_ID"))
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_Location_ID", selectId: "ftblClassRoomadd_x_int_Location_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_Location_ID?.lookupOptions.length) {
+        options.data = { id: "x_int_Location_ID", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_Location_ID", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_Location_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_Location_ID.Visible (end) *@
+@if (tblClassRoomAdd.int_Teacher_ID.Visible) { // tblClassRoomAdd.int_Teacher_ID.Visible (begin)
+    <div id="r_int_Teacher_ID" @Html.Raw(tblClassRoomAdd.int_Teacher_ID.RowAttributes)>
+        <label id="elh_tblClassRoom_int_Teacher_ID" for="x_int_Teacher_ID" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_Teacher_ID.Caption)@Html.Raw(tblClassRoomAdd.int_Teacher_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_Teacher_ID.CellAttributes)>
+<span id="el_tblClassRoom_int_Teacher_ID">
+    <select
+        id="x_int_Teacher_ID"
+        name="x_int_Teacher_ID"
+        class="form-select ew-select@(tblClassRoomAdd.int_Teacher_ID.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_Teacher_ID"
+        data-table="tblClassRoom"
+        data-field="x_int_Teacher_ID"
+        data-page="1"
+        data-value-separator="@(tblClassRoomAdd.int_Teacher_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_Teacher_ID.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_Teacher_ID.EditAttributes)>
+        @(tblClassRoomAdd.int_Teacher_ID.SelectOptionListHtml("x_int_Teacher_ID"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_Teacher_ID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_Teacher_ID.GetErrorMessage())</div>
+@Html.Raw(tblClassRoomAdd.int_Teacher_ID.Lookup.GetParamTag(tblClassRoomAdd, "p_x_int_Teacher_ID"))
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_Teacher_ID", selectId: "ftblClassRoomadd_x_int_Teacher_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_Teacher_ID?.lookupOptions.length) {
+        options.data = { id: "x_int_Teacher_ID", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_Teacher_ID", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_Teacher_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_Teacher_ID.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblClassRoomAdd.MultiPages.TabPaneClasses(2))" id="tab_tblClassRoom2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblClassRoomAdd.int_CR_Size.Visible) { // tblClassRoomAdd.int_CR_Size.Visible (begin)
+    <div id="r_int_CR_Size" @Html.Raw(tblClassRoomAdd.int_CR_Size.RowAttributes)>
+        <label id="elh_tblClassRoom_int_CR_Size" for="x_int_CR_Size" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_CR_Size.Caption)@Html.Raw(tblClassRoomAdd.int_CR_Size.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_CR_Size.CellAttributes)>
+<span id="el_tblClassRoom_int_CR_Size">
+    <select
+        id="x_int_CR_Size"
+        name="x_int_CR_Size"
+        class="form-select ew-select@(tblClassRoomAdd.int_CR_Size.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_CR_Size"
+        data-table="tblClassRoom"
+        data-field="x_int_CR_Size"
+        data-page="2"
+        data-value-separator="@(tblClassRoomAdd.int_CR_Size.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_CR_Size.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_CR_Size.EditAttributes)>
+        @(tblClassRoomAdd.int_CR_Size.SelectOptionListHtml("x_int_CR_Size"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_CR_Size.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_CR_Size.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_CR_Size", selectId: "ftblClassRoomadd_x_int_CR_Size" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_CR_Size?.lookupOptions.length) {
+        options.data = { id: "x_int_CR_Size", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_CR_Size", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Size.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_CR_Size.Visible (end) *@
+@if (tblClassRoomAdd.int_MU_Size.Visible) { // tblClassRoomAdd.int_MU_Size.Visible (begin)
+    <div id="r_int_MU_Size" @Html.Raw(tblClassRoomAdd.int_MU_Size.RowAttributes)>
+        <label id="elh_tblClassRoom_int_MU_Size" for="x_int_MU_Size" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_MU_Size.Caption)@Html.Raw(tblClassRoomAdd.int_MU_Size.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_MU_Size.CellAttributes)>
+<span id="el_tblClassRoom_int_MU_Size">
+    <select
+        id="x_int_MU_Size"
+        name="x_int_MU_Size"
+        class="form-select ew-select@(tblClassRoomAdd.int_MU_Size.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_MU_Size"
+        data-table="tblClassRoom"
+        data-field="x_int_MU_Size"
+        data-page="2"
+        data-value-separator="@(tblClassRoomAdd.int_MU_Size.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_MU_Size.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_MU_Size.EditAttributes)>
+        @(tblClassRoomAdd.int_MU_Size.SelectOptionListHtml("x_int_MU_Size"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_MU_Size.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_MU_Size.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_MU_Size", selectId: "ftblClassRoomadd_x_int_MU_Size" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_MU_Size?.lookupOptions.length) {
+        options.data = { id: "x_int_MU_Size", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_MU_Size", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_MU_Size.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_MU_Size.Visible (end) *@
+@if (tblClassRoomAdd.int_CR_Status.Visible) { // tblClassRoomAdd.int_CR_Status.Visible (begin)
+    <div id="r_int_CR_Status" @Html.Raw(tblClassRoomAdd.int_CR_Status.RowAttributes)>
+        <label id="elh_tblClassRoom_int_CR_Status" for="x_int_CR_Status" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_CR_Status.Caption)@Html.Raw(tblClassRoomAdd.int_CR_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_CR_Status.CellAttributes)>
+<span id="el_tblClassRoom_int_CR_Status">
+    <select
+        id="x_int_CR_Status"
+        name="x_int_CR_Status"
+        class="form-select ew-select@(tblClassRoomAdd.int_CR_Status.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_CR_Status"
+        data-table="tblClassRoom"
+        data-field="x_int_CR_Status"
+        data-page="2"
+        data-value-separator="@(tblClassRoomAdd.int_CR_Status.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_CR_Status.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_CR_Status.EditAttributes)>
+        @(tblClassRoomAdd.int_CR_Status.SelectOptionListHtml("x_int_CR_Status"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_CR_Status.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_CR_Status.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_CR_Status", selectId: "ftblClassRoomadd_x_int_CR_Status" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_CR_Status?.lookupOptions.length) {
+        options.data = { id: "x_int_CR_Status", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_CR_Status", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_CR_Status.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_CR_Status.Visible (end) *@
+@if (tblClassRoomAdd.Is_Web_SignUp.Visible) { // tblClassRoomAdd.Is_Web_SignUp.Visible (begin)
+    <div id="r_Is_Web_SignUp" @Html.Raw(tblClassRoomAdd.Is_Web_SignUp.RowAttributes)>
+        <label id="elh_tblClassRoom_Is_Web_SignUp" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.Is_Web_SignUp.Caption)@Html.Raw(tblClassRoomAdd.Is_Web_SignUp.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.Is_Web_SignUp.CellAttributes)>
+<span id="el_tblClassRoom_Is_Web_SignUp">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblClassRoomAdd.Is_Web_SignUp.IsInvalidClass)" data-table="tblClassRoom" data-field="x_Is_Web_SignUp" data-boolean data-page="2" name="x_Is_Web_SignUp" id="x_Is_Web_SignUp" value="1" checked="@ConvertToBool(tblClassRoomAdd.Is_Web_SignUp.CurrentValue)" @Html.Raw(tblClassRoomAdd.Is_Web_SignUp.EditAttributes) aria-describedby="x_Is_Web_SignUp_help">
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.Is_Web_SignUp.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblClassRoomAdd.Is_Web_SignUp.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.Is_Web_SignUp.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblClassRoomAdd.MultiPages.TabPaneClasses(3))" id="tab_tblClassRoom3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblClassRoomAdd.date_Start.Visible) { // tblClassRoomAdd.date_Start.Visible (begin)
+    <div id="r_date_Start" @Html.Raw(tblClassRoomAdd.date_Start.RowAttributes)>
+        <label id="elh_tblClassRoom_date_Start" for="x_date_Start" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.date_Start.Caption)@Html.Raw(tblClassRoomAdd.date_Start.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.date_Start.CellAttributes)>
+<span id="el_tblClassRoom_date_Start">
+<input type="@(tblClassRoomAdd.date_Start.InputTextType)" name="x_date_Start" id="x_date_Start" data-table="tblClassRoom" data-field="x_date_Start" value="@Html.Raw(tblClassRoomAdd.date_Start.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.date_Start.PlaceHolder))" data-format-pattern="@(tblClassRoomAdd.date_Start.FormatPattern)"@Html.Raw(tblClassRoomAdd.date_Start.EditAttributes) aria-describedby="x_date_Start_help">
+@Html.Raw(tblClassRoomAdd.date_Start.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.date_Start.GetErrorMessage())</div>
+@if (!tblClassRoomAdd.date_Start.ReadOnly && !tblClassRoomAdd.date_Start.Disabled && !tblClassRoomAdd.date_Start.EditAttrs.Is("readonly") && !tblClassRoomAdd.date_Start.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblClassRoomadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(16))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblClassRoomadd", "x_date_Start", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.date_Start.Visible (end) *@
+@if (tblClassRoomAdd.mon_CR_Price.Visible) { // tblClassRoomAdd.mon_CR_Price.Visible (begin)
+    <div id="r_mon_CR_Price" @Html.Raw(tblClassRoomAdd.mon_CR_Price.RowAttributes)>
+        <label id="elh_tblClassRoom_mon_CR_Price" for="x_mon_CR_Price" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.mon_CR_Price.Caption)@Html.Raw(tblClassRoomAdd.mon_CR_Price.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.mon_CR_Price.CellAttributes)>
+<span id="el_tblClassRoom_mon_CR_Price">
+    <select
+        id="x_mon_CR_Price"
+        name="x_mon_CR_Price"
+        class="form-select ew-select@(tblClassRoomAdd.mon_CR_Price.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_mon_CR_Price"
+        data-table="tblClassRoom"
+        data-field="x_mon_CR_Price"
+        data-page="3"
+        data-value-separator="@(tblClassRoomAdd.mon_CR_Price.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.mon_CR_Price.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.mon_CR_Price.EditAttributes)>
+        @(tblClassRoomAdd.mon_CR_Price.SelectOptionListHtml("x_mon_CR_Price"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.mon_CR_Price.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.mon_CR_Price.GetErrorMessage())</div>
+@Html.Raw(tblClassRoomAdd.mon_CR_Price.Lookup.GetParamTag(tblClassRoomAdd, "p_x_mon_CR_Price"))
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_mon_CR_Price", selectId: "ftblClassRoomadd_x_mon_CR_Price" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.mon_CR_Price?.lookupOptions.length) {
+        options.data = { id: "x_mon_CR_Price", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_mon_CR_Price", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.mon_CR_Price.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.mon_CR_Price.Visible (end) *@
+@if (tblClassRoomAdd.int_TotSession.Visible) { // tblClassRoomAdd.int_TotSession.Visible (begin)
+    <div id="r_int_TotSession" @Html.Raw(tblClassRoomAdd.int_TotSession.RowAttributes)>
+        <label id="elh_tblClassRoom_int_TotSession" for="x_int_TotSession" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_TotSession.Caption)@Html.Raw(tblClassRoomAdd.int_TotSession.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_TotSession.CellAttributes)>
+<span id="el_tblClassRoom_int_TotSession">
+    <select
+        id="x_int_TotSession"
+        name="x_int_TotSession"
+        class="form-select ew-select@(tblClassRoomAdd.int_TotSession.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_TotSession"
+        data-table="tblClassRoom"
+        data-field="x_int_TotSession"
+        data-page="3"
+        data-value-separator="@(tblClassRoomAdd.int_TotSession.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_TotSession.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_TotSession.EditAttributes)>
+        @(tblClassRoomAdd.int_TotSession.SelectOptionListHtml("x_int_TotSession"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_TotSession.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_TotSession.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_TotSession", selectId: "ftblClassRoomadd_x_int_TotSession" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_TotSession?.lookupOptions.length) {
+        options.data = { id: "x_int_TotSession", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_TotSession", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_TotSession.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_TotSession.Visible (end) *@
+@if (tblClassRoomAdd.int_PerDaySession.Visible) { // tblClassRoomAdd.int_PerDaySession.Visible (begin)
+    <div id="r_int_PerDaySession" @Html.Raw(tblClassRoomAdd.int_PerDaySession.RowAttributes)>
+        <label id="elh_tblClassRoom_int_PerDaySession" for="x_int_PerDaySession" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_PerDaySession.Caption)@Html.Raw(tblClassRoomAdd.int_PerDaySession.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_PerDaySession.CellAttributes)>
+<span id="el_tblClassRoom_int_PerDaySession">
+    <select
+        id="x_int_PerDaySession"
+        name="x_int_PerDaySession"
+        class="form-select ew-select@(tblClassRoomAdd.int_PerDaySession.IsInvalidClass)"
+        data-select2-id="ftblClassRoomadd_x_int_PerDaySession"
+        data-table="tblClassRoom"
+        data-field="x_int_PerDaySession"
+        data-page="3"
+        data-value-separator="@(tblClassRoomAdd.int_PerDaySession.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblClassRoomAdd.int_PerDaySession.PlaceHolder))"
+        @Html.Raw(tblClassRoomAdd.int_PerDaySession.EditAttributes)>
+        @(tblClassRoomAdd.int_PerDaySession.SelectOptionListHtml("x_int_PerDaySession"))
+    </select>
+    @Html.Raw(tblClassRoomAdd.int_PerDaySession.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_PerDaySession.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblClassRoomadd", function() {
+    var options = { name: "x_int_PerDaySession", selectId: "ftblClassRoomadd_x_int_PerDaySession" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblClassRoomadd.lists.int_PerDaySession?.lookupOptions.length) {
+        options.data = { id: "x_int_PerDaySession", form: "ftblClassRoomadd" };
+    } else {
+        options.ajax = { id: "x_int_PerDaySession", form: "ftblClassRoomadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblClassRoom.fields.int_PerDaySession.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_PerDaySession.Visible (end) *@
+@if (tblClassRoomAdd.date_Start2.Visible) { // tblClassRoomAdd.date_Start2.Visible (begin)
+    <div id="r_date_Start2" @Html.Raw(tblClassRoomAdd.date_Start2.RowAttributes)>
+        <label id="elh_tblClassRoom_date_Start2" for="x_date_Start2" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.date_Start2.Caption)@Html.Raw(tblClassRoomAdd.date_Start2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.date_Start2.CellAttributes)>
+<span id="el_tblClassRoom_date_Start2">
+<input type="@(tblClassRoomAdd.date_Start2.InputTextType)" name="x_date_Start2" id="x_date_Start2" data-table="tblClassRoom" data-field="x_date_Start2" value="@Html.Raw(tblClassRoomAdd.date_Start2.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.date_Start2.PlaceHolder))" data-format-pattern="@(tblClassRoomAdd.date_Start2.FormatPattern)"@Html.Raw(tblClassRoomAdd.date_Start2.EditAttributes) aria-describedby="x_date_Start2_help">
+@Html.Raw(tblClassRoomAdd.date_Start2.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.date_Start2.GetErrorMessage())</div>
+@if (!tblClassRoomAdd.date_Start2.ReadOnly && !tblClassRoomAdd.date_Start2.Disabled && !tblClassRoomAdd.date_Start2.EditAttrs.Is("readonly") && !tblClassRoomAdd.date_Start2.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblClassRoomadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(16))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblClassRoomadd", "x_date_Start2", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.date_Start2.Visible (end) *@
+@if (tblClassRoomAdd.date_Start3.Visible) { // tblClassRoomAdd.date_Start3.Visible (begin)
+    <div id="r_date_Start3" @Html.Raw(tblClassRoomAdd.date_Start3.RowAttributes)>
+        <label id="elh_tblClassRoom_date_Start3" for="x_date_Start3" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.date_Start3.Caption)@Html.Raw(tblClassRoomAdd.date_Start3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.date_Start3.CellAttributes)>
+<span id="el_tblClassRoom_date_Start3">
+<input type="@(tblClassRoomAdd.date_Start3.InputTextType)" name="x_date_Start3" id="x_date_Start3" data-table="tblClassRoom" data-field="x_date_Start3" value="@Html.Raw(tblClassRoomAdd.date_Start3.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.date_Start3.PlaceHolder))" data-format-pattern="@(tblClassRoomAdd.date_Start3.FormatPattern)"@Html.Raw(tblClassRoomAdd.date_Start3.EditAttributes) aria-describedby="x_date_Start3_help">
+@Html.Raw(tblClassRoomAdd.date_Start3.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.date_Start3.GetErrorMessage())</div>
+@if (!tblClassRoomAdd.date_Start3.ReadOnly && !tblClassRoomAdd.date_Start3.Disabled && !tblClassRoomAdd.date_Start3.EditAttrs.Is("readonly") && !tblClassRoomAdd.date_Start3.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblClassRoomadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(16))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblClassRoomadd", "x_date_Start3", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.date_Start3.Visible (end) *@
+@if (tblClassRoomAdd.date_Start4.Visible) { // tblClassRoomAdd.date_Start4.Visible (begin)
+    <div id="r_date_Start4" @Html.Raw(tblClassRoomAdd.date_Start4.RowAttributes)>
+        <label id="elh_tblClassRoom_date_Start4" for="x_date_Start4" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.date_Start4.Caption)@Html.Raw(tblClassRoomAdd.date_Start4.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.date_Start4.CellAttributes)>
+<span id="el_tblClassRoom_date_Start4">
+<input type="@(tblClassRoomAdd.date_Start4.InputTextType)" name="x_date_Start4" id="x_date_Start4" data-table="tblClassRoom" data-field="x_date_Start4" value="@Html.Raw(tblClassRoomAdd.date_Start4.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.date_Start4.PlaceHolder))" data-format-pattern="@(tblClassRoomAdd.date_Start4.FormatPattern)"@Html.Raw(tblClassRoomAdd.date_Start4.EditAttributes) aria-describedby="x_date_Start4_help">
+@Html.Raw(tblClassRoomAdd.date_Start4.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.date_Start4.GetErrorMessage())</div>
+@if (!tblClassRoomAdd.date_Start4.ReadOnly && !tblClassRoomAdd.date_Start4.Disabled && !tblClassRoomAdd.date_Start4.EditAttrs.Is("readonly") && !tblClassRoomAdd.date_Start4.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblClassRoomadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(16))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblClassRoomadd", "x_date_Start4", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.date_Start4.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblClassRoomAdd.MultiPages.TabPaneClasses(4))" id="tab_tblClassRoom4" role="tabpanel"><!-- multi-page .tab-pane -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblClassRoomAdd.MultiPages.TabPaneClasses(5))" id="tab_tblClassRoom5" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblClassRoomAdd.BulkCR_Set.Visible) { // tblClassRoomAdd.BulkCR_Set.Visible (begin)
+    <div id="r_BulkCR_Set" @Html.Raw(tblClassRoomAdd.BulkCR_Set.RowAttributes)>
+        <label id="elh_tblClassRoom_BulkCR_Set" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.BulkCR_Set.Caption)@Html.Raw(tblClassRoomAdd.BulkCR_Set.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.BulkCR_Set.CellAttributes)>
+<span id="el_tblClassRoom_BulkCR_Set">
+<template id="tp_x_BulkCR_Set">
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" data-table="tblClassRoom" data-field="x_BulkCR_Set" name="x_BulkCR_Set" id="x_BulkCR_Set"@Html.Raw(tblClassRoomAdd.BulkCR_Set.EditAttributes)>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_BulkCR_Set" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_BulkCR_Set[]"
+    name="x_BulkCR_Set[]"
+    value="@(HtmlEncode(tblClassRoomAdd.BulkCR_Set.CurrentValue))"
+    data-type="select-multiple"
+    data-template="tp_x_BulkCR_Set"
+    data-target="dsl_x_BulkCR_Set"
+    data-repeatcolumn="5"
+    class="form-control@(tblClassRoomAdd.BulkCR_Set.IsInvalidClass)"
+    data-table="tblClassRoom"
+    data-field="x_BulkCR_Set"
+    data-page="5"
+    data-value-separator="@(tblClassRoomAdd.BulkCR_Set.DisplayValueSeparatorAttribute)"
+    @Html.Raw(tblClassRoomAdd.BulkCR_Set.EditAttributes)></selection-list>
+@Html.Raw(tblClassRoomAdd.BulkCR_Set.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.BulkCR_Set.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.BulkCR_Set.Visible (end) *@
+@if (tblClassRoomAdd.int_Day_Incremental.Visible) { // tblClassRoomAdd.int_Day_Incremental.Visible (begin)
+    <div id="r_int_Day_Incremental" @Html.Raw(tblClassRoomAdd.int_Day_Incremental.RowAttributes)>
+        <label id="elh_tblClassRoom_int_Day_Incremental" for="x_int_Day_Incremental" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_Day_Incremental.Caption)@Html.Raw(tblClassRoomAdd.int_Day_Incremental.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_Day_Incremental.CellAttributes)>
+<span id="el_tblClassRoom_int_Day_Incremental">
+<input type="@(tblClassRoomAdd.int_Day_Incremental.InputTextType)" name="x_int_Day_Incremental" id="x_int_Day_Incremental" data-table="tblClassRoom" data-field="x_int_Day_Incremental" value="@Html.Raw(tblClassRoomAdd.int_Day_Incremental.EditValue)" data-page="5" size="30" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.int_Day_Incremental.PlaceHolder))" data-format-pattern="@(tblClassRoomAdd.int_Day_Incremental.FormatPattern)"@Html.Raw(tblClassRoomAdd.int_Day_Incremental.EditAttributes) aria-describedby="x_int_Day_Incremental_help">
+@Html.Raw(tblClassRoomAdd.int_Day_Incremental.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_Day_Incremental.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_Day_Incremental.Visible (end) *@
+@if (tblClassRoomAdd.int_Reoccurrence.Visible) { // tblClassRoomAdd.int_Reoccurrence.Visible (begin)
+    <div id="r_int_Reoccurrence" @Html.Raw(tblClassRoomAdd.int_Reoccurrence.RowAttributes)>
+        <label id="elh_tblClassRoom_int_Reoccurrence" for="x_int_Reoccurrence" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.int_Reoccurrence.Caption)@Html.Raw(tblClassRoomAdd.int_Reoccurrence.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.int_Reoccurrence.CellAttributes)>
+<span id="el_tblClassRoom_int_Reoccurrence">
+<input type="@(tblClassRoomAdd.int_Reoccurrence.InputTextType)" name="x_int_Reoccurrence" id="x_int_Reoccurrence" data-table="tblClassRoom" data-field="x_int_Reoccurrence" value="@Html.Raw(tblClassRoomAdd.int_Reoccurrence.EditValue)" data-page="5" size="30" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.int_Reoccurrence.PlaceHolder))" data-format-pattern="@(tblClassRoomAdd.int_Reoccurrence.FormatPattern)"@Html.Raw(tblClassRoomAdd.int_Reoccurrence.EditAttributes) aria-describedby="x_int_Reoccurrence_help">
+@Html.Raw(tblClassRoomAdd.int_Reoccurrence.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.int_Reoccurrence.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.int_Reoccurrence.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblClassRoomAdd.MultiPages.TabPaneClasses(6))" id="tab_tblClassRoom6" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblClassRoomAdd.str_CR_Notes.Visible) { // tblClassRoomAdd.str_CR_Notes.Visible (begin)
+    <div id="r_str_CR_Notes" @Html.Raw(tblClassRoomAdd.str_CR_Notes.RowAttributes)>
+        <label id="elh_tblClassRoom_str_CR_Notes" for="x_str_CR_Notes" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.str_CR_Notes.Caption)@Html.Raw(tblClassRoomAdd.str_CR_Notes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.str_CR_Notes.CellAttributes)>
+<span id="el_tblClassRoom_str_CR_Notes">
+<textarea data-table="tblClassRoom" data-field="x_str_CR_Notes" data-page="6" name="x_str_CR_Notes" id="x_str_CR_Notes" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblClassRoomAdd.str_CR_Notes.PlaceHolder))"@Html.Raw(tblClassRoomAdd.str_CR_Notes.EditAttributes) aria-describedby="x_str_CR_Notes_help">@(tblClassRoomAdd.str_CR_Notes.EditValue)</textarea>
+@Html.Raw(tblClassRoomAdd.str_CR_Notes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.str_CR_Notes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.str_CR_Notes.Visible (end) *@
+@if (tblClassRoomAdd.is_ZoomMeet.Visible) { // tblClassRoomAdd.is_ZoomMeet.Visible (begin)
+    <div id="r_is_ZoomMeet" @Html.Raw(tblClassRoomAdd.is_ZoomMeet.RowAttributes)>
+        <label id="elh_tblClassRoom_is_ZoomMeet" class="@(tblClassRoomAdd.LeftColumnClass)">@Html.Raw(tblClassRoomAdd.is_ZoomMeet.Caption)@Html.Raw(tblClassRoomAdd.is_ZoomMeet.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblClassRoomAdd.RightColumnClass)"><div @Html.Raw(tblClassRoomAdd.is_ZoomMeet.CellAttributes)>
+<span id="el_tblClassRoom_is_ZoomMeet">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblClassRoomAdd.is_ZoomMeet.IsInvalidClass)" data-table="tblClassRoom" data-field="x_is_ZoomMeet" data-boolean data-page="6" name="x_is_ZoomMeet" id="x_is_ZoomMeet" value="1" checked="@ConvertToBool(tblClassRoomAdd.is_ZoomMeet.CurrentValue)" @Html.Raw(tblClassRoomAdd.is_ZoomMeet.EditAttributes) aria-describedby="x_is_ZoomMeet_help">
+    <div class="invalid-feedback">@Html.Raw(tblClassRoomAdd.is_ZoomMeet.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblClassRoomAdd.is_ZoomMeet.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblClassRoomAdd.is_ZoomMeet.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+@{ tblClassRoomAdd.CloseRecordset(); }
+@Html.Raw(tblClassRoomAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblClassRoomAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblClassRoomadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblClassRoomadd" data-href="@AppPath(tblClassRoomAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblClassRoomAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblClassRoomAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblClassRoom");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

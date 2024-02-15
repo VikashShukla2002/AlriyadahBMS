@@ -1,0 +1,177 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrSessionsAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrSessionsAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrSessionsAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRSessions: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblCRSessionsadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblCRSessionsadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["Instructor", [fields.Instructor.visible && fields.Instructor.required ? ew.Validators.required(fields.Instructor.caption) : null], fields.Instructor.isInvalid],
+            ["Location", [fields.Location.visible && fields.Location.required ? ew.Validators.required(fields.Location.caption) : null], fields.Location.isInvalid],
+            ["int_Student_Id", [fields.int_Student_Id.visible && fields.int_Student_Id.required ? ew.Validators.required(fields.int_Student_Id.caption) : null, ew.Validators.integer], fields.int_Student_Id.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["str_Status", [fields.str_Status.visible && fields.str_Status.required ? ew.Validators.required(fields.str_Status.caption) : null], fields.str_Status.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblCrSessionsAdd.ShowPageHeader()
+@tblCrSessionsAdd.ShowMessages()
+<form name="ftblCRSessionsadd" id="ftblCRSessionsadd" class="@(tblCrSessionsAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblCrSessionsAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblCrSessionsAdd.OldKeyName)" value="@Html.Raw(tblCrSessionsAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblCrSessionsAdd.Instructor.Visible) { // tblCrSessionsAdd.Instructor.Visible (begin)
+    <div id="r_Instructor" @Html.Raw(tblCrSessionsAdd.Instructor.RowAttributes)>
+        <label id="elh_tblCRSessions_Instructor" for="x_Instructor" class="@(tblCrSessionsAdd.LeftColumnClass)">@Html.Raw(tblCrSessionsAdd.Instructor.Caption)@Html.Raw(tblCrSessionsAdd.Instructor.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsAdd.RightColumnClass)"><div @Html.Raw(tblCrSessionsAdd.Instructor.CellAttributes)>
+<span id="el_tblCRSessions_Instructor">
+<input type="@(tblCrSessionsAdd.Instructor.InputTextType)" name="x_Instructor" id="x_Instructor" data-table="tblCRSessions" data-field="x_Instructor" value="@Html.Raw(tblCrSessionsAdd.Instructor.EditValue)" size="30" maxlength="122" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsAdd.Instructor.PlaceHolder))" data-format-pattern="@(tblCrSessionsAdd.Instructor.FormatPattern)"@Html.Raw(tblCrSessionsAdd.Instructor.EditAttributes) aria-describedby="x_Instructor_help">
+@Html.Raw(tblCrSessionsAdd.Instructor.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsAdd.Instructor.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsAdd.Instructor.Visible (end) *@
+@if (tblCrSessionsAdd.Location.Visible) { // tblCrSessionsAdd.Location.Visible (begin)
+    <div id="r_Location" @Html.Raw(tblCrSessionsAdd.Location.RowAttributes)>
+        <label id="elh_tblCRSessions_Location" for="x_Location" class="@(tblCrSessionsAdd.LeftColumnClass)">@Html.Raw(tblCrSessionsAdd.Location.Caption)@Html.Raw(tblCrSessionsAdd.Location.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsAdd.RightColumnClass)"><div @Html.Raw(tblCrSessionsAdd.Location.CellAttributes)>
+<span id="el_tblCRSessions_Location">
+<input type="@(tblCrSessionsAdd.Location.InputTextType)" name="x_Location" id="x_Location" data-table="tblCRSessions" data-field="x_Location" value="@Html.Raw(tblCrSessionsAdd.Location.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsAdd.Location.PlaceHolder))" data-format-pattern="@(tblCrSessionsAdd.Location.FormatPattern)"@Html.Raw(tblCrSessionsAdd.Location.EditAttributes) aria-describedby="x_Location_help">
+@Html.Raw(tblCrSessionsAdd.Location.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsAdd.Location.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsAdd.Location.Visible (end) *@
+@if (tblCrSessionsAdd.int_Student_Id.Visible) { // tblCrSessionsAdd.int_Student_Id.Visible (begin)
+    <div id="r_int_Student_Id" @Html.Raw(tblCrSessionsAdd.int_Student_Id.RowAttributes)>
+        <label id="elh_tblCRSessions_int_Student_Id" for="x_int_Student_Id" class="@(tblCrSessionsAdd.LeftColumnClass)">@Html.Raw(tblCrSessionsAdd.int_Student_Id.Caption)@Html.Raw(tblCrSessionsAdd.int_Student_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsAdd.RightColumnClass)"><div @Html.Raw(tblCrSessionsAdd.int_Student_Id.CellAttributes)>
+<span id="el_tblCRSessions_int_Student_Id">
+<input type="@(tblCrSessionsAdd.int_Student_Id.InputTextType)" name="x_int_Student_Id" id="x_int_Student_Id" data-table="tblCRSessions" data-field="x_int_Student_Id" value="@Html.Raw(tblCrSessionsAdd.int_Student_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsAdd.int_Student_Id.PlaceHolder))" data-format-pattern="@(tblCrSessionsAdd.int_Student_Id.FormatPattern)"@Html.Raw(tblCrSessionsAdd.int_Student_Id.EditAttributes) aria-describedby="x_int_Student_Id_help">
+@Html.Raw(tblCrSessionsAdd.int_Student_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsAdd.int_Student_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsAdd.int_Student_Id.Visible (end) *@
+@if (tblCrSessionsAdd.str_Username.Visible) { // tblCrSessionsAdd.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(tblCrSessionsAdd.str_Username.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Username" for="x_str_Username" class="@(tblCrSessionsAdd.LeftColumnClass)">@Html.Raw(tblCrSessionsAdd.str_Username.Caption)@Html.Raw(tblCrSessionsAdd.str_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsAdd.RightColumnClass)"><div @Html.Raw(tblCrSessionsAdd.str_Username.CellAttributes)>
+<span id="el_tblCRSessions_str_Username">
+<input type="@(tblCrSessionsAdd.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblCRSessions" data-field="x_str_Username" value="@Html.Raw(tblCrSessionsAdd.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsAdd.str_Username.PlaceHolder))" data-format-pattern="@(tblCrSessionsAdd.str_Username.FormatPattern)"@Html.Raw(tblCrSessionsAdd.str_Username.EditAttributes) aria-describedby="x_str_Username_help">
+@Html.Raw(tblCrSessionsAdd.str_Username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsAdd.str_Username.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsAdd.str_Username.Visible (end) *@
+@if (tblCrSessionsAdd.str_Status.Visible) { // tblCrSessionsAdd.str_Status.Visible (begin)
+    <div id="r_str_Status" @Html.Raw(tblCrSessionsAdd.str_Status.RowAttributes)>
+        <label id="elh_tblCRSessions_str_Status" for="x_str_Status" class="@(tblCrSessionsAdd.LeftColumnClass)">@Html.Raw(tblCrSessionsAdd.str_Status.Caption)@Html.Raw(tblCrSessionsAdd.str_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrSessionsAdd.RightColumnClass)"><div @Html.Raw(tblCrSessionsAdd.str_Status.CellAttributes)>
+<span id="el_tblCRSessions_str_Status">
+<input type="@(tblCrSessionsAdd.str_Status.InputTextType)" name="x_str_Status" id="x_str_Status" data-table="tblCRSessions" data-field="x_str_Status" value="@Html.Raw(tblCrSessionsAdd.str_Status.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblCrSessionsAdd.str_Status.PlaceHolder))" data-format-pattern="@(tblCrSessionsAdd.str_Status.FormatPattern)"@Html.Raw(tblCrSessionsAdd.str_Status.EditAttributes) aria-describedby="x_str_Status_help">
+@Html.Raw(tblCrSessionsAdd.str_Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblCrSessionsAdd.str_Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblCrSessionsAdd.str_Status.Visible (end) *@
+</div><!-- /page* -->
+@{ tblCrSessionsAdd.CloseRecordset(); }
+@Html.Raw(tblCrSessionsAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblCrSessionsAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblCRSessionsadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblCRSessionsadd" data-href="@AppPath(tblCrSessionsAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblCrSessionsAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblCrSessionsAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblCRSessions");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

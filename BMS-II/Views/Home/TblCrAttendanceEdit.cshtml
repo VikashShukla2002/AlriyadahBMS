@@ -1,0 +1,339 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrAttendanceEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrAttendanceEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblCrAttendanceEdit.ShowPageHeader()
+@tblCrAttendanceEdit.ShowMessages()
+<main class="edit">
+<form name="ftblCRAttendanceedit" id="ftblCRAttendanceedit" class="@(tblCrAttendanceEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrAttendanceEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRAttendance: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var ftblCRAttendanceedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblCRAttendanceedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["str_FullName", [fields.str_FullName.visible && fields.str_FullName.required ? ew.Validators.required(fields.str_FullName.caption) : null], fields.str_FullName.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["int_CR_ID", [fields.int_CR_ID.visible && fields.int_CR_ID.required ? ew.Validators.required(fields.int_CR_ID.caption) : null], fields.int_CR_ID.isInvalid],
+            ["int_CRSession_ID", [fields.int_CRSession_ID.visible && fields.int_CRSession_ID.required ? ew.Validators.required(fields.int_CRSession_ID.caption) : null], fields.int_CRSession_ID.isInvalid],
+            ["Is_All_Attend", [fields.Is_All_Attend.visible && fields.Is_All_Attend.required ? ew.Validators.required(fields.Is_All_Attend.caption) : null], fields.Is_All_Attend.isInvalid],
+            ["idnumber", [fields.idnumber.visible && fields.idnumber.required ? ew.Validators.required(fields.idnumber.caption) : null], fields.idnumber.isInvalid],
+            ["bit_IsMakeUP", [fields.bit_IsMakeUP.visible && fields.bit_IsMakeUP.required ? ew.Validators.required(fields.bit_IsMakeUP.caption) : null], fields.bit_IsMakeUP.isInvalid],
+            ["RemM1", [fields.RemM1.visible && fields.RemM1.required ? ew.Validators.required(fields.RemM1.caption) : null], fields.RemM1.isInvalid],
+            ["SMSReminder1", [fields.SMSReminder1.visible && fields.SMSReminder1.required ? ew.Validators.required(fields.SMSReminder1.caption) : null], fields.SMSReminder1.isInvalid],
+            ["str_CR_Number", [fields.str_CR_Number.visible && fields.str_CR_Number.required ? ew.Validators.required(fields.str_CR_Number.caption) : null], fields.str_CR_Number.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Is_All_Attend": @Html.Raw(tblCrAttendanceEdit.Is_All_Attend.ToClientList(tblCrAttendanceEdit)),
+            "bit_IsMakeUP": @Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.ToClientList(tblCrAttendanceEdit)),
+            "RemM1": @Html.Raw(tblCrAttendanceEdit.RemM1.ToClientList(tblCrAttendanceEdit)),
+            "SMSReminder1": @Html.Raw(tblCrAttendanceEdit.SMSReminder1.ToClientList(tblCrAttendanceEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblCrAttendanceEdit.IsConfirm) { // Confirm page
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="confirm" id="confirm" value="confirm">
+} else {
+<input type="hidden" name="action" id="action" value="confirm">
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblCrAttendanceEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblCrAttendanceEdit.OldKeyName)" value="@Html.Raw(tblCrAttendanceEdit.OldKey)">
+<div class="ew-edit-div"><!-- page* -->
+@if (tblCrAttendanceEdit.str_FullName.Visible) { // tblCrAttendanceEdit.str_FullName.Visible (begin)
+    <div id="r_str_FullName" @Html.Raw(tblCrAttendanceEdit.str_FullName.RowAttributes)>
+        <label id="elh_tblCRAttendance_str_FullName" for="x_str_FullName" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.str_FullName.Caption)@Html.Raw(tblCrAttendanceEdit.str_FullName.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.str_FullName.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // str_FullName (begin)
+<span id="el_tblCRAttendance_str_FullName">
+<span @Html.Raw(tblCrAttendanceEdit.str_FullName.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblCrAttendanceEdit.str_FullName.EditValue)))"></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_str_FullName" data-hidden="1" name="x_str_FullName" id="x_str_FullName" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.str_FullName.CurrentValue))">
+</span>
+} else { // str_FullName (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.str_FullName.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblCrAttendanceEdit.str_FullName.ViewValue)))"></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_str_FullName" data-hidden="1" name="x_str_FullName" id="x_str_FullName" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.str_FullName.FormValue))">
+} @* str_FullName (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.str_FullName.Visible (end) *@
+@if (tblCrAttendanceEdit.str_Username.Visible) { // tblCrAttendanceEdit.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(tblCrAttendanceEdit.str_Username.RowAttributes)>
+        <label id="elh_tblCRAttendance_str_Username" for="x_str_Username" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.str_Username.Caption)@Html.Raw(tblCrAttendanceEdit.str_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.str_Username.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // str_Username (begin)
+<span id="el_tblCRAttendance_str_Username">
+<span @Html.Raw(tblCrAttendanceEdit.str_Username.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblCrAttendanceEdit.str_Username.DisplayValue(tblCrAttendanceEdit.str_Username.EditValue))</span></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_str_Username" data-hidden="1" name="x_str_Username" id="x_str_Username" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.str_Username.CurrentValue))">
+</span>
+} else { // str_Username (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.str_Username.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblCrAttendanceEdit.str_Username.DisplayValue(tblCrAttendanceEdit.str_Username.ViewValue))</span></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_str_Username" data-hidden="1" name="x_str_Username" id="x_str_Username" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.str_Username.FormValue))">
+} @* str_Username (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.str_Username.Visible (end) *@
+@if (tblCrAttendanceEdit.int_CR_ID.Visible) { // tblCrAttendanceEdit.int_CR_ID.Visible (begin)
+    <div id="r_int_CR_ID" @Html.Raw(tblCrAttendanceEdit.int_CR_ID.RowAttributes)>
+        <label id="elh_tblCRAttendance_int_CR_ID" for="x_int_CR_ID" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.int_CR_ID.Caption)@Html.Raw(tblCrAttendanceEdit.int_CR_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.int_CR_ID.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // int_CR_ID (begin)
+<span id="el_tblCRAttendance_int_CR_ID">
+<span @Html.Raw(tblCrAttendanceEdit.int_CR_ID.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblCrAttendanceEdit.int_CR_ID.EditValue)))"></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_int_CR_ID" data-hidden="1" name="x_int_CR_ID" id="x_int_CR_ID" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.int_CR_ID.CurrentValue))">
+</span>
+} else { // int_CR_ID (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.int_CR_ID.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblCrAttendanceEdit.int_CR_ID.ViewValue)))"></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_int_CR_ID" data-hidden="1" name="x_int_CR_ID" id="x_int_CR_ID" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.int_CR_ID.FormValue))">
+} @* int_CR_ID (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.int_CR_ID.Visible (end) *@
+@if (tblCrAttendanceEdit.int_CRSession_ID.Visible) { // tblCrAttendanceEdit.int_CRSession_ID.Visible (begin)
+    <div id="r_int_CRSession_ID" @Html.Raw(tblCrAttendanceEdit.int_CRSession_ID.RowAttributes)>
+        <label id="elh_tblCRAttendance_int_CRSession_ID" for="x_int_CRSession_ID" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.int_CRSession_ID.Caption)@Html.Raw(tblCrAttendanceEdit.int_CRSession_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.int_CRSession_ID.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // int_CRSession_ID (begin)
+<span id="el_tblCRAttendance_int_CRSession_ID">
+<span @Html.Raw(tblCrAttendanceEdit.int_CRSession_ID.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblCrAttendanceEdit.int_CRSession_ID.EditValue)))"></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_int_CRSession_ID" data-hidden="1" name="x_int_CRSession_ID" id="x_int_CRSession_ID" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.int_CRSession_ID.CurrentValue))">
+</span>
+} else { // int_CRSession_ID (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.int_CRSession_ID.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblCrAttendanceEdit.int_CRSession_ID.ViewValue)))"></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_int_CRSession_ID" data-hidden="1" name="x_int_CRSession_ID" id="x_int_CRSession_ID" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.int_CRSession_ID.FormValue))">
+} @* int_CRSession_ID (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.int_CRSession_ID.Visible (end) *@
+@if (tblCrAttendanceEdit.Is_All_Attend.Visible) { // tblCrAttendanceEdit.Is_All_Attend.Visible (begin)
+    <div id="r_Is_All_Attend" @Html.Raw(tblCrAttendanceEdit.Is_All_Attend.RowAttributes)>
+        <label id="elh_tblCRAttendance_Is_All_Attend" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.Is_All_Attend.Caption)@Html.Raw(tblCrAttendanceEdit.Is_All_Attend.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.Is_All_Attend.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // Is_All_Attend (begin)
+<span id="el_tblCRAttendance_Is_All_Attend">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblCrAttendanceEdit.Is_All_Attend.IsInvalidClass)" data-table="tblCRAttendance" data-field="x_Is_All_Attend" data-boolean name="x_Is_All_Attend" id="x_Is_All_Attend" value="1" checked="@ConvertToBool(tblCrAttendanceEdit.Is_All_Attend.CurrentValue)" @Html.Raw(tblCrAttendanceEdit.Is_All_Attend.EditAttributes) aria-describedby="x_Is_All_Attend_help">
+    <div class="invalid-feedback">@Html.Raw(tblCrAttendanceEdit.Is_All_Attend.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblCrAttendanceEdit.Is_All_Attend.GetCustomMessage)
+</span>
+} else { // Is_All_Attend (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.Is_All_Attend.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Is_All_Attend_@(tblCrAttendanceEdit.RowCount)" class="form-check-input" value="@(tblCrAttendanceEdit.Is_All_Attend.ViewValue)" disabled checked="@(ConvertToBool(tblCrAttendanceEdit.Is_All_Attend.CurrentValue))">
+    <label class="form-check-label" for="x_Is_All_Attend_@(tblCrAttendanceEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_Is_All_Attend" data-hidden="1" name="x_Is_All_Attend" id="x_Is_All_Attend" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.Is_All_Attend.FormValue))">
+} @* Is_All_Attend (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.Is_All_Attend.Visible (end) *@
+@if (tblCrAttendanceEdit.idnumber.Visible) { // tblCrAttendanceEdit.idnumber.Visible (begin)
+    <div id="r_idnumber" @Html.Raw(tblCrAttendanceEdit.idnumber.RowAttributes)>
+        <label id="elh_tblCRAttendance_idnumber" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.idnumber.Caption)@Html.Raw(tblCrAttendanceEdit.idnumber.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.idnumber.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // idnumber (begin)
+<span id="el_tblCRAttendance_idnumber">
+<span @Html.Raw(tblCrAttendanceEdit.idnumber.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblCrAttendanceEdit.idnumber.DisplayValue(tblCrAttendanceEdit.idnumber.EditValue))</span></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_idnumber" data-hidden="1" name="x_idnumber" id="x_idnumber" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.idnumber.CurrentValue))">
+</span>
+} else { // idnumber (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.idnumber.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblCrAttendanceEdit.idnumber.DisplayValue(tblCrAttendanceEdit.idnumber.ViewValue))</span></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_idnumber" data-hidden="1" name="x_idnumber" id="x_idnumber" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.idnumber.FormValue))">
+} @* idnumber (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.idnumber.Visible (end) *@
+@if (tblCrAttendanceEdit.bit_IsMakeUP.Visible) { // tblCrAttendanceEdit.bit_IsMakeUP.Visible (begin)
+    <div id="r_bit_IsMakeUP" @Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.RowAttributes)>
+        <label id="elh_tblCRAttendance_bit_IsMakeUP" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.Caption)@Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // bit_IsMakeUP (begin)
+<span id="el_tblCRAttendance_bit_IsMakeUP">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblCrAttendanceEdit.bit_IsMakeUP.IsInvalidClass)" data-table="tblCRAttendance" data-field="x_bit_IsMakeUP" data-boolean name="x_bit_IsMakeUP" id="x_bit_IsMakeUP" value="1" checked="@ConvertToBool(tblCrAttendanceEdit.bit_IsMakeUP.CurrentValue)" @Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.EditAttributes) aria-describedby="x_bit_IsMakeUP_help">
+    <div class="invalid-feedback">@Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.GetCustomMessage)
+</span>
+} else { // bit_IsMakeUP (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.bit_IsMakeUP.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsMakeUP_@(tblCrAttendanceEdit.RowCount)" class="form-check-input" value="@(tblCrAttendanceEdit.bit_IsMakeUP.ViewValue)" disabled checked="@(ConvertToBool(tblCrAttendanceEdit.bit_IsMakeUP.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsMakeUP_@(tblCrAttendanceEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_bit_IsMakeUP" data-hidden="1" name="x_bit_IsMakeUP" id="x_bit_IsMakeUP" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.bit_IsMakeUP.FormValue))">
+} @* bit_IsMakeUP (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.bit_IsMakeUP.Visible (end) *@
+@if (tblCrAttendanceEdit.RemM1.Visible) { // tblCrAttendanceEdit.RemM1.Visible (begin)
+    <div id="r_RemM1" @Html.Raw(tblCrAttendanceEdit.RemM1.RowAttributes)>
+        <label id="elh_tblCRAttendance_RemM1" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.RemM1.Caption)@Html.Raw(tblCrAttendanceEdit.RemM1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.RemM1.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // RemM1 (begin)
+<span id="el_tblCRAttendance_RemM1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblCrAttendanceEdit.RemM1.IsInvalidClass)" data-table="tblCRAttendance" data-field="x_RemM1" data-boolean name="x_RemM1" id="x_RemM1" value="1" checked="@ConvertToBool(tblCrAttendanceEdit.RemM1.CurrentValue)" @Html.Raw(tblCrAttendanceEdit.RemM1.EditAttributes) aria-describedby="x_RemM1_help">
+    <div class="invalid-feedback">@Html.Raw(tblCrAttendanceEdit.RemM1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblCrAttendanceEdit.RemM1.GetCustomMessage)
+</span>
+} else { // RemM1 (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.RemM1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM1_@(tblCrAttendanceEdit.RowCount)" class="form-check-input" value="@(tblCrAttendanceEdit.RemM1.ViewValue)" disabled checked="@(ConvertToBool(tblCrAttendanceEdit.RemM1.CurrentValue))">
+    <label class="form-check-label" for="x_RemM1_@(tblCrAttendanceEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_RemM1" data-hidden="1" name="x_RemM1" id="x_RemM1" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.RemM1.FormValue))">
+} @* RemM1 (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.RemM1.Visible (end) *@
+@if (tblCrAttendanceEdit.SMSReminder1.Visible) { // tblCrAttendanceEdit.SMSReminder1.Visible (begin)
+    <div id="r_SMSReminder1" @Html.Raw(tblCrAttendanceEdit.SMSReminder1.RowAttributes)>
+        <label id="elh_tblCRAttendance_SMSReminder1" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.SMSReminder1.Caption)@Html.Raw(tblCrAttendanceEdit.SMSReminder1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.SMSReminder1.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // SMSReminder1 (begin)
+<span id="el_tblCRAttendance_SMSReminder1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblCrAttendanceEdit.SMSReminder1.IsInvalidClass)" data-table="tblCRAttendance" data-field="x_SMSReminder1" data-boolean name="x_SMSReminder1" id="x_SMSReminder1" value="1" checked="@ConvertToBool(tblCrAttendanceEdit.SMSReminder1.CurrentValue)" @Html.Raw(tblCrAttendanceEdit.SMSReminder1.EditAttributes) aria-describedby="x_SMSReminder1_help">
+    <div class="invalid-feedback">@Html.Raw(tblCrAttendanceEdit.SMSReminder1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblCrAttendanceEdit.SMSReminder1.GetCustomMessage)
+</span>
+} else { // SMSReminder1 (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.SMSReminder1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder1_@(tblCrAttendanceEdit.RowCount)" class="form-check-input" value="@(tblCrAttendanceEdit.SMSReminder1.ViewValue)" disabled checked="@(ConvertToBool(tblCrAttendanceEdit.SMSReminder1.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder1_@(tblCrAttendanceEdit.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_SMSReminder1" data-hidden="1" name="x_SMSReminder1" id="x_SMSReminder1" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.SMSReminder1.FormValue))">
+} @* SMSReminder1 (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.SMSReminder1.Visible (end) *@
+@if (tblCrAttendanceEdit.str_CR_Number.Visible) { // tblCrAttendanceEdit.str_CR_Number.Visible (begin)
+    <div id="r_str_CR_Number" @Html.Raw(tblCrAttendanceEdit.str_CR_Number.RowAttributes)>
+        <label id="elh_tblCRAttendance_str_CR_Number" for="x_str_CR_Number" class="@(tblCrAttendanceEdit.LeftColumnClass)">@Html.Raw(tblCrAttendanceEdit.str_CR_Number.Caption)@Html.Raw(tblCrAttendanceEdit.str_CR_Number.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblCrAttendanceEdit.RightColumnClass)"><div @Html.Raw(tblCrAttendanceEdit.str_CR_Number.CellAttributes)>
+@if (!tblCrAttendanceEdit.IsConfirm) { // str_CR_Number (begin)
+<span id="el_tblCRAttendance_str_CR_Number">
+<span @Html.Raw(tblCrAttendanceEdit.str_CR_Number.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblCrAttendanceEdit.str_CR_Number.DisplayValue(tblCrAttendanceEdit.str_CR_Number.EditValue))</span></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_str_CR_Number" data-hidden="1" name="x_str_CR_Number" id="x_str_CR_Number" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.str_CR_Number.CurrentValue))">
+</span>
+} else { // str_CR_Number (confirm)
+<span @Html.Raw(tblCrAttendanceEdit.str_CR_Number.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblCrAttendanceEdit.str_CR_Number.DisplayValue(tblCrAttendanceEdit.str_CR_Number.ViewValue))</span></span>
+<input type="hidden" data-table="tblCRAttendance" data-field="x_str_CR_Number" data-hidden="1" name="x_str_CR_Number" id="x_str_CR_Number" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.str_CR_Number.FormValue))">
+} @* str_CR_Number (end) *@
+</div></div>
+    </div>
+} @* tblCrAttendanceEdit.str_CR_Number.Visible (end) *@
+</div><!-- /page* -->
+    <input type="hidden" data-table="tblCRAttendance" data-field="x_int_Attendance_ID" data-hidden="1" name="x_int_Attendance_ID" id="x_int_Attendance_ID" value="@Html.Raw(HtmlEncode(tblCrAttendanceEdit.int_Attendance_ID.CurrentValue))">
+@{ tblCrAttendanceEdit.CloseRecordset(); }
+@Html.Raw(tblCrAttendanceEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblCrAttendanceEdit.OffsetColumnClass)"><!-- buttons offset -->
+@if (!tblCrAttendanceEdit.IsConfirm) { // Confirm page
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblCRAttendanceedit" data-ew-action="set-action" data-value="confirm">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblCRAttendanceedit" data-href="@AppPath(tblCrAttendanceEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+} else {
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblCRAttendanceedit">@Html.Raw(Language.Phrase("ConfirmBtn"))</button>
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="submit" form="ftblCRAttendanceedit" data-ew-action="set-action" data-value="cancel">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblCrAttendanceEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@tblCrAttendanceEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblCRAttendance");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

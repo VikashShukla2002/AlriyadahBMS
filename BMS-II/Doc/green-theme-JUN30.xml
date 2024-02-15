@@ -1,0 +1,1083 @@
+<?xml version="1.0"?>
+<theme name="green-theme-JUN30" version="2023.5" author="ALRIYADAH">
+	<style id="ThemePaceColor" value="#13653F"/>
+	<style id="ThemeTableStriped" value="0"/>
+	<style id="ThemeTableBordered" value="1"/>
+	<style id="ThemeTableBorderless" value="0"/>
+	<style id="ThemeTableHover" value="1"/>
+	<style id="ThemeTableCondensed" value="0"/>
+	<style id="ThemeTableHeaderBackgroundColor" value="#177D4E"/>
+	<style id="ThemeTableHeaderBorderColor" value="#157347"/>
+	<style id="ThemeTableHeaderColor" value=""/>
+	<style id="ThemeTableBodyBackgroundColor" value="$table-bg"/>
+	<style id="ThemeTableBodyColor" value="$table-color"/>
+	<style id="ThemeTableBodyStripedBackgroundColor" value="$table-striped-bg"/>
+	<style id="ThemeTableBodyStripedColor" value="$table-striped-color"/>
+	<style id="ThemeTableBodyHoverBackgroundColor" value="$table-hover-bg"/>
+	<style id="ThemeTableBodyHoverColor" value="$table-hover-color"/>
+	<style id="ThemeTableBodyActiveBackgroundColor" value="#D1E7DD"/>
+	<style id="ThemeTableBodyActiveColor" value=""/>
+	<style id="ThemeTableFooterBackgroundColor" value="#DDEDE5"/>
+	<style id="ThemeTableFooterColor" value=""/>
+	<style id="ThemeGridBorderWidth" value="$table-border-width"/>
+	<style id="ThemeGridBorderColor" value="#13653F"/>
+	<style id="ThemeGridLineColor" value="$table-border-color"/>
+	<style id="ThemeGridPagerPanelBackgroundColor" value="$card-cap-bg"/>
+	<style id="ThemeGridPagerPanelColor" value=""/>
+	<style id="ThemeReportGroupBackgroundColor1" value="#DDEDE5"/>
+	<style id="ThemeReportGroupColor1" value=""/>
+	<style id="ThemeReportGroupBackgroundColor2" value=""/>
+	<style id="ThemeReportGroupColor2" value=""/>
+	<style id="ThemeReportGroupBackgroundColor3" value="#DDEDE5"/>
+	<style id="ThemeReportGroupColor3" value=""/>
+	<style id="ThemeReportGroupBackgroundColor4" value=""/>
+	<style id="ThemeReportGroupColor4" value=""/>
+	<style id="ThemeReportGroupBackgroundColor5" value="#DDEDE5"/>
+	<style id="ThemeReportGroupColor5" value=""/>
+	<style id="ThemeReportGroupBackgroundColor6" value=""/>
+	<style id="ThemeReportGroupColor6" value=""/>
+	<style id="ThemeReportGroupSummaryBackgroundColor1" value="#DDEDE5"/>
+	<style id="ThemeReportGroupSummaryColor1" value=""/>
+	<style id="ThemeReportGroupSummaryBackgroundColor2" value=""/>
+	<style id="ThemeReportGroupSummaryColor2" value=""/>
+	<style id="ThemeReportGroupSummaryBackgroundColor3" value="#DDEDE5"/>
+	<style id="ThemeReportGroupSummaryColor3" value=""/>
+	<style id="ThemeReportGroupSummaryBackgroundColor4" value=""/>
+	<style id="ThemeReportGroupSummaryColor4" value=""/>
+	<style id="ThemeReportGroupSummaryBackgroundColor5" value="#DDEDE5"/>
+	<style id="ThemeReportGroupSummaryColor5" value=""/>
+	<style id="ThemeReportGroupSummaryBackgroundColor6" value=""/>
+	<style id="ThemeReportGroupSummaryColor6" value=""/>
+	<style id="ThemeReportPageSummaryBackgroundColor" value="#D7EAE1"/>
+	<style id="ThemeReportPageSummaryColor" value=""/>
+	<style id="ThemeReportGrandSummaryBackgroundColor" value="#D1E7DD"/>
+	<style id="ThemeReportGrandSummaryColor" value=""/>
+	<style id="ThemeSidebarClass" value="sidebar-dark-green"/>
+	<style id="ThemeNavbarClass" value="navbar-green"/>
+	<style id="ThemeNavbarBorder" value="0"/>
+	<style id="ThemeBrandLogoClass" value=""/>
+	<style id="ThemeAccentColor" value=""/>
+	<style id="ThemeSidebarCompact" value="0"/>
+	<style id="ThemeSidebarSearch" value="0"/>
+	<style id="ThemeLightblue" value="#3C8DBC"/>
+	<style id="ThemeNavy" value="#001F3F"/>
+	<style id="ThemeOlive" value="#3D9970"/>
+	<style id="ThemeLime" value="#01FF70"/>
+	<style id="ThemeFuchsia" value="#F012BE"/>
+	<style id="ThemeMaroon" value="#D81B60"/>
+	<style id="ThemeGrayXLight" value="#D2D6DE"/>
+	<style id="ThemeSidebarWidth" value="250px"/>
+	<style id="ThemeSidebarPaddingX" value=".5rem"/>
+	<style id="ThemeSidebarPaddingY" value="0"/>
+	<style id="ThemeSidebarCustomHeight" value="4rem"/>
+	<style id="ThemeSidebarCustomHeightLg" value="6rem"/>
+	<style id="ThemeSidebarCustomHeightXl" value="8rem"/>
+	<style id="ThemeSidebarCustomPaddingX" value=".85rem"/>
+	<style id="ThemeSidebarCustomPaddingY" value=".5rem"/>
+	<style id="ThemeBoxedLayoutMaxWidth" value="1250px"/>
+	<style id="ThemeMainBg" value="#F4F6F9"/>
+	<style id="ThemeDarkMainBg" value="tint-color($dark, 7.5%)"/>
+	<style id="ThemeContentPaddingY" value="0"/>
+	<style id="ThemeContentPaddingX" value="1rem"/>
+	<style id="ThemeImgSizeSm" value="1.875rem"/>
+	<style id="ThemeImgSizeMd" value="3.75rem"/>
+	<style id="ThemeImgSizeLg" value="6.25rem"/>
+	<style id="ThemeImgSizePush" value=".625rem"/>
+	<style id="ThemeMainHeaderBottomBorderWidth" value="$border-width"/>
+	<style id="ThemeMainHeaderBottomBorderColor" value="$gray-300"/>
+	<style id="ThemeMainHeaderBottomBorder" value="$main-header-bottom-border-width solid $main-header-bottom-border-color"/>
+	<style id="ThemeMainHeaderLinkPaddingY" value="$navbar-padding-y"/>
+	<style id="ThemeMainHeaderHeightInner" value="(($nav-link-height + ($main-header-link-padding-y * 2)))"/>
+	<style id="ThemeMainHeaderHeight" value="calc(#{$main-header-height-inner} + #{$main-header-bottom-border-width})"/>
+	<style id="ThemeNavLinkSmPaddingY" value=".35rem"/>
+	<style id="ThemeNavLinkSmHeight" value="(($font-size-sm * $line-height-sm + $nav-link-sm-padding-y * 1.785))"/>
+	<style id="ThemeMainHeaderHeightSmInner" value="(($nav-link-sm-height + ($main-header-link-padding-y * 2)))"/>
+	<style id="ThemeMainHeaderHeightSm" value="calc(#{$main-header-height-sm-inner} + #{$main-header-bottom-border-width})"/>
+	<style id="ThemeMainHeaderDarkFormControlBg" value="$gray-800"/>
+	<style id="ThemeMainHeaderDarkFormControlFocusedBg" value="$gray-700"/>
+	<style id="ThemeMainHeaderDarkFormControlFocusedColor" value="$gray-400"/>
+	<style id="ThemeMainHeaderDarkFormControlBorderColor" value="$gray-600"/>
+	<style id="ThemeMainHeaderDarkFormControlFocusedBorderColor" value="$gray-600"/>
+	<style id="ThemeMainHeaderDarkPlaceholderColor" value="rgba($white, .6)"/>
+	<style id="ThemeMainHeaderLightFormControlBg" value="shade-color($gray-200, 5%)"/>
+	<style id="ThemeMainHeaderLightFormControlFocusedBg" value="shade-color($gray-200, 7.5%)"/>
+	<style id="ThemeMainHeaderLightFormControlFocusedColor" value="$gray-400"/>
+	<style id="ThemeMainHeaderLightFormControlBorderColor" value="$gray-400"/>
+	<style id="ThemeMainHeaderLightFormControlFocusedBorderColor" value="shade-color($gray-400, 2.5%)"/>
+	<style id="ThemeMainHeaderLightPlaceholderColor" value="rgba(0, 0, 0, .6)"/>
+	<style id="ThemeMainFooterPadding" value="1rem"/>
+	<style id="ThemeMainFooterPaddingSm" value="($main-footer-padding * .812)"/>
+	<style id="ThemeMainFooterBorderTopWidth" value="1px"/>
+	<style id="ThemeMainFooterBorderTopColor" value="$gray-300"/>
+	<style id="ThemeMainFooterBorderTop" value="$main-footer-border-top-width solid $main-footer-border-top-color"/>
+	<style id="ThemeMainFooterHeightInner" value="((($font-size-base * $line-height-base) + ($main-footer-padding * 2)))"/>
+	<style id="ThemeMainFooterHeight" value="calc(#{$main-footer-height-inner} + #{$main-footer-border-top-width})"/>
+	<style id="ThemeMainFooterHeightSmInner" value="((($font-size-sm * $line-height-base) + ($main-footer-padding-sm * 2)))"/>
+	<style id="ThemeMainFooterHeightSm" value="calc(#{$main-footer-height-sm-inner} + #{$main-footer-border-top-width})"/>
+	<style id="ThemeMainFooterBg" value="$white"/>
+	<style id="ThemeSidebarDarkBg" value="#F1E9D2"/>
+	<style id="ThemeSidebarDarkHoverBg" value="$green-400"/>
+	<style id="ThemeSidebarDarkColor" value="#898A8D"/>
+	<style id="ThemeSidebarDarkHoverColor" value="$white"/>
+	<style id="ThemeSidebarDarkActiveColor" value="$white"/>
+	<style id="ThemeSidebarDarkSubmenuBg" value="transparent"/>
+	<style id="ThemeSidebarDarkSubmenuColor" value="#898A8D"/>
+	<style id="ThemeSidebarDarkSubmenuHoverColor" value="$white"/>
+	<style id="ThemeSidebarDarkSubmenuHoverBg" value="$green-400"/>
+	<style id="ThemeSidebarDarkSubmenuActiveColor" value="$white"/>
+	<style id="ThemeSidebarDarkSubmenuActiveBg" value="$green-400"/>
+	<style id="ThemeSidebarLightBg" value="$white"/>
+	<style id="ThemeSidebarLightHoverBg" value="rgba($black, .1)"/>
+	<style id="ThemeSidebarLightColor" value="$gray-800"/>
+	<style id="ThemeSidebarLightHoverColor" value="$gray-900"/>
+	<style id="ThemeSidebarLightActiveColor" value="$black"/>
+	<style id="ThemeSidebarLightSubmenuBg" value="transparent"/>
+	<style id="ThemeSidebarLightSubmenuColor" value="#777777"/>
+	<style id="ThemeSidebarLightSubmenuHoverColor" value="$black"/>
+	<style id="ThemeSidebarLightSubmenuHoverBg" value="$sidebar-light-hover-bg"/>
+	<style id="ThemeSidebarLightSubmenuActiveColor" value="$sidebar-light-hover-color"/>
+	<style id="ThemeSidebarLightSubmenuActiveBg" value="$sidebar-light-submenu-hover-bg"/>
+	<style id="ThemeSidebarMiniWidth" value="($nav-link-padding-x + $sidebar-padding-x + .8rem) * 2"/>
+	<style id="ThemeSidebarNavIconWidth" value="$sidebar-mini-width - (($sidebar-padding-x + $nav-link-padding-x) * 2)"/>
+	<style id="ThemeSidebarUserImageWidth" value="($sidebar-nav-icon-width + $nav-link-padding-x * .5)"/>
+	<style id="ThemeControlSidebarWidth" value="$sidebar-width"/>
+	<style id="ThemeCardDarkBorderColor" value="tint-color($gray-900, 10%)"/>
+	<style id="ThemeCardShadow" value="0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2)"/>
+	<style id="ThemeCardTitleFontSize" value="1.1rem"/>
+	<style id="ThemeCardTitleFontSizeSm" value="1rem"/>
+	<style id="ThemeCardTitleFontWeight" value="$font-weight-normal"/>
+	<style id="ThemeCardNavLinkPaddingSmY" value=".4rem"/>
+	<style id="ThemeCardNavLinkPaddingSmX" value=".8rem"/>
+	<style id="ThemeCardImgSize" value="$img-size-sm"/>
+	<style id="ThemeProgressBarBorderRadius" value="1px"/>
+	<style id="ThemeDirectChatDefaultMsgBg" value="$gray-x-light"/>
+	<style id="ThemeDirectChatDefaultFontColor" value="#444444"/>
+	<style id="ThemeDirectChatDefaultMsgBorderColor" value="$gray-x-light"/>
+	<style id="ThemeZindexMainHeader" value="$zindex-fixed + 4"/>
+	<style id="ThemeZindexMainSidebar" value="$zindex-fixed + 8"/>
+	<style id="ThemeZindexMainFooter" value="$zindex-fixed + 2"/>
+	<style id="ThemeZindexControlSidebar" value="$zindex-fixed + 1"/>
+	<style id="ThemeZindexToasts" value="$zindex-main-sidebar + 2"/>
+	<style id="ThemeZindexPreloader" value="9999"/>
+	<style id="ThemeTransitionSpeed" value=".3s"/>
+	<style id="ThemeTransitionFn" value="ease-in-out"/>
+	<style id="ThemeFontSizeXs" value="(($font-size-base * .75))"/>
+	<style id="ThemeFontSizeXl" value="(($font-size-base * 2))"/>
+	<style id="ThemeButtonDefaultBackgroundColor" value="$green-100"/>
+	<style id="ThemeButtonDefaultColor" value="#177D4E"/>
+	<style id="ThemeButtonDefaultBorderColor" value="#44AC99"/>
+	<style id="ThemeButtonPaddingYXs" value=".125rem"/>
+	<style id="ThemeButtonPaddingXXs" value=".25rem"/>
+	<style id="ThemeButtonLineHeightXs" value="$line-height-sm"/>
+	<style id="ThemeButtonFontSizeXs" value="(($font-size-base * .75))"/>
+	<style id="ThemeButtonBorderRadiusXs" value=".15rem"/>
+	<style id="ThemeRibbonBorderSize" value="3px"/>
+	<style id="ThemeRibbonLineHeight" value="100%"/>
+	<style id="ThemeRibbonPadding" value=".375rem 0"/>
+	<style id="ThemeRibbonFontSize" value=".8rem"/>
+	<style id="ThemeRibbonWidth" value="90px"/>
+	<style id="ThemeRibbonWrapperSize" value="70px"/>
+	<style id="ThemeRibbonTop" value="10px"/>
+	<style id="ThemeRibbonRight" value="-2px"/>
+	<style id="ThemeRibbonLgWrapperSize" value="120px"/>
+	<style id="ThemeRibbonLgWidth" value="160px"/>
+	<style id="ThemeRibbonLgTop" value="26px"/>
+	<style id="ThemeRibbonLgRight" value="0"/>
+	<style id="ThemeRibbonXlWrapperSize" value="180px"/>
+	<style id="ThemeRibbonXlWidth" value="240px"/>
+	<style id="ThemeRibbonXlTop" value="47px"/>
+	<style id="ThemeRibbonXlRight" value="4px"/>
+	<style id="ThemeFormSelectDarkIndicatorColor" value="$white"/>
+	<style id="ThemeFormSelectDarkIndicator" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'&gt;&lt;path fill='#{$form-select-dark-indicator-color}' d='M2 0L0 2h4zm0 5L0 3h4z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormSelectDarkBackground" value="escape-svg($form-select-dark-indicator) right $form-select-padding-x center / $form-select-bg-size no-repeat"/>
+	<style id="ThemeEnableDarkMode" value="0"/>
+	<style id="ThemeWhite" value="#FFFFFF"/>
+	<style id="ThemeGray100" value="#F8F9FA"/>
+	<style id="ThemeGray200" value="#E9ECEF"/>
+	<style id="ThemeGray300" value="#DEE2E6"/>
+	<style id="ThemeGray400" value="#CED4DA"/>
+	<style id="ThemeGray500" value="#ADB5BD"/>
+	<style id="ThemeGray600" value="#6C757D"/>
+	<style id="ThemeGray700" value="#495057"/>
+	<style id="ThemeGray800" value="#343A40"/>
+	<style id="ThemeGray900" value="#212529"/>
+	<style id="ThemeBlack" value="#000000"/>
+	<style id="ThemeGrays" value="(&quot;100&quot;: $gray-100, &quot;200&quot;: $gray-200, &quot;300&quot;: $gray-300, &quot;400&quot;: $gray-400, &quot;500&quot;: $gray-500, &quot;600&quot;: $gray-600, &quot;700&quot;: $gray-700, &quot;800&quot;: $gray-800, &quot;900&quot;: $gray-900)"/>
+	<style id="ThemeBlue" value="#198754"/>
+	<style id="ThemeIndigo" value="#6610F2"/>
+	<style id="ThemePurple" value="#6F42C1"/>
+	<style id="ThemePink" value="#D63384"/>
+	<style id="ThemeRed" value="#DC3545"/>
+	<style id="ThemeOrange" value="#FD7E14"/>
+	<style id="ThemeYellow" value="#FFC107"/>
+	<style id="ThemeGreen" value="#198754"/>
+	<style id="ThemeTeal" value="#20C997"/>
+	<style id="ThemeCyan" value="#0DCAF0"/>
+	<style id="ThemeColors" value="(&quot;blue&quot;: $blue, &quot;indigo&quot;: $indigo, &quot;purple&quot;: $purple, &quot;pink&quot;: $pink, &quot;red&quot;: $red, &quot;orange&quot;: $orange, &quot;yellow&quot;: $yellow, &quot;green&quot;: $green, &quot;teal&quot;: $teal, &quot;cyan&quot;: $cyan, &quot;black&quot;: $black, &quot;white&quot;: $white, &quot;gray&quot;: $gray-600, &quot;gray-dark&quot;: $gray-800)"/>
+	<style id="ThemeMinContrastRatio" value="4.5"/>
+	<style id="ThemeColorContrastDark" value="$black"/>
+	<style id="ThemeColorContrastLight" value="$white"/>
+	<style id="ThemeBlue100" value="tint-color($blue, 80%)"/>
+	<style id="ThemeBlue200" value="tint-color($blue, 60%)"/>
+	<style id="ThemeBlue300" value="tint-color($blue, 40%)"/>
+	<style id="ThemeBlue400" value="tint-color($blue, 20%)"/>
+	<style id="ThemeBlue500" value="$blue"/>
+	<style id="ThemeBlue600" value="shade-color($blue, 20%)"/>
+	<style id="ThemeBlue700" value="shade-color($blue, 40%)"/>
+	<style id="ThemeBlue800" value="shade-color($blue, 60%)"/>
+	<style id="ThemeBlue900" value="shade-color($blue, 80%)"/>
+	<style id="ThemeIndigo100" value="tint-color($indigo, 80%)"/>
+	<style id="ThemeIndigo200" value="tint-color($indigo, 60%)"/>
+	<style id="ThemeIndigo300" value="tint-color($indigo, 40%)"/>
+	<style id="ThemeIndigo400" value="tint-color($indigo, 20%)"/>
+	<style id="ThemeIndigo500" value="$indigo"/>
+	<style id="ThemeIndigo600" value="shade-color($indigo, 20%)"/>
+	<style id="ThemeIndigo700" value="shade-color($indigo, 40%)"/>
+	<style id="ThemeIndigo800" value="shade-color($indigo, 60%)"/>
+	<style id="ThemeIndigo900" value="shade-color($indigo, 80%)"/>
+	<style id="ThemePurple100" value="tint-color($purple, 80%)"/>
+	<style id="ThemePurple200" value="tint-color($purple, 60%)"/>
+	<style id="ThemePurple300" value="tint-color($purple, 40%)"/>
+	<style id="ThemePurple400" value="tint-color($purple, 20%)"/>
+	<style id="ThemePurple500" value="$purple"/>
+	<style id="ThemePurple600" value="shade-color($purple, 20%)"/>
+	<style id="ThemePurple700" value="shade-color($purple, 40%)"/>
+	<style id="ThemePurple800" value="shade-color($purple, 60%)"/>
+	<style id="ThemePurple900" value="shade-color($purple, 80%)"/>
+	<style id="ThemePink100" value="tint-color($pink, 80%)"/>
+	<style id="ThemePink200" value="tint-color($pink, 60%)"/>
+	<style id="ThemePink300" value="tint-color($pink, 40%)"/>
+	<style id="ThemePink400" value="tint-color($pink, 20%)"/>
+	<style id="ThemePink500" value="$pink"/>
+	<style id="ThemePink600" value="shade-color($pink, 20%)"/>
+	<style id="ThemePink700" value="shade-color($pink, 40%)"/>
+	<style id="ThemePink800" value="shade-color($pink, 60%)"/>
+	<style id="ThemePink900" value="shade-color($pink, 80%)"/>
+	<style id="ThemeRed100" value="tint-color($red, 80%)"/>
+	<style id="ThemeRed200" value="tint-color($red, 60%)"/>
+	<style id="ThemeRed300" value="tint-color($red, 40%)"/>
+	<style id="ThemeRed400" value="tint-color($red, 20%)"/>
+	<style id="ThemeRed500" value="$red"/>
+	<style id="ThemeRed600" value="shade-color($red, 20%)"/>
+	<style id="ThemeRed700" value="shade-color($red, 40%)"/>
+	<style id="ThemeRed800" value="shade-color($red, 60%)"/>
+	<style id="ThemeRed900" value="shade-color($red, 80%)"/>
+	<style id="ThemeOrange100" value="tint-color($orange, 80%)"/>
+	<style id="ThemeOrange200" value="tint-color($orange, 60%)"/>
+	<style id="ThemeOrange300" value="tint-color($orange, 40%)"/>
+	<style id="ThemeOrange400" value="tint-color($orange, 20%)"/>
+	<style id="ThemeOrange500" value="$orange"/>
+	<style id="ThemeOrange600" value="shade-color($orange, 20%)"/>
+	<style id="ThemeOrange700" value="shade-color($orange, 40%)"/>
+	<style id="ThemeOrange800" value="shade-color($orange, 60%)"/>
+	<style id="ThemeOrange900" value="shade-color($orange, 80%)"/>
+	<style id="ThemeYellow100" value="tint-color($yellow, 80%)"/>
+	<style id="ThemeYellow200" value="tint-color($yellow, 60%)"/>
+	<style id="ThemeYellow300" value="tint-color($yellow, 40%)"/>
+	<style id="ThemeYellow400" value="tint-color($yellow, 20%)"/>
+	<style id="ThemeYellow500" value="$yellow"/>
+	<style id="ThemeYellow600" value="shade-color($yellow, 20%)"/>
+	<style id="ThemeYellow700" value="shade-color($yellow, 40%)"/>
+	<style id="ThemeYellow800" value="shade-color($yellow, 60%)"/>
+	<style id="ThemeYellow900" value="shade-color($yellow, 80%)"/>
+	<style id="ThemeGreen100" value="tint-color($green, 80%)"/>
+	<style id="ThemeGreen200" value="tint-color($green, 60%)"/>
+	<style id="ThemeGreen300" value="tint-color($green, 40%)"/>
+	<style id="ThemeGreen400" value="tint-color($green, 20%)"/>
+	<style id="ThemeGreen500" value="$green"/>
+	<style id="ThemeGreen600" value="shade-color($green, 20%)"/>
+	<style id="ThemeGreen700" value="shade-color($green, 40%)"/>
+	<style id="ThemeGreen800" value="shade-color($green, 60%)"/>
+	<style id="ThemeGreen900" value="shade-color($green, 80%)"/>
+	<style id="ThemeTeal100" value="tint-color($teal, 80%)"/>
+	<style id="ThemeTeal200" value="tint-color($teal, 60%)"/>
+	<style id="ThemeTeal300" value="tint-color($teal, 40%)"/>
+	<style id="ThemeTeal400" value="tint-color($teal, 20%)"/>
+	<style id="ThemeTeal500" value="$teal"/>
+	<style id="ThemeTeal600" value="shade-color($teal, 20%)"/>
+	<style id="ThemeTeal700" value="shade-color($teal, 40%)"/>
+	<style id="ThemeTeal800" value="shade-color($teal, 60%)"/>
+	<style id="ThemeTeal900" value="shade-color($teal, 80%)"/>
+	<style id="ThemeCyan100" value="tint-color($cyan, 80%)"/>
+	<style id="ThemeCyan200" value="tint-color($cyan, 60%)"/>
+	<style id="ThemeCyan300" value="tint-color($cyan, 40%)"/>
+	<style id="ThemeCyan400" value="tint-color($cyan, 20%)"/>
+	<style id="ThemeCyan500" value="$cyan"/>
+	<style id="ThemeCyan600" value="shade-color($cyan, 20%)"/>
+	<style id="ThemeCyan700" value="shade-color($cyan, 40%)"/>
+	<style id="ThemeCyan800" value="shade-color($cyan, 60%)"/>
+	<style id="ThemeCyan900" value="shade-color($cyan, 80%)"/>
+	<style id="ThemeBlues" value="(&quot;blue-100&quot;: $blue-100, &quot;blue-200&quot;: $blue-200, &quot;blue-300&quot;: $blue-300, &quot;blue-400&quot;: $blue-400, &quot;blue-500&quot;: $blue-500, &quot;blue-600&quot;: $blue-600, &quot;blue-700&quot;: $blue-700, &quot;blue-800&quot;: $blue-800, &quot;blue-900&quot;: $blue-900)"/>
+	<style id="ThemeIndigos" value="(&quot;indigo-100&quot;: $indigo-100, &quot;indigo-200&quot;: $indigo-200, &quot;indigo-300&quot;: $indigo-300, &quot;indigo-400&quot;: $indigo-400, &quot;indigo-500&quot;: $indigo-500, &quot;indigo-600&quot;: $indigo-600, &quot;indigo-700&quot;: $indigo-700, &quot;indigo-800&quot;: $indigo-800, &quot;indigo-900&quot;: $indigo-900)"/>
+	<style id="ThemePurples" value="(&quot;purple-100&quot;: $purple-100, &quot;purple-200&quot;: $purple-200, &quot;purple-300&quot;: $purple-300, &quot;purple-400&quot;: $purple-400, &quot;purple-500&quot;: $purple-500, &quot;purple-600&quot;: $purple-600, &quot;purple-700&quot;: $purple-700, &quot;purple-800&quot;: $purple-800, &quot;purple-900&quot;: $purple-900)"/>
+	<style id="ThemePinks" value="(&quot;pink-100&quot;: $pink-100, &quot;pink-200&quot;: $pink-200, &quot;pink-300&quot;: $pink-300, &quot;pink-400&quot;: $pink-400, &quot;pink-500&quot;: $pink-500, &quot;pink-600&quot;: $pink-600, &quot;pink-700&quot;: $pink-700, &quot;pink-800&quot;: $pink-800, &quot;pink-900&quot;: $pink-900)"/>
+	<style id="ThemeReds" value="(&quot;red-100&quot;: $red-100, &quot;red-200&quot;: $red-200, &quot;red-300&quot;: $red-300, &quot;red-400&quot;: $red-400, &quot;red-500&quot;: $red-500, &quot;red-600&quot;: $red-600, &quot;red-700&quot;: $red-700, &quot;red-800&quot;: $red-800, &quot;red-900&quot;: $red-900)"/>
+	<style id="ThemeOranges" value="(&quot;orange-100&quot;: $orange-100, &quot;orange-200&quot;: $orange-200, &quot;orange-300&quot;: $orange-300, &quot;orange-400&quot;: $orange-400, &quot;orange-500&quot;: $orange-500, &quot;orange-600&quot;: $orange-600, &quot;orange-700&quot;: $orange-700, &quot;orange-800&quot;: $orange-800, &quot;orange-900&quot;: $orange-900)"/>
+	<style id="ThemeYellows" value="(&quot;yellow-100&quot;: $yellow-100, &quot;yellow-200&quot;: $yellow-200, &quot;yellow-300&quot;: $yellow-300, &quot;yellow-400&quot;: $yellow-400, &quot;yellow-500&quot;: $yellow-500, &quot;yellow-600&quot;: $yellow-600, &quot;yellow-700&quot;: $yellow-700, &quot;yellow-800&quot;: $yellow-800, &quot;yellow-900&quot;: $yellow-900)"/>
+	<style id="ThemeGreens" value="(&quot;green-100&quot;: $green-100, &quot;green-200&quot;: $green-200, &quot;green-300&quot;: $green-300, &quot;green-400&quot;: $green-400, &quot;green-500&quot;: $green-500, &quot;green-600&quot;: $green-600, &quot;green-700&quot;: $green-700, &quot;green-800&quot;: $green-800, &quot;green-900&quot;: $green-900)"/>
+	<style id="ThemeTeals" value="(&quot;teal-100&quot;: $teal-100, &quot;teal-200&quot;: $teal-200, &quot;teal-300&quot;: $teal-300, &quot;teal-400&quot;: $teal-400, &quot;teal-500&quot;: $teal-500, &quot;teal-600&quot;: $teal-600, &quot;teal-700&quot;: $teal-700, &quot;teal-800&quot;: $teal-800, &quot;teal-900&quot;: $teal-900)"/>
+	<style id="ThemeCyans" value="(&quot;cyan-100&quot;: $cyan-100, &quot;cyan-200&quot;: $cyan-200, &quot;cyan-300&quot;: $cyan-300, &quot;cyan-400&quot;: $cyan-400, &quot;cyan-500&quot;: $cyan-500, &quot;cyan-600&quot;: $cyan-600, &quot;cyan-700&quot;: $cyan-700, &quot;cyan-800&quot;: $cyan-800, &quot;cyan-900&quot;: $cyan-900)"/>
+	<style id="ThemePrimary" value="$blue"/>
+	<style id="ThemeSecondary" value="$gray-600"/>
+	<style id="ThemeSuccess" value="$green"/>
+	<style id="ThemeInfo" value="$cyan"/>
+	<style id="ThemeWarning" value="$yellow"/>
+	<style id="ThemeDanger" value="$red"/>
+	<style id="ThemeLight" value="$gray-100"/>
+	<style id="ThemeDark" value="$gray-900"/>
+	<style id="ThemeThemeColors" value="(&quot;primary&quot;: $primary, &quot;secondary&quot;: $secondary, &quot;success&quot;: $success, &quot;info&quot;: $info, &quot;warning&quot;: $warning, &quot;danger&quot;: $danger, &quot;light&quot;: $light, &quot;dark&quot;: $dark)"/>
+	<style id="ThemeEscapedCharacters" value="((&quot;&lt;&quot;, &quot;%3c&quot;), (&quot;&gt;&quot;, &quot;%3e&quot;), (&quot;#&quot;, &quot;%23&quot;), (&quot;(&quot;, &quot;%28&quot;), (&quot;)&quot;, &quot;%29&quot;), )"/>
+	<style id="ThemeEnableCaret" value="1"/>
+	<style id="ThemeEnableRounded" value="1"/>
+	<style id="ThemeEnableShadows" value="0"/>
+	<style id="ThemeEnableGradients" value="0"/>
+	<style id="ThemeEnableTransitions" value="1"/>
+	<style id="ThemeEnableReducedMotion" value="1"/>
+	<style id="ThemeEnableSmoothScroll" value="1"/>
+	<style id="ThemeEnableGridClasses" value="1"/>
+	<style id="ThemeEnableContainerClasses" value="1"/>
+	<style id="ThemeEnableCssgrid" value="0"/>
+	<style id="ThemeEnableButtonPointers" value="1"/>
+	<style id="ThemeEnableRfs" value="1"/>
+	<style id="ThemeEnableValidationIcons" value="1"/>
+	<style id="ThemeEnableNegativeMargins" value="0"/>
+	<style id="ThemeEnableDeprecationMessages" value="1"/>
+	<style id="ThemeEnableImportantUtilities" value="1"/>
+	<style id="ThemeVariablePrefix" value="bs-"/>
+	<style id="ThemePrefix" value="$variable-prefix"/>
+	<style id="ThemeGradient" value="linear-gradient(180deg, rgba($white, .15), rgba($white, 0))"/>
+	<style id="ThemeSpacer" value="1rem"/>
+	<style id="ThemeSpacers" value="((0: 0, 1: $spacer * .25, 2: $spacer * .5, 3: $spacer, 4: $spacer * 1.5, 5: $spacer * 3, ))"/>
+	<style id="ThemePositionValues" value="(0: 0, 50: 50%, 100: 100%)"/>
+	<style id="ThemeBodyBg" value="$white"/>
+	<style id="ThemeBodyColor" value="$gray-900"/>
+	<style id="ThemeBodyTextAlign" value="null"/>
+	<style id="ThemeLinkColor" value="$teal"/>
+	<style id="ThemeLinkDecoration" value="none"/>
+	<style id="ThemeLinkShadePercentage" value="20%"/>
+	<style id="ThemeLinkHoverColor" value="shift-color($teal-300, $link-shade-percentage)"/>
+	<style id="ThemeLinkHoverDecoration" value="null"/>
+	<style id="ThemeStretchedLinkPseudoElement" value="after"/>
+	<style id="ThemeStretchedLinkZIndex" value="1"/>
+	<style id="ThemeParagraphMarginBottom" value="1rem"/>
+	<style id="ThemeGridBreakpoints" value="(xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px)"/>
+	<style id="ThemeContainerMaxWidths" value="(sm: 540px, md: 720px, lg: 960px, xl: 1140px, xxl: 1320px)"/>
+	<style id="ThemeGridColumns" value="12"/>
+	<style id="ThemeGridGutterWidth" value="15px"/>
+	<style id="ThemeGridRowColumns" value="6"/>
+	<style id="ThemeContainerPaddingX" value="$grid-gutter-width"/>
+	<style id="ThemeBorderWidth" value="1px"/>
+	<style id="ThemeBorderWidths" value="(1: 1px, 2: 2px, 3: 3px, 4: 4px, 5: 5px)"/>
+	<style id="ThemeBorderStyle" value="solid"/>
+	<style id="ThemeBorderColor" value="$gray-300"/>
+	<style id="ThemeBorderColorTranslucent" value="rgba($black, .175)"/>
+	<style id="ThemeBorderRadius" value=".375rem"/>
+	<style id="ThemeBorderRadiusSm" value=".25rem"/>
+	<style id="ThemeBorderRadiusLg" value=".5rem"/>
+	<style id="ThemeBorderRadiusXl" value="1rem"/>
+	<style id="ThemeBorderRadius2xl" value="2rem"/>
+	<style id="ThemeBorderRadiusPill" value="50rem"/>
+	<style id="ThemeBoxShadow" value="0 .5rem 1rem rgba($black, .15)"/>
+	<style id="ThemeBoxShadowSm" value="0 .125rem .25rem rgba($black, .075)"/>
+	<style id="ThemeBoxShadowLg" value="0 1rem 3rem rgba($black, .175)"/>
+	<style id="ThemeBoxShadowInset" value="inset 0 1px 2px rgba($black, .075)"/>
+	<style id="ThemeComponentActiveColor" value="$white"/>
+	<style id="ThemeComponentActiveBg" value="$primary"/>
+	<style id="ThemeCaretWidth" value=".3em"/>
+	<style id="ThemeCaretVerticalAlign" value="($caret-width * .85)"/>
+	<style id="ThemeCaretSpacing" value="($caret-width * .85)"/>
+	<style id="ThemeTransitionBase" value="all .2s ease-in-out"/>
+	<style id="ThemeTransitionFade" value="opacity .15s linear"/>
+	<style id="ThemeTransitionCollapse" value="height .35s ease"/>
+	<style id="ThemeTransitionCollapseWidth" value="width .35s ease"/>
+	<style id="ThemeAspectRatios" value="(&quot;1x1&quot;: 100%, &quot;4x3&quot;: calc(3 / 4 * 100%), &quot;16x9&quot;: calc(9 / 16 * 100%), &quot;21x9&quot;: calc(9 / 21 * 100%))"/>
+	<style id="ThemeFontFamilySansSerif" value="&quot;Poppins&quot;system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Noto Sans&quot;, &quot;Liberation Sans&quot;, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;"/>
+	<style id="ThemeFontFamilyMonospace" value="&quot;Poppins&quot;,SFMono-Regular, Menlo, Monaco, Consolas, &quot;Liberation Mono&quot;, &quot;Courier New&quot;, monospace"/>
+	<style id="ThemeFontFamilyBase" value="var(--#{$prefix}font-sans-serif)"/>
+	<style id="ThemeFontFamilyCode" value="var(--#{$prefix}font-monospace)"/>
+	<style id="ThemeFontSizeRoot" value="null"/>
+	<style id="ThemeFontSizeSm" value="($font-size-base * .875)"/>
+	<style id="ThemeFontSizeLg" value="($font-size-base * 1.25)"/>
+	<style id="ThemeFontWeightLighter" value="lighter"/>
+	<style id="ThemeFontWeightLight" value="300"/>
+	<style id="ThemeFontWeightNormal" value="400"/>
+	<style id="ThemeFontWeightSemibold" value="600"/>
+	<style id="ThemeFontWeightBold" value="700"/>
+	<style id="ThemeFontWeightBolder" value="bolder"/>
+	<style id="ThemeFontWeightBase" value="$font-weight-normal"/>
+	<style id="ThemeLineHeightBase" value="1.5"/>
+	<style id="ThemeLineHeightSm" value="1.25"/>
+	<style id="ThemeLineHeightLg" value="2"/>
+	<style id="ThemeH1FontSize" value="($font-size-base * 2.5)"/>
+	<style id="ThemeH2FontSize" value="($font-size-base * 2)"/>
+	<style id="ThemeH3FontSize" value="($font-size-base * 1.75)"/>
+	<style id="ThemeH4FontSize" value="($font-size-base * 1.5)"/>
+	<style id="ThemeH5FontSize" value="($font-size-base * 1.25)"/>
+	<style id="ThemeH6FontSize" value="$font-size-base"/>
+	<style id="ThemeH7FontSize" value="$font-size-sm"/>
+	<style id="ThemeH8FontSize" value="$font-size-xs"/>
+	<style id="ThemeFontSizes" value="(1: $h1-font-size, 2: $h2-font-size, 3: $h3-font-size, 4: $h4-font-size, 5: $h5-font-size, 6: $h6-font-size, 7: $h7-font-size, 8: $h8-font-size)"/>
+	<style id="ThemeHeadingsMarginBottom" value="($spacer * .5)"/>
+	<style id="ThemeHeadingsFontFamily" value="null"/>
+	<style id="ThemeHeadingsFontStyle" value="null"/>
+	<style id="ThemeHeadingsFontWeight" value="500"/>
+	<style id="ThemeHeadingsLineHeight" value="1.2"/>
+	<style id="ThemeHeadingsColor" value="null"/>
+	<style id="ThemeDisplayFontSizes" value="(1: 5rem, 2: 4.5rem, 3: 4rem, 4: 3.5rem, 5: 3rem, 6: 2.5rem)"/>
+	<style id="ThemeDisplayFontFamily" value="null"/>
+	<style id="ThemeDisplayFontStyle" value="null"/>
+	<style id="ThemeDisplayFontWeight" value="300"/>
+	<style id="ThemeDisplayLineHeight" value="$headings-line-height"/>
+	<style id="ThemeLeadFontSize" value="($font-size-base * 1.25)"/>
+	<style id="ThemeLeadFontWeight" value="300"/>
+	<style id="ThemeSmallFontSize" value=".875em"/>
+	<style id="ThemeSubSupFontSize" value=".75em"/>
+	<style id="ThemeTextMuted" value="$gray-600"/>
+	<style id="ThemeInitialismFontSize" value="$small-font-size"/>
+	<style id="ThemeBlockquoteMarginY" value="$spacer"/>
+	<style id="ThemeBlockquoteFontSize" value="($font-size-base * 1.25)"/>
+	<style id="ThemeBlockquoteFooterColor" value="$gray-600"/>
+	<style id="ThemeBlockquoteFooterFontSize" value="$small-font-size"/>
+	<style id="ThemeHrMarginY" value="$spacer"/>
+	<style id="ThemeHrColor" value="inherit"/>
+	<style id="ThemeHrBgColor" value="null"/>
+	<style id="ThemeHrHeight" value="null"/>
+	<style id="ThemeHrBorderColor" value="null"/>
+	<style id="ThemeHrBorderWidth" value="$border-width"/>
+	<style id="ThemeHrOpacity" value=".25"/>
+	<style id="ThemeLegendMarginBottom" value=".5rem"/>
+	<style id="ThemeLegendFontSize" value="1.5rem"/>
+	<style id="ThemeLegendFontWeight" value="null"/>
+	<style id="ThemeDtFontWeight" value="$font-weight-bold"/>
+	<style id="ThemeListInlinePadding" value=".5rem"/>
+	<style id="ThemeMarkPadding" value=".1875em"/>
+	<style id="ThemeMarkBg" value="$yellow-100"/>
+	<style id="ThemeTableCellPaddingY" value=".75rem"/>
+	<style id="ThemeTableCellPaddingX" value=".75rem"/>
+	<style id="ThemeTableCellPaddingYSm" value=".25rem"/>
+	<style id="ThemeTableCellPaddingXSm" value=".25rem"/>
+	<style id="ThemeTableCellVerticalAlign" value="top"/>
+	<style id="ThemeTableColor" value="var(--#{$prefix}body-color)"/>
+	<style id="ThemeTableBg" value="transparent"/>
+	<style id="ThemeTableAccentBg" value="transparent"/>
+	<style id="ThemeTableThFontWeight" value="null"/>
+	<style id="ThemeTableStripedColor" value="$table-color"/>
+	<style id="ThemeTableStripedBgFactor" value=".05"/>
+	<style id="ThemeTableStripedBg" value="rgba($black, $table-striped-bg-factor)"/>
+	<style id="ThemeTableActiveColor" value="$table-color"/>
+	<style id="ThemeTableActiveBgFactor" value=".1"/>
+	<style id="ThemeTableActiveBg" value="rgba($black, $table-active-bg-factor)"/>
+	<style id="ThemeTableHoverColor" value="$table-color"/>
+	<style id="ThemeTableHoverBgFactor" value=".075"/>
+	<style id="ThemeTableHoverBg" value="rgba($black, $table-hover-bg-factor)"/>
+	<style id="ThemeTableBorderFactor" value=".1"/>
+	<style id="ThemeTableBorderWidth" value="$border-width"/>
+	<style id="ThemeTableBorderColor" value="var(--#{$prefix}border-color)"/>
+	<style id="ThemeTableStripedOrder" value="odd"/>
+	<style id="ThemeTableStripedColumnsOrder" value="even"/>
+	<style id="ThemeTableGroupSeparatorColor" value="currentcolor"/>
+	<style id="ThemeTableCaptionColor" value="$text-muted"/>
+	<style id="ThemeTableBgScale" value="-80%"/>
+	<style id="ThemeTableVariants" value="(&quot;primary&quot;: shift-color($primary, $table-bg-scale), &quot;secondary&quot;: shift-color($secondary, $table-bg-scale), &quot;success&quot;: shift-color($success, $table-bg-scale), &quot;info&quot;: shift-color($info, $table-bg-scale), &quot;warning&quot;: shift-color($warning, $table-bg-scale), &quot;danger&quot;: shift-color($danger, $table-bg-scale), &quot;light&quot;: $light, &quot;dark&quot;: $dark, )"/>
+	<style id="ThemeInputBtnPaddingY" value=".375rem"/>
+	<style id="ThemeInputBtnPaddingX" value=".75rem"/>
+	<style id="ThemeInputBtnFontFamily" value="null"/>
+	<style id="ThemeInputBtnFontSize" value="$font-size-base"/>
+	<style id="ThemeInputBtnLineHeight" value="$line-height-base"/>
+	<style id="ThemeInputBtnFocusWidth" value=".25rem"/>
+	<style id="ThemeInputBtnFocusColorOpacity" value=".25"/>
+	<style id="ThemeInputBtnFocusColor" value="rgba($component-active-bg, $input-btn-focus-color-opacity)"/>
+	<style id="ThemeInputBtnFocusBlur" value="0"/>
+	<style id="ThemeInputBtnFocusBoxShadow" value="0 0 $input-btn-focus-blur $input-btn-focus-width $input-btn-focus-color"/>
+	<style id="ThemeInputBtnPaddingYSm" value=".25rem"/>
+	<style id="ThemeInputBtnPaddingXSm" value=".5rem"/>
+	<style id="ThemeInputBtnFontSizeSm" value="$font-size-sm"/>
+	<style id="ThemeInputBtnPaddingYLg" value=".5rem"/>
+	<style id="ThemeInputBtnPaddingXLg" value="1rem"/>
+	<style id="ThemeInputBtnFontSizeLg" value="$font-size-lg"/>
+	<style id="ThemeInputBtnBorderWidth" value="$border-width"/>
+	<style id="ThemeBtnPaddingY" value="$input-btn-padding-y"/>
+	<style id="ThemeBtnPaddingX" value="$input-btn-padding-x"/>
+	<style id="ThemeBtnFontFamily" value="$input-btn-font-family"/>
+	<style id="ThemeBtnFontSize" value="$input-btn-font-size"/>
+	<style id="ThemeBtnLineHeight" value="$input-btn-line-height"/>
+	<style id="ThemeBtnWhiteSpace" value="null"/>
+	<style id="ThemeBtnPaddingYSm" value="$input-btn-padding-y-sm"/>
+	<style id="ThemeBtnPaddingXSm" value="$input-btn-padding-x-sm"/>
+	<style id="ThemeBtnFontSizeSm" value="$input-btn-font-size-sm"/>
+	<style id="ThemeBtnPaddingYLg" value="$input-btn-padding-y-lg"/>
+	<style id="ThemeBtnPaddingXLg" value="$input-btn-padding-x-lg"/>
+	<style id="ThemeBtnFontSizeLg" value="$input-btn-font-size-lg"/>
+	<style id="ThemeBtnBorderWidth" value="$input-btn-border-width"/>
+	<style id="ThemeBtnFontWeight" value="$font-weight-normal"/>
+	<style id="ThemeBtnBoxShadow" value="inset 0 1px 0 rgba($white, .15), 0 1px 1px rgba($black, .075)"/>
+	<style id="ThemeBtnFocusWidth" value="$input-btn-focus-width"/>
+	<style id="ThemeBtnFocusBoxShadow" value="$input-btn-focus-box-shadow"/>
+	<style id="ThemeBtnDisabledOpacity" value=".65"/>
+	<style id="ThemeBtnActiveBoxShadow" value="inset 0 3px 5px rgba($black, .125)"/>
+	<style id="ThemeBtnLinkColor" value="var(--#{$prefix}link-color)"/>
+	<style id="ThemeBtnLinkHoverColor" value="var(--#{$prefix}link-hover-color)"/>
+	<style id="ThemeBtnLinkDisabledColor" value="$gray-600"/>
+	<style id="ThemeBtnBorderRadius" value="$border-radius"/>
+	<style id="ThemeBtnBorderRadiusSm" value="$border-radius-sm"/>
+	<style id="ThemeBtnBorderRadiusLg" value="$border-radius-lg"/>
+	<style id="ThemeBtnTransition" value="color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out"/>
+	<style id="ThemeBtnHoverBgShadeAmount" value="15%"/>
+	<style id="ThemeBtnHoverBgTintAmount" value="15%"/>
+	<style id="ThemeBtnHoverBorderShadeAmount" value="20%"/>
+	<style id="ThemeBtnHoverBorderTintAmount" value="10%"/>
+	<style id="ThemeBtnActiveBgShadeAmount" value="20%"/>
+	<style id="ThemeBtnActiveBgTintAmount" value="20%"/>
+	<style id="ThemeBtnActiveBorderShadeAmount" value="25%"/>
+	<style id="ThemeBtnActiveBorderTintAmount" value="10%"/>
+	<style id="ThemeFormTextMarginTop" value=".25rem"/>
+	<style id="ThemeFormTextFontSize" value="$small-font-size"/>
+	<style id="ThemeFormTextFontStyle" value="null"/>
+	<style id="ThemeFormTextFontWeight" value="null"/>
+	<style id="ThemeFormTextColor" value="$text-muted"/>
+	<style id="ThemeFormLabelMarginBottom" value=".5rem"/>
+	<style id="ThemeFormLabelFontSize" value="null"/>
+	<style id="ThemeFormLabelFontStyle" value="null"/>
+	<style id="ThemeFormLabelFontWeight" value="null"/>
+	<style id="ThemeFormLabelColor" value="null"/>
+	<style id="ThemeInputPaddingY" value="$input-btn-padding-y"/>
+	<style id="ThemeInputPaddingX" value="$input-btn-padding-x"/>
+	<style id="ThemeInputFontFamily" value="$input-btn-font-family"/>
+	<style id="ThemeInputFontSize" value="$input-btn-font-size"/>
+	<style id="ThemeInputFontWeight" value="$font-weight-base"/>
+	<style id="ThemeInputLineHeight" value="$input-btn-line-height"/>
+	<style id="ThemeInputPaddingYSm" value="$input-btn-padding-y-sm"/>
+	<style id="ThemeInputPaddingXSm" value="$input-btn-padding-x-sm"/>
+	<style id="ThemeInputFontSizeSm" value="$input-btn-font-size-sm"/>
+	<style id="ThemeInputPaddingYLg" value="$input-btn-padding-y-lg"/>
+	<style id="ThemeInputPaddingXLg" value="$input-btn-padding-x-lg"/>
+	<style id="ThemeInputFontSizeLg" value="$input-btn-font-size-lg"/>
+	<style id="ThemeInputBg" value="$body-bg"/>
+	<style id="ThemeInputDisabledColor" value="null"/>
+	<style id="ThemeInputDisabledBg" value="$gray-200"/>
+	<style id="ThemeInputDisabledBorderColor" value="null"/>
+	<style id="ThemeInputColor" value="$body-color"/>
+	<style id="ThemeInputBorderColor" value="$gray-400"/>
+	<style id="ThemeInputBorderWidth" value="$input-btn-border-width"/>
+	<style id="ThemeInputBoxShadow" value="$box-shadow-inset"/>
+	<style id="ThemeInputBorderRadius" value="$border-radius"/>
+	<style id="ThemeInputBorderRadiusSm" value="$border-radius-sm"/>
+	<style id="ThemeInputBorderRadiusLg" value="$border-radius-lg"/>
+	<style id="ThemeInputFocusBg" value="$input-bg"/>
+	<style id="ThemeInputFocusBorderColor" value="tint-color($component-active-bg, 50%)"/>
+	<style id="ThemeInputFocusColor" value="$input-color"/>
+	<style id="ThemeInputFocusWidth" value="$input-btn-focus-width"/>
+	<style id="ThemeInputFocusBoxShadow" value="$input-btn-focus-box-shadow"/>
+	<style id="ThemeInputPlaceholderColor" value="$gray-600"/>
+	<style id="ThemeInputPlaintextColor" value="$body-color"/>
+	<style id="ThemeInputHeightBorder" value="($input-border-width * 2)"/>
+	<style id="ThemeInputHeightInner" value="add($input-line-height * 1em, $input-padding-y * 2)"/>
+	<style id="ThemeInputHeightInnerHalf" value="add($input-line-height * .5em, $input-padding-y)"/>
+	<style id="ThemeInputHeightInnerQuarter" value="add($input-line-height * .25em, $input-padding-y * .5)"/>
+	<style id="ThemeInputHeight" value="add($input-line-height * 1em, add($input-padding-y * 2, $input-height-border, false))"/>
+	<style id="ThemeInputHeightSm" value="add($input-line-height * 1em, add($input-padding-y-sm * 2, $input-height-border, false))"/>
+	<style id="ThemeInputHeightLg" value="add($input-line-height * 1em, add($input-padding-y-lg * 2, $input-height-border, false))"/>
+	<style id="ThemeInputTransition" value="border-color .15s ease-in-out, box-shadow .15s ease-in-out"/>
+	<style id="ThemeFormColorWidth" value="3rem"/>
+	<style id="ThemeFormCheckInputWidth" value="1.125em"/>
+	<style id="ThemeFormCheckMinHeight" value="($font-size-base * $line-height-base)"/>
+	<style id="ThemeFormCheckPaddingStart" value="$form-check-input-width + .5em"/>
+	<style id="ThemeFormCheckMarginBottom" value=".125rem"/>
+	<style id="ThemeFormCheckLabelColor" value="null"/>
+	<style id="ThemeFormCheckLabelCursor" value="null"/>
+	<style id="ThemeFormCheckTransition" value="null"/>
+	<style id="ThemeFormCheckInputActiveFilter" value="brightness(90%)"/>
+	<style id="ThemeFormCheckInputBg" value="$input-bg"/>
+	<style id="ThemeFormCheckInputBorder" value="1px solid rgba($black, .25)"/>
+	<style id="ThemeFormCheckInputBorderRadius" value=".25em"/>
+	<style id="ThemeFormCheckRadioBorderRadius" value="50%"/>
+	<style id="ThemeFormCheckInputFocusBorder" value="$input-focus-border-color"/>
+	<style id="ThemeFormCheckInputFocusBoxShadow" value="$input-btn-focus-box-shadow"/>
+	<style id="ThemeFormCheckInputCheckedColor" value="$component-active-color"/>
+	<style id="ThemeFormCheckInputCheckedBgColor" value="$component-active-bg"/>
+	<style id="ThemeFormCheckInputCheckedBorderColor" value="$form-check-input-checked-bg-color"/>
+	<style id="ThemeFormCheckInputCheckedBgImage" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'&gt;&lt;path fill='none' stroke='#{$form-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormCheckRadioCheckedBgImage" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'&gt;&lt;circle r='2' fill='#{$form-check-input-checked-color}'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormCheckInputIndeterminateColor" value="$component-active-color"/>
+	<style id="ThemeFormCheckInputIndeterminateBgColor" value="$component-active-bg"/>
+	<style id="ThemeFormCheckInputIndeterminateBorderColor" value="$form-check-input-indeterminate-bg-color"/>
+	<style id="ThemeFormCheckInputIndeterminateBgImage" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'&gt;&lt;path fill='none' stroke='#{$form-check-input-indeterminate-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormCheckInputDisabledOpacity" value=".5"/>
+	<style id="ThemeFormCheckLabelDisabledOpacity" value="$form-check-input-disabled-opacity"/>
+	<style id="ThemeFormCheckBtnCheckDisabledOpacity" value="$btn-disabled-opacity"/>
+	<style id="ThemeFormCheckInlineMarginEnd" value="1rem"/>
+	<style id="ThemeFormSwitchColor" value="rgba($black, .25)"/>
+	<style id="ThemeFormSwitchWidth" value="2em"/>
+	<style id="ThemeFormSwitchPaddingStart" value="$form-switch-width + .5em"/>
+	<style id="ThemeFormSwitchBgImage" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'&gt;&lt;circle r='3' fill='#{$form-switch-color}'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormSwitchBorderRadius" value="$form-switch-width"/>
+	<style id="ThemeFormSwitchTransition" value="background-position .15s ease-in-out"/>
+	<style id="ThemeFormSwitchFocusColor" value="$input-focus-border-color"/>
+	<style id="ThemeFormSwitchFocusBgImage" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'&gt;&lt;circle r='3' fill='#{$form-switch-focus-color}'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormSwitchCheckedColor" value="$component-active-color"/>
+	<style id="ThemeFormSwitchCheckedBgImage" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'&gt;&lt;circle r='3' fill='#{$form-switch-checked-color}'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormSwitchCheckedBgPosition" value="right center"/>
+	<style id="ThemeInputGroupAddonPaddingY" value="$input-padding-y"/>
+	<style id="ThemeInputGroupAddonPaddingX" value="$input-padding-x"/>
+	<style id="ThemeInputGroupAddonFontWeight" value="$input-font-weight"/>
+	<style id="ThemeInputGroupAddonColor" value="$input-color"/>
+	<style id="ThemeInputGroupAddonBg" value="$gray-200"/>
+	<style id="ThemeInputGroupAddonBorderColor" value="$input-border-color"/>
+	<style id="ThemeFormSelectPaddingY" value="$input-padding-y"/>
+	<style id="ThemeFormSelectPaddingX" value="$input-padding-x"/>
+	<style id="ThemeFormSelectFontFamily" value="$input-font-family"/>
+	<style id="ThemeFormSelectFontSize" value="$input-font-size"/>
+	<style id="ThemeFormSelectIndicatorPadding" value="($form-select-padding-x * 3)"/>
+	<style id="ThemeFormSelectFontWeight" value="$input-font-weight"/>
+	<style id="ThemeFormSelectLineHeight" value="$input-line-height"/>
+	<style id="ThemeFormSelectColor" value="$input-color"/>
+	<style id="ThemeFormSelectBg" value="$input-bg"/>
+	<style id="ThemeFormSelectDisabledColor" value="null"/>
+	<style id="ThemeFormSelectDisabledBg" value="$gray-200"/>
+	<style id="ThemeFormSelectDisabledBorderColor" value="$input-disabled-border-color"/>
+	<style id="ThemeFormSelectBgPosition" value="right $form-select-padding-x center"/>
+	<style id="ThemeFormSelectBgSize" value="16px 12px"/>
+	<style id="ThemeFormSelectIndicatorColor" value="$gray-800"/>
+	<style id="ThemeFormSelectIndicator" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;path fill='none' stroke='#{$form-select-indicator-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormSelectFeedbackIconPaddingEnd" value="($form-select-padding-x * 2.5 + $form-select-indicator-padding)"/>
+	<style id="ThemeFormSelectFeedbackIconPosition" value="center right $form-select-indicator-padding"/>
+	<style id="ThemeFormSelectFeedbackIconSize" value="$input-height-inner-half $input-height-inner-half"/>
+	<style id="ThemeFormSelectBorderWidth" value="$input-border-width"/>
+	<style id="ThemeFormSelectBorderColor" value="$input-border-color"/>
+	<style id="ThemeFormSelectBorderRadius" value="$input-border-radius"/>
+	<style id="ThemeFormSelectBoxShadow" value="$box-shadow-inset"/>
+	<style id="ThemeFormSelectFocusBorderColor" value="$input-focus-border-color"/>
+	<style id="ThemeFormSelectFocusWidth" value="$input-focus-width"/>
+	<style id="ThemeFormSelectFocusBoxShadow" value="0 0 0 $form-select-focus-width $input-btn-focus-color"/>
+	<style id="ThemeFormSelectPaddingYSm" value="$input-padding-y-sm"/>
+	<style id="ThemeFormSelectPaddingXSm" value="$input-padding-x-sm"/>
+	<style id="ThemeFormSelectFontSizeSm" value="$input-font-size-sm"/>
+	<style id="ThemeFormSelectBorderRadiusSm" value="$input-border-radius-sm"/>
+	<style id="ThemeFormSelectPaddingYLg" value="$input-padding-y-lg"/>
+	<style id="ThemeFormSelectPaddingXLg" value="$input-padding-x-lg"/>
+	<style id="ThemeFormSelectFontSizeLg" value="$input-font-size-lg"/>
+	<style id="ThemeFormSelectBorderRadiusLg" value="$input-border-radius-lg"/>
+	<style id="ThemeFormSelectTransition" value="$input-transition"/>
+	<style id="ThemeFormRangeTrackWidth" value="100%"/>
+	<style id="ThemeFormRangeTrackHeight" value=".5rem"/>
+	<style id="ThemeFormRangeTrackCursor" value="pointer"/>
+	<style id="ThemeFormRangeTrackBg" value="$gray-300"/>
+	<style id="ThemeFormRangeTrackBorderRadius" value="1rem"/>
+	<style id="ThemeFormRangeTrackBoxShadow" value="$box-shadow-inset"/>
+	<style id="ThemeFormRangeThumbWidth" value="1rem"/>
+	<style id="ThemeFormRangeThumbHeight" value="$form-range-thumb-width"/>
+	<style id="ThemeFormRangeThumbBg" value="$component-active-bg"/>
+	<style id="ThemeFormRangeThumbBorder" value="0"/>
+	<style id="ThemeFormRangeThumbBorderRadius" value="1rem"/>
+	<style id="ThemeFormRangeThumbBoxShadow" value="0 .1rem .25rem rgba($black, .1)"/>
+	<style id="ThemeFormRangeThumbFocusBoxShadow" value="0 0 0 1px $body-bg, $input-focus-box-shadow"/>
+	<style id="ThemeFormRangeThumbFocusBoxShadowWidth" value="$input-focus-width"/>
+	<style id="ThemeFormRangeThumbActiveBg" value="tint-color($component-active-bg, 70%)"/>
+	<style id="ThemeFormRangeThumbDisabledBg" value="$gray-500"/>
+	<style id="ThemeFormRangeThumbTransition" value="background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out"/>
+	<style id="ThemeFormFileButtonColor" value="$input-color"/>
+	<style id="ThemeFormFileButtonBg" value="$input-group-addon-bg"/>
+	<style id="ThemeFormFileButtonHoverBg" value="shade-color($form-file-button-bg, 5%)"/>
+	<style id="ThemeFormFloatingHeight" value="add(3.5rem, $input-height-border)"/>
+	<style id="ThemeFormFloatingLineHeight" value="1.25"/>
+	<style id="ThemeFormFloatingPaddingX" value="$input-padding-x"/>
+	<style id="ThemeFormFloatingPaddingY" value="1rem"/>
+	<style id="ThemeFormFloatingInputPaddingT" value="1.625rem"/>
+	<style id="ThemeFormFloatingInputPaddingB" value=".625rem"/>
+	<style id="ThemeFormFloatingLabelOpacity" value=".65"/>
+	<style id="ThemeFormFloatingLabelTransform" value="scale(.85) translateY(-.5rem) translateX(.15rem)"/>
+	<style id="ThemeFormFloatingTransition" value="opacity .1s ease-in-out, transform .1s ease-in-out"/>
+	<style id="ThemeFormFeedbackMarginTop" value="$form-text-margin-top"/>
+	<style id="ThemeFormFeedbackFontSize" value="$form-text-font-size"/>
+	<style id="ThemeFormFeedbackFontStyle" value="$form-text-font-style"/>
+	<style id="ThemeFormFeedbackValidColor" value="$success"/>
+	<style id="ThemeFormFeedbackInvalidColor" value="$danger"/>
+	<style id="ThemeFormFeedbackIconValidColor" value="$form-feedback-valid-color"/>
+	<style id="ThemeFormFeedbackIconValid" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'&gt;&lt;path fill='#{$form-feedback-icon-valid-color}' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormFeedbackIconInvalidColor" value="$form-feedback-invalid-color"/>
+	<style id="ThemeFormFeedbackIconInvalid" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='#{$form-feedback-icon-invalid-color}'&gt;&lt;circle cx='6' cy='6' r='4.5'/&gt;&lt;path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/&gt;&lt;circle cx='6' cy='8.2' r='.6' fill='#{$form-feedback-icon-invalid-color}' stroke='none'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeFormValidationStates" value="(&quot;valid&quot;: (&quot;color&quot;: $form-feedback-valid-color, &quot;icon&quot;: $form-feedback-icon-valid), &quot;invalid&quot;: (&quot;color&quot;: $form-feedback-invalid-color, &quot;icon&quot;: $form-feedback-icon-invalid))"/>
+	<style id="ThemeZindexDropdown" value="1000"/>
+	<style id="ThemeZindexSticky" value="1020"/>
+	<style id="ThemeZindexFixed" value="1030"/>
+	<style id="ThemeZindexOffcanvasBackdrop" value="1040"/>
+	<style id="ThemeZindexOffcanvas" value="1045"/>
+	<style id="ThemeZindexModalBackdrop" value="1050"/>
+	<style id="ThemeZindexModal" value="1055"/>
+	<style id="ThemeZindexPopover" value="1070"/>
+	<style id="ThemeZindexTooltip" value="1080"/>
+	<style id="ThemeZindexToast" value="1090"/>
+	<style id="ThemeNavLinkPaddingY" value=".5rem"/>
+	<style id="ThemeNavLinkPaddingX" value="1rem"/>
+	<style id="ThemeNavLinkFontSize" value="null"/>
+	<style id="ThemeNavLinkFontWeight" value="null"/>
+	<style id="ThemeNavLinkColor" value="var(--#{$prefix}link-color)"/>
+	<style id="ThemeNavLinkHoverColor" value="var(--#{$prefix}link-hover-color)"/>
+	<style id="ThemeNavLinkTransition" value="color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out"/>
+	<style id="ThemeNavLinkDisabledColor" value="$gray-600"/>
+	<style id="ThemeNavTabsBorderColor" value="$gray-300"/>
+	<style id="ThemeNavTabsBorderWidth" value="$border-width"/>
+	<style id="ThemeNavTabsBorderRadius" value="$border-radius"/>
+	<style id="ThemeNavTabsLinkHoverBorderColor" value="$gray-200 $gray-200 $nav-tabs-border-color"/>
+	<style id="ThemeNavTabsLinkActiveColor" value="$gray-700"/>
+	<style id="ThemeNavTabsLinkActiveBg" value="$body-bg"/>
+	<style id="ThemeNavTabsLinkActiveBorderColor" value="$gray-300 $gray-300 $nav-tabs-link-active-bg"/>
+	<style id="ThemeNavPillsBorderRadius" value="$border-radius"/>
+	<style id="ThemeNavPillsLinkActiveColor" value="$component-active-color"/>
+	<style id="ThemeNavPillsLinkActiveBg" value="$component-active-bg"/>
+	<style id="ThemeNavbarPaddingY" value="($spacer * .5)"/>
+	<style id="ThemeNavbarPaddingX" value="null"/>
+	<style id="ThemeNavbarNavLinkPaddingX" value="1rem"/>
+	<style id="ThemeNavbarBrandFontSize" value="$font-size-lg"/>
+	<style id="ThemeNavLinkHeight" value="($font-size-base * $line-height-base + $nav-link-padding-y * 2)"/>
+	<style id="ThemeNavbarBrandHeight" value="($navbar-brand-font-size * $line-height-base)"/>
+	<style id="ThemeNavbarBrandPaddingY" value="($nav-link-height - $navbar-brand-height) * .5"/>
+	<style id="ThemeNavbarBrandMarginEnd" value="1rem"/>
+	<style id="ThemeNavbarTogglerPaddingY" value=".25rem"/>
+	<style id="ThemeNavbarTogglerPaddingX" value=".75rem"/>
+	<style id="ThemeNavbarTogglerFontSize" value="$font-size-lg"/>
+	<style id="ThemeNavbarTogglerBorderRadius" value="$btn-border-radius"/>
+	<style id="ThemeNavbarTogglerFocusWidth" value="$btn-focus-width"/>
+	<style id="ThemeNavbarTogglerTransition" value="box-shadow .15s ease-in-out"/>
+	<style id="ThemeNavbarLightColor" value="rgba($black, .55)"/>
+	<style id="ThemeNavbarLightHoverColor" value="rgba($black, .7)"/>
+	<style id="ThemeNavbarLightActiveColor" value="rgba($black, .9)"/>
+	<style id="ThemeNavbarLightDisabledColor" value="rgba($black, .3)"/>
+	<style id="ThemeNavbarLightTogglerIconBg" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'&gt;&lt;path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeNavbarLightTogglerBorderColor" value="rgba($black, .1)"/>
+	<style id="ThemeNavbarLightBrandColor" value="$navbar-light-active-color"/>
+	<style id="ThemeNavbarLightBrandHoverColor" value="$navbar-light-active-color"/>
+	<style id="ThemeNavbarDarkColor" value="rgba($white, .55)"/>
+	<style id="ThemeNavbarDarkHoverColor" value="rgba($white, .75)"/>
+	<style id="ThemeNavbarDarkActiveColor" value="$white"/>
+	<style id="ThemeNavbarDarkDisabledColor" value="rgba($white, .25)"/>
+	<style id="ThemeNavbarDarkTogglerIconBg" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'&gt;&lt;path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeNavbarDarkTogglerBorderColor" value="rgba($white, .1)"/>
+	<style id="ThemeNavbarDarkBrandColor" value="$navbar-dark-active-color"/>
+	<style id="ThemeNavbarDarkBrandHoverColor" value="$navbar-dark-active-color"/>
+	<style id="ThemeDropdownMinWidth" value="10rem"/>
+	<style id="ThemeDropdownPaddingX" value="0"/>
+	<style id="ThemeDropdownPaddingY" value=".5rem"/>
+	<style id="ThemeDropdownSpacer" value=".125rem"/>
+	<style id="ThemeDropdownFontSize" value="$font-size-base"/>
+	<style id="ThemeDropdownColor" value="$body-color"/>
+	<style id="ThemeDropdownBg" value="$white"/>
+	<style id="ThemeDropdownBorderColor" value="var(--#{$prefix}border-color-translucent)"/>
+	<style id="ThemeDropdownBorderRadius" value="$border-radius"/>
+	<style id="ThemeDropdownBorderWidth" value="$border-width"/>
+	<style id="ThemeDropdownInnerBorderRadius" value="subtract($dropdown-border-radius, $dropdown-border-width)"/>
+	<style id="ThemeDropdownDividerBg" value="$dropdown-border-color"/>
+	<style id="ThemeDropdownDividerMarginY" value="($spacer * .5)"/>
+	<style id="ThemeDropdownBoxShadow" value="$box-shadow"/>
+	<style id="ThemeDropdownLinkColor" value="$gray-900"/>
+	<style id="ThemeDropdownLinkHoverColor" value="shade-color($dropdown-link-color, 10%)"/>
+	<style id="ThemeDropdownLinkHoverBg" value="$gray-200"/>
+	<style id="ThemeDropdownLinkActiveColor" value="$component-active-color"/>
+	<style id="ThemeDropdownLinkActiveBg" value="$component-active-bg"/>
+	<style id="ThemeDropdownLinkDisabledColor" value="$gray-500"/>
+	<style id="ThemeDropdownItemPaddingY" value="($spacer * .25)"/>
+	<style id="ThemeDropdownItemPaddingX" value="$spacer"/>
+	<style id="ThemeDropdownHeaderColor" value="$gray-600"/>
+	<style id="ThemeDropdownHeaderPaddingX" value="$dropdown-item-padding-x"/>
+	<style id="ThemeDropdownHeaderPaddingY" value="$dropdown-padding-y"/>
+	<style id="ThemeDropdownHeaderPadding" value="$dropdown-header-padding-y $dropdown-header-padding-x"/>
+	<style id="ThemeDropdownDarkColor" value="$gray-300"/>
+	<style id="ThemeDropdownDarkBg" value="$gray-800"/>
+	<style id="ThemeDropdownDarkBorderColor" value="$dropdown-border-color"/>
+	<style id="ThemeDropdownDarkDividerBg" value="$dropdown-divider-bg"/>
+	<style id="ThemeDropdownDarkBoxShadow" value="null"/>
+	<style id="ThemeDropdownDarkLinkColor" value="$dropdown-dark-color"/>
+	<style id="ThemeDropdownDarkLinkHoverColor" value="$white"/>
+	<style id="ThemeDropdownDarkLinkHoverBg" value="rgba($white, .15)"/>
+	<style id="ThemeDropdownDarkLinkActiveColor" value="$dropdown-link-active-color"/>
+	<style id="ThemeDropdownDarkLinkActiveBg" value="$dropdown-link-active-bg"/>
+	<style id="ThemeDropdownDarkLinkDisabledColor" value="$gray-500"/>
+	<style id="ThemeDropdownDarkHeaderColor" value="$gray-500"/>
+	<style id="ThemePaginationPaddingY" value=".375rem"/>
+	<style id="ThemePaginationPaddingX" value=".75rem"/>
+	<style id="ThemePaginationPaddingYSm" value=".25rem"/>
+	<style id="ThemePaginationPaddingXSm" value=".5rem"/>
+	<style id="ThemePaginationPaddingYLg" value=".75rem"/>
+	<style id="ThemePaginationPaddingXLg" value="1.5rem"/>
+	<style id="ThemePaginationFontSize" value="$font-size-base"/>
+	<style id="ThemePaginationColor" value="var(--#{$prefix}link-color)"/>
+	<style id="ThemePaginationBg" value="$white"/>
+	<style id="ThemePaginationBorderRadius" value="$border-radius"/>
+	<style id="ThemePaginationBorderWidth" value="$border-width"/>
+	<style id="ThemePaginationMarginStart" value="($pagination-border-width * -1)"/>
+	<style id="ThemePaginationBorderColor" value="$gray-300"/>
+	<style id="ThemePaginationFocusColor" value="var(--#{$prefix}link-hover-color)"/>
+	<style id="ThemePaginationFocusBg" value="$gray-200"/>
+	<style id="ThemePaginationFocusBoxShadow" value="$input-btn-focus-box-shadow"/>
+	<style id="ThemePaginationFocusOutline" value="0"/>
+	<style id="ThemePaginationHoverColor" value="var(--#{$prefix}link-hover-color)"/>
+	<style id="ThemePaginationHoverBg" value="$gray-200"/>
+	<style id="ThemePaginationHoverBorderColor" value="$gray-300"/>
+	<style id="ThemePaginationActiveColor" value="$component-active-color"/>
+	<style id="ThemePaginationActiveBg" value="$component-active-bg"/>
+	<style id="ThemePaginationActiveBorderColor" value="$pagination-active-bg"/>
+	<style id="ThemePaginationDisabledColor" value="$gray-600"/>
+	<style id="ThemePaginationDisabledBg" value="$white"/>
+	<style id="ThemePaginationDisabledBorderColor" value="$gray-300"/>
+	<style id="ThemePaginationTransition" value="color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out"/>
+	<style id="ThemePaginationBorderRadiusSm" value="$border-radius-sm"/>
+	<style id="ThemePaginationBorderRadiusLg" value="$border-radius-lg"/>
+	<style id="ThemePlaceholderOpacityMax" value=".5"/>
+	<style id="ThemePlaceholderOpacityMin" value=".2"/>
+	<style id="ThemeCardSpacerY" value="$spacer"/>
+	<style id="ThemeCardSpacerX" value="$spacer"/>
+	<style id="ThemeCardTitleSpacerY" value="($spacer * .5)"/>
+	<style id="ThemeCardBorderWidth" value="$border-width"/>
+	<style id="ThemeCardBorderColor" value="var(--#{$prefix}border-color-translucent)"/>
+	<style id="ThemeCardBorderRadius" value="$border-radius"/>
+	<style id="ThemeCardBoxShadow" value="null"/>
+	<style id="ThemeCardInnerBorderRadius" value="subtract($card-border-radius, $card-border-width)"/>
+	<style id="ThemeCardCapPaddingY" value="($card-spacer-y * .5)"/>
+	<style id="ThemeCardCapPaddingX" value="$card-spacer-x"/>
+	<style id="ThemeCardCapBg" value="rgba($black, .03)"/>
+	<style id="ThemeCardCapColor" value="null"/>
+	<style id="ThemeCardHeight" value="null"/>
+	<style id="ThemeCardColor" value="null"/>
+	<style id="ThemeCardBg" value="$white"/>
+	<style id="ThemeCardImgOverlayPadding" value="$spacer"/>
+	<style id="ThemeCardGroupMargin" value="($grid-gutter-width * .5)"/>
+	<style id="ThemeAccordionPaddingY" value="1rem"/>
+	<style id="ThemeAccordionPaddingX" value="1.25rem"/>
+	<style id="ThemeAccordionColor" value="$body-color"/>
+	<style id="ThemeAccordionBg" value="$body-bg"/>
+	<style id="ThemeAccordionBorderWidth" value="$border-width"/>
+	<style id="ThemeAccordionBorderColor" value="var(--#{$prefix}border-color)"/>
+	<style id="ThemeAccordionBorderRadius" value="$border-radius"/>
+	<style id="ThemeAccordionInnerBorderRadius" value="subtract($accordion-border-radius, $accordion-border-width)"/>
+	<style id="ThemeAccordionBodyPaddingY" value="$accordion-padding-y"/>
+	<style id="ThemeAccordionBodyPaddingX" value="$accordion-padding-x"/>
+	<style id="ThemeAccordionButtonPaddingY" value="$accordion-padding-y"/>
+	<style id="ThemeAccordionButtonPaddingX" value="$accordion-padding-x"/>
+	<style id="ThemeAccordionButtonColor" value="$accordion-color"/>
+	<style id="ThemeAccordionButtonBg" value="var(--#{$prefix}accordion-bg)"/>
+	<style id="ThemeAccordionTransition" value="$btn-transition, border-radius .15s ease"/>
+	<style id="ThemeAccordionButtonActiveBg" value="tint-color($component-active-bg, 90%)"/>
+	<style id="ThemeAccordionButtonActiveColor" value="shade-color($primary, 10%)"/>
+	<style id="ThemeAccordionButtonFocusBorderColor" value="$input-focus-border-color"/>
+	<style id="ThemeAccordionButtonFocusBoxShadow" value="$btn-focus-box-shadow"/>
+	<style id="ThemeAccordionIconWidth" value="1.25rem"/>
+	<style id="ThemeAccordionIconColor" value="$accordion-button-color"/>
+	<style id="ThemeAccordionIconActiveColor" value="$accordion-button-active-color"/>
+	<style id="ThemeAccordionIconTransition" value="transform .2s ease-in-out"/>
+	<style id="ThemeAccordionIconTransform" value="rotate(-180deg)"/>
+	<style id="ThemeAccordionButtonIcon" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-color}'&gt;&lt;path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeAccordionButtonActiveIcon" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-active-color}'&gt;&lt;path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeTooltipFontSize" value="$font-size-sm"/>
+	<style id="ThemeTooltipMaxWidth" value="200px"/>
+	<style id="ThemeTooltipColor" value="$white"/>
+	<style id="ThemeTooltipBg" value="$black"/>
+	<style id="ThemeTooltipBorderRadius" value="$border-radius"/>
+	<style id="ThemeTooltipOpacity" value=".9"/>
+	<style id="ThemeTooltipPaddingY" value="($spacer * .25)"/>
+	<style id="ThemeTooltipPaddingX" value="($spacer * .5)"/>
+	<style id="ThemeTooltipMargin" value="null"/>
+	<style id="ThemeTooltipArrowWidth" value=".8rem"/>
+	<style id="ThemeTooltipArrowHeight" value=".4rem"/>
+	<style id="ThemeTooltipArrowColor" value="null"/>
+	<style id="ThemeFormFeedbackTooltipPaddingY" value="$tooltip-padding-y"/>
+	<style id="ThemeFormFeedbackTooltipPaddingX" value="$tooltip-padding-x"/>
+	<style id="ThemeFormFeedbackTooltipFontSize" value="$tooltip-font-size"/>
+	<style id="ThemeFormFeedbackTooltipLineHeight" value="null"/>
+	<style id="ThemeFormFeedbackTooltipOpacity" value="$tooltip-opacity"/>
+	<style id="ThemeFormFeedbackTooltipBorderRadius" value="$tooltip-border-radius"/>
+	<style id="ThemePopoverFontSize" value="$font-size-sm"/>
+	<style id="ThemePopoverBg" value="$white"/>
+	<style id="ThemePopoverMaxWidth" value="276px"/>
+	<style id="ThemePopoverBorderWidth" value="$border-width"/>
+	<style id="ThemePopoverBorderColor" value="var(--#{$prefix}border-color-translucent)"/>
+	<style id="ThemePopoverBorderRadius" value="$border-radius-lg"/>
+	<style id="ThemePopoverInnerBorderRadius" value="subtract($popover-border-radius, $popover-border-width)"/>
+	<style id="ThemePopoverBoxShadow" value="$box-shadow"/>
+	<style id="ThemePopoverHeaderFontSize" value="$font-size-base"/>
+	<style id="ThemePopoverHeaderBg" value="shade-color($popover-bg, 6%)"/>
+	<style id="ThemePopoverHeaderColor" value="$headings-color"/>
+	<style id="ThemePopoverHeaderPaddingY" value=".5rem"/>
+	<style id="ThemePopoverHeaderPaddingX" value="$spacer"/>
+	<style id="ThemePopoverBodyColor" value="$body-color"/>
+	<style id="ThemePopoverBodyPaddingY" value="$spacer"/>
+	<style id="ThemePopoverBodyPaddingX" value="$spacer"/>
+	<style id="ThemePopoverArrowWidth" value="1rem"/>
+	<style id="ThemePopoverArrowHeight" value=".5rem"/>
+	<style id="ThemePopoverArrowColor" value="$popover-bg"/>
+	<style id="ThemePopoverArrowOuterColor" value="var(--#{$prefix}border-color-translucent)"/>
+	<style id="ThemeToastMaxWidth" value="350px"/>
+	<style id="ThemeToastPaddingX" value=".75rem"/>
+	<style id="ThemeToastPaddingY" value=".5rem"/>
+	<style id="ThemeToastFontSize" value=".875rem"/>
+	<style id="ThemeToastColor" value="null"/>
+	<style id="ThemeToastBackgroundColor" value="rgba($white, .85)"/>
+	<style id="ThemeToastBorderWidth" value="$border-width"/>
+	<style id="ThemeToastBorderColor" value="var(--#{$prefix}border-color-translucent)"/>
+	<style id="ThemeToastBorderRadius" value="$border-radius"/>
+	<style id="ThemeToastBoxShadow" value="$box-shadow"/>
+	<style id="ThemeToastSpacing" value="$container-padding-x"/>
+	<style id="ThemeToastHeaderColor" value="$gray-600"/>
+	<style id="ThemeToastHeaderBackgroundColor" value="rgba($white, .85)"/>
+	<style id="ThemeToastHeaderBorderColor" value="rgba($black, .05)"/>
+	<style id="ThemeBadgeFontSize" value=".75em"/>
+	<style id="ThemeBadgeFontWeight" value="$font-weight-bold"/>
+	<style id="ThemeBadgeColor" value="$white"/>
+	<style id="ThemeBadgePaddingY" value=".35em"/>
+	<style id="ThemeBadgePaddingX" value=".65em"/>
+	<style id="ThemeBadgeBorderRadius" value="$border-radius"/>
+	<style id="ThemeModalInnerPadding" value="$spacer"/>
+	<style id="ThemeModalFooterMarginBetween" value=".5rem"/>
+	<style id="ThemeModalDialogMargin" value=".5rem"/>
+	<style id="ThemeModalDialogMarginYSmUp" value="1.75rem"/>
+	<style id="ThemeModalTitleLineHeight" value="$line-height-base"/>
+	<style id="ThemeModalContentColor" value="null"/>
+	<style id="ThemeModalContentBg" value="$white"/>
+	<style id="ThemeModalContentBorderColor" value="var(--#{$prefix}border-color-translucent)"/>
+	<style id="ThemeModalContentBorderWidth" value="$border-width"/>
+	<style id="ThemeModalContentBorderRadius" value="$border-radius-lg"/>
+	<style id="ThemeModalContentInnerBorderRadius" value="subtract($modal-content-border-radius, $modal-content-border-width)"/>
+	<style id="ThemeModalContentBoxShadowXs" value="$box-shadow-sm"/>
+	<style id="ThemeModalContentBoxShadowSmUp" value="$box-shadow"/>
+	<style id="ThemeModalBackdropBg" value="$black"/>
+	<style id="ThemeModalBackdropOpacity" value=".5"/>
+	<style id="ThemeModalHeaderBorderColor" value="var(--#{$prefix}border-color)"/>
+	<style id="ThemeModalHeaderBorderWidth" value="$modal-content-border-width"/>
+	<style id="ThemeModalHeaderPaddingY" value="$modal-inner-padding"/>
+	<style id="ThemeModalHeaderPaddingX" value="$modal-inner-padding"/>
+	<style id="ThemeModalHeaderPadding" value="$modal-header-padding-y $modal-header-padding-x"/>
+	<style id="ThemeModalFooterBg" value="null"/>
+	<style id="ThemeModalFooterBorderColor" value="$modal-header-border-color"/>
+	<style id="ThemeModalFooterBorderWidth" value="$modal-header-border-width"/>
+	<style id="ThemeModalSm" value="300px"/>
+	<style id="ThemeModalMd" value="500px"/>
+	<style id="ThemeModalLg" value="800px"/>
+	<style id="ThemeModalXl" value="1140px"/>
+	<style id="ThemeModalFadeTransform" value="translate(0, -50px)"/>
+	<style id="ThemeModalShowTransform" value="none"/>
+	<style id="ThemeModalTransition" value="transform .3s ease-out"/>
+	<style id="ThemeModalScaleTransform" value="scale(1.02)"/>
+	<style id="ThemeAlertPaddingY" value="$spacer"/>
+	<style id="ThemeAlertPaddingX" value="$spacer"/>
+	<style id="ThemeAlertMarginBottom" value="1rem"/>
+	<style id="ThemeAlertBorderRadius" value="$border-radius"/>
+	<style id="ThemeAlertLinkFontWeight" value="$font-weight-bold"/>
+	<style id="ThemeAlertBorderWidth" value="$border-width"/>
+	<style id="ThemeAlertBgScale" value="-80%"/>
+	<style id="ThemeAlertBorderScale" value="-70%"/>
+	<style id="ThemeAlertColorScale" value="40%"/>
+	<style id="ThemeAlertDismissiblePaddingR" value="($alert-padding-x * 3)"/>
+	<style id="ThemeProgressHeight" value="1rem"/>
+	<style id="ThemeProgressFontSize" value="($font-size-base * .75)"/>
+	<style id="ThemeProgressBg" value="$gray-200"/>
+	<style id="ThemeProgressBorderRadius" value="$border-radius"/>
+	<style id="ThemeProgressBoxShadow" value="$box-shadow-inset"/>
+	<style id="ThemeProgressBarColor" value="$white"/>
+	<style id="ThemeProgressBarBg" value="$primary"/>
+	<style id="ThemeProgressBarAnimationTiming" value="1s linear infinite"/>
+	<style id="ThemeProgressBarTransition" value="width .6s ease"/>
+	<style id="ThemeListGroupColor" value="$gray-900"/>
+	<style id="ThemeListGroupBg" value="$white"/>
+	<style id="ThemeListGroupBorderColor" value="rgba($black, .125)"/>
+	<style id="ThemeListGroupBorderWidth" value="$border-width"/>
+	<style id="ThemeListGroupBorderRadius" value="$border-radius"/>
+	<style id="ThemeListGroupItemPaddingY" value="($spacer * .5)"/>
+	<style id="ThemeListGroupItemPaddingX" value="$spacer"/>
+	<style id="ThemeListGroupItemBgScale" value="-80%"/>
+	<style id="ThemeListGroupItemColorScale" value="40%"/>
+	<style id="ThemeListGroupHoverBg" value="$gray-100"/>
+	<style id="ThemeListGroupActiveColor" value="$component-active-color"/>
+	<style id="ThemeListGroupActiveBg" value="$component-active-bg"/>
+	<style id="ThemeListGroupActiveBorderColor" value="$list-group-active-bg"/>
+	<style id="ThemeListGroupDisabledColor" value="$gray-600"/>
+	<style id="ThemeListGroupDisabledBg" value="$list-group-bg"/>
+	<style id="ThemeListGroupActionColor" value="$gray-700"/>
+	<style id="ThemeListGroupActionHoverColor" value="$list-group-action-color"/>
+	<style id="ThemeListGroupActionActiveColor" value="$body-color"/>
+	<style id="ThemeListGroupActionActiveBg" value="$gray-200"/>
+	<style id="ThemeThumbnailPadding" value=".25rem"/>
+	<style id="ThemeThumbnailBg" value="$body-bg"/>
+	<style id="ThemeThumbnailBorderWidth" value="$border-width"/>
+	<style id="ThemeThumbnailBorderColor" value="var(--#{$prefix}border-color)"/>
+	<style id="ThemeThumbnailBorderRadius" value="$border-radius"/>
+	<style id="ThemeThumbnailBoxShadow" value="$box-shadow-sm"/>
+	<style id="ThemeFigureCaptionFontSize" value="$small-font-size"/>
+	<style id="ThemeFigureCaptionColor" value="$gray-600"/>
+	<style id="ThemeBreadcrumbFontSize" value="null"/>
+	<style id="ThemeBreadcrumbPaddingY" value="0"/>
+	<style id="ThemeBreadcrumbPaddingX" value="0"/>
+	<style id="ThemeBreadcrumbItemPaddingX" value=".5rem"/>
+	<style id="ThemeBreadcrumbMarginBottom" value="1rem"/>
+	<style id="ThemeBreadcrumbBg" value="null"/>
+	<style id="ThemeBreadcrumbDividerColor" value="$gray-600"/>
+	<style id="ThemeBreadcrumbActiveColor" value="$gray-600"/>
+	<style id="ThemeBreadcrumbDivider" value="quote(&quot;/&quot;)"/>
+	<style id="ThemeBreadcrumbDividerFlipped" value="$breadcrumb-divider"/>
+	<style id="ThemeBreadcrumbBorderRadius" value="null"/>
+	<style id="ThemeCarouselControlColor" value="$white"/>
+	<style id="ThemeCarouselControlWidth" value="15%"/>
+	<style id="ThemeCarouselControlOpacity" value=".5"/>
+	<style id="ThemeCarouselControlHoverOpacity" value=".9"/>
+	<style id="ThemeCarouselControlTransition" value="opacity .15s ease"/>
+	<style id="ThemeCarouselIndicatorWidth" value="30px"/>
+	<style id="ThemeCarouselIndicatorHeight" value="3px"/>
+	<style id="ThemeCarouselIndicatorHitAreaHeight" value="10px"/>
+	<style id="ThemeCarouselIndicatorSpacer" value="3px"/>
+	<style id="ThemeCarouselIndicatorOpacity" value=".5"/>
+	<style id="ThemeCarouselIndicatorActiveBg" value="$white"/>
+	<style id="ThemeCarouselIndicatorActiveOpacity" value="1"/>
+	<style id="ThemeCarouselIndicatorTransition" value="opacity .6s ease"/>
+	<style id="ThemeCarouselCaptionWidth" value="70%"/>
+	<style id="ThemeCarouselCaptionColor" value="$white"/>
+	<style id="ThemeCarouselCaptionPaddingY" value="1.25rem"/>
+	<style id="ThemeCarouselCaptionSpacer" value="1.25rem"/>
+	<style id="ThemeCarouselControlIconWidth" value="2rem"/>
+	<style id="ThemeCarouselControlPrevIconBg" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$carousel-control-color}'&gt;&lt;path d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeCarouselControlNextIconBg" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$carousel-control-color}'&gt;&lt;path d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeCarouselTransitionDuration" value=".6s"/>
+	<style id="ThemeCarouselTransition" value="transform $carousel-transition-duration ease-in-out"/>
+	<style id="ThemeCarouselDarkIndicatorActiveBg" value="$black"/>
+	<style id="ThemeCarouselDarkCaptionColor" value="$black"/>
+	<style id="ThemeCarouselDarkControlIconFilter" value="invert(1) grayscale(100)"/>
+	<style id="ThemeSpinnerWidth" value="2rem"/>
+	<style id="ThemeSpinnerHeight" value="$spinner-width"/>
+	<style id="ThemeSpinnerVerticalAlign" value="-.125em"/>
+	<style id="ThemeSpinnerBorderWidth" value=".25em"/>
+	<style id="ThemeSpinnerAnimationSpeed" value=".75s"/>
+	<style id="ThemeSpinnerWidthSm" value="1rem"/>
+	<style id="ThemeSpinnerHeightSm" value="$spinner-width-sm"/>
+	<style id="ThemeSpinnerBorderWidthSm" value=".2em"/>
+	<style id="ThemeBtnCloseWidth" value="1em"/>
+	<style id="ThemeBtnCloseHeight" value="$btn-close-width"/>
+	<style id="ThemeBtnClosePaddingX" value=".25em"/>
+	<style id="ThemeBtnClosePaddingY" value="$btn-close-padding-x"/>
+	<style id="ThemeBtnCloseColor" value="$black"/>
+	<style id="ThemeBtnCloseBg" value="url(&quot;data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$btn-close-color}'&gt;&lt;path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/&gt;&lt;/svg&gt;&quot;)"/>
+	<style id="ThemeBtnCloseFocusShadow" value="$input-btn-focus-box-shadow"/>
+	<style id="ThemeBtnCloseOpacity" value=".5"/>
+	<style id="ThemeBtnCloseHoverOpacity" value=".75"/>
+	<style id="ThemeBtnCloseFocusOpacity" value="1"/>
+	<style id="ThemeBtnCloseDisabledOpacity" value=".25"/>
+	<style id="ThemeBtnCloseWhiteFilter" value="invert(1) grayscale(100%) brightness(200%)"/>
+	<style id="ThemeOffcanvasPaddingY" value="$modal-inner-padding"/>
+	<style id="ThemeOffcanvasPaddingX" value="$modal-inner-padding"/>
+	<style id="ThemeOffcanvasHorizontalWidth" value="400px"/>
+	<style id="ThemeOffcanvasVerticalHeight" value="30vh"/>
+	<style id="ThemeOffcanvasTransitionDuration" value=".3s"/>
+	<style id="ThemeOffcanvasBorderColor" value="$modal-content-border-color"/>
+	<style id="ThemeOffcanvasBorderWidth" value="$modal-content-border-width"/>
+	<style id="ThemeOffcanvasTitleLineHeight" value="$modal-title-line-height"/>
+	<style id="ThemeOffcanvasBgColor" value="$modal-content-bg"/>
+	<style id="ThemeOffcanvasColor" value="$modal-content-color"/>
+	<style id="ThemeOffcanvasBoxShadow" value="$modal-content-box-shadow-xs"/>
+	<style id="ThemeOffcanvasBackdropBg" value="$modal-backdrop-bg"/>
+	<style id="ThemeOffcanvasBackdropOpacity" value="$modal-backdrop-opacity"/>
+	<style id="ThemeCodeFontSize" value="$small-font-size"/>
+	<style id="ThemeCodeColor" value="$pink"/>
+	<style id="ThemeKbdPaddingY" value=".1875rem"/>
+	<style id="ThemeKbdPaddingX" value=".375rem"/>
+	<style id="ThemeKbdFontSize" value="$code-font-size"/>
+	<style id="ThemeKbdColor" value="var(--#{$prefix}body-bg)"/>
+	<style id="ThemeKbdBg" value="var(--#{$prefix}body-color)"/>
+	<style id="ThemeNestedKbdFontWeight" value="null"/>
+	<style id="ThemePreColor" value="null"/>
+</theme>

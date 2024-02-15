@@ -1,0 +1,392 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblClassRoomView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblClassRoomView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblClassRoomView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblClassRoomView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblClassRoomView.ExportOptions.RenderBody()
+    @tblClassRoomView.OtherOptions.RenderBody()
+</div>
+}
+@tblClassRoomView.ShowPageHeader()
+@tblClassRoomView.ShowMessages()
+<main class="view">
+<form name="ftblClassRoomview" id="ftblClassRoomview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblClassRoomView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblClassRoomView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblClassRoom: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblClassRoomview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblClassRoomview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblClassRoomView.IsModal)">
+@if (!tblClassRoomView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblClassRoomView.MultiPages.ContainerClasses)" id="pages_tblClassRoomView"><!-- multi-page tabs -->
+    <ul class="@(tblClassRoomView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblClassRoomView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblClassRoom1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom1" aria-selected="@(ConvertToJson(tblClassRoomView.MultiPages.IsActive(1)))">@Html.Raw(tblClassRoomView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblClassRoom2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom2" aria-selected="@(ConvertToJson(tblClassRoomView.MultiPages.IsActive(2)))">@Html.Raw(tblClassRoomView.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomView.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblClassRoom3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom3" aria-selected="@(ConvertToJson(tblClassRoomView.MultiPages.IsActive(3)))">@Html.Raw(tblClassRoomView.PageCaption(3))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomView.MultiPages.NavLinkClasses(5))" data-bs-target="#tab_tblClassRoom5" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom5" aria-selected="@(ConvertToJson(tblClassRoomView.MultiPages.IsActive(5)))">@Html.Raw(tblClassRoomView.PageCaption(5))</button></li>
+        <li class="nav-item"><button class="@(tblClassRoomView.MultiPages.NavLinkClasses(6))" data-bs-target="#tab_tblClassRoom6" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblClassRoom6" aria-selected="@(ConvertToJson(tblClassRoomView.MultiPages.IsActive(6)))">@Html.Raw(tblClassRoomView.PageCaption(6))</button></li>
+    </ul>
+    @:<div class="@(tblClassRoomView.MultiPages.TabContentClasses)"">
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:<div class="@(tblClassRoomView.MultiPages.TabPaneClasses(1))" id="tab_tblClassRoom1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblClassRoomView.TableClass)">
+@if (tblClassRoomView.str_CR_Number.Visible) { // tblClassRoomView.str_CR_Number.Visible (begin)
+    <tr id="r_str_CR_Number" @Html.Raw(tblClassRoomView.str_CR_Number.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_str_CR_Number">@Html.Raw(tblClassRoomView.str_CR_Number.Caption)</span></td>
+        <td data-name="str_CR_Number" @Html.Raw(tblClassRoomView.str_CR_Number.CellAttributes)>
+<span id="el_tblClassRoom_str_CR_Number" data-page="1">
+<span @Html.Raw(tblClassRoomView.str_CR_Number.ViewAttributes)>
+@Html.Raw(tblClassRoomView.str_CR_Number.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.str_CR_Number.Visible (end) *@
+@if (tblClassRoomView.int_CR_Product_ID.Visible) { // tblClassRoomView.int_CR_Product_ID.Visible (begin)
+    <tr id="r_int_CR_Product_ID" @Html.Raw(tblClassRoomView.int_CR_Product_ID.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_CR_Product_ID">@Html.Raw(tblClassRoomView.int_CR_Product_ID.Caption)</span></td>
+        <td data-name="int_CR_Product_ID" @Html.Raw(tblClassRoomView.int_CR_Product_ID.CellAttributes)>
+<span id="el_tblClassRoom_int_CR_Product_ID" data-page="1">
+<span @Html.Raw(tblClassRoomView.int_CR_Product_ID.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_CR_Product_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_CR_Product_ID.Visible (end) *@
+@if (tblClassRoomView.str_Package_Name.Visible) { // tblClassRoomView.str_Package_Name.Visible (begin)
+    <tr id="r_str_Package_Name" @Html.Raw(tblClassRoomView.str_Package_Name.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_str_Package_Name">@Html.Raw(tblClassRoomView.str_Package_Name.Caption)</span></td>
+        <td data-name="str_Package_Name" @Html.Raw(tblClassRoomView.str_Package_Name.CellAttributes)>
+<span id="el_tblClassRoom_str_Package_Name" data-page="1">
+<span @Html.Raw(tblClassRoomView.str_Package_Name.ViewAttributes)>
+@Html.Raw(tblClassRoomView.str_Package_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.str_Package_Name.Visible (end) *@
+@if (tblClassRoomView.int_Location_ID.Visible) { // tblClassRoomView.int_Location_ID.Visible (begin)
+    <tr id="r_int_Location_ID" @Html.Raw(tblClassRoomView.int_Location_ID.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_Location_ID">@Html.Raw(tblClassRoomView.int_Location_ID.Caption)</span></td>
+        <td data-name="int_Location_ID" @Html.Raw(tblClassRoomView.int_Location_ID.CellAttributes)>
+<span id="el_tblClassRoom_int_Location_ID" data-page="1">
+<span @Html.Raw(tblClassRoomView.int_Location_ID.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_Location_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_Location_ID.Visible (end) *@
+@if (tblClassRoomView.int_Teacher_ID.Visible) { // tblClassRoomView.int_Teacher_ID.Visible (begin)
+    <tr id="r_int_Teacher_ID" @Html.Raw(tblClassRoomView.int_Teacher_ID.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_Teacher_ID">@Html.Raw(tblClassRoomView.int_Teacher_ID.Caption)</span></td>
+        <td data-name="int_Teacher_ID" @Html.Raw(tblClassRoomView.int_Teacher_ID.CellAttributes)>
+<span id="el_tblClassRoom_int_Teacher_ID" data-page="1">
+<span @Html.Raw(tblClassRoomView.int_Teacher_ID.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_Teacher_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_Teacher_ID.Visible (end) *@
+@if (tblClassRoomView.date_Created.Visible) { // tblClassRoomView.date_Created.Visible (begin)
+    <tr id="r_date_Created" @Html.Raw(tblClassRoomView.date_Created.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_date_Created">@Html.Raw(tblClassRoomView.date_Created.Caption)</span></td>
+        <td data-name="date_Created" @Html.Raw(tblClassRoomView.date_Created.CellAttributes)>
+<span id="el_tblClassRoom_date_Created" data-page="1">
+<span @Html.Raw(tblClassRoomView.date_Created.ViewAttributes)>
+@Html.Raw(tblClassRoomView.date_Created.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.date_Created.Visible (end) *@
+@if (tblClassRoomView.date_Modified.Visible) { // tblClassRoomView.date_Modified.Visible (begin)
+    <tr id="r_date_Modified" @Html.Raw(tblClassRoomView.date_Modified.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_date_Modified">@Html.Raw(tblClassRoomView.date_Modified.Caption)</span></td>
+        <td data-name="date_Modified" @Html.Raw(tblClassRoomView.date_Modified.CellAttributes)>
+<span id="el_tblClassRoom_date_Modified" data-page="1">
+<span @Html.Raw(tblClassRoomView.date_Modified.ViewAttributes)>
+@Html.Raw(tblClassRoomView.date_Modified.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.date_Modified.Visible (end) *@
+</table>
+@if (!tblClassRoomView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:<div class="@(tblClassRoomView.MultiPages.TabPaneClasses(2))" id="tab_tblClassRoom2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblClassRoomView.TableClass)">
+@if (tblClassRoomView.int_CR_Size.Visible) { // tblClassRoomView.int_CR_Size.Visible (begin)
+    <tr id="r_int_CR_Size" @Html.Raw(tblClassRoomView.int_CR_Size.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_CR_Size">@Html.Raw(tblClassRoomView.int_CR_Size.Caption)</span></td>
+        <td data-name="int_CR_Size" @Html.Raw(tblClassRoomView.int_CR_Size.CellAttributes)>
+<span id="el_tblClassRoom_int_CR_Size" data-page="2">
+<span @Html.Raw(tblClassRoomView.int_CR_Size.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_CR_Size.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_CR_Size.Visible (end) *@
+@if (tblClassRoomView.int_MU_Size.Visible) { // tblClassRoomView.int_MU_Size.Visible (begin)
+    <tr id="r_int_MU_Size" @Html.Raw(tblClassRoomView.int_MU_Size.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_MU_Size">@Html.Raw(tblClassRoomView.int_MU_Size.Caption)</span></td>
+        <td data-name="int_MU_Size" @Html.Raw(tblClassRoomView.int_MU_Size.CellAttributes)>
+<span id="el_tblClassRoom_int_MU_Size" data-page="2">
+<span @Html.Raw(tblClassRoomView.int_MU_Size.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_MU_Size.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_MU_Size.Visible (end) *@
+@if (tblClassRoomView.int_CR_Status.Visible) { // tblClassRoomView.int_CR_Status.Visible (begin)
+    <tr id="r_int_CR_Status" @Html.Raw(tblClassRoomView.int_CR_Status.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_CR_Status">@Html.Raw(tblClassRoomView.int_CR_Status.Caption)</span></td>
+        <td data-name="int_CR_Status" @Html.Raw(tblClassRoomView.int_CR_Status.CellAttributes)>
+<span id="el_tblClassRoom_int_CR_Status" data-page="2">
+<span @Html.Raw(tblClassRoomView.int_CR_Status.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_CR_Status.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_CR_Status.Visible (end) *@
+@if (tblClassRoomView.Is_Web_SignUp.Visible) { // tblClassRoomView.Is_Web_SignUp.Visible (begin)
+    <tr id="r_Is_Web_SignUp" @Html.Raw(tblClassRoomView.Is_Web_SignUp.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_Is_Web_SignUp">@Html.Raw(tblClassRoomView.Is_Web_SignUp.Caption)</span></td>
+        <td data-name="Is_Web_SignUp" @Html.Raw(tblClassRoomView.Is_Web_SignUp.CellAttributes)>
+<span id="el_tblClassRoom_Is_Web_SignUp" data-page="2">
+<span @Html.Raw(tblClassRoomView.Is_Web_SignUp.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Is_Web_SignUp_@(tblClassRoomView.RowCount)" class="form-check-input" value="@(tblClassRoomView.Is_Web_SignUp.GetViewValue())" disabled checked="@(ConvertToBool(tblClassRoomView.Is_Web_SignUp.CurrentValue))">
+    <label class="form-check-label" for="x_Is_Web_SignUp_@(tblClassRoomView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.Is_Web_SignUp.Visible (end) *@
+</table>
+@if (!tblClassRoomView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:<div class="@(tblClassRoomView.MultiPages.TabPaneClasses(3))" id="tab_tblClassRoom3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblClassRoomView.TableClass)">
+@if (tblClassRoomView.date_Start.Visible) { // tblClassRoomView.date_Start.Visible (begin)
+    <tr id="r_date_Start" @Html.Raw(tblClassRoomView.date_Start.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_date_Start">@Html.Raw(tblClassRoomView.date_Start.Caption)</span></td>
+        <td data-name="date_Start" @Html.Raw(tblClassRoomView.date_Start.CellAttributes)>
+<span id="el_tblClassRoom_date_Start" data-page="3">
+<span @Html.Raw(tblClassRoomView.date_Start.ViewAttributes)>
+@Html.Raw(tblClassRoomView.date_Start.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.date_Start.Visible (end) *@
+@if (tblClassRoomView.mon_CR_Price.Visible) { // tblClassRoomView.mon_CR_Price.Visible (begin)
+    <tr id="r_mon_CR_Price" @Html.Raw(tblClassRoomView.mon_CR_Price.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_mon_CR_Price">@Html.Raw(tblClassRoomView.mon_CR_Price.Caption)</span></td>
+        <td data-name="mon_CR_Price" @Html.Raw(tblClassRoomView.mon_CR_Price.CellAttributes)>
+<span id="el_tblClassRoom_mon_CR_Price" data-page="3">
+<span @Html.Raw(tblClassRoomView.mon_CR_Price.ViewAttributes)>
+@Html.Raw(tblClassRoomView.mon_CR_Price.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.mon_CR_Price.Visible (end) *@
+@if (tblClassRoomView.int_TotSession.Visible) { // tblClassRoomView.int_TotSession.Visible (begin)
+    <tr id="r_int_TotSession" @Html.Raw(tblClassRoomView.int_TotSession.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_TotSession">@Html.Raw(tblClassRoomView.int_TotSession.Caption)</span></td>
+        <td data-name="int_TotSession" @Html.Raw(tblClassRoomView.int_TotSession.CellAttributes)>
+<span id="el_tblClassRoom_int_TotSession" data-page="3">
+<span @Html.Raw(tblClassRoomView.int_TotSession.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_TotSession.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_TotSession.Visible (end) *@
+@if (tblClassRoomView.int_PerDaySession.Visible) { // tblClassRoomView.int_PerDaySession.Visible (begin)
+    <tr id="r_int_PerDaySession" @Html.Raw(tblClassRoomView.int_PerDaySession.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_PerDaySession">@Html.Raw(tblClassRoomView.int_PerDaySession.Caption)</span></td>
+        <td data-name="int_PerDaySession" @Html.Raw(tblClassRoomView.int_PerDaySession.CellAttributes)>
+<span id="el_tblClassRoom_int_PerDaySession" data-page="3">
+<span @Html.Raw(tblClassRoomView.int_PerDaySession.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_PerDaySession.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_PerDaySession.Visible (end) *@
+@if (tblClassRoomView.date_Start2.Visible) { // tblClassRoomView.date_Start2.Visible (begin)
+    <tr id="r_date_Start2" @Html.Raw(tblClassRoomView.date_Start2.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_date_Start2">@Html.Raw(tblClassRoomView.date_Start2.Caption)</span></td>
+        <td data-name="date_Start2" @Html.Raw(tblClassRoomView.date_Start2.CellAttributes)>
+<span id="el_tblClassRoom_date_Start2" data-page="3">
+<span @Html.Raw(tblClassRoomView.date_Start2.ViewAttributes)>
+@Html.Raw(tblClassRoomView.date_Start2.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.date_Start2.Visible (end) *@
+@if (tblClassRoomView.date_Start3.Visible) { // tblClassRoomView.date_Start3.Visible (begin)
+    <tr id="r_date_Start3" @Html.Raw(tblClassRoomView.date_Start3.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_date_Start3">@Html.Raw(tblClassRoomView.date_Start3.Caption)</span></td>
+        <td data-name="date_Start3" @Html.Raw(tblClassRoomView.date_Start3.CellAttributes)>
+<span id="el_tblClassRoom_date_Start3" data-page="3">
+<span @Html.Raw(tblClassRoomView.date_Start3.ViewAttributes)>
+@Html.Raw(tblClassRoomView.date_Start3.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.date_Start3.Visible (end) *@
+@if (tblClassRoomView.date_Start4.Visible) { // tblClassRoomView.date_Start4.Visible (begin)
+    <tr id="r_date_Start4" @Html.Raw(tblClassRoomView.date_Start4.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_date_Start4">@Html.Raw(tblClassRoomView.date_Start4.Caption)</span></td>
+        <td data-name="date_Start4" @Html.Raw(tblClassRoomView.date_Start4.CellAttributes)>
+<span id="el_tblClassRoom_date_Start4" data-page="3">
+<span @Html.Raw(tblClassRoomView.date_Start4.ViewAttributes)>
+@Html.Raw(tblClassRoomView.date_Start4.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.date_Start4.Visible (end) *@
+@if (tblClassRoomView.str_CR_Days.Visible) { // tblClassRoomView.str_CR_Days.Visible (begin)
+    <tr id="r_str_CR_Days" @Html.Raw(tblClassRoomView.str_CR_Days.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_str_CR_Days">@Html.Raw(tblClassRoomView.str_CR_Days.Caption)</span></td>
+        <td data-name="str_CR_Days" @Html.Raw(tblClassRoomView.str_CR_Days.CellAttributes)>
+<span id="el_tblClassRoom_str_CR_Days" data-page="3">
+<span @Html.Raw(tblClassRoomView.str_CR_Days.ViewAttributes)>
+@Html.Raw(tblClassRoomView.str_CR_Days.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.str_CR_Days.Visible (end) *@
+</table>
+@if (!tblClassRoomView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:<div class="@(tblClassRoomView.MultiPages.TabPaneClasses(4))" id="tab_tblClassRoom4" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:<div class="@(tblClassRoomView.MultiPages.TabPaneClasses(5))" id="tab_tblClassRoom5" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblClassRoomView.TableClass)">
+@if (tblClassRoomView.BulkCR_Set.Visible) { // tblClassRoomView.BulkCR_Set.Visible (begin)
+    <tr id="r_BulkCR_Set" @Html.Raw(tblClassRoomView.BulkCR_Set.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_BulkCR_Set">@Html.Raw(tblClassRoomView.BulkCR_Set.Caption)</span></td>
+        <td data-name="BulkCR_Set" @Html.Raw(tblClassRoomView.BulkCR_Set.CellAttributes)>
+<span id="el_tblClassRoom_BulkCR_Set" data-page="5">
+<span @Html.Raw(tblClassRoomView.BulkCR_Set.ViewAttributes)>
+@Html.Raw(tblClassRoomView.BulkCR_Set.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.BulkCR_Set.Visible (end) *@
+@if (tblClassRoomView.int_Day_Incremental.Visible) { // tblClassRoomView.int_Day_Incremental.Visible (begin)
+    <tr id="r_int_Day_Incremental" @Html.Raw(tblClassRoomView.int_Day_Incremental.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_Day_Incremental">@Html.Raw(tblClassRoomView.int_Day_Incremental.Caption)</span></td>
+        <td data-name="int_Day_Incremental" @Html.Raw(tblClassRoomView.int_Day_Incremental.CellAttributes)>
+<span id="el_tblClassRoom_int_Day_Incremental" data-page="5">
+<span @Html.Raw(tblClassRoomView.int_Day_Incremental.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_Day_Incremental.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_Day_Incremental.Visible (end) *@
+@if (tblClassRoomView.int_Reoccurrence.Visible) { // tblClassRoomView.int_Reoccurrence.Visible (begin)
+    <tr id="r_int_Reoccurrence" @Html.Raw(tblClassRoomView.int_Reoccurrence.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_int_Reoccurrence">@Html.Raw(tblClassRoomView.int_Reoccurrence.Caption)</span></td>
+        <td data-name="int_Reoccurrence" @Html.Raw(tblClassRoomView.int_Reoccurrence.CellAttributes)>
+<span id="el_tblClassRoom_int_Reoccurrence" data-page="5">
+<span @Html.Raw(tblClassRoomView.int_Reoccurrence.ViewAttributes)>
+@Html.Raw(tblClassRoomView.int_Reoccurrence.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.int_Reoccurrence.Visible (end) *@
+</table>
+@if (!tblClassRoomView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:<div class="@(tblClassRoomView.MultiPages.TabPaneClasses(6))" id="tab_tblClassRoom6" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblClassRoomView.TableClass)">
+@if (tblClassRoomView.str_CR_Notes.Visible) { // tblClassRoomView.str_CR_Notes.Visible (begin)
+    <tr id="r_str_CR_Notes" @Html.Raw(tblClassRoomView.str_CR_Notes.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_str_CR_Notes">@Html.Raw(tblClassRoomView.str_CR_Notes.Caption)</span></td>
+        <td data-name="str_CR_Notes" @Html.Raw(tblClassRoomView.str_CR_Notes.CellAttributes)>
+<span id="el_tblClassRoom_str_CR_Notes" data-page="6">
+<span @Html.Raw(tblClassRoomView.str_CR_Notes.ViewAttributes)>
+@Html.Raw(tblClassRoomView.str_CR_Notes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.str_CR_Notes.Visible (end) *@
+@if (tblClassRoomView.is_ZoomMeet.Visible) { // tblClassRoomView.is_ZoomMeet.Visible (begin)
+    <tr id="r_is_ZoomMeet" @Html.Raw(tblClassRoomView.is_ZoomMeet.RowAttributes)>
+        <td class="@(tblClassRoomView.TableLeftColumnClass)"><span id="elh_tblClassRoom_is_ZoomMeet">@Html.Raw(tblClassRoomView.is_ZoomMeet.Caption)</span></td>
+        <td data-name="is_ZoomMeet" @Html.Raw(tblClassRoomView.is_ZoomMeet.CellAttributes)>
+<span id="el_tblClassRoom_is_ZoomMeet" data-page="6">
+<span @Html.Raw(tblClassRoomView.is_ZoomMeet.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_is_ZoomMeet_@(tblClassRoomView.RowCount)" class="form-check-input" value="@(tblClassRoomView.is_ZoomMeet.GetViewValue())" disabled checked="@(ConvertToBool(tblClassRoomView.is_ZoomMeet.CurrentValue))">
+    <label class="form-check-label" for="x_is_ZoomMeet_@(tblClassRoomView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblClassRoomView.is_ZoomMeet.Visible (end) *@
+</table>
+@if (!tblClassRoomView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblClassRoomView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblClassRoomView.CloseRecordset(); }
+</form>
+</main>
+@tblClassRoomView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblClassRoomView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

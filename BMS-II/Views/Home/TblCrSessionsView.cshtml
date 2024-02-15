@@ -1,0 +1,306 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrSessionsView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrSessionsView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblCrSessionsView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblCrSessionsView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblCrSessionsView.ExportOptions.RenderBody()
+    @tblCrSessionsView.OtherOptions.RenderBody()
+</div>
+}
+@tblCrSessionsView.ShowPageHeader()
+@tblCrSessionsView.ShowMessages()
+<main class="view">
+<form name="ftblCRSessionsview" id="ftblCRSessionsview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblCrSessionsView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrSessionsView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRSessions: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblCRSessionsview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblCRSessionsview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblCrSessionsView.IsModal)">
+@if (!tblCrSessionsView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(tblCrSessionsView.MultiPages.ContainerClasses)" id="pages_tblCrSessionsView"><!-- multi-page tabs -->
+    <ul class="@(tblCrSessionsView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblCrSessionsView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblCRSessions1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblCRSessions1" aria-selected="@(ConvertToJson(tblCrSessionsView.MultiPages.IsActive(1)))">@Html.Raw(tblCrSessionsView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblCrSessionsView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblCRSessions2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblCRSessions2" aria-selected="@(ConvertToJson(tblCrSessionsView.MultiPages.IsActive(2)))">@Html.Raw(tblCrSessionsView.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblCrSessionsView.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblCRSessions3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblCRSessions3" aria-selected="@(ConvertToJson(tblCrSessionsView.MultiPages.IsActive(3)))">@Html.Raw(tblCrSessionsView.PageCaption(3))</button></li>
+    </ul>
+    @:<div class="@(tblCrSessionsView.MultiPages.TabContentClasses)"">
+}
+@if (!tblCrSessionsView.IsExport()) {
+    @:<div class="@(tblCrSessionsView.MultiPages.TabPaneClasses(1))" id="tab_tblCRSessions1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblCrSessionsView.TableClass)">
+@if (tblCrSessionsView.str_CR_Number.Visible) { // tblCrSessionsView.str_CR_Number.Visible (begin)
+    <tr id="r_str_CR_Number" @Html.Raw(tblCrSessionsView.str_CR_Number.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_CR_Number">@Html.Raw(tblCrSessionsView.str_CR_Number.Caption)</span></td>
+        <td data-name="str_CR_Number" @Html.Raw(tblCrSessionsView.str_CR_Number.CellAttributes)>
+<span id="el_tblCRSessions_str_CR_Number" data-page="1">
+<span @Html.Raw(tblCrSessionsView.str_CR_Number.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_CR_Number.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_CR_Number.Visible (end) *@
+@if (tblCrSessionsView.int_Status.Visible) { // tblCrSessionsView.int_Status.Visible (begin)
+    <tr id="r_int_Status" @Html.Raw(tblCrSessionsView.int_Status.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_int_Status">@Html.Raw(tblCrSessionsView.int_Status.Caption)</span></td>
+        <td data-name="int_Status" @Html.Raw(tblCrSessionsView.int_Status.CellAttributes)>
+<span id="el_tblCRSessions_int_Status" data-page="1">
+<span @Html.Raw(tblCrSessionsView.int_Status.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.int_Status.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.int_Status.Visible (end) *@
+@if (tblCrSessionsView.Instructor.Visible) { // tblCrSessionsView.Instructor.Visible (begin)
+    <tr id="r_Instructor" @Html.Raw(tblCrSessionsView.Instructor.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_Instructor">@Html.Raw(tblCrSessionsView.Instructor.Caption)</span></td>
+        <td data-name="Instructor" @Html.Raw(tblCrSessionsView.Instructor.CellAttributes)>
+<span id="el_tblCRSessions_Instructor" data-page="1">
+<span @Html.Raw(tblCrSessionsView.Instructor.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.Instructor.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.Instructor.Visible (end) *@
+@if (tblCrSessionsView.Location.Visible) { // tblCrSessionsView.Location.Visible (begin)
+    <tr id="r_Location" @Html.Raw(tblCrSessionsView.Location.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_Location">@Html.Raw(tblCrSessionsView.Location.Caption)</span></td>
+        <td data-name="Location" @Html.Raw(tblCrSessionsView.Location.CellAttributes)>
+<span id="el_tblCRSessions_Location" data-page="1">
+<span @Html.Raw(tblCrSessionsView.Location.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.Location.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.Location.Visible (end) *@
+@if (tblCrSessionsView.int_Student_Id.Visible) { // tblCrSessionsView.int_Student_Id.Visible (begin)
+    <tr id="r_int_Student_Id" @Html.Raw(tblCrSessionsView.int_Student_Id.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_int_Student_Id">@Html.Raw(tblCrSessionsView.int_Student_Id.Caption)</span></td>
+        <td data-name="int_Student_Id" @Html.Raw(tblCrSessionsView.int_Student_Id.CellAttributes)>
+<span id="el_tblCRSessions_int_Student_Id" data-page="1">
+<span @Html.Raw(tblCrSessionsView.int_Student_Id.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.int_Student_Id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.int_Student_Id.Visible (end) *@
+@if (tblCrSessionsView.str_Username.Visible) { // tblCrSessionsView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(tblCrSessionsView.str_Username.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_Username">@Html.Raw(tblCrSessionsView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(tblCrSessionsView.str_Username.CellAttributes)>
+<span id="el_tblCRSessions_str_Username" data-page="1">
+<span @Html.Raw(tblCrSessionsView.str_Username.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_Username.Visible (end) *@
+@if (tblCrSessionsView.str_Status.Visible) { // tblCrSessionsView.str_Status.Visible (begin)
+    <tr id="r_str_Status" @Html.Raw(tblCrSessionsView.str_Status.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_Status">@Html.Raw(tblCrSessionsView.str_Status.Caption)</span></td>
+        <td data-name="str_Status" @Html.Raw(tblCrSessionsView.str_Status.CellAttributes)>
+<span id="el_tblCRSessions_str_Status" data-page="1">
+<span @Html.Raw(tblCrSessionsView.str_Status.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_Status.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_Status.Visible (end) *@
+</table>
+@if (!tblCrSessionsView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblCrSessionsView.IsExport()) {
+    @:<div class="@(tblCrSessionsView.MultiPages.TabPaneClasses(2))" id="tab_tblCRSessions2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblCrSessionsView.TableClass)">
+@if (tblCrSessionsView.int_Session_ID.Visible) { // tblCrSessionsView.int_Session_ID.Visible (begin)
+    <tr id="r_int_Session_ID" @Html.Raw(tblCrSessionsView.int_Session_ID.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_int_Session_ID">@Html.Raw(tblCrSessionsView.int_Session_ID.Caption)</span></td>
+        <td data-name="int_Session_ID" @Html.Raw(tblCrSessionsView.int_Session_ID.CellAttributes)>
+<span id="el_tblCRSessions_int_Session_ID" data-page="2">
+<span @Html.Raw(tblCrSessionsView.int_Session_ID.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.int_Session_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.int_Session_ID.Visible (end) *@
+@if (tblCrSessionsView.str_Session_Date.Visible) { // tblCrSessionsView.str_Session_Date.Visible (begin)
+    <tr id="r_str_Session_Date" @Html.Raw(tblCrSessionsView.str_Session_Date.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_Session_Date">@Html.Raw(tblCrSessionsView.str_Session_Date.Caption)</span></td>
+        <td data-name="str_Session_Date" @Html.Raw(tblCrSessionsView.str_Session_Date.CellAttributes)>
+<span id="el_tblCRSessions_str_Session_Date" data-page="2">
+<span @Html.Raw(tblCrSessionsView.str_Session_Date.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_Session_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_Session_Date.Visible (end) *@
+@if (tblCrSessionsView.int_Day_ID.Visible) { // tblCrSessionsView.int_Day_ID.Visible (begin)
+    <tr id="r_int_Day_ID" @Html.Raw(tblCrSessionsView.int_Day_ID.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_int_Day_ID">@Html.Raw(tblCrSessionsView.int_Day_ID.Caption)</span></td>
+        <td data-name="int_Day_ID" @Html.Raw(tblCrSessionsView.int_Day_ID.CellAttributes)>
+<span id="el_tblCRSessions_int_Day_ID" data-page="2">
+<span @Html.Raw(tblCrSessionsView.int_Day_ID.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.int_Day_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.int_Day_ID.Visible (end) *@
+@if (tblCrSessionsView.str_Time_Start.Visible) { // tblCrSessionsView.str_Time_Start.Visible (begin)
+    <tr id="r_str_Time_Start" @Html.Raw(tblCrSessionsView.str_Time_Start.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_Time_Start">@Html.Raw(tblCrSessionsView.str_Time_Start.Caption)</span></td>
+        <td data-name="str_Time_Start" @Html.Raw(tblCrSessionsView.str_Time_Start.CellAttributes)>
+<span id="el_tblCRSessions_str_Time_Start" data-page="2">
+<span @Html.Raw(tblCrSessionsView.str_Time_Start.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_Time_Start.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_Time_Start.Visible (end) *@
+@if (tblCrSessionsView.str_Time_End.Visible) { // tblCrSessionsView.str_Time_End.Visible (begin)
+    <tr id="r_str_Time_End" @Html.Raw(tblCrSessionsView.str_Time_End.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_Time_End">@Html.Raw(tblCrSessionsView.str_Time_End.Caption)</span></td>
+        <td data-name="str_Time_End" @Html.Raw(tblCrSessionsView.str_Time_End.CellAttributes)>
+<span id="el_tblCRSessions_str_Time_End" data-page="2">
+<span @Html.Raw(tblCrSessionsView.str_Time_End.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_Time_End.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_Time_End.Visible (end) *@
+</table>
+@if (!tblCrSessionsView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblCrSessionsView.IsExport()) {
+    @:<div class="@(tblCrSessionsView.MultiPages.TabPaneClasses(3))" id="tab_tblCRSessions3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(tblCrSessionsView.TableClass)">
+@if (tblCrSessionsView.str_Session_Notes.Visible) { // tblCrSessionsView.str_Session_Notes.Visible (begin)
+    <tr id="r_str_Session_Notes" @Html.Raw(tblCrSessionsView.str_Session_Notes.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_Session_Notes">@Html.Raw(tblCrSessionsView.str_Session_Notes.Caption)</span></td>
+        <td data-name="str_Session_Notes" @Html.Raw(tblCrSessionsView.str_Session_Notes.CellAttributes)>
+<span id="el_tblCRSessions_str_Session_Notes" data-page="3">
+<span @Html.Raw(tblCrSessionsView.str_Session_Notes.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_Session_Notes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_Session_Notes.Visible (end) *@
+@if (tblCrSessionsView.is_Rescheduled.Visible) { // tblCrSessionsView.is_Rescheduled.Visible (begin)
+    <tr id="r_is_Rescheduled" @Html.Raw(tblCrSessionsView.is_Rescheduled.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_is_Rescheduled">@Html.Raw(tblCrSessionsView.is_Rescheduled.Caption)</span></td>
+        <td data-name="is_Rescheduled" @Html.Raw(tblCrSessionsView.is_Rescheduled.CellAttributes)>
+<span id="el_tblCRSessions_is_Rescheduled" data-page="3">
+<span @Html.Raw(tblCrSessionsView.is_Rescheduled.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.is_Rescheduled.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.is_Rescheduled.Visible (end) *@
+@if (tblCrSessionsView.instructorSignature.Visible) { // tblCrSessionsView.instructorSignature.Visible (begin)
+    <tr id="r_instructorSignature" @Html.Raw(tblCrSessionsView.instructorSignature.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_instructorSignature">@Html.Raw(tblCrSessionsView.instructorSignature.Caption)</span></td>
+        <td data-name="instructorSignature" @Html.Raw(tblCrSessionsView.instructorSignature.CellAttributes)>
+<span id="el_tblCRSessions_instructorSignature" data-page="3">
+<span @Html.Raw(tblCrSessionsView.instructorSignature.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblCrSessionsView.instructorSignature, ConvertToString(tblCrSessionsView.instructorSignature.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.instructorSignature.Visible (end) *@
+@if (tblCrSessionsView.IsZoomMeet.Visible) { // tblCrSessionsView.IsZoomMeet.Visible (begin)
+    <tr id="r_IsZoomMeet" @Html.Raw(tblCrSessionsView.IsZoomMeet.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_IsZoomMeet">@Html.Raw(tblCrSessionsView.IsZoomMeet.Caption)</span></td>
+        <td data-name="IsZoomMeet" @Html.Raw(tblCrSessionsView.IsZoomMeet.CellAttributes)>
+<span id="el_tblCRSessions_IsZoomMeet" data-page="3">
+<span @Html.Raw(tblCrSessionsView.IsZoomMeet.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsZoomMeet_@(tblCrSessionsView.RowCount)" class="form-check-input" value="@(tblCrSessionsView.IsZoomMeet.GetViewValue())" disabled checked="@(ConvertToBool(tblCrSessionsView.IsZoomMeet.CurrentValue))">
+    <label class="form-check-label" for="x_IsZoomMeet_@(tblCrSessionsView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.IsZoomMeet.Visible (end) *@
+@if (tblCrSessionsView.str_ZoomHostUrl.Visible) { // tblCrSessionsView.str_ZoomHostUrl.Visible (begin)
+    <tr id="r_str_ZoomHostUrl" @Html.Raw(tblCrSessionsView.str_ZoomHostUrl.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_ZoomHostUrl">@Html.Raw(tblCrSessionsView.str_ZoomHostUrl.Caption)</span></td>
+        <td data-name="str_ZoomHostUrl" @Html.Raw(tblCrSessionsView.str_ZoomHostUrl.CellAttributes)>
+<span id="el_tblCRSessions_str_ZoomHostUrl" data-page="3">
+<span @Html.Raw(tblCrSessionsView.str_ZoomHostUrl.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_ZoomHostUrl.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_ZoomHostUrl.Visible (end) *@
+@if (tblCrSessionsView.str_ZoomUserUrl.Visible) { // tblCrSessionsView.str_ZoomUserUrl.Visible (begin)
+    <tr id="r_str_ZoomUserUrl" @Html.Raw(tblCrSessionsView.str_ZoomUserUrl.RowAttributes)>
+        <td class="@(tblCrSessionsView.TableLeftColumnClass)"><span id="elh_tblCRSessions_str_ZoomUserUrl">@Html.Raw(tblCrSessionsView.str_ZoomUserUrl.Caption)</span></td>
+        <td data-name="str_ZoomUserUrl" @Html.Raw(tblCrSessionsView.str_ZoomUserUrl.CellAttributes)>
+<span id="el_tblCRSessions_str_ZoomUserUrl" data-page="3">
+<span @Html.Raw(tblCrSessionsView.str_ZoomUserUrl.ViewAttributes)>
+@Html.Raw(tblCrSessionsView.str_ZoomUserUrl.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrSessionsView.str_ZoomUserUrl.Visible (end) *@
+</table>
+@if (!tblCrSessionsView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!tblCrSessionsView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ tblCrSessionsView.CloseRecordset(); }
+</form>
+</main>
+@tblCrSessionsView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblCrSessionsView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

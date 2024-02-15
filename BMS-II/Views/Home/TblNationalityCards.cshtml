@@ -1,0 +1,310 @@
+@if (!tblNationalityList.IsExport()) {
+<div>
+@if (!tblNationalityList.IsGridAdd && !(tblNationalityList.IsGridEdit && tblNationalityList.ModalGridEdit) && !tblNationalityList.IsMultiEdit) {
+@Html.Raw(tblNationalityList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblNationalityList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblNationalityList.ModalGridAdd && tblNationalityList.IsGridAdd || tblNationalityList.ModalGridEdit && tblNationalityList.IsGridEdit || tblNationalityList.ModalMultiEdit && tblNationalityList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblNationalityList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblNationality: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblNationalityList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblNationalityList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblNationalityList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblNationalityList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblNationalityList.FormName)" id="@(tblNationalityList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblNationalityList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblNationalityList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblNationalityList.GetMultiColumnRowClass())">
+@if (tblNationalityList.TotalRecords > 0 || tblNationalityList.IsGridEdit || tblNationalityList.IsMultiEdit) {
+    await tblNationalityList.SetupGrid();
+    bool eof = tblNationalityList.Recordset == null; // DN
+while (tblNationalityList.RecordCount < tblNationalityList.StopRecord || SameString(tblNationalityList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblNationalityList.RowIndex, "$rowindex$") &&
+        (!tblNationalityList.IsGridAdd || tblNationalityList.CurrentMode == "copy") &&
+        (!((tblNationalityList.IsCopy || tblNationalityList.IsAdd) && tblNationalityList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblNationalityList.Recordset.ReadAsync();
+    tblNationalityList.RecordCount++;
+    if (tblNationalityList.RecordCount >= tblNationalityList.StartRecord) {
+        await tblNationalityList.SetupRow();
+<div class="@(tblNationalityList.GetMultiColumnColClass())" @Html.Raw(tblNationalityList.RowAttributes)>
+<div class="@(tblNationalityList.MultiColumnCardClass)">
+    @if (tblNationalityList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblNationalityList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblNationalityList.ListOptions.Tag = "div";
+    tblNationalityList.ListOptions.RenderBody(tblNationalityList.MultiColumnListOptionsPosition, tblNationalityList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblNationalityList.ID.Visible) { // tblNationalityList.ID.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_ID">
+            <div class="col col-sm-4 tblNationality_ID">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.ID.CellAttributes)>
+<span @Html.Raw(tblNationalityList.ID.ViewAttributes)>
+@Html.Raw(tblNationalityList.ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_ID">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.ID.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.ID.CellAttributes)>
+<span @Html.Raw(tblNationalityList.ID.ViewAttributes)>
+@Html.Raw(tblNationalityList.ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.Nationality_en.Visible) { // tblNationalityList.Nationality_en.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_Nationality_en">
+            <div class="col col-sm-4 tblNationality_Nationality_en">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.Nationality_en))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.Nationality_en.CellAttributes)>
+<span @Html.Raw(tblNationalityList.Nationality_en.ViewAttributes)>
+@Html.Raw(tblNationalityList.Nationality_en.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_Nationality_en">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.Nationality_en.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.Nationality_en.CellAttributes)>
+<span @Html.Raw(tblNationalityList.Nationality_en.ViewAttributes)>
+@Html.Raw(tblNationalityList.Nationality_en.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.Nationality_arabic.Visible) { // tblNationalityList.Nationality_arabic.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_Nationality_arabic">
+            <div class="col col-sm-4 tblNationality_Nationality_arabic">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.Nationality_arabic))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.Nationality_arabic.CellAttributes)>
+<span @Html.Raw(tblNationalityList.Nationality_arabic.ViewAttributes)>
+@Html.Raw(tblNationalityList.Nationality_arabic.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_Nationality_arabic">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.Nationality_arabic.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.Nationality_arabic.CellAttributes)>
+<span @Html.Raw(tblNationalityList.Nationality_arabic.ViewAttributes)>
+@Html.Raw(tblNationalityList.Nationality_arabic.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.IsActive.Visible) { // tblNationalityList.IsActive.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_IsActive">
+            <div class="col col-sm-4 tblNationality_IsActive">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.IsActive))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.IsActive.CellAttributes)>
+<span @Html.Raw(tblNationalityList.IsActive.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsActive_@(tblNationalityList.RowCount)" class="form-check-input" value="@(tblNationalityList.IsActive.GetViewValue())" disabled checked="@(ConvertToBool(tblNationalityList.IsActive.CurrentValue))">
+    <label class="form-check-label" for="x_IsActive_@(tblNationalityList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_IsActive">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.IsActive.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.IsActive.CellAttributes)>
+<span @Html.Raw(tblNationalityList.IsActive.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsActive_@(tblNationalityList.RowCount)" class="form-check-input" value="@(tblNationalityList.IsActive.GetViewValue())" disabled checked="@(ConvertToBool(tblNationalityList.IsActive.CurrentValue))">
+    <label class="form-check-label" for="x_IsActive_@(tblNationalityList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.IsDeleted.Visible) { // tblNationalityList.IsDeleted.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_IsDeleted">
+            <div class="col col-sm-4 tblNationality_IsDeleted">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.IsDeleted))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.IsDeleted.CellAttributes)>
+<span @Html.Raw(tblNationalityList.IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDeleted_@(tblNationalityList.RowCount)" class="form-check-input" value="@(tblNationalityList.IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblNationalityList.IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_IsDeleted_@(tblNationalityList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_IsDeleted">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.IsDeleted.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.IsDeleted.CellAttributes)>
+<span @Html.Raw(tblNationalityList.IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDeleted_@(tblNationalityList.RowCount)" class="form-check-input" value="@(tblNationalityList.IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblNationalityList.IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_IsDeleted_@(tblNationalityList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.int_Status.Visible) { // tblNationalityList.int_Status.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_int_Status">
+            <div class="col col-sm-4 tblNationality_int_Status">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.int_Status))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.int_Status.CellAttributes)>
+<span @Html.Raw(tblNationalityList.int_Status.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_int_Status">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.int_Status.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.int_Status.CellAttributes)>
+<span @Html.Raw(tblNationalityList.int_Status.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.int_Created_By.Visible) { // tblNationalityList.int_Created_By.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_int_Created_By">
+            <div class="col col-sm-4 tblNationality_int_Created_By">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.int_Created_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblNationalityList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_int_Created_By">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.int_Created_By.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblNationalityList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.int_Modified_By.Visible) { // tblNationalityList.int_Modified_By.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_int_Modified_By">
+            <div class="col col-sm-4 tblNationality_int_Modified_By">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.int_Modified_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblNationalityList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_int_Modified_By">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.int_Modified_By.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblNationalityList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblNationalityList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.date_Created.Visible) { // tblNationalityList.date_Created.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_date_Created">
+            <div class="col col-sm-4 tblNationality_date_Created">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.date_Created))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.date_Created.CellAttributes)>
+<span @Html.Raw(tblNationalityList.date_Created.ViewAttributes)>
+@Html.Raw(tblNationalityList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_date_Created">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.date_Created.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.date_Created.CellAttributes)>
+<span @Html.Raw(tblNationalityList.date_Created.ViewAttributes)>
+@Html.Raw(tblNationalityList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblNationalityList.date_Modified.Visible) { // tblNationalityList.date_Modified.Visible (begin)
+        if (tblNationalityList.RowType == RowType.View) { // View record
+        <div class="row tblNationality_date_Modified">
+            <div class="col col-sm-4 tblNationality_date_Modified">@Html.Raw(tblNationalityList.RenderFieldHeader(tblNationalityList.date_Modified))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblNationalityList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblNationalityList.date_Modified.ViewAttributes)>
+@Html.Raw(tblNationalityList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblNationality_date_Modified">
+            <label class="@(tblNationalityList.LeftColumnClass)">@Html.Raw(tblNationalityList.date_Modified.Caption)</label>
+            <div class="@(tblNationalityList.RightColumnClass)"><div @Html.Raw(tblNationalityList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblNationalityList.date_Modified.ViewAttributes)>
+@Html.Raw(tblNationalityList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblNationalityList.IsExport()) {
+    if (tblNationalityList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblNationalityList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblNationalityList.ListOptions.Tag = "div";
+}
+@tblNationalityList.ListOptions.RenderBody(tblNationalityList.MultiColumnListOptionsPosition, tblNationalityList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblNationalityList.RowIndex, "$rowindex$"))
+        tblNationalityList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblNationalityList.IsCopy || tblNationalityList.IsAdd) && tblNationalityList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblNationalityList.RowIndex = 1;
+} @* End While *@
+} @* tblNationalityList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblNationalityList.CurrentAction) && !tblNationalityList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblNationalityList.CloseRecordset(); }

@@ -1,0 +1,145 @@
+@if (tblOtherWebServicesList.ModalGridAdd && tblOtherWebServicesList.IsGridAdd || tblOtherWebServicesList.ModalGridEdit && tblOtherWebServicesList.IsGridEdit || tblOtherWebServicesList.ModalMultiEdit && tblOtherWebServicesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblOtherWebServicesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblOtherWebServices: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblOtherWebServicesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblOtherWebServicesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblOtherWebServicesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblOtherWebServicesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblOtherWebServicesList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblOtherWebServicesList.TableGridClass)">
+@if (!tblOtherWebServicesList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblOtherWebServicesList.IsGridAdd && !(tblOtherWebServicesList.IsGridEdit && tblOtherWebServicesList.ModalGridEdit) && !tblOtherWebServicesList.IsMultiEdit) {
+@Html.Raw(tblOtherWebServicesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblOtherWebServicesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblOtherWebServicesList.FormName)" id="@(tblOtherWebServicesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblOtherWebServicesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblOtherWebServicesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblOtherWebServices" class="card-body ew-grid-middle-panel @(tblOtherWebServicesList.TableContainerClass)" style="@(tblOtherWebServicesList.TableContainerStyle)">
+@if (tblOtherWebServicesList.TotalRecords > 0 || tblOtherWebServicesList.IsGridEdit || tblOtherWebServicesList.IsMultiEdit) {
+<table id="tbl_tblOtherWebServiceslist" class="@(tblOtherWebServicesList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblOtherWebServicesList.RowType = RowType.Header;
+
+    // Render list options
+    await tblOtherWebServicesList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblOtherWebServicesList.ListOptions.RenderHeader("left")
+@if (tblOtherWebServicesList.Website.Visible) { // tblOtherWebServicesList.Website.Visible (begin)
+        <th data-name="Website" class="@(tblOtherWebServicesList.Website.HeaderCellClass)"><div id="elh_tblOtherWebServices_Website" class="tblOtherWebServices_Website">@Html.Raw(tblOtherWebServicesList.RenderFieldHeader(tblOtherWebServicesList.Website))</div></th>
+} @* tblOtherWebServicesList.Website.Visible (end) *@
+@if (tblOtherWebServicesList.str_username.Visible) { // tblOtherWebServicesList.str_username.Visible (begin)
+        <th data-name="str_username" class="@(tblOtherWebServicesList.str_username.HeaderCellClass)"><div id="elh_tblOtherWebServices_str_username" class="tblOtherWebServices_str_username">@Html.Raw(tblOtherWebServicesList.RenderFieldHeader(tblOtherWebServicesList.str_username))</div></th>
+} @* tblOtherWebServicesList.str_username.Visible (end) *@
+@if (tblOtherWebServicesList.str_password.Visible) { // tblOtherWebServicesList.str_password.Visible (begin)
+        <th data-name="str_password" class="@(tblOtherWebServicesList.str_password.HeaderCellClass)"><div id="elh_tblOtherWebServices_str_password" class="tblOtherWebServices_str_password">@Html.Raw(tblOtherWebServicesList.RenderFieldHeader(tblOtherWebServicesList.str_password))</div></th>
+} @* tblOtherWebServicesList.str_password.Visible (end) *@
+@* Render list options (header, right) *@
+@tblOtherWebServicesList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblOtherWebServicesList.PageNumber)">
+@{
+    await tblOtherWebServicesList.SetupGrid();
+    bool eof = tblOtherWebServicesList.Recordset == null; // DN
+}
+@while (tblOtherWebServicesList.RecordCount < tblOtherWebServicesList.StopRecord || SameString(tblOtherWebServicesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblOtherWebServicesList.RowIndex, "$rowindex$") &&
+        (!tblOtherWebServicesList.IsGridAdd || tblOtherWebServicesList.CurrentMode == "copy") &&
+        (!((tblOtherWebServicesList.IsCopy || tblOtherWebServicesList.IsAdd) && tblOtherWebServicesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblOtherWebServicesList.Recordset.ReadAsync();
+    tblOtherWebServicesList.RecordCount++;
+    if (tblOtherWebServicesList.RecordCount >= tblOtherWebServicesList.StartRecord) {
+        await tblOtherWebServicesList.SetupRow();
+    <tr @Html.Raw(tblOtherWebServicesList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblOtherWebServicesList.ListOptions.RenderBody("left", tblOtherWebServicesList.RowCount)
+    @if (tblOtherWebServicesList.Website.Visible) { // tblOtherWebServicesList.Website.Visible (begin)
+        <td data-name="Website" @Html.Raw(tblOtherWebServicesList.Website.CellAttributes)>
+<span id="el@(tblOtherWebServicesList.RowIndex == "$rowindex$" ? "$rowindex$" : tblOtherWebServicesList.RowCount)_tblOtherWebServices_Website" class="el_tblOtherWebServices_Website">
+<span @Html.Raw(tblOtherWebServicesList.Website.ViewAttributes)>
+@if (!EmptyString(tblOtherWebServicesList.Website.GetViewValue()) && !Empty(tblOtherWebServicesList.Website.LinkAttributes)) {
+<a @Html.Raw(tblOtherWebServicesList.Website.LinkAttributes)>@Html.Raw(tblOtherWebServicesList.Website.GetViewValue())</a>
+} else {
+@Html.Raw(tblOtherWebServicesList.Website.GetViewValue())
+}
+</span>
+</span>
+</td>
+    } @* tblOtherWebServicesList.Website.Visible (end) *@
+    @if (tblOtherWebServicesList.str_username.Visible) { // tblOtherWebServicesList.str_username.Visible (begin)
+        <td data-name="str_username" @Html.Raw(tblOtherWebServicesList.str_username.CellAttributes)>
+<span id="el@(tblOtherWebServicesList.RowIndex == "$rowindex$" ? "$rowindex$" : tblOtherWebServicesList.RowCount)_tblOtherWebServices_str_username" class="el_tblOtherWebServices_str_username">
+<span @Html.Raw(tblOtherWebServicesList.str_username.ViewAttributes)>
+@Html.Raw(tblOtherWebServicesList.str_username.GetViewValue())</span>
+</span>
+</td>
+    } @* tblOtherWebServicesList.str_username.Visible (end) *@
+    @if (tblOtherWebServicesList.str_password.Visible) { // tblOtherWebServicesList.str_password.Visible (begin)
+        <td data-name="str_password" @Html.Raw(tblOtherWebServicesList.str_password.CellAttributes)>
+<span id="el@(tblOtherWebServicesList.RowIndex == "$rowindex$" ? "$rowindex$" : tblOtherWebServicesList.RowCount)_tblOtherWebServices_str_password" class="el_tblOtherWebServices_str_password">
+<span @Html.Raw(tblOtherWebServicesList.str_password.ViewAttributes)>
+@Html.Raw(tblOtherWebServicesList.str_password.GetViewValue())</span>
+</span>
+</td>
+    } @* tblOtherWebServicesList.str_password.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblOtherWebServicesList.ListOptions.RenderBody("right", tblOtherWebServicesList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblOtherWebServicesList.RowIndex, "$rowindex$"))
+        tblOtherWebServicesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblOtherWebServicesList.IsCopy || tblOtherWebServicesList.IsAdd) && tblOtherWebServicesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblOtherWebServicesList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblOtherWebServicesList.CurrentAction) && !tblOtherWebServicesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblOtherWebServicesList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

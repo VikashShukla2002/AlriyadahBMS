@@ -1,0 +1,353 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblEvaluationMbList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblEvaluationMbList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblEvaluationMbList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationMbList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluationMB: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblEvaluationMbList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblEvaluationMbList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblEvaluationMbList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblEvaluationMbList.FormKeyCountName)")
+
+        // Dynamic selection lists
+        .setLists({
+            "Retake": @Html.Raw(tblEvaluationMbList.Retake.ToClientList(tblEvaluationMbList)),
+            "AbsherApptNbr": @Html.Raw(tblEvaluationMbList.AbsherApptNbr.ToClientList(tblEvaluationMbList)),
+            "IsDrivingexperience": @Html.Raw(tblEvaluationMbList.IsDrivingexperience.ToClientList(tblEvaluationMbList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblEvaluationMbList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblEvaluationMbList.TotalRecords > 0 && tblEvaluationMbList.ExportOptions.Visible) {
+    tblEvaluationMbList.ExportOptions.Render("body");
+}
+@if (tblEvaluationMbList.ImportOptions.Visible) {
+    tblEvaluationMbList.ImportOptions.Render("body");
+}
+@if (tblEvaluationMbList.SearchOptions.Visible) {
+    tblEvaluationMbList.SearchOptions.Render("body");
+}
+@if (tblEvaluationMbList.FilterOptions.Visible) {
+    tblEvaluationMbList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblEvaluationMbList.IsExport() || Config.ExportMasterRecord && tblEvaluationMbList.IsExport("print")) {
+if (!Empty(tblEvaluationMbList.DbMasterFilter) && tblEvaluationMbList.CurrentMasterTable == "tblAssessment") {
+    if (tblEvaluationMbList.MasterRecordExists) {
+        @await Html.PartialAsync("TblAssessmentMaster.cshtml")
+    }
+}
+}
+@if (tblEvaluationMbList.ShowCurrentFilter) {
+    tblEvaluationMbList.ShowFilterList();
+}
+@if (!tblEvaluationMbList.IsModal) {
+<form name="ftblEvaluationMBsrch" id="ftblEvaluationMBsrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblEvaluationMBsrch_search_panel" class="mb-2 mb-sm-0 @(tblEvaluationMbList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblEvaluationMbList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblEvaluationMB: currentTable } });
+var currentForm;
+var ftblEvaluationMBsrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblEvaluationMBsrch")
+        .setPageId("list")
+@if (tblEvaluationMbList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name_Hdr", [], fields.str_Full_Name_Hdr.isInvalid],
+            ["NationalID", [ew.Validators.integer], fields.NationalID.isInvalid],
+            ["str_Cell_Phone", [], fields.str_Cell_Phone.isInvalid],
+            ["intDrivinglicenseType", [], fields.intDrivinglicenseType.isInvalid],
+            ["Retake", [], fields.Retake.isInvalid],
+            ["AbsherApptNbr", [], fields.AbsherApptNbr.isInvalid],
+            ["IsDrivingexperience", [], fields.IsDrivingexperience.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Retake": @Html.Raw(tblEvaluationMbList.Retake.ToClientList(tblEvaluationMbList)),
+            "AbsherApptNbr": @Html.Raw(tblEvaluationMbList.AbsherApptNbr.ToClientList(tblEvaluationMbList)),
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblEvaluationMbList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblEvaluationMbList.IsExport() && Empty(tblEvaluationMbList.CurrentAction) && tblEvaluationMbList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0@(tblEvaluationMbList.SearchFieldsPerRow > 0 ? " row-cols-sm-" + tblEvaluationMbList.SearchFieldsPerRow : "")">
+@{
+    // Render search row
+    tblEvaluationMbList.RowType = RowType.Search;
+    tblEvaluationMbList.ResetAttributes();
+    await tblEvaluationMbList.RenderRow();
+}
+@if (tblEvaluationMbList.NationalID.Visible) { // tblEvaluationMbList.NationalID.Visible (begin)
+    if (!tblEvaluationMbList.NationalID.UseFilter) {
+        tblEvaluationMbList.SearchColumnCount++;
+    }
+    <div id="xs_NationalID" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationMbList.NationalID.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_NationalID" class="ew-search-caption ew-label">@Html.Raw(tblEvaluationMbList.NationalID.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("="))
+<input type="hidden" name="z_NationalID" id="z_NationalID" value="=">
+</div>
+        </div>
+        <div id="el_tblEvaluationMB_NationalID" class="ew-search-field">
+<input type="@(tblEvaluationMbList.NationalID.InputTextType)" name="x_NationalID" id="x_NationalID" data-table="tblEvaluationMB" data-field="x_NationalID" value="@Html.Raw(tblEvaluationMbList.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbList.NationalID.PlaceHolder))" data-format-pattern="@(tblEvaluationMbList.NationalID.FormatPattern)"@Html.Raw(tblEvaluationMbList.NationalID.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblEvaluationMbList.NationalID.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationMbList.NationalID.Visible (end) *@
+@if (tblEvaluationMbList.str_Cell_Phone.Visible) { // tblEvaluationMbList.str_Cell_Phone.Visible (begin)
+    if (!tblEvaluationMbList.str_Cell_Phone.UseFilter) {
+        tblEvaluationMbList.SearchColumnCount++;
+    }
+    <div id="xs_str_Cell_Phone" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationMbList.str_Cell_Phone.UseFilter ? " ew-filter-field" : "")">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_str_Cell_Phone" class="ew-search-caption ew-label">@Html.Raw(tblEvaluationMbList.str_Cell_Phone.Caption)</label>
+            <div class="ew-search-operator">
+@Html.Raw(Language.Phrase("LIKE"))
+<input type="hidden" name="z_str_Cell_Phone" id="z_str_Cell_Phone" value="LIKE">
+</div>
+        </div>
+        <div id="el_tblEvaluationMB_str_Cell_Phone" class="ew-search-field">
+<input type="@(tblEvaluationMbList.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblEvaluationMB" data-field="x_str_Cell_Phone" value="@Html.Raw(tblEvaluationMbList.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbList.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblEvaluationMbList.str_Cell_Phone.FormatPattern)"@Html.Raw(tblEvaluationMbList.str_Cell_Phone.EditAttributes)>
+<div class="invalid-feedback">@Html.Raw(tblEvaluationMbList.str_Cell_Phone.GetErrorMessage(false))</div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationMbList.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationMbList.Retake.Visible) { // tblEvaluationMbList.Retake.Visible (begin)
+    if (!tblEvaluationMbList.Retake.UseFilter) {
+        tblEvaluationMbList.SearchColumnCount++;
+    }
+    <div id="xs_Retake" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationMbList.Retake.UseFilter ? " ew-filter-field" : "")">
+        <select
+            id="x_Retake"
+            name="x_Retake[]"
+            class="form-control ew-select@(tblEvaluationMbList.Retake.IsInvalidClass)"
+            data-select2-id="ftblEvaluationMBsrch_x_Retake"
+            data-table="tblEvaluationMB"
+            data-field="x_Retake"
+            data-caption="@Html.Raw(HtmlEncode(RemoveHtml(tblEvaluationMbList.Retake.Caption)))"
+            data-filter="true"
+            multiple
+            size="1"
+            data-value-separator="@(tblEvaluationMbList.Retake.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblEvaluationMbList.Retake.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblEvaluationMbList.Retake.EditAttributes)>
+            @(tblEvaluationMbList.Retake.SelectOptionListHtml("x_Retake", true))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationMbList.Retake.GetErrorMessage(false))</div>
+        <script>
+        loadjs.ready("ftblEvaluationMBsrch", function() {
+            var options = {
+                name: "x_Retake",
+                selectId: "ftblEvaluationMBsrch_x_Retake",
+                ajax: { id: "x_Retake", form: "ftblEvaluationMBsrch", limit: ew.FILTER_PAGE_SIZE, data: { ajax: "filter" } }
+            };
+            options = Object.assign({}, ew.filterOptions, options, ew.vars.tables.tblEvaluationMB.fields.Retake.filterOptions);
+            ew.createFilter(options);
+        });
+        </script>
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationMbList.Retake.Visible (end) *@
+@if (tblEvaluationMbList.AbsherApptNbr.Visible) { // tblEvaluationMbList.AbsherApptNbr.Visible (begin)
+    if (!tblEvaluationMbList.AbsherApptNbr.UseFilter) {
+        tblEvaluationMbList.SearchColumnCount++;
+    }
+    <div id="xs_AbsherApptNbr" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblEvaluationMbList.AbsherApptNbr.UseFilter ? " ew-filter-field" : "")">
+        <select
+            id="x_AbsherApptNbr"
+            name="x_AbsherApptNbr[]"
+            class="form-control ew-select@(tblEvaluationMbList.AbsherApptNbr.IsInvalidClass)"
+            data-select2-id="ftblEvaluationMBsrch_x_AbsherApptNbr"
+            data-table="tblEvaluationMB"
+            data-field="x_AbsherApptNbr"
+            data-caption="@Html.Raw(HtmlEncode(RemoveHtml(tblEvaluationMbList.AbsherApptNbr.Caption)))"
+            data-filter="true"
+            multiple
+            size="1"
+            data-value-separator="@(tblEvaluationMbList.AbsherApptNbr.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblEvaluationMbList.AbsherApptNbr.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblEvaluationMbList.AbsherApptNbr.EditAttributes)>
+            @(tblEvaluationMbList.AbsherApptNbr.SelectOptionListHtml("x_AbsherApptNbr", true))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationMbList.AbsherApptNbr.GetErrorMessage(false))</div>
+        <script>
+        loadjs.ready("ftblEvaluationMBsrch", function() {
+            var options = {
+                name: "x_AbsherApptNbr",
+                selectId: "ftblEvaluationMBsrch_x_AbsherApptNbr",
+                ajax: { id: "x_AbsherApptNbr", form: "ftblEvaluationMBsrch", limit: ew.FILTER_PAGE_SIZE, data: { ajax: "filter" } }
+            };
+            options = Object.assign({}, ew.filterOptions, options, ew.vars.tables.tblEvaluationMB.fields.AbsherApptNbr.filterOptions);
+            ew.createFilter(options);
+        });
+        </script>
+    </div><!-- /.col-sm-auto -->
+} @* tblEvaluationMbList.AbsherApptNbr.Visible (end) *@
+</div><!-- /.row -->
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblEvaluationMbList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblEvaluationMbList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblEvaluationMbList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblEvaluationMbList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblEvaluationMBsrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblEvaluationMbList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblEvaluationMBsrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblEvaluationMbList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblEvaluationMBsrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblEvaluationMbList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblEvaluationMBsrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblEvaluationMbList.ShowPageHeader()
+@tblEvaluationMbList.ShowMessages()
+<main class="list @(tblEvaluationMbList.TotalRecords == 0 && !tblEvaluationMbList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblEvaluationMbList.TotalRecords > 0 || !Empty(tblEvaluationMbList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblEvaluationMbList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblEvaluationMb" + TitleCaseInvariant(tblEvaluationMbList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblEvaluationMbList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblEvaluationMbList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblEvaluationMbList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblEvaluationMB");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

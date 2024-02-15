@@ -1,0 +1,462 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrAttendanceView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrAttendanceView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblCrAttendanceView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblCrAttendanceView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblCrAttendanceView.ExportOptions.RenderBody()
+    @tblCrAttendanceView.OtherOptions.RenderBody()
+</div>
+}
+@tblCrAttendanceView.ShowPageHeader()
+@tblCrAttendanceView.ShowMessages()
+<main class="view">
+<form name="ftblCRAttendanceview" id="ftblCRAttendanceview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblCrAttendanceView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrAttendanceView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRAttendance: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblCRAttendanceview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblCRAttendanceview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblCrAttendanceView.IsModal)">
+<table class="@(tblCrAttendanceView.TableClass)">
+@if (tblCrAttendanceView.int_Attendance_ID.Visible) { // tblCrAttendanceView.int_Attendance_ID.Visible (begin)
+    <tr id="r_int_Attendance_ID" @Html.Raw(tblCrAttendanceView.int_Attendance_ID.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_Attendance_ID">@Html.Raw(tblCrAttendanceView.int_Attendance_ID.Caption)</span></td>
+        <td data-name="int_Attendance_ID" @Html.Raw(tblCrAttendanceView.int_Attendance_ID.CellAttributes)>
+<span id="el_tblCRAttendance_int_Attendance_ID">
+<span @Html.Raw(tblCrAttendanceView.int_Attendance_ID.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_Attendance_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_Attendance_ID.Visible (end) *@
+@if (tblCrAttendanceView.int_Student_ID.Visible) { // tblCrAttendanceView.int_Student_ID.Visible (begin)
+    <tr id="r_int_Student_ID" @Html.Raw(tblCrAttendanceView.int_Student_ID.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_Student_ID">@Html.Raw(tblCrAttendanceView.int_Student_ID.Caption)</span></td>
+        <td data-name="int_Student_ID" @Html.Raw(tblCrAttendanceView.int_Student_ID.CellAttributes)>
+<span id="el_tblCRAttendance_int_Student_ID">
+<span @Html.Raw(tblCrAttendanceView.int_Student_ID.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_Student_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_Student_ID.Visible (end) *@
+@if (tblCrAttendanceView.str_FullName.Visible) { // tblCrAttendanceView.str_FullName.Visible (begin)
+    <tr id="r_str_FullName" @Html.Raw(tblCrAttendanceView.str_FullName.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_str_FullName">@Html.Raw(tblCrAttendanceView.str_FullName.Caption)</span></td>
+        <td data-name="str_FullName" @Html.Raw(tblCrAttendanceView.str_FullName.CellAttributes)>
+<span id="el_tblCRAttendance_str_FullName">
+<span @Html.Raw(tblCrAttendanceView.str_FullName.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.str_FullName.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.str_FullName.Visible (end) *@
+@if (tblCrAttendanceView.str_Username.Visible) { // tblCrAttendanceView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(tblCrAttendanceView.str_Username.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_str_Username">@Html.Raw(tblCrAttendanceView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(tblCrAttendanceView.str_Username.CellAttributes)>
+<span id="el_tblCRAttendance_str_Username">
+<span @Html.Raw(tblCrAttendanceView.str_Username.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.str_Username.Visible (end) *@
+@if (tblCrAttendanceView.int_CR_ID.Visible) { // tblCrAttendanceView.int_CR_ID.Visible (begin)
+    <tr id="r_int_CR_ID" @Html.Raw(tblCrAttendanceView.int_CR_ID.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_CR_ID">@Html.Raw(tblCrAttendanceView.int_CR_ID.Caption)</span></td>
+        <td data-name="int_CR_ID" @Html.Raw(tblCrAttendanceView.int_CR_ID.CellAttributes)>
+<span id="el_tblCRAttendance_int_CR_ID">
+<span @Html.Raw(tblCrAttendanceView.int_CR_ID.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_CR_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_CR_ID.Visible (end) *@
+@if (tblCrAttendanceView.int_CRSession_ID.Visible) { // tblCrAttendanceView.int_CRSession_ID.Visible (begin)
+    <tr id="r_int_CRSession_ID" @Html.Raw(tblCrAttendanceView.int_CRSession_ID.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_CRSession_ID">@Html.Raw(tblCrAttendanceView.int_CRSession_ID.Caption)</span></td>
+        <td data-name="int_CRSession_ID" @Html.Raw(tblCrAttendanceView.int_CRSession_ID.CellAttributes)>
+<span id="el_tblCRAttendance_int_CRSession_ID">
+<span @Html.Raw(tblCrAttendanceView.int_CRSession_ID.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_CRSession_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_CRSession_ID.Visible (end) *@
+@if (tblCrAttendanceView.Is_All_Attend.Visible) { // tblCrAttendanceView.Is_All_Attend.Visible (begin)
+    <tr id="r_Is_All_Attend" @Html.Raw(tblCrAttendanceView.Is_All_Attend.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_Is_All_Attend">@Html.Raw(tblCrAttendanceView.Is_All_Attend.Caption)</span></td>
+        <td data-name="Is_All_Attend" @Html.Raw(tblCrAttendanceView.Is_All_Attend.CellAttributes)>
+<span id="el_tblCRAttendance_Is_All_Attend">
+<span @Html.Raw(tblCrAttendanceView.Is_All_Attend.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Is_All_Attend_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.Is_All_Attend.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.Is_All_Attend.CurrentValue))">
+    <label class="form-check-label" for="x_Is_All_Attend_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.Is_All_Attend.Visible (end) *@
+@if (tblCrAttendanceView.idnumber.Visible) { // tblCrAttendanceView.idnumber.Visible (begin)
+    <tr id="r_idnumber" @Html.Raw(tblCrAttendanceView.idnumber.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_idnumber">@Html.Raw(tblCrAttendanceView.idnumber.Caption)</span></td>
+        <td data-name="idnumber" @Html.Raw(tblCrAttendanceView.idnumber.CellAttributes)>
+<span id="el_tblCRAttendance_idnumber">
+<span @Html.Raw(tblCrAttendanceView.idnumber.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.idnumber.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.idnumber.Visible (end) *@
+@if (tblCrAttendanceView.course_id.Visible) { // tblCrAttendanceView.course_id.Visible (begin)
+    <tr id="r_course_id" @Html.Raw(tblCrAttendanceView.course_id.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_course_id">@Html.Raw(tblCrAttendanceView.course_id.Caption)</span></td>
+        <td data-name="course_id" @Html.Raw(tblCrAttendanceView.course_id.CellAttributes)>
+<span id="el_tblCRAttendance_course_id">
+<span @Html.Raw(tblCrAttendanceView.course_id.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.course_id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.course_id.Visible (end) *@
+@if (tblCrAttendanceView.str_Test_Score.Visible) { // tblCrAttendanceView.str_Test_Score.Visible (begin)
+    <tr id="r_str_Test_Score" @Html.Raw(tblCrAttendanceView.str_Test_Score.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_str_Test_Score">@Html.Raw(tblCrAttendanceView.str_Test_Score.Caption)</span></td>
+        <td data-name="str_Test_Score" @Html.Raw(tblCrAttendanceView.str_Test_Score.CellAttributes)>
+<span id="el_tblCRAttendance_str_Test_Score">
+<span @Html.Raw(tblCrAttendanceView.str_Test_Score.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.str_Test_Score.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.str_Test_Score.Visible (end) *@
+@if (tblCrAttendanceView.str_Notes.Visible) { // tblCrAttendanceView.str_Notes.Visible (begin)
+    <tr id="r_str_Notes" @Html.Raw(tblCrAttendanceView.str_Notes.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_str_Notes">@Html.Raw(tblCrAttendanceView.str_Notes.Caption)</span></td>
+        <td data-name="str_Notes" @Html.Raw(tblCrAttendanceView.str_Notes.CellAttributes)>
+<span id="el_tblCRAttendance_str_Notes">
+<span @Html.Raw(tblCrAttendanceView.str_Notes.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.str_Notes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.str_Notes.Visible (end) *@
+@if (tblCrAttendanceView.bit_IsDeleted.Visible) { // tblCrAttendanceView.bit_IsDeleted.Visible (begin)
+    <tr id="r_bit_IsDeleted" @Html.Raw(tblCrAttendanceView.bit_IsDeleted.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_bit_IsDeleted">@Html.Raw(tblCrAttendanceView.bit_IsDeleted.Caption)</span></td>
+        <td data-name="bit_IsDeleted" @Html.Raw(tblCrAttendanceView.bit_IsDeleted.CellAttributes)>
+<span id="el_tblCRAttendance_bit_IsDeleted">
+<span @Html.Raw(tblCrAttendanceView.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.bit_IsDeleted.Visible (end) *@
+@if (tblCrAttendanceView.int_Created_BY.Visible) { // tblCrAttendanceView.int_Created_BY.Visible (begin)
+    <tr id="r_int_Created_BY" @Html.Raw(tblCrAttendanceView.int_Created_BY.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_Created_BY">@Html.Raw(tblCrAttendanceView.int_Created_BY.Caption)</span></td>
+        <td data-name="int_Created_BY" @Html.Raw(tblCrAttendanceView.int_Created_BY.CellAttributes)>
+<span id="el_tblCRAttendance_int_Created_BY">
+<span @Html.Raw(tblCrAttendanceView.int_Created_BY.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_Created_BY.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_Created_BY.Visible (end) *@
+@if (tblCrAttendanceView.int_Modified_BY.Visible) { // tblCrAttendanceView.int_Modified_BY.Visible (begin)
+    <tr id="r_int_Modified_BY" @Html.Raw(tblCrAttendanceView.int_Modified_BY.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_Modified_BY">@Html.Raw(tblCrAttendanceView.int_Modified_BY.Caption)</span></td>
+        <td data-name="int_Modified_BY" @Html.Raw(tblCrAttendanceView.int_Modified_BY.CellAttributes)>
+<span id="el_tblCRAttendance_int_Modified_BY">
+<span @Html.Raw(tblCrAttendanceView.int_Modified_BY.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_Modified_BY.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_Modified_BY.Visible (end) *@
+@if (tblCrAttendanceView.date_Created.Visible) { // tblCrAttendanceView.date_Created.Visible (begin)
+    <tr id="r_date_Created" @Html.Raw(tblCrAttendanceView.date_Created.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_date_Created">@Html.Raw(tblCrAttendanceView.date_Created.Caption)</span></td>
+        <td data-name="date_Created" @Html.Raw(tblCrAttendanceView.date_Created.CellAttributes)>
+<span id="el_tblCRAttendance_date_Created">
+<span @Html.Raw(tblCrAttendanceView.date_Created.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.date_Created.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.date_Created.Visible (end) *@
+@if (tblCrAttendanceView.date_Modified.Visible) { // tblCrAttendanceView.date_Modified.Visible (begin)
+    <tr id="r_date_Modified" @Html.Raw(tblCrAttendanceView.date_Modified.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_date_Modified">@Html.Raw(tblCrAttendanceView.date_Modified.Caption)</span></td>
+        <td data-name="date_Modified" @Html.Raw(tblCrAttendanceView.date_Modified.CellAttributes)>
+<span id="el_tblCRAttendance_date_Modified">
+<span @Html.Raw(tblCrAttendanceView.date_Modified.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.date_Modified.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.date_Modified.Visible (end) *@
+@if (tblCrAttendanceView.bit_IsMakeUP.Visible) { // tblCrAttendanceView.bit_IsMakeUP.Visible (begin)
+    <tr id="r_bit_IsMakeUP" @Html.Raw(tblCrAttendanceView.bit_IsMakeUP.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_bit_IsMakeUP">@Html.Raw(tblCrAttendanceView.bit_IsMakeUP.Caption)</span></td>
+        <td data-name="bit_IsMakeUP" @Html.Raw(tblCrAttendanceView.bit_IsMakeUP.CellAttributes)>
+<span id="el_tblCRAttendance_bit_IsMakeUP">
+<span @Html.Raw(tblCrAttendanceView.bit_IsMakeUP.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsMakeUP_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.bit_IsMakeUP.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.bit_IsMakeUP.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsMakeUP_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.bit_IsMakeUP.Visible (end) *@
+@if (tblCrAttendanceView.dec_Orginal_SessionID.Visible) { // tblCrAttendanceView.dec_Orginal_SessionID.Visible (begin)
+    <tr id="r_dec_Orginal_SessionID" @Html.Raw(tblCrAttendanceView.dec_Orginal_SessionID.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_dec_Orginal_SessionID">@Html.Raw(tblCrAttendanceView.dec_Orginal_SessionID.Caption)</span></td>
+        <td data-name="dec_Orginal_SessionID" @Html.Raw(tblCrAttendanceView.dec_Orginal_SessionID.CellAttributes)>
+<span id="el_tblCRAttendance_dec_Orginal_SessionID">
+<span @Html.Raw(tblCrAttendanceView.dec_Orginal_SessionID.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.dec_Orginal_SessionID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.dec_Orginal_SessionID.Visible (end) *@
+@if (tblCrAttendanceView.dec_CR_ID_For_Del.Visible) { // tblCrAttendanceView.dec_CR_ID_For_Del.Visible (begin)
+    <tr id="r_dec_CR_ID_For_Del" @Html.Raw(tblCrAttendanceView.dec_CR_ID_For_Del.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_dec_CR_ID_For_Del">@Html.Raw(tblCrAttendanceView.dec_CR_ID_For_Del.Caption)</span></td>
+        <td data-name="dec_CR_ID_For_Del" @Html.Raw(tblCrAttendanceView.dec_CR_ID_For_Del.CellAttributes)>
+<span id="el_tblCRAttendance_dec_CR_ID_For_Del">
+<span @Html.Raw(tblCrAttendanceView.dec_CR_ID_For_Del.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.dec_CR_ID_For_Del.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.dec_CR_ID_For_Del.Visible (end) *@
+@if (tblCrAttendanceView.int_Session_ID_For_Del.Visible) { // tblCrAttendanceView.int_Session_ID_For_Del.Visible (begin)
+    <tr id="r_int_Session_ID_For_Del" @Html.Raw(tblCrAttendanceView.int_Session_ID_For_Del.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_int_Session_ID_For_Del">@Html.Raw(tblCrAttendanceView.int_Session_ID_For_Del.Caption)</span></td>
+        <td data-name="int_Session_ID_For_Del" @Html.Raw(tblCrAttendanceView.int_Session_ID_For_Del.CellAttributes)>
+<span id="el_tblCRAttendance_int_Session_ID_For_Del">
+<span @Html.Raw(tblCrAttendanceView.int_Session_ID_For_Del.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.int_Session_ID_For_Del.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.int_Session_ID_For_Del.Visible (end) *@
+@if (tblCrAttendanceView.RemM1.Visible) { // tblCrAttendanceView.RemM1.Visible (begin)
+    <tr id="r_RemM1" @Html.Raw(tblCrAttendanceView.RemM1.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_RemM1">@Html.Raw(tblCrAttendanceView.RemM1.Caption)</span></td>
+        <td data-name="RemM1" @Html.Raw(tblCrAttendanceView.RemM1.CellAttributes)>
+<span id="el_tblCRAttendance_RemM1">
+<span @Html.Raw(tblCrAttendanceView.RemM1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM1_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.RemM1.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.RemM1.CurrentValue))">
+    <label class="form-check-label" for="x_RemM1_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.RemM1.Visible (end) *@
+@if (tblCrAttendanceView.RemM2.Visible) { // tblCrAttendanceView.RemM2.Visible (begin)
+    <tr id="r_RemM2" @Html.Raw(tblCrAttendanceView.RemM2.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_RemM2">@Html.Raw(tblCrAttendanceView.RemM2.Caption)</span></td>
+        <td data-name="RemM2" @Html.Raw(tblCrAttendanceView.RemM2.CellAttributes)>
+<span id="el_tblCRAttendance_RemM2">
+<span @Html.Raw(tblCrAttendanceView.RemM2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM2_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.RemM2.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.RemM2.CurrentValue))">
+    <label class="form-check-label" for="x_RemM2_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.RemM2.Visible (end) *@
+@if (tblCrAttendanceView.RemM3.Visible) { // tblCrAttendanceView.RemM3.Visible (begin)
+    <tr id="r_RemM3" @Html.Raw(tblCrAttendanceView.RemM3.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_RemM3">@Html.Raw(tblCrAttendanceView.RemM3.Caption)</span></td>
+        <td data-name="RemM3" @Html.Raw(tblCrAttendanceView.RemM3.CellAttributes)>
+<span id="el_tblCRAttendance_RemM3">
+<span @Html.Raw(tblCrAttendanceView.RemM3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM3_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.RemM3.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.RemM3.CurrentValue))">
+    <label class="form-check-label" for="x_RemM3_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.RemM3.Visible (end) *@
+@if (tblCrAttendanceView.studentSignature.Visible) { // tblCrAttendanceView.studentSignature.Visible (begin)
+    <tr id="r_studentSignature" @Html.Raw(tblCrAttendanceView.studentSignature.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_studentSignature">@Html.Raw(tblCrAttendanceView.studentSignature.Caption)</span></td>
+        <td data-name="studentSignature" @Html.Raw(tblCrAttendanceView.studentSignature.CellAttributes)>
+<span id="el_tblCRAttendance_studentSignature">
+<span @Html.Raw(tblCrAttendanceView.studentSignature.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblCrAttendanceView.studentSignature, ConvertToString(tblCrAttendanceView.studentSignature.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.studentSignature.Visible (end) *@
+@if (tblCrAttendanceView.SMSReminder1.Visible) { // tblCrAttendanceView.SMSReminder1.Visible (begin)
+    <tr id="r_SMSReminder1" @Html.Raw(tblCrAttendanceView.SMSReminder1.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_SMSReminder1">@Html.Raw(tblCrAttendanceView.SMSReminder1.Caption)</span></td>
+        <td data-name="SMSReminder1" @Html.Raw(tblCrAttendanceView.SMSReminder1.CellAttributes)>
+<span id="el_tblCRAttendance_SMSReminder1">
+<span @Html.Raw(tblCrAttendanceView.SMSReminder1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder1_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.SMSReminder1.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.SMSReminder1.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder1_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.SMSReminder1.Visible (end) *@
+@if (tblCrAttendanceView.SMSReminder2.Visible) { // tblCrAttendanceView.SMSReminder2.Visible (begin)
+    <tr id="r_SMSReminder2" @Html.Raw(tblCrAttendanceView.SMSReminder2.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_SMSReminder2">@Html.Raw(tblCrAttendanceView.SMSReminder2.Caption)</span></td>
+        <td data-name="SMSReminder2" @Html.Raw(tblCrAttendanceView.SMSReminder2.CellAttributes)>
+<span id="el_tblCRAttendance_SMSReminder2">
+<span @Html.Raw(tblCrAttendanceView.SMSReminder2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder2_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.SMSReminder2.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.SMSReminder2.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder2_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.SMSReminder2.Visible (end) *@
+@if (tblCrAttendanceView.SMSReminder3.Visible) { // tblCrAttendanceView.SMSReminder3.Visible (begin)
+    <tr id="r_SMSReminder3" @Html.Raw(tblCrAttendanceView.SMSReminder3.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_SMSReminder3">@Html.Raw(tblCrAttendanceView.SMSReminder3.Caption)</span></td>
+        <td data-name="SMSReminder3" @Html.Raw(tblCrAttendanceView.SMSReminder3.CellAttributes)>
+<span id="el_tblCRAttendance_SMSReminder3">
+<span @Html.Raw(tblCrAttendanceView.SMSReminder3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder3_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.SMSReminder3.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.SMSReminder3.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder3_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.SMSReminder3.Visible (end) *@
+@if (tblCrAttendanceView.VoiceReminder1.Visible) { // tblCrAttendanceView.VoiceReminder1.Visible (begin)
+    <tr id="r_VoiceReminder1" @Html.Raw(tblCrAttendanceView.VoiceReminder1.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_VoiceReminder1">@Html.Raw(tblCrAttendanceView.VoiceReminder1.Caption)</span></td>
+        <td data-name="VoiceReminder1" @Html.Raw(tblCrAttendanceView.VoiceReminder1.CellAttributes)>
+<span id="el_tblCRAttendance_VoiceReminder1">
+<span @Html.Raw(tblCrAttendanceView.VoiceReminder1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_VoiceReminder1_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.VoiceReminder1.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.VoiceReminder1.CurrentValue))">
+    <label class="form-check-label" for="x_VoiceReminder1_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.VoiceReminder1.Visible (end) *@
+@if (tblCrAttendanceView.VoiceReminder2.Visible) { // tblCrAttendanceView.VoiceReminder2.Visible (begin)
+    <tr id="r_VoiceReminder2" @Html.Raw(tblCrAttendanceView.VoiceReminder2.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_VoiceReminder2">@Html.Raw(tblCrAttendanceView.VoiceReminder2.Caption)</span></td>
+        <td data-name="VoiceReminder2" @Html.Raw(tblCrAttendanceView.VoiceReminder2.CellAttributes)>
+<span id="el_tblCRAttendance_VoiceReminder2">
+<span @Html.Raw(tblCrAttendanceView.VoiceReminder2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_VoiceReminder2_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.VoiceReminder2.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.VoiceReminder2.CurrentValue))">
+    <label class="form-check-label" for="x_VoiceReminder2_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.VoiceReminder2.Visible (end) *@
+@if (tblCrAttendanceView.VoiceReminder3.Visible) { // tblCrAttendanceView.VoiceReminder3.Visible (begin)
+    <tr id="r_VoiceReminder3" @Html.Raw(tblCrAttendanceView.VoiceReminder3.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_VoiceReminder3">@Html.Raw(tblCrAttendanceView.VoiceReminder3.Caption)</span></td>
+        <td data-name="VoiceReminder3" @Html.Raw(tblCrAttendanceView.VoiceReminder3.CellAttributes)>
+<span id="el_tblCRAttendance_VoiceReminder3">
+<span @Html.Raw(tblCrAttendanceView.VoiceReminder3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_VoiceReminder3_@(tblCrAttendanceView.RowCount)" class="form-check-input" value="@(tblCrAttendanceView.VoiceReminder3.GetViewValue())" disabled checked="@(ConvertToBool(tblCrAttendanceView.VoiceReminder3.CurrentValue))">
+    <label class="form-check-label" for="x_VoiceReminder3_@(tblCrAttendanceView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.VoiceReminder3.Visible (end) *@
+@if (tblCrAttendanceView.strParentName.Visible) { // tblCrAttendanceView.strParentName.Visible (begin)
+    <tr id="r_strParentName" @Html.Raw(tblCrAttendanceView.strParentName.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_strParentName">@Html.Raw(tblCrAttendanceView.strParentName.Caption)</span></td>
+        <td data-name="strParentName" @Html.Raw(tblCrAttendanceView.strParentName.CellAttributes)>
+<span id="el_tblCRAttendance_strParentName">
+<span @Html.Raw(tblCrAttendanceView.strParentName.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.strParentName.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.strParentName.Visible (end) *@
+@if (tblCrAttendanceView.strParentState.Visible) { // tblCrAttendanceView.strParentState.Visible (begin)
+    <tr id="r_strParentState" @Html.Raw(tblCrAttendanceView.strParentState.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_strParentState">@Html.Raw(tblCrAttendanceView.strParentState.Caption)</span></td>
+        <td data-name="strParentState" @Html.Raw(tblCrAttendanceView.strParentState.CellAttributes)>
+<span id="el_tblCRAttendance_strParentState">
+<span @Html.Raw(tblCrAttendanceView.strParentState.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.strParentState.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.strParentState.Visible (end) *@
+@if (tblCrAttendanceView.strParentLicenseNumber.Visible) { // tblCrAttendanceView.strParentLicenseNumber.Visible (begin)
+    <tr id="r_strParentLicenseNumber" @Html.Raw(tblCrAttendanceView.strParentLicenseNumber.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_strParentLicenseNumber">@Html.Raw(tblCrAttendanceView.strParentLicenseNumber.Caption)</span></td>
+        <td data-name="strParentLicenseNumber" @Html.Raw(tblCrAttendanceView.strParentLicenseNumber.CellAttributes)>
+<span id="el_tblCRAttendance_strParentLicenseNumber">
+<span @Html.Raw(tblCrAttendanceView.strParentLicenseNumber.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.strParentLicenseNumber.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.strParentLicenseNumber.Visible (end) *@
+@if (tblCrAttendanceView.CRSS_ID.Visible) { // tblCrAttendanceView.CRSS_ID.Visible (begin)
+    <tr id="r_CRSS_ID" @Html.Raw(tblCrAttendanceView.CRSS_ID.RowAttributes)>
+        <td class="@(tblCrAttendanceView.TableLeftColumnClass)"><span id="elh_tblCRAttendance_CRSS_ID">@Html.Raw(tblCrAttendanceView.CRSS_ID.Caption)</span></td>
+        <td data-name="CRSS_ID" @Html.Raw(tblCrAttendanceView.CRSS_ID.CellAttributes)>
+<span id="el_tblCRAttendance_CRSS_ID">
+<span @Html.Raw(tblCrAttendanceView.CRSS_ID.ViewAttributes)>
+@Html.Raw(tblCrAttendanceView.CRSS_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblCrAttendanceView.CRSS_ID.Visible (end) *@
+</table>
+@{ tblCrAttendanceView.CloseRecordset(); }
+</form>
+</main>
+@tblCrAttendanceView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblCrAttendanceView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

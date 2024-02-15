@@ -1,0 +1,300 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (registrationStatusSummary.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!registrationStatusSummary.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!registrationStatusSummary.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!registrationStatusSummary.IsExport() && !registrationStatusSummary.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(registrationStatusSummary.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Registration_Status: currentTable } });
+var currentPageID = ew.PAGE_ID = "summary";
+var currentForm;
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<a id="top"></a>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+<div class="btn-toolbar ew-toolbar">
+@if (!registrationStatusSummary.DrillDownInPanel) {
+    registrationStatusSummary.ExportOptions.Render("body");
+    registrationStatusSummary.SearchOptions.Render("body");
+    registrationStatusSummary.FilterOptions.Render("body");
+}
+</div>
+@if (!registrationStatusSummary.IsExport() && !registrationStatusSummary.DrillDown && !DashboardReport) {
+}
+@registrationStatusSummary.ShowPageHeader()
+@registrationStatusSummary.ShowMessages()
+@if (registrationStatusSummary.ShowReport) {
+<!-- Summary report (begin) -->
+@if (!registrationStatusSummary.IsExport("pdf")) {
+@:<main class="report-summary @(registrationStatusSummary.TotalGroups == 0 ? " ew-no-record" : "")">
+}
+@while (registrationStatusSummary.GroupCount <= registrationStatusSummary.GroupRecords.Count && registrationStatusSummary.GroupCount <= registrationStatusSummary.DisplayGroups) {
+    // Show header
+    if (registrationStatusSummary.ShowHeader) {
+if (registrationStatusSummary.GroupCount > 1) {
+@:</tbody>
+@:</table>
+if (!registrationStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!registrationStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+@Html.Raw(registrationStatusSummary.PageBreakHtml)
+}
+if (!registrationStatusSummary.IsExport("pdf")) {
+@:<div class="@Html.Raw(registrationStatusSummary.ReportContainerClass)">
+}
+if (!registrationStatusSummary.IsExport() && !(registrationStatusSummary.DrillDown && registrationStatusSummary.TotalGroups > 0)) {
+<!-- Top pager -->
+<div class="card-header ew-grid-upper-panel">
+@registrationStatusSummary.Pager.Render()
+</div>
+}
+if (!registrationStatusSummary.IsExport("pdf")) {
+<!-- Report grid (begin) -->
+@:<div id="gmp_Registration_Status" class="card-body ew-grid-middle-panel @(registrationStatusSummary.TableContainerClass)">
+}
+@:<table class="@(registrationStatusSummary.TableClass)">
+<thead>
+    <!-- Table header -->
+    <tr class="ew-table-header">
+@if (registrationStatusSummary.str_Username.Visible) { // registrationStatusSummary.str_Username.Visible (begin)
+    if (registrationStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    <th data-name="str_Username">&nbsp;</th>
+    } else {
+    <th data-name="str_Username" class="@(registrationStatusSummary.str_Username.HeaderCellClass)"><div class="Registration_Status_str_Username">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.str_Username))</div></th>
+    }
+} @* registrationStatusSummary.str_Username.Visible (end) *@
+@if (registrationStatusSummary.RegistrationDate.Visible) { // registrationStatusSummary.RegistrationDate.Visible (begin)
+    if (registrationStatusSummary.RegistrationDate.ShowGroupHeaderAsRow) {
+    <th data-name="RegistrationDate">&nbsp;</th>
+    } else {
+    <th data-name="RegistrationDate" class="@(registrationStatusSummary.RegistrationDate.HeaderCellClass)"><div class="Registration_Status_RegistrationDate">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.RegistrationDate))</div></th>
+    }
+} @* registrationStatusSummary.RegistrationDate.Visible (end) *@
+@if (registrationStatusSummary.DrivingExperience.Visible) { // registrationStatusSummary.DrivingExperience.Visible (begin)
+    if (registrationStatusSummary.DrivingExperience.ShowGroupHeaderAsRow) {
+    <th data-name="DrivingExperience">&nbsp;</th>
+    } else {
+    <th data-name="DrivingExperience" class="@(registrationStatusSummary.DrivingExperience.HeaderCellClass)"><div class="Registration_Status_DrivingExperience">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.DrivingExperience))</div></th>
+    }
+} @* registrationStatusSummary.DrivingExperience.Visible (end) *@
+@if (registrationStatusSummary.NationalID.Visible) { // registrationStatusSummary.NationalID.Visible (begin)
+    <th data-name="NationalID" class="@(registrationStatusSummary.NationalID.HeaderCellClass)"><div class="Registration_Status_NationalID">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.NationalID))</div></th>
+} @* registrationStatusSummary.NationalID.Visible (end) *@
+    </tr>
+</thead>
+@:<tbody>
+        if (registrationStatusSummary.TotalGroups == 0) {
+            break; // Show header only
+        }
+        registrationStatusSummary.ShowHeader = false;
+    } // End show header
+
+    // Build detail SQL
+    string where = DetailFilterSql(registrationStatusSummary.str_Username, registrationStatusSummary.SqlFirstGroupField, registrationStatusSummary.str_Username?.GroupValue, registrationStatusSummary.DbId); // DN
+    if (!Empty(registrationStatusSummary.PageFirstGroupFilter)) {
+        registrationStatusSummary.PageFirstGroupFilter += " OR ";
+    }
+    registrationStatusSummary.PageFirstGroupFilter += where;
+    if (!Empty(registrationStatusSummary.Filter)) {
+        where = "(" + registrationStatusSummary.Filter + ") AND (" + where + ")";
+    }
+    sqlWrk = BuildReportSql(registrationStatusSummary.SqlSelect, registrationStatusSummary.SqlWhere, registrationStatusSummary.SqlGroupBy, registrationStatusSummary.SqlHaving, registrationStatusSummary.SqlOrderBy, where, registrationStatusSummary.Sort);
+    registrationStatusSummary.DetailRecords = await registrationStatusSummary.Connection.GetRowsAsync(sqlWrk); // DN
+    registrationStatusSummary.DetailRecordCount = registrationStatusSummary.DetailRecords?.Count ?? 0; // DN
+
+    // Load detail records
+    registrationStatusSummary.str_Username.Records = registrationStatusSummary.DetailRecords;
+    registrationStatusSummary.str_Username.LevelBreak = true; // Set field level break
+        registrationStatusSummary.GroupCounter[1] = registrationStatusSummary.GroupCount;
+        registrationStatusSummary.str_Username.GetCnt(registrationStatusSummary.str_Username.Records); // Get record count
+if (registrationStatusSummary.str_Username.Visible && registrationStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    // Render header row
+    registrationStatusSummary.ResetAttributes();
+    registrationStatusSummary.RowType = RowType.Total;
+    registrationStatusSummary.RowTotalType = RowSummary.Group;
+    registrationStatusSummary.RowTotalSubType = RowTotal.Header;
+    registrationStatusSummary.RowGroupLevel = 1;
+    await registrationStatusSummary.RenderRow();
+    @:<tr @Html.Raw(registrationStatusSummary.RowAttributes)>
+if (registrationStatusSummary.str_Username.Visible) {
+    registrationStatusSummary.str_Username.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_Username" @Html.Raw(registrationStatusSummary.str_Username.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    registrationStatusSummary.str_Username.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_Username" colspan="@(registrationStatusSummary.GroupColumnCount + registrationStatusSummary.DetailColumnCount - 1)" @Html.Raw(registrationStatusSummary.str_Username.CellAttributes)>
+        <span class="ew-summary-caption Registration_Status_str_Username">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.str_Username))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(registrationStatusSummary.str_Username.ViewAttributes)>@Html.Raw(registrationStatusSummary.str_Username.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(registrationStatusSummary.str_Username.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    registrationStatusSummary.RegistrationDate.GetDistinctValues(registrationStatusSummary.str_Username.Records, registrationStatusSummary.RegistrationDate.Sort);
+    registrationStatusSummary.SetGroupCount(registrationStatusSummary.RegistrationDate.DistinctValues.Count, registrationStatusSummary.GroupCounter[1]);
+    registrationStatusSummary.GroupCounter[2] = 0; // Init group count index
+    foreach (var RegistrationDate in registrationStatusSummary.RegistrationDate.DistinctValues) { // Load records for this distinct value
+        registrationStatusSummary.RegistrationDate.GroupValue = RegistrationDate; // Set group value
+        registrationStatusSummary.RegistrationDate.GetDistinctRecords(registrationStatusSummary.str_Username.Records, registrationStatusSummary.RegistrationDate.GroupValue);
+        registrationStatusSummary.RegistrationDate.LevelBreak = true; // Set field level break
+        registrationStatusSummary.GroupCounter[2]++;
+        registrationStatusSummary.RegistrationDate.GetCnt(registrationStatusSummary.RegistrationDate.Records); // Get record count
+if (registrationStatusSummary.RegistrationDate.Visible && registrationStatusSummary.RegistrationDate.ShowGroupHeaderAsRow) {
+    // Render header row
+    registrationStatusSummary.RegistrationDate.SetDbValue(RegistrationDate); // Set current value for Registration Date
+    registrationStatusSummary.ResetAttributes();
+    registrationStatusSummary.RowType = RowType.Total;
+    registrationStatusSummary.RowTotalType = RowSummary.Group;
+    registrationStatusSummary.RowTotalSubType = RowTotal.Header;
+    registrationStatusSummary.RowGroupLevel = 2;
+    await registrationStatusSummary.RenderRow();
+    @:<tr @Html.Raw(registrationStatusSummary.RowAttributes)>
+if (registrationStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(registrationStatusSummary.str_Username.CellAttributes)></td>
+}
+if (registrationStatusSummary.RegistrationDate.Visible) {
+    registrationStatusSummary.RegistrationDate.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="RegistrationDate" @Html.Raw(registrationStatusSummary.RegistrationDate.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    registrationStatusSummary.RegistrationDate.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="RegistrationDate" colspan="@(registrationStatusSummary.GroupColumnCount + registrationStatusSummary.DetailColumnCount - 2)" @Html.Raw(registrationStatusSummary.RegistrationDate.CellAttributes)>
+        <span class="ew-summary-caption Registration_Status_RegistrationDate">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.RegistrationDate))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(registrationStatusSummary.RegistrationDate.ViewAttributes)>@Html.Raw(registrationStatusSummary.RegistrationDate.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(registrationStatusSummary.RegistrationDate.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    registrationStatusSummary.DrivingExperience.GetDistinctValues(registrationStatusSummary.RegistrationDate.Records, registrationStatusSummary.DrivingExperience.Sort);
+    registrationStatusSummary.SetGroupCount(registrationStatusSummary.DrivingExperience.DistinctValues.Count, registrationStatusSummary.GroupCounter[1], registrationStatusSummary.GroupCounter[2]);
+    registrationStatusSummary.GroupCounter[3] = 0; // Init group count index
+    foreach (var DrivingExperience in registrationStatusSummary.DrivingExperience.DistinctValues) { // Load records for this distinct value
+        registrationStatusSummary.DrivingExperience.GroupValue = DrivingExperience; // Set group value
+        registrationStatusSummary.DrivingExperience.GetDistinctRecords(registrationStatusSummary.RegistrationDate.Records, registrationStatusSummary.DrivingExperience.GroupValue);
+        registrationStatusSummary.DrivingExperience.LevelBreak = true; // Set field level break
+        registrationStatusSummary.GroupCounter[3]++;
+        registrationStatusSummary.DrivingExperience.GetCnt(registrationStatusSummary.DrivingExperience.Records); // Get record count
+        registrationStatusSummary.SetGroupCount(registrationStatusSummary.DrivingExperience.Count, registrationStatusSummary.GroupCounter[1], registrationStatusSummary.GroupCounter[2], registrationStatusSummary.GroupCounter[3]);
+if (registrationStatusSummary.DrivingExperience.Visible && registrationStatusSummary.DrivingExperience.ShowGroupHeaderAsRow) {
+    // Render header row
+    registrationStatusSummary.DrivingExperience.SetDbValue(DrivingExperience); // Set current value for Driving Experience
+    registrationStatusSummary.ResetAttributes();
+    registrationStatusSummary.RowType = RowType.Total;
+    registrationStatusSummary.RowTotalType = RowSummary.Group;
+    registrationStatusSummary.RowTotalSubType = RowTotal.Header;
+    registrationStatusSummary.RowGroupLevel = 3;
+    await registrationStatusSummary.RenderRow();
+    @:<tr @Html.Raw(registrationStatusSummary.RowAttributes)>
+if (registrationStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(registrationStatusSummary.str_Username.CellAttributes)></td>
+}
+if (registrationStatusSummary.RegistrationDate.Visible) {
+        <td data-field="RegistrationDate" @Html.Raw(registrationStatusSummary.RegistrationDate.CellAttributes)></td>
+}
+if (registrationStatusSummary.DrivingExperience.Visible) {
+    registrationStatusSummary.DrivingExperience.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="DrivingExperience" @Html.Raw(registrationStatusSummary.DrivingExperience.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    registrationStatusSummary.DrivingExperience.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="DrivingExperience" colspan="@(registrationStatusSummary.GroupColumnCount + registrationStatusSummary.DetailColumnCount - 3)" @Html.Raw(registrationStatusSummary.DrivingExperience.CellAttributes)>
+        <span class="ew-summary-caption Registration_Status_DrivingExperience">@Html.Raw(registrationStatusSummary.RenderFieldHeader(registrationStatusSummary.DrivingExperience))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(registrationStatusSummary.DrivingExperience.ViewAttributes)>@Html.Raw(registrationStatusSummary.DrivingExperience.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(registrationStatusSummary.DrivingExperience.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    registrationStatusSummary.RecordCount = 0; // Reset record count
+    foreach (var record in registrationStatusSummary.DrivingExperience.Records) {
+        registrationStatusSummary.RecordCount++;
+        registrationStatusSummary.RecordIndex++;
+        registrationStatusSummary.LoadRowValues(record);
+    }
+    } // End group level 2
+    } // End group level 1
+
+    // Next group
+    registrationStatusSummary.LoadGroupRowValues();
+
+    // Show header if page break
+    if (registrationStatusSummary.IsExport()) {
+        registrationStatusSummary.ShowHeader = (registrationStatusSummary.ExportPageBreakCount == 0) ? false : (registrationStatusSummary.GroupCount % registrationStatusSummary.ExportPageBreakCount == 0);
+    }
+
+    // Page Breaking server event
+    if (registrationStatusSummary.ShowHeader) {
+        bool pageShowHeader = registrationStatusSummary.ShowHeader;
+        string pageBreakHtml = registrationStatusSummary.PageBreakHtml;
+        registrationStatusSummary.PageBreaking(ref pageShowHeader, ref pageBreakHtml);
+        registrationStatusSummary.ShowHeader = pageShowHeader;
+        registrationStatusSummary.PageBreakHtml = pageBreakHtml;
+    }
+    registrationStatusSummary.GroupCount++;
+} @* End while *@
+@if (registrationStatusSummary.TotalGroups > 0) {
+@:</tbody>
+@:<tfoot>
+@:</tfoot>
+@:</table>
+if (!registrationStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!registrationStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+}
+@if (!registrationStatusSummary.IsExport("pdf")) {
+@:</main>
+<!-- /.report-summary -->
+}
+<!-- Summary report (end) -->
+}
+</div>
+<!-- /.ew-report -->
+@registrationStatusSummary.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!registrationStatusSummary.IsExport() && !registrationStatusSummary.DrillDown && !DashboardReport) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

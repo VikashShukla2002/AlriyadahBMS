@@ -1,0 +1,228 @@
+@if (dshbdAssessmentv1List.ModalGridAdd && dshbdAssessmentv1List.IsGridAdd || dshbdAssessmentv1List.ModalGridEdit && dshbdAssessmentv1List.IsGridEdit || dshbdAssessmentv1List.ModalMultiEdit && dshbdAssessmentv1List.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(dshbdAssessmentv1List.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { dshbdAssessmentv1: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(dshbdAssessmentv1List.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(dshbdAssessmentv1List.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(dshbdAssessmentv1List.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(dshbdAssessmentv1List.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(dshbdAssessmentv1List.IsAddOrEdit ? " ew-grid-add-edit" : "") @(dshbdAssessmentv1List.TableGridClass)">
+@if (!dshbdAssessmentv1List.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!dshbdAssessmentv1List.IsGridAdd && !(dshbdAssessmentv1List.IsGridEdit && dshbdAssessmentv1List.ModalGridEdit) && !dshbdAssessmentv1List.IsMultiEdit) {
+@Html.Raw(dshbdAssessmentv1List.Pager.Render())
+}
+<div class="ew-list-other-options">
+@dshbdAssessmentv1List.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(dshbdAssessmentv1List.FormName)" id="@(dshbdAssessmentv1List.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(dshbdAssessmentv1List.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (dshbdAssessmentv1List.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_dshbdAssessmentv1" class="card-body ew-grid-middle-panel @(dshbdAssessmentv1List.TableContainerClass)" style="@(dshbdAssessmentv1List.TableContainerStyle)">
+@if (dshbdAssessmentv1List.TotalRecords > 0 || dshbdAssessmentv1List.IsGridEdit || dshbdAssessmentv1List.IsMultiEdit) {
+<table id="tbl_dshbdAssessmentv1list" class="@(dshbdAssessmentv1List.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    dshbdAssessmentv1List.RowType = RowType.Header;
+
+    // Render list options
+    await dshbdAssessmentv1List.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@dshbdAssessmentv1List.ListOptions.RenderHeader("left")
+@if (dshbdAssessmentv1List.str_Full_Name_Hdr.Visible) { // dshbdAssessmentv1List.str_Full_Name_Hdr.Visible (begin)
+        <th data-name="str_Full_Name_Hdr" class="@(dshbdAssessmentv1List.str_Full_Name_Hdr.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_str_Full_Name_Hdr" class="dshbdAssessmentv1_str_Full_Name_Hdr">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.str_Full_Name_Hdr))</div></th>
+} @* dshbdAssessmentv1List.str_Full_Name_Hdr.Visible (end) *@
+@if (dshbdAssessmentv1List.AssessmentID.Visible) { // dshbdAssessmentv1List.AssessmentID.Visible (begin)
+        <th data-name="AssessmentID" class="@(dshbdAssessmentv1List.AssessmentID.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_AssessmentID" class="dshbdAssessmentv1_AssessmentID">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.AssessmentID))</div></th>
+} @* dshbdAssessmentv1List.AssessmentID.Visible (end) *@
+@if (dshbdAssessmentv1List.NationalID.Visible) { // dshbdAssessmentv1List.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(dshbdAssessmentv1List.NationalID.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_NationalID" class="dshbdAssessmentv1_NationalID">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.NationalID))</div></th>
+} @* dshbdAssessmentv1List.NationalID.Visible (end) *@
+@if (dshbdAssessmentv1List.AssessmentDate.Visible) { // dshbdAssessmentv1List.AssessmentDate.Visible (begin)
+        <th data-name="AssessmentDate" class="@(dshbdAssessmentv1List.AssessmentDate.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_AssessmentDate" class="dshbdAssessmentv1_AssessmentDate">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.AssessmentDate))</div></th>
+} @* dshbdAssessmentv1List.AssessmentDate.Visible (end) *@
+@if (dshbdAssessmentv1List.AssessmentDone.Visible) { // dshbdAssessmentv1List.AssessmentDone.Visible (begin)
+        <th data-name="AssessmentDone" class="@(dshbdAssessmentv1List.AssessmentDone.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_AssessmentDone" class="dshbdAssessmentv1_AssessmentDone">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.AssessmentDone))</div></th>
+} @* dshbdAssessmentv1List.AssessmentDone.Visible (end) *@
+@if (dshbdAssessmentv1List.str_Username.Visible) { // dshbdAssessmentv1List.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(dshbdAssessmentv1List.str_Username.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_str_Username" class="dshbdAssessmentv1_str_Username">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.str_Username))</div></th>
+} @* dshbdAssessmentv1List.str_Username.Visible (end) *@
+@if (dshbdAssessmentv1List.AbsherApptNbr.Visible) { // dshbdAssessmentv1List.AbsherApptNbr.Visible (begin)
+        <th data-name="AbsherApptNbr" class="@(dshbdAssessmentv1List.AbsherApptNbr.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_AbsherApptNbr" class="dshbdAssessmentv1_AbsherApptNbr">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.AbsherApptNbr))</div></th>
+} @* dshbdAssessmentv1List.AbsherApptNbr.Visible (end) *@
+@if (dshbdAssessmentv1List.DLType.Visible) { // dshbdAssessmentv1List.DLType.Visible (begin)
+        <th data-name="DLType" class="@(dshbdAssessmentv1List.DLType.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_DLType" class="dshbdAssessmentv1_DLType">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.DLType))</div></th>
+} @* dshbdAssessmentv1List.DLType.Visible (end) *@
+@if (dshbdAssessmentv1List.AssessmentScore.Visible) { // dshbdAssessmentv1List.AssessmentScore.Visible (begin)
+        <th data-name="AssessmentScore" class="@(dshbdAssessmentv1List.AssessmentScore.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_AssessmentScore" class="dshbdAssessmentv1_AssessmentScore">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.AssessmentScore))</div></th>
+} @* dshbdAssessmentv1List.AssessmentScore.Visible (end) *@
+@if (dshbdAssessmentv1List.Price.Visible) { // dshbdAssessmentv1List.Price.Visible (begin)
+        <th data-name="Price" class="@(dshbdAssessmentv1List.Price.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_Price" class="dshbdAssessmentv1_Price">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.Price))</div></th>
+} @* dshbdAssessmentv1List.Price.Visible (end) *@
+@if (dshbdAssessmentv1List.int_Student_ID.Visible) { // dshbdAssessmentv1List.int_Student_ID.Visible (begin)
+        <th data-name="int_Student_ID" class="@(dshbdAssessmentv1List.int_Student_ID.HeaderCellClass)"><div id="elh_dshbdAssessmentv1_int_Student_ID" class="dshbdAssessmentv1_int_Student_ID">@Html.Raw(dshbdAssessmentv1List.RenderFieldHeader(dshbdAssessmentv1List.int_Student_ID))</div></th>
+} @* dshbdAssessmentv1List.int_Student_ID.Visible (end) *@
+@* Render list options (header, right) *@
+@dshbdAssessmentv1List.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(dshbdAssessmentv1List.PageNumber)">
+@{
+    await dshbdAssessmentv1List.SetupGrid();
+    bool eof = dshbdAssessmentv1List.Recordset == null; // DN
+}
+@while (dshbdAssessmentv1List.RecordCount < dshbdAssessmentv1List.StopRecord || SameString(dshbdAssessmentv1List.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(dshbdAssessmentv1List.RowIndex, "$rowindex$") &&
+        (!dshbdAssessmentv1List.IsGridAdd || dshbdAssessmentv1List.CurrentMode == "copy") &&
+        (!((dshbdAssessmentv1List.IsCopy || dshbdAssessmentv1List.IsAdd) && dshbdAssessmentv1List.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await dshbdAssessmentv1List.Recordset.ReadAsync();
+    dshbdAssessmentv1List.RecordCount++;
+    if (dshbdAssessmentv1List.RecordCount >= dshbdAssessmentv1List.StartRecord) {
+        await dshbdAssessmentv1List.SetupRow();
+    <tr @Html.Raw(dshbdAssessmentv1List.RowAttributes)>
+    @* Render list options (body, left) *@
+    @dshbdAssessmentv1List.ListOptions.RenderBody("left", dshbdAssessmentv1List.RowCount)
+    @if (dshbdAssessmentv1List.str_Full_Name_Hdr.Visible) { // dshbdAssessmentv1List.str_Full_Name_Hdr.Visible (begin)
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(dshbdAssessmentv1List.str_Full_Name_Hdr.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_str_Full_Name_Hdr" class="el_dshbdAssessmentv1_str_Full_Name_Hdr">
+<span @Html.Raw(dshbdAssessmentv1List.str_Full_Name_Hdr.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.str_Full_Name_Hdr.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.str_Full_Name_Hdr.Visible (end) *@
+    @if (dshbdAssessmentv1List.AssessmentID.Visible) { // dshbdAssessmentv1List.AssessmentID.Visible (begin)
+        <td data-name="AssessmentID" @Html.Raw(dshbdAssessmentv1List.AssessmentID.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_AssessmentID" class="el_dshbdAssessmentv1_AssessmentID">
+<span @Html.Raw(dshbdAssessmentv1List.AssessmentID.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.AssessmentID.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.AssessmentID.Visible (end) *@
+    @if (dshbdAssessmentv1List.NationalID.Visible) { // dshbdAssessmentv1List.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(dshbdAssessmentv1List.NationalID.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_NationalID" class="el_dshbdAssessmentv1_NationalID">
+<span @Html.Raw(dshbdAssessmentv1List.NationalID.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.NationalID.Visible (end) *@
+    @if (dshbdAssessmentv1List.AssessmentDate.Visible) { // dshbdAssessmentv1List.AssessmentDate.Visible (begin)
+        <td data-name="AssessmentDate" @Html.Raw(dshbdAssessmentv1List.AssessmentDate.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_AssessmentDate" class="el_dshbdAssessmentv1_AssessmentDate">
+<span @Html.Raw(dshbdAssessmentv1List.AssessmentDate.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.AssessmentDate.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.AssessmentDate.Visible (end) *@
+    @if (dshbdAssessmentv1List.AssessmentDone.Visible) { // dshbdAssessmentv1List.AssessmentDone.Visible (begin)
+        <td data-name="AssessmentDone" @Html.Raw(dshbdAssessmentv1List.AssessmentDone.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_AssessmentDone" class="el_dshbdAssessmentv1_AssessmentDone">
+<span @Html.Raw(dshbdAssessmentv1List.AssessmentDone.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.AssessmentDone.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.AssessmentDone.Visible (end) *@
+    @if (dshbdAssessmentv1List.str_Username.Visible) { // dshbdAssessmentv1List.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(dshbdAssessmentv1List.str_Username.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_str_Username" class="el_dshbdAssessmentv1_str_Username">
+<span @Html.Raw(dshbdAssessmentv1List.str_Username.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.str_Username.Visible (end) *@
+    @if (dshbdAssessmentv1List.AbsherApptNbr.Visible) { // dshbdAssessmentv1List.AbsherApptNbr.Visible (begin)
+        <td data-name="AbsherApptNbr" @Html.Raw(dshbdAssessmentv1List.AbsherApptNbr.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_AbsherApptNbr" class="el_dshbdAssessmentv1_AbsherApptNbr">
+<span @Html.Raw(dshbdAssessmentv1List.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.AbsherApptNbr.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.AbsherApptNbr.Visible (end) *@
+    @if (dshbdAssessmentv1List.DLType.Visible) { // dshbdAssessmentv1List.DLType.Visible (begin)
+        <td data-name="DLType" @Html.Raw(dshbdAssessmentv1List.DLType.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_DLType" class="el_dshbdAssessmentv1_DLType">
+<span @Html.Raw(dshbdAssessmentv1List.DLType.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.DLType.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.DLType.Visible (end) *@
+    @if (dshbdAssessmentv1List.AssessmentScore.Visible) { // dshbdAssessmentv1List.AssessmentScore.Visible (begin)
+        <td data-name="AssessmentScore" @Html.Raw(dshbdAssessmentv1List.AssessmentScore.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_AssessmentScore" class="el_dshbdAssessmentv1_AssessmentScore">
+<span @Html.Raw(dshbdAssessmentv1List.AssessmentScore.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.AssessmentScore.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.AssessmentScore.Visible (end) *@
+    @if (dshbdAssessmentv1List.Price.Visible) { // dshbdAssessmentv1List.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(dshbdAssessmentv1List.Price.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_Price" class="el_dshbdAssessmentv1_Price">
+<span @Html.Raw(dshbdAssessmentv1List.Price.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.Price.Visible (end) *@
+    @if (dshbdAssessmentv1List.int_Student_ID.Visible) { // dshbdAssessmentv1List.int_Student_ID.Visible (begin)
+        <td data-name="int_Student_ID" @Html.Raw(dshbdAssessmentv1List.int_Student_ID.CellAttributes)>
+<span id="el@(dshbdAssessmentv1List.RowIndex == "$rowindex$" ? "$rowindex$" : dshbdAssessmentv1List.RowCount)_dshbdAssessmentv1_int_Student_ID" class="el_dshbdAssessmentv1_int_Student_ID">
+<span @Html.Raw(dshbdAssessmentv1List.int_Student_ID.ViewAttributes)>
+@Html.Raw(dshbdAssessmentv1List.int_Student_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* dshbdAssessmentv1List.int_Student_ID.Visible (end) *@
+    @* Render list options (body, right) *@
+    @dshbdAssessmentv1List.ListOptions.RenderBody("right", dshbdAssessmentv1List.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(dshbdAssessmentv1List.RowIndex, "$rowindex$"))
+        dshbdAssessmentv1List.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((dshbdAssessmentv1List.IsCopy || dshbdAssessmentv1List.IsAdd) && dshbdAssessmentv1List.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        dshbdAssessmentv1List.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(dshbdAssessmentv1List.CurrentAction) && !dshbdAssessmentv1List.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ dshbdAssessmentv1List.CloseRecordset(); }
+</div><!-- /.ew-grid -->

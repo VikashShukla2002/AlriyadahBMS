@@ -1,0 +1,392 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (equipmentEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!equipmentEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@equipmentEdit.ShowPageHeader()
+@equipmentEdit.ShowMessages()
+<main class="edit">
+<form name="fEquipmentedit" id="fEquipmentedit" class="@(equipmentEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(equipmentEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Equipment: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var fEquipmentedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fEquipmentedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["int_Location", [fields.int_Location.visible && fields.int_Location.required ? ew.Validators.required(fields.int_Location.caption) : null], fields.int_Location.isInvalid],
+            ["Equipment_Type_ID", [fields.Equipment_Type_ID.visible && fields.Equipment_Type_ID.required ? ew.Validators.required(fields.Equipment_Type_ID.caption) : null], fields.Equipment_Type_ID.isInvalid],
+            ["Manufacturer_Name", [fields.Manufacturer_Name.visible && fields.Manufacturer_Name.required ? ew.Validators.required(fields.Manufacturer_Name.caption) : null], fields.Manufacturer_Name.isInvalid],
+            ["Serial_VIN_Number", [fields.Serial_VIN_Number.visible && fields.Serial_VIN_Number.required ? ew.Validators.required(fields.Serial_VIN_Number.caption) : null], fields.Serial_VIN_Number.isInvalid],
+            ["Retailer_Name", [fields.Retailer_Name.visible && fields.Retailer_Name.required ? ew.Validators.required(fields.Retailer_Name.caption) : null], fields.Retailer_Name.isInvalid],
+            ["DatePurchased", [fields.DatePurchased.visible && fields.DatePurchased.required ? ew.Validators.required(fields.DatePurchased.caption) : null, ew.Validators.datetime(fields.DatePurchased.clientFormatPattern)], fields.DatePurchased.isInvalid],
+            ["ServiceInception_Date", [fields.ServiceInception_Date.visible && fields.ServiceInception_Date.required ? ew.Validators.required(fields.ServiceInception_Date.caption) : null, ew.Validators.datetime(fields.ServiceInception_Date.clientFormatPattern)], fields.ServiceInception_Date.isInvalid],
+            ["UsefulLife", [fields.UsefulLife.visible && fields.UsefulLife.required ? ew.Validators.required(fields.UsefulLife.caption) : null, ew.Validators.integer], fields.UsefulLife.isInvalid],
+            ["Price", [fields.Price.visible && fields.Price.required ? ew.Validators.required(fields.Price.caption) : null, ew.Validators.float], fields.Price.isInvalid],
+            ["VAT", [fields.VAT.visible && fields.VAT.required ? ew.Validators.required(fields.VAT.caption) : null, ew.Validators.float], fields.VAT.isInvalid],
+            ["Creation_Date", [fields.Creation_Date.visible && fields.Creation_Date.required ? ew.Validators.required(fields.Creation_Date.caption) : null], fields.Creation_Date.isInvalid],
+            ["Modified_Date", [fields.Modified_Date.visible && fields.Modified_Date.required ? ew.Validators.required(fields.Modified_Date.caption) : null], fields.Modified_Date.isInvalid],
+            ["Created_by", [fields.Created_by.visible && fields.Created_by.required ? ew.Validators.required(fields.Created_by.caption) : null], fields.Created_by.isInvalid],
+            ["Modified_by", [fields.Modified_by.visible && fields.Modified_by.required ? ew.Validators.required(fields.Modified_by.caption) : null], fields.Modified_by.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_Location": @Html.Raw(equipmentEdit.int_Location.ToClientList(equipmentEdit)),
+            "Equipment_Type_ID": @Html.Raw(equipmentEdit.Equipment_Type_ID.ToClientList(equipmentEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="modal" value="@ConvertToInt(equipmentEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(equipmentEdit.OldKeyName)" value="@Html.Raw(equipmentEdit.OldKey)">
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(equipmentEdit.MultiPages.ContainerClasses)" id="pages_equipmentEdit"><!-- multi-page tabs -->
+    <ul class="@(equipmentEdit.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(equipmentEdit.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_Equipment1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_Equipment1" aria-selected="@(ConvertToJson(equipmentEdit.MultiPages.IsActive(1)))">@Html.Raw(equipmentEdit.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(equipmentEdit.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_Equipment2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_Equipment2" aria-selected="@(ConvertToJson(equipmentEdit.MultiPages.IsActive(2)))">@Html.Raw(equipmentEdit.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(equipmentEdit.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_Equipment3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_Equipment3" aria-selected="@(ConvertToJson(equipmentEdit.MultiPages.IsActive(3)))">@Html.Raw(equipmentEdit.PageCaption(3))</button></li>
+    </ul>
+    <div class="@(equipmentEdit.MultiPages.TabContentClasses)"><!-- multi-page tabs .tab-content -->
+        <div class="@(equipmentEdit.MultiPages.TabPaneClasses(1))" id="tab_Equipment1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (equipmentEdit.int_Location.Visible) { // equipmentEdit.int_Location.Visible (begin)
+    <div id="r_int_Location" @Html.Raw(equipmentEdit.int_Location.RowAttributes)>
+        <label id="elh_Equipment_int_Location" for="x_int_Location" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.int_Location.Caption)@Html.Raw(equipmentEdit.int_Location.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.int_Location.CellAttributes)>
+<span id="el_Equipment_int_Location">
+    <select
+        id="x_int_Location"
+        name="x_int_Location"
+        class="form-select ew-select@(equipmentEdit.int_Location.IsInvalidClass)"
+        data-select2-id="fEquipmentedit_x_int_Location"
+        data-table="Equipment"
+        data-field="x_int_Location"
+        data-page="1"
+        data-value-separator="@(equipmentEdit.int_Location.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(equipmentEdit.int_Location.PlaceHolder))"
+        @Html.Raw(equipmentEdit.int_Location.EditAttributes)>
+        @(equipmentEdit.int_Location.SelectOptionListHtml("x_int_Location"))
+    </select>
+    @Html.Raw(equipmentEdit.int_Location.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(equipmentEdit.int_Location.GetErrorMessage())</div>
+@Html.Raw(equipmentEdit.int_Location.Lookup.GetParamTag(equipmentEdit, "p_x_int_Location"))
+<script>
+loadjs.ready("fEquipmentedit", function() {
+    var options = { name: "x_int_Location", selectId: "fEquipmentedit_x_int_Location" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fEquipmentedit.lists.int_Location?.lookupOptions.length) {
+        options.data = { id: "x_int_Location", form: "fEquipmentedit" };
+    } else {
+        options.ajax = { id: "x_int_Location", form: "fEquipmentedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Equipment.fields.int_Location.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.int_Location.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(equipmentEdit.MultiPages.TabPaneClasses(2))" id="tab_Equipment2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (equipmentEdit.Equipment_Type_ID.Visible) { // equipmentEdit.Equipment_Type_ID.Visible (begin)
+    <div id="r_Equipment_Type_ID" @Html.Raw(equipmentEdit.Equipment_Type_ID.RowAttributes)>
+        <label id="elh_Equipment_Equipment_Type_ID" for="x_Equipment_Type_ID" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.Equipment_Type_ID.Caption)@Html.Raw(equipmentEdit.Equipment_Type_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.Equipment_Type_ID.CellAttributes)>
+<span id="el_Equipment_Equipment_Type_ID">
+    <select
+        id="x_Equipment_Type_ID"
+        name="x_Equipment_Type_ID"
+        class="form-select ew-select@(equipmentEdit.Equipment_Type_ID.IsInvalidClass)"
+        data-select2-id="fEquipmentedit_x_Equipment_Type_ID"
+        data-table="Equipment"
+        data-field="x_Equipment_Type_ID"
+        data-page="2"
+        data-value-separator="@(equipmentEdit.Equipment_Type_ID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(equipmentEdit.Equipment_Type_ID.PlaceHolder))"
+        @Html.Raw(equipmentEdit.Equipment_Type_ID.EditAttributes)>
+        @(equipmentEdit.Equipment_Type_ID.SelectOptionListHtml("x_Equipment_Type_ID"))
+    </select>
+    @Html.Raw(equipmentEdit.Equipment_Type_ID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(equipmentEdit.Equipment_Type_ID.GetErrorMessage())</div>
+<script>
+loadjs.ready("fEquipmentedit", function() {
+    var options = { name: "x_Equipment_Type_ID", selectId: "fEquipmentedit_x_Equipment_Type_ID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fEquipmentedit.lists.Equipment_Type_ID?.lookupOptions.length) {
+        options.data = { id: "x_Equipment_Type_ID", form: "fEquipmentedit" };
+    } else {
+        options.ajax = { id: "x_Equipment_Type_ID", form: "fEquipmentedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.Equipment.fields.Equipment_Type_ID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.Equipment_Type_ID.Visible (end) *@
+@if (equipmentEdit.Manufacturer_Name.Visible) { // equipmentEdit.Manufacturer_Name.Visible (begin)
+    <div id="r_Manufacturer_Name" @Html.Raw(equipmentEdit.Manufacturer_Name.RowAttributes)>
+        <label id="elh_Equipment_Manufacturer_Name" for="x_Manufacturer_Name" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.Manufacturer_Name.Caption)@Html.Raw(equipmentEdit.Manufacturer_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.Manufacturer_Name.CellAttributes)>
+<span id="el_Equipment_Manufacturer_Name">
+<input type="@(equipmentEdit.Manufacturer_Name.InputTextType)" name="x_Manufacturer_Name" id="x_Manufacturer_Name" data-table="Equipment" data-field="x_Manufacturer_Name" value="@Html.Raw(equipmentEdit.Manufacturer_Name.EditValue)" data-page="2" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.Manufacturer_Name.PlaceHolder))" data-format-pattern="@(equipmentEdit.Manufacturer_Name.FormatPattern)"@Html.Raw(equipmentEdit.Manufacturer_Name.EditAttributes) aria-describedby="x_Manufacturer_Name_help">
+@Html.Raw(equipmentEdit.Manufacturer_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.Manufacturer_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.Manufacturer_Name.Visible (end) *@
+@if (equipmentEdit.Serial_VIN_Number.Visible) { // equipmentEdit.Serial_VIN_Number.Visible (begin)
+    <div id="r_Serial_VIN_Number" @Html.Raw(equipmentEdit.Serial_VIN_Number.RowAttributes)>
+        <label id="elh_Equipment_Serial_VIN_Number" for="x_Serial_VIN_Number" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.Serial_VIN_Number.Caption)@Html.Raw(equipmentEdit.Serial_VIN_Number.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.Serial_VIN_Number.CellAttributes)>
+<span id="el_Equipment_Serial_VIN_Number">
+<input type="@(equipmentEdit.Serial_VIN_Number.InputTextType)" name="x_Serial_VIN_Number" id="x_Serial_VIN_Number" data-table="Equipment" data-field="x_Serial_VIN_Number" value="@Html.Raw(equipmentEdit.Serial_VIN_Number.EditValue)" data-page="2" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.Serial_VIN_Number.PlaceHolder))" data-format-pattern="@(equipmentEdit.Serial_VIN_Number.FormatPattern)"@Html.Raw(equipmentEdit.Serial_VIN_Number.EditAttributes) aria-describedby="x_Serial_VIN_Number_help">
+@Html.Raw(equipmentEdit.Serial_VIN_Number.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.Serial_VIN_Number.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.Serial_VIN_Number.Visible (end) *@
+@if (equipmentEdit.Retailer_Name.Visible) { // equipmentEdit.Retailer_Name.Visible (begin)
+    <div id="r_Retailer_Name" @Html.Raw(equipmentEdit.Retailer_Name.RowAttributes)>
+        <label id="elh_Equipment_Retailer_Name" for="x_Retailer_Name" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.Retailer_Name.Caption)@Html.Raw(equipmentEdit.Retailer_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.Retailer_Name.CellAttributes)>
+<span id="el_Equipment_Retailer_Name">
+<input type="@(equipmentEdit.Retailer_Name.InputTextType)" name="x_Retailer_Name" id="x_Retailer_Name" data-table="Equipment" data-field="x_Retailer_Name" value="@Html.Raw(equipmentEdit.Retailer_Name.EditValue)" data-page="2" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.Retailer_Name.PlaceHolder))" data-format-pattern="@(equipmentEdit.Retailer_Name.FormatPattern)"@Html.Raw(equipmentEdit.Retailer_Name.EditAttributes) aria-describedby="x_Retailer_Name_help">
+@Html.Raw(equipmentEdit.Retailer_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.Retailer_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.Retailer_Name.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(equipmentEdit.MultiPages.TabPaneClasses(3))" id="tab_Equipment3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (equipmentEdit.DatePurchased.Visible) { // equipmentEdit.DatePurchased.Visible (begin)
+    <div id="r_DatePurchased" @Html.Raw(equipmentEdit.DatePurchased.RowAttributes)>
+        <label id="elh_Equipment_DatePurchased" for="x_DatePurchased" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.DatePurchased.Caption)@Html.Raw(equipmentEdit.DatePurchased.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.DatePurchased.CellAttributes)>
+<span id="el_Equipment_DatePurchased">
+<input type="@(equipmentEdit.DatePurchased.InputTextType)" name="x_DatePurchased" id="x_DatePurchased" data-table="Equipment" data-field="x_DatePurchased" value="@Html.Raw(equipmentEdit.DatePurchased.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.DatePurchased.PlaceHolder))" data-format-pattern="@(equipmentEdit.DatePurchased.FormatPattern)"@Html.Raw(equipmentEdit.DatePurchased.EditAttributes) aria-describedby="x_DatePurchased_help">
+@Html.Raw(equipmentEdit.DatePurchased.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.DatePurchased.GetErrorMessage())</div>
+@if (!equipmentEdit.DatePurchased.ReadOnly && !equipmentEdit.DatePurchased.Disabled && !equipmentEdit.DatePurchased.EditAttrs.Is("readonly") && !equipmentEdit.DatePurchased.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["fEquipmentedit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("fEquipmentedit", "x_DatePurchased", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.DatePurchased.Visible (end) *@
+@if (equipmentEdit.ServiceInception_Date.Visible) { // equipmentEdit.ServiceInception_Date.Visible (begin)
+    <div id="r_ServiceInception_Date" @Html.Raw(equipmentEdit.ServiceInception_Date.RowAttributes)>
+        <label id="elh_Equipment_ServiceInception_Date" for="x_ServiceInception_Date" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.ServiceInception_Date.Caption)@Html.Raw(equipmentEdit.ServiceInception_Date.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.ServiceInception_Date.CellAttributes)>
+<span id="el_Equipment_ServiceInception_Date">
+<input type="@(equipmentEdit.ServiceInception_Date.InputTextType)" name="x_ServiceInception_Date" id="x_ServiceInception_Date" data-table="Equipment" data-field="x_ServiceInception_Date" value="@Html.Raw(equipmentEdit.ServiceInception_Date.EditValue)" data-page="3" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.ServiceInception_Date.PlaceHolder))" data-format-pattern="@(equipmentEdit.ServiceInception_Date.FormatPattern)"@Html.Raw(equipmentEdit.ServiceInception_Date.EditAttributes) aria-describedby="x_ServiceInception_Date_help">
+@Html.Raw(equipmentEdit.ServiceInception_Date.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.ServiceInception_Date.GetErrorMessage())</div>
+@if (!equipmentEdit.ServiceInception_Date.ReadOnly && !equipmentEdit.ServiceInception_Date.Disabled && !equipmentEdit.ServiceInception_Date.EditAttrs.Is("readonly") && !equipmentEdit.ServiceInception_Date.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["fEquipmentedit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("fEquipmentedit", "x_ServiceInception_Date", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.ServiceInception_Date.Visible (end) *@
+@if (equipmentEdit.UsefulLife.Visible) { // equipmentEdit.UsefulLife.Visible (begin)
+    <div id="r_UsefulLife" @Html.Raw(equipmentEdit.UsefulLife.RowAttributes)>
+        <label id="elh_Equipment_UsefulLife" for="x_UsefulLife" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.UsefulLife.Caption)@Html.Raw(equipmentEdit.UsefulLife.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.UsefulLife.CellAttributes)>
+<span id="el_Equipment_UsefulLife">
+<input type="@(equipmentEdit.UsefulLife.InputTextType)" name="x_UsefulLife" id="x_UsefulLife" data-table="Equipment" data-field="x_UsefulLife" value="@Html.Raw(equipmentEdit.UsefulLife.EditValue)" data-page="3" size="30" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.UsefulLife.PlaceHolder))" data-format-pattern="@(equipmentEdit.UsefulLife.FormatPattern)"@Html.Raw(equipmentEdit.UsefulLife.EditAttributes) aria-describedby="x_UsefulLife_help">
+@Html.Raw(equipmentEdit.UsefulLife.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.UsefulLife.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.UsefulLife.Visible (end) *@
+@if (equipmentEdit.Price.Visible) { // equipmentEdit.Price.Visible (begin)
+    <div id="r_Price" @Html.Raw(equipmentEdit.Price.RowAttributes)>
+        <label id="elh_Equipment_Price" for="x_Price" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.Price.Caption)@Html.Raw(equipmentEdit.Price.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.Price.CellAttributes)>
+<span id="el_Equipment_Price">
+<input type="@(equipmentEdit.Price.InputTextType)" name="x_Price" id="x_Price" data-table="Equipment" data-field="x_Price" value="@Html.Raw(equipmentEdit.Price.EditValue)" data-page="3" size="30" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.Price.PlaceHolder))" data-format-pattern="@(equipmentEdit.Price.FormatPattern)"@Html.Raw(equipmentEdit.Price.EditAttributes) aria-describedby="x_Price_help">
+@Html.Raw(equipmentEdit.Price.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.Price.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.Price.Visible (end) *@
+@if (equipmentEdit.VAT.Visible) { // equipmentEdit.VAT.Visible (begin)
+    <div id="r_VAT" @Html.Raw(equipmentEdit.VAT.RowAttributes)>
+        <label id="elh_Equipment_VAT" for="x_VAT" class="@(equipmentEdit.LeftColumnClass)">@Html.Raw(equipmentEdit.VAT.Caption)@Html.Raw(equipmentEdit.VAT.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(equipmentEdit.RightColumnClass)"><div @Html.Raw(equipmentEdit.VAT.CellAttributes)>
+<span id="el_Equipment_VAT">
+<input type="@(equipmentEdit.VAT.InputTextType)" name="x_VAT" id="x_VAT" data-table="Equipment" data-field="x_VAT" value="@Html.Raw(equipmentEdit.VAT.EditValue)" data-page="3" size="30" placeholder="@Html.Raw(HtmlEncode(equipmentEdit.VAT.PlaceHolder))" data-format-pattern="@(equipmentEdit.VAT.FormatPattern)"@Html.Raw(equipmentEdit.VAT.EditAttributes) aria-describedby="x_VAT_help">
+@Html.Raw(equipmentEdit.VAT.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(equipmentEdit.VAT.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* equipmentEdit.VAT.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+    <input type="hidden" data-table="Equipment" data-field="x_Equipment_ID" data-hidden="1" name="x_Equipment_ID" id="x_Equipment_ID" value="@Html.Raw(HtmlEncode(equipmentEdit.Equipment_ID.CurrentValue))">
+@{ equipmentEdit.CloseRecordset(); }
+@Html.Raw(equipmentEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(equipmentEdit.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="fEquipmentedit">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="fEquipmentedit" data-href="@AppPath(equipmentEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(equipmentEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@equipmentEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("Equipment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

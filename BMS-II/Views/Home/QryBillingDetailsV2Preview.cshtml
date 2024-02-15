@@ -1,0 +1,243 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (qryBillingDetailsV2Preview.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+ew.deepAssign(ew.vars, { tables: { qryBillingDetails_v2: @Html.Raw(ConvertToJson(qryBillingDetailsV2Preview.ToClientVar())) } });
+</script>
+@qryBillingDetailsV2Preview.ShowPageHeader()
+@if (qryBillingDetailsV2Preview.TotalRecords > 0) {
+<div class="card ew-grid @(qryBillingDetailsV2Preview.TableGridClass)"><!-- .card -->
+<div class="card-header ew-grid-upper-panel ew-preview-upper-panel"><!-- .card-header -->
+@Html.Raw(qryBillingDetailsV2Preview.Pager.Render())
+<div class="ew-preview-other-options">
+@qryBillingDetailsV2Preview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card-header -->
+<div class="card-body ew-preview-middle-panel ew-grid-middle-panel @(qryBillingDetailsV2Preview.TableContainerClass)" style="@(qryBillingDetailsV2Preview.TableContainerStyle)"><!-- .card-body -->
+<table class="@(qryBillingDetailsV2Preview.TableClass)"><!-- .table -->
+    <thead><!-- Table header -->
+        <tr class="ew-table-header">
+@{
+    await qryBillingDetailsV2Preview.RenderListOptions(); // Render list options
+}
+@qryBillingDetailsV2Preview.ListOptions.RenderHeader("left")
+@if (qryBillingDetailsV2Preview.Payment_Number.Visible) { // qryBillingDetailsV2Preview.Payment_Number.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.Payment_Number))) {
+        <th class="@qryBillingDetailsV2Preview.Payment_Number.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.Payment_Number.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.Payment_Number.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.Payment_Number.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.Payment_Number.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.Payment_Number.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.Payment_Number.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.Payment_Number.Visible (end) *@
+@if (qryBillingDetailsV2Preview.NationalID.Visible) { // qryBillingDetailsV2Preview.NationalID.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.NationalID))) {
+        <th class="@qryBillingDetailsV2Preview.NationalID.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.NationalID.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.NationalID.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.NationalID.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.NationalID.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.NationalID.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.NationalID.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.NationalID.Visible (end) *@
+@if (qryBillingDetailsV2Preview.date_Paid.Visible) { // qryBillingDetailsV2Preview.date_Paid.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.date_Paid))) {
+        <th class="@qryBillingDetailsV2Preview.date_Paid.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.date_Paid.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.date_Paid.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.date_Paid.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.date_Paid.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.date_Paid.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.date_Paid.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.date_Paid.Visible (end) *@
+@if (qryBillingDetailsV2Preview.Amount_Paid.Visible) { // qryBillingDetailsV2Preview.Amount_Paid.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.Amount_Paid))) {
+        <th class="@qryBillingDetailsV2Preview.Amount_Paid.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.Amount_Paid.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.Amount_Paid.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.Amount_Paid.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.Amount_Paid.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.Amount_Paid.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.Amount_Paid.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.Amount_Paid.Visible (end) *@
+@if (qryBillingDetailsV2Preview.running_payments.Visible) { // qryBillingDetailsV2Preview.running_payments.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.running_payments))) {
+        <th class="@qryBillingDetailsV2Preview.running_payments.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.running_payments.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.running_payments.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.running_payments.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.running_payments.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.running_payments.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.running_payments.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.running_payments.Visible (end) *@
+@if (qryBillingDetailsV2Preview.running_balance.Visible) { // qryBillingDetailsV2Preview.running_balance.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.running_balance))) {
+        <th class="@qryBillingDetailsV2Preview.running_balance.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.running_balance.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.running_balance.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.running_balance.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.running_balance.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.running_balance.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.running_balance.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.running_balance.Visible (end) *@
+@if (qryBillingDetailsV2Preview.str_ApprovalCode.Visible) { // qryBillingDetailsV2Preview.str_ApprovalCode.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.str_ApprovalCode))) {
+        <th class="@qryBillingDetailsV2Preview.str_ApprovalCode.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.str_ApprovalCode.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.str_ApprovalCode.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.str_ApprovalCode.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.str_ApprovalCode.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.str_ApprovalCode.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.str_ApprovalCode.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.str_ApprovalCode.Visible (end) *@
+@if (qryBillingDetailsV2Preview.Package_Name.Visible) { // qryBillingDetailsV2Preview.Package_Name.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.Package_Name))) {
+        <th class="@qryBillingDetailsV2Preview.Package_Name.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.Package_Name.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.Package_Name.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.Package_Name.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.Package_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.Package_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.Package_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.Package_Name.Visible (end) *@
+@if (qryBillingDetailsV2Preview.int_Package_ID.Visible) { // qryBillingDetailsV2Preview.int_Package_ID.Visible (begin)
+    if (Empty(qryBillingDetailsV2Preview.SortUrl(qryBillingDetailsV2Preview.int_Package_ID))) {
+        <th class="@qryBillingDetailsV2Preview.int_Package_ID.HeaderCellClass">@Html.Raw(qryBillingDetailsV2Preview.int_Package_ID.Caption)</th>
+    } else {
+        <th class="@qryBillingDetailsV2Preview.int_Package_ID.HeaderCellClass"><div role="button" data-table="qryBillingDetails_v2" data-sort="@qryBillingDetailsV2Preview.int_Package_ID.Name" data-sort-type="2" data-sort-order="@qryBillingDetailsV2Preview.int_Package_ID.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(qryBillingDetailsV2Preview.int_Package_ID.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(qryBillingDetailsV2Preview.int_Package_ID.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* qryBillingDetailsV2Preview.int_Package_ID.Visible (end) *@
+@qryBillingDetailsV2Preview.ListOptions.RenderHeader("right")
+        </tr>
+    </thead>
+    <tbody><!-- Table body -->
+@{
+    qryBillingDetailsV2Preview.RecordCount = 0;
+    qryBillingDetailsV2Preview.RowCount = 0;
+}
+@do {
+    // Init row class and style
+    qryBillingDetailsV2Preview.RecordCount++;
+    qryBillingDetailsV2Preview.RowCount++;
+    qryBillingDetailsV2Preview.CssStyle = "";
+    qryBillingDetailsV2Preview.LoadListRowValues(qryBillingDetailsV2Preview.Recordset);
+
+    // Render row
+    qryBillingDetailsV2Preview.RowType = RowType.Preview; // Preview record
+    qryBillingDetailsV2Preview.ResetAttributes();
+    await qryBillingDetailsV2Preview.RenderListRow();
+
+    // Render list options
+    await qryBillingDetailsV2Preview.RenderListOptions();
+    <tr @Html.Raw(qryBillingDetailsV2Preview.RowAttributes)>
+    @qryBillingDetailsV2Preview.ListOptions.RenderBody("left", qryBillingDetailsV2Preview.RowCount)
+    @if (qryBillingDetailsV2Preview.Payment_Number.Visible) { // qryBillingDetailsV2Preview.Payment_Number.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.Payment_Number.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.Payment_Number.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.Payment_Number.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.Payment_Number.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.NationalID.Visible) { // qryBillingDetailsV2Preview.NationalID.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.NationalID.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.NationalID.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.NationalID.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.NationalID.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.date_Paid.Visible) { // qryBillingDetailsV2Preview.date_Paid.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.date_Paid.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.date_Paid.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.date_Paid.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.date_Paid.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.Amount_Paid.Visible) { // qryBillingDetailsV2Preview.Amount_Paid.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.Amount_Paid.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.Amount_Paid.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.Amount_Paid.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.Amount_Paid.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.running_payments.Visible) { // qryBillingDetailsV2Preview.running_payments.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.running_payments.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.running_payments.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.running_payments.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.running_payments.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.running_balance.Visible) { // qryBillingDetailsV2Preview.running_balance.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.running_balance.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.running_balance.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.running_balance.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.running_balance.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.str_ApprovalCode.Visible) { // qryBillingDetailsV2Preview.str_ApprovalCode.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.str_ApprovalCode.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.str_ApprovalCode.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.str_ApprovalCode.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.Package_Name.Visible) { // qryBillingDetailsV2Preview.Package_Name.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.Package_Name.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.Package_Name.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.Package_Name.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.Package_Name.Visible (end) *@
+    @if (qryBillingDetailsV2Preview.int_Package_ID.Visible) { // qryBillingDetailsV2Preview.int_Package_ID.Visible (begin)
+            <td @Html.Raw(qryBillingDetailsV2Preview.int_Package_ID.CellAttributes)>
+<span @Html.Raw(qryBillingDetailsV2Preview.int_Package_ID.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2Preview.int_Package_ID.GetViewValue())</span>
+</td>
+    } @* qryBillingDetailsV2Preview.int_Package_ID.Visible (end) *@
+    @qryBillingDetailsV2Preview.ListOptions.RenderBody("right", qryBillingDetailsV2Preview.RowCount)
+    </tr>
+} while (await qryBillingDetailsV2Preview.Recordset.ReadAsync());
+    </tbody>
+</table><!-- /.table -->
+</div><!-- /.card-body -->
+</div><!-- /.card -->
+} else { @* No record *@
+<div class="card border-0"><!-- .card -->
+<div class="ew-detail-count">@Html.Raw(Language.Phrase("NoRecord"))</div>
+<div class="ew-preview-other-options">
+@qryBillingDetailsV2Preview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card -->
+}
+@qryBillingDetailsV2Preview.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()

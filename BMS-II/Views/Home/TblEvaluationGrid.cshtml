@@ -1,0 +1,433 @@
+@{
+    // View
+    View = this;
+
+    // Set up CurrentGrid
+    CurrentGrid = tblEvaluationGrid;
+
+    // Run
+    await tblEvaluationGrid.Run();
+
+    // Check action result
+    if (tblEvaluationGrid.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblEvaluationGrid.IsExport()) {
+<script>
+var ftblEvaluationgrid;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let currentTable = @Html.Raw(ConvertToJson(tblEvaluationGrid.ToClientVar()));
+    ew.deepAssign(ew.vars, { tables: { tblEvaluation: currentTable } });
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblEvaluationgrid")
+        .setPageId("grid")
+        .setFormKeyCountName("@(tblEvaluationGrid.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name_Hdr", [fields.str_Full_Name_Hdr.visible && fields.str_Full_Name_Hdr.required ? ew.Validators.required(fields.str_Full_Name_Hdr.caption) : null], fields.str_Full_Name_Hdr.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["Retake", [fields.Retake.visible && fields.Retake.required ? ew.Validators.required(fields.Retake.caption) : null], fields.Retake.isInvalid],
+            ["AbsherApptNbr", [fields.AbsherApptNbr.visible && fields.AbsherApptNbr.required ? ew.Validators.required(fields.AbsherApptNbr.caption) : null], fields.AbsherApptNbr.isInvalid],
+            ["IsDrivingexperience", [fields.IsDrivingexperience.visible && fields.IsDrivingexperience.required ? ew.Validators.required(fields.IsDrivingexperience.caption) : null], fields.IsDrivingexperience.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["str_Full_Name_Hdr",false],["NationalID",false],["str_Cell_Phone",false],["Retake",true],["AbsherApptNbr",false],["IsDrivingexperience",true]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Retake": @Html.Raw(tblEvaluationGrid.Retake.ToClientList(tblEvaluationGrid)),
+            "IsDrivingexperience": @Html.Raw(tblEvaluationGrid.IsDrivingexperience.ToClientList(tblEvaluationGrid)),
+        })
+        .build();
+    window[form.id] = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+<main class="list">
+<div id="ew-list">
+@if (tblEvaluationGrid.TotalRecords > 0 || !Empty(tblEvaluationGrid.CurrentAction)) {
+<div class="card ew-card ew-grid@(tblEvaluationGrid.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblEvaluationGrid.TableGridClass)">
+@if (tblEvaluationGrid.ShowOtherOptions) {
+<div class="card-header ew-grid-upper-panel">
+    @tblEvaluationGrid.OtherOptions.RenderBody()
+</div>
+}
+<div id="ftblEvaluationgrid" class="ew-form ew-list-form">
+<div id="gmp_tblEvaluation" class="card-body ew-grid-middle-panel @(tblEvaluationGrid.TableContainerClass)" style="@(tblEvaluationGrid.TableContainerStyle)">
+<table id="tbl_tblEvaluationgrid" class="@(tblEvaluationGrid.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblEvaluationGrid.RowType = RowType.Header;
+
+    // Render list options
+    await tblEvaluationGrid.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblEvaluationGrid.ListOptions.RenderHeader("left")
+@if (tblEvaluationGrid.str_Full_Name_Hdr.Visible) { // tblEvaluationGrid.str_Full_Name_Hdr.Visible (begin)
+        <th data-name="str_Full_Name_Hdr" class="@(tblEvaluationGrid.str_Full_Name_Hdr.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluation_str_Full_Name_Hdr" class="tblEvaluation_str_Full_Name_Hdr">@Html.Raw(tblEvaluationGrid.RenderFieldHeader(tblEvaluationGrid.str_Full_Name_Hdr))</div></th>
+} @* tblEvaluationGrid.str_Full_Name_Hdr.Visible (end) *@
+@if (tblEvaluationGrid.NationalID.Visible) { // tblEvaluationGrid.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(tblEvaluationGrid.NationalID.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluation_NationalID" class="tblEvaluation_NationalID">@Html.Raw(tblEvaluationGrid.RenderFieldHeader(tblEvaluationGrid.NationalID))</div></th>
+} @* tblEvaluationGrid.NationalID.Visible (end) *@
+@if (tblEvaluationGrid.str_Cell_Phone.Visible) { // tblEvaluationGrid.str_Cell_Phone.Visible (begin)
+        <th data-name="str_Cell_Phone" class="@(tblEvaluationGrid.str_Cell_Phone.HeaderCellClass)"><div id="elh_tblEvaluation_str_Cell_Phone" class="tblEvaluation_str_Cell_Phone">@Html.Raw(tblEvaluationGrid.RenderFieldHeader(tblEvaluationGrid.str_Cell_Phone))</div></th>
+} @* tblEvaluationGrid.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationGrid.Retake.Visible) { // tblEvaluationGrid.Retake.Visible (begin)
+        <th data-name="Retake" class="@(tblEvaluationGrid.Retake.HeaderCellClass)"><div id="elh_tblEvaluation_Retake" class="tblEvaluation_Retake">@Html.Raw(tblEvaluationGrid.RenderFieldHeader(tblEvaluationGrid.Retake))</div></th>
+} @* tblEvaluationGrid.Retake.Visible (end) *@
+@if (tblEvaluationGrid.AbsherApptNbr.Visible) { // tblEvaluationGrid.AbsherApptNbr.Visible (begin)
+        <th data-name="AbsherApptNbr" class="@(tblEvaluationGrid.AbsherApptNbr.HeaderCellClass)"><div id="elh_tblEvaluation_AbsherApptNbr" class="tblEvaluation_AbsherApptNbr">@Html.Raw(tblEvaluationGrid.RenderFieldHeader(tblEvaluationGrid.AbsherApptNbr))</div></th>
+} @* tblEvaluationGrid.AbsherApptNbr.Visible (end) *@
+@if (tblEvaluationGrid.IsDrivingexperience.Visible) { // tblEvaluationGrid.IsDrivingexperience.Visible (begin)
+        <th data-name="IsDrivingexperience" class="@(tblEvaluationGrid.IsDrivingexperience.HeaderCellClass)"><div id="elh_tblEvaluation_IsDrivingexperience" class="tblEvaluation_IsDrivingexperience">@Html.Raw(tblEvaluationGrid.RenderFieldHeader(tblEvaluationGrid.IsDrivingexperience))</div></th>
+} @* tblEvaluationGrid.IsDrivingexperience.Visible (end) *@
+@* Render list options (header, right) *@
+@tblEvaluationGrid.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblEvaluationGrid.PageNumber)">
+@{
+    await tblEvaluationGrid.SetupGrid();
+    bool eof = tblEvaluationGrid.Recordset == null; // DN
+}
+@while (tblEvaluationGrid.RecordCount < tblEvaluationGrid.StopRecord || SameString(tblEvaluationGrid.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblEvaluationGrid.RowIndex, "$rowindex$") &&
+        (!tblEvaluationGrid.IsGridAdd || tblEvaluationGrid.CurrentMode == "copy") &&
+        (!((tblEvaluationGrid.IsCopy || tblEvaluationGrid.IsAdd) && tblEvaluationGrid.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblEvaluationGrid.Recordset.ReadAsync();
+    tblEvaluationGrid.RecordCount++;
+    if (tblEvaluationGrid.RecordCount >= tblEvaluationGrid.StartRecord) {
+        await tblEvaluationGrid.SetupRow();
+
+        // Skip 1) delete row / empty row for confirm page, 2) hidden row
+        if (tblEvaluationGrid.RowAction != "delete" &&
+            tblEvaluationGrid.RowAction != "insertdelete" &&
+            !(tblEvaluationGrid.RowAction == "insert" && tblEvaluationGrid.IsConfirm && tblEvaluationGrid.EmptyRow()) &&
+            tblEvaluationGrid.RowAction != "hide") {
+    <tr @Html.Raw(tblEvaluationGrid.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblEvaluationGrid.ListOptions.RenderBody("left", tblEvaluationGrid.RowCount)
+    @if (tblEvaluationGrid.str_Full_Name_Hdr.Visible) { // tblEvaluationGrid.str_Full_Name_Hdr.Visible (begin)
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.CellAttributes)>
+@if (tblEvaluationGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Full_Name_Hdr (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_str_Full_Name_Hdr" class="el_tblEvaluation_str_Full_Name_Hdr">
+    <input type="@(tblEvaluationGrid.str_Full_Name_Hdr.InputTextType)" name="x@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" id="x@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" data-table="tblEvaluation" data-field="x_str_Full_Name_Hdr" value="@Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Full_Name_Hdr.PlaceHolder))" data-format-pattern="@(tblEvaluationGrid.str_Full_Name_Hdr.FormatPattern)"@Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Full_Name_Hdr" data-hidden="1" data-old name="o@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" id="o@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Full_Name_Hdr.OldValue))">
+    @* str_Full_Name_Hdr (end) *@
+} @* Add (end) *@
+@if (tblEvaluationGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Full_Name_Hdr (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_str_Full_Name_Hdr" class="el_tblEvaluation_str_Full_Name_Hdr">
+    <span @Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationGrid.str_Full_Name_Hdr.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Full_Name_Hdr" data-hidden="1" name="x@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" id="x@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Full_Name_Hdr.CurrentValue))">
+    </span>
+    @* str_Full_Name_Hdr (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationGrid.RowType == RowType.View) { // View (begin)
+    @* str_Full_Name_Hdr (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_str_Full_Name_Hdr" class="el_tblEvaluation_str_Full_Name_Hdr">
+    <span @Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.ViewAttributes)>
+    @Html.Raw(tblEvaluationGrid.str_Full_Name_Hdr.GetViewValue())</span>
+    </span>
+    if (tblEvaluationGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Full_Name_Hdr" data-hidden="1" name="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" id="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Full_Name_Hdr.FormValue))">
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Full_Name_Hdr" data-hidden="1" data-old name="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" id="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Full_Name_Hdr.OldValue))">
+    }
+    @* str_Full_Name_Hdr (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationGrid.str_Full_Name_Hdr.Visible (end) *@
+    @if (tblEvaluationGrid.NationalID.Visible) { // tblEvaluationGrid.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(tblEvaluationGrid.NationalID.CellAttributes)>
+@if (tblEvaluationGrid.RowType == RowType.Add) { // Add (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_NationalID" class="el_tblEvaluation_NationalID">
+    <input type="@(tblEvaluationGrid.NationalID.InputTextType)" name="x@(tblEvaluationGrid.RowIndex)_NationalID" id="x@(tblEvaluationGrid.RowIndex)_NationalID" data-table="tblEvaluation" data-field="x_NationalID" value="@Html.Raw(tblEvaluationGrid.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblEvaluationGrid.NationalID.PlaceHolder))" data-format-pattern="@(tblEvaluationGrid.NationalID.FormatPattern)"@Html.Raw(tblEvaluationGrid.NationalID.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.NationalID.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_NationalID" data-hidden="1" data-old name="o@(tblEvaluationGrid.RowIndex)_NationalID" id="o@(tblEvaluationGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.NationalID.OldValue))">
+    @* NationalID (end) *@
+} @* Add (end) *@
+@if (tblEvaluationGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_NationalID" class="el_tblEvaluation_NationalID">
+    <span @Html.Raw(tblEvaluationGrid.NationalID.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationGrid.NationalID.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_NationalID" data-hidden="1" name="x@(tblEvaluationGrid.RowIndex)_NationalID" id="x@(tblEvaluationGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.NationalID.CurrentValue))">
+    </span>
+    @* NationalID (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationGrid.RowType == RowType.View) { // View (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_NationalID" class="el_tblEvaluation_NationalID">
+    <span @Html.Raw(tblEvaluationGrid.NationalID.ViewAttributes)>
+    @Html.Raw(tblEvaluationGrid.NationalID.GetViewValue())</span>
+    </span>
+    if (tblEvaluationGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluation" data-field="x_NationalID" data-hidden="1" name="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_NationalID" id="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.NationalID.FormValue))">
+    <input type="hidden" data-table="tblEvaluation" data-field="x_NationalID" data-hidden="1" data-old name="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_NationalID" id="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.NationalID.OldValue))">
+    }
+    @* NationalID (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationGrid.NationalID.Visible (end) *@
+    @if (tblEvaluationGrid.str_Cell_Phone.Visible) { // tblEvaluationGrid.str_Cell_Phone.Visible (begin)
+        <td data-name="str_Cell_Phone" @Html.Raw(tblEvaluationGrid.str_Cell_Phone.CellAttributes)>
+@if (tblEvaluationGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Cell_Phone (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_str_Cell_Phone" class="el_tblEvaluation_str_Cell_Phone">
+    <input type="@(tblEvaluationGrid.str_Cell_Phone.InputTextType)" name="x@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" id="x@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" data-table="tblEvaluation" data-field="x_str_Cell_Phone" value="@Html.Raw(tblEvaluationGrid.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblEvaluationGrid.str_Cell_Phone.FormatPattern)"@Html.Raw(tblEvaluationGrid.str_Cell_Phone.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.str_Cell_Phone.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Cell_Phone" data-hidden="1" data-old name="o@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" id="o@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Cell_Phone.OldValue))">
+    @* str_Cell_Phone (end) *@
+} @* Add (end) *@
+@if (tblEvaluationGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Cell_Phone (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_str_Cell_Phone" class="el_tblEvaluation_str_Cell_Phone">
+    <span @Html.Raw(tblEvaluationGrid.str_Cell_Phone.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationGrid.str_Cell_Phone.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Cell_Phone" data-hidden="1" name="x@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" id="x@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Cell_Phone.CurrentValue))">
+    </span>
+    @* str_Cell_Phone (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationGrid.RowType == RowType.View) { // View (begin)
+    @* str_Cell_Phone (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_str_Cell_Phone" class="el_tblEvaluation_str_Cell_Phone">
+    <span @Html.Raw(tblEvaluationGrid.str_Cell_Phone.ViewAttributes)>
+    @Html.Raw(tblEvaluationGrid.str_Cell_Phone.GetViewValue())</span>
+    </span>
+    if (tblEvaluationGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Cell_Phone" data-hidden="1" name="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" id="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Cell_Phone.FormValue))">
+    <input type="hidden" data-table="tblEvaluation" data-field="x_str_Cell_Phone" data-hidden="1" data-old name="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" id="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.str_Cell_Phone.OldValue))">
+    }
+    @* str_Cell_Phone (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationGrid.str_Cell_Phone.Visible (end) *@
+    @if (tblEvaluationGrid.Retake.Visible) { // tblEvaluationGrid.Retake.Visible (begin)
+        <td data-name="Retake" @Html.Raw(tblEvaluationGrid.Retake.CellAttributes)>
+@if (tblEvaluationGrid.RowType == RowType.Add) { // Add (begin)
+    @* Retake (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_Retake" class="el_tblEvaluation_Retake">
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input@(tblEvaluationGrid.Retake.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Retake" data-boolean name="x@(tblEvaluationGrid.RowIndex)_Retake" id="x@(tblEvaluationGrid.RowIndex)_Retake" value="1" checked="@ConvertToBool(tblEvaluationGrid.Retake.CurrentValue)" @Html.Raw(tblEvaluationGrid.Retake.EditAttributes)>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.Retake.GetErrorMessage())</div>
+    </div>
+    </span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_Retake" data-hidden="1" data-old name="o@(tblEvaluationGrid.RowIndex)_Retake" id="o@(tblEvaluationGrid.RowIndex)_Retake" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.Retake.OldValue))">
+    @* Retake (end) *@
+} @* Add (end) *@
+@if (tblEvaluationGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* Retake (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_Retake" class="el_tblEvaluation_Retake">
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input@(tblEvaluationGrid.Retake.IsInvalidClass)" data-table="tblEvaluation" data-field="x_Retake" data-boolean name="x@(tblEvaluationGrid.RowIndex)_Retake" id="x@(tblEvaluationGrid.RowIndex)_Retake" value="1" checked="@ConvertToBool(tblEvaluationGrid.Retake.CurrentValue)" @Html.Raw(tblEvaluationGrid.Retake.EditAttributes)>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.Retake.GetErrorMessage())</div>
+    </div>
+    </span>
+    @* Retake (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationGrid.RowType == RowType.View) { // View (begin)
+    @* Retake (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_Retake" class="el_tblEvaluation_Retake">
+    <span @Html.Raw(tblEvaluationGrid.Retake.ViewAttributes)>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" id="x_Retake_@(tblEvaluationGrid.RowCount)" class="form-check-input" value="@(tblEvaluationGrid.Retake.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationGrid.Retake.CurrentValue))">
+        <label class="form-check-label" for="x_Retake_@(tblEvaluationGrid.RowCount)"></label>
+    </div></span>
+    </span>
+    if (tblEvaluationGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluation" data-field="x_Retake" data-hidden="1" name="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_Retake" id="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_Retake" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.Retake.FormValue))">
+    <input type="hidden" data-table="tblEvaluation" data-field="x_Retake" data-hidden="1" data-old name="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_Retake" id="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_Retake" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.Retake.OldValue))">
+    }
+    @* Retake (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationGrid.Retake.Visible (end) *@
+    @if (tblEvaluationGrid.AbsherApptNbr.Visible) { // tblEvaluationGrid.AbsherApptNbr.Visible (begin)
+        <td data-name="AbsherApptNbr" @Html.Raw(tblEvaluationGrid.AbsherApptNbr.CellAttributes)>
+@if (tblEvaluationGrid.RowType == RowType.Add) { // Add (begin)
+    @* AbsherApptNbr (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_AbsherApptNbr" class="el_tblEvaluation_AbsherApptNbr">
+    <input type="@(tblEvaluationGrid.AbsherApptNbr.InputTextType)" name="x@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" id="x@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" data-table="tblEvaluation" data-field="x_AbsherApptNbr" value="@Html.Raw(tblEvaluationGrid.AbsherApptNbr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblEvaluationGrid.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(tblEvaluationGrid.AbsherApptNbr.FormatPattern)"@Html.Raw(tblEvaluationGrid.AbsherApptNbr.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.AbsherApptNbr.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_AbsherApptNbr" data-hidden="1" data-old name="o@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" id="o@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.AbsherApptNbr.OldValue))">
+    @* AbsherApptNbr (end) *@
+} @* Add (end) *@
+@if (tblEvaluationGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* AbsherApptNbr (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_AbsherApptNbr" class="el_tblEvaluation_AbsherApptNbr">
+    <span @Html.Raw(tblEvaluationGrid.AbsherApptNbr.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationGrid.AbsherApptNbr.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_AbsherApptNbr" data-hidden="1" name="x@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" id="x@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.AbsherApptNbr.CurrentValue))">
+    </span>
+    @* AbsherApptNbr (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationGrid.RowType == RowType.View) { // View (begin)
+    @* AbsherApptNbr (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_AbsherApptNbr" class="el_tblEvaluation_AbsherApptNbr">
+    <span @Html.Raw(tblEvaluationGrid.AbsherApptNbr.ViewAttributes)>
+    @Html.Raw(tblEvaluationGrid.AbsherApptNbr.GetViewValue())</span>
+    </span>
+    if (tblEvaluationGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluation" data-field="x_AbsherApptNbr" data-hidden="1" name="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" id="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.AbsherApptNbr.FormValue))">
+    <input type="hidden" data-table="tblEvaluation" data-field="x_AbsherApptNbr" data-hidden="1" data-old name="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" id="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.AbsherApptNbr.OldValue))">
+    }
+    @* AbsherApptNbr (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationGrid.AbsherApptNbr.Visible (end) *@
+    @if (tblEvaluationGrid.IsDrivingexperience.Visible) { // tblEvaluationGrid.IsDrivingexperience.Visible (begin)
+        <td data-name="IsDrivingexperience" @Html.Raw(tblEvaluationGrid.IsDrivingexperience.CellAttributes)>
+@if (tblEvaluationGrid.RowType == RowType.Add) { // Add (begin)
+    @* IsDrivingexperience (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_IsDrivingexperience" class="el_tblEvaluation_IsDrivingexperience">
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input@(tblEvaluationGrid.IsDrivingexperience.IsInvalidClass)" data-table="tblEvaluation" data-field="x_IsDrivingexperience" data-boolean name="x@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" id="x@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" value="1" checked="@ConvertToBool(tblEvaluationGrid.IsDrivingexperience.CurrentValue)" @Html.Raw(tblEvaluationGrid.IsDrivingexperience.EditAttributes)>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationGrid.IsDrivingexperience.GetErrorMessage())</div>
+    </div>
+    </span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_IsDrivingexperience" data-hidden="1" data-old name="o@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" id="o@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.IsDrivingexperience.OldValue))">
+    @* IsDrivingexperience (end) *@
+} @* Add (end) *@
+@if (tblEvaluationGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* IsDrivingexperience (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_IsDrivingexperience" class="el_tblEvaluation_IsDrivingexperience">
+    <span @Html.Raw(tblEvaluationGrid.IsDrivingexperience.ViewAttributes)>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationGrid.RowCount)" class="form-check-input" value="@(tblEvaluationGrid.IsDrivingexperience.EditValue)" disabled checked="@(ConvertToBool(tblEvaluationGrid.IsDrivingexperience.CurrentValue))">
+        <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationGrid.RowCount)"></label>
+    </div></span>
+    <input type="hidden" data-table="tblEvaluation" data-field="x_IsDrivingexperience" data-hidden="1" name="x@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" id="x@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.IsDrivingexperience.CurrentValue))">
+    </span>
+    @* IsDrivingexperience (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationGrid.RowType == RowType.View) { // View (begin)
+    @* IsDrivingexperience (begin) *@
+    <span id="el@(tblEvaluationGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationGrid.RowCount)_tblEvaluation_IsDrivingexperience" class="el_tblEvaluation_IsDrivingexperience">
+    <span @Html.Raw(tblEvaluationGrid.IsDrivingexperience.ViewAttributes)>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationGrid.RowCount)" class="form-check-input" value="@(tblEvaluationGrid.IsDrivingexperience.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationGrid.IsDrivingexperience.CurrentValue))">
+        <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationGrid.RowCount)"></label>
+    </div></span>
+    </span>
+    if (tblEvaluationGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluation" data-field="x_IsDrivingexperience" data-hidden="1" name="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" id="ftblEvaluationgrid$x@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.IsDrivingexperience.FormValue))">
+    <input type="hidden" data-table="tblEvaluation" data-field="x_IsDrivingexperience" data-hidden="1" data-old name="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" id="ftblEvaluationgrid$o@(tblEvaluationGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationGrid.IsDrivingexperience.OldValue))">
+    }
+    @* IsDrivingexperience (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationGrid.IsDrivingexperience.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblEvaluationGrid.ListOptions.RenderBody("right", tblEvaluationGrid.RowCount)
+    </tr>
+if (tblEvaluationGrid.RowType == RowType.Add || tblEvaluationGrid.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["ftblEvaluationgrid","load"], () => ftblEvaluationgrid.updateLists(@(tblEvaluationGrid.RowIndex)@(tblEvaluationGrid.IsAdd || tblEvaluationGrid.IsEdit || tblEvaluationGrid.IsCopy || SameString(tblEvaluationGrid.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End delete row checking *@
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblEvaluationGrid.RowIndex, "$rowindex$"))
+        tblEvaluationGrid.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblEvaluationGrid.IsCopy || tblEvaluationGrid.IsAdd) && tblEvaluationGrid.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblEvaluationGrid.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+@if (tblEvaluationGrid.CurrentMode == "add" || tblEvaluationGrid.CurrentMode == "copy") {
+<input type="hidden" name="@(tblEvaluationGrid.FormKeyCountName)" id="@(tblEvaluationGrid.FormKeyCountName)" value="@(tblEvaluationGrid.KeyCount)">
+@Html.Raw(tblEvaluationGrid.MultiSelectKey)
+}
+@if (tblEvaluationGrid.CurrentMode == "edit") {
+<input type="hidden" name="@(tblEvaluationGrid.FormKeyCountName)" id="@(tblEvaluationGrid.FormKeyCountName)" value="@(tblEvaluationGrid.KeyCount)">
+@Html.Raw(tblEvaluationGrid.MultiSelectKey)
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblEvaluationGrid.CurrentMode)) {
+<input type="hidden" name="action" id="action" value="">
+}
+<input type="hidden" name="detailpage" value="ftblEvaluationgrid">
+</div><!-- /.ew-list-form -->
+@{ tblEvaluationGrid.CloseRecordset(); }
+</div><!-- /.ew-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblEvaluationGrid.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@if (!tblEvaluationGrid.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblEvaluation");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}
+@{
+    // Close Recordset
+    tblEvaluationGrid.CloseRecordset(); // DN
+    // Clear CurrentGrid
+    CurrentGrid = null;
+}

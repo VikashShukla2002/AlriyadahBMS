@@ -1,0 +1,1123 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAppointmentsInfoAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAppointmentsInfoAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAppointmentsInfoAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAppointmentsInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblAppointmentsInfoadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblAppointmentsInfoadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["str_AppName", [fields.str_AppName.visible && fields.str_AppName.required ? ew.Validators.required(fields.str_AppName.caption) : null], fields.str_AppName.isInvalid],
+            ["str_App_Date", [fields.str_App_Date.visible && fields.str_App_Date.required ? ew.Validators.required(fields.str_App_Date.caption) : null], fields.str_App_Date.isInvalid],
+            ["str_StartTime", [fields.str_StartTime.visible && fields.str_StartTime.required ? ew.Validators.required(fields.str_StartTime.caption) : null], fields.str_StartTime.isInvalid],
+            ["str_EndTime", [fields.str_EndTime.visible && fields.str_EndTime.required ? ew.Validators.required(fields.str_EndTime.caption) : null], fields.str_EndTime.isInvalid],
+            ["str_PickupTime", [fields.str_PickupTime.visible && fields.str_PickupTime.required ? ew.Validators.required(fields.str_PickupTime.caption) : null], fields.str_PickupTime.isInvalid],
+            ["str_DropOffTime", [fields.str_DropOffTime.visible && fields.str_DropOffTime.required ? ew.Validators.required(fields.str_DropOffTime.caption) : null], fields.str_DropOffTime.isInvalid],
+            ["int_VehicleID", [fields.int_VehicleID.visible && fields.int_VehicleID.required ? ew.Validators.required(fields.int_VehicleID.caption) : null, ew.Validators.integer], fields.int_VehicleID.isInvalid],
+            ["dec_InstID", [fields.dec_InstID.visible && fields.dec_InstID.required ? ew.Validators.required(fields.dec_InstID.caption) : null, ew.Validators.float], fields.dec_InstID.isInvalid],
+            ["dec_StudentID", [fields.dec_StudentID.visible && fields.dec_StudentID.required ? ew.Validators.required(fields.dec_StudentID.caption) : null, ew.Validators.integer], fields.dec_StudentID.isInvalid],
+            ["dec_Observed_StudentID", [fields.dec_Observed_StudentID.visible && fields.dec_Observed_StudentID.required ? ew.Validators.required(fields.dec_Observed_StudentID.caption) : null, ew.Validators.integer], fields.dec_Observed_StudentID.isInvalid],
+            ["int_Apptype", [fields.int_Apptype.visible && fields.int_Apptype.required ? ew.Validators.required(fields.int_Apptype.caption) : null, ew.Validators.integer], fields.int_Apptype.isInvalid],
+            ["int_AppStatus", [fields.int_AppStatus.visible && fields.int_AppStatus.required ? ew.Validators.required(fields.int_AppStatus.caption) : null], fields.int_AppStatus.isInvalid],
+            ["mny_AppCost", [fields.mny_AppCost.visible && fields.mny_AppCost.required ? ew.Validators.required(fields.mny_AppCost.caption) : null, ew.Validators.float], fields.mny_AppCost.isInvalid],
+            ["mny_AmountPaid", [fields.mny_AmountPaid.visible && fields.mny_AmountPaid.required ? ew.Validators.required(fields.mny_AmountPaid.caption) : null, ew.Validators.float], fields.mny_AmountPaid.isInvalid],
+            ["bit_CheckAppPaid", [fields.bit_CheckAppPaid.visible && fields.bit_CheckAppPaid.required ? ew.Validators.required(fields.bit_CheckAppPaid.caption) : null], fields.bit_CheckAppPaid.isInvalid],
+            ["bit_Confirmation", [fields.bit_Confirmation.visible && fields.bit_Confirmation.required ? ew.Validators.required(fields.bit_Confirmation.caption) : null], fields.bit_Confirmation.isInvalid],
+            ["str_Instructions", [fields.str_Instructions.visible && fields.str_Instructions.required ? ew.Validators.required(fields.str_Instructions.caption) : null], fields.str_Instructions.isInvalid],
+            ["str_Instructions1", [fields.str_Instructions1.visible && fields.str_Instructions1.required ? ew.Validators.required(fields.str_Instructions1.caption) : null], fields.str_Instructions1.isInvalid],
+            ["str_AppNotes", [fields.str_AppNotes.visible && fields.str_AppNotes.required ? ew.Validators.required(fields.str_AppNotes.caption) : null], fields.str_AppNotes.isInvalid],
+            ["str_PickupLocation", [fields.str_PickupLocation.visible && fields.str_PickupLocation.required ? ew.Validators.required(fields.str_PickupLocation.caption) : null], fields.str_PickupLocation.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null, ew.Validators.float], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null, ew.Validators.float], fields.int_Modified_By.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null], fields.date_Modified.isInvalid],
+            ["bit_IsDeleted", [fields.bit_IsDeleted.visible && fields.bit_IsDeleted.required ? ew.Validators.required(fields.bit_IsDeleted.caption) : null], fields.bit_IsDeleted.isInvalid],
+            ["str_Interval", [fields.str_Interval.visible && fields.str_Interval.required ? ew.Validators.required(fields.str_Interval.caption) : null], fields.str_Interval.isInvalid],
+            ["RemM1", [fields.RemM1.visible && fields.RemM1.required ? ew.Validators.required(fields.RemM1.caption) : null], fields.RemM1.isInvalid],
+            ["RemM2", [fields.RemM2.visible && fields.RemM2.required ? ew.Validators.required(fields.RemM2.caption) : null], fields.RemM2.isInvalid],
+            ["RemM3", [fields.RemM3.visible && fields.RemM3.required ? ew.Validators.required(fields.RemM3.caption) : null], fields.RemM3.isInvalid],
+            ["int_Location_ID", [fields.int_Location_ID.visible && fields.int_Location_ID.required ? ew.Validators.required(fields.int_Location_ID.caption) : null, ew.Validators.float], fields.int_Location_ID.isInvalid],
+            ["SPID", [fields.SPID.visible && fields.SPID.required ? ew.Validators.required(fields.SPID.caption) : null, ew.Validators.float], fields.SPID.isInvalid],
+            ["Chk_Trace", [fields.Chk_Trace.visible && fields.Chk_Trace.required ? ew.Validators.required(fields.Chk_Trace.caption) : null], fields.Chk_Trace.isInvalid],
+            ["str_DropOffLocation", [fields.str_DropOffLocation.visible && fields.str_DropOffLocation.required ? ew.Validators.required(fields.str_DropOffLocation.caption) : null], fields.str_DropOffLocation.isInvalid],
+            ["imgInstructorSignature", [fields.imgInstructorSignature.visible && fields.imgInstructorSignature.required ? ew.Validators.fileRequired(fields.imgInstructorSignature.caption) : null], fields.imgInstructorSignature.isInvalid],
+            ["imgStudentSignature", [fields.imgStudentSignature.visible && fields.imgStudentSignature.required ? ew.Validators.fileRequired(fields.imgStudentSignature.caption) : null], fields.imgStudentSignature.isInvalid],
+            ["imgObserverSignature", [fields.imgObserverSignature.visible && fields.imgObserverSignature.required ? ew.Validators.fileRequired(fields.imgObserverSignature.caption) : null], fields.imgObserverSignature.isInvalid],
+            ["dt_apptstart", [fields.dt_apptstart.visible && fields.dt_apptstart.required ? ew.Validators.required(fields.dt_apptstart.caption) : null, ew.Validators.datetime(fields.dt_apptstart.clientFormatPattern)], fields.dt_apptstart.isInvalid],
+            ["dt_apptComplete", [fields.dt_apptComplete.visible && fields.dt_apptComplete.required ? ew.Validators.required(fields.dt_apptComplete.caption) : null, ew.Validators.datetime(fields.dt_apptComplete.clientFormatPattern)], fields.dt_apptComplete.isInvalid],
+            ["int_apptstartedBy", [fields.int_apptstartedBy.visible && fields.int_apptstartedBy.required ? ew.Validators.required(fields.int_apptstartedBy.caption) : null, ew.Validators.integer], fields.int_apptstartedBy.isInvalid],
+            ["int_apptCompletedBy", [fields.int_apptCompletedBy.visible && fields.int_apptCompletedBy.required ? ew.Validators.required(fields.int_apptCompletedBy.caption) : null, ew.Validators.integer], fields.int_apptCompletedBy.isInvalid],
+            ["SMSReminder1", [fields.SMSReminder1.visible && fields.SMSReminder1.required ? ew.Validators.required(fields.SMSReminder1.caption) : null], fields.SMSReminder1.isInvalid],
+            ["SMSReminder2", [fields.SMSReminder2.visible && fields.SMSReminder2.required ? ew.Validators.required(fields.SMSReminder2.caption) : null], fields.SMSReminder2.isInvalid],
+            ["SMSReminder3", [fields.SMSReminder3.visible && fields.SMSReminder3.required ? ew.Validators.required(fields.SMSReminder3.caption) : null], fields.SMSReminder3.isInvalid],
+            ["VoiceReminder1", [fields.VoiceReminder1.visible && fields.VoiceReminder1.required ? ew.Validators.required(fields.VoiceReminder1.caption) : null], fields.VoiceReminder1.isInvalid],
+            ["VoiceReminder2", [fields.VoiceReminder2.visible && fields.VoiceReminder2.required ? ew.Validators.required(fields.VoiceReminder2.caption) : null], fields.VoiceReminder2.isInvalid],
+            ["VoiceReminder3", [fields.VoiceReminder3.visible && fields.VoiceReminder3.required ? ew.Validators.required(fields.VoiceReminder3.caption) : null], fields.VoiceReminder3.isInvalid],
+            ["bit_isroadtest", [fields.bit_isroadtest.visible && fields.bit_isroadtest.required ? ew.Validators.required(fields.bit_isroadtest.caption) : null], fields.bit_isroadtest.isInvalid],
+            ["int_slotType", [fields.int_slotType.visible && fields.int_slotType.required ? ew.Validators.required(fields.int_slotType.caption) : null, ew.Validators.integer], fields.int_slotType.isInvalid],
+            ["bit_VisibleOnPortal", [fields.bit_VisibleOnPortal.visible && fields.bit_VisibleOnPortal.required ? ew.Validators.required(fields.bit_VisibleOnPortal.caption) : null], fields.bit_VisibleOnPortal.isInvalid],
+            ["IsDataRetrieved", [fields.IsDataRetrieved.visible && fields.IsDataRetrieved.required ? ew.Validators.required(fields.IsDataRetrieved.caption) : null], fields.IsDataRetrieved.isInvalid],
+            ["bit_chargesApplied", [fields.bit_chargesApplied.visible && fields.bit_chargesApplied.required ? ew.Validators.required(fields.bit_chargesApplied.caption) : null], fields.bit_chargesApplied.isInvalid],
+            ["dec_DistanceTravelled", [fields.dec_DistanceTravelled.visible && fields.dec_DistanceTravelled.required ? ew.Validators.required(fields.dec_DistanceTravelled.caption) : null, ew.Validators.float], fields.dec_DistanceTravelled.isInvalid],
+            ["btwProductIdsforSSRules", [fields.btwProductIdsforSSRules.visible && fields.btwProductIdsforSSRules.required ? ew.Validators.required(fields.btwProductIdsforSSRules.caption) : null], fields.btwProductIdsforSSRules.isInvalid],
+            ["int_evaluateApptWithEmail", [fields.int_evaluateApptWithEmail.visible && fields.int_evaluateApptWithEmail.required ? ew.Validators.required(fields.int_evaluateApptWithEmail.caption) : null, ew.Validators.integer], fields.int_evaluateApptWithEmail.isInvalid],
+            ["PublicNotesId", [fields.PublicNotesId.visible && fields.PublicNotesId.required ? ew.Validators.required(fields.PublicNotesId.caption) : null], fields.PublicNotesId.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null, ew.Validators.integer], fields.NationalID.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["int_PackageID", [fields.int_PackageID.visible && fields.int_PackageID.required ? ew.Validators.required(fields.int_PackageID.caption) : null, ew.Validators.integer], fields.int_PackageID.isInvalid],
+            ["int_ApptCldr_ID", [fields.int_ApptCldr_ID.visible && fields.int_ApptCldr_ID.required ? ew.Validators.required(fields.int_ApptCldr_ID.caption) : null, ew.Validators.integer], fields.int_ApptCldr_ID.isInvalid],
+            ["str_CRSS_ID", [fields.str_CRSS_ID.visible && fields.str_CRSS_ID.required ? ew.Validators.required(fields.str_CRSS_ID.caption) : null], fields.str_CRSS_ID.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "int_Apptype": @Html.Raw(tblAppointmentsInfoAdd.int_Apptype.ToClientList(tblAppointmentsInfoAdd)),
+            "int_AppStatus": @Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.ToClientList(tblAppointmentsInfoAdd)),
+            "bit_CheckAppPaid": @Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.ToClientList(tblAppointmentsInfoAdd)),
+            "bit_Confirmation": @Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.ToClientList(tblAppointmentsInfoAdd)),
+            "bit_IsDeleted": @Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.ToClientList(tblAppointmentsInfoAdd)),
+            "RemM1": @Html.Raw(tblAppointmentsInfoAdd.RemM1.ToClientList(tblAppointmentsInfoAdd)),
+            "RemM2": @Html.Raw(tblAppointmentsInfoAdd.RemM2.ToClientList(tblAppointmentsInfoAdd)),
+            "RemM3": @Html.Raw(tblAppointmentsInfoAdd.RemM3.ToClientList(tblAppointmentsInfoAdd)),
+            "SMSReminder1": @Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.ToClientList(tblAppointmentsInfoAdd)),
+            "SMSReminder2": @Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.ToClientList(tblAppointmentsInfoAdd)),
+            "SMSReminder3": @Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.ToClientList(tblAppointmentsInfoAdd)),
+            "VoiceReminder1": @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.ToClientList(tblAppointmentsInfoAdd)),
+            "VoiceReminder2": @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.ToClientList(tblAppointmentsInfoAdd)),
+            "VoiceReminder3": @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.ToClientList(tblAppointmentsInfoAdd)),
+            "bit_isroadtest": @Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.ToClientList(tblAppointmentsInfoAdd)),
+            "bit_VisibleOnPortal": @Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.ToClientList(tblAppointmentsInfoAdd)),
+            "IsDataRetrieved": @Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.ToClientList(tblAppointmentsInfoAdd)),
+            "bit_chargesApplied": @Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.ToClientList(tblAppointmentsInfoAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblAppointmentsInfoAdd.ShowPageHeader()
+@tblAppointmentsInfoAdd.ShowMessages()
+<form name="ftblAppointmentsInfoadd" id="ftblAppointmentsInfoadd" class="@(tblAppointmentsInfoAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblAppointmentsInfoAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblAppointmentsInfoAdd.OldKeyName)" value="@Html.Raw(tblAppointmentsInfoAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblAppointmentsInfoAdd.str_AppName.Visible) { // tblAppointmentsInfoAdd.str_AppName.Visible (begin)
+    <div id="r_str_AppName" @Html.Raw(tblAppointmentsInfoAdd.str_AppName.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_AppName" for="x_str_AppName" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_AppName.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_AppName.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_AppName.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_AppName">
+<input type="@(tblAppointmentsInfoAdd.str_AppName.InputTextType)" name="x_str_AppName" id="x_str_AppName" data-table="tblAppointmentsInfo" data-field="x_str_AppName" value="@Html.Raw(tblAppointmentsInfoAdd.str_AppName.EditValue)" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_AppName.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_AppName.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_AppName.EditAttributes) aria-describedby="x_str_AppName_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_AppName.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_AppName.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_AppName.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_App_Date.Visible) { // tblAppointmentsInfoAdd.str_App_Date.Visible (begin)
+    <div id="r_str_App_Date" @Html.Raw(tblAppointmentsInfoAdd.str_App_Date.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_App_Date" for="x_str_App_Date" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_App_Date.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_App_Date.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_App_Date.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_App_Date">
+<input type="@(tblAppointmentsInfoAdd.str_App_Date.InputTextType)" name="x_str_App_Date" id="x_str_App_Date" data-table="tblAppointmentsInfo" data-field="x_str_App_Date" value="@Html.Raw(tblAppointmentsInfoAdd.str_App_Date.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_App_Date.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_App_Date.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_App_Date.EditAttributes) aria-describedby="x_str_App_Date_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_App_Date.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_App_Date.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_App_Date.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_StartTime.Visible) { // tblAppointmentsInfoAdd.str_StartTime.Visible (begin)
+    <div id="r_str_StartTime" @Html.Raw(tblAppointmentsInfoAdd.str_StartTime.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_StartTime" for="x_str_StartTime" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_StartTime.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_StartTime.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_StartTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_StartTime">
+<input type="@(tblAppointmentsInfoAdd.str_StartTime.InputTextType)" name="x_str_StartTime" id="x_str_StartTime" data-table="tblAppointmentsInfo" data-field="x_str_StartTime" value="@Html.Raw(tblAppointmentsInfoAdd.str_StartTime.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_StartTime.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_StartTime.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_StartTime.EditAttributes) aria-describedby="x_str_StartTime_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_StartTime.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_StartTime.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_StartTime.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_EndTime.Visible) { // tblAppointmentsInfoAdd.str_EndTime.Visible (begin)
+    <div id="r_str_EndTime" @Html.Raw(tblAppointmentsInfoAdd.str_EndTime.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_EndTime" for="x_str_EndTime" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_EndTime.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_EndTime.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_EndTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_EndTime">
+<input type="@(tblAppointmentsInfoAdd.str_EndTime.InputTextType)" name="x_str_EndTime" id="x_str_EndTime" data-table="tblAppointmentsInfo" data-field="x_str_EndTime" value="@Html.Raw(tblAppointmentsInfoAdd.str_EndTime.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_EndTime.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_EndTime.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_EndTime.EditAttributes) aria-describedby="x_str_EndTime_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_EndTime.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_EndTime.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_EndTime.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_PickupTime.Visible) { // tblAppointmentsInfoAdd.str_PickupTime.Visible (begin)
+    <div id="r_str_PickupTime" @Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_PickupTime" for="x_str_PickupTime" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_PickupTime">
+<input type="@(tblAppointmentsInfoAdd.str_PickupTime.InputTextType)" name="x_str_PickupTime" id="x_str_PickupTime" data-table="tblAppointmentsInfo" data-field="x_str_PickupTime" value="@Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_PickupTime.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_PickupTime.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.EditAttributes) aria-describedby="x_str_PickupTime_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_PickupTime.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_PickupTime.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_DropOffTime.Visible) { // tblAppointmentsInfoAdd.str_DropOffTime.Visible (begin)
+    <div id="r_str_DropOffTime" @Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_DropOffTime" for="x_str_DropOffTime" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_DropOffTime">
+<input type="@(tblAppointmentsInfoAdd.str_DropOffTime.InputTextType)" name="x_str_DropOffTime" id="x_str_DropOffTime" data-table="tblAppointmentsInfo" data-field="x_str_DropOffTime" value="@Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_DropOffTime.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_DropOffTime.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.EditAttributes) aria-describedby="x_str_DropOffTime_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_DropOffTime.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_DropOffTime.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_VehicleID.Visible) { // tblAppointmentsInfoAdd.int_VehicleID.Visible (begin)
+    <div id="r_int_VehicleID" @Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_VehicleID" for="x_int_VehicleID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_VehicleID">
+<input type="@(tblAppointmentsInfoAdd.int_VehicleID.InputTextType)" name="x_int_VehicleID" id="x_int_VehicleID" data-table="tblAppointmentsInfo" data-field="x_int_VehicleID" value="@Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_VehicleID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_VehicleID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.EditAttributes) aria-describedby="x_int_VehicleID_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_VehicleID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_VehicleID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.dec_InstID.Visible) { // tblAppointmentsInfoAdd.dec_InstID.Visible (begin)
+    <div id="r_dec_InstID" @Html.Raw(tblAppointmentsInfoAdd.dec_InstID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_dec_InstID" for="x_dec_InstID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.dec_InstID.Caption)@Html.Raw(tblAppointmentsInfoAdd.dec_InstID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.dec_InstID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_InstID">
+<input type="@(tblAppointmentsInfoAdd.dec_InstID.InputTextType)" name="x_dec_InstID" id="x_dec_InstID" data-table="tblAppointmentsInfo" data-field="x_dec_InstID" value="@Html.Raw(tblAppointmentsInfoAdd.dec_InstID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.dec_InstID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.dec_InstID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.dec_InstID.EditAttributes) aria-describedby="x_dec_InstID_help">
+@Html.Raw(tblAppointmentsInfoAdd.dec_InstID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.dec_InstID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.dec_InstID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.dec_StudentID.Visible) { // tblAppointmentsInfoAdd.dec_StudentID.Visible (begin)
+    <div id="r_dec_StudentID" @Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_dec_StudentID" for="x_dec_StudentID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.Caption)@Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_StudentID">
+<input type="@(tblAppointmentsInfoAdd.dec_StudentID.InputTextType)" name="x_dec_StudentID" id="x_dec_StudentID" data-table="tblAppointmentsInfo" data-field="x_dec_StudentID" value="@Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.dec_StudentID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.dec_StudentID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.EditAttributes) aria-describedby="x_dec_StudentID_help">
+@Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.dec_StudentID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.dec_StudentID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.dec_Observed_StudentID.Visible) { // tblAppointmentsInfoAdd.dec_Observed_StudentID.Visible (begin)
+    <div id="r_dec_Observed_StudentID" @Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_dec_Observed_StudentID" for="x_dec_Observed_StudentID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.Caption)@Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_Observed_StudentID">
+<input type="@(tblAppointmentsInfoAdd.dec_Observed_StudentID.InputTextType)" name="x_dec_Observed_StudentID" id="x_dec_Observed_StudentID" data-table="tblAppointmentsInfo" data-field="x_dec_Observed_StudentID" value="@Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.dec_Observed_StudentID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.dec_Observed_StudentID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.EditAttributes) aria-describedby="x_dec_Observed_StudentID_help">
+@Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.dec_Observed_StudentID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.dec_Observed_StudentID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_Apptype.Visible) { // tblAppointmentsInfoAdd.int_Apptype.Visible (begin)
+    <div id="r_int_Apptype" @Html.Raw(tblAppointmentsInfoAdd.int_Apptype.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_Apptype" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_Apptype.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_Apptype.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_Apptype.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Apptype">
+<span>@{
+    if (IsRTL) {
+        tblAppointmentsInfoAdd.int_Apptype.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_int_Apptype" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_int_Apptype" id="sv_x_int_Apptype" value="@(RemoveHtml(ConvertToString(tblAppointmentsInfoAdd.int_Apptype.EditValue)))" autocomplete="off" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_Apptype.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_Apptype.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_Apptype.FormatPattern)" @Html.Raw(tblAppointmentsInfoAdd.int_Apptype.EditAttributes) aria-describedby="x_int_Apptype_help">
+</span>
+<selection-list hidden class="form-control" data-table="tblAppointmentsInfo" data-field="x_int_Apptype" data-input="sv_x_int_Apptype" data-value-separator="@(tblAppointmentsInfoAdd.int_Apptype.DisplayValueSeparatorAttribute)" name="x_int_Apptype" id="x_int_Apptype" value="@(HtmlEncode(tblAppointmentsInfoAdd.int_Apptype.CurrentValue))"></selection-list>
+@Html.Raw(tblAppointmentsInfoAdd.int_Apptype.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_Apptype.GetErrorMessage())</div>
+<script>
+loadjs.ready(["ftblAppointmentsInfoadd"], function() {
+    ftblAppointmentsInfoadd.createAutoSuggest(Object.assign({"id":"x_int_Apptype","forceSelect":false}, { lookupAllDisplayFields: @(tblAppointmentsInfoAdd.int_Apptype.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblAppointmentsInfo.fields.int_Apptype.autoSuggestOptions));
+});
+</script>
+@Html.Raw(tblAppointmentsInfoAdd.int_Apptype.Lookup.GetParamTag(tblAppointmentsInfoAdd, "p_x_int_Apptype"))
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_Apptype.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_AppStatus.Visible) { // tblAppointmentsInfoAdd.int_AppStatus.Visible (begin)
+    <div id="r_int_AppStatus" @Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_AppStatus" for="x_int_AppStatus" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_AppStatus">
+    <select
+        id="x_int_AppStatus"
+        name="x_int_AppStatus"
+        class="form-select ew-select@(tblAppointmentsInfoAdd.int_AppStatus.IsInvalidClass)"
+        data-select2-id="ftblAppointmentsInfoadd_x_int_AppStatus"
+        data-table="tblAppointmentsInfo"
+        data-field="x_int_AppStatus"
+        data-value-separator="@(tblAppointmentsInfoAdd.int_AppStatus.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAppointmentsInfoAdd.int_AppStatus.PlaceHolder))"
+        @Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.EditAttributes)>
+        @(tblAppointmentsInfoAdd.int_AppStatus.SelectOptionListHtml("x_int_AppStatus"))
+    </select>
+    @Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_AppStatus.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblAppointmentsInfoadd", function() {
+    var options = { name: "x_int_AppStatus", selectId: "ftblAppointmentsInfoadd_x_int_AppStatus" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAppointmentsInfoadd.lists.int_AppStatus?.lookupOptions.length) {
+        options.data = { id: "x_int_AppStatus", form: "ftblAppointmentsInfoadd" };
+    } else {
+        options.ajax = { id: "x_int_AppStatus", form: "ftblAppointmentsInfoadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAppointmentsInfo.fields.int_AppStatus.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_AppStatus.Visible (end) *@
+@if (tblAppointmentsInfoAdd.mny_AppCost.Visible) { // tblAppointmentsInfoAdd.mny_AppCost.Visible (begin)
+    <div id="r_mny_AppCost" @Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_mny_AppCost" for="x_mny_AppCost" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.Caption)@Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.CellAttributes)>
+<span id="el_tblAppointmentsInfo_mny_AppCost">
+<input type="@(tblAppointmentsInfoAdd.mny_AppCost.InputTextType)" name="x_mny_AppCost" id="x_mny_AppCost" data-table="tblAppointmentsInfo" data-field="x_mny_AppCost" value="@Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.mny_AppCost.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.mny_AppCost.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.EditAttributes) aria-describedby="x_mny_AppCost_help">
+@Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.mny_AppCost.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.mny_AppCost.Visible (end) *@
+@if (tblAppointmentsInfoAdd.mny_AmountPaid.Visible) { // tblAppointmentsInfoAdd.mny_AmountPaid.Visible (begin)
+    <div id="r_mny_AmountPaid" @Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_mny_AmountPaid" for="x_mny_AmountPaid" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.Caption)@Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.CellAttributes)>
+<span id="el_tblAppointmentsInfo_mny_AmountPaid">
+<input type="@(tblAppointmentsInfoAdd.mny_AmountPaid.InputTextType)" name="x_mny_AmountPaid" id="x_mny_AmountPaid" data-table="tblAppointmentsInfo" data-field="x_mny_AmountPaid" value="@Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.mny_AmountPaid.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.mny_AmountPaid.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.EditAttributes) aria-describedby="x_mny_AmountPaid_help">
+@Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.mny_AmountPaid.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.mny_AmountPaid.Visible (end) *@
+@if (tblAppointmentsInfoAdd.bit_CheckAppPaid.Visible) { // tblAppointmentsInfoAdd.bit_CheckAppPaid.Visible (begin)
+    <div id="r_bit_CheckAppPaid" @Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_bit_CheckAppPaid" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.Caption)@Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_CheckAppPaid">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.bit_CheckAppPaid.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_bit_CheckAppPaid" data-boolean name="x_bit_CheckAppPaid" id="x_bit_CheckAppPaid" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.bit_CheckAppPaid.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.EditAttributes) aria-describedby="x_bit_CheckAppPaid_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.bit_CheckAppPaid.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.bit_CheckAppPaid.Visible (end) *@
+@if (tblAppointmentsInfoAdd.bit_Confirmation.Visible) { // tblAppointmentsInfoAdd.bit_Confirmation.Visible (begin)
+    <div id="r_bit_Confirmation" @Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_bit_Confirmation" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.Caption)@Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_Confirmation">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.bit_Confirmation.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_bit_Confirmation" data-boolean name="x_bit_Confirmation" id="x_bit_Confirmation" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.bit_Confirmation.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.EditAttributes) aria-describedby="x_bit_Confirmation_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.bit_Confirmation.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.bit_Confirmation.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_Instructions.Visible) { // tblAppointmentsInfoAdd.str_Instructions.Visible (begin)
+    <div id="r_str_Instructions" @Html.Raw(tblAppointmentsInfoAdd.str_Instructions.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_Instructions" for="x_str_Instructions" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_Instructions.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_Instructions.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_Instructions.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Instructions">
+<input type="@(tblAppointmentsInfoAdd.str_Instructions.InputTextType)" name="x_str_Instructions" id="x_str_Instructions" data-table="tblAppointmentsInfo" data-field="x_str_Instructions" value="@Html.Raw(tblAppointmentsInfoAdd.str_Instructions.EditValue)" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_Instructions.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_Instructions.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_Instructions.EditAttributes) aria-describedby="x_str_Instructions_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_Instructions.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_Instructions.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_Instructions.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_Instructions1.Visible) { // tblAppointmentsInfoAdd.str_Instructions1.Visible (begin)
+    <div id="r_str_Instructions1" @Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_Instructions1" for="x_str_Instructions1" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Instructions1">
+<input type="@(tblAppointmentsInfoAdd.str_Instructions1.InputTextType)" name="x_str_Instructions1" id="x_str_Instructions1" data-table="tblAppointmentsInfo" data-field="x_str_Instructions1" value="@Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.EditValue)" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_Instructions1.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_Instructions1.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.EditAttributes) aria-describedby="x_str_Instructions1_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_Instructions1.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_Instructions1.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_AppNotes.Visible) { // tblAppointmentsInfoAdd.str_AppNotes.Visible (begin)
+    <div id="r_str_AppNotes" @Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_AppNotes" for="x_str_AppNotes" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_AppNotes">
+<input type="@(tblAppointmentsInfoAdd.str_AppNotes.InputTextType)" name="x_str_AppNotes" id="x_str_AppNotes" data-table="tblAppointmentsInfo" data-field="x_str_AppNotes" value="@Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.EditValue)" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_AppNotes.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_AppNotes.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.EditAttributes) aria-describedby="x_str_AppNotes_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_AppNotes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_AppNotes.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_PickupLocation.Visible) { // tblAppointmentsInfoAdd.str_PickupLocation.Visible (begin)
+    <div id="r_str_PickupLocation" @Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_PickupLocation" for="x_str_PickupLocation" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_PickupLocation">
+<input type="@(tblAppointmentsInfoAdd.str_PickupLocation.InputTextType)" name="x_str_PickupLocation" id="x_str_PickupLocation" data-table="tblAppointmentsInfo" data-field="x_str_PickupLocation" value="@Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.EditValue)" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_PickupLocation.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_PickupLocation.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.EditAttributes) aria-describedby="x_str_PickupLocation_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_PickupLocation.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_PickupLocation.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_Created_By.Visible) { // tblAppointmentsInfoAdd.int_Created_By.Visible (begin)
+    <div id="r_int_Created_By" @Html.Raw(tblAppointmentsInfoAdd.int_Created_By.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_Created_By" for="x_int_Created_By" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_Created_By.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_Created_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_Created_By.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Created_By">
+<input type="@(tblAppointmentsInfoAdd.int_Created_By.InputTextType)" name="x_int_Created_By" id="x_int_Created_By" data-table="tblAppointmentsInfo" data-field="x_int_Created_By" value="@Html.Raw(tblAppointmentsInfoAdd.int_Created_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_Created_By.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_Created_By.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_Created_By.EditAttributes) aria-describedby="x_int_Created_By_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_Created_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_Created_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_Created_By.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_Modified_By.Visible) { // tblAppointmentsInfoAdd.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" @Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_Modified_By" for="x_int_Modified_By" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Modified_By">
+<input type="@(tblAppointmentsInfoAdd.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblAppointmentsInfo" data-field="x_int_Modified_By" value="@Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_Modified_By.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.EditAttributes) aria-describedby="x_int_Modified_By_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_Modified_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_Modified_By.Visible (end) *@
+@if (tblAppointmentsInfoAdd.bit_IsDeleted.Visible) { // tblAppointmentsInfoAdd.bit_IsDeleted.Visible (begin)
+    <div id="r_bit_IsDeleted" @Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_bit_IsDeleted" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.Caption)@Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_IsDeleted">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.bit_IsDeleted.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_bit_IsDeleted" data-boolean name="x_bit_IsDeleted" id="x_bit_IsDeleted" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.bit_IsDeleted.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.EditAttributes) aria-describedby="x_bit_IsDeleted_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.bit_IsDeleted.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.bit_IsDeleted.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_Interval.Visible) { // tblAppointmentsInfoAdd.str_Interval.Visible (begin)
+    <div id="r_str_Interval" @Html.Raw(tblAppointmentsInfoAdd.str_Interval.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_Interval" for="x_str_Interval" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_Interval.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_Interval.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_Interval.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Interval">
+<input type="@(tblAppointmentsInfoAdd.str_Interval.InputTextType)" name="x_str_Interval" id="x_str_Interval" data-table="tblAppointmentsInfo" data-field="x_str_Interval" value="@Html.Raw(tblAppointmentsInfoAdd.str_Interval.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_Interval.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_Interval.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_Interval.EditAttributes) aria-describedby="x_str_Interval_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_Interval.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_Interval.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_Interval.Visible (end) *@
+@if (tblAppointmentsInfoAdd.RemM1.Visible) { // tblAppointmentsInfoAdd.RemM1.Visible (begin)
+    <div id="r_RemM1" @Html.Raw(tblAppointmentsInfoAdd.RemM1.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_RemM1" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.RemM1.Caption)@Html.Raw(tblAppointmentsInfoAdd.RemM1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.RemM1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_RemM1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.RemM1.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_RemM1" data-boolean name="x_RemM1" id="x_RemM1" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.RemM1.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.RemM1.EditAttributes) aria-describedby="x_RemM1_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.RemM1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.RemM1.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.RemM1.Visible (end) *@
+@if (tblAppointmentsInfoAdd.RemM2.Visible) { // tblAppointmentsInfoAdd.RemM2.Visible (begin)
+    <div id="r_RemM2" @Html.Raw(tblAppointmentsInfoAdd.RemM2.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_RemM2" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.RemM2.Caption)@Html.Raw(tblAppointmentsInfoAdd.RemM2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.RemM2.CellAttributes)>
+<span id="el_tblAppointmentsInfo_RemM2">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.RemM2.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_RemM2" data-boolean name="x_RemM2" id="x_RemM2" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.RemM2.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.RemM2.EditAttributes) aria-describedby="x_RemM2_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.RemM2.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.RemM2.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.RemM2.Visible (end) *@
+@if (tblAppointmentsInfoAdd.RemM3.Visible) { // tblAppointmentsInfoAdd.RemM3.Visible (begin)
+    <div id="r_RemM3" @Html.Raw(tblAppointmentsInfoAdd.RemM3.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_RemM3" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.RemM3.Caption)@Html.Raw(tblAppointmentsInfoAdd.RemM3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.RemM3.CellAttributes)>
+<span id="el_tblAppointmentsInfo_RemM3">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.RemM3.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_RemM3" data-boolean name="x_RemM3" id="x_RemM3" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.RemM3.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.RemM3.EditAttributes) aria-describedby="x_RemM3_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.RemM3.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.RemM3.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.RemM3.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_Location_ID.Visible) { // tblAppointmentsInfoAdd.int_Location_ID.Visible (begin)
+    <div id="r_int_Location_ID" @Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_Location_ID" for="x_int_Location_ID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Location_ID">
+<input type="@(tblAppointmentsInfoAdd.int_Location_ID.InputTextType)" name="x_int_Location_ID" id="x_int_Location_ID" data-table="tblAppointmentsInfo" data-field="x_int_Location_ID" value="@Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_Location_ID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_Location_ID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.EditAttributes) aria-describedby="x_int_Location_ID_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_Location_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_Location_ID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.SPID.Visible) { // tblAppointmentsInfoAdd.SPID.Visible (begin)
+    <div id="r_SPID" @Html.Raw(tblAppointmentsInfoAdd.SPID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_SPID" for="x_SPID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.SPID.Caption)@Html.Raw(tblAppointmentsInfoAdd.SPID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.SPID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SPID">
+<input type="@(tblAppointmentsInfoAdd.SPID.InputTextType)" name="x_SPID" id="x_SPID" data-table="tblAppointmentsInfo" data-field="x_SPID" value="@Html.Raw(tblAppointmentsInfoAdd.SPID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.SPID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.SPID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.SPID.EditAttributes) aria-describedby="x_SPID_help">
+@Html.Raw(tblAppointmentsInfoAdd.SPID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.SPID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.SPID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.Chk_Trace.Visible) { // tblAppointmentsInfoAdd.Chk_Trace.Visible (begin)
+    <div id="r_Chk_Trace" @Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_Chk_Trace" for="x_Chk_Trace" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.Caption)@Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.CellAttributes)>
+<span id="el_tblAppointmentsInfo_Chk_Trace">
+<input type="@(tblAppointmentsInfoAdd.Chk_Trace.InputTextType)" name="x_Chk_Trace" id="x_Chk_Trace" data-table="tblAppointmentsInfo" data-field="x_Chk_Trace" value="@Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.Chk_Trace.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.Chk_Trace.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.EditAttributes) aria-describedby="x_Chk_Trace_help">
+@Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.Chk_Trace.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.Chk_Trace.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_DropOffLocation.Visible) { // tblAppointmentsInfoAdd.str_DropOffLocation.Visible (begin)
+    <div id="r_str_DropOffLocation" @Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_DropOffLocation" for="x_str_DropOffLocation" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_DropOffLocation">
+<input type="@(tblAppointmentsInfoAdd.str_DropOffLocation.InputTextType)" name="x_str_DropOffLocation" id="x_str_DropOffLocation" data-table="tblAppointmentsInfo" data-field="x_str_DropOffLocation" value="@Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.EditValue)" size="30" maxlength="500" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_DropOffLocation.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_DropOffLocation.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.EditAttributes) aria-describedby="x_str_DropOffLocation_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_DropOffLocation.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_DropOffLocation.Visible (end) *@
+@if (tblAppointmentsInfoAdd.imgInstructorSignature.Visible) { // tblAppointmentsInfoAdd.imgInstructorSignature.Visible (begin)
+    <div id="r_imgInstructorSignature" @Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_imgInstructorSignature" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.Caption)@Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.CellAttributes)>
+<span id="el_tblAppointmentsInfo_imgInstructorSignature">
+<div id="fd_x_imgInstructorSignature" class="fileinput-button ew-file-drop-zone">
+    <input
+        type="file"
+        id="x_imgInstructorSignature"
+        name="x_imgInstructorSignature"
+        class="form-control ew-file-input"
+        title="@(tblAppointmentsInfoAdd.imgInstructorSignature.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblAppointmentsInfo"
+        data-field="x_imgInstructorSignature"
+        data-size="0"
+        data-accept-file-types="@(tblAppointmentsInfoAdd.imgInstructorSignature.AcceptFileTypes)"
+        data-max-file-size="@(tblAppointmentsInfoAdd.imgInstructorSignature.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(tblAppointmentsInfoAdd.imgInstructorSignature.ImageCropper ? 0 : 1)"
+        aria-describedby="x_imgInstructorSignature_help"
+        @Html.Raw((tblAppointmentsInfoAdd.imgInstructorSignature.ReadOnly || tblAppointmentsInfoAdd.imgInstructorSignature.Disabled) ? " disabled" : "")
+        @Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.EditAttributes)
+    >
+    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.imgInstructorSignature.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_imgInstructorSignature" id= "fn_x_imgInstructorSignature" value="@(tblAppointmentsInfoAdd.imgInstructorSignature.Upload.FileName)">
+<input type="hidden" name="fa_x_imgInstructorSignature" id= "fa_x_imgInstructorSignature" value="0">
+<table id="ft_x_imgInstructorSignature" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.imgInstructorSignature.Visible (end) *@
+@if (tblAppointmentsInfoAdd.imgStudentSignature.Visible) { // tblAppointmentsInfoAdd.imgStudentSignature.Visible (begin)
+    <div id="r_imgStudentSignature" @Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_imgStudentSignature" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.Caption)@Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.CellAttributes)>
+<span id="el_tblAppointmentsInfo_imgStudentSignature">
+<div id="fd_x_imgStudentSignature" class="fileinput-button ew-file-drop-zone">
+    <input
+        type="file"
+        id="x_imgStudentSignature"
+        name="x_imgStudentSignature"
+        class="form-control ew-file-input"
+        title="@(tblAppointmentsInfoAdd.imgStudentSignature.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblAppointmentsInfo"
+        data-field="x_imgStudentSignature"
+        data-size="0"
+        data-accept-file-types="@(tblAppointmentsInfoAdd.imgStudentSignature.AcceptFileTypes)"
+        data-max-file-size="@(tblAppointmentsInfoAdd.imgStudentSignature.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(tblAppointmentsInfoAdd.imgStudentSignature.ImageCropper ? 0 : 1)"
+        aria-describedby="x_imgStudentSignature_help"
+        @Html.Raw((tblAppointmentsInfoAdd.imgStudentSignature.ReadOnly || tblAppointmentsInfoAdd.imgStudentSignature.Disabled) ? " disabled" : "")
+        @Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.EditAttributes)
+    >
+    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.imgStudentSignature.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_imgStudentSignature" id= "fn_x_imgStudentSignature" value="@(tblAppointmentsInfoAdd.imgStudentSignature.Upload.FileName)">
+<input type="hidden" name="fa_x_imgStudentSignature" id= "fa_x_imgStudentSignature" value="0">
+<table id="ft_x_imgStudentSignature" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.imgStudentSignature.Visible (end) *@
+@if (tblAppointmentsInfoAdd.imgObserverSignature.Visible) { // tblAppointmentsInfoAdd.imgObserverSignature.Visible (begin)
+    <div id="r_imgObserverSignature" @Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_imgObserverSignature" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.Caption)@Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.CellAttributes)>
+<span id="el_tblAppointmentsInfo_imgObserverSignature">
+<div id="fd_x_imgObserverSignature" class="fileinput-button ew-file-drop-zone">
+    <input
+        type="file"
+        id="x_imgObserverSignature"
+        name="x_imgObserverSignature"
+        class="form-control ew-file-input"
+        title="@(tblAppointmentsInfoAdd.imgObserverSignature.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblAppointmentsInfo"
+        data-field="x_imgObserverSignature"
+        data-size="0"
+        data-accept-file-types="@(tblAppointmentsInfoAdd.imgObserverSignature.AcceptFileTypes)"
+        data-max-file-size="@(tblAppointmentsInfoAdd.imgObserverSignature.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(tblAppointmentsInfoAdd.imgObserverSignature.ImageCropper ? 0 : 1)"
+        aria-describedby="x_imgObserverSignature_help"
+        @Html.Raw((tblAppointmentsInfoAdd.imgObserverSignature.ReadOnly || tblAppointmentsInfoAdd.imgObserverSignature.Disabled) ? " disabled" : "")
+        @Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.EditAttributes)
+    >
+    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.imgObserverSignature.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_imgObserverSignature" id= "fn_x_imgObserverSignature" value="@(tblAppointmentsInfoAdd.imgObserverSignature.Upload.FileName)">
+<input type="hidden" name="fa_x_imgObserverSignature" id= "fa_x_imgObserverSignature" value="0">
+<table id="ft_x_imgObserverSignature" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.imgObserverSignature.Visible (end) *@
+@if (tblAppointmentsInfoAdd.dt_apptstart.Visible) { // tblAppointmentsInfoAdd.dt_apptstart.Visible (begin)
+    <div id="r_dt_apptstart" @Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_dt_apptstart" for="x_dt_apptstart" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.Caption)@Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dt_apptstart">
+<input type="@(tblAppointmentsInfoAdd.dt_apptstart.InputTextType)" name="x_dt_apptstart" id="x_dt_apptstart" data-table="tblAppointmentsInfo" data-field="x_dt_apptstart" value="@Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.dt_apptstart.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.dt_apptstart.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.EditAttributes) aria-describedby="x_dt_apptstart_help">
+@Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.dt_apptstart.GetErrorMessage())</div>
+@if (!tblAppointmentsInfoAdd.dt_apptstart.ReadOnly && !tblAppointmentsInfoAdd.dt_apptstart.Disabled && !tblAppointmentsInfoAdd.dt_apptstart.EditAttrs.Is("readonly") && !tblAppointmentsInfoAdd.dt_apptstart.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAppointmentsInfoadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAppointmentsInfoadd", "x_dt_apptstart", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.dt_apptstart.Visible (end) *@
+@if (tblAppointmentsInfoAdd.dt_apptComplete.Visible) { // tblAppointmentsInfoAdd.dt_apptComplete.Visible (begin)
+    <div id="r_dt_apptComplete" @Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_dt_apptComplete" for="x_dt_apptComplete" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.Caption)@Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dt_apptComplete">
+<input type="@(tblAppointmentsInfoAdd.dt_apptComplete.InputTextType)" name="x_dt_apptComplete" id="x_dt_apptComplete" data-table="tblAppointmentsInfo" data-field="x_dt_apptComplete" value="@Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.dt_apptComplete.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.dt_apptComplete.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.EditAttributes) aria-describedby="x_dt_apptComplete_help">
+@Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.dt_apptComplete.GetErrorMessage())</div>
+@if (!tblAppointmentsInfoAdd.dt_apptComplete.ReadOnly && !tblAppointmentsInfoAdd.dt_apptComplete.Disabled && !tblAppointmentsInfoAdd.dt_apptComplete.EditAttrs.Is("readonly") && !tblAppointmentsInfoAdd.dt_apptComplete.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAppointmentsInfoadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAppointmentsInfoadd", "x_dt_apptComplete", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.dt_apptComplete.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_apptstartedBy.Visible) { // tblAppointmentsInfoAdd.int_apptstartedBy.Visible (begin)
+    <div id="r_int_apptstartedBy" @Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_apptstartedBy" for="x_int_apptstartedBy" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_apptstartedBy">
+<input type="@(tblAppointmentsInfoAdd.int_apptstartedBy.InputTextType)" name="x_int_apptstartedBy" id="x_int_apptstartedBy" data-table="tblAppointmentsInfo" data-field="x_int_apptstartedBy" value="@Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_apptstartedBy.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_apptstartedBy.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.EditAttributes) aria-describedby="x_int_apptstartedBy_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_apptstartedBy.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_apptstartedBy.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_apptCompletedBy.Visible) { // tblAppointmentsInfoAdd.int_apptCompletedBy.Visible (begin)
+    <div id="r_int_apptCompletedBy" @Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_apptCompletedBy" for="x_int_apptCompletedBy" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_apptCompletedBy">
+<input type="@(tblAppointmentsInfoAdd.int_apptCompletedBy.InputTextType)" name="x_int_apptCompletedBy" id="x_int_apptCompletedBy" data-table="tblAppointmentsInfo" data-field="x_int_apptCompletedBy" value="@Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_apptCompletedBy.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_apptCompletedBy.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.EditAttributes) aria-describedby="x_int_apptCompletedBy_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_apptCompletedBy.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_apptCompletedBy.Visible (end) *@
+@if (tblAppointmentsInfoAdd.SMSReminder1.Visible) { // tblAppointmentsInfoAdd.SMSReminder1.Visible (begin)
+    <div id="r_SMSReminder1" @Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_SMSReminder1" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.Caption)@Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SMSReminder1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.SMSReminder1.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_SMSReminder1" data-boolean name="x_SMSReminder1" id="x_SMSReminder1" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.SMSReminder1.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.EditAttributes) aria-describedby="x_SMSReminder1_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.SMSReminder1.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.SMSReminder1.Visible (end) *@
+@if (tblAppointmentsInfoAdd.SMSReminder2.Visible) { // tblAppointmentsInfoAdd.SMSReminder2.Visible (begin)
+    <div id="r_SMSReminder2" @Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_SMSReminder2" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.Caption)@Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SMSReminder2">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.SMSReminder2.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_SMSReminder2" data-boolean name="x_SMSReminder2" id="x_SMSReminder2" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.SMSReminder2.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.EditAttributes) aria-describedby="x_SMSReminder2_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.SMSReminder2.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.SMSReminder2.Visible (end) *@
+@if (tblAppointmentsInfoAdd.SMSReminder3.Visible) { // tblAppointmentsInfoAdd.SMSReminder3.Visible (begin)
+    <div id="r_SMSReminder3" @Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_SMSReminder3" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.Caption)@Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SMSReminder3">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.SMSReminder3.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_SMSReminder3" data-boolean name="x_SMSReminder3" id="x_SMSReminder3" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.SMSReminder3.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.EditAttributes) aria-describedby="x_SMSReminder3_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.SMSReminder3.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.SMSReminder3.Visible (end) *@
+@if (tblAppointmentsInfoAdd.VoiceReminder1.Visible) { // tblAppointmentsInfoAdd.VoiceReminder1.Visible (begin)
+    <div id="r_VoiceReminder1" @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_VoiceReminder1" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.Caption)@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_VoiceReminder1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.VoiceReminder1.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_VoiceReminder1" data-boolean name="x_VoiceReminder1" id="x_VoiceReminder1" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.VoiceReminder1.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.EditAttributes) aria-describedby="x_VoiceReminder1_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder1.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.VoiceReminder1.Visible (end) *@
+@if (tblAppointmentsInfoAdd.VoiceReminder2.Visible) { // tblAppointmentsInfoAdd.VoiceReminder2.Visible (begin)
+    <div id="r_VoiceReminder2" @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_VoiceReminder2" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.Caption)@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.CellAttributes)>
+<span id="el_tblAppointmentsInfo_VoiceReminder2">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.VoiceReminder2.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_VoiceReminder2" data-boolean name="x_VoiceReminder2" id="x_VoiceReminder2" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.VoiceReminder2.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.EditAttributes) aria-describedby="x_VoiceReminder2_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder2.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.VoiceReminder2.Visible (end) *@
+@if (tblAppointmentsInfoAdd.VoiceReminder3.Visible) { // tblAppointmentsInfoAdd.VoiceReminder3.Visible (begin)
+    <div id="r_VoiceReminder3" @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_VoiceReminder3" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.Caption)@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.CellAttributes)>
+<span id="el_tblAppointmentsInfo_VoiceReminder3">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.VoiceReminder3.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_VoiceReminder3" data-boolean name="x_VoiceReminder3" id="x_VoiceReminder3" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.VoiceReminder3.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.EditAttributes) aria-describedby="x_VoiceReminder3_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.VoiceReminder3.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.VoiceReminder3.Visible (end) *@
+@if (tblAppointmentsInfoAdd.bit_isroadtest.Visible) { // tblAppointmentsInfoAdd.bit_isroadtest.Visible (begin)
+    <div id="r_bit_isroadtest" @Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_bit_isroadtest" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.Caption)@Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_isroadtest">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.bit_isroadtest.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_bit_isroadtest" data-boolean name="x_bit_isroadtest" id="x_bit_isroadtest" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.bit_isroadtest.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.EditAttributes) aria-describedby="x_bit_isroadtest_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.bit_isroadtest.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.bit_isroadtest.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_slotType.Visible) { // tblAppointmentsInfoAdd.int_slotType.Visible (begin)
+    <div id="r_int_slotType" @Html.Raw(tblAppointmentsInfoAdd.int_slotType.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_slotType" for="x_int_slotType" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_slotType.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_slotType.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_slotType.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_slotType">
+<input type="@(tblAppointmentsInfoAdd.int_slotType.InputTextType)" name="x_int_slotType" id="x_int_slotType" data-table="tblAppointmentsInfo" data-field="x_int_slotType" value="@Html.Raw(tblAppointmentsInfoAdd.int_slotType.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_slotType.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_slotType.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_slotType.EditAttributes) aria-describedby="x_int_slotType_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_slotType.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_slotType.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_slotType.Visible (end) *@
+@if (tblAppointmentsInfoAdd.bit_VisibleOnPortal.Visible) { // tblAppointmentsInfoAdd.bit_VisibleOnPortal.Visible (begin)
+    <div id="r_bit_VisibleOnPortal" @Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_bit_VisibleOnPortal" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.Caption)@Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_VisibleOnPortal">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.bit_VisibleOnPortal.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_bit_VisibleOnPortal" data-boolean name="x_bit_VisibleOnPortal" id="x_bit_VisibleOnPortal" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.bit_VisibleOnPortal.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.EditAttributes) aria-describedby="x_bit_VisibleOnPortal_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.bit_VisibleOnPortal.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.bit_VisibleOnPortal.Visible (end) *@
+@if (tblAppointmentsInfoAdd.IsDataRetrieved.Visible) { // tblAppointmentsInfoAdd.IsDataRetrieved.Visible (begin)
+    <div id="r_IsDataRetrieved" @Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_IsDataRetrieved" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.Caption)@Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.CellAttributes)>
+<span id="el_tblAppointmentsInfo_IsDataRetrieved">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.IsDataRetrieved.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_IsDataRetrieved" data-boolean name="x_IsDataRetrieved" id="x_IsDataRetrieved" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.IsDataRetrieved.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.EditAttributes) aria-describedby="x_IsDataRetrieved_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.IsDataRetrieved.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.IsDataRetrieved.Visible (end) *@
+@if (tblAppointmentsInfoAdd.bit_chargesApplied.Visible) { // tblAppointmentsInfoAdd.bit_chargesApplied.Visible (begin)
+    <div id="r_bit_chargesApplied" @Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_bit_chargesApplied" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.Caption)@Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_chargesApplied">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAppointmentsInfoAdd.bit_chargesApplied.IsInvalidClass)" data-table="tblAppointmentsInfo" data-field="x_bit_chargesApplied" data-boolean name="x_bit_chargesApplied" id="x_bit_chargesApplied" value="1" checked="@ConvertToBool(tblAppointmentsInfoAdd.bit_chargesApplied.CurrentValue)" @Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.EditAttributes) aria-describedby="x_bit_chargesApplied_help">
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAppointmentsInfoAdd.bit_chargesApplied.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.bit_chargesApplied.Visible (end) *@
+@if (tblAppointmentsInfoAdd.dec_DistanceTravelled.Visible) { // tblAppointmentsInfoAdd.dec_DistanceTravelled.Visible (begin)
+    <div id="r_dec_DistanceTravelled" @Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_dec_DistanceTravelled" for="x_dec_DistanceTravelled" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.Caption)@Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_DistanceTravelled">
+<input type="@(tblAppointmentsInfoAdd.dec_DistanceTravelled.InputTextType)" name="x_dec_DistanceTravelled" id="x_dec_DistanceTravelled" data-table="tblAppointmentsInfo" data-field="x_dec_DistanceTravelled" value="@Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.dec_DistanceTravelled.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.dec_DistanceTravelled.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.EditAttributes) aria-describedby="x_dec_DistanceTravelled_help">
+@Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.dec_DistanceTravelled.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.dec_DistanceTravelled.Visible (end) *@
+@if (tblAppointmentsInfoAdd.btwProductIdsforSSRules.Visible) { // tblAppointmentsInfoAdd.btwProductIdsforSSRules.Visible (begin)
+    <div id="r_btwProductIdsforSSRules" @Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_btwProductIdsforSSRules" for="x_btwProductIdsforSSRules" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.Caption)@Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.CellAttributes)>
+<span id="el_tblAppointmentsInfo_btwProductIdsforSSRules">
+<textarea data-table="tblAppointmentsInfo" data-field="x_btwProductIdsforSSRules" name="x_btwProductIdsforSSRules" id="x_btwProductIdsforSSRules" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.btwProductIdsforSSRules.PlaceHolder))"@Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.EditAttributes) aria-describedby="x_btwProductIdsforSSRules_help">@(tblAppointmentsInfoAdd.btwProductIdsforSSRules.EditValue)</textarea>
+@Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.btwProductIdsforSSRules.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.btwProductIdsforSSRules.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_evaluateApptWithEmail.Visible) { // tblAppointmentsInfoAdd.int_evaluateApptWithEmail.Visible (begin)
+    <div id="r_int_evaluateApptWithEmail" @Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_evaluateApptWithEmail" for="x_int_evaluateApptWithEmail" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_evaluateApptWithEmail">
+<input type="@(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.InputTextType)" name="x_int_evaluateApptWithEmail" id="x_int_evaluateApptWithEmail" data-table="tblAppointmentsInfo" data-field="x_int_evaluateApptWithEmail" value="@Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.EditAttributes) aria-describedby="x_int_evaluateApptWithEmail_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_evaluateApptWithEmail.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_evaluateApptWithEmail.Visible (end) *@
+@if (tblAppointmentsInfoAdd.PublicNotesId.Visible) { // tblAppointmentsInfoAdd.PublicNotesId.Visible (begin)
+    <div id="r_PublicNotesId" @Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_PublicNotesId" for="x_PublicNotesId" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.Caption)@Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.CellAttributes)>
+<span id="el_tblAppointmentsInfo_PublicNotesId">
+<textarea data-table="tblAppointmentsInfo" data-field="x_PublicNotesId" name="x_PublicNotesId" id="x_PublicNotesId" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.PublicNotesId.PlaceHolder))"@Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.EditAttributes) aria-describedby="x_PublicNotesId_help">@(tblAppointmentsInfoAdd.PublicNotesId.EditValue)</textarea>
+@Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.PublicNotesId.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.PublicNotesId.Visible (end) *@
+@if (tblAppointmentsInfoAdd.NationalID.Visible) { // tblAppointmentsInfoAdd.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblAppointmentsInfoAdd.NationalID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_NationalID" for="x_NationalID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.NationalID.Caption)@Html.Raw(tblAppointmentsInfoAdd.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.NationalID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_NationalID">
+<input type="@(tblAppointmentsInfoAdd.NationalID.InputTextType)" name="x_NationalID" id="x_NationalID" data-table="tblAppointmentsInfo" data-field="x_NationalID" value="@Html.Raw(tblAppointmentsInfoAdd.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.NationalID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.NationalID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.NationalID.EditAttributes) aria-describedby="x_NationalID_help">
+@Html.Raw(tblAppointmentsInfoAdd.NationalID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.NationalID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.NationalID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_Username.Visible) { // tblAppointmentsInfoAdd.str_Username.Visible (begin)
+    <div id="r_str_Username" @Html.Raw(tblAppointmentsInfoAdd.str_Username.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_Username" for="x_str_Username" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_Username.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_Username.CellAttributes)>
+@if (!Security.IsAdmin && Security.IsLoggedIn && !tblAppointmentsInfoAdd.UserIDAllow("add")) { // Non system admin
+<span id="el_tblAppointmentsInfo_str_Username">
+    <select
+        id="x_str_Username"
+        name="x_str_Username"
+        class="form-select ew-select@(tblAppointmentsInfoAdd.str_Username.IsInvalidClass)"
+        data-select2-id="ftblAppointmentsInfoadd_x_str_Username"
+        data-table="tblAppointmentsInfo"
+        data-field="x_str_Username"
+        data-value-separator="@(tblAppointmentsInfoAdd.str_Username.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAppointmentsInfoAdd.str_Username.PlaceHolder))"
+        @Html.Raw(tblAppointmentsInfoAdd.str_Username.EditAttributes)>
+        @(tblAppointmentsInfoAdd.str_Username.SelectOptionListHtml("x_str_Username"))
+    </select>
+    @Html.Raw(tblAppointmentsInfoAdd.str_Username.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_Username.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblAppointmentsInfoadd", function() {
+    var options = { name: "x_str_Username", selectId: "ftblAppointmentsInfoadd_x_str_Username" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAppointmentsInfoadd.lists.str_Username?.lookupOptions.length) {
+        options.data = { id: "x_str_Username", form: "ftblAppointmentsInfoadd" };
+    } else {
+        options.ajax = { id: "x_str_Username", form: "ftblAppointmentsInfoadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAppointmentsInfo.fields.str_Username.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else {
+<span id="el_tblAppointmentsInfo_str_Username">
+<input type="@(tblAppointmentsInfoAdd.str_Username.InputTextType)" name="x_str_Username" id="x_str_Username" data-table="tblAppointmentsInfo" data-field="x_str_Username" value="@Html.Raw(tblAppointmentsInfoAdd.str_Username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_Username.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_Username.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_Username.EditAttributes) aria-describedby="x_str_Username_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_Username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_Username.GetErrorMessage())</div>
+</span>
+}
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_Username.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_PackageID.Visible) { // tblAppointmentsInfoAdd.int_PackageID.Visible (begin)
+    <div id="r_int_PackageID" @Html.Raw(tblAppointmentsInfoAdd.int_PackageID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_PackageID" for="x_int_PackageID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_PackageID.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_PackageID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_PackageID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_PackageID">
+<input type="@(tblAppointmentsInfoAdd.int_PackageID.InputTextType)" name="x_int_PackageID" id="x_int_PackageID" data-table="tblAppointmentsInfo" data-field="x_int_PackageID" value="@Html.Raw(tblAppointmentsInfoAdd.int_PackageID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_PackageID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_PackageID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_PackageID.EditAttributes) aria-describedby="x_int_PackageID_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_PackageID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_PackageID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_PackageID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.int_ApptCldr_ID.Visible) { // tblAppointmentsInfoAdd.int_ApptCldr_ID.Visible (begin)
+    <div id="r_int_ApptCldr_ID" @Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_int_ApptCldr_ID" for="x_int_ApptCldr_ID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.Caption)@Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_ApptCldr_ID">
+<input type="@(tblAppointmentsInfoAdd.int_ApptCldr_ID.InputTextType)" name="x_int_ApptCldr_ID" id="x_int_ApptCldr_ID" data-table="tblAppointmentsInfo" data-field="x_int_ApptCldr_ID" value="@Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.int_ApptCldr_ID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.int_ApptCldr_ID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.EditAttributes) aria-describedby="x_int_ApptCldr_ID_help">
+@Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.int_ApptCldr_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.int_ApptCldr_ID.Visible (end) *@
+@if (tblAppointmentsInfoAdd.str_CRSS_ID.Visible) { // tblAppointmentsInfoAdd.str_CRSS_ID.Visible (begin)
+    <div id="r_str_CRSS_ID" @Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.RowAttributes)>
+        <label id="elh_tblAppointmentsInfo_str_CRSS_ID" for="x_str_CRSS_ID" class="@(tblAppointmentsInfoAdd.LeftColumnClass)">@Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.Caption)@Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAppointmentsInfoAdd.RightColumnClass)"><div @Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_CRSS_ID">
+<input type="@(tblAppointmentsInfoAdd.str_CRSS_ID.InputTextType)" name="x_str_CRSS_ID" id="x_str_CRSS_ID" data-table="tblAppointmentsInfo" data-field="x_str_CRSS_ID" value="@Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblAppointmentsInfoAdd.str_CRSS_ID.PlaceHolder))" data-format-pattern="@(tblAppointmentsInfoAdd.str_CRSS_ID.FormatPattern)"@Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.EditAttributes) aria-describedby="x_str_CRSS_ID_help">
+@Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAppointmentsInfoAdd.str_CRSS_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAppointmentsInfoAdd.str_CRSS_ID.Visible (end) *@
+</div><!-- /page* -->
+@{ tblAppointmentsInfoAdd.CloseRecordset(); }
+@Html.Raw(tblAppointmentsInfoAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblAppointmentsInfoAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblAppointmentsInfoadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblAppointmentsInfoadd" data-href="@AppPath(tblAppointmentsInfoAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblAppointmentsInfoAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblAppointmentsInfoAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblAppointmentsInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

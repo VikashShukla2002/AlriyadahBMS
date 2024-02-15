@@ -1,0 +1,300 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (assessmentStatusSummary.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!assessmentStatusSummary.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!assessmentStatusSummary.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!assessmentStatusSummary.IsExport() && !assessmentStatusSummary.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(assessmentStatusSummary.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Assessment_Status: currentTable } });
+var currentPageID = ew.PAGE_ID = "summary";
+var currentForm;
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<a id="top"></a>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+<div class="btn-toolbar ew-toolbar">
+@if (!assessmentStatusSummary.DrillDownInPanel) {
+    assessmentStatusSummary.ExportOptions.Render("body");
+    assessmentStatusSummary.SearchOptions.Render("body");
+    assessmentStatusSummary.FilterOptions.Render("body");
+}
+</div>
+@if (!assessmentStatusSummary.IsExport() && !assessmentStatusSummary.DrillDown && !DashboardReport) {
+}
+@assessmentStatusSummary.ShowPageHeader()
+@assessmentStatusSummary.ShowMessages()
+@if (assessmentStatusSummary.ShowReport) {
+<!-- Summary report (begin) -->
+@if (!assessmentStatusSummary.IsExport("pdf")) {
+@:<main class="report-summary @(assessmentStatusSummary.TotalGroups == 0 ? " ew-no-record" : "")">
+}
+@while (assessmentStatusSummary.GroupCount <= assessmentStatusSummary.GroupRecords.Count && assessmentStatusSummary.GroupCount <= assessmentStatusSummary.DisplayGroups) {
+    // Show header
+    if (assessmentStatusSummary.ShowHeader) {
+if (assessmentStatusSummary.GroupCount > 1) {
+@:</tbody>
+@:</table>
+if (!assessmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!assessmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+@Html.Raw(assessmentStatusSummary.PageBreakHtml)
+}
+if (!assessmentStatusSummary.IsExport("pdf")) {
+@:<div class="@Html.Raw(assessmentStatusSummary.ReportContainerClass)">
+}
+if (!assessmentStatusSummary.IsExport() && !(assessmentStatusSummary.DrillDown && assessmentStatusSummary.TotalGroups > 0)) {
+<!-- Top pager -->
+<div class="card-header ew-grid-upper-panel">
+@assessmentStatusSummary.Pager.Render()
+</div>
+}
+if (!assessmentStatusSummary.IsExport("pdf")) {
+<!-- Report grid (begin) -->
+@:<div id="gmp_Assessment_Status" class="card-body ew-grid-middle-panel @(assessmentStatusSummary.TableContainerClass)">
+}
+@:<table class="@(assessmentStatusSummary.TableClass)">
+<thead>
+    <!-- Table header -->
+    <tr class="ew-table-header">
+@if (assessmentStatusSummary.str_Username.Visible) { // assessmentStatusSummary.str_Username.Visible (begin)
+    if (assessmentStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    <th data-name="str_Username">&nbsp;</th>
+    } else {
+    <th data-name="str_Username" class="@(assessmentStatusSummary.str_Username.HeaderCellClass)"><div class="Assessment_Status_str_Username">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.str_Username))</div></th>
+    }
+} @* assessmentStatusSummary.str_Username.Visible (end) *@
+@if (assessmentStatusSummary.DLType.Visible) { // assessmentStatusSummary.DLType.Visible (begin)
+    if (assessmentStatusSummary.DLType.ShowGroupHeaderAsRow) {
+    <th data-name="DLType">&nbsp;</th>
+    } else {
+    <th data-name="DLType" class="@(assessmentStatusSummary.DLType.HeaderCellClass)"><div class="Assessment_Status_DLType">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.DLType))</div></th>
+    }
+} @* assessmentStatusSummary.DLType.Visible (end) *@
+@if (assessmentStatusSummary.AssessmentScore.Visible) { // assessmentStatusSummary.AssessmentScore.Visible (begin)
+    if (assessmentStatusSummary.AssessmentScore.ShowGroupHeaderAsRow) {
+    <th data-name="AssessmentScore">&nbsp;</th>
+    } else {
+    <th data-name="AssessmentScore" class="@(assessmentStatusSummary.AssessmentScore.HeaderCellClass)"><div class="Assessment_Status_AssessmentScore">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.AssessmentScore))</div></th>
+    }
+} @* assessmentStatusSummary.AssessmentScore.Visible (end) *@
+@if (assessmentStatusSummary.Price.Visible) { // assessmentStatusSummary.Price.Visible (begin)
+    <th data-name="Price" class="@(assessmentStatusSummary.Price.HeaderCellClass)"><div class="Assessment_Status_Price">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.Price))</div></th>
+} @* assessmentStatusSummary.Price.Visible (end) *@
+    </tr>
+</thead>
+@:<tbody>
+        if (assessmentStatusSummary.TotalGroups == 0) {
+            break; // Show header only
+        }
+        assessmentStatusSummary.ShowHeader = false;
+    } // End show header
+
+    // Build detail SQL
+    string where = DetailFilterSql(assessmentStatusSummary.str_Username, assessmentStatusSummary.SqlFirstGroupField, assessmentStatusSummary.str_Username?.GroupValue, assessmentStatusSummary.DbId); // DN
+    if (!Empty(assessmentStatusSummary.PageFirstGroupFilter)) {
+        assessmentStatusSummary.PageFirstGroupFilter += " OR ";
+    }
+    assessmentStatusSummary.PageFirstGroupFilter += where;
+    if (!Empty(assessmentStatusSummary.Filter)) {
+        where = "(" + assessmentStatusSummary.Filter + ") AND (" + where + ")";
+    }
+    sqlWrk = BuildReportSql(assessmentStatusSummary.SqlSelect, assessmentStatusSummary.SqlWhere, assessmentStatusSummary.SqlGroupBy, assessmentStatusSummary.SqlHaving, assessmentStatusSummary.SqlOrderBy, where, assessmentStatusSummary.Sort);
+    assessmentStatusSummary.DetailRecords = await assessmentStatusSummary.Connection.GetRowsAsync(sqlWrk); // DN
+    assessmentStatusSummary.DetailRecordCount = assessmentStatusSummary.DetailRecords?.Count ?? 0; // DN
+
+    // Load detail records
+    assessmentStatusSummary.str_Username.Records = assessmentStatusSummary.DetailRecords;
+    assessmentStatusSummary.str_Username.LevelBreak = true; // Set field level break
+        assessmentStatusSummary.GroupCounter[1] = assessmentStatusSummary.GroupCount;
+        assessmentStatusSummary.str_Username.GetCnt(assessmentStatusSummary.str_Username.Records); // Get record count
+if (assessmentStatusSummary.str_Username.Visible && assessmentStatusSummary.str_Username.ShowGroupHeaderAsRow) {
+    // Render header row
+    assessmentStatusSummary.ResetAttributes();
+    assessmentStatusSummary.RowType = RowType.Total;
+    assessmentStatusSummary.RowTotalType = RowSummary.Group;
+    assessmentStatusSummary.RowTotalSubType = RowTotal.Header;
+    assessmentStatusSummary.RowGroupLevel = 1;
+    await assessmentStatusSummary.RenderRow();
+    @:<tr @Html.Raw(assessmentStatusSummary.RowAttributes)>
+if (assessmentStatusSummary.str_Username.Visible) {
+    assessmentStatusSummary.str_Username.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_Username" @Html.Raw(assessmentStatusSummary.str_Username.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    assessmentStatusSummary.str_Username.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_Username" colspan="@(assessmentStatusSummary.GroupColumnCount + assessmentStatusSummary.DetailColumnCount - 1)" @Html.Raw(assessmentStatusSummary.str_Username.CellAttributes)>
+        <span class="ew-summary-caption Assessment_Status_str_Username">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.str_Username))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(assessmentStatusSummary.str_Username.ViewAttributes)>@Html.Raw(assessmentStatusSummary.str_Username.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(assessmentStatusSummary.str_Username.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    assessmentStatusSummary.DLType.GetDistinctValues(assessmentStatusSummary.str_Username.Records, assessmentStatusSummary.DLType.Sort);
+    assessmentStatusSummary.SetGroupCount(assessmentStatusSummary.DLType.DistinctValues.Count, assessmentStatusSummary.GroupCounter[1]);
+    assessmentStatusSummary.GroupCounter[2] = 0; // Init group count index
+    foreach (var DLType in assessmentStatusSummary.DLType.DistinctValues) { // Load records for this distinct value
+        assessmentStatusSummary.DLType.GroupValue = DLType; // Set group value
+        assessmentStatusSummary.DLType.GetDistinctRecords(assessmentStatusSummary.str_Username.Records, assessmentStatusSummary.DLType.GroupValue);
+        assessmentStatusSummary.DLType.LevelBreak = true; // Set field level break
+        assessmentStatusSummary.GroupCounter[2]++;
+        assessmentStatusSummary.DLType.GetCnt(assessmentStatusSummary.DLType.Records); // Get record count
+if (assessmentStatusSummary.DLType.Visible && assessmentStatusSummary.DLType.ShowGroupHeaderAsRow) {
+    // Render header row
+    assessmentStatusSummary.DLType.SetDbValue(DLType); // Set current value for DL Type
+    assessmentStatusSummary.ResetAttributes();
+    assessmentStatusSummary.RowType = RowType.Total;
+    assessmentStatusSummary.RowTotalType = RowSummary.Group;
+    assessmentStatusSummary.RowTotalSubType = RowTotal.Header;
+    assessmentStatusSummary.RowGroupLevel = 2;
+    await assessmentStatusSummary.RenderRow();
+    @:<tr @Html.Raw(assessmentStatusSummary.RowAttributes)>
+if (assessmentStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(assessmentStatusSummary.str_Username.CellAttributes)></td>
+}
+if (assessmentStatusSummary.DLType.Visible) {
+    assessmentStatusSummary.DLType.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="DLType" @Html.Raw(assessmentStatusSummary.DLType.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    assessmentStatusSummary.DLType.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="DLType" colspan="@(assessmentStatusSummary.GroupColumnCount + assessmentStatusSummary.DetailColumnCount - 2)" @Html.Raw(assessmentStatusSummary.DLType.CellAttributes)>
+        <span class="ew-summary-caption Assessment_Status_DLType">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.DLType))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(assessmentStatusSummary.DLType.ViewAttributes)>@Html.Raw(assessmentStatusSummary.DLType.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(assessmentStatusSummary.DLType.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    assessmentStatusSummary.AssessmentScore.GetDistinctValues(assessmentStatusSummary.DLType.Records, assessmentStatusSummary.AssessmentScore.Sort);
+    assessmentStatusSummary.SetGroupCount(assessmentStatusSummary.AssessmentScore.DistinctValues.Count, assessmentStatusSummary.GroupCounter[1], assessmentStatusSummary.GroupCounter[2]);
+    assessmentStatusSummary.GroupCounter[3] = 0; // Init group count index
+    foreach (var AssessmentScore in assessmentStatusSummary.AssessmentScore.DistinctValues) { // Load records for this distinct value
+        assessmentStatusSummary.AssessmentScore.GroupValue = AssessmentScore; // Set group value
+        assessmentStatusSummary.AssessmentScore.GetDistinctRecords(assessmentStatusSummary.DLType.Records, assessmentStatusSummary.AssessmentScore.GroupValue);
+        assessmentStatusSummary.AssessmentScore.LevelBreak = true; // Set field level break
+        assessmentStatusSummary.GroupCounter[3]++;
+        assessmentStatusSummary.AssessmentScore.GetCnt(assessmentStatusSummary.AssessmentScore.Records); // Get record count
+        assessmentStatusSummary.SetGroupCount(assessmentStatusSummary.AssessmentScore.Count, assessmentStatusSummary.GroupCounter[1], assessmentStatusSummary.GroupCounter[2], assessmentStatusSummary.GroupCounter[3]);
+if (assessmentStatusSummary.AssessmentScore.Visible && assessmentStatusSummary.AssessmentScore.ShowGroupHeaderAsRow) {
+    // Render header row
+    assessmentStatusSummary.AssessmentScore.SetDbValue(AssessmentScore); // Set current value for Assessment Score
+    assessmentStatusSummary.ResetAttributes();
+    assessmentStatusSummary.RowType = RowType.Total;
+    assessmentStatusSummary.RowTotalType = RowSummary.Group;
+    assessmentStatusSummary.RowTotalSubType = RowTotal.Header;
+    assessmentStatusSummary.RowGroupLevel = 3;
+    await assessmentStatusSummary.RenderRow();
+    @:<tr @Html.Raw(assessmentStatusSummary.RowAttributes)>
+if (assessmentStatusSummary.str_Username.Visible) {
+        <td data-field="str_Username" @Html.Raw(assessmentStatusSummary.str_Username.CellAttributes)></td>
+}
+if (assessmentStatusSummary.DLType.Visible) {
+        <td data-field="DLType" @Html.Raw(assessmentStatusSummary.DLType.CellAttributes)></td>
+}
+if (assessmentStatusSummary.AssessmentScore.Visible) {
+    assessmentStatusSummary.AssessmentScore.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="AssessmentScore" @Html.Raw(assessmentStatusSummary.AssessmentScore.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    assessmentStatusSummary.AssessmentScore.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="AssessmentScore" colspan="@(assessmentStatusSummary.GroupColumnCount + assessmentStatusSummary.DetailColumnCount - 3)" @Html.Raw(assessmentStatusSummary.AssessmentScore.CellAttributes)>
+        <span class="ew-summary-caption Assessment_Status_AssessmentScore">@Html.Raw(assessmentStatusSummary.RenderFieldHeader(assessmentStatusSummary.AssessmentScore))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(assessmentStatusSummary.AssessmentScore.ViewAttributes)>@Html.Raw(assessmentStatusSummary.AssessmentScore.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(assessmentStatusSummary.AssessmentScore.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    assessmentStatusSummary.RecordCount = 0; // Reset record count
+    foreach (var record in assessmentStatusSummary.AssessmentScore.Records) {
+        assessmentStatusSummary.RecordCount++;
+        assessmentStatusSummary.RecordIndex++;
+        assessmentStatusSummary.LoadRowValues(record);
+    }
+    } // End group level 2
+    } // End group level 1
+
+    // Next group
+    assessmentStatusSummary.LoadGroupRowValues();
+
+    // Show header if page break
+    if (assessmentStatusSummary.IsExport()) {
+        assessmentStatusSummary.ShowHeader = (assessmentStatusSummary.ExportPageBreakCount == 0) ? false : (assessmentStatusSummary.GroupCount % assessmentStatusSummary.ExportPageBreakCount == 0);
+    }
+
+    // Page Breaking server event
+    if (assessmentStatusSummary.ShowHeader) {
+        bool pageShowHeader = assessmentStatusSummary.ShowHeader;
+        string pageBreakHtml = assessmentStatusSummary.PageBreakHtml;
+        assessmentStatusSummary.PageBreaking(ref pageShowHeader, ref pageBreakHtml);
+        assessmentStatusSummary.ShowHeader = pageShowHeader;
+        assessmentStatusSummary.PageBreakHtml = pageBreakHtml;
+    }
+    assessmentStatusSummary.GroupCount++;
+} @* End while *@
+@if (assessmentStatusSummary.TotalGroups > 0) {
+@:</tbody>
+@:<tfoot>
+@:</tfoot>
+@:</table>
+if (!assessmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!assessmentStatusSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+}
+@if (!assessmentStatusSummary.IsExport("pdf")) {
+@:</main>
+<!-- /.report-summary -->
+}
+<!-- Summary report (end) -->
+}
+</div>
+<!-- /.ew-report -->
+@assessmentStatusSummary.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!assessmentStatusSummary.IsExport() && !assessmentStatusSummary.DrillDown && !DashboardReport) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

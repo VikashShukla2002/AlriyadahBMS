@@ -1,0 +1,173 @@
+@if (appointmentCldrList.ModalGridAdd && appointmentCldrList.IsGridAdd || appointmentCldrList.ModalGridEdit && appointmentCldrList.IsGridEdit || appointmentCldrList.ModalMultiEdit && appointmentCldrList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(appointmentCldrList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Appointment_Cldr: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(appointmentCldrList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(appointmentCldrList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(appointmentCldrList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(appointmentCldrList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(appointmentCldrList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(appointmentCldrList.TableGridClass)">
+@if (!appointmentCldrList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!appointmentCldrList.IsGridAdd && !(appointmentCldrList.IsGridEdit && appointmentCldrList.ModalGridEdit) && !appointmentCldrList.IsMultiEdit) {
+@Html.Raw(appointmentCldrList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@appointmentCldrList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(appointmentCldrList.FormName)" id="@(appointmentCldrList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(appointmentCldrList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (appointmentCldrList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_Appointment_Cldr" class="card-body ew-grid-middle-panel @(appointmentCldrList.TableContainerClass)" style="@(appointmentCldrList.TableContainerStyle)">
+@if (appointmentCldrList.TotalRecords > 0 || appointmentCldrList.IsGridEdit || appointmentCldrList.IsMultiEdit) {
+<table id="tbl_Appointment_Cldrlist" class="@(appointmentCldrList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    appointmentCldrList.RowType = RowType.Header;
+
+    // Render list options
+    await appointmentCldrList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@appointmentCldrList.ListOptions.RenderHeader("left")
+@if (appointmentCldrList.int_Enrollement_Id.Visible) { // appointmentCldrList.int_Enrollement_Id.Visible (begin)
+        <th data-name="int_Enrollement_Id" class="@(appointmentCldrList.int_Enrollement_Id.HeaderCellClass)"><div id="elh_Appointment_Cldr_int_Enrollement_Id" class="Appointment_Cldr_int_Enrollement_Id">@Html.Raw(appointmentCldrList.RenderFieldHeader(appointmentCldrList.int_Enrollement_Id))</div></th>
+} @* appointmentCldrList.int_Enrollement_Id.Visible (end) *@
+@if (appointmentCldrList.int_PackageID.Visible) { // appointmentCldrList.int_PackageID.Visible (begin)
+        <th data-name="int_PackageID" class="@(appointmentCldrList.int_PackageID.HeaderCellClass)"><div id="elh_Appointment_Cldr_int_PackageID" class="Appointment_Cldr_int_PackageID">@Html.Raw(appointmentCldrList.RenderFieldHeader(appointmentCldrList.int_PackageID))</div></th>
+} @* appointmentCldrList.int_PackageID.Visible (end) *@
+@if (appointmentCldrList.Start.Visible) { // appointmentCldrList.Start.Visible (begin)
+        <th data-name="Start" class="@(appointmentCldrList.Start.HeaderCellClass)"><div id="elh_Appointment_Cldr_Start" class="Appointment_Cldr_Start">@Html.Raw(appointmentCldrList.RenderFieldHeader(appointmentCldrList.Start))</div></th>
+} @* appointmentCldrList.Start.Visible (end) *@
+@if (appointmentCldrList.End.Visible) { // appointmentCldrList.End.Visible (begin)
+        <th data-name="End" class="@(appointmentCldrList.End.HeaderCellClass)"><div id="elh_Appointment_Cldr_End" class="Appointment_Cldr_End">@Html.Raw(appointmentCldrList.RenderFieldHeader(appointmentCldrList.End))</div></th>
+} @* appointmentCldrList.End.Visible (end) *@
+@if (appointmentCldrList.str_AppointmentType.Visible) { // appointmentCldrList.str_AppointmentType.Visible (begin)
+        <th data-name="str_AppointmentType" class="@(appointmentCldrList.str_AppointmentType.HeaderCellClass)"><div id="elh_Appointment_Cldr_str_AppointmentType" class="Appointment_Cldr_str_AppointmentType">@Html.Raw(appointmentCldrList.RenderFieldHeader(appointmentCldrList.str_AppointmentType))</div></th>
+} @* appointmentCldrList.str_AppointmentType.Visible (end) *@
+@if (appointmentCldrList.str_AppointmentStatus.Visible) { // appointmentCldrList.str_AppointmentStatus.Visible (begin)
+        <th data-name="str_AppointmentStatus" class="@(appointmentCldrList.str_AppointmentStatus.HeaderCellClass)"><div id="elh_Appointment_Cldr_str_AppointmentStatus" class="Appointment_Cldr_str_AppointmentStatus">@Html.Raw(appointmentCldrList.RenderFieldHeader(appointmentCldrList.str_AppointmentStatus))</div></th>
+} @* appointmentCldrList.str_AppointmentStatus.Visible (end) *@
+@* Render list options (header, right) *@
+@appointmentCldrList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(appointmentCldrList.PageNumber)">
+@{
+    await appointmentCldrList.SetupGrid();
+    bool eof = appointmentCldrList.Recordset == null; // DN
+}
+@while (appointmentCldrList.RecordCount < appointmentCldrList.StopRecord || SameString(appointmentCldrList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(appointmentCldrList.RowIndex, "$rowindex$") &&
+        (!appointmentCldrList.IsGridAdd || appointmentCldrList.CurrentMode == "copy") &&
+        (!((appointmentCldrList.IsCopy || appointmentCldrList.IsAdd) && appointmentCldrList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await appointmentCldrList.Recordset.ReadAsync();
+    appointmentCldrList.RecordCount++;
+    if (appointmentCldrList.RecordCount >= appointmentCldrList.StartRecord) {
+        await appointmentCldrList.SetupRow();
+    <tr @Html.Raw(appointmentCldrList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @appointmentCldrList.ListOptions.RenderBody("left", appointmentCldrList.RowCount)
+    @if (appointmentCldrList.int_Enrollement_Id.Visible) { // appointmentCldrList.int_Enrollement_Id.Visible (begin)
+        <td data-name="int_Enrollement_Id" @Html.Raw(appointmentCldrList.int_Enrollement_Id.CellAttributes)>
+<span id="el@(appointmentCldrList.RowIndex == "$rowindex$" ? "$rowindex$" : appointmentCldrList.RowCount)_Appointment_Cldr_int_Enrollement_Id" class="el_Appointment_Cldr_int_Enrollement_Id">
+<span @Html.Raw(appointmentCldrList.int_Enrollement_Id.ViewAttributes)>
+@Html.Raw(appointmentCldrList.int_Enrollement_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* appointmentCldrList.int_Enrollement_Id.Visible (end) *@
+    @if (appointmentCldrList.int_PackageID.Visible) { // appointmentCldrList.int_PackageID.Visible (begin)
+        <td data-name="int_PackageID" @Html.Raw(appointmentCldrList.int_PackageID.CellAttributes)>
+<span id="el@(appointmentCldrList.RowIndex == "$rowindex$" ? "$rowindex$" : appointmentCldrList.RowCount)_Appointment_Cldr_int_PackageID" class="el_Appointment_Cldr_int_PackageID">
+<span @Html.Raw(appointmentCldrList.int_PackageID.ViewAttributes)>
+@Html.Raw(appointmentCldrList.int_PackageID.GetViewValue())</span>
+</span>
+</td>
+    } @* appointmentCldrList.int_PackageID.Visible (end) *@
+    @if (appointmentCldrList.Start.Visible) { // appointmentCldrList.Start.Visible (begin)
+        <td data-name="Start" @Html.Raw(appointmentCldrList.Start.CellAttributes)>
+<span id="el@(appointmentCldrList.RowIndex == "$rowindex$" ? "$rowindex$" : appointmentCldrList.RowCount)_Appointment_Cldr_Start" class="el_Appointment_Cldr_Start">
+<span @Html.Raw(appointmentCldrList.Start.ViewAttributes)>
+@Html.Raw(appointmentCldrList.Start.GetViewValue())</span>
+</span>
+</td>
+    } @* appointmentCldrList.Start.Visible (end) *@
+    @if (appointmentCldrList.End.Visible) { // appointmentCldrList.End.Visible (begin)
+        <td data-name="End" @Html.Raw(appointmentCldrList.End.CellAttributes)>
+<span id="el@(appointmentCldrList.RowIndex == "$rowindex$" ? "$rowindex$" : appointmentCldrList.RowCount)_Appointment_Cldr_End" class="el_Appointment_Cldr_End">
+<span @Html.Raw(appointmentCldrList.End.ViewAttributes)>
+@Html.Raw(appointmentCldrList.End.GetViewValue())</span>
+</span>
+</td>
+    } @* appointmentCldrList.End.Visible (end) *@
+    @if (appointmentCldrList.str_AppointmentType.Visible) { // appointmentCldrList.str_AppointmentType.Visible (begin)
+        <td data-name="str_AppointmentType" @Html.Raw(appointmentCldrList.str_AppointmentType.CellAttributes)>
+<span id="el@(appointmentCldrList.RowIndex == "$rowindex$" ? "$rowindex$" : appointmentCldrList.RowCount)_Appointment_Cldr_str_AppointmentType" class="el_Appointment_Cldr_str_AppointmentType">
+<span @Html.Raw(appointmentCldrList.str_AppointmentType.ViewAttributes)>
+@Html.Raw(appointmentCldrList.str_AppointmentType.GetViewValue())</span>
+</span>
+</td>
+    } @* appointmentCldrList.str_AppointmentType.Visible (end) *@
+    @if (appointmentCldrList.str_AppointmentStatus.Visible) { // appointmentCldrList.str_AppointmentStatus.Visible (begin)
+        <td data-name="str_AppointmentStatus" @Html.Raw(appointmentCldrList.str_AppointmentStatus.CellAttributes)>
+<span id="el@(appointmentCldrList.RowIndex == "$rowindex$" ? "$rowindex$" : appointmentCldrList.RowCount)_Appointment_Cldr_str_AppointmentStatus" class="el_Appointment_Cldr_str_AppointmentStatus">
+<span @Html.Raw(appointmentCldrList.str_AppointmentStatus.ViewAttributes)>
+@Html.Raw(appointmentCldrList.str_AppointmentStatus.GetViewValue())</span>
+</span>
+</td>
+    } @* appointmentCldrList.str_AppointmentStatus.Visible (end) *@
+    @* Render list options (body, right) *@
+    @appointmentCldrList.ListOptions.RenderBody("right", appointmentCldrList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(appointmentCldrList.RowIndex, "$rowindex$"))
+        appointmentCldrList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((appointmentCldrList.IsCopy || appointmentCldrList.IsAdd) && appointmentCldrList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        appointmentCldrList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(appointmentCldrList.CurrentAction) && !appointmentCldrList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ appointmentCldrList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

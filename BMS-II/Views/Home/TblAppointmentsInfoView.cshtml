@@ -1,0 +1,726 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAppointmentsInfoView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAppointmentsInfoView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblAppointmentsInfoView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblAppointmentsInfoView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblAppointmentsInfoView.ExportOptions.RenderBody()
+    @tblAppointmentsInfoView.OtherOptions.RenderBody()
+</div>
+}
+@tblAppointmentsInfoView.ShowPageHeader()
+@tblAppointmentsInfoView.ShowMessages()
+<main class="view">
+<form name="ftblAppointmentsInfoview" id="ftblAppointmentsInfoview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblAppointmentsInfoView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAppointmentsInfoView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAppointmentsInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblAppointmentsInfoview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblAppointmentsInfoview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblAppointmentsInfoView.IsModal)">
+<table class="@(tblAppointmentsInfoView.TableClass)">
+@if (tblAppointmentsInfoView.int_Appt_id.Visible) { // tblAppointmentsInfoView.int_Appt_id.Visible (begin)
+    <tr id="r_int_Appt_id" @Html.Raw(tblAppointmentsInfoView.int_Appt_id.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_Appt_id">@Html.Raw(tblAppointmentsInfoView.int_Appt_id.Caption)</span></td>
+        <td data-name="int_Appt_id" @Html.Raw(tblAppointmentsInfoView.int_Appt_id.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Appt_id">
+<span @Html.Raw(tblAppointmentsInfoView.int_Appt_id.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_Appt_id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_Appt_id.Visible (end) *@
+@if (tblAppointmentsInfoView.str_AppName.Visible) { // tblAppointmentsInfoView.str_AppName.Visible (begin)
+    <tr id="r_str_AppName" @Html.Raw(tblAppointmentsInfoView.str_AppName.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_AppName">@Html.Raw(tblAppointmentsInfoView.str_AppName.Caption)</span></td>
+        <td data-name="str_AppName" @Html.Raw(tblAppointmentsInfoView.str_AppName.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_AppName">
+<span @Html.Raw(tblAppointmentsInfoView.str_AppName.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_AppName.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_AppName.Visible (end) *@
+@if (tblAppointmentsInfoView.str_App_Date.Visible) { // tblAppointmentsInfoView.str_App_Date.Visible (begin)
+    <tr id="r_str_App_Date" @Html.Raw(tblAppointmentsInfoView.str_App_Date.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_App_Date">@Html.Raw(tblAppointmentsInfoView.str_App_Date.Caption)</span></td>
+        <td data-name="str_App_Date" @Html.Raw(tblAppointmentsInfoView.str_App_Date.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_App_Date">
+<span @Html.Raw(tblAppointmentsInfoView.str_App_Date.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_App_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_App_Date.Visible (end) *@
+@if (tblAppointmentsInfoView.str_StartTime.Visible) { // tblAppointmentsInfoView.str_StartTime.Visible (begin)
+    <tr id="r_str_StartTime" @Html.Raw(tblAppointmentsInfoView.str_StartTime.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_StartTime">@Html.Raw(tblAppointmentsInfoView.str_StartTime.Caption)</span></td>
+        <td data-name="str_StartTime" @Html.Raw(tblAppointmentsInfoView.str_StartTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_StartTime">
+<span @Html.Raw(tblAppointmentsInfoView.str_StartTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_StartTime.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_StartTime.Visible (end) *@
+@if (tblAppointmentsInfoView.str_EndTime.Visible) { // tblAppointmentsInfoView.str_EndTime.Visible (begin)
+    <tr id="r_str_EndTime" @Html.Raw(tblAppointmentsInfoView.str_EndTime.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_EndTime">@Html.Raw(tblAppointmentsInfoView.str_EndTime.Caption)</span></td>
+        <td data-name="str_EndTime" @Html.Raw(tblAppointmentsInfoView.str_EndTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_EndTime">
+<span @Html.Raw(tblAppointmentsInfoView.str_EndTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_EndTime.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_EndTime.Visible (end) *@
+@if (tblAppointmentsInfoView.str_PickupTime.Visible) { // tblAppointmentsInfoView.str_PickupTime.Visible (begin)
+    <tr id="r_str_PickupTime" @Html.Raw(tblAppointmentsInfoView.str_PickupTime.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_PickupTime">@Html.Raw(tblAppointmentsInfoView.str_PickupTime.Caption)</span></td>
+        <td data-name="str_PickupTime" @Html.Raw(tblAppointmentsInfoView.str_PickupTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_PickupTime">
+<span @Html.Raw(tblAppointmentsInfoView.str_PickupTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_PickupTime.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_PickupTime.Visible (end) *@
+@if (tblAppointmentsInfoView.str_DropOffTime.Visible) { // tblAppointmentsInfoView.str_DropOffTime.Visible (begin)
+    <tr id="r_str_DropOffTime" @Html.Raw(tblAppointmentsInfoView.str_DropOffTime.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_DropOffTime">@Html.Raw(tblAppointmentsInfoView.str_DropOffTime.Caption)</span></td>
+        <td data-name="str_DropOffTime" @Html.Raw(tblAppointmentsInfoView.str_DropOffTime.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_DropOffTime">
+<span @Html.Raw(tblAppointmentsInfoView.str_DropOffTime.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_DropOffTime.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_DropOffTime.Visible (end) *@
+@if (tblAppointmentsInfoView.int_VehicleID.Visible) { // tblAppointmentsInfoView.int_VehicleID.Visible (begin)
+    <tr id="r_int_VehicleID" @Html.Raw(tblAppointmentsInfoView.int_VehicleID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_VehicleID">@Html.Raw(tblAppointmentsInfoView.int_VehicleID.Caption)</span></td>
+        <td data-name="int_VehicleID" @Html.Raw(tblAppointmentsInfoView.int_VehicleID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_VehicleID">
+<span @Html.Raw(tblAppointmentsInfoView.int_VehicleID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_VehicleID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_VehicleID.Visible (end) *@
+@if (tblAppointmentsInfoView.dec_InstID.Visible) { // tblAppointmentsInfoView.dec_InstID.Visible (begin)
+    <tr id="r_dec_InstID" @Html.Raw(tblAppointmentsInfoView.dec_InstID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_dec_InstID">@Html.Raw(tblAppointmentsInfoView.dec_InstID.Caption)</span></td>
+        <td data-name="dec_InstID" @Html.Raw(tblAppointmentsInfoView.dec_InstID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_InstID">
+<span @Html.Raw(tblAppointmentsInfoView.dec_InstID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.dec_InstID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.dec_InstID.Visible (end) *@
+@if (tblAppointmentsInfoView.dec_StudentID.Visible) { // tblAppointmentsInfoView.dec_StudentID.Visible (begin)
+    <tr id="r_dec_StudentID" @Html.Raw(tblAppointmentsInfoView.dec_StudentID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_dec_StudentID">@Html.Raw(tblAppointmentsInfoView.dec_StudentID.Caption)</span></td>
+        <td data-name="dec_StudentID" @Html.Raw(tblAppointmentsInfoView.dec_StudentID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_StudentID">
+<span @Html.Raw(tblAppointmentsInfoView.dec_StudentID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.dec_StudentID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.dec_StudentID.Visible (end) *@
+@if (tblAppointmentsInfoView.dec_Observed_StudentID.Visible) { // tblAppointmentsInfoView.dec_Observed_StudentID.Visible (begin)
+    <tr id="r_dec_Observed_StudentID" @Html.Raw(tblAppointmentsInfoView.dec_Observed_StudentID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_dec_Observed_StudentID">@Html.Raw(tblAppointmentsInfoView.dec_Observed_StudentID.Caption)</span></td>
+        <td data-name="dec_Observed_StudentID" @Html.Raw(tblAppointmentsInfoView.dec_Observed_StudentID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_Observed_StudentID">
+<span @Html.Raw(tblAppointmentsInfoView.dec_Observed_StudentID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.dec_Observed_StudentID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.dec_Observed_StudentID.Visible (end) *@
+@if (tblAppointmentsInfoView.int_Apptype.Visible) { // tblAppointmentsInfoView.int_Apptype.Visible (begin)
+    <tr id="r_int_Apptype" @Html.Raw(tblAppointmentsInfoView.int_Apptype.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_Apptype">@Html.Raw(tblAppointmentsInfoView.int_Apptype.Caption)</span></td>
+        <td data-name="int_Apptype" @Html.Raw(tblAppointmentsInfoView.int_Apptype.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Apptype">
+<span @Html.Raw(tblAppointmentsInfoView.int_Apptype.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_Apptype.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_Apptype.Visible (end) *@
+@if (tblAppointmentsInfoView.int_AppStatus.Visible) { // tblAppointmentsInfoView.int_AppStatus.Visible (begin)
+    <tr id="r_int_AppStatus" @Html.Raw(tblAppointmentsInfoView.int_AppStatus.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_AppStatus">@Html.Raw(tblAppointmentsInfoView.int_AppStatus.Caption)</span></td>
+        <td data-name="int_AppStatus" @Html.Raw(tblAppointmentsInfoView.int_AppStatus.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_AppStatus">
+<span @Html.Raw(tblAppointmentsInfoView.int_AppStatus.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_AppStatus.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_AppStatus.Visible (end) *@
+@if (tblAppointmentsInfoView.mny_AppCost.Visible) { // tblAppointmentsInfoView.mny_AppCost.Visible (begin)
+    <tr id="r_mny_AppCost" @Html.Raw(tblAppointmentsInfoView.mny_AppCost.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_mny_AppCost">@Html.Raw(tblAppointmentsInfoView.mny_AppCost.Caption)</span></td>
+        <td data-name="mny_AppCost" @Html.Raw(tblAppointmentsInfoView.mny_AppCost.CellAttributes)>
+<span id="el_tblAppointmentsInfo_mny_AppCost">
+<span @Html.Raw(tblAppointmentsInfoView.mny_AppCost.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.mny_AppCost.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.mny_AppCost.Visible (end) *@
+@if (tblAppointmentsInfoView.mny_AmountPaid.Visible) { // tblAppointmentsInfoView.mny_AmountPaid.Visible (begin)
+    <tr id="r_mny_AmountPaid" @Html.Raw(tblAppointmentsInfoView.mny_AmountPaid.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_mny_AmountPaid">@Html.Raw(tblAppointmentsInfoView.mny_AmountPaid.Caption)</span></td>
+        <td data-name="mny_AmountPaid" @Html.Raw(tblAppointmentsInfoView.mny_AmountPaid.CellAttributes)>
+<span id="el_tblAppointmentsInfo_mny_AmountPaid">
+<span @Html.Raw(tblAppointmentsInfoView.mny_AmountPaid.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.mny_AmountPaid.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.mny_AmountPaid.Visible (end) *@
+@if (tblAppointmentsInfoView.bit_CheckAppPaid.Visible) { // tblAppointmentsInfoView.bit_CheckAppPaid.Visible (begin)
+    <tr id="r_bit_CheckAppPaid" @Html.Raw(tblAppointmentsInfoView.bit_CheckAppPaid.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_bit_CheckAppPaid">@Html.Raw(tblAppointmentsInfoView.bit_CheckAppPaid.Caption)</span></td>
+        <td data-name="bit_CheckAppPaid" @Html.Raw(tblAppointmentsInfoView.bit_CheckAppPaid.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_CheckAppPaid">
+<span @Html.Raw(tblAppointmentsInfoView.bit_CheckAppPaid.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_CheckAppPaid_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.bit_CheckAppPaid.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.bit_CheckAppPaid.CurrentValue))">
+    <label class="form-check-label" for="x_bit_CheckAppPaid_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.bit_CheckAppPaid.Visible (end) *@
+@if (tblAppointmentsInfoView.bit_Confirmation.Visible) { // tblAppointmentsInfoView.bit_Confirmation.Visible (begin)
+    <tr id="r_bit_Confirmation" @Html.Raw(tblAppointmentsInfoView.bit_Confirmation.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_bit_Confirmation">@Html.Raw(tblAppointmentsInfoView.bit_Confirmation.Caption)</span></td>
+        <td data-name="bit_Confirmation" @Html.Raw(tblAppointmentsInfoView.bit_Confirmation.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_Confirmation">
+<span @Html.Raw(tblAppointmentsInfoView.bit_Confirmation.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_Confirmation_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.bit_Confirmation.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.bit_Confirmation.CurrentValue))">
+    <label class="form-check-label" for="x_bit_Confirmation_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.bit_Confirmation.Visible (end) *@
+@if (tblAppointmentsInfoView.str_Instructions.Visible) { // tblAppointmentsInfoView.str_Instructions.Visible (begin)
+    <tr id="r_str_Instructions" @Html.Raw(tblAppointmentsInfoView.str_Instructions.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_Instructions">@Html.Raw(tblAppointmentsInfoView.str_Instructions.Caption)</span></td>
+        <td data-name="str_Instructions" @Html.Raw(tblAppointmentsInfoView.str_Instructions.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Instructions">
+<span @Html.Raw(tblAppointmentsInfoView.str_Instructions.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_Instructions.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_Instructions.Visible (end) *@
+@if (tblAppointmentsInfoView.str_Instructions1.Visible) { // tblAppointmentsInfoView.str_Instructions1.Visible (begin)
+    <tr id="r_str_Instructions1" @Html.Raw(tblAppointmentsInfoView.str_Instructions1.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_Instructions1">@Html.Raw(tblAppointmentsInfoView.str_Instructions1.Caption)</span></td>
+        <td data-name="str_Instructions1" @Html.Raw(tblAppointmentsInfoView.str_Instructions1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Instructions1">
+<span @Html.Raw(tblAppointmentsInfoView.str_Instructions1.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_Instructions1.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_Instructions1.Visible (end) *@
+@if (tblAppointmentsInfoView.str_AppNotes.Visible) { // tblAppointmentsInfoView.str_AppNotes.Visible (begin)
+    <tr id="r_str_AppNotes" @Html.Raw(tblAppointmentsInfoView.str_AppNotes.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_AppNotes">@Html.Raw(tblAppointmentsInfoView.str_AppNotes.Caption)</span></td>
+        <td data-name="str_AppNotes" @Html.Raw(tblAppointmentsInfoView.str_AppNotes.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_AppNotes">
+<span @Html.Raw(tblAppointmentsInfoView.str_AppNotes.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_AppNotes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_AppNotes.Visible (end) *@
+@if (tblAppointmentsInfoView.str_PickupLocation.Visible) { // tblAppointmentsInfoView.str_PickupLocation.Visible (begin)
+    <tr id="r_str_PickupLocation" @Html.Raw(tblAppointmentsInfoView.str_PickupLocation.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_PickupLocation">@Html.Raw(tblAppointmentsInfoView.str_PickupLocation.Caption)</span></td>
+        <td data-name="str_PickupLocation" @Html.Raw(tblAppointmentsInfoView.str_PickupLocation.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_PickupLocation">
+<span @Html.Raw(tblAppointmentsInfoView.str_PickupLocation.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_PickupLocation.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_PickupLocation.Visible (end) *@
+@if (tblAppointmentsInfoView.int_Created_By.Visible) { // tblAppointmentsInfoView.int_Created_By.Visible (begin)
+    <tr id="r_int_Created_By" @Html.Raw(tblAppointmentsInfoView.int_Created_By.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_Created_By">@Html.Raw(tblAppointmentsInfoView.int_Created_By.Caption)</span></td>
+        <td data-name="int_Created_By" @Html.Raw(tblAppointmentsInfoView.int_Created_By.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Created_By">
+<span @Html.Raw(tblAppointmentsInfoView.int_Created_By.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_Created_By.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_Created_By.Visible (end) *@
+@if (tblAppointmentsInfoView.int_Modified_By.Visible) { // tblAppointmentsInfoView.int_Modified_By.Visible (begin)
+    <tr id="r_int_Modified_By" @Html.Raw(tblAppointmentsInfoView.int_Modified_By.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_Modified_By">@Html.Raw(tblAppointmentsInfoView.int_Modified_By.Caption)</span></td>
+        <td data-name="int_Modified_By" @Html.Raw(tblAppointmentsInfoView.int_Modified_By.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Modified_By">
+<span @Html.Raw(tblAppointmentsInfoView.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_Modified_By.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_Modified_By.Visible (end) *@
+@if (tblAppointmentsInfoView.bit_IsDeleted.Visible) { // tblAppointmentsInfoView.bit_IsDeleted.Visible (begin)
+    <tr id="r_bit_IsDeleted" @Html.Raw(tblAppointmentsInfoView.bit_IsDeleted.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_bit_IsDeleted">@Html.Raw(tblAppointmentsInfoView.bit_IsDeleted.Caption)</span></td>
+        <td data-name="bit_IsDeleted" @Html.Raw(tblAppointmentsInfoView.bit_IsDeleted.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_IsDeleted">
+<span @Html.Raw(tblAppointmentsInfoView.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.bit_IsDeleted.Visible (end) *@
+@if (tblAppointmentsInfoView.str_Interval.Visible) { // tblAppointmentsInfoView.str_Interval.Visible (begin)
+    <tr id="r_str_Interval" @Html.Raw(tblAppointmentsInfoView.str_Interval.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_Interval">@Html.Raw(tblAppointmentsInfoView.str_Interval.Caption)</span></td>
+        <td data-name="str_Interval" @Html.Raw(tblAppointmentsInfoView.str_Interval.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Interval">
+<span @Html.Raw(tblAppointmentsInfoView.str_Interval.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_Interval.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_Interval.Visible (end) *@
+@if (tblAppointmentsInfoView.RemM1.Visible) { // tblAppointmentsInfoView.RemM1.Visible (begin)
+    <tr id="r_RemM1" @Html.Raw(tblAppointmentsInfoView.RemM1.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_RemM1">@Html.Raw(tblAppointmentsInfoView.RemM1.Caption)</span></td>
+        <td data-name="RemM1" @Html.Raw(tblAppointmentsInfoView.RemM1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_RemM1">
+<span @Html.Raw(tblAppointmentsInfoView.RemM1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM1_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.RemM1.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.RemM1.CurrentValue))">
+    <label class="form-check-label" for="x_RemM1_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.RemM1.Visible (end) *@
+@if (tblAppointmentsInfoView.RemM2.Visible) { // tblAppointmentsInfoView.RemM2.Visible (begin)
+    <tr id="r_RemM2" @Html.Raw(tblAppointmentsInfoView.RemM2.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_RemM2">@Html.Raw(tblAppointmentsInfoView.RemM2.Caption)</span></td>
+        <td data-name="RemM2" @Html.Raw(tblAppointmentsInfoView.RemM2.CellAttributes)>
+<span id="el_tblAppointmentsInfo_RemM2">
+<span @Html.Raw(tblAppointmentsInfoView.RemM2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM2_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.RemM2.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.RemM2.CurrentValue))">
+    <label class="form-check-label" for="x_RemM2_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.RemM2.Visible (end) *@
+@if (tblAppointmentsInfoView.RemM3.Visible) { // tblAppointmentsInfoView.RemM3.Visible (begin)
+    <tr id="r_RemM3" @Html.Raw(tblAppointmentsInfoView.RemM3.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_RemM3">@Html.Raw(tblAppointmentsInfoView.RemM3.Caption)</span></td>
+        <td data-name="RemM3" @Html.Raw(tblAppointmentsInfoView.RemM3.CellAttributes)>
+<span id="el_tblAppointmentsInfo_RemM3">
+<span @Html.Raw(tblAppointmentsInfoView.RemM3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_RemM3_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.RemM3.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.RemM3.CurrentValue))">
+    <label class="form-check-label" for="x_RemM3_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.RemM3.Visible (end) *@
+@if (tblAppointmentsInfoView.int_Location_ID.Visible) { // tblAppointmentsInfoView.int_Location_ID.Visible (begin)
+    <tr id="r_int_Location_ID" @Html.Raw(tblAppointmentsInfoView.int_Location_ID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_Location_ID">@Html.Raw(tblAppointmentsInfoView.int_Location_ID.Caption)</span></td>
+        <td data-name="int_Location_ID" @Html.Raw(tblAppointmentsInfoView.int_Location_ID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_Location_ID">
+<span @Html.Raw(tblAppointmentsInfoView.int_Location_ID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_Location_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_Location_ID.Visible (end) *@
+@if (tblAppointmentsInfoView.SPID.Visible) { // tblAppointmentsInfoView.SPID.Visible (begin)
+    <tr id="r_SPID" @Html.Raw(tblAppointmentsInfoView.SPID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_SPID">@Html.Raw(tblAppointmentsInfoView.SPID.Caption)</span></td>
+        <td data-name="SPID" @Html.Raw(tblAppointmentsInfoView.SPID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SPID">
+<span @Html.Raw(tblAppointmentsInfoView.SPID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.SPID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.SPID.Visible (end) *@
+@if (tblAppointmentsInfoView.Chk_Trace.Visible) { // tblAppointmentsInfoView.Chk_Trace.Visible (begin)
+    <tr id="r_Chk_Trace" @Html.Raw(tblAppointmentsInfoView.Chk_Trace.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_Chk_Trace">@Html.Raw(tblAppointmentsInfoView.Chk_Trace.Caption)</span></td>
+        <td data-name="Chk_Trace" @Html.Raw(tblAppointmentsInfoView.Chk_Trace.CellAttributes)>
+<span id="el_tblAppointmentsInfo_Chk_Trace">
+<span @Html.Raw(tblAppointmentsInfoView.Chk_Trace.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.Chk_Trace.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.Chk_Trace.Visible (end) *@
+@if (tblAppointmentsInfoView.str_DropOffLocation.Visible) { // tblAppointmentsInfoView.str_DropOffLocation.Visible (begin)
+    <tr id="r_str_DropOffLocation" @Html.Raw(tblAppointmentsInfoView.str_DropOffLocation.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_DropOffLocation">@Html.Raw(tblAppointmentsInfoView.str_DropOffLocation.Caption)</span></td>
+        <td data-name="str_DropOffLocation" @Html.Raw(tblAppointmentsInfoView.str_DropOffLocation.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_DropOffLocation">
+<span @Html.Raw(tblAppointmentsInfoView.str_DropOffLocation.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_DropOffLocation.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_DropOffLocation.Visible (end) *@
+@if (tblAppointmentsInfoView.imgInstructorSignature.Visible) { // tblAppointmentsInfoView.imgInstructorSignature.Visible (begin)
+    <tr id="r_imgInstructorSignature" @Html.Raw(tblAppointmentsInfoView.imgInstructorSignature.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_imgInstructorSignature">@Html.Raw(tblAppointmentsInfoView.imgInstructorSignature.Caption)</span></td>
+        <td data-name="imgInstructorSignature" @Html.Raw(tblAppointmentsInfoView.imgInstructorSignature.CellAttributes)>
+<span id="el_tblAppointmentsInfo_imgInstructorSignature">
+<span @Html.Raw(tblAppointmentsInfoView.imgInstructorSignature.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblAppointmentsInfoView.imgInstructorSignature, ConvertToString(tblAppointmentsInfoView.imgInstructorSignature.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.imgInstructorSignature.Visible (end) *@
+@if (tblAppointmentsInfoView.imgStudentSignature.Visible) { // tblAppointmentsInfoView.imgStudentSignature.Visible (begin)
+    <tr id="r_imgStudentSignature" @Html.Raw(tblAppointmentsInfoView.imgStudentSignature.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_imgStudentSignature">@Html.Raw(tblAppointmentsInfoView.imgStudentSignature.Caption)</span></td>
+        <td data-name="imgStudentSignature" @Html.Raw(tblAppointmentsInfoView.imgStudentSignature.CellAttributes)>
+<span id="el_tblAppointmentsInfo_imgStudentSignature">
+<span @Html.Raw(tblAppointmentsInfoView.imgStudentSignature.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblAppointmentsInfoView.imgStudentSignature, ConvertToString(tblAppointmentsInfoView.imgStudentSignature.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.imgStudentSignature.Visible (end) *@
+@if (tblAppointmentsInfoView.imgObserverSignature.Visible) { // tblAppointmentsInfoView.imgObserverSignature.Visible (begin)
+    <tr id="r_imgObserverSignature" @Html.Raw(tblAppointmentsInfoView.imgObserverSignature.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_imgObserverSignature">@Html.Raw(tblAppointmentsInfoView.imgObserverSignature.Caption)</span></td>
+        <td data-name="imgObserverSignature" @Html.Raw(tblAppointmentsInfoView.imgObserverSignature.CellAttributes)>
+<span id="el_tblAppointmentsInfo_imgObserverSignature">
+<span @Html.Raw(tblAppointmentsInfoView.imgObserverSignature.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblAppointmentsInfoView.imgObserverSignature, ConvertToString(tblAppointmentsInfoView.imgObserverSignature.GetViewValue()), false))
+</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.imgObserverSignature.Visible (end) *@
+@if (tblAppointmentsInfoView.dt_apptstart.Visible) { // tblAppointmentsInfoView.dt_apptstart.Visible (begin)
+    <tr id="r_dt_apptstart" @Html.Raw(tblAppointmentsInfoView.dt_apptstart.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_dt_apptstart">@Html.Raw(tblAppointmentsInfoView.dt_apptstart.Caption)</span></td>
+        <td data-name="dt_apptstart" @Html.Raw(tblAppointmentsInfoView.dt_apptstart.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dt_apptstart">
+<span @Html.Raw(tblAppointmentsInfoView.dt_apptstart.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.dt_apptstart.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.dt_apptstart.Visible (end) *@
+@if (tblAppointmentsInfoView.dt_apptComplete.Visible) { // tblAppointmentsInfoView.dt_apptComplete.Visible (begin)
+    <tr id="r_dt_apptComplete" @Html.Raw(tblAppointmentsInfoView.dt_apptComplete.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_dt_apptComplete">@Html.Raw(tblAppointmentsInfoView.dt_apptComplete.Caption)</span></td>
+        <td data-name="dt_apptComplete" @Html.Raw(tblAppointmentsInfoView.dt_apptComplete.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dt_apptComplete">
+<span @Html.Raw(tblAppointmentsInfoView.dt_apptComplete.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.dt_apptComplete.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.dt_apptComplete.Visible (end) *@
+@if (tblAppointmentsInfoView.int_apptstartedBy.Visible) { // tblAppointmentsInfoView.int_apptstartedBy.Visible (begin)
+    <tr id="r_int_apptstartedBy" @Html.Raw(tblAppointmentsInfoView.int_apptstartedBy.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_apptstartedBy">@Html.Raw(tblAppointmentsInfoView.int_apptstartedBy.Caption)</span></td>
+        <td data-name="int_apptstartedBy" @Html.Raw(tblAppointmentsInfoView.int_apptstartedBy.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_apptstartedBy">
+<span @Html.Raw(tblAppointmentsInfoView.int_apptstartedBy.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_apptstartedBy.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_apptstartedBy.Visible (end) *@
+@if (tblAppointmentsInfoView.int_apptCompletedBy.Visible) { // tblAppointmentsInfoView.int_apptCompletedBy.Visible (begin)
+    <tr id="r_int_apptCompletedBy" @Html.Raw(tblAppointmentsInfoView.int_apptCompletedBy.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_apptCompletedBy">@Html.Raw(tblAppointmentsInfoView.int_apptCompletedBy.Caption)</span></td>
+        <td data-name="int_apptCompletedBy" @Html.Raw(tblAppointmentsInfoView.int_apptCompletedBy.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_apptCompletedBy">
+<span @Html.Raw(tblAppointmentsInfoView.int_apptCompletedBy.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_apptCompletedBy.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_apptCompletedBy.Visible (end) *@
+@if (tblAppointmentsInfoView.SMSReminder1.Visible) { // tblAppointmentsInfoView.SMSReminder1.Visible (begin)
+    <tr id="r_SMSReminder1" @Html.Raw(tblAppointmentsInfoView.SMSReminder1.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_SMSReminder1">@Html.Raw(tblAppointmentsInfoView.SMSReminder1.Caption)</span></td>
+        <td data-name="SMSReminder1" @Html.Raw(tblAppointmentsInfoView.SMSReminder1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SMSReminder1">
+<span @Html.Raw(tblAppointmentsInfoView.SMSReminder1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder1_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.SMSReminder1.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.SMSReminder1.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder1_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.SMSReminder1.Visible (end) *@
+@if (tblAppointmentsInfoView.SMSReminder2.Visible) { // tblAppointmentsInfoView.SMSReminder2.Visible (begin)
+    <tr id="r_SMSReminder2" @Html.Raw(tblAppointmentsInfoView.SMSReminder2.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_SMSReminder2">@Html.Raw(tblAppointmentsInfoView.SMSReminder2.Caption)</span></td>
+        <td data-name="SMSReminder2" @Html.Raw(tblAppointmentsInfoView.SMSReminder2.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SMSReminder2">
+<span @Html.Raw(tblAppointmentsInfoView.SMSReminder2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder2_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.SMSReminder2.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.SMSReminder2.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder2_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.SMSReminder2.Visible (end) *@
+@if (tblAppointmentsInfoView.SMSReminder3.Visible) { // tblAppointmentsInfoView.SMSReminder3.Visible (begin)
+    <tr id="r_SMSReminder3" @Html.Raw(tblAppointmentsInfoView.SMSReminder3.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_SMSReminder3">@Html.Raw(tblAppointmentsInfoView.SMSReminder3.Caption)</span></td>
+        <td data-name="SMSReminder3" @Html.Raw(tblAppointmentsInfoView.SMSReminder3.CellAttributes)>
+<span id="el_tblAppointmentsInfo_SMSReminder3">
+<span @Html.Raw(tblAppointmentsInfoView.SMSReminder3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_SMSReminder3_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.SMSReminder3.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.SMSReminder3.CurrentValue))">
+    <label class="form-check-label" for="x_SMSReminder3_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.SMSReminder3.Visible (end) *@
+@if (tblAppointmentsInfoView.VoiceReminder1.Visible) { // tblAppointmentsInfoView.VoiceReminder1.Visible (begin)
+    <tr id="r_VoiceReminder1" @Html.Raw(tblAppointmentsInfoView.VoiceReminder1.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_VoiceReminder1">@Html.Raw(tblAppointmentsInfoView.VoiceReminder1.Caption)</span></td>
+        <td data-name="VoiceReminder1" @Html.Raw(tblAppointmentsInfoView.VoiceReminder1.CellAttributes)>
+<span id="el_tblAppointmentsInfo_VoiceReminder1">
+<span @Html.Raw(tblAppointmentsInfoView.VoiceReminder1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_VoiceReminder1_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.VoiceReminder1.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.VoiceReminder1.CurrentValue))">
+    <label class="form-check-label" for="x_VoiceReminder1_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.VoiceReminder1.Visible (end) *@
+@if (tblAppointmentsInfoView.VoiceReminder2.Visible) { // tblAppointmentsInfoView.VoiceReminder2.Visible (begin)
+    <tr id="r_VoiceReminder2" @Html.Raw(tblAppointmentsInfoView.VoiceReminder2.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_VoiceReminder2">@Html.Raw(tblAppointmentsInfoView.VoiceReminder2.Caption)</span></td>
+        <td data-name="VoiceReminder2" @Html.Raw(tblAppointmentsInfoView.VoiceReminder2.CellAttributes)>
+<span id="el_tblAppointmentsInfo_VoiceReminder2">
+<span @Html.Raw(tblAppointmentsInfoView.VoiceReminder2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_VoiceReminder2_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.VoiceReminder2.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.VoiceReminder2.CurrentValue))">
+    <label class="form-check-label" for="x_VoiceReminder2_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.VoiceReminder2.Visible (end) *@
+@if (tblAppointmentsInfoView.VoiceReminder3.Visible) { // tblAppointmentsInfoView.VoiceReminder3.Visible (begin)
+    <tr id="r_VoiceReminder3" @Html.Raw(tblAppointmentsInfoView.VoiceReminder3.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_VoiceReminder3">@Html.Raw(tblAppointmentsInfoView.VoiceReminder3.Caption)</span></td>
+        <td data-name="VoiceReminder3" @Html.Raw(tblAppointmentsInfoView.VoiceReminder3.CellAttributes)>
+<span id="el_tblAppointmentsInfo_VoiceReminder3">
+<span @Html.Raw(tblAppointmentsInfoView.VoiceReminder3.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_VoiceReminder3_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.VoiceReminder3.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.VoiceReminder3.CurrentValue))">
+    <label class="form-check-label" for="x_VoiceReminder3_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.VoiceReminder3.Visible (end) *@
+@if (tblAppointmentsInfoView.bit_isroadtest.Visible) { // tblAppointmentsInfoView.bit_isroadtest.Visible (begin)
+    <tr id="r_bit_isroadtest" @Html.Raw(tblAppointmentsInfoView.bit_isroadtest.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_bit_isroadtest">@Html.Raw(tblAppointmentsInfoView.bit_isroadtest.Caption)</span></td>
+        <td data-name="bit_isroadtest" @Html.Raw(tblAppointmentsInfoView.bit_isroadtest.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_isroadtest">
+<span @Html.Raw(tblAppointmentsInfoView.bit_isroadtest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_isroadtest_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.bit_isroadtest.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.bit_isroadtest.CurrentValue))">
+    <label class="form-check-label" for="x_bit_isroadtest_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.bit_isroadtest.Visible (end) *@
+@if (tblAppointmentsInfoView.int_slotType.Visible) { // tblAppointmentsInfoView.int_slotType.Visible (begin)
+    <tr id="r_int_slotType" @Html.Raw(tblAppointmentsInfoView.int_slotType.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_slotType">@Html.Raw(tblAppointmentsInfoView.int_slotType.Caption)</span></td>
+        <td data-name="int_slotType" @Html.Raw(tblAppointmentsInfoView.int_slotType.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_slotType">
+<span @Html.Raw(tblAppointmentsInfoView.int_slotType.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_slotType.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_slotType.Visible (end) *@
+@if (tblAppointmentsInfoView.bit_VisibleOnPortal.Visible) { // tblAppointmentsInfoView.bit_VisibleOnPortal.Visible (begin)
+    <tr id="r_bit_VisibleOnPortal" @Html.Raw(tblAppointmentsInfoView.bit_VisibleOnPortal.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_bit_VisibleOnPortal">@Html.Raw(tblAppointmentsInfoView.bit_VisibleOnPortal.Caption)</span></td>
+        <td data-name="bit_VisibleOnPortal" @Html.Raw(tblAppointmentsInfoView.bit_VisibleOnPortal.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_VisibleOnPortal">
+<span @Html.Raw(tblAppointmentsInfoView.bit_VisibleOnPortal.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_VisibleOnPortal_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.bit_VisibleOnPortal.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.bit_VisibleOnPortal.CurrentValue))">
+    <label class="form-check-label" for="x_bit_VisibleOnPortal_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.bit_VisibleOnPortal.Visible (end) *@
+@if (tblAppointmentsInfoView.IsDataRetrieved.Visible) { // tblAppointmentsInfoView.IsDataRetrieved.Visible (begin)
+    <tr id="r_IsDataRetrieved" @Html.Raw(tblAppointmentsInfoView.IsDataRetrieved.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_IsDataRetrieved">@Html.Raw(tblAppointmentsInfoView.IsDataRetrieved.Caption)</span></td>
+        <td data-name="IsDataRetrieved" @Html.Raw(tblAppointmentsInfoView.IsDataRetrieved.CellAttributes)>
+<span id="el_tblAppointmentsInfo_IsDataRetrieved">
+<span @Html.Raw(tblAppointmentsInfoView.IsDataRetrieved.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDataRetrieved_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.IsDataRetrieved.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.IsDataRetrieved.CurrentValue))">
+    <label class="form-check-label" for="x_IsDataRetrieved_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.IsDataRetrieved.Visible (end) *@
+@if (tblAppointmentsInfoView.bit_chargesApplied.Visible) { // tblAppointmentsInfoView.bit_chargesApplied.Visible (begin)
+    <tr id="r_bit_chargesApplied" @Html.Raw(tblAppointmentsInfoView.bit_chargesApplied.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_bit_chargesApplied">@Html.Raw(tblAppointmentsInfoView.bit_chargesApplied.Caption)</span></td>
+        <td data-name="bit_chargesApplied" @Html.Raw(tblAppointmentsInfoView.bit_chargesApplied.CellAttributes)>
+<span id="el_tblAppointmentsInfo_bit_chargesApplied">
+<span @Html.Raw(tblAppointmentsInfoView.bit_chargesApplied.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_chargesApplied_@(tblAppointmentsInfoView.RowCount)" class="form-check-input" value="@(tblAppointmentsInfoView.bit_chargesApplied.GetViewValue())" disabled checked="@(ConvertToBool(tblAppointmentsInfoView.bit_chargesApplied.CurrentValue))">
+    <label class="form-check-label" for="x_bit_chargesApplied_@(tblAppointmentsInfoView.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.bit_chargesApplied.Visible (end) *@
+@if (tblAppointmentsInfoView.dec_DistanceTravelled.Visible) { // tblAppointmentsInfoView.dec_DistanceTravelled.Visible (begin)
+    <tr id="r_dec_DistanceTravelled" @Html.Raw(tblAppointmentsInfoView.dec_DistanceTravelled.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_dec_DistanceTravelled">@Html.Raw(tblAppointmentsInfoView.dec_DistanceTravelled.Caption)</span></td>
+        <td data-name="dec_DistanceTravelled" @Html.Raw(tblAppointmentsInfoView.dec_DistanceTravelled.CellAttributes)>
+<span id="el_tblAppointmentsInfo_dec_DistanceTravelled">
+<span @Html.Raw(tblAppointmentsInfoView.dec_DistanceTravelled.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.dec_DistanceTravelled.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.dec_DistanceTravelled.Visible (end) *@
+@if (tblAppointmentsInfoView.btwProductIdsforSSRules.Visible) { // tblAppointmentsInfoView.btwProductIdsforSSRules.Visible (begin)
+    <tr id="r_btwProductIdsforSSRules" @Html.Raw(tblAppointmentsInfoView.btwProductIdsforSSRules.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_btwProductIdsforSSRules">@Html.Raw(tblAppointmentsInfoView.btwProductIdsforSSRules.Caption)</span></td>
+        <td data-name="btwProductIdsforSSRules" @Html.Raw(tblAppointmentsInfoView.btwProductIdsforSSRules.CellAttributes)>
+<span id="el_tblAppointmentsInfo_btwProductIdsforSSRules">
+<span @Html.Raw(tblAppointmentsInfoView.btwProductIdsforSSRules.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.btwProductIdsforSSRules.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.btwProductIdsforSSRules.Visible (end) *@
+@if (tblAppointmentsInfoView.int_evaluateApptWithEmail.Visible) { // tblAppointmentsInfoView.int_evaluateApptWithEmail.Visible (begin)
+    <tr id="r_int_evaluateApptWithEmail" @Html.Raw(tblAppointmentsInfoView.int_evaluateApptWithEmail.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_evaluateApptWithEmail">@Html.Raw(tblAppointmentsInfoView.int_evaluateApptWithEmail.Caption)</span></td>
+        <td data-name="int_evaluateApptWithEmail" @Html.Raw(tblAppointmentsInfoView.int_evaluateApptWithEmail.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_evaluateApptWithEmail">
+<span @Html.Raw(tblAppointmentsInfoView.int_evaluateApptWithEmail.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_evaluateApptWithEmail.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_evaluateApptWithEmail.Visible (end) *@
+@if (tblAppointmentsInfoView.PublicNotesId.Visible) { // tblAppointmentsInfoView.PublicNotesId.Visible (begin)
+    <tr id="r_PublicNotesId" @Html.Raw(tblAppointmentsInfoView.PublicNotesId.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_PublicNotesId">@Html.Raw(tblAppointmentsInfoView.PublicNotesId.Caption)</span></td>
+        <td data-name="PublicNotesId" @Html.Raw(tblAppointmentsInfoView.PublicNotesId.CellAttributes)>
+<span id="el_tblAppointmentsInfo_PublicNotesId">
+<span @Html.Raw(tblAppointmentsInfoView.PublicNotesId.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.PublicNotesId.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.PublicNotesId.Visible (end) *@
+@if (tblAppointmentsInfoView.NationalID.Visible) { // tblAppointmentsInfoView.NationalID.Visible (begin)
+    <tr id="r_NationalID" @Html.Raw(tblAppointmentsInfoView.NationalID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_NationalID">@Html.Raw(tblAppointmentsInfoView.NationalID.Caption)</span></td>
+        <td data-name="NationalID" @Html.Raw(tblAppointmentsInfoView.NationalID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_NationalID">
+<span @Html.Raw(tblAppointmentsInfoView.NationalID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.NationalID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.NationalID.Visible (end) *@
+@if (tblAppointmentsInfoView.str_Username.Visible) { // tblAppointmentsInfoView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(tblAppointmentsInfoView.str_Username.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_Username">@Html.Raw(tblAppointmentsInfoView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(tblAppointmentsInfoView.str_Username.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_Username">
+<span @Html.Raw(tblAppointmentsInfoView.str_Username.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_Username.Visible (end) *@
+@if (tblAppointmentsInfoView.int_PackageID.Visible) { // tblAppointmentsInfoView.int_PackageID.Visible (begin)
+    <tr id="r_int_PackageID" @Html.Raw(tblAppointmentsInfoView.int_PackageID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_PackageID">@Html.Raw(tblAppointmentsInfoView.int_PackageID.Caption)</span></td>
+        <td data-name="int_PackageID" @Html.Raw(tblAppointmentsInfoView.int_PackageID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_PackageID">
+<span @Html.Raw(tblAppointmentsInfoView.int_PackageID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_PackageID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_PackageID.Visible (end) *@
+@if (tblAppointmentsInfoView.int_ApptCldr_ID.Visible) { // tblAppointmentsInfoView.int_ApptCldr_ID.Visible (begin)
+    <tr id="r_int_ApptCldr_ID" @Html.Raw(tblAppointmentsInfoView.int_ApptCldr_ID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_int_ApptCldr_ID">@Html.Raw(tblAppointmentsInfoView.int_ApptCldr_ID.Caption)</span></td>
+        <td data-name="int_ApptCldr_ID" @Html.Raw(tblAppointmentsInfoView.int_ApptCldr_ID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_int_ApptCldr_ID">
+<span @Html.Raw(tblAppointmentsInfoView.int_ApptCldr_ID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.int_ApptCldr_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.int_ApptCldr_ID.Visible (end) *@
+@if (tblAppointmentsInfoView.str_CRSS_ID.Visible) { // tblAppointmentsInfoView.str_CRSS_ID.Visible (begin)
+    <tr id="r_str_CRSS_ID" @Html.Raw(tblAppointmentsInfoView.str_CRSS_ID.RowAttributes)>
+        <td class="@(tblAppointmentsInfoView.TableLeftColumnClass)"><span id="elh_tblAppointmentsInfo_str_CRSS_ID">@Html.Raw(tblAppointmentsInfoView.str_CRSS_ID.Caption)</span></td>
+        <td data-name="str_CRSS_ID" @Html.Raw(tblAppointmentsInfoView.str_CRSS_ID.CellAttributes)>
+<span id="el_tblAppointmentsInfo_str_CRSS_ID">
+<span @Html.Raw(tblAppointmentsInfoView.str_CRSS_ID.ViewAttributes)>
+@Html.Raw(tblAppointmentsInfoView.str_CRSS_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblAppointmentsInfoView.str_CRSS_ID.Visible (end) *@
+</table>
+@{ tblAppointmentsInfoView.CloseRecordset(); }
+</form>
+</main>
+@tblAppointmentsInfoView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblAppointmentsInfoView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

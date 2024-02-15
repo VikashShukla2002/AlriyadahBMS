@@ -1,0 +1,106 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (qryClassroomCldrListList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!qryClassroomCldrListList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!qryClassroomCldrListList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryClassroomCldrListList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryClassroomCldrList: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryClassroomCldrListList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryClassroomCldrListList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryClassroomCldrListList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryClassroomCldrListList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!qryClassroomCldrListList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (qryClassroomCldrListList.TotalRecords > 0 && qryClassroomCldrListList.ExportOptions.Visible) {
+    qryClassroomCldrListList.ExportOptions.Render("body");
+}
+@if (qryClassroomCldrListList.ImportOptions.Visible) {
+    qryClassroomCldrListList.ImportOptions.Render("body");
+}
+</div>
+}
+@if (!qryClassroomCldrListList.IsModal) {
+}
+@qryClassroomCldrListList.ShowPageHeader()
+@qryClassroomCldrListList.ShowMessages()
+<main class="list @(qryClassroomCldrListList.TotalRecords == 0 && !qryClassroomCldrListList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (qryClassroomCldrListList.TotalRecords > 0 || !Empty(qryClassroomCldrListList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ qryClassroomCldrListList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("QryClassroomCldrList" + TitleCaseInvariant(qryClassroomCldrListList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@qryClassroomCldrListList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@qryClassroomCldrListList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!qryClassroomCldrListList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("qryClassroomCldrList");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

@@ -1,0 +1,172 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (rptqryInvoiceItemPricesList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!rptqryInvoiceItemPricesList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!rptqryInvoiceItemPricesList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(rptqryInvoiceItemPricesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { rptqryInvoiceItemPrices: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(rptqryInvoiceItemPricesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(rptqryInvoiceItemPricesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(rptqryInvoiceItemPricesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(rptqryInvoiceItemPricesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!rptqryInvoiceItemPricesList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (rptqryInvoiceItemPricesList.TotalRecords > 0 && rptqryInvoiceItemPricesList.ExportOptions.Visible) {
+    rptqryInvoiceItemPricesList.ExportOptions.Render("body");
+}
+@if (rptqryInvoiceItemPricesList.ImportOptions.Visible) {
+    rptqryInvoiceItemPricesList.ImportOptions.Render("body");
+}
+@if (rptqryInvoiceItemPricesList.SearchOptions.Visible) {
+    rptqryInvoiceItemPricesList.SearchOptions.Render("body");
+}
+@if (rptqryInvoiceItemPricesList.FilterOptions.Visible) {
+    rptqryInvoiceItemPricesList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!rptqryInvoiceItemPricesList.IsModal) {
+<form name="frptqryInvoiceItemPricessrch" id="frptqryInvoiceItemPricessrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="frptqryInvoiceItemPricessrch_search_panel" class="mb-2 mb-sm-0 @(rptqryInvoiceItemPricesList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(rptqryInvoiceItemPricesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { rptqryInvoiceItemPrices: currentTable } });
+var currentForm;
+var frptqryInvoiceItemPricessrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("frptqryInvoiceItemPricessrch")
+        .setPageId("list")
+@if (rptqryInvoiceItemPricesList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await rptqryInvoiceItemPricesList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!rptqryInvoiceItemPricesList.IsExport() && Empty(rptqryInvoiceItemPricesList.CurrentAction) && rptqryInvoiceItemPricesList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(rptqryInvoiceItemPricesList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(rptqryInvoiceItemPricesList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(rptqryInvoiceItemPricesList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(rptqryInvoiceItemPricesList.BasicSearch.SessionType == "" ? " active" : "")" form="frptqryInvoiceItemPricessrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(rptqryInvoiceItemPricesList.BasicSearch.SessionType == "=" ? " active" : "")" form="frptqryInvoiceItemPricessrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(rptqryInvoiceItemPricesList.BasicSearch.SessionType == "AND" ? " active" : "")" form="frptqryInvoiceItemPricessrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(rptqryInvoiceItemPricesList.BasicSearch.SessionType == "OR" ? " active" : "")" form="frptqryInvoiceItemPricessrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@rptqryInvoiceItemPricesList.ShowPageHeader()
+@rptqryInvoiceItemPricesList.ShowMessages()
+<main class="list @(rptqryInvoiceItemPricesList.TotalRecords == 0 && !rptqryInvoiceItemPricesList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (rptqryInvoiceItemPricesList.TotalRecords > 0 || !Empty(rptqryInvoiceItemPricesList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ rptqryInvoiceItemPricesList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("RptqryInvoiceItemPrices" + TitleCaseInvariant(rptqryInvoiceItemPricesList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@rptqryInvoiceItemPricesList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@rptqryInvoiceItemPricesList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!rptqryInvoiceItemPricesList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("rptqryInvoiceItemPrices");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

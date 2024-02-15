@@ -1,0 +1,784 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblProductInfoAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblProductInfoAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblProductInfoAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblProductInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblProductInfoadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblProductInfoadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["int_Product_Id", [fields.int_Product_Id.visible && fields.int_Product_Id.required ? ew.Validators.required(fields.int_Product_Id.caption) : null, ew.Validators.integer], fields.int_Product_Id.isInvalid],
+            ["str_Product_Name", [fields.str_Product_Name.visible && fields.str_Product_Name.required ? ew.Validators.required(fields.str_Product_Name.caption) : null], fields.str_Product_Name.isInvalid],
+            ["str_Item_Code", [fields.str_Item_Code.visible && fields.str_Item_Code.required ? ew.Validators.required(fields.str_Item_Code.caption) : null], fields.str_Item_Code.isInvalid],
+            ["mny_Price", [fields.mny_Price.visible && fields.mny_Price.required ? ew.Validators.required(fields.mny_Price.caption) : null, ew.Validators.float], fields.mny_Price.isInvalid],
+            ["bit_IsTaxable", [fields.bit_IsTaxable.visible && fields.bit_IsTaxable.required ? ew.Validators.required(fields.bit_IsTaxable.caption) : null], fields.bit_IsTaxable.isInvalid],
+            ["str_Web_Description", [fields.str_Web_Description.visible && fields.str_Web_Description.required ? ew.Validators.required(fields.str_Web_Description.caption) : null], fields.str_Web_Description.isInvalid],
+            ["dec_StateTax", [fields.dec_StateTax.visible && fields.dec_StateTax.required ? ew.Validators.required(fields.dec_StateTax.caption) : null, ew.Validators.integer], fields.dec_StateTax.isInvalid],
+            ["dec_AddTax", [fields.dec_AddTax.visible && fields.dec_AddTax.required ? ew.Validators.required(fields.dec_AddTax.caption) : null, ew.Validators.float], fields.dec_AddTax.isInvalid],
+            ["mny_TotalPrice", [fields.mny_TotalPrice.visible && fields.mny_TotalPrice.required ? ew.Validators.required(fields.mny_TotalPrice.caption) : null, ew.Validators.float], fields.mny_TotalPrice.isInvalid],
+            ["int_Product_Type", [fields.int_Product_Type.visible && fields.int_Product_Type.required ? ew.Validators.required(fields.int_Product_Type.caption) : null, ew.Validators.integer], fields.int_Product_Type.isInvalid],
+            ["int_Product_Sub_Type", [fields.int_Product_Sub_Type.visible && fields.int_Product_Sub_Type.required ? ew.Validators.required(fields.int_Product_Sub_Type.caption) : null, ew.Validators.integer], fields.int_Product_Sub_Type.isInvalid],
+            ["int_Status", [fields.int_Status.visible && fields.int_Status.required ? ew.Validators.required(fields.int_Status.caption) : null, ew.Validators.integer], fields.int_Status.isInvalid],
+            ["bit_Is_Web_Purchase", [fields.bit_Is_Web_Purchase.visible && fields.bit_Is_Web_Purchase.required ? ew.Validators.required(fields.bit_Is_Web_Purchase.caption) : null], fields.bit_Is_Web_Purchase.isInvalid],
+            ["str_BTW_Hours", [fields.str_BTW_Hours.visible && fields.str_BTW_Hours.required ? ew.Validators.required(fields.str_BTW_Hours.caption) : null], fields.str_BTW_Hours.isInvalid],
+            ["str_Hour", [fields.str_Hour.visible && fields.str_Hour.required ? ew.Validators.required(fields.str_Hour.caption) : null], fields.str_Hour.isInvalid],
+            ["Str_Minutes", [fields.Str_Minutes.visible && fields.Str_Minutes.required ? ew.Validators.required(fields.Str_Minutes.caption) : null], fields.Str_Minutes.isInvalid],
+            ["str_Appointment_Duration", [fields.str_Appointment_Duration.visible && fields.str_Appointment_Duration.required ? ew.Validators.required(fields.str_Appointment_Duration.caption) : null], fields.str_Appointment_Duration.isInvalid],
+            ["str_Notes", [fields.str_Notes.visible && fields.str_Notes.required ? ew.Validators.required(fields.str_Notes.caption) : null], fields.str_Notes.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null, ew.Validators.float], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null, ew.Validators.float], fields.int_Modified_By.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null, ew.Validators.datetime(fields.date_Created.clientFormatPattern)], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null, ew.Validators.datetime(fields.date_Modified.clientFormatPattern)], fields.date_Modified.isInvalid],
+            ["bit_IsDeleted", [fields.bit_IsDeleted.visible && fields.bit_IsDeleted.required ? ew.Validators.required(fields.bit_IsDeleted.caption) : null], fields.bit_IsDeleted.isInvalid],
+            ["int_Dollar", [fields.int_Dollar.visible && fields.int_Dollar.required ? ew.Validators.required(fields.int_Dollar.caption) : null, ew.Validators.integer], fields.int_Dollar.isInvalid],
+            ["bit_PortalPurchase", [fields.bit_PortalPurchase.visible && fields.bit_PortalPurchase.required ? ew.Validators.required(fields.bit_PortalPurchase.caption) : null], fields.bit_PortalPurchase.isInvalid],
+            ["str_WebName", [fields.str_WebName.visible && fields.str_WebName.required ? ew.Validators.required(fields.str_WebName.caption) : null], fields.str_WebName.isInvalid],
+            ["bit_ExtraChk1", [fields.bit_ExtraChk1.visible && fields.bit_ExtraChk1.required ? ew.Validators.required(fields.bit_ExtraChk1.caption) : null], fields.bit_ExtraChk1.isInvalid],
+            ["bit_ExtraChk2", [fields.bit_ExtraChk2.visible && fields.bit_ExtraChk2.required ? ew.Validators.required(fields.bit_ExtraChk2.caption) : null], fields.bit_ExtraChk2.isInvalid],
+            ["str_ExtraDrpDown1", [fields.str_ExtraDrpDown1.visible && fields.str_ExtraDrpDown1.required ? ew.Validators.required(fields.str_ExtraDrpDown1.caption) : null], fields.str_ExtraDrpDown1.isInvalid],
+            ["str_ExtraDrpDown2", [fields.str_ExtraDrpDown2.visible && fields.str_ExtraDrpDown2.required ? ew.Validators.required(fields.str_ExtraDrpDown2.caption) : null], fields.str_ExtraDrpDown2.isInvalid],
+            ["str_Extratxt1", [fields.str_Extratxt1.visible && fields.str_Extratxt1.required ? ew.Validators.required(fields.str_Extratxt1.caption) : null], fields.str_Extratxt1.isInvalid],
+            ["str_Extratxt2", [fields.str_Extratxt2.visible && fields.str_Extratxt2.required ? ew.Validators.required(fields.str_Extratxt2.caption) : null], fields.str_Extratxt2.isInvalid],
+            ["str_OBHours", [fields.str_OBHours.visible && fields.str_OBHours.required ? ew.Validators.required(fields.str_OBHours.caption) : null], fields.str_OBHours.isInvalid],
+            ["str_OBMinutes", [fields.str_OBMinutes.visible && fields.str_OBMinutes.required ? ew.Validators.required(fields.str_OBMinutes.caption) : null], fields.str_OBMinutes.isInvalid],
+            ["str_TotalOB_Mins", [fields.str_TotalOB_Mins.visible && fields.str_TotalOB_Mins.required ? ew.Validators.required(fields.str_TotalOB_Mins.caption) : null], fields.str_TotalOB_Mins.isInvalid],
+            ["LMSProductID", [fields.LMSProductID.visible && fields.LMSProductID.required ? ew.Validators.required(fields.LMSProductID.caption) : null, ew.Validators.integer], fields.LMSProductID.isInvalid],
+            ["LMSNoOfAttempts", [fields.LMSNoOfAttempts.visible && fields.LMSNoOfAttempts.required ? ew.Validators.required(fields.LMSNoOfAttempts.caption) : null, ew.Validators.integer], fields.LMSNoOfAttempts.isInvalid],
+            ["int_LMSLinkExpirationDays", [fields.int_LMSLinkExpirationDays.visible && fields.int_LMSLinkExpirationDays.required ? ew.Validators.required(fields.int_LMSLinkExpirationDays.caption) : null, ew.Validators.integer], fields.int_LMSLinkExpirationDays.isInvalid],
+            ["IGD_product_id", [fields.IGD_product_id.visible && fields.IGD_product_id.required ? ew.Validators.required(fields.IGD_product_id.caption) : null, ew.Validators.integer], fields.IGD_product_id.isInvalid],
+            ["IEC_product_id", [fields.IEC_product_id.visible && fields.IEC_product_id.required ? ew.Validators.required(fields.IEC_product_id.caption) : null, ew.Validators.integer], fields.IEC_product_id.isInvalid],
+            ["Somastream_Product_ID", [fields.Somastream_Product_ID.visible && fields.Somastream_Product_ID.required ? ew.Validators.required(fields.Somastream_Product_ID.caption) : null, ew.Validators.integer], fields.Somastream_Product_ID.isInvalid],
+            ["ProTREAD_Product_ID", [fields.ProTREAD_Product_ID.visible && fields.ProTREAD_Product_ID.required ? ew.Validators.required(fields.ProTREAD_Product_ID.caption) : null, ew.Validators.integer], fields.ProTREAD_Product_ID.isInvalid],
+            ["ASD_product_id", [fields.ASD_product_id.visible && fields.ASD_product_id.required ? ew.Validators.required(fields.ASD_product_id.caption) : null, ew.Validators.integer], fields.ASD_product_id.isInvalid],
+            ["D2L_product_Id", [fields.D2L_product_Id.visible && fields.D2L_product_Id.required ? ew.Validators.required(fields.D2L_product_Id.caption) : null, ew.Validators.integer], fields.D2L_product_Id.isInvalid],
+            ["int_Course_Duration", [fields.int_Course_Duration.visible && fields.int_Course_Duration.required ? ew.Validators.required(fields.int_Course_Duration.caption) : null, ew.Validators.integer], fields.int_Course_Duration.isInvalid],
+            ["Moodle_product_Id", [fields.Moodle_product_Id.visible && fields.Moodle_product_Id.required ? ew.Validators.required(fields.Moodle_product_Id.caption) : null, ew.Validators.integer], fields.Moodle_product_Id.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "bit_IsTaxable": @Html.Raw(tblProductInfoAdd.bit_IsTaxable.ToClientList(tblProductInfoAdd)),
+            "bit_Is_Web_Purchase": @Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.ToClientList(tblProductInfoAdd)),
+            "bit_IsDeleted": @Html.Raw(tblProductInfoAdd.bit_IsDeleted.ToClientList(tblProductInfoAdd)),
+            "bit_PortalPurchase": @Html.Raw(tblProductInfoAdd.bit_PortalPurchase.ToClientList(tblProductInfoAdd)),
+            "bit_ExtraChk1": @Html.Raw(tblProductInfoAdd.bit_ExtraChk1.ToClientList(tblProductInfoAdd)),
+            "bit_ExtraChk2": @Html.Raw(tblProductInfoAdd.bit_ExtraChk2.ToClientList(tblProductInfoAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblProductInfoAdd.ShowPageHeader()
+@tblProductInfoAdd.ShowMessages()
+<form name="ftblProductInfoadd" id="ftblProductInfoadd" class="@(tblProductInfoAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblProductInfoAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblProductInfoAdd.OldKeyName)" value="@Html.Raw(tblProductInfoAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblProductInfoAdd.int_Product_Id.Visible) { // tblProductInfoAdd.int_Product_Id.Visible (begin)
+    <div id="r_int_Product_Id" @Html.Raw(tblProductInfoAdd.int_Product_Id.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Product_Id" for="x_int_Product_Id" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Product_Id.Caption)@Html.Raw(tblProductInfoAdd.int_Product_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Product_Id.CellAttributes)>
+<span id="el_tblProductInfo_int_Product_Id">
+<input type="@(tblProductInfoAdd.int_Product_Id.InputTextType)" name="x_int_Product_Id" id="x_int_Product_Id" data-table="tblProductInfo" data-field="x_int_Product_Id" value="@Html.Raw(tblProductInfoAdd.int_Product_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Product_Id.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Product_Id.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Product_Id.EditAttributes) aria-describedby="x_int_Product_Id_help">
+@Html.Raw(tblProductInfoAdd.int_Product_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Product_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Product_Id.Visible (end) *@
+@if (tblProductInfoAdd.str_Product_Name.Visible) { // tblProductInfoAdd.str_Product_Name.Visible (begin)
+    <div id="r_str_Product_Name" @Html.Raw(tblProductInfoAdd.str_Product_Name.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Product_Name" for="x_str_Product_Name" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Product_Name.Caption)@Html.Raw(tblProductInfoAdd.str_Product_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Product_Name.CellAttributes)>
+<span id="el_tblProductInfo_str_Product_Name">
+<input type="@(tblProductInfoAdd.str_Product_Name.InputTextType)" name="x_str_Product_Name" id="x_str_Product_Name" data-table="tblProductInfo" data-field="x_str_Product_Name" value="@Html.Raw(tblProductInfoAdd.str_Product_Name.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Product_Name.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Product_Name.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Product_Name.EditAttributes) aria-describedby="x_str_Product_Name_help">
+@Html.Raw(tblProductInfoAdd.str_Product_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Product_Name.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Product_Name.Visible (end) *@
+@if (tblProductInfoAdd.str_Item_Code.Visible) { // tblProductInfoAdd.str_Item_Code.Visible (begin)
+    <div id="r_str_Item_Code" @Html.Raw(tblProductInfoAdd.str_Item_Code.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Item_Code" for="x_str_Item_Code" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Item_Code.Caption)@Html.Raw(tblProductInfoAdd.str_Item_Code.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Item_Code.CellAttributes)>
+<span id="el_tblProductInfo_str_Item_Code">
+<input type="@(tblProductInfoAdd.str_Item_Code.InputTextType)" name="x_str_Item_Code" id="x_str_Item_Code" data-table="tblProductInfo" data-field="x_str_Item_Code" value="@Html.Raw(tblProductInfoAdd.str_Item_Code.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Item_Code.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Item_Code.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Item_Code.EditAttributes) aria-describedby="x_str_Item_Code_help">
+@Html.Raw(tblProductInfoAdd.str_Item_Code.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Item_Code.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Item_Code.Visible (end) *@
+@if (tblProductInfoAdd.mny_Price.Visible) { // tblProductInfoAdd.mny_Price.Visible (begin)
+    <div id="r_mny_Price" @Html.Raw(tblProductInfoAdd.mny_Price.RowAttributes)>
+        <label id="elh_tblProductInfo_mny_Price" for="x_mny_Price" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.mny_Price.Caption)@Html.Raw(tblProductInfoAdd.mny_Price.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.mny_Price.CellAttributes)>
+<span id="el_tblProductInfo_mny_Price">
+<input type="@(tblProductInfoAdd.mny_Price.InputTextType)" name="x_mny_Price" id="x_mny_Price" data-table="tblProductInfo" data-field="x_mny_Price" value="@Html.Raw(tblProductInfoAdd.mny_Price.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.mny_Price.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.mny_Price.FormatPattern)"@Html.Raw(tblProductInfoAdd.mny_Price.EditAttributes) aria-describedby="x_mny_Price_help">
+@Html.Raw(tblProductInfoAdd.mny_Price.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.mny_Price.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.mny_Price.Visible (end) *@
+@if (tblProductInfoAdd.bit_IsTaxable.Visible) { // tblProductInfoAdd.bit_IsTaxable.Visible (begin)
+    <div id="r_bit_IsTaxable" @Html.Raw(tblProductInfoAdd.bit_IsTaxable.RowAttributes)>
+        <label id="elh_tblProductInfo_bit_IsTaxable" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.bit_IsTaxable.Caption)@Html.Raw(tblProductInfoAdd.bit_IsTaxable.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.bit_IsTaxable.CellAttributes)>
+<span id="el_tblProductInfo_bit_IsTaxable">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblProductInfoAdd.bit_IsTaxable.IsInvalidClass)" data-table="tblProductInfo" data-field="x_bit_IsTaxable" data-boolean name="x_bit_IsTaxable" id="x_bit_IsTaxable" value="1" checked="@ConvertToBool(tblProductInfoAdd.bit_IsTaxable.CurrentValue)" @Html.Raw(tblProductInfoAdd.bit_IsTaxable.EditAttributes) aria-describedby="x_bit_IsTaxable_help">
+    <div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.bit_IsTaxable.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblProductInfoAdd.bit_IsTaxable.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.bit_IsTaxable.Visible (end) *@
+@if (tblProductInfoAdd.str_Web_Description.Visible) { // tblProductInfoAdd.str_Web_Description.Visible (begin)
+    <div id="r_str_Web_Description" @Html.Raw(tblProductInfoAdd.str_Web_Description.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Web_Description" for="x_str_Web_Description" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Web_Description.Caption)@Html.Raw(tblProductInfoAdd.str_Web_Description.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Web_Description.CellAttributes)>
+<span id="el_tblProductInfo_str_Web_Description">
+<input type="@(tblProductInfoAdd.str_Web_Description.InputTextType)" name="x_str_Web_Description" id="x_str_Web_Description" data-table="tblProductInfo" data-field="x_str_Web_Description" value="@Html.Raw(tblProductInfoAdd.str_Web_Description.EditValue)" size="30" maxlength="550" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Web_Description.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Web_Description.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Web_Description.EditAttributes) aria-describedby="x_str_Web_Description_help">
+@Html.Raw(tblProductInfoAdd.str_Web_Description.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Web_Description.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Web_Description.Visible (end) *@
+@if (tblProductInfoAdd.dec_StateTax.Visible) { // tblProductInfoAdd.dec_StateTax.Visible (begin)
+    <div id="r_dec_StateTax" @Html.Raw(tblProductInfoAdd.dec_StateTax.RowAttributes)>
+        <label id="elh_tblProductInfo_dec_StateTax" for="x_dec_StateTax" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.dec_StateTax.Caption)@Html.Raw(tblProductInfoAdd.dec_StateTax.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.dec_StateTax.CellAttributes)>
+<span id="el_tblProductInfo_dec_StateTax">
+<input type="@(tblProductInfoAdd.dec_StateTax.InputTextType)" name="x_dec_StateTax" id="x_dec_StateTax" data-table="tblProductInfo" data-field="x_dec_StateTax" value="@Html.Raw(tblProductInfoAdd.dec_StateTax.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.dec_StateTax.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.dec_StateTax.FormatPattern)"@Html.Raw(tblProductInfoAdd.dec_StateTax.EditAttributes) aria-describedby="x_dec_StateTax_help">
+@Html.Raw(tblProductInfoAdd.dec_StateTax.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.dec_StateTax.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.dec_StateTax.Visible (end) *@
+@if (tblProductInfoAdd.dec_AddTax.Visible) { // tblProductInfoAdd.dec_AddTax.Visible (begin)
+    <div id="r_dec_AddTax" @Html.Raw(tblProductInfoAdd.dec_AddTax.RowAttributes)>
+        <label id="elh_tblProductInfo_dec_AddTax" for="x_dec_AddTax" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.dec_AddTax.Caption)@Html.Raw(tblProductInfoAdd.dec_AddTax.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.dec_AddTax.CellAttributes)>
+<span id="el_tblProductInfo_dec_AddTax">
+<input type="@(tblProductInfoAdd.dec_AddTax.InputTextType)" name="x_dec_AddTax" id="x_dec_AddTax" data-table="tblProductInfo" data-field="x_dec_AddTax" value="@Html.Raw(tblProductInfoAdd.dec_AddTax.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.dec_AddTax.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.dec_AddTax.FormatPattern)"@Html.Raw(tblProductInfoAdd.dec_AddTax.EditAttributes) aria-describedby="x_dec_AddTax_help">
+@Html.Raw(tblProductInfoAdd.dec_AddTax.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.dec_AddTax.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.dec_AddTax.Visible (end) *@
+@if (tblProductInfoAdd.mny_TotalPrice.Visible) { // tblProductInfoAdd.mny_TotalPrice.Visible (begin)
+    <div id="r_mny_TotalPrice" @Html.Raw(tblProductInfoAdd.mny_TotalPrice.RowAttributes)>
+        <label id="elh_tblProductInfo_mny_TotalPrice" for="x_mny_TotalPrice" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.mny_TotalPrice.Caption)@Html.Raw(tblProductInfoAdd.mny_TotalPrice.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.mny_TotalPrice.CellAttributes)>
+<span id="el_tblProductInfo_mny_TotalPrice">
+<input type="@(tblProductInfoAdd.mny_TotalPrice.InputTextType)" name="x_mny_TotalPrice" id="x_mny_TotalPrice" data-table="tblProductInfo" data-field="x_mny_TotalPrice" value="@Html.Raw(tblProductInfoAdd.mny_TotalPrice.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.mny_TotalPrice.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.mny_TotalPrice.FormatPattern)"@Html.Raw(tblProductInfoAdd.mny_TotalPrice.EditAttributes) aria-describedby="x_mny_TotalPrice_help">
+@Html.Raw(tblProductInfoAdd.mny_TotalPrice.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.mny_TotalPrice.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.mny_TotalPrice.Visible (end) *@
+@if (tblProductInfoAdd.int_Product_Type.Visible) { // tblProductInfoAdd.int_Product_Type.Visible (begin)
+    <div id="r_int_Product_Type" @Html.Raw(tblProductInfoAdd.int_Product_Type.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Product_Type" for="x_int_Product_Type" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Product_Type.Caption)@Html.Raw(tblProductInfoAdd.int_Product_Type.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Product_Type.CellAttributes)>
+<span id="el_tblProductInfo_int_Product_Type">
+<input type="@(tblProductInfoAdd.int_Product_Type.InputTextType)" name="x_int_Product_Type" id="x_int_Product_Type" data-table="tblProductInfo" data-field="x_int_Product_Type" value="@Html.Raw(tblProductInfoAdd.int_Product_Type.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Product_Type.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Product_Type.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Product_Type.EditAttributes) aria-describedby="x_int_Product_Type_help">
+@Html.Raw(tblProductInfoAdd.int_Product_Type.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Product_Type.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Product_Type.Visible (end) *@
+@if (tblProductInfoAdd.int_Product_Sub_Type.Visible) { // tblProductInfoAdd.int_Product_Sub_Type.Visible (begin)
+    <div id="r_int_Product_Sub_Type" @Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Product_Sub_Type" for="x_int_Product_Sub_Type" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.Caption)@Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.CellAttributes)>
+<span id="el_tblProductInfo_int_Product_Sub_Type">
+<input type="@(tblProductInfoAdd.int_Product_Sub_Type.InputTextType)" name="x_int_Product_Sub_Type" id="x_int_Product_Sub_Type" data-table="tblProductInfo" data-field="x_int_Product_Sub_Type" value="@Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Product_Sub_Type.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Product_Sub_Type.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.EditAttributes) aria-describedby="x_int_Product_Sub_Type_help">
+@Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Product_Sub_Type.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Product_Sub_Type.Visible (end) *@
+@if (tblProductInfoAdd.int_Status.Visible) { // tblProductInfoAdd.int_Status.Visible (begin)
+    <div id="r_int_Status" @Html.Raw(tblProductInfoAdd.int_Status.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Status" for="x_int_Status" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Status.Caption)@Html.Raw(tblProductInfoAdd.int_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Status.CellAttributes)>
+<span id="el_tblProductInfo_int_Status">
+<input type="@(tblProductInfoAdd.int_Status.InputTextType)" name="x_int_Status" id="x_int_Status" data-table="tblProductInfo" data-field="x_int_Status" value="@Html.Raw(tblProductInfoAdd.int_Status.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Status.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Status.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Status.EditAttributes) aria-describedby="x_int_Status_help">
+@Html.Raw(tblProductInfoAdd.int_Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Status.Visible (end) *@
+@if (tblProductInfoAdd.bit_Is_Web_Purchase.Visible) { // tblProductInfoAdd.bit_Is_Web_Purchase.Visible (begin)
+    <div id="r_bit_Is_Web_Purchase" @Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.RowAttributes)>
+        <label id="elh_tblProductInfo_bit_Is_Web_Purchase" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.Caption)@Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.CellAttributes)>
+<span id="el_tblProductInfo_bit_Is_Web_Purchase">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblProductInfoAdd.bit_Is_Web_Purchase.IsInvalidClass)" data-table="tblProductInfo" data-field="x_bit_Is_Web_Purchase" data-boolean name="x_bit_Is_Web_Purchase" id="x_bit_Is_Web_Purchase" value="1" checked="@ConvertToBool(tblProductInfoAdd.bit_Is_Web_Purchase.CurrentValue)" @Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.EditAttributes) aria-describedby="x_bit_Is_Web_Purchase_help">
+    <div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblProductInfoAdd.bit_Is_Web_Purchase.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.bit_Is_Web_Purchase.Visible (end) *@
+@if (tblProductInfoAdd.str_BTW_Hours.Visible) { // tblProductInfoAdd.str_BTW_Hours.Visible (begin)
+    <div id="r_str_BTW_Hours" @Html.Raw(tblProductInfoAdd.str_BTW_Hours.RowAttributes)>
+        <label id="elh_tblProductInfo_str_BTW_Hours" for="x_str_BTW_Hours" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_BTW_Hours.Caption)@Html.Raw(tblProductInfoAdd.str_BTW_Hours.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_BTW_Hours.CellAttributes)>
+<span id="el_tblProductInfo_str_BTW_Hours">
+<input type="@(tblProductInfoAdd.str_BTW_Hours.InputTextType)" name="x_str_BTW_Hours" id="x_str_BTW_Hours" data-table="tblProductInfo" data-field="x_str_BTW_Hours" value="@Html.Raw(tblProductInfoAdd.str_BTW_Hours.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_BTW_Hours.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_BTW_Hours.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_BTW_Hours.EditAttributes) aria-describedby="x_str_BTW_Hours_help">
+@Html.Raw(tblProductInfoAdd.str_BTW_Hours.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_BTW_Hours.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_BTW_Hours.Visible (end) *@
+@if (tblProductInfoAdd.str_Hour.Visible) { // tblProductInfoAdd.str_Hour.Visible (begin)
+    <div id="r_str_Hour" @Html.Raw(tblProductInfoAdd.str_Hour.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Hour" for="x_str_Hour" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Hour.Caption)@Html.Raw(tblProductInfoAdd.str_Hour.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Hour.CellAttributes)>
+<span id="el_tblProductInfo_str_Hour">
+<input type="@(tblProductInfoAdd.str_Hour.InputTextType)" name="x_str_Hour" id="x_str_Hour" data-table="tblProductInfo" data-field="x_str_Hour" value="@Html.Raw(tblProductInfoAdd.str_Hour.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Hour.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Hour.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Hour.EditAttributes) aria-describedby="x_str_Hour_help">
+@Html.Raw(tblProductInfoAdd.str_Hour.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Hour.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Hour.Visible (end) *@
+@if (tblProductInfoAdd.Str_Minutes.Visible) { // tblProductInfoAdd.Str_Minutes.Visible (begin)
+    <div id="r_Str_Minutes" @Html.Raw(tblProductInfoAdd.Str_Minutes.RowAttributes)>
+        <label id="elh_tblProductInfo_Str_Minutes" for="x_Str_Minutes" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.Str_Minutes.Caption)@Html.Raw(tblProductInfoAdd.Str_Minutes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.Str_Minutes.CellAttributes)>
+<span id="el_tblProductInfo_Str_Minutes">
+<input type="@(tblProductInfoAdd.Str_Minutes.InputTextType)" name="x_Str_Minutes" id="x_Str_Minutes" data-table="tblProductInfo" data-field="x_Str_Minutes" value="@Html.Raw(tblProductInfoAdd.Str_Minutes.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.Str_Minutes.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.Str_Minutes.FormatPattern)"@Html.Raw(tblProductInfoAdd.Str_Minutes.EditAttributes) aria-describedby="x_Str_Minutes_help">
+@Html.Raw(tblProductInfoAdd.Str_Minutes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.Str_Minutes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.Str_Minutes.Visible (end) *@
+@if (tblProductInfoAdd.str_Appointment_Duration.Visible) { // tblProductInfoAdd.str_Appointment_Duration.Visible (begin)
+    <div id="r_str_Appointment_Duration" @Html.Raw(tblProductInfoAdd.str_Appointment_Duration.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Appointment_Duration" for="x_str_Appointment_Duration" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Appointment_Duration.Caption)@Html.Raw(tblProductInfoAdd.str_Appointment_Duration.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Appointment_Duration.CellAttributes)>
+<span id="el_tblProductInfo_str_Appointment_Duration">
+<input type="@(tblProductInfoAdd.str_Appointment_Duration.InputTextType)" name="x_str_Appointment_Duration" id="x_str_Appointment_Duration" data-table="tblProductInfo" data-field="x_str_Appointment_Duration" value="@Html.Raw(tblProductInfoAdd.str_Appointment_Duration.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Appointment_Duration.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Appointment_Duration.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Appointment_Duration.EditAttributes) aria-describedby="x_str_Appointment_Duration_help">
+@Html.Raw(tblProductInfoAdd.str_Appointment_Duration.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Appointment_Duration.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Appointment_Duration.Visible (end) *@
+@if (tblProductInfoAdd.str_Notes.Visible) { // tblProductInfoAdd.str_Notes.Visible (begin)
+    <div id="r_str_Notes" @Html.Raw(tblProductInfoAdd.str_Notes.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Notes" for="x_str_Notes" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Notes.Caption)@Html.Raw(tblProductInfoAdd.str_Notes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Notes.CellAttributes)>
+<span id="el_tblProductInfo_str_Notes">
+<input type="@(tblProductInfoAdd.str_Notes.InputTextType)" name="x_str_Notes" id="x_str_Notes" data-table="tblProductInfo" data-field="x_str_Notes" value="@Html.Raw(tblProductInfoAdd.str_Notes.EditValue)" size="30" maxlength="550" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Notes.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Notes.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Notes.EditAttributes) aria-describedby="x_str_Notes_help">
+@Html.Raw(tblProductInfoAdd.str_Notes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Notes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Notes.Visible (end) *@
+@if (tblProductInfoAdd.int_Created_By.Visible) { // tblProductInfoAdd.int_Created_By.Visible (begin)
+    <div id="r_int_Created_By" @Html.Raw(tblProductInfoAdd.int_Created_By.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Created_By" for="x_int_Created_By" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Created_By.Caption)@Html.Raw(tblProductInfoAdd.int_Created_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Created_By.CellAttributes)>
+<span id="el_tblProductInfo_int_Created_By">
+<input type="@(tblProductInfoAdd.int_Created_By.InputTextType)" name="x_int_Created_By" id="x_int_Created_By" data-table="tblProductInfo" data-field="x_int_Created_By" value="@Html.Raw(tblProductInfoAdd.int_Created_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Created_By.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Created_By.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Created_By.EditAttributes) aria-describedby="x_int_Created_By_help">
+@Html.Raw(tblProductInfoAdd.int_Created_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Created_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Created_By.Visible (end) *@
+@if (tblProductInfoAdd.int_Modified_By.Visible) { // tblProductInfoAdd.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" @Html.Raw(tblProductInfoAdd.int_Modified_By.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Modified_By" for="x_int_Modified_By" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Modified_By.Caption)@Html.Raw(tblProductInfoAdd.int_Modified_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Modified_By.CellAttributes)>
+<span id="el_tblProductInfo_int_Modified_By">
+<input type="@(tblProductInfoAdd.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblProductInfo" data-field="x_int_Modified_By" value="@Html.Raw(tblProductInfoAdd.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Modified_By.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Modified_By.EditAttributes) aria-describedby="x_int_Modified_By_help">
+@Html.Raw(tblProductInfoAdd.int_Modified_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Modified_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Modified_By.Visible (end) *@
+@if (tblProductInfoAdd.date_Created.Visible) { // tblProductInfoAdd.date_Created.Visible (begin)
+    <div id="r_date_Created" @Html.Raw(tblProductInfoAdd.date_Created.RowAttributes)>
+        <label id="elh_tblProductInfo_date_Created" for="x_date_Created" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.date_Created.Caption)@Html.Raw(tblProductInfoAdd.date_Created.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.date_Created.CellAttributes)>
+<span id="el_tblProductInfo_date_Created">
+<input type="@(tblProductInfoAdd.date_Created.InputTextType)" name="x_date_Created" id="x_date_Created" data-table="tblProductInfo" data-field="x_date_Created" value="@Html.Raw(tblProductInfoAdd.date_Created.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.date_Created.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.date_Created.FormatPattern)"@Html.Raw(tblProductInfoAdd.date_Created.EditAttributes) aria-describedby="x_date_Created_help">
+@Html.Raw(tblProductInfoAdd.date_Created.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.date_Created.GetErrorMessage())</div>
+@if (!tblProductInfoAdd.date_Created.ReadOnly && !tblProductInfoAdd.date_Created.Disabled && !tblProductInfoAdd.date_Created.EditAttrs.Is("readonly") && !tblProductInfoAdd.date_Created.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblProductInfoadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblProductInfoadd", "x_date_Created", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.date_Created.Visible (end) *@
+@if (tblProductInfoAdd.date_Modified.Visible) { // tblProductInfoAdd.date_Modified.Visible (begin)
+    <div id="r_date_Modified" @Html.Raw(tblProductInfoAdd.date_Modified.RowAttributes)>
+        <label id="elh_tblProductInfo_date_Modified" for="x_date_Modified" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.date_Modified.Caption)@Html.Raw(tblProductInfoAdd.date_Modified.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.date_Modified.CellAttributes)>
+<span id="el_tblProductInfo_date_Modified">
+<input type="@(tblProductInfoAdd.date_Modified.InputTextType)" name="x_date_Modified" id="x_date_Modified" data-table="tblProductInfo" data-field="x_date_Modified" value="@Html.Raw(tblProductInfoAdd.date_Modified.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.date_Modified.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.date_Modified.FormatPattern)"@Html.Raw(tblProductInfoAdd.date_Modified.EditAttributes) aria-describedby="x_date_Modified_help">
+@Html.Raw(tblProductInfoAdd.date_Modified.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.date_Modified.GetErrorMessage())</div>
+@if (!tblProductInfoAdd.date_Modified.ReadOnly && !tblProductInfoAdd.date_Modified.Disabled && !tblProductInfoAdd.date_Modified.EditAttrs.Is("readonly") && !tblProductInfoAdd.date_Modified.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblProductInfoadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblProductInfoadd", "x_date_Modified", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.date_Modified.Visible (end) *@
+@if (tblProductInfoAdd.bit_IsDeleted.Visible) { // tblProductInfoAdd.bit_IsDeleted.Visible (begin)
+    <div id="r_bit_IsDeleted" @Html.Raw(tblProductInfoAdd.bit_IsDeleted.RowAttributes)>
+        <label id="elh_tblProductInfo_bit_IsDeleted" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.bit_IsDeleted.Caption)@Html.Raw(tblProductInfoAdd.bit_IsDeleted.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.bit_IsDeleted.CellAttributes)>
+<span id="el_tblProductInfo_bit_IsDeleted">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblProductInfoAdd.bit_IsDeleted.IsInvalidClass)" data-table="tblProductInfo" data-field="x_bit_IsDeleted" data-boolean name="x_bit_IsDeleted" id="x_bit_IsDeleted" value="1" checked="@ConvertToBool(tblProductInfoAdd.bit_IsDeleted.CurrentValue)" @Html.Raw(tblProductInfoAdd.bit_IsDeleted.EditAttributes) aria-describedby="x_bit_IsDeleted_help">
+    <div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.bit_IsDeleted.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblProductInfoAdd.bit_IsDeleted.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.bit_IsDeleted.Visible (end) *@
+@if (tblProductInfoAdd.int_Dollar.Visible) { // tblProductInfoAdd.int_Dollar.Visible (begin)
+    <div id="r_int_Dollar" @Html.Raw(tblProductInfoAdd.int_Dollar.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Dollar" for="x_int_Dollar" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Dollar.Caption)@Html.Raw(tblProductInfoAdd.int_Dollar.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Dollar.CellAttributes)>
+<span id="el_tblProductInfo_int_Dollar">
+<input type="@(tblProductInfoAdd.int_Dollar.InputTextType)" name="x_int_Dollar" id="x_int_Dollar" data-table="tblProductInfo" data-field="x_int_Dollar" value="@Html.Raw(tblProductInfoAdd.int_Dollar.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Dollar.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Dollar.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Dollar.EditAttributes) aria-describedby="x_int_Dollar_help">
+@Html.Raw(tblProductInfoAdd.int_Dollar.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Dollar.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Dollar.Visible (end) *@
+@if (tblProductInfoAdd.bit_PortalPurchase.Visible) { // tblProductInfoAdd.bit_PortalPurchase.Visible (begin)
+    <div id="r_bit_PortalPurchase" @Html.Raw(tblProductInfoAdd.bit_PortalPurchase.RowAttributes)>
+        <label id="elh_tblProductInfo_bit_PortalPurchase" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.bit_PortalPurchase.Caption)@Html.Raw(tblProductInfoAdd.bit_PortalPurchase.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.bit_PortalPurchase.CellAttributes)>
+<span id="el_tblProductInfo_bit_PortalPurchase">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblProductInfoAdd.bit_PortalPurchase.IsInvalidClass)" data-table="tblProductInfo" data-field="x_bit_PortalPurchase" data-boolean name="x_bit_PortalPurchase" id="x_bit_PortalPurchase" value="1" checked="@ConvertToBool(tblProductInfoAdd.bit_PortalPurchase.CurrentValue)" @Html.Raw(tblProductInfoAdd.bit_PortalPurchase.EditAttributes) aria-describedby="x_bit_PortalPurchase_help">
+    <div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.bit_PortalPurchase.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblProductInfoAdd.bit_PortalPurchase.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.bit_PortalPurchase.Visible (end) *@
+@if (tblProductInfoAdd.str_WebName.Visible) { // tblProductInfoAdd.str_WebName.Visible (begin)
+    <div id="r_str_WebName" @Html.Raw(tblProductInfoAdd.str_WebName.RowAttributes)>
+        <label id="elh_tblProductInfo_str_WebName" for="x_str_WebName" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_WebName.Caption)@Html.Raw(tblProductInfoAdd.str_WebName.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_WebName.CellAttributes)>
+<span id="el_tblProductInfo_str_WebName">
+<input type="@(tblProductInfoAdd.str_WebName.InputTextType)" name="x_str_WebName" id="x_str_WebName" data-table="tblProductInfo" data-field="x_str_WebName" value="@Html.Raw(tblProductInfoAdd.str_WebName.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_WebName.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_WebName.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_WebName.EditAttributes) aria-describedby="x_str_WebName_help">
+@Html.Raw(tblProductInfoAdd.str_WebName.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_WebName.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_WebName.Visible (end) *@
+@if (tblProductInfoAdd.bit_ExtraChk1.Visible) { // tblProductInfoAdd.bit_ExtraChk1.Visible (begin)
+    <div id="r_bit_ExtraChk1" @Html.Raw(tblProductInfoAdd.bit_ExtraChk1.RowAttributes)>
+        <label id="elh_tblProductInfo_bit_ExtraChk1" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.bit_ExtraChk1.Caption)@Html.Raw(tblProductInfoAdd.bit_ExtraChk1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.bit_ExtraChk1.CellAttributes)>
+<span id="el_tblProductInfo_bit_ExtraChk1">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblProductInfoAdd.bit_ExtraChk1.IsInvalidClass)" data-table="tblProductInfo" data-field="x_bit_ExtraChk1" data-boolean name="x_bit_ExtraChk1" id="x_bit_ExtraChk1" value="1" checked="@ConvertToBool(tblProductInfoAdd.bit_ExtraChk1.CurrentValue)" @Html.Raw(tblProductInfoAdd.bit_ExtraChk1.EditAttributes) aria-describedby="x_bit_ExtraChk1_help">
+    <div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.bit_ExtraChk1.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblProductInfoAdd.bit_ExtraChk1.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.bit_ExtraChk1.Visible (end) *@
+@if (tblProductInfoAdd.bit_ExtraChk2.Visible) { // tblProductInfoAdd.bit_ExtraChk2.Visible (begin)
+    <div id="r_bit_ExtraChk2" @Html.Raw(tblProductInfoAdd.bit_ExtraChk2.RowAttributes)>
+        <label id="elh_tblProductInfo_bit_ExtraChk2" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.bit_ExtraChk2.Caption)@Html.Raw(tblProductInfoAdd.bit_ExtraChk2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.bit_ExtraChk2.CellAttributes)>
+<span id="el_tblProductInfo_bit_ExtraChk2">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblProductInfoAdd.bit_ExtraChk2.IsInvalidClass)" data-table="tblProductInfo" data-field="x_bit_ExtraChk2" data-boolean name="x_bit_ExtraChk2" id="x_bit_ExtraChk2" value="1" checked="@ConvertToBool(tblProductInfoAdd.bit_ExtraChk2.CurrentValue)" @Html.Raw(tblProductInfoAdd.bit_ExtraChk2.EditAttributes) aria-describedby="x_bit_ExtraChk2_help">
+    <div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.bit_ExtraChk2.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblProductInfoAdd.bit_ExtraChk2.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.bit_ExtraChk2.Visible (end) *@
+@if (tblProductInfoAdd.str_ExtraDrpDown1.Visible) { // tblProductInfoAdd.str_ExtraDrpDown1.Visible (begin)
+    <div id="r_str_ExtraDrpDown1" @Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.RowAttributes)>
+        <label id="elh_tblProductInfo_str_ExtraDrpDown1" for="x_str_ExtraDrpDown1" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.Caption)@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.CellAttributes)>
+<span id="el_tblProductInfo_str_ExtraDrpDown1">
+<input type="@(tblProductInfoAdd.str_ExtraDrpDown1.InputTextType)" name="x_str_ExtraDrpDown1" id="x_str_ExtraDrpDown1" data-table="tblProductInfo" data-field="x_str_ExtraDrpDown1" value="@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_ExtraDrpDown1.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_ExtraDrpDown1.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.EditAttributes) aria-describedby="x_str_ExtraDrpDown1_help">
+@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown1.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_ExtraDrpDown1.Visible (end) *@
+@if (tblProductInfoAdd.str_ExtraDrpDown2.Visible) { // tblProductInfoAdd.str_ExtraDrpDown2.Visible (begin)
+    <div id="r_str_ExtraDrpDown2" @Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.RowAttributes)>
+        <label id="elh_tblProductInfo_str_ExtraDrpDown2" for="x_str_ExtraDrpDown2" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.Caption)@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.CellAttributes)>
+<span id="el_tblProductInfo_str_ExtraDrpDown2">
+<input type="@(tblProductInfoAdd.str_ExtraDrpDown2.InputTextType)" name="x_str_ExtraDrpDown2" id="x_str_ExtraDrpDown2" data-table="tblProductInfo" data-field="x_str_ExtraDrpDown2" value="@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_ExtraDrpDown2.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_ExtraDrpDown2.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.EditAttributes) aria-describedby="x_str_ExtraDrpDown2_help">
+@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_ExtraDrpDown2.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_ExtraDrpDown2.Visible (end) *@
+@if (tblProductInfoAdd.str_Extratxt1.Visible) { // tblProductInfoAdd.str_Extratxt1.Visible (begin)
+    <div id="r_str_Extratxt1" @Html.Raw(tblProductInfoAdd.str_Extratxt1.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Extratxt1" for="x_str_Extratxt1" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Extratxt1.Caption)@Html.Raw(tblProductInfoAdd.str_Extratxt1.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Extratxt1.CellAttributes)>
+<span id="el_tblProductInfo_str_Extratxt1">
+<input type="@(tblProductInfoAdd.str_Extratxt1.InputTextType)" name="x_str_Extratxt1" id="x_str_Extratxt1" data-table="tblProductInfo" data-field="x_str_Extratxt1" value="@Html.Raw(tblProductInfoAdd.str_Extratxt1.EditValue)" size="30" maxlength="550" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Extratxt1.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Extratxt1.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Extratxt1.EditAttributes) aria-describedby="x_str_Extratxt1_help">
+@Html.Raw(tblProductInfoAdd.str_Extratxt1.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Extratxt1.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Extratxt1.Visible (end) *@
+@if (tblProductInfoAdd.str_Extratxt2.Visible) { // tblProductInfoAdd.str_Extratxt2.Visible (begin)
+    <div id="r_str_Extratxt2" @Html.Raw(tblProductInfoAdd.str_Extratxt2.RowAttributes)>
+        <label id="elh_tblProductInfo_str_Extratxt2" for="x_str_Extratxt2" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_Extratxt2.Caption)@Html.Raw(tblProductInfoAdd.str_Extratxt2.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_Extratxt2.CellAttributes)>
+<span id="el_tblProductInfo_str_Extratxt2">
+<input type="@(tblProductInfoAdd.str_Extratxt2.InputTextType)" name="x_str_Extratxt2" id="x_str_Extratxt2" data-table="tblProductInfo" data-field="x_str_Extratxt2" value="@Html.Raw(tblProductInfoAdd.str_Extratxt2.EditValue)" size="30" maxlength="550" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_Extratxt2.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_Extratxt2.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_Extratxt2.EditAttributes) aria-describedby="x_str_Extratxt2_help">
+@Html.Raw(tblProductInfoAdd.str_Extratxt2.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_Extratxt2.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_Extratxt2.Visible (end) *@
+@if (tblProductInfoAdd.str_OBHours.Visible) { // tblProductInfoAdd.str_OBHours.Visible (begin)
+    <div id="r_str_OBHours" @Html.Raw(tblProductInfoAdd.str_OBHours.RowAttributes)>
+        <label id="elh_tblProductInfo_str_OBHours" for="x_str_OBHours" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_OBHours.Caption)@Html.Raw(tblProductInfoAdd.str_OBHours.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_OBHours.CellAttributes)>
+<span id="el_tblProductInfo_str_OBHours">
+<input type="@(tblProductInfoAdd.str_OBHours.InputTextType)" name="x_str_OBHours" id="x_str_OBHours" data-table="tblProductInfo" data-field="x_str_OBHours" value="@Html.Raw(tblProductInfoAdd.str_OBHours.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_OBHours.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_OBHours.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_OBHours.EditAttributes) aria-describedby="x_str_OBHours_help">
+@Html.Raw(tblProductInfoAdd.str_OBHours.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_OBHours.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_OBHours.Visible (end) *@
+@if (tblProductInfoAdd.str_OBMinutes.Visible) { // tblProductInfoAdd.str_OBMinutes.Visible (begin)
+    <div id="r_str_OBMinutes" @Html.Raw(tblProductInfoAdd.str_OBMinutes.RowAttributes)>
+        <label id="elh_tblProductInfo_str_OBMinutes" for="x_str_OBMinutes" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_OBMinutes.Caption)@Html.Raw(tblProductInfoAdd.str_OBMinutes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_OBMinutes.CellAttributes)>
+<span id="el_tblProductInfo_str_OBMinutes">
+<input type="@(tblProductInfoAdd.str_OBMinutes.InputTextType)" name="x_str_OBMinutes" id="x_str_OBMinutes" data-table="tblProductInfo" data-field="x_str_OBMinutes" value="@Html.Raw(tblProductInfoAdd.str_OBMinutes.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_OBMinutes.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_OBMinutes.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_OBMinutes.EditAttributes) aria-describedby="x_str_OBMinutes_help">
+@Html.Raw(tblProductInfoAdd.str_OBMinutes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_OBMinutes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_OBMinutes.Visible (end) *@
+@if (tblProductInfoAdd.str_TotalOB_Mins.Visible) { // tblProductInfoAdd.str_TotalOB_Mins.Visible (begin)
+    <div id="r_str_TotalOB_Mins" @Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.RowAttributes)>
+        <label id="elh_tblProductInfo_str_TotalOB_Mins" for="x_str_TotalOB_Mins" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.Caption)@Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.CellAttributes)>
+<span id="el_tblProductInfo_str_TotalOB_Mins">
+<input type="@(tblProductInfoAdd.str_TotalOB_Mins.InputTextType)" name="x_str_TotalOB_Mins" id="x_str_TotalOB_Mins" data-table="tblProductInfo" data-field="x_str_TotalOB_Mins" value="@Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.str_TotalOB_Mins.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.str_TotalOB_Mins.FormatPattern)"@Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.EditAttributes) aria-describedby="x_str_TotalOB_Mins_help">
+@Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.str_TotalOB_Mins.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.str_TotalOB_Mins.Visible (end) *@
+@if (tblProductInfoAdd.LMSProductID.Visible) { // tblProductInfoAdd.LMSProductID.Visible (begin)
+    <div id="r_LMSProductID" @Html.Raw(tblProductInfoAdd.LMSProductID.RowAttributes)>
+        <label id="elh_tblProductInfo_LMSProductID" for="x_LMSProductID" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.LMSProductID.Caption)@Html.Raw(tblProductInfoAdd.LMSProductID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.LMSProductID.CellAttributes)>
+<span id="el_tblProductInfo_LMSProductID">
+<input type="@(tblProductInfoAdd.LMSProductID.InputTextType)" name="x_LMSProductID" id="x_LMSProductID" data-table="tblProductInfo" data-field="x_LMSProductID" value="@Html.Raw(tblProductInfoAdd.LMSProductID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.LMSProductID.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.LMSProductID.FormatPattern)"@Html.Raw(tblProductInfoAdd.LMSProductID.EditAttributes) aria-describedby="x_LMSProductID_help">
+@Html.Raw(tblProductInfoAdd.LMSProductID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.LMSProductID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.LMSProductID.Visible (end) *@
+@if (tblProductInfoAdd.LMSNoOfAttempts.Visible) { // tblProductInfoAdd.LMSNoOfAttempts.Visible (begin)
+    <div id="r_LMSNoOfAttempts" @Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.RowAttributes)>
+        <label id="elh_tblProductInfo_LMSNoOfAttempts" for="x_LMSNoOfAttempts" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.Caption)@Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.CellAttributes)>
+<span id="el_tblProductInfo_LMSNoOfAttempts">
+<input type="@(tblProductInfoAdd.LMSNoOfAttempts.InputTextType)" name="x_LMSNoOfAttempts" id="x_LMSNoOfAttempts" data-table="tblProductInfo" data-field="x_LMSNoOfAttempts" value="@Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.LMSNoOfAttempts.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.LMSNoOfAttempts.FormatPattern)"@Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.EditAttributes) aria-describedby="x_LMSNoOfAttempts_help">
+@Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.LMSNoOfAttempts.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.LMSNoOfAttempts.Visible (end) *@
+@if (tblProductInfoAdd.int_LMSLinkExpirationDays.Visible) { // tblProductInfoAdd.int_LMSLinkExpirationDays.Visible (begin)
+    <div id="r_int_LMSLinkExpirationDays" @Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.RowAttributes)>
+        <label id="elh_tblProductInfo_int_LMSLinkExpirationDays" for="x_int_LMSLinkExpirationDays" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.Caption)@Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.CellAttributes)>
+<span id="el_tblProductInfo_int_LMSLinkExpirationDays">
+<input type="@(tblProductInfoAdd.int_LMSLinkExpirationDays.InputTextType)" name="x_int_LMSLinkExpirationDays" id="x_int_LMSLinkExpirationDays" data-table="tblProductInfo" data-field="x_int_LMSLinkExpirationDays" value="@Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_LMSLinkExpirationDays.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_LMSLinkExpirationDays.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.EditAttributes) aria-describedby="x_int_LMSLinkExpirationDays_help">
+@Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_LMSLinkExpirationDays.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_LMSLinkExpirationDays.Visible (end) *@
+@if (tblProductInfoAdd.IGD_product_id.Visible) { // tblProductInfoAdd.IGD_product_id.Visible (begin)
+    <div id="r_IGD_product_id" @Html.Raw(tblProductInfoAdd.IGD_product_id.RowAttributes)>
+        <label id="elh_tblProductInfo_IGD_product_id" for="x_IGD_product_id" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.IGD_product_id.Caption)@Html.Raw(tblProductInfoAdd.IGD_product_id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.IGD_product_id.CellAttributes)>
+<span id="el_tblProductInfo_IGD_product_id">
+<input type="@(tblProductInfoAdd.IGD_product_id.InputTextType)" name="x_IGD_product_id" id="x_IGD_product_id" data-table="tblProductInfo" data-field="x_IGD_product_id" value="@Html.Raw(tblProductInfoAdd.IGD_product_id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.IGD_product_id.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.IGD_product_id.FormatPattern)"@Html.Raw(tblProductInfoAdd.IGD_product_id.EditAttributes) aria-describedby="x_IGD_product_id_help">
+@Html.Raw(tblProductInfoAdd.IGD_product_id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.IGD_product_id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.IGD_product_id.Visible (end) *@
+@if (tblProductInfoAdd.IEC_product_id.Visible) { // tblProductInfoAdd.IEC_product_id.Visible (begin)
+    <div id="r_IEC_product_id" @Html.Raw(tblProductInfoAdd.IEC_product_id.RowAttributes)>
+        <label id="elh_tblProductInfo_IEC_product_id" for="x_IEC_product_id" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.IEC_product_id.Caption)@Html.Raw(tblProductInfoAdd.IEC_product_id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.IEC_product_id.CellAttributes)>
+<span id="el_tblProductInfo_IEC_product_id">
+<input type="@(tblProductInfoAdd.IEC_product_id.InputTextType)" name="x_IEC_product_id" id="x_IEC_product_id" data-table="tblProductInfo" data-field="x_IEC_product_id" value="@Html.Raw(tblProductInfoAdd.IEC_product_id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.IEC_product_id.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.IEC_product_id.FormatPattern)"@Html.Raw(tblProductInfoAdd.IEC_product_id.EditAttributes) aria-describedby="x_IEC_product_id_help">
+@Html.Raw(tblProductInfoAdd.IEC_product_id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.IEC_product_id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.IEC_product_id.Visible (end) *@
+@if (tblProductInfoAdd.Somastream_Product_ID.Visible) { // tblProductInfoAdd.Somastream_Product_ID.Visible (begin)
+    <div id="r_Somastream_Product_ID" @Html.Raw(tblProductInfoAdd.Somastream_Product_ID.RowAttributes)>
+        <label id="elh_tblProductInfo_Somastream_Product_ID" for="x_Somastream_Product_ID" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.Somastream_Product_ID.Caption)@Html.Raw(tblProductInfoAdd.Somastream_Product_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.Somastream_Product_ID.CellAttributes)>
+<span id="el_tblProductInfo_Somastream_Product_ID">
+<input type="@(tblProductInfoAdd.Somastream_Product_ID.InputTextType)" name="x_Somastream_Product_ID" id="x_Somastream_Product_ID" data-table="tblProductInfo" data-field="x_Somastream_Product_ID" value="@Html.Raw(tblProductInfoAdd.Somastream_Product_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.Somastream_Product_ID.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.Somastream_Product_ID.FormatPattern)"@Html.Raw(tblProductInfoAdd.Somastream_Product_ID.EditAttributes) aria-describedby="x_Somastream_Product_ID_help">
+@Html.Raw(tblProductInfoAdd.Somastream_Product_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.Somastream_Product_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.Somastream_Product_ID.Visible (end) *@
+@if (tblProductInfoAdd.ProTREAD_Product_ID.Visible) { // tblProductInfoAdd.ProTREAD_Product_ID.Visible (begin)
+    <div id="r_ProTREAD_Product_ID" @Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.RowAttributes)>
+        <label id="elh_tblProductInfo_ProTREAD_Product_ID" for="x_ProTREAD_Product_ID" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.Caption)@Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.CellAttributes)>
+<span id="el_tblProductInfo_ProTREAD_Product_ID">
+<input type="@(tblProductInfoAdd.ProTREAD_Product_ID.InputTextType)" name="x_ProTREAD_Product_ID" id="x_ProTREAD_Product_ID" data-table="tblProductInfo" data-field="x_ProTREAD_Product_ID" value="@Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.ProTREAD_Product_ID.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.ProTREAD_Product_ID.FormatPattern)"@Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.EditAttributes) aria-describedby="x_ProTREAD_Product_ID_help">
+@Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.ProTREAD_Product_ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.ProTREAD_Product_ID.Visible (end) *@
+@if (tblProductInfoAdd.ASD_product_id.Visible) { // tblProductInfoAdd.ASD_product_id.Visible (begin)
+    <div id="r_ASD_product_id" @Html.Raw(tblProductInfoAdd.ASD_product_id.RowAttributes)>
+        <label id="elh_tblProductInfo_ASD_product_id" for="x_ASD_product_id" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.ASD_product_id.Caption)@Html.Raw(tblProductInfoAdd.ASD_product_id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.ASD_product_id.CellAttributes)>
+<span id="el_tblProductInfo_ASD_product_id">
+<input type="@(tblProductInfoAdd.ASD_product_id.InputTextType)" name="x_ASD_product_id" id="x_ASD_product_id" data-table="tblProductInfo" data-field="x_ASD_product_id" value="@Html.Raw(tblProductInfoAdd.ASD_product_id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.ASD_product_id.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.ASD_product_id.FormatPattern)"@Html.Raw(tblProductInfoAdd.ASD_product_id.EditAttributes) aria-describedby="x_ASD_product_id_help">
+@Html.Raw(tblProductInfoAdd.ASD_product_id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.ASD_product_id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.ASD_product_id.Visible (end) *@
+@if (tblProductInfoAdd.D2L_product_Id.Visible) { // tblProductInfoAdd.D2L_product_Id.Visible (begin)
+    <div id="r_D2L_product_Id" @Html.Raw(tblProductInfoAdd.D2L_product_Id.RowAttributes)>
+        <label id="elh_tblProductInfo_D2L_product_Id" for="x_D2L_product_Id" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.D2L_product_Id.Caption)@Html.Raw(tblProductInfoAdd.D2L_product_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.D2L_product_Id.CellAttributes)>
+<span id="el_tblProductInfo_D2L_product_Id">
+<input type="@(tblProductInfoAdd.D2L_product_Id.InputTextType)" name="x_D2L_product_Id" id="x_D2L_product_Id" data-table="tblProductInfo" data-field="x_D2L_product_Id" value="@Html.Raw(tblProductInfoAdd.D2L_product_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.D2L_product_Id.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.D2L_product_Id.FormatPattern)"@Html.Raw(tblProductInfoAdd.D2L_product_Id.EditAttributes) aria-describedby="x_D2L_product_Id_help">
+@Html.Raw(tblProductInfoAdd.D2L_product_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.D2L_product_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.D2L_product_Id.Visible (end) *@
+@if (tblProductInfoAdd.int_Course_Duration.Visible) { // tblProductInfoAdd.int_Course_Duration.Visible (begin)
+    <div id="r_int_Course_Duration" @Html.Raw(tblProductInfoAdd.int_Course_Duration.RowAttributes)>
+        <label id="elh_tblProductInfo_int_Course_Duration" for="x_int_Course_Duration" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.int_Course_Duration.Caption)@Html.Raw(tblProductInfoAdd.int_Course_Duration.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.int_Course_Duration.CellAttributes)>
+<span id="el_tblProductInfo_int_Course_Duration">
+<input type="@(tblProductInfoAdd.int_Course_Duration.InputTextType)" name="x_int_Course_Duration" id="x_int_Course_Duration" data-table="tblProductInfo" data-field="x_int_Course_Duration" value="@Html.Raw(tblProductInfoAdd.int_Course_Duration.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.int_Course_Duration.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.int_Course_Duration.FormatPattern)"@Html.Raw(tblProductInfoAdd.int_Course_Duration.EditAttributes) aria-describedby="x_int_Course_Duration_help">
+@Html.Raw(tblProductInfoAdd.int_Course_Duration.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.int_Course_Duration.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.int_Course_Duration.Visible (end) *@
+@if (tblProductInfoAdd.Moodle_product_Id.Visible) { // tblProductInfoAdd.Moodle_product_Id.Visible (begin)
+    <div id="r_Moodle_product_Id" @Html.Raw(tblProductInfoAdd.Moodle_product_Id.RowAttributes)>
+        <label id="elh_tblProductInfo_Moodle_product_Id" for="x_Moodle_product_Id" class="@(tblProductInfoAdd.LeftColumnClass)">@Html.Raw(tblProductInfoAdd.Moodle_product_Id.Caption)@Html.Raw(tblProductInfoAdd.Moodle_product_Id.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblProductInfoAdd.RightColumnClass)"><div @Html.Raw(tblProductInfoAdd.Moodle_product_Id.CellAttributes)>
+<span id="el_tblProductInfo_Moodle_product_Id">
+<input type="@(tblProductInfoAdd.Moodle_product_Id.InputTextType)" name="x_Moodle_product_Id" id="x_Moodle_product_Id" data-table="tblProductInfo" data-field="x_Moodle_product_Id" value="@Html.Raw(tblProductInfoAdd.Moodle_product_Id.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblProductInfoAdd.Moodle_product_Id.PlaceHolder))" data-format-pattern="@(tblProductInfoAdd.Moodle_product_Id.FormatPattern)"@Html.Raw(tblProductInfoAdd.Moodle_product_Id.EditAttributes) aria-describedby="x_Moodle_product_Id_help">
+@Html.Raw(tblProductInfoAdd.Moodle_product_Id.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblProductInfoAdd.Moodle_product_Id.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblProductInfoAdd.Moodle_product_Id.Visible (end) *@
+</div><!-- /page* -->
+@{ tblProductInfoAdd.CloseRecordset(); }
+@Html.Raw(tblProductInfoAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblProductInfoAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblProductInfoadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblProductInfoadd" data-href="@AppPath(tblProductInfoAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblProductInfoAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblProductInfoAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblProductInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

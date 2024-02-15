@@ -1,0 +1,272 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (equipmentView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!equipmentView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!equipmentView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!equipmentView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @equipmentView.ExportOptions.RenderBody()
+    @equipmentView.OtherOptions.RenderBody()
+</div>
+}
+@equipmentView.ShowPageHeader()
+@equipmentView.ShowMessages()
+<main class="view">
+<form name="fEquipmentview" id="fEquipmentview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!equipmentView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(equipmentView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Equipment: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var fEquipmentview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fEquipmentview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(equipmentView.IsModal)">
+@if (!equipmentView.IsExport()) {
+@:<div class="ew-multi-page">
+    @:<div class="ew-nav@(equipmentView.MultiPages.ContainerClasses)" id="pages_equipmentView"><!-- multi-page tabs -->
+    <ul class="@(equipmentView.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(equipmentView.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_Equipment1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_Equipment1" aria-selected="@(ConvertToJson(equipmentView.MultiPages.IsActive(1)))">@Html.Raw(equipmentView.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(equipmentView.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_Equipment2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_Equipment2" aria-selected="@(ConvertToJson(equipmentView.MultiPages.IsActive(2)))">@Html.Raw(equipmentView.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(equipmentView.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_Equipment3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_Equipment3" aria-selected="@(ConvertToJson(equipmentView.MultiPages.IsActive(3)))">@Html.Raw(equipmentView.PageCaption(3))</button></li>
+    </ul>
+    @:<div class="@(equipmentView.MultiPages.TabContentClasses)"">
+}
+@if (!equipmentView.IsExport()) {
+    @:<div class="@(equipmentView.MultiPages.TabPaneClasses(1))" id="tab_Equipment1" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(equipmentView.TableClass)">
+@if (equipmentView.int_Location.Visible) { // equipmentView.int_Location.Visible (begin)
+    <tr id="r_int_Location" @Html.Raw(equipmentView.int_Location.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_int_Location">@Html.Raw(equipmentView.int_Location.Caption)</span></td>
+        <td data-name="int_Location" @Html.Raw(equipmentView.int_Location.CellAttributes)>
+<span id="el_Equipment_int_Location" data-page="1">
+<span @Html.Raw(equipmentView.int_Location.ViewAttributes)>
+@Html.Raw(equipmentView.int_Location.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.int_Location.Visible (end) *@
+@if (equipmentView.Creation_Date.Visible) { // equipmentView.Creation_Date.Visible (begin)
+    <tr id="r_Creation_Date" @Html.Raw(equipmentView.Creation_Date.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Creation_Date">@Html.Raw(equipmentView.Creation_Date.Caption)</span></td>
+        <td data-name="Creation_Date" @Html.Raw(equipmentView.Creation_Date.CellAttributes)>
+<span id="el_Equipment_Creation_Date" data-page="1">
+<span @Html.Raw(equipmentView.Creation_Date.ViewAttributes)>
+@Html.Raw(equipmentView.Creation_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Creation_Date.Visible (end) *@
+@if (equipmentView.Modified_Date.Visible) { // equipmentView.Modified_Date.Visible (begin)
+    <tr id="r_Modified_Date" @Html.Raw(equipmentView.Modified_Date.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Modified_Date">@Html.Raw(equipmentView.Modified_Date.Caption)</span></td>
+        <td data-name="Modified_Date" @Html.Raw(equipmentView.Modified_Date.CellAttributes)>
+<span id="el_Equipment_Modified_Date" data-page="1">
+<span @Html.Raw(equipmentView.Modified_Date.ViewAttributes)>
+@Html.Raw(equipmentView.Modified_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Modified_Date.Visible (end) *@
+@if (equipmentView.Created_by.Visible) { // equipmentView.Created_by.Visible (begin)
+    <tr id="r_Created_by" @Html.Raw(equipmentView.Created_by.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Created_by">@Html.Raw(equipmentView.Created_by.Caption)</span></td>
+        <td data-name="Created_by" @Html.Raw(equipmentView.Created_by.CellAttributes)>
+<span id="el_Equipment_Created_by" data-page="1">
+<span @Html.Raw(equipmentView.Created_by.ViewAttributes)>
+@Html.Raw(equipmentView.Created_by.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Created_by.Visible (end) *@
+@if (equipmentView.Modified_by.Visible) { // equipmentView.Modified_by.Visible (begin)
+    <tr id="r_Modified_by" @Html.Raw(equipmentView.Modified_by.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Modified_by">@Html.Raw(equipmentView.Modified_by.Caption)</span></td>
+        <td data-name="Modified_by" @Html.Raw(equipmentView.Modified_by.CellAttributes)>
+<span id="el_Equipment_Modified_by" data-page="1">
+<span @Html.Raw(equipmentView.Modified_by.ViewAttributes)>
+@Html.Raw(equipmentView.Modified_by.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Modified_by.Visible (end) *@
+</table>
+@if (!equipmentView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!equipmentView.IsExport()) {
+    @:<div class="@(equipmentView.MultiPages.TabPaneClasses(2))" id="tab_Equipment2" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(equipmentView.TableClass)">
+@if (equipmentView.Equipment_Type_ID.Visible) { // equipmentView.Equipment_Type_ID.Visible (begin)
+    <tr id="r_Equipment_Type_ID" @Html.Raw(equipmentView.Equipment_Type_ID.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Equipment_Type_ID">@Html.Raw(equipmentView.Equipment_Type_ID.Caption)</span></td>
+        <td data-name="Equipment_Type_ID" @Html.Raw(equipmentView.Equipment_Type_ID.CellAttributes)>
+<span id="el_Equipment_Equipment_Type_ID" data-page="2">
+<span @Html.Raw(equipmentView.Equipment_Type_ID.ViewAttributes)>
+@Html.Raw(equipmentView.Equipment_Type_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Equipment_Type_ID.Visible (end) *@
+@if (equipmentView.Equipment_Type_Name.Visible) { // equipmentView.Equipment_Type_Name.Visible (begin)
+    <tr id="r_Equipment_Type_Name" @Html.Raw(equipmentView.Equipment_Type_Name.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Equipment_Type_Name">@Html.Raw(equipmentView.Equipment_Type_Name.Caption)</span></td>
+        <td data-name="Equipment_Type_Name" @Html.Raw(equipmentView.Equipment_Type_Name.CellAttributes)>
+<span id="el_Equipment_Equipment_Type_Name" data-page="2">
+<span @Html.Raw(equipmentView.Equipment_Type_Name.ViewAttributes)>
+@Html.Raw(equipmentView.Equipment_Type_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Equipment_Type_Name.Visible (end) *@
+@if (equipmentView.Manufacturer_Name.Visible) { // equipmentView.Manufacturer_Name.Visible (begin)
+    <tr id="r_Manufacturer_Name" @Html.Raw(equipmentView.Manufacturer_Name.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Manufacturer_Name">@Html.Raw(equipmentView.Manufacturer_Name.Caption)</span></td>
+        <td data-name="Manufacturer_Name" @Html.Raw(equipmentView.Manufacturer_Name.CellAttributes)>
+<span id="el_Equipment_Manufacturer_Name" data-page="2">
+<span @Html.Raw(equipmentView.Manufacturer_Name.ViewAttributes)>
+@Html.Raw(equipmentView.Manufacturer_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Manufacturer_Name.Visible (end) *@
+@if (equipmentView.Serial_VIN_Number.Visible) { // equipmentView.Serial_VIN_Number.Visible (begin)
+    <tr id="r_Serial_VIN_Number" @Html.Raw(equipmentView.Serial_VIN_Number.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Serial_VIN_Number">@Html.Raw(equipmentView.Serial_VIN_Number.Caption)</span></td>
+        <td data-name="Serial_VIN_Number" @Html.Raw(equipmentView.Serial_VIN_Number.CellAttributes)>
+<span id="el_Equipment_Serial_VIN_Number" data-page="2">
+<span @Html.Raw(equipmentView.Serial_VIN_Number.ViewAttributes)>
+@Html.Raw(equipmentView.Serial_VIN_Number.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Serial_VIN_Number.Visible (end) *@
+@if (equipmentView.Retailer_Name.Visible) { // equipmentView.Retailer_Name.Visible (begin)
+    <tr id="r_Retailer_Name" @Html.Raw(equipmentView.Retailer_Name.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Retailer_Name">@Html.Raw(equipmentView.Retailer_Name.Caption)</span></td>
+        <td data-name="Retailer_Name" @Html.Raw(equipmentView.Retailer_Name.CellAttributes)>
+<span id="el_Equipment_Retailer_Name" data-page="2">
+<span @Html.Raw(equipmentView.Retailer_Name.ViewAttributes)>
+@Html.Raw(equipmentView.Retailer_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Retailer_Name.Visible (end) *@
+</table>
+@if (!equipmentView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!equipmentView.IsExport()) {
+    @:<div class="@(equipmentView.MultiPages.TabPaneClasses(3))" id="tab_Equipment3" role="tabpanel"><!-- multi-page .tab-pane -->
+}
+<table class="@(equipmentView.TableClass)">
+@if (equipmentView.DatePurchased.Visible) { // equipmentView.DatePurchased.Visible (begin)
+    <tr id="r_DatePurchased" @Html.Raw(equipmentView.DatePurchased.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_DatePurchased">@Html.Raw(equipmentView.DatePurchased.Caption)</span></td>
+        <td data-name="DatePurchased" @Html.Raw(equipmentView.DatePurchased.CellAttributes)>
+<span id="el_Equipment_DatePurchased" data-page="3">
+<span @Html.Raw(equipmentView.DatePurchased.ViewAttributes)>
+@Html.Raw(equipmentView.DatePurchased.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.DatePurchased.Visible (end) *@
+@if (equipmentView.ServiceInception_Date.Visible) { // equipmentView.ServiceInception_Date.Visible (begin)
+    <tr id="r_ServiceInception_Date" @Html.Raw(equipmentView.ServiceInception_Date.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_ServiceInception_Date">@Html.Raw(equipmentView.ServiceInception_Date.Caption)</span></td>
+        <td data-name="ServiceInception_Date" @Html.Raw(equipmentView.ServiceInception_Date.CellAttributes)>
+<span id="el_Equipment_ServiceInception_Date" data-page="3">
+<span @Html.Raw(equipmentView.ServiceInception_Date.ViewAttributes)>
+@Html.Raw(equipmentView.ServiceInception_Date.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.ServiceInception_Date.Visible (end) *@
+@if (equipmentView.UsefulLife.Visible) { // equipmentView.UsefulLife.Visible (begin)
+    <tr id="r_UsefulLife" @Html.Raw(equipmentView.UsefulLife.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_UsefulLife">@Html.Raw(equipmentView.UsefulLife.Caption)</span></td>
+        <td data-name="UsefulLife" @Html.Raw(equipmentView.UsefulLife.CellAttributes)>
+<span id="el_Equipment_UsefulLife" data-page="3">
+<span @Html.Raw(equipmentView.UsefulLife.ViewAttributes)>
+@Html.Raw(equipmentView.UsefulLife.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.UsefulLife.Visible (end) *@
+@if (equipmentView.Price.Visible) { // equipmentView.Price.Visible (begin)
+    <tr id="r_Price" @Html.Raw(equipmentView.Price.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_Price">@Html.Raw(equipmentView.Price.Caption)</span></td>
+        <td data-name="Price" @Html.Raw(equipmentView.Price.CellAttributes)>
+<span id="el_Equipment_Price" data-page="3">
+<span @Html.Raw(equipmentView.Price.ViewAttributes)>
+@Html.Raw(equipmentView.Price.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.Price.Visible (end) *@
+@if (equipmentView.VAT.Visible) { // equipmentView.VAT.Visible (begin)
+    <tr id="r_VAT" @Html.Raw(equipmentView.VAT.RowAttributes)>
+        <td class="@(equipmentView.TableLeftColumnClass)"><span id="elh_Equipment_VAT">@Html.Raw(equipmentView.VAT.Caption)</span></td>
+        <td data-name="VAT" @Html.Raw(equipmentView.VAT.CellAttributes)>
+<span id="el_Equipment_VAT" data-page="3">
+<span @Html.Raw(equipmentView.VAT.ViewAttributes)>
+@Html.Raw(equipmentView.VAT.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* equipmentView.VAT.Visible (end) *@
+</table>
+@if (!equipmentView.IsExport()) {
+    @:</div><!-- /multi-page .tab-pane -->
+}
+@if (!equipmentView.IsExport()) {
+    @:</div>
+@:</div>
+@:</div>
+}
+@{ equipmentView.CloseRecordset(); }
+</form>
+</main>
+@equipmentView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!equipmentView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

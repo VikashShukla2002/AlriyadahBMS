@@ -1,0 +1,559 @@
+@if (tblLocationList.ModalGridAdd && tblLocationList.IsGridAdd || tblLocationList.ModalGridEdit && tblLocationList.IsGridEdit || tblLocationList.ModalMultiEdit && tblLocationList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblLocationList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblLocation: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblLocationList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblLocationList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblLocationList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblLocationList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblLocationList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblLocationList.TableGridClass)">
+@if (!tblLocationList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblLocationList.IsGridAdd && !(tblLocationList.IsGridEdit && tblLocationList.ModalGridEdit) && !tblLocationList.IsMultiEdit) {
+@Html.Raw(tblLocationList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblLocationList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblLocationList.FormName)" id="@(tblLocationList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblLocationList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblLocationList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblLocation" class="card-body ew-grid-middle-panel @(tblLocationList.TableContainerClass)" style="@(tblLocationList.TableContainerStyle)">
+@if (tblLocationList.TotalRecords > 0 || tblLocationList.IsGridEdit || tblLocationList.IsMultiEdit) {
+<table id="tbl_tblLocationlist" class="@(tblLocationList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblLocationList.RowType = RowType.Header;
+
+    // Render list options
+    await tblLocationList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblLocationList.ListOptions.RenderHeader("left")
+@if (tblLocationList.int_Location_Id.Visible) { // tblLocationList.int_Location_Id.Visible (begin)
+        <th data-name="int_Location_Id" class="@(tblLocationList.int_Location_Id.HeaderCellClass)"><div id="elh_tblLocation_int_Location_Id" class="tblLocation_int_Location_Id">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Location_Id))</div></th>
+} @* tblLocationList.int_Location_Id.Visible (end) *@
+@if (tblLocationList.str_Name.Visible) { // tblLocationList.str_Name.Visible (begin)
+        <th data-name="str_Name" class="@(tblLocationList.str_Name.HeaderCellClass)"><div id="elh_tblLocation_str_Name" class="tblLocation_str_Name">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Name))</div></th>
+} @* tblLocationList.str_Name.Visible (end) *@
+@if (tblLocationList.str_Code.Visible) { // tblLocationList.str_Code.Visible (begin)
+        <th data-name="str_Code" class="@(tblLocationList.str_Code.HeaderCellClass)"><div id="elh_tblLocation_str_Code" class="tblLocation_str_Code">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Code))</div></th>
+} @* tblLocationList.str_Code.Visible (end) *@
+@if (tblLocationList.str_Location_Type.Visible) { // tblLocationList.str_Location_Type.Visible (begin)
+        <th data-name="str_Location_Type" class="@(tblLocationList.str_Location_Type.HeaderCellClass)"><div id="elh_tblLocation_str_Location_Type" class="tblLocation_str_Location_Type">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Location_Type))</div></th>
+} @* tblLocationList.str_Location_Type.Visible (end) *@
+@if (tblLocationList.str_Address1.Visible) { // tblLocationList.str_Address1.Visible (begin)
+        <th data-name="str_Address1" class="@(tblLocationList.str_Address1.HeaderCellClass)"><div id="elh_tblLocation_str_Address1" class="tblLocation_str_Address1">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Address1))</div></th>
+} @* tblLocationList.str_Address1.Visible (end) *@
+@if (tblLocationList.str_Address2.Visible) { // tblLocationList.str_Address2.Visible (begin)
+        <th data-name="str_Address2" class="@(tblLocationList.str_Address2.HeaderCellClass)"><div id="elh_tblLocation_str_Address2" class="tblLocation_str_Address2">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Address2))</div></th>
+} @* tblLocationList.str_Address2.Visible (end) *@
+@if (tblLocationList.str_City.Visible) { // tblLocationList.str_City.Visible (begin)
+        <th data-name="str_City" class="@(tblLocationList.str_City.HeaderCellClass)"><div id="elh_tblLocation_str_City" class="tblLocation_str_City">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_City))</div></th>
+} @* tblLocationList.str_City.Visible (end) *@
+@if (tblLocationList.int_State.Visible) { // tblLocationList.int_State.Visible (begin)
+        <th data-name="int_State" class="@(tblLocationList.int_State.HeaderCellClass)"><div id="elh_tblLocation_int_State" class="tblLocation_int_State">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_State))</div></th>
+} @* tblLocationList.int_State.Visible (end) *@
+@if (tblLocationList.str_Zip.Visible) { // tblLocationList.str_Zip.Visible (begin)
+        <th data-name="str_Zip" class="@(tblLocationList.str_Zip.HeaderCellClass)"><div id="elh_tblLocation_str_Zip" class="tblLocation_str_Zip">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Zip))</div></th>
+} @* tblLocationList.str_Zip.Visible (end) *@
+@if (tblLocationList.str_County.Visible) { // tblLocationList.str_County.Visible (begin)
+        <th data-name="str_County" class="@(tblLocationList.str_County.HeaderCellClass)"><div id="elh_tblLocation_str_County" class="tblLocation_str_County">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_County))</div></th>
+} @* tblLocationList.str_County.Visible (end) *@
+@if (tblLocationList.str_Manager.Visible) { // tblLocationList.str_Manager.Visible (begin)
+        <th data-name="str_Manager" class="@(tblLocationList.str_Manager.HeaderCellClass)"><div id="elh_tblLocation_str_Manager" class="tblLocation_str_Manager">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Manager))</div></th>
+} @* tblLocationList.str_Manager.Visible (end) *@
+@if (tblLocationList.str_Phone_Main.Visible) { // tblLocationList.str_Phone_Main.Visible (begin)
+        <th data-name="str_Phone_Main" class="@(tblLocationList.str_Phone_Main.HeaderCellClass)"><div id="elh_tblLocation_str_Phone_Main" class="tblLocation_str_Phone_Main">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Phone_Main))</div></th>
+} @* tblLocationList.str_Phone_Main.Visible (end) *@
+@if (tblLocationList.str_Phone_Fax.Visible) { // tblLocationList.str_Phone_Fax.Visible (begin)
+        <th data-name="str_Phone_Fax" class="@(tblLocationList.str_Phone_Fax.HeaderCellClass)"><div id="elh_tblLocation_str_Phone_Fax" class="tblLocation_str_Phone_Fax">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Phone_Fax))</div></th>
+} @* tblLocationList.str_Phone_Fax.Visible (end) *@
+@if (tblLocationList.str_Phone_Other.Visible) { // tblLocationList.str_Phone_Other.Visible (begin)
+        <th data-name="str_Phone_Other" class="@(tblLocationList.str_Phone_Other.HeaderCellClass)"><div id="elh_tblLocation_str_Phone_Other" class="tblLocation_str_Phone_Other">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Phone_Other))</div></th>
+} @* tblLocationList.str_Phone_Other.Visible (end) *@
+@if (tblLocationList.str_Notes.Visible) { // tblLocationList.str_Notes.Visible (begin)
+        <th data-name="str_Notes" class="@(tblLocationList.str_Notes.HeaderCellClass)"><div id="elh_tblLocation_str_Notes" class="tblLocation_str_Notes">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Notes))</div></th>
+} @* tblLocationList.str_Notes.Visible (end) *@
+@if (tblLocationList.int_Status.Visible) { // tblLocationList.int_Status.Visible (begin)
+        <th data-name="int_Status" class="@(tblLocationList.int_Status.HeaderCellClass)"><div id="elh_tblLocation_int_Status" class="tblLocation_int_Status">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Status))</div></th>
+} @* tblLocationList.int_Status.Visible (end) *@
+@if (tblLocationList.date_Created.Visible) { // tblLocationList.date_Created.Visible (begin)
+        <th data-name="date_Created" class="@(tblLocationList.date_Created.HeaderCellClass)"><div id="elh_tblLocation_date_Created" class="tblLocation_date_Created">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.date_Created))</div></th>
+} @* tblLocationList.date_Created.Visible (end) *@
+@if (tblLocationList.date_Modified.Visible) { // tblLocationList.date_Modified.Visible (begin)
+        <th data-name="date_Modified" class="@(tblLocationList.date_Modified.HeaderCellClass)"><div id="elh_tblLocation_date_Modified" class="tblLocation_date_Modified">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.date_Modified))</div></th>
+} @* tblLocationList.date_Modified.Visible (end) *@
+@if (tblLocationList.int_Created_By.Visible) { // tblLocationList.int_Created_By.Visible (begin)
+        <th data-name="int_Created_By" class="@(tblLocationList.int_Created_By.HeaderCellClass)"><div id="elh_tblLocation_int_Created_By" class="tblLocation_int_Created_By">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Created_By))</div></th>
+} @* tblLocationList.int_Created_By.Visible (end) *@
+@if (tblLocationList.int_Modified_By.Visible) { // tblLocationList.int_Modified_By.Visible (begin)
+        <th data-name="int_Modified_By" class="@(tblLocationList.int_Modified_By.HeaderCellClass)"><div id="elh_tblLocation_int_Modified_By" class="tblLocation_int_Modified_By">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Modified_By))</div></th>
+} @* tblLocationList.int_Modified_By.Visible (end) *@
+@if (tblLocationList.bit_IsDeleted.Visible) { // tblLocationList.bit_IsDeleted.Visible (begin)
+        <th data-name="bit_IsDeleted" class="@(tblLocationList.bit_IsDeleted.HeaderCellClass)"><div id="elh_tblLocation_bit_IsDeleted" class="tblLocation_bit_IsDeleted">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.bit_IsDeleted))</div></th>
+} @* tblLocationList.bit_IsDeleted.Visible (end) *@
+@if (tblLocationList.str_LocCapacity.Visible) { // tblLocationList.str_LocCapacity.Visible (begin)
+        <th data-name="str_LocCapacity" class="@(tblLocationList.str_LocCapacity.HeaderCellClass)"><div id="elh_tblLocation_str_LocCapacity" class="tblLocation_str_LocCapacity">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_LocCapacity))</div></th>
+} @* tblLocationList.str_LocCapacity.Visible (end) *@
+@if (tblLocationList.str_ContactEmail.Visible) { // tblLocationList.str_ContactEmail.Visible (begin)
+        <th data-name="str_ContactEmail" class="@(tblLocationList.str_ContactEmail.HeaderCellClass)"><div id="elh_tblLocation_str_ContactEmail" class="tblLocation_str_ContactEmail">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_ContactEmail))</div></th>
+} @* tblLocationList.str_ContactEmail.Visible (end) *@
+@if (tblLocationList.str_SchoolHours.Visible) { // tblLocationList.str_SchoolHours.Visible (begin)
+        <th data-name="str_SchoolHours" class="@(tblLocationList.str_SchoolHours.HeaderCellClass)"><div id="elh_tblLocation_str_SchoolHours" class="tblLocation_str_SchoolHours">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_SchoolHours))</div></th>
+} @* tblLocationList.str_SchoolHours.Visible (end) *@
+@if (tblLocationList.str_EmerName.Visible) { // tblLocationList.str_EmerName.Visible (begin)
+        <th data-name="str_EmerName" class="@(tblLocationList.str_EmerName.HeaderCellClass)"><div id="elh_tblLocation_str_EmerName" class="tblLocation_str_EmerName">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_EmerName))</div></th>
+} @* tblLocationList.str_EmerName.Visible (end) *@
+@if (tblLocationList.str_EmerPhone.Visible) { // tblLocationList.str_EmerPhone.Visible (begin)
+        <th data-name="str_EmerPhone" class="@(tblLocationList.str_EmerPhone.HeaderCellClass)"><div id="elh_tblLocation_str_EmerPhone" class="tblLocation_str_EmerPhone">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_EmerPhone))</div></th>
+} @* tblLocationList.str_EmerPhone.Visible (end) *@
+@if (tblLocationList.str_Room.Visible) { // tblLocationList.str_Room.Visible (begin)
+        <th data-name="str_Room" class="@(tblLocationList.str_Room.HeaderCellClass)"><div id="elh_tblLocation_str_Room" class="tblLocation_str_Room">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Room))</div></th>
+} @* tblLocationList.str_Room.Visible (end) *@
+@if (tblLocationList.str_Email_Content.Visible) { // tblLocationList.str_Email_Content.Visible (begin)
+        <th data-name="str_Email_Content" class="@(tblLocationList.str_Email_Content.HeaderCellClass)"><div id="elh_tblLocation_str_Email_Content" class="tblLocation_str_Email_Content">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Email_Content))</div></th>
+} @* tblLocationList.str_Email_Content.Visible (end) *@
+@if (tblLocationList.bit_appointmentColor.Visible) { // tblLocationList.bit_appointmentColor.Visible (begin)
+        <th data-name="bit_appointmentColor" class="@(tblLocationList.bit_appointmentColor.HeaderCellClass)"><div id="elh_tblLocation_bit_appointmentColor" class="tblLocation_bit_appointmentColor">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.bit_appointmentColor))</div></th>
+} @* tblLocationList.bit_appointmentColor.Visible (end) *@
+@if (tblLocationList.str_appointmentColorCode.Visible) { // tblLocationList.str_appointmentColorCode.Visible (begin)
+        <th data-name="str_appointmentColorCode" class="@(tblLocationList.str_appointmentColorCode.HeaderCellClass)"><div id="elh_tblLocation_str_appointmentColorCode" class="tblLocation_str_appointmentColorCode">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_appointmentColorCode))</div></th>
+} @* tblLocationList.str_appointmentColorCode.Visible (end) *@
+@if (tblLocationList.isKnowledgeTest.Visible) { // tblLocationList.isKnowledgeTest.Visible (begin)
+        <th data-name="isKnowledgeTest" class="@(tblLocationList.isKnowledgeTest.HeaderCellClass)"><div id="elh_tblLocation_isKnowledgeTest" class="tblLocation_isKnowledgeTest">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.isKnowledgeTest))</div></th>
+} @* tblLocationList.isKnowledgeTest.Visible (end) *@
+@if (tblLocationList.isRoadTest.Visible) { // tblLocationList.isRoadTest.Visible (begin)
+        <th data-name="isRoadTest" class="@(tblLocationList.isRoadTest.HeaderCellClass)"><div id="elh_tblLocation_isRoadTest" class="tblLocation_isRoadTest">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.isRoadTest))</div></th>
+} @* tblLocationList.isRoadTest.Visible (end) *@
+@if (tblLocationList.dec_Latitude.Visible) { // tblLocationList.dec_Latitude.Visible (begin)
+        <th data-name="dec_Latitude" class="@(tblLocationList.dec_Latitude.HeaderCellClass)"><div id="elh_tblLocation_dec_Latitude" class="tblLocation_dec_Latitude">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.dec_Latitude))</div></th>
+} @* tblLocationList.dec_Latitude.Visible (end) *@
+@if (tblLocationList.dec_Longitude.Visible) { // tblLocationList.dec_Longitude.Visible (begin)
+        <th data-name="dec_Longitude" class="@(tblLocationList.dec_Longitude.HeaderCellClass)"><div id="elh_tblLocation_dec_Longitude" class="tblLocation_dec_Longitude">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.dec_Longitude))</div></th>
+} @* tblLocationList.dec_Longitude.Visible (end) *@
+@if (tblLocationList.str_nameAr.Visible) { // tblLocationList.str_nameAr.Visible (begin)
+        <th data-name="str_nameAr" class="@(tblLocationList.str_nameAr.HeaderCellClass)"><div id="elh_tblLocation_str_nameAr" class="tblLocation_str_nameAr">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_nameAr))</div></th>
+} @* tblLocationList.str_nameAr.Visible (end) *@
+@if (tblLocationList.IsDistanceBasedScheduling.Visible) { // tblLocationList.IsDistanceBasedScheduling.Visible (begin)
+        <th data-name="IsDistanceBasedScheduling" class="@(tblLocationList.IsDistanceBasedScheduling.HeaderCellClass)"><div id="elh_tblLocation_IsDistanceBasedScheduling" class="tblLocation_IsDistanceBasedScheduling">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.IsDistanceBasedScheduling))</div></th>
+} @* tblLocationList.IsDistanceBasedScheduling.Visible (end) *@
+@if (tblLocationList.str_ZoomEmail.Visible) { // tblLocationList.str_ZoomEmail.Visible (begin)
+        <th data-name="str_ZoomEmail" class="@(tblLocationList.str_ZoomEmail.HeaderCellClass)"><div id="elh_tblLocation_str_ZoomEmail" class="tblLocation_str_ZoomEmail">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_ZoomEmail))</div></th>
+} @* tblLocationList.str_ZoomEmail.Visible (end) *@
+@if (tblLocationList.str_ProviderLocationId.Visible) { // tblLocationList.str_ProviderLocationId.Visible (begin)
+        <th data-name="str_ProviderLocationId" class="@(tblLocationList.str_ProviderLocationId.HeaderCellClass)"><div id="elh_tblLocation_str_ProviderLocationId" class="tblLocation_str_ProviderLocationId">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_ProviderLocationId))</div></th>
+} @* tblLocationList.str_ProviderLocationId.Visible (end) *@
+@if (tblLocationList.int_RoadDistanceCoverage.Visible) { // tblLocationList.int_RoadDistanceCoverage.Visible (begin)
+        <th data-name="int_RoadDistanceCoverage" class="@(tblLocationList.int_RoadDistanceCoverage.HeaderCellClass)"><div id="elh_tblLocation_int_RoadDistanceCoverage" class="tblLocation_int_RoadDistanceCoverage">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_RoadDistanceCoverage))</div></th>
+} @* tblLocationList.int_RoadDistanceCoverage.Visible (end) *@
+@if (tblLocationList.IsCashDrawer.Visible) { // tblLocationList.IsCashDrawer.Visible (begin)
+        <th data-name="IsCashDrawer" class="@(tblLocationList.IsCashDrawer.HeaderCellClass)"><div id="elh_tblLocation_IsCashDrawer" class="tblLocation_IsCashDrawer">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.IsCashDrawer))</div></th>
+} @* tblLocationList.IsCashDrawer.Visible (end) *@
+@* Render list options (header, right) *@
+@tblLocationList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblLocationList.PageNumber)">
+@{
+    await tblLocationList.SetupGrid();
+    bool eof = tblLocationList.Recordset == null; // DN
+}
+@while (tblLocationList.RecordCount < tblLocationList.StopRecord || SameString(tblLocationList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblLocationList.RowIndex, "$rowindex$") &&
+        (!tblLocationList.IsGridAdd || tblLocationList.CurrentMode == "copy") &&
+        (!((tblLocationList.IsCopy || tblLocationList.IsAdd) && tblLocationList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblLocationList.Recordset.ReadAsync();
+    tblLocationList.RecordCount++;
+    if (tblLocationList.RecordCount >= tblLocationList.StartRecord) {
+        await tblLocationList.SetupRow();
+    <tr @Html.Raw(tblLocationList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblLocationList.ListOptions.RenderBody("left", tblLocationList.RowCount)
+    @if (tblLocationList.int_Location_Id.Visible) { // tblLocationList.int_Location_Id.Visible (begin)
+        <td data-name="int_Location_Id" @Html.Raw(tblLocationList.int_Location_Id.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_int_Location_Id" class="el_tblLocation_int_Location_Id">
+<span @Html.Raw(tblLocationList.int_Location_Id.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Location_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.int_Location_Id.Visible (end) *@
+    @if (tblLocationList.str_Name.Visible) { // tblLocationList.str_Name.Visible (begin)
+        <td data-name="str_Name" @Html.Raw(tblLocationList.str_Name.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Name" class="el_tblLocation_str_Name">
+<span @Html.Raw(tblLocationList.str_Name.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Name.Visible (end) *@
+    @if (tblLocationList.str_Code.Visible) { // tblLocationList.str_Code.Visible (begin)
+        <td data-name="str_Code" @Html.Raw(tblLocationList.str_Code.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Code" class="el_tblLocation_str_Code">
+<span @Html.Raw(tblLocationList.str_Code.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Code.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Code.Visible (end) *@
+    @if (tblLocationList.str_Location_Type.Visible) { // tblLocationList.str_Location_Type.Visible (begin)
+        <td data-name="str_Location_Type" @Html.Raw(tblLocationList.str_Location_Type.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Location_Type" class="el_tblLocation_str_Location_Type">
+<span @Html.Raw(tblLocationList.str_Location_Type.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Location_Type.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Location_Type.Visible (end) *@
+    @if (tblLocationList.str_Address1.Visible) { // tblLocationList.str_Address1.Visible (begin)
+        <td data-name="str_Address1" @Html.Raw(tblLocationList.str_Address1.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Address1" class="el_tblLocation_str_Address1">
+<span @Html.Raw(tblLocationList.str_Address1.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Address1.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Address1.Visible (end) *@
+    @if (tblLocationList.str_Address2.Visible) { // tblLocationList.str_Address2.Visible (begin)
+        <td data-name="str_Address2" @Html.Raw(tblLocationList.str_Address2.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Address2" class="el_tblLocation_str_Address2">
+<span @Html.Raw(tblLocationList.str_Address2.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Address2.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Address2.Visible (end) *@
+    @if (tblLocationList.str_City.Visible) { // tblLocationList.str_City.Visible (begin)
+        <td data-name="str_City" @Html.Raw(tblLocationList.str_City.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_City" class="el_tblLocation_str_City">
+<span @Html.Raw(tblLocationList.str_City.ViewAttributes)>
+@Html.Raw(tblLocationList.str_City.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_City.Visible (end) *@
+    @if (tblLocationList.int_State.Visible) { // tblLocationList.int_State.Visible (begin)
+        <td data-name="int_State" @Html.Raw(tblLocationList.int_State.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_int_State" class="el_tblLocation_int_State">
+<span @Html.Raw(tblLocationList.int_State.ViewAttributes)>
+@Html.Raw(tblLocationList.int_State.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.int_State.Visible (end) *@
+    @if (tblLocationList.str_Zip.Visible) { // tblLocationList.str_Zip.Visible (begin)
+        <td data-name="str_Zip" @Html.Raw(tblLocationList.str_Zip.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Zip" class="el_tblLocation_str_Zip">
+<span @Html.Raw(tblLocationList.str_Zip.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Zip.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Zip.Visible (end) *@
+    @if (tblLocationList.str_County.Visible) { // tblLocationList.str_County.Visible (begin)
+        <td data-name="str_County" @Html.Raw(tblLocationList.str_County.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_County" class="el_tblLocation_str_County">
+<span @Html.Raw(tblLocationList.str_County.ViewAttributes)>
+@Html.Raw(tblLocationList.str_County.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_County.Visible (end) *@
+    @if (tblLocationList.str_Manager.Visible) { // tblLocationList.str_Manager.Visible (begin)
+        <td data-name="str_Manager" @Html.Raw(tblLocationList.str_Manager.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Manager" class="el_tblLocation_str_Manager">
+<span @Html.Raw(tblLocationList.str_Manager.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Manager.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Manager.Visible (end) *@
+    @if (tblLocationList.str_Phone_Main.Visible) { // tblLocationList.str_Phone_Main.Visible (begin)
+        <td data-name="str_Phone_Main" @Html.Raw(tblLocationList.str_Phone_Main.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Phone_Main" class="el_tblLocation_str_Phone_Main">
+<span @Html.Raw(tblLocationList.str_Phone_Main.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Main.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Phone_Main.Visible (end) *@
+    @if (tblLocationList.str_Phone_Fax.Visible) { // tblLocationList.str_Phone_Fax.Visible (begin)
+        <td data-name="str_Phone_Fax" @Html.Raw(tblLocationList.str_Phone_Fax.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Phone_Fax" class="el_tblLocation_str_Phone_Fax">
+<span @Html.Raw(tblLocationList.str_Phone_Fax.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Fax.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Phone_Fax.Visible (end) *@
+    @if (tblLocationList.str_Phone_Other.Visible) { // tblLocationList.str_Phone_Other.Visible (begin)
+        <td data-name="str_Phone_Other" @Html.Raw(tblLocationList.str_Phone_Other.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Phone_Other" class="el_tblLocation_str_Phone_Other">
+<span @Html.Raw(tblLocationList.str_Phone_Other.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Other.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Phone_Other.Visible (end) *@
+    @if (tblLocationList.str_Notes.Visible) { // tblLocationList.str_Notes.Visible (begin)
+        <td data-name="str_Notes" @Html.Raw(tblLocationList.str_Notes.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Notes" class="el_tblLocation_str_Notes">
+<span @Html.Raw(tblLocationList.str_Notes.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Notes.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Notes.Visible (end) *@
+    @if (tblLocationList.int_Status.Visible) { // tblLocationList.int_Status.Visible (begin)
+        <td data-name="int_Status" @Html.Raw(tblLocationList.int_Status.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_int_Status" class="el_tblLocation_int_Status">
+<span @Html.Raw(tblLocationList.int_Status.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Status.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.int_Status.Visible (end) *@
+    @if (tblLocationList.date_Created.Visible) { // tblLocationList.date_Created.Visible (begin)
+        <td data-name="date_Created" @Html.Raw(tblLocationList.date_Created.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_date_Created" class="el_tblLocation_date_Created">
+<span @Html.Raw(tblLocationList.date_Created.ViewAttributes)>
+@Html.Raw(tblLocationList.date_Created.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.date_Created.Visible (end) *@
+    @if (tblLocationList.date_Modified.Visible) { // tblLocationList.date_Modified.Visible (begin)
+        <td data-name="date_Modified" @Html.Raw(tblLocationList.date_Modified.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_date_Modified" class="el_tblLocation_date_Modified">
+<span @Html.Raw(tblLocationList.date_Modified.ViewAttributes)>
+@Html.Raw(tblLocationList.date_Modified.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.date_Modified.Visible (end) *@
+    @if (tblLocationList.int_Created_By.Visible) { // tblLocationList.int_Created_By.Visible (begin)
+        <td data-name="int_Created_By" @Html.Raw(tblLocationList.int_Created_By.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_int_Created_By" class="el_tblLocation_int_Created_By">
+<span @Html.Raw(tblLocationList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Created_By.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.int_Created_By.Visible (end) *@
+    @if (tblLocationList.int_Modified_By.Visible) { // tblLocationList.int_Modified_By.Visible (begin)
+        <td data-name="int_Modified_By" @Html.Raw(tblLocationList.int_Modified_By.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_int_Modified_By" class="el_tblLocation_int_Modified_By">
+<span @Html.Raw(tblLocationList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Modified_By.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.int_Modified_By.Visible (end) *@
+    @if (tblLocationList.bit_IsDeleted.Visible) { // tblLocationList.bit_IsDeleted.Visible (begin)
+        <td data-name="bit_IsDeleted" @Html.Raw(tblLocationList.bit_IsDeleted.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_bit_IsDeleted" class="el_tblLocation_bit_IsDeleted">
+<span @Html.Raw(tblLocationList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblLocationList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblLocationList.bit_IsDeleted.Visible (end) *@
+    @if (tblLocationList.str_LocCapacity.Visible) { // tblLocationList.str_LocCapacity.Visible (begin)
+        <td data-name="str_LocCapacity" @Html.Raw(tblLocationList.str_LocCapacity.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_LocCapacity" class="el_tblLocation_str_LocCapacity">
+<span @Html.Raw(tblLocationList.str_LocCapacity.ViewAttributes)>
+@Html.Raw(tblLocationList.str_LocCapacity.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_LocCapacity.Visible (end) *@
+    @if (tblLocationList.str_ContactEmail.Visible) { // tblLocationList.str_ContactEmail.Visible (begin)
+        <td data-name="str_ContactEmail" @Html.Raw(tblLocationList.str_ContactEmail.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_ContactEmail" class="el_tblLocation_str_ContactEmail">
+<span @Html.Raw(tblLocationList.str_ContactEmail.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ContactEmail.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_ContactEmail.Visible (end) *@
+    @if (tblLocationList.str_SchoolHours.Visible) { // tblLocationList.str_SchoolHours.Visible (begin)
+        <td data-name="str_SchoolHours" @Html.Raw(tblLocationList.str_SchoolHours.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_SchoolHours" class="el_tblLocation_str_SchoolHours">
+<span @Html.Raw(tblLocationList.str_SchoolHours.ViewAttributes)>
+@Html.Raw(tblLocationList.str_SchoolHours.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_SchoolHours.Visible (end) *@
+    @if (tblLocationList.str_EmerName.Visible) { // tblLocationList.str_EmerName.Visible (begin)
+        <td data-name="str_EmerName" @Html.Raw(tblLocationList.str_EmerName.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_EmerName" class="el_tblLocation_str_EmerName">
+<span @Html.Raw(tblLocationList.str_EmerName.ViewAttributes)>
+@Html.Raw(tblLocationList.str_EmerName.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_EmerName.Visible (end) *@
+    @if (tblLocationList.str_EmerPhone.Visible) { // tblLocationList.str_EmerPhone.Visible (begin)
+        <td data-name="str_EmerPhone" @Html.Raw(tblLocationList.str_EmerPhone.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_EmerPhone" class="el_tblLocation_str_EmerPhone">
+<span @Html.Raw(tblLocationList.str_EmerPhone.ViewAttributes)>
+@Html.Raw(tblLocationList.str_EmerPhone.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_EmerPhone.Visible (end) *@
+    @if (tblLocationList.str_Room.Visible) { // tblLocationList.str_Room.Visible (begin)
+        <td data-name="str_Room" @Html.Raw(tblLocationList.str_Room.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Room" class="el_tblLocation_str_Room">
+<span @Html.Raw(tblLocationList.str_Room.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Room.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Room.Visible (end) *@
+    @if (tblLocationList.str_Email_Content.Visible) { // tblLocationList.str_Email_Content.Visible (begin)
+        <td data-name="str_Email_Content" @Html.Raw(tblLocationList.str_Email_Content.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_Email_Content" class="el_tblLocation_str_Email_Content">
+<span @Html.Raw(tblLocationList.str_Email_Content.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Email_Content.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_Email_Content.Visible (end) *@
+    @if (tblLocationList.bit_appointmentColor.Visible) { // tblLocationList.bit_appointmentColor.Visible (begin)
+        <td data-name="bit_appointmentColor" @Html.Raw(tblLocationList.bit_appointmentColor.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_bit_appointmentColor" class="el_tblLocation_bit_appointmentColor">
+<span @Html.Raw(tblLocationList.bit_appointmentColor.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_appointmentColor_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.bit_appointmentColor.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.bit_appointmentColor.CurrentValue))">
+    <label class="form-check-label" for="x_bit_appointmentColor_@(tblLocationList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblLocationList.bit_appointmentColor.Visible (end) *@
+    @if (tblLocationList.str_appointmentColorCode.Visible) { // tblLocationList.str_appointmentColorCode.Visible (begin)
+        <td data-name="str_appointmentColorCode" @Html.Raw(tblLocationList.str_appointmentColorCode.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_appointmentColorCode" class="el_tblLocation_str_appointmentColorCode">
+<span @Html.Raw(tblLocationList.str_appointmentColorCode.ViewAttributes)>
+@Html.Raw(tblLocationList.str_appointmentColorCode.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_appointmentColorCode.Visible (end) *@
+    @if (tblLocationList.isKnowledgeTest.Visible) { // tblLocationList.isKnowledgeTest.Visible (begin)
+        <td data-name="isKnowledgeTest" @Html.Raw(tblLocationList.isKnowledgeTest.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_isKnowledgeTest" class="el_tblLocation_isKnowledgeTest">
+<span @Html.Raw(tblLocationList.isKnowledgeTest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isKnowledgeTest_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.isKnowledgeTest.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.isKnowledgeTest.CurrentValue))">
+    <label class="form-check-label" for="x_isKnowledgeTest_@(tblLocationList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblLocationList.isKnowledgeTest.Visible (end) *@
+    @if (tblLocationList.isRoadTest.Visible) { // tblLocationList.isRoadTest.Visible (begin)
+        <td data-name="isRoadTest" @Html.Raw(tblLocationList.isRoadTest.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_isRoadTest" class="el_tblLocation_isRoadTest">
+<span @Html.Raw(tblLocationList.isRoadTest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isRoadTest_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.isRoadTest.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.isRoadTest.CurrentValue))">
+    <label class="form-check-label" for="x_isRoadTest_@(tblLocationList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* tblLocationList.isRoadTest.Visible (end) *@
+    @if (tblLocationList.dec_Latitude.Visible) { // tblLocationList.dec_Latitude.Visible (begin)
+        <td data-name="dec_Latitude" @Html.Raw(tblLocationList.dec_Latitude.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_dec_Latitude" class="el_tblLocation_dec_Latitude">
+<span @Html.Raw(tblLocationList.dec_Latitude.ViewAttributes)>
+@Html.Raw(tblLocationList.dec_Latitude.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.dec_Latitude.Visible (end) *@
+    @if (tblLocationList.dec_Longitude.Visible) { // tblLocationList.dec_Longitude.Visible (begin)
+        <td data-name="dec_Longitude" @Html.Raw(tblLocationList.dec_Longitude.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_dec_Longitude" class="el_tblLocation_dec_Longitude">
+<span @Html.Raw(tblLocationList.dec_Longitude.ViewAttributes)>
+@Html.Raw(tblLocationList.dec_Longitude.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.dec_Longitude.Visible (end) *@
+    @if (tblLocationList.str_nameAr.Visible) { // tblLocationList.str_nameAr.Visible (begin)
+        <td data-name="str_nameAr" @Html.Raw(tblLocationList.str_nameAr.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_nameAr" class="el_tblLocation_str_nameAr">
+<span @Html.Raw(tblLocationList.str_nameAr.ViewAttributes)>
+@Html.Raw(tblLocationList.str_nameAr.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_nameAr.Visible (end) *@
+    @if (tblLocationList.IsDistanceBasedScheduling.Visible) { // tblLocationList.IsDistanceBasedScheduling.Visible (begin)
+        <td data-name="IsDistanceBasedScheduling" @Html.Raw(tblLocationList.IsDistanceBasedScheduling.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_IsDistanceBasedScheduling" class="el_tblLocation_IsDistanceBasedScheduling">
+<span @Html.Raw(tblLocationList.IsDistanceBasedScheduling.ViewAttributes)>
+@Html.Raw(tblLocationList.IsDistanceBasedScheduling.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.IsDistanceBasedScheduling.Visible (end) *@
+    @if (tblLocationList.str_ZoomEmail.Visible) { // tblLocationList.str_ZoomEmail.Visible (begin)
+        <td data-name="str_ZoomEmail" @Html.Raw(tblLocationList.str_ZoomEmail.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_ZoomEmail" class="el_tblLocation_str_ZoomEmail">
+<span @Html.Raw(tblLocationList.str_ZoomEmail.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ZoomEmail.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_ZoomEmail.Visible (end) *@
+    @if (tblLocationList.str_ProviderLocationId.Visible) { // tblLocationList.str_ProviderLocationId.Visible (begin)
+        <td data-name="str_ProviderLocationId" @Html.Raw(tblLocationList.str_ProviderLocationId.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_str_ProviderLocationId" class="el_tblLocation_str_ProviderLocationId">
+<span @Html.Raw(tblLocationList.str_ProviderLocationId.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ProviderLocationId.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.str_ProviderLocationId.Visible (end) *@
+    @if (tblLocationList.int_RoadDistanceCoverage.Visible) { // tblLocationList.int_RoadDistanceCoverage.Visible (begin)
+        <td data-name="int_RoadDistanceCoverage" @Html.Raw(tblLocationList.int_RoadDistanceCoverage.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_int_RoadDistanceCoverage" class="el_tblLocation_int_RoadDistanceCoverage">
+<span @Html.Raw(tblLocationList.int_RoadDistanceCoverage.ViewAttributes)>
+@Html.Raw(tblLocationList.int_RoadDistanceCoverage.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.int_RoadDistanceCoverage.Visible (end) *@
+    @if (tblLocationList.IsCashDrawer.Visible) { // tblLocationList.IsCashDrawer.Visible (begin)
+        <td data-name="IsCashDrawer" @Html.Raw(tblLocationList.IsCashDrawer.CellAttributes)>
+<span id="el@(tblLocationList.RowIndex == "$rowindex$" ? "$rowindex$" : tblLocationList.RowCount)_tblLocation_IsCashDrawer" class="el_tblLocation_IsCashDrawer">
+<span @Html.Raw(tblLocationList.IsCashDrawer.ViewAttributes)>
+@Html.Raw(tblLocationList.IsCashDrawer.GetViewValue())</span>
+</span>
+</td>
+    } @* tblLocationList.IsCashDrawer.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblLocationList.ListOptions.RenderBody("right", tblLocationList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblLocationList.RowIndex, "$rowindex$"))
+        tblLocationList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblLocationList.IsCopy || tblLocationList.IsAdd) && tblLocationList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblLocationList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblLocationList.CurrentAction) && !tblLocationList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblLocationList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

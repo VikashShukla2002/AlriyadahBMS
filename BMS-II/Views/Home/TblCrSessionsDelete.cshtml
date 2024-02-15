@@ -1,0 +1,225 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblCrSessionsDelete.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblCrSessionsDelete.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrSessionsDelete.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRSessions: currentTable } });
+var currentPageID = ew.PAGE_ID = "delete";
+var currentForm;
+var ftblCRSessionsdelete;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblCRSessionsdelete")
+        .setPageId("delete")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblCrSessionsDelete.ShowPageHeader()
+@tblCrSessionsDelete.ShowMessages()
+<form name="ftblCRSessionsdelete" id="ftblCRSessionsdelete" class="ew-form ew-delete-form" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="delete">
+@foreach (string key in tblCrSessionsDelete.RecordKeys) {
+<input type="hidden" name="key_m[]" value="@key">
+}
+<div class="card ew-card ew-grid @(tblCrSessionsDelete.TableGridClass)">
+<div class="card-body ew-grid-middle-panel @(tblCrSessionsDelete.TableContainerClass)" style="@(tblCrSessionsDelete.TableContainerStyle)">
+<table class="@(tblCrSessionsDelete.TableClass)">
+    <thead>
+    <tr class="ew-table-header">
+@if (tblCrSessionsDelete.str_CR_Number.Visible) { // tblCrSessionsDelete.str_CR_Number.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.str_CR_Number.HeaderCellClass)"><span id="elh_tblCRSessions_str_CR_Number" class="tblCRSessions_str_CR_Number">@Html.Raw(tblCrSessionsDelete.str_CR_Number.Caption)</span></th>
+} @* tblCrSessionsDelete.str_CR_Number.Visible (end) *@
+@if (tblCrSessionsDelete.int_Status.Visible) { // tblCrSessionsDelete.int_Status.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.int_Status.HeaderCellClass)"><span id="elh_tblCRSessions_int_Status" class="tblCRSessions_int_Status">@Html.Raw(tblCrSessionsDelete.int_Status.Caption)</span></th>
+} @* tblCrSessionsDelete.int_Status.Visible (end) *@
+@if (tblCrSessionsDelete.Instructor.Visible) { // tblCrSessionsDelete.Instructor.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.Instructor.HeaderCellClass)"><span id="elh_tblCRSessions_Instructor" class="tblCRSessions_Instructor">@Html.Raw(tblCrSessionsDelete.Instructor.Caption)</span></th>
+} @* tblCrSessionsDelete.Instructor.Visible (end) *@
+@if (tblCrSessionsDelete.Location.Visible) { // tblCrSessionsDelete.Location.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.Location.HeaderCellClass)"><span id="elh_tblCRSessions_Location" class="tblCRSessions_Location">@Html.Raw(tblCrSessionsDelete.Location.Caption)</span></th>
+} @* tblCrSessionsDelete.Location.Visible (end) *@
+@if (tblCrSessionsDelete.int_Session_ID.Visible) { // tblCrSessionsDelete.int_Session_ID.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.int_Session_ID.HeaderCellClass)"><span id="elh_tblCRSessions_int_Session_ID" class="tblCRSessions_int_Session_ID">@Html.Raw(tblCrSessionsDelete.int_Session_ID.Caption)</span></th>
+} @* tblCrSessionsDelete.int_Session_ID.Visible (end) *@
+@if (tblCrSessionsDelete.str_Session_Date.Visible) { // tblCrSessionsDelete.str_Session_Date.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.str_Session_Date.HeaderCellClass)"><span id="elh_tblCRSessions_str_Session_Date" class="tblCRSessions_str_Session_Date">@Html.Raw(tblCrSessionsDelete.str_Session_Date.Caption)</span></th>
+} @* tblCrSessionsDelete.str_Session_Date.Visible (end) *@
+@if (tblCrSessionsDelete.int_Day_ID.Visible) { // tblCrSessionsDelete.int_Day_ID.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.int_Day_ID.HeaderCellClass)"><span id="elh_tblCRSessions_int_Day_ID" class="tblCRSessions_int_Day_ID">@Html.Raw(tblCrSessionsDelete.int_Day_ID.Caption)</span></th>
+} @* tblCrSessionsDelete.int_Day_ID.Visible (end) *@
+@if (tblCrSessionsDelete.str_Time_Start.Visible) { // tblCrSessionsDelete.str_Time_Start.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.str_Time_Start.HeaderCellClass)"><span id="elh_tblCRSessions_str_Time_Start" class="tblCRSessions_str_Time_Start">@Html.Raw(tblCrSessionsDelete.str_Time_Start.Caption)</span></th>
+} @* tblCrSessionsDelete.str_Time_Start.Visible (end) *@
+@if (tblCrSessionsDelete.str_Time_End.Visible) { // tblCrSessionsDelete.str_Time_End.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.str_Time_End.HeaderCellClass)"><span id="elh_tblCRSessions_str_Time_End" class="tblCRSessions_str_Time_End">@Html.Raw(tblCrSessionsDelete.str_Time_End.Caption)</span></th>
+} @* tblCrSessionsDelete.str_Time_End.Visible (end) *@
+@if (tblCrSessionsDelete.int_Student_Id.Visible) { // tblCrSessionsDelete.int_Student_Id.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.int_Student_Id.HeaderCellClass)"><span id="elh_tblCRSessions_int_Student_Id" class="tblCRSessions_int_Student_Id">@Html.Raw(tblCrSessionsDelete.int_Student_Id.Caption)</span></th>
+} @* tblCrSessionsDelete.int_Student_Id.Visible (end) *@
+@if (tblCrSessionsDelete.str_Username.Visible) { // tblCrSessionsDelete.str_Username.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.str_Username.HeaderCellClass)"><span id="elh_tblCRSessions_str_Username" class="tblCRSessions_str_Username">@Html.Raw(tblCrSessionsDelete.str_Username.Caption)</span></th>
+} @* tblCrSessionsDelete.str_Username.Visible (end) *@
+@if (tblCrSessionsDelete.str_Status.Visible) { // tblCrSessionsDelete.str_Status.Visible (begin)
+        <th class="@Html.Raw(tblCrSessionsDelete.str_Status.HeaderCellClass)"><span id="elh_tblCRSessions_str_Status" class="tblCRSessions_str_Status">@Html.Raw(tblCrSessionsDelete.str_Status.Caption)</span></th>
+} @* tblCrSessionsDelete.str_Status.Visible (end) *@
+    </tr>
+    </thead>
+    <tbody>
+@{ tblCrSessionsDelete.RecordCount = 0; }
+@while (tblCrSessionsDelete.Recordset != null && await tblCrSessionsDelete.Recordset.ReadAsync()) { // DN
+    tblCrSessionsDelete.RecordCount++;
+    tblCrSessionsDelete.RowCount++;
+
+    // Set row properties
+    tblCrSessionsDelete.ResetAttributes();
+    tblCrSessionsDelete.RowType = RowType.View; // View
+
+    // Get the field contents
+    await tblCrSessionsDelete.LoadRowValues(tblCrSessionsDelete.Recordset);
+
+    // Render row
+    await tblCrSessionsDelete.RenderRow();
+    <tr @Html.Raw(tblCrSessionsDelete.RowAttributes)>
+@if (tblCrSessionsDelete.str_CR_Number.Visible) { // tblCrSessionsDelete.str_CR_Number.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.str_CR_Number.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.str_CR_Number.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.str_CR_Number.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.str_CR_Number.Visible (end) *@
+@if (tblCrSessionsDelete.int_Status.Visible) { // tblCrSessionsDelete.int_Status.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.int_Status.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.int_Status.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.int_Status.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.int_Status.Visible (end) *@
+@if (tblCrSessionsDelete.Instructor.Visible) { // tblCrSessionsDelete.Instructor.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.Instructor.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.Instructor.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.Instructor.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.Instructor.Visible (end) *@
+@if (tblCrSessionsDelete.Location.Visible) { // tblCrSessionsDelete.Location.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.Location.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.Location.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.Location.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.Location.Visible (end) *@
+@if (tblCrSessionsDelete.int_Session_ID.Visible) { // tblCrSessionsDelete.int_Session_ID.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.int_Session_ID.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.int_Session_ID.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.int_Session_ID.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.int_Session_ID.Visible (end) *@
+@if (tblCrSessionsDelete.str_Session_Date.Visible) { // tblCrSessionsDelete.str_Session_Date.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.str_Session_Date.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.str_Session_Date.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.str_Session_Date.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.str_Session_Date.Visible (end) *@
+@if (tblCrSessionsDelete.int_Day_ID.Visible) { // tblCrSessionsDelete.int_Day_ID.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.int_Day_ID.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.int_Day_ID.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.int_Day_ID.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.int_Day_ID.Visible (end) *@
+@if (tblCrSessionsDelete.str_Time_Start.Visible) { // tblCrSessionsDelete.str_Time_Start.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.str_Time_Start.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.str_Time_Start.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.str_Time_Start.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.str_Time_Start.Visible (end) *@
+@if (tblCrSessionsDelete.str_Time_End.Visible) { // tblCrSessionsDelete.str_Time_End.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.str_Time_End.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.str_Time_End.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.str_Time_End.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.str_Time_End.Visible (end) *@
+@if (tblCrSessionsDelete.int_Student_Id.Visible) { // tblCrSessionsDelete.int_Student_Id.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.int_Student_Id.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.int_Student_Id.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.int_Student_Id.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.int_Student_Id.Visible (end) *@
+@if (tblCrSessionsDelete.str_Username.Visible) { // tblCrSessionsDelete.str_Username.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.str_Username.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.str_Username.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.str_Username.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.str_Username.Visible (end) *@
+@if (tblCrSessionsDelete.str_Status.Visible) { // tblCrSessionsDelete.str_Status.Visible (begin)
+        <td @Html.Raw(tblCrSessionsDelete.str_Status.CellAttributes)>
+<span id="">
+<span @Html.Raw(tblCrSessionsDelete.str_Status.ViewAttributes)>
+@Html.Raw(tblCrSessionsDelete.str_Status.GetViewValue())</span>
+</span></td>
+} @* tblCrSessionsDelete.str_Status.Visible (end) *@
+    </tr>
+}
+@{ tblCrSessionsDelete.CloseRecordset(); }
+</tbody>
+</table>
+</div>
+</div>
+<div class="ew-buttons ew-desktop-buttons">
+<button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit">@Html.Raw(Language.Phrase("DeleteBtn"))</button>
+<button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-href="@AppPath(tblCrSessionsDelete.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+</div>
+</form>
+@tblCrSessionsDelete.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

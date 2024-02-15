@@ -1,0 +1,164 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblOtherWebServicesAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblOtherWebServicesAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblOtherWebServicesAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblOtherWebServices: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblOtherWebServicesadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblOtherWebServicesadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["Website", [fields.Website.visible && fields.Website.required ? ew.Validators.required(fields.Website.caption) : null], fields.Website.isInvalid],
+            ["Link", [fields.Link.visible && fields.Link.required ? ew.Validators.required(fields.Link.caption) : null], fields.Link.isInvalid],
+            ["str_username", [fields.str_username.visible && fields.str_username.required ? ew.Validators.required(fields.str_username.caption) : null], fields.str_username.isInvalid],
+            ["str_password", [fields.str_password.visible && fields.str_password.required ? ew.Validators.required(fields.str_password.caption) : null], fields.str_password.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblOtherWebServicesAdd.ShowPageHeader()
+@tblOtherWebServicesAdd.ShowMessages()
+<form name="ftblOtherWebServicesadd" id="ftblOtherWebServicesadd" class="@(tblOtherWebServicesAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblOtherWebServicesAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblOtherWebServicesAdd.OldKeyName)" value="@Html.Raw(tblOtherWebServicesAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblOtherWebServicesAdd.Website.Visible) { // tblOtherWebServicesAdd.Website.Visible (begin)
+    <div id="r_Website" @Html.Raw(tblOtherWebServicesAdd.Website.RowAttributes)>
+        <label id="elh_tblOtherWebServices_Website" for="x_Website" class="@(tblOtherWebServicesAdd.LeftColumnClass)">@Html.Raw(tblOtherWebServicesAdd.Website.Caption)@Html.Raw(tblOtherWebServicesAdd.Website.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblOtherWebServicesAdd.RightColumnClass)"><div @Html.Raw(tblOtherWebServicesAdd.Website.CellAttributes)>
+<span id="el_tblOtherWebServices_Website">
+<textarea data-table="tblOtherWebServices" data-field="x_Website" name="x_Website" id="x_Website" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblOtherWebServicesAdd.Website.PlaceHolder))"@Html.Raw(tblOtherWebServicesAdd.Website.EditAttributes) aria-describedby="x_Website_help">@(tblOtherWebServicesAdd.Website.EditValue)</textarea>
+@Html.Raw(tblOtherWebServicesAdd.Website.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblOtherWebServicesAdd.Website.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblOtherWebServicesAdd.Website.Visible (end) *@
+@if (tblOtherWebServicesAdd.Link.Visible) { // tblOtherWebServicesAdd.Link.Visible (begin)
+    <div id="r_Link" @Html.Raw(tblOtherWebServicesAdd.Link.RowAttributes)>
+        <label id="elh_tblOtherWebServices_Link" for="x_Link" class="@(tblOtherWebServicesAdd.LeftColumnClass)">@Html.Raw(tblOtherWebServicesAdd.Link.Caption)@Html.Raw(tblOtherWebServicesAdd.Link.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblOtherWebServicesAdd.RightColumnClass)"><div @Html.Raw(tblOtherWebServicesAdd.Link.CellAttributes)>
+<span id="el_tblOtherWebServices_Link">
+<input type="@(tblOtherWebServicesAdd.Link.InputTextType)" name="x_Link" id="x_Link" data-table="tblOtherWebServices" data-field="x_Link" value="@Html.Raw(tblOtherWebServicesAdd.Link.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblOtherWebServicesAdd.Link.PlaceHolder))" data-format-pattern="@(tblOtherWebServicesAdd.Link.FormatPattern)"@Html.Raw(tblOtherWebServicesAdd.Link.EditAttributes) aria-describedby="x_Link_help">
+@Html.Raw(tblOtherWebServicesAdd.Link.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblOtherWebServicesAdd.Link.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblOtherWebServicesAdd.Link.Visible (end) *@
+@if (tblOtherWebServicesAdd.str_username.Visible) { // tblOtherWebServicesAdd.str_username.Visible (begin)
+    <div id="r_str_username" @Html.Raw(tblOtherWebServicesAdd.str_username.RowAttributes)>
+        <label id="elh_tblOtherWebServices_str_username" for="x_str_username" class="@(tblOtherWebServicesAdd.LeftColumnClass)">@Html.Raw(tblOtherWebServicesAdd.str_username.Caption)@Html.Raw(tblOtherWebServicesAdd.str_username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblOtherWebServicesAdd.RightColumnClass)"><div @Html.Raw(tblOtherWebServicesAdd.str_username.CellAttributes)>
+<span id="el_tblOtherWebServices_str_username">
+<input type="@(tblOtherWebServicesAdd.str_username.InputTextType)" name="x_str_username" id="x_str_username" data-table="tblOtherWebServices" data-field="x_str_username" value="@Html.Raw(tblOtherWebServicesAdd.str_username.EditValue)" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblOtherWebServicesAdd.str_username.PlaceHolder))" data-format-pattern="@(tblOtherWebServicesAdd.str_username.FormatPattern)"@Html.Raw(tblOtherWebServicesAdd.str_username.EditAttributes) aria-describedby="x_str_username_help">
+@Html.Raw(tblOtherWebServicesAdd.str_username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblOtherWebServicesAdd.str_username.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblOtherWebServicesAdd.str_username.Visible (end) *@
+@if (tblOtherWebServicesAdd.str_password.Visible) { // tblOtherWebServicesAdd.str_password.Visible (begin)
+    <div id="r_str_password" @Html.Raw(tblOtherWebServicesAdd.str_password.RowAttributes)>
+        <label id="elh_tblOtherWebServices_str_password" for="x_str_password" class="@(tblOtherWebServicesAdd.LeftColumnClass)">@Html.Raw(tblOtherWebServicesAdd.str_password.Caption)@Html.Raw(tblOtherWebServicesAdd.str_password.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblOtherWebServicesAdd.RightColumnClass)"><div @Html.Raw(tblOtherWebServicesAdd.str_password.CellAttributes)>
+<span id="el_tblOtherWebServices_str_password">
+<input type="@(tblOtherWebServicesAdd.str_password.InputTextType)" name="x_str_password" id="x_str_password" data-table="tblOtherWebServices" data-field="x_str_password" value="@Html.Raw(tblOtherWebServicesAdd.str_password.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblOtherWebServicesAdd.str_password.PlaceHolder))" data-format-pattern="@(tblOtherWebServicesAdd.str_password.FormatPattern)"@Html.Raw(tblOtherWebServicesAdd.str_password.EditAttributes) aria-describedby="x_str_password_help">
+@Html.Raw(tblOtherWebServicesAdd.str_password.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblOtherWebServicesAdd.str_password.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblOtherWebServicesAdd.str_password.Visible (end) *@
+</div><!-- /page* -->
+@{ tblOtherWebServicesAdd.CloseRecordset(); }
+@Html.Raw(tblOtherWebServicesAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblOtherWebServicesAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblOtherWebServicesadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblOtherWebServicesadd" data-href="@AppPath(tblOtherWebServicesAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblOtherWebServicesAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblOtherWebServicesAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblOtherWebServices");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

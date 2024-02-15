@@ -1,0 +1,483 @@
+@{
+    // View
+    View = this;
+
+    // Set up CurrentGrid
+    CurrentGrid = tblEvaluationMbGrid;
+
+    // Run
+    await tblEvaluationMbGrid.Run();
+
+    // Check action result
+    if (tblEvaluationMbGrid.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblEvaluationMbGrid.IsExport()) {
+<script>
+var ftblEvaluationMBgrid;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let currentTable = @Html.Raw(ConvertToJson(tblEvaluationMbGrid.ToClientVar()));
+    ew.deepAssign(ew.vars, { tables: { tblEvaluationMB: currentTable } });
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblEvaluationMBgrid")
+        .setPageId("grid")
+        .setFormKeyCountName("@(tblEvaluationMbGrid.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name_Hdr", [fields.str_Full_Name_Hdr.visible && fields.str_Full_Name_Hdr.required ? ew.Validators.required(fields.str_Full_Name_Hdr.caption) : null], fields.str_Full_Name_Hdr.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["intDrivinglicenseType", [fields.intDrivinglicenseType.visible && fields.intDrivinglicenseType.required ? ew.Validators.required(fields.intDrivinglicenseType.caption) : null], fields.intDrivinglicenseType.isInvalid],
+            ["Retake", [fields.Retake.visible && fields.Retake.required ? ew.Validators.required(fields.Retake.caption) : null], fields.Retake.isInvalid],
+            ["AbsherApptNbr", [fields.AbsherApptNbr.visible && fields.AbsherApptNbr.required ? ew.Validators.required(fields.AbsherApptNbr.caption) : null], fields.AbsherApptNbr.isInvalid],
+            ["IsDrivingexperience", [fields.IsDrivingexperience.visible && fields.IsDrivingexperience.required ? ew.Validators.required(fields.IsDrivingexperience.caption) : null], fields.IsDrivingexperience.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["str_Full_Name_Hdr",false],["NationalID",false],["str_Cell_Phone",false],["intDrivinglicenseType",false],["Retake",true],["AbsherApptNbr",false],["IsDrivingexperience",true]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Retake": @Html.Raw(tblEvaluationMbGrid.Retake.ToClientList(tblEvaluationMbGrid)),
+            "IsDrivingexperience": @Html.Raw(tblEvaluationMbGrid.IsDrivingexperience.ToClientList(tblEvaluationMbGrid)),
+        })
+        .build();
+    window[form.id] = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+<main class="list">
+<div id="ew-list">
+@if (tblEvaluationMbGrid.TotalRecords > 0 || !Empty(tblEvaluationMbGrid.CurrentAction)) {
+<div class="card ew-card ew-grid@(tblEvaluationMbGrid.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblEvaluationMbGrid.TableGridClass)">
+@if (tblEvaluationMbGrid.ShowOtherOptions) {
+<div class="card-header ew-grid-upper-panel">
+    @tblEvaluationMbGrid.OtherOptions.RenderBody()
+</div>
+}
+<div id="ftblEvaluationMBgrid" class="ew-form ew-list-form">
+<div id="gmp_tblEvaluationMB" class="card-body ew-grid-middle-panel @(tblEvaluationMbGrid.TableContainerClass)" style="@(tblEvaluationMbGrid.TableContainerStyle)">
+<table id="tbl_tblEvaluationMBgrid" class="@(tblEvaluationMbGrid.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblEvaluationMbGrid.RowType = RowType.Header;
+
+    // Render list options
+    await tblEvaluationMbGrid.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblEvaluationMbGrid.ListOptions.RenderHeader("left")
+@if (tblEvaluationMbGrid.str_Full_Name_Hdr.Visible) { // tblEvaluationMbGrid.str_Full_Name_Hdr.Visible (begin)
+        <th data-name="str_Full_Name_Hdr" class="@(tblEvaluationMbGrid.str_Full_Name_Hdr.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluationMB_str_Full_Name_Hdr" class="tblEvaluationMB_str_Full_Name_Hdr">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.str_Full_Name_Hdr))</div></th>
+} @* tblEvaluationMbGrid.str_Full_Name_Hdr.Visible (end) *@
+@if (tblEvaluationMbGrid.NationalID.Visible) { // tblEvaluationMbGrid.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(tblEvaluationMbGrid.NationalID.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluationMB_NationalID" class="tblEvaluationMB_NationalID">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.NationalID))</div></th>
+} @* tblEvaluationMbGrid.NationalID.Visible (end) *@
+@if (tblEvaluationMbGrid.str_Cell_Phone.Visible) { // tblEvaluationMbGrid.str_Cell_Phone.Visible (begin)
+        <th data-name="str_Cell_Phone" class="@(tblEvaluationMbGrid.str_Cell_Phone.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluationMB_str_Cell_Phone" class="tblEvaluationMB_str_Cell_Phone">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.str_Cell_Phone))</div></th>
+} @* tblEvaluationMbGrid.str_Cell_Phone.Visible (end) *@
+@if (tblEvaluationMbGrid.intDrivinglicenseType.Visible) { // tblEvaluationMbGrid.intDrivinglicenseType.Visible (begin)
+        <th data-name="intDrivinglicenseType" class="@(tblEvaluationMbGrid.intDrivinglicenseType.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblEvaluationMB_intDrivinglicenseType" class="tblEvaluationMB_intDrivinglicenseType">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.intDrivinglicenseType))</div></th>
+} @* tblEvaluationMbGrid.intDrivinglicenseType.Visible (end) *@
+@if (tblEvaluationMbGrid.Retake.Visible) { // tblEvaluationMbGrid.Retake.Visible (begin)
+        <th data-name="Retake" class="@(tblEvaluationMbGrid.Retake.HeaderCellClass)"><div id="elh_tblEvaluationMB_Retake" class="tblEvaluationMB_Retake">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.Retake))</div></th>
+} @* tblEvaluationMbGrid.Retake.Visible (end) *@
+@if (tblEvaluationMbGrid.AbsherApptNbr.Visible) { // tblEvaluationMbGrid.AbsherApptNbr.Visible (begin)
+        <th data-name="AbsherApptNbr" class="@(tblEvaluationMbGrid.AbsherApptNbr.HeaderCellClass)"><div id="elh_tblEvaluationMB_AbsherApptNbr" class="tblEvaluationMB_AbsherApptNbr">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.AbsherApptNbr))</div></th>
+} @* tblEvaluationMbGrid.AbsherApptNbr.Visible (end) *@
+@if (tblEvaluationMbGrid.IsDrivingexperience.Visible) { // tblEvaluationMbGrid.IsDrivingexperience.Visible (begin)
+        <th data-name="IsDrivingexperience" class="@(tblEvaluationMbGrid.IsDrivingexperience.HeaderCellClass)"><div id="elh_tblEvaluationMB_IsDrivingexperience" class="tblEvaluationMB_IsDrivingexperience">@Html.Raw(tblEvaluationMbGrid.RenderFieldHeader(tblEvaluationMbGrid.IsDrivingexperience))</div></th>
+} @* tblEvaluationMbGrid.IsDrivingexperience.Visible (end) *@
+@* Render list options (header, right) *@
+@tblEvaluationMbGrid.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblEvaluationMbGrid.PageNumber)">
+@{
+    await tblEvaluationMbGrid.SetupGrid();
+    bool eof = tblEvaluationMbGrid.Recordset == null; // DN
+}
+@while (tblEvaluationMbGrid.RecordCount < tblEvaluationMbGrid.StopRecord || SameString(tblEvaluationMbGrid.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblEvaluationMbGrid.RowIndex, "$rowindex$") &&
+        (!tblEvaluationMbGrid.IsGridAdd || tblEvaluationMbGrid.CurrentMode == "copy") &&
+        (!((tblEvaluationMbGrid.IsCopy || tblEvaluationMbGrid.IsAdd) && tblEvaluationMbGrid.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblEvaluationMbGrid.Recordset.ReadAsync();
+    tblEvaluationMbGrid.RecordCount++;
+    if (tblEvaluationMbGrid.RecordCount >= tblEvaluationMbGrid.StartRecord) {
+        await tblEvaluationMbGrid.SetupRow();
+
+        // Skip 1) delete row / empty row for confirm page, 2) hidden row
+        if (tblEvaluationMbGrid.RowAction != "delete" &&
+            tblEvaluationMbGrid.RowAction != "insertdelete" &&
+            !(tblEvaluationMbGrid.RowAction == "insert" && tblEvaluationMbGrid.IsConfirm && tblEvaluationMbGrid.EmptyRow()) &&
+            tblEvaluationMbGrid.RowAction != "hide") {
+    <tr @Html.Raw(tblEvaluationMbGrid.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblEvaluationMbGrid.ListOptions.RenderBody("left", tblEvaluationMbGrid.RowCount)
+    @if (tblEvaluationMbGrid.str_Full_Name_Hdr.Visible) { // tblEvaluationMbGrid.str_Full_Name_Hdr.Visible (begin)
+        <td data-name="str_Full_Name_Hdr" @Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Full_Name_Hdr (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_str_Full_Name_Hdr" class="el_tblEvaluationMB_str_Full_Name_Hdr">
+    <input type="@(tblEvaluationMbGrid.str_Full_Name_Hdr.InputTextType)" name="x@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" id="x@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" data-table="tblEvaluationMB" data-field="x_str_Full_Name_Hdr" value="@Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Full_Name_Hdr.PlaceHolder))" data-format-pattern="@(tblEvaluationMbGrid.str_Full_Name_Hdr.FormatPattern)"@Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Full_Name_Hdr" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" id="o@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Full_Name_Hdr.OldValue))">
+    @* str_Full_Name_Hdr (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Full_Name_Hdr (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_str_Full_Name_Hdr" class="el_tblEvaluationMB_str_Full_Name_Hdr">
+    <span @Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationMbGrid.str_Full_Name_Hdr.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Full_Name_Hdr" data-hidden="1" name="x@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" id="x@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Full_Name_Hdr.CurrentValue))">
+    </span>
+    @* str_Full_Name_Hdr (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* str_Full_Name_Hdr (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_str_Full_Name_Hdr" class="el_tblEvaluationMB_str_Full_Name_Hdr">
+    <span @Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.ViewAttributes)>
+    @Html.Raw(tblEvaluationMbGrid.str_Full_Name_Hdr.GetViewValue())</span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Full_Name_Hdr" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Full_Name_Hdr.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Full_Name_Hdr" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_str_Full_Name_Hdr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Full_Name_Hdr.OldValue))">
+    }
+    @* str_Full_Name_Hdr (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.str_Full_Name_Hdr.Visible (end) *@
+    @if (tblEvaluationMbGrid.NationalID.Visible) { // tblEvaluationMbGrid.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(tblEvaluationMbGrid.NationalID.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_NationalID" class="el_tblEvaluationMB_NationalID">
+    <input type="@(tblEvaluationMbGrid.NationalID.InputTextType)" name="x@(tblEvaluationMbGrid.RowIndex)_NationalID" id="x@(tblEvaluationMbGrid.RowIndex)_NationalID" data-table="tblEvaluationMB" data-field="x_NationalID" value="@Html.Raw(tblEvaluationMbGrid.NationalID.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.NationalID.PlaceHolder))" data-format-pattern="@(tblEvaluationMbGrid.NationalID.FormatPattern)"@Html.Raw(tblEvaluationMbGrid.NationalID.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.NationalID.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_NationalID" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_NationalID" id="o@(tblEvaluationMbGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.NationalID.OldValue))">
+    @* NationalID (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_NationalID" class="el_tblEvaluationMB_NationalID">
+    <span @Html.Raw(tblEvaluationMbGrid.NationalID.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationMbGrid.NationalID.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_NationalID" data-hidden="1" name="x@(tblEvaluationMbGrid.RowIndex)_NationalID" id="x@(tblEvaluationMbGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.NationalID.CurrentValue))">
+    </span>
+    @* NationalID (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_NationalID" class="el_tblEvaluationMB_NationalID">
+    <span @Html.Raw(tblEvaluationMbGrid.NationalID.ViewAttributes)>
+    @Html.Raw(tblEvaluationMbGrid.NationalID.GetViewValue())</span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_NationalID" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_NationalID" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.NationalID.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_NationalID" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_NationalID" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.NationalID.OldValue))">
+    }
+    @* NationalID (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.NationalID.Visible (end) *@
+    @if (tblEvaluationMbGrid.str_Cell_Phone.Visible) { // tblEvaluationMbGrid.str_Cell_Phone.Visible (begin)
+        <td data-name="str_Cell_Phone" @Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Cell_Phone (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_str_Cell_Phone" class="el_tblEvaluationMB_str_Cell_Phone">
+    <input type="@(tblEvaluationMbGrid.str_Cell_Phone.InputTextType)" name="x@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" id="x@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" data-table="tblEvaluationMB" data-field="x_str_Cell_Phone" value="@Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblEvaluationMbGrid.str_Cell_Phone.FormatPattern)"@Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Cell_Phone" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" id="o@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Cell_Phone.OldValue))">
+    @* str_Cell_Phone (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Cell_Phone (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_str_Cell_Phone" class="el_tblEvaluationMB_str_Cell_Phone">
+    <span @Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationMbGrid.str_Cell_Phone.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Cell_Phone" data-hidden="1" name="x@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" id="x@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Cell_Phone.CurrentValue))">
+    </span>
+    @* str_Cell_Phone (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* str_Cell_Phone (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_str_Cell_Phone" class="el_tblEvaluationMB_str_Cell_Phone">
+    <span @Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.ViewAttributes)>
+    @Html.Raw(tblEvaluationMbGrid.str_Cell_Phone.GetViewValue())</span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Cell_Phone" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Cell_Phone.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_str_Cell_Phone" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.str_Cell_Phone.OldValue))">
+    }
+    @* str_Cell_Phone (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.str_Cell_Phone.Visible (end) *@
+    @if (tblEvaluationMbGrid.intDrivinglicenseType.Visible) { // tblEvaluationMbGrid.intDrivinglicenseType.Visible (begin)
+        <td data-name="intDrivinglicenseType" @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* intDrivinglicenseType (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_intDrivinglicenseType" class="el_tblEvaluationMB_intDrivinglicenseType">
+    <input type="@(tblEvaluationMbGrid.intDrivinglicenseType.InputTextType)" name="x@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" id="x@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" data-table="tblEvaluationMB" data-field="x_intDrivinglicenseType" value="@Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.intDrivinglicenseType.PlaceHolder))" data-format-pattern="@(tblEvaluationMbGrid.intDrivinglicenseType.FormatPattern)"@Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_intDrivinglicenseType" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" id="o@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.intDrivinglicenseType.OldValue))">
+    @* intDrivinglicenseType (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* intDrivinglicenseType (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_intDrivinglicenseType" class="el_tblEvaluationMB_intDrivinglicenseType">
+    <span @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.ViewAttributes)>
+    @if ((!EmptyString(tblEvaluationMbGrid.intDrivinglicenseType.EditValue) || !EmptyString(tblEvaluationMbGrid.intDrivinglicenseType.TooltipValue)) && !Empty(tblEvaluationMbGrid.intDrivinglicenseType.LinkAttributes)) {
+    <a @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.LinkAttributes)><input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationMbGrid.intDrivinglicenseType.EditValue)))"></a>
+    } else {
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationMbGrid.intDrivinglicenseType.EditValue)))">
+    }
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_intDrivinglicenseType" data-hidden="1" name="x@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" id="x@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.intDrivinglicenseType.CurrentValue))">
+    </span>
+    @* intDrivinglicenseType (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* intDrivinglicenseType (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_intDrivinglicenseType" class="el_tblEvaluationMB_intDrivinglicenseType">
+    <span @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.ViewAttributes)>
+    @if ((!EmptyString(tblEvaluationMbGrid.intDrivinglicenseType.GetViewValue()) || !EmptyString(tblEvaluationMbGrid.intDrivinglicenseType.TooltipValue)) && !Empty(tblEvaluationMbGrid.intDrivinglicenseType.LinkAttributes)) {
+    <a @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.LinkAttributes)>@Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.GetViewValue())</a>
+    } else {
+    @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.GetViewValue())
+    }
+    <span id="tt_tblEvaluationMB_x@(tblEvaluationMbGrid.RowCount)_intDrivinglicenseType" class="d-none">
+    @Html.Raw(tblEvaluationMbGrid.intDrivinglicenseType.TooltipValue)
+    </span></span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_intDrivinglicenseType" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.intDrivinglicenseType.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_intDrivinglicenseType" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.intDrivinglicenseType.OldValue))">
+    }
+    @* intDrivinglicenseType (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.intDrivinglicenseType.Visible (end) *@
+    @if (tblEvaluationMbGrid.Retake.Visible) { // tblEvaluationMbGrid.Retake.Visible (begin)
+        <td data-name="Retake" @Html.Raw(tblEvaluationMbGrid.Retake.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* Retake (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_Retake" class="el_tblEvaluationMB_Retake">
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input@(tblEvaluationMbGrid.Retake.IsInvalidClass)" data-table="tblEvaluationMB" data-field="x_Retake" data-boolean name="x@(tblEvaluationMbGrid.RowIndex)_Retake" id="x@(tblEvaluationMbGrid.RowIndex)_Retake" value="1" checked="@ConvertToBool(tblEvaluationMbGrid.Retake.CurrentValue)" @Html.Raw(tblEvaluationMbGrid.Retake.EditAttributes)>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.Retake.GetErrorMessage())</div>
+    </div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_Retake" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_Retake" id="o@(tblEvaluationMbGrid.RowIndex)_Retake" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.Retake.OldValue))">
+    @* Retake (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* Retake (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_Retake" class="el_tblEvaluationMB_Retake">
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input@(tblEvaluationMbGrid.Retake.IsInvalidClass)" data-table="tblEvaluationMB" data-field="x_Retake" data-boolean name="x@(tblEvaluationMbGrid.RowIndex)_Retake" id="x@(tblEvaluationMbGrid.RowIndex)_Retake" value="1" checked="@ConvertToBool(tblEvaluationMbGrid.Retake.CurrentValue)" @Html.Raw(tblEvaluationMbGrid.Retake.EditAttributes)>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.Retake.GetErrorMessage())</div>
+    </div>
+    </span>
+    @* Retake (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* Retake (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_Retake" class="el_tblEvaluationMB_Retake">
+    <span @Html.Raw(tblEvaluationMbGrid.Retake.ViewAttributes)>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" id="x_Retake_@(tblEvaluationMbGrid.RowCount)" class="form-check-input" value="@(tblEvaluationMbGrid.Retake.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbGrid.Retake.CurrentValue))">
+        <label class="form-check-label" for="x_Retake_@(tblEvaluationMbGrid.RowCount)"></label>
+    </div></span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_Retake" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_Retake" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_Retake" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.Retake.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_Retake" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_Retake" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_Retake" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.Retake.OldValue))">
+    }
+    @* Retake (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.Retake.Visible (end) *@
+    @if (tblEvaluationMbGrid.AbsherApptNbr.Visible) { // tblEvaluationMbGrid.AbsherApptNbr.Visible (begin)
+        <td data-name="AbsherApptNbr" @Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* AbsherApptNbr (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_AbsherApptNbr" class="el_tblEvaluationMB_AbsherApptNbr">
+    <input type="@(tblEvaluationMbGrid.AbsherApptNbr.InputTextType)" name="x@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" id="x@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" data-table="tblEvaluationMB" data-field="x_AbsherApptNbr" value="@Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(tblEvaluationMbGrid.AbsherApptNbr.FormatPattern)"@Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_AbsherApptNbr" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" id="o@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.AbsherApptNbr.OldValue))">
+    @* AbsherApptNbr (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* AbsherApptNbr (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_AbsherApptNbr" class="el_tblEvaluationMB_AbsherApptNbr">
+    <span @Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblEvaluationMbGrid.AbsherApptNbr.EditValue)))"></span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_AbsherApptNbr" data-hidden="1" name="x@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" id="x@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.AbsherApptNbr.CurrentValue))">
+    </span>
+    @* AbsherApptNbr (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* AbsherApptNbr (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_AbsherApptNbr" class="el_tblEvaluationMB_AbsherApptNbr">
+    <span @Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.ViewAttributes)>
+    @Html.Raw(tblEvaluationMbGrid.AbsherApptNbr.GetViewValue())</span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_AbsherApptNbr" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.AbsherApptNbr.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_AbsherApptNbr" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.AbsherApptNbr.OldValue))">
+    }
+    @* AbsherApptNbr (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.AbsherApptNbr.Visible (end) *@
+    @if (tblEvaluationMbGrid.IsDrivingexperience.Visible) { // tblEvaluationMbGrid.IsDrivingexperience.Visible (begin)
+        <td data-name="IsDrivingexperience" @Html.Raw(tblEvaluationMbGrid.IsDrivingexperience.CellAttributes)>
+@if (tblEvaluationMbGrid.RowType == RowType.Add) { // Add (begin)
+    @* IsDrivingexperience (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_IsDrivingexperience" class="el_tblEvaluationMB_IsDrivingexperience">
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input@(tblEvaluationMbGrid.IsDrivingexperience.IsInvalidClass)" data-table="tblEvaluationMB" data-field="x_IsDrivingexperience" data-boolean name="x@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" id="x@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" value="1" checked="@ConvertToBool(tblEvaluationMbGrid.IsDrivingexperience.CurrentValue)" @Html.Raw(tblEvaluationMbGrid.IsDrivingexperience.EditAttributes)>
+        <div class="invalid-feedback">@Html.Raw(tblEvaluationMbGrid.IsDrivingexperience.GetErrorMessage())</div>
+    </div>
+    </span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_IsDrivingexperience" data-hidden="1" data-old name="o@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" id="o@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.IsDrivingexperience.OldValue))">
+    @* IsDrivingexperience (end) *@
+} @* Add (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* IsDrivingexperience (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_IsDrivingexperience" class="el_tblEvaluationMB_IsDrivingexperience">
+    <span @Html.Raw(tblEvaluationMbGrid.IsDrivingexperience.ViewAttributes)>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationMbGrid.RowCount)" class="form-check-input" value="@(tblEvaluationMbGrid.IsDrivingexperience.EditValue)" disabled checked="@(ConvertToBool(tblEvaluationMbGrid.IsDrivingexperience.CurrentValue))">
+        <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationMbGrid.RowCount)"></label>
+    </div></span>
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_IsDrivingexperience" data-hidden="1" name="x@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" id="x@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.IsDrivingexperience.CurrentValue))">
+    </span>
+    @* IsDrivingexperience (end) *@
+} @* Edit (end) *@
+@if (tblEvaluationMbGrid.RowType == RowType.View) { // View (begin)
+    @* IsDrivingexperience (begin) *@
+    <span id="el@(tblEvaluationMbGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblEvaluationMbGrid.RowCount)_tblEvaluationMB_IsDrivingexperience" class="el_tblEvaluationMB_IsDrivingexperience">
+    <span @Html.Raw(tblEvaluationMbGrid.IsDrivingexperience.ViewAttributes)>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" id="x_IsDrivingexperience_@(tblEvaluationMbGrid.RowCount)" class="form-check-input" value="@(tblEvaluationMbGrid.IsDrivingexperience.GetViewValue())" disabled checked="@(ConvertToBool(tblEvaluationMbGrid.IsDrivingexperience.CurrentValue))">
+        <label class="form-check-label" for="x_IsDrivingexperience_@(tblEvaluationMbGrid.RowCount)"></label>
+    </div></span>
+    </span>
+    if (tblEvaluationMbGrid.IsConfirm) {
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_IsDrivingexperience" data-hidden="1" name="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" id="ftblEvaluationMBgrid$x@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.IsDrivingexperience.FormValue))">
+    <input type="hidden" data-table="tblEvaluationMB" data-field="x_IsDrivingexperience" data-hidden="1" data-old name="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" id="ftblEvaluationMBgrid$o@(tblEvaluationMbGrid.RowIndex)_IsDrivingexperience" value="@Html.Raw(HtmlEncode(tblEvaluationMbGrid.IsDrivingexperience.OldValue))">
+    }
+    @* IsDrivingexperience (end) *@
+} @* View (end) *@
+</td>
+    } @* tblEvaluationMbGrid.IsDrivingexperience.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblEvaluationMbGrid.ListOptions.RenderBody("right", tblEvaluationMbGrid.RowCount)
+    </tr>
+if (tblEvaluationMbGrid.RowType == RowType.Add || tblEvaluationMbGrid.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["ftblEvaluationMBgrid","load"], () => ftblEvaluationMBgrid.updateLists(@(tblEvaluationMbGrid.RowIndex)@(tblEvaluationMbGrid.IsAdd || tblEvaluationMbGrid.IsEdit || tblEvaluationMbGrid.IsCopy || SameString(tblEvaluationMbGrid.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End delete row checking *@
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblEvaluationMbGrid.RowIndex, "$rowindex$"))
+        tblEvaluationMbGrid.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblEvaluationMbGrid.IsCopy || tblEvaluationMbGrid.IsAdd) && tblEvaluationMbGrid.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblEvaluationMbGrid.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+@if (tblEvaluationMbGrid.CurrentMode == "add" || tblEvaluationMbGrid.CurrentMode == "copy") {
+<input type="hidden" name="@(tblEvaluationMbGrid.FormKeyCountName)" id="@(tblEvaluationMbGrid.FormKeyCountName)" value="@(tblEvaluationMbGrid.KeyCount)">
+@Html.Raw(tblEvaluationMbGrid.MultiSelectKey)
+}
+@if (tblEvaluationMbGrid.CurrentMode == "edit") {
+<input type="hidden" name="@(tblEvaluationMbGrid.FormKeyCountName)" id="@(tblEvaluationMbGrid.FormKeyCountName)" value="@(tblEvaluationMbGrid.KeyCount)">
+@Html.Raw(tblEvaluationMbGrid.MultiSelectKey)
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblEvaluationMbGrid.CurrentMode)) {
+<input type="hidden" name="action" id="action" value="">
+}
+<input type="hidden" name="detailpage" value="ftblEvaluationMBgrid">
+</div><!-- /.ew-list-form -->
+@{ tblEvaluationMbGrid.CloseRecordset(); }
+</div><!-- /.ew-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblEvaluationMbGrid.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@if (!tblEvaluationMbGrid.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblEvaluationMB");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}
+@{
+    // Close Recordset
+    tblEvaluationMbGrid.CloseRecordset(); // DN
+    // Clear CurrentGrid
+    CurrentGrid = null;
+}

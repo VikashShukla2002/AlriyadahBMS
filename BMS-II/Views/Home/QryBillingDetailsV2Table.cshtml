@@ -1,0 +1,210 @@
+@if (qryBillingDetailsV2List.ModalGridAdd && qryBillingDetailsV2List.IsGridAdd || qryBillingDetailsV2List.ModalGridEdit && qryBillingDetailsV2List.IsGridEdit || qryBillingDetailsV2List.ModalMultiEdit && qryBillingDetailsV2List.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryBillingDetailsV2List.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryBillingDetails_v2: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryBillingDetailsV2List.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryBillingDetailsV2List.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryBillingDetailsV2List.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryBillingDetailsV2List.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryBillingDetailsV2List.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryBillingDetailsV2List.TableGridClass)">
+@if (!qryBillingDetailsV2List.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryBillingDetailsV2List.IsGridAdd && !(qryBillingDetailsV2List.IsGridEdit && qryBillingDetailsV2List.ModalGridEdit) && !qryBillingDetailsV2List.IsMultiEdit) {
+@Html.Raw(qryBillingDetailsV2List.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryBillingDetailsV2List.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryBillingDetailsV2List.FormName)" id="@(qryBillingDetailsV2List.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryBillingDetailsV2List.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryBillingDetailsV2List.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+@if (qryBillingDetailsV2List.CurrentMasterTable == "tblBillingInfo" && !Empty(qryBillingDetailsV2List.CurrentAction)) {
+<input type="hidden" name="@(Config.TableShowMaster)" value="tblBillingInfo">
+<input type="hidden" name="fk_NationalID" value="@(HtmlEncode(qryBillingDetailsV2List.NationalID.SessionValue))">
+}
+<div id="gmp_qryBillingDetails_v2" class="card-body ew-grid-middle-panel @(qryBillingDetailsV2List.TableContainerClass)" style="@(qryBillingDetailsV2List.TableContainerStyle)">
+@if (qryBillingDetailsV2List.TotalRecords > 0 || qryBillingDetailsV2List.IsGridEdit || qryBillingDetailsV2List.IsMultiEdit) {
+<table id="tbl_qryBillingDetails_v2list" class="@(qryBillingDetailsV2List.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryBillingDetailsV2List.RowType = RowType.Header;
+
+    // Render list options
+    await qryBillingDetailsV2List.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryBillingDetailsV2List.ListOptions.RenderHeader("left")
+@if (qryBillingDetailsV2List.Payment_Number.Visible) { // qryBillingDetailsV2List.Payment_Number.Visible (begin)
+        <th data-name="Payment_Number" class="@(qryBillingDetailsV2List.Payment_Number.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_Payment_Number" class="qryBillingDetails_v2_Payment_Number">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.Payment_Number))</div></th>
+} @* qryBillingDetailsV2List.Payment_Number.Visible (end) *@
+@if (qryBillingDetailsV2List.NationalID.Visible) { // qryBillingDetailsV2List.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(qryBillingDetailsV2List.NationalID.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_NationalID" class="qryBillingDetails_v2_NationalID">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.NationalID))</div></th>
+} @* qryBillingDetailsV2List.NationalID.Visible (end) *@
+@if (qryBillingDetailsV2List.date_Paid.Visible) { // qryBillingDetailsV2List.date_Paid.Visible (begin)
+        <th data-name="date_Paid" class="@(qryBillingDetailsV2List.date_Paid.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_date_Paid" class="qryBillingDetails_v2_date_Paid">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.date_Paid))</div></th>
+} @* qryBillingDetailsV2List.date_Paid.Visible (end) *@
+@if (qryBillingDetailsV2List.Amount_Paid.Visible) { // qryBillingDetailsV2List.Amount_Paid.Visible (begin)
+        <th data-name="Amount_Paid" class="@(qryBillingDetailsV2List.Amount_Paid.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_Amount_Paid" class="qryBillingDetails_v2_Amount_Paid">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.Amount_Paid))</div></th>
+} @* qryBillingDetailsV2List.Amount_Paid.Visible (end) *@
+@if (qryBillingDetailsV2List.running_payments.Visible) { // qryBillingDetailsV2List.running_payments.Visible (begin)
+        <th data-name="running_payments" class="@(qryBillingDetailsV2List.running_payments.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_running_payments" class="qryBillingDetails_v2_running_payments">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.running_payments))</div></th>
+} @* qryBillingDetailsV2List.running_payments.Visible (end) *@
+@if (qryBillingDetailsV2List.running_balance.Visible) { // qryBillingDetailsV2List.running_balance.Visible (begin)
+        <th data-name="running_balance" class="@(qryBillingDetailsV2List.running_balance.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_running_balance" class="qryBillingDetails_v2_running_balance">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.running_balance))</div></th>
+} @* qryBillingDetailsV2List.running_balance.Visible (end) *@
+@if (qryBillingDetailsV2List.str_ApprovalCode.Visible) { // qryBillingDetailsV2List.str_ApprovalCode.Visible (begin)
+        <th data-name="str_ApprovalCode" class="@(qryBillingDetailsV2List.str_ApprovalCode.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_str_ApprovalCode" class="qryBillingDetails_v2_str_ApprovalCode">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.str_ApprovalCode))</div></th>
+} @* qryBillingDetailsV2List.str_ApprovalCode.Visible (end) *@
+@if (qryBillingDetailsV2List.Package_Name.Visible) { // qryBillingDetailsV2List.Package_Name.Visible (begin)
+        <th data-name="Package_Name" class="@(qryBillingDetailsV2List.Package_Name.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_Package_Name" class="qryBillingDetails_v2_Package_Name">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.Package_Name))</div></th>
+} @* qryBillingDetailsV2List.Package_Name.Visible (end) *@
+@if (qryBillingDetailsV2List.int_Package_ID.Visible) { // qryBillingDetailsV2List.int_Package_ID.Visible (begin)
+        <th data-name="int_Package_ID" class="@(qryBillingDetailsV2List.int_Package_ID.HeaderCellClass)"><div id="elh_qryBillingDetails_v2_int_Package_ID" class="qryBillingDetails_v2_int_Package_ID">@Html.Raw(qryBillingDetailsV2List.RenderFieldHeader(qryBillingDetailsV2List.int_Package_ID))</div></th>
+} @* qryBillingDetailsV2List.int_Package_ID.Visible (end) *@
+@* Render list options (header, right) *@
+@qryBillingDetailsV2List.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryBillingDetailsV2List.PageNumber)">
+@{
+    await qryBillingDetailsV2List.SetupGrid();
+    bool eof = qryBillingDetailsV2List.Recordset == null; // DN
+}
+@while (qryBillingDetailsV2List.RecordCount < qryBillingDetailsV2List.StopRecord || SameString(qryBillingDetailsV2List.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryBillingDetailsV2List.RowIndex, "$rowindex$") &&
+        (!qryBillingDetailsV2List.IsGridAdd || qryBillingDetailsV2List.CurrentMode == "copy") &&
+        (!((qryBillingDetailsV2List.IsCopy || qryBillingDetailsV2List.IsAdd) && qryBillingDetailsV2List.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryBillingDetailsV2List.Recordset.ReadAsync();
+    qryBillingDetailsV2List.RecordCount++;
+    if (qryBillingDetailsV2List.RecordCount >= qryBillingDetailsV2List.StartRecord) {
+        await qryBillingDetailsV2List.SetupRow();
+    <tr @Html.Raw(qryBillingDetailsV2List.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryBillingDetailsV2List.ListOptions.RenderBody("left", qryBillingDetailsV2List.RowCount)
+    @if (qryBillingDetailsV2List.Payment_Number.Visible) { // qryBillingDetailsV2List.Payment_Number.Visible (begin)
+        <td data-name="Payment_Number" @Html.Raw(qryBillingDetailsV2List.Payment_Number.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_Payment_Number" class="el_qryBillingDetails_v2_Payment_Number">
+<span @Html.Raw(qryBillingDetailsV2List.Payment_Number.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.Payment_Number.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.Payment_Number.Visible (end) *@
+    @if (qryBillingDetailsV2List.NationalID.Visible) { // qryBillingDetailsV2List.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(qryBillingDetailsV2List.NationalID.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_NationalID" class="el_qryBillingDetails_v2_NationalID">
+<span @Html.Raw(qryBillingDetailsV2List.NationalID.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.NationalID.Visible (end) *@
+    @if (qryBillingDetailsV2List.date_Paid.Visible) { // qryBillingDetailsV2List.date_Paid.Visible (begin)
+        <td data-name="date_Paid" @Html.Raw(qryBillingDetailsV2List.date_Paid.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_date_Paid" class="el_qryBillingDetails_v2_date_Paid">
+<span @Html.Raw(qryBillingDetailsV2List.date_Paid.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.date_Paid.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.date_Paid.Visible (end) *@
+    @if (qryBillingDetailsV2List.Amount_Paid.Visible) { // qryBillingDetailsV2List.Amount_Paid.Visible (begin)
+        <td data-name="Amount_Paid" @Html.Raw(qryBillingDetailsV2List.Amount_Paid.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_Amount_Paid" class="el_qryBillingDetails_v2_Amount_Paid">
+<span @Html.Raw(qryBillingDetailsV2List.Amount_Paid.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.Amount_Paid.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.Amount_Paid.Visible (end) *@
+    @if (qryBillingDetailsV2List.running_payments.Visible) { // qryBillingDetailsV2List.running_payments.Visible (begin)
+        <td data-name="running_payments" @Html.Raw(qryBillingDetailsV2List.running_payments.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_running_payments" class="el_qryBillingDetails_v2_running_payments">
+<span @Html.Raw(qryBillingDetailsV2List.running_payments.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.running_payments.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.running_payments.Visible (end) *@
+    @if (qryBillingDetailsV2List.running_balance.Visible) { // qryBillingDetailsV2List.running_balance.Visible (begin)
+        <td data-name="running_balance" @Html.Raw(qryBillingDetailsV2List.running_balance.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_running_balance" class="el_qryBillingDetails_v2_running_balance">
+<span @Html.Raw(qryBillingDetailsV2List.running_balance.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.running_balance.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.running_balance.Visible (end) *@
+    @if (qryBillingDetailsV2List.str_ApprovalCode.Visible) { // qryBillingDetailsV2List.str_ApprovalCode.Visible (begin)
+        <td data-name="str_ApprovalCode" @Html.Raw(qryBillingDetailsV2List.str_ApprovalCode.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_str_ApprovalCode" class="el_qryBillingDetails_v2_str_ApprovalCode">
+<span @Html.Raw(qryBillingDetailsV2List.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.str_ApprovalCode.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.str_ApprovalCode.Visible (end) *@
+    @if (qryBillingDetailsV2List.Package_Name.Visible) { // qryBillingDetailsV2List.Package_Name.Visible (begin)
+        <td data-name="Package_Name" @Html.Raw(qryBillingDetailsV2List.Package_Name.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_Package_Name" class="el_qryBillingDetails_v2_Package_Name">
+<span @Html.Raw(qryBillingDetailsV2List.Package_Name.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.Package_Name.Visible (end) *@
+    @if (qryBillingDetailsV2List.int_Package_ID.Visible) { // qryBillingDetailsV2List.int_Package_ID.Visible (begin)
+        <td data-name="int_Package_ID" @Html.Raw(qryBillingDetailsV2List.int_Package_ID.CellAttributes)>
+<span id="el@(qryBillingDetailsV2List.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingDetailsV2List.RowCount)_qryBillingDetails_v2_int_Package_ID" class="el_qryBillingDetails_v2_int_Package_ID">
+<span @Html.Raw(qryBillingDetailsV2List.int_Package_ID.ViewAttributes)>
+@Html.Raw(qryBillingDetailsV2List.int_Package_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingDetailsV2List.int_Package_ID.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryBillingDetailsV2List.ListOptions.RenderBody("right", qryBillingDetailsV2List.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryBillingDetailsV2List.RowIndex, "$rowindex$"))
+        qryBillingDetailsV2List.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryBillingDetailsV2List.IsCopy || qryBillingDetailsV2List.IsAdd) && qryBillingDetailsV2List.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryBillingDetailsV2List.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryBillingDetailsV2List.CurrentAction) && !qryBillingDetailsV2List.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryBillingDetailsV2List.CloseRecordset(); }
+</div><!-- /.ew-grid -->

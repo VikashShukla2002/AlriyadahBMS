@@ -1,0 +1,188 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (calendar2View.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!calendar2View.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!calendar2View.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!calendar2View.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @calendar2View.ExportOptions.RenderBody()
+    @calendar2View.OtherOptions.RenderBody()
+</div>
+}
+@calendar2View.ShowPageHeader()
+@calendar2View.ShowMessages()
+<main class="view">
+<form name="fCalendar2view" id="fCalendar2view" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!calendar2View.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(calendar2View.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Calendar2: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var fCalendar2view;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fCalendar2view")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(calendar2View.IsModal)">
+<table class="@(calendar2View.TableClass)">
+@if (calendar2View.Id.Visible) { // calendar2View.Id.Visible (begin)
+    <tr id="r_Id" @Html.Raw(calendar2View.Id.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_Id">@Html.Raw(calendar2View.Id.Caption)</span></td>
+        <td data-name="Id" @Html.Raw(calendar2View.Id.CellAttributes)>
+<span id="el_Calendar2_Id">
+<span @Html.Raw(calendar2View.Id.ViewAttributes)>
+@Html.Raw(calendar2View.Id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.Id.Visible (end) *@
+@if (calendar2View._Title.Visible) { // calendar2View._Title.Visible (begin)
+    <tr id="r__Title" @Html.Raw(calendar2View._Title.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2__Title">@Html.Raw(calendar2View._Title.Caption)</span></td>
+        <td data-name="_Title" @Html.Raw(calendar2View._Title.CellAttributes)>
+<span id="el_Calendar2__Title">
+<span @Html.Raw(calendar2View._Title.ViewAttributes)>
+@Html.Raw(calendar2View._Title.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View._Title.Visible (end) *@
+@if (calendar2View.Start.Visible) { // calendar2View.Start.Visible (begin)
+    <tr id="r_Start" @Html.Raw(calendar2View.Start.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_Start">@Html.Raw(calendar2View.Start.Caption)</span></td>
+        <td data-name="Start" @Html.Raw(calendar2View.Start.CellAttributes)>
+<span id="el_Calendar2_Start">
+<span @Html.Raw(calendar2View.Start.ViewAttributes)>
+@Html.Raw(calendar2View.Start.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.Start.Visible (end) *@
+@if (calendar2View.End.Visible) { // calendar2View.End.Visible (begin)
+    <tr id="r_End" @Html.Raw(calendar2View.End.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_End">@Html.Raw(calendar2View.End.Caption)</span></td>
+        <td data-name="End" @Html.Raw(calendar2View.End.CellAttributes)>
+<span id="el_Calendar2_End">
+<span @Html.Raw(calendar2View.End.ViewAttributes)>
+@Html.Raw(calendar2View.End.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.End.Visible (end) *@
+@if (calendar2View.AllDay.Visible) { // calendar2View.AllDay.Visible (begin)
+    <tr id="r_AllDay" @Html.Raw(calendar2View.AllDay.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_AllDay">@Html.Raw(calendar2View.AllDay.Caption)</span></td>
+        <td data-name="AllDay" @Html.Raw(calendar2View.AllDay.CellAttributes)>
+<span id="el_Calendar2_AllDay">
+<span @Html.Raw(calendar2View.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(calendar2View.RowCount)" class="form-check-input" value="@(calendar2View.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(calendar2View.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(calendar2View.RowCount)"></label>
+</div></span>
+</span></td>
+    </tr>
+} @* calendar2View.AllDay.Visible (end) *@
+@if (calendar2View.Notes.Visible) { // calendar2View.Notes.Visible (begin)
+    <tr id="r_Notes" @Html.Raw(calendar2View.Notes.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_Notes">@Html.Raw(calendar2View.Notes.Caption)</span></td>
+        <td data-name="Notes" @Html.Raw(calendar2View.Notes.CellAttributes)>
+<span id="el_Calendar2_Notes">
+<span @Html.Raw(calendar2View.Notes.ViewAttributes)>
+@Html.Raw(calendar2View.Notes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.Notes.Visible (end) *@
+@if (calendar2View.str_Username.Visible) { // calendar2View.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(calendar2View.str_Username.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_str_Username">@Html.Raw(calendar2View.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(calendar2View.str_Username.CellAttributes)>
+<span id="el_Calendar2_str_Username">
+<span @Html.Raw(calendar2View.str_Username.ViewAttributes)>
+@Html.Raw(calendar2View.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.str_Username.Visible (end) *@
+@if (calendar2View._Url.Visible) { // calendar2View._Url.Visible (begin)
+    <tr id="r__Url" @Html.Raw(calendar2View._Url.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2__Url">@Html.Raw(calendar2View._Url.Caption)</span></td>
+        <td data-name="_Url" @Html.Raw(calendar2View._Url.CellAttributes)>
+<span id="el_Calendar2__Url">
+<span @Html.Raw(calendar2View._Url.ViewAttributes)>
+@Html.Raw(calendar2View._Url.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View._Url.Visible (end) *@
+@if (calendar2View.ClassNames.Visible) { // calendar2View.ClassNames.Visible (begin)
+    <tr id="r_ClassNames" @Html.Raw(calendar2View.ClassNames.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_ClassNames">@Html.Raw(calendar2View.ClassNames.Caption)</span></td>
+        <td data-name="ClassNames" @Html.Raw(calendar2View.ClassNames.CellAttributes)>
+<span id="el_Calendar2_ClassNames">
+<span @Html.Raw(calendar2View.ClassNames.ViewAttributes)>
+@Html.Raw(calendar2View.ClassNames.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.ClassNames.Visible (end) *@
+@if (calendar2View.Display.Visible) { // calendar2View.Display.Visible (begin)
+    <tr id="r_Display" @Html.Raw(calendar2View.Display.RowAttributes)>
+        <td class="@(calendar2View.TableLeftColumnClass)"><span id="elh_Calendar2_Display">@Html.Raw(calendar2View.Display.Caption)</span></td>
+        <td data-name="Display" @Html.Raw(calendar2View.Display.CellAttributes)>
+<span id="el_Calendar2_Display">
+<span @Html.Raw(calendar2View.Display.ViewAttributes)>
+@Html.Raw(calendar2View.Display.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* calendar2View.Display.Visible (end) *@
+</table>
+@{ calendar2View.CloseRecordset(); }
+</form>
+</main>
+@calendar2View.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!calendar2View.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

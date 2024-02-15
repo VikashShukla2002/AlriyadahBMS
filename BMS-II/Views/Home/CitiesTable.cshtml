@@ -1,0 +1,217 @@
+@if (citiesList.ModalGridAdd && citiesList.IsGridAdd || citiesList.ModalGridEdit && citiesList.IsGridEdit || citiesList.ModalMultiEdit && citiesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(citiesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Cities: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(citiesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(citiesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(citiesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(citiesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(citiesList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(citiesList.TableGridClass)">
+@if (!citiesList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!citiesList.IsGridAdd && !(citiesList.IsGridEdit && citiesList.ModalGridEdit) && !citiesList.IsMultiEdit) {
+@Html.Raw(citiesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@citiesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(citiesList.FormName)" id="@(citiesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(citiesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (citiesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_Cities" class="card-body ew-grid-middle-panel @(citiesList.TableContainerClass)" style="@(citiesList.TableContainerStyle)">
+@if (citiesList.TotalRecords > 0 || citiesList.IsGridEdit || citiesList.IsMultiEdit) {
+<table id="tbl_Citieslist" class="@(citiesList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    citiesList.RowType = RowType.Header;
+
+    // Render list options
+    await citiesList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@citiesList.ListOptions.RenderHeader("left")
+@if (citiesList.City.Visible) { // citiesList.City.Visible (begin)
+        <th data-name="City" class="@(citiesList.City.HeaderCellClass)"><div id="elh_Cities_City" class="Cities_City">@Html.Raw(citiesList.RenderFieldHeader(citiesList.City))</div></th>
+} @* citiesList.City.Visible (end) *@
+@if (citiesList.Arabic_City_Name.Visible) { // citiesList.Arabic_City_Name.Visible (begin)
+        <th data-name="Arabic_City_Name" class="@(citiesList.Arabic_City_Name.HeaderCellClass)"><div id="elh_Cities_Arabic_City_Name" class="Cities_Arabic_City_Name">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Arabic_City_Name))</div></th>
+} @* citiesList.Arabic_City_Name.Visible (end) *@
+@if (citiesList.Province_ID.Visible) { // citiesList.Province_ID.Visible (begin)
+        <th data-name="Province_ID" class="@(citiesList.Province_ID.HeaderCellClass)"><div id="elh_Cities_Province_ID" class="Cities_Province_ID">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Province_ID))</div></th>
+} @* citiesList.Province_ID.Visible (end) *@
+@if (citiesList.Province.Visible) { // citiesList.Province.Visible (begin)
+        <th data-name="Province" class="@(citiesList.Province.HeaderCellClass)"><div id="elh_Cities_Province" class="Cities_Province">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Province))</div></th>
+} @* citiesList.Province.Visible (end) *@
+@if (citiesList.Arabic_Province_Name.Visible) { // citiesList.Arabic_Province_Name.Visible (begin)
+        <th data-name="Arabic_Province_Name" class="@(citiesList.Arabic_Province_Name.HeaderCellClass)"><div id="elh_Cities_Arabic_Province_Name" class="Cities_Arabic_Province_Name">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Arabic_Province_Name))</div></th>
+} @* citiesList.Arabic_Province_Name.Visible (end) *@
+@if (citiesList.Initials.Visible) { // citiesList.Initials.Visible (begin)
+        <th data-name="Initials" class="@(citiesList.Initials.HeaderCellClass)"><div id="elh_Cities_Initials" class="Cities_Initials">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Initials))</div></th>
+} @* citiesList.Initials.Visible (end) *@
+@if (citiesList.Population.Visible) { // citiesList.Population.Visible (begin)
+        <th data-name="Population" class="@(citiesList.Population.HeaderCellClass)"><div id="elh_Cities_Population" class="Cities_Population">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Population))</div></th>
+} @* citiesList.Population.Visible (end) *@
+@if (citiesList.Population_2004.Visible) { // citiesList.Population_2004.Visible (begin)
+        <th data-name="Population_2004" class="@(citiesList.Population_2004.HeaderCellClass)"><div id="elh_Cities_Population_2004" class="Cities_Population_2004">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Population_2004))</div></th>
+} @* citiesList.Population_2004.Visible (end) *@
+@if (citiesList.Population_2010.Visible) { // citiesList.Population_2010.Visible (begin)
+        <th data-name="Population_2010" class="@(citiesList.Population_2010.HeaderCellClass)"><div id="elh_Cities_Population_2010" class="Cities_Population_2010">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Population_2010))</div></th>
+} @* citiesList.Population_2010.Visible (end) *@
+@if (citiesList.Population_2022.Visible) { // citiesList.Population_2022.Visible (begin)
+        <th data-name="Population_2022" class="@(citiesList.Population_2022.HeaderCellClass)"><div id="elh_Cities_Population_2022" class="Cities_Population_2022">@Html.Raw(citiesList.RenderFieldHeader(citiesList.Population_2022))</div></th>
+} @* citiesList.Population_2022.Visible (end) *@
+@* Render list options (header, right) *@
+@citiesList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(citiesList.PageNumber)">
+@{
+    await citiesList.SetupGrid();
+    bool eof = citiesList.Recordset == null; // DN
+}
+@while (citiesList.RecordCount < citiesList.StopRecord || SameString(citiesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(citiesList.RowIndex, "$rowindex$") &&
+        (!citiesList.IsGridAdd || citiesList.CurrentMode == "copy") &&
+        (!((citiesList.IsCopy || citiesList.IsAdd) && citiesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await citiesList.Recordset.ReadAsync();
+    citiesList.RecordCount++;
+    if (citiesList.RecordCount >= citiesList.StartRecord) {
+        await citiesList.SetupRow();
+    <tr @Html.Raw(citiesList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @citiesList.ListOptions.RenderBody("left", citiesList.RowCount)
+    @if (citiesList.City.Visible) { // citiesList.City.Visible (begin)
+        <td data-name="City" @Html.Raw(citiesList.City.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_City" class="el_Cities_City">
+<span @Html.Raw(citiesList.City.ViewAttributes)>
+@Html.Raw(citiesList.City.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.City.Visible (end) *@
+    @if (citiesList.Arabic_City_Name.Visible) { // citiesList.Arabic_City_Name.Visible (begin)
+        <td data-name="Arabic_City_Name" @Html.Raw(citiesList.Arabic_City_Name.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Arabic_City_Name" class="el_Cities_Arabic_City_Name">
+<span @Html.Raw(citiesList.Arabic_City_Name.ViewAttributes)>
+@Html.Raw(citiesList.Arabic_City_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Arabic_City_Name.Visible (end) *@
+    @if (citiesList.Province_ID.Visible) { // citiesList.Province_ID.Visible (begin)
+        <td data-name="Province_ID" @Html.Raw(citiesList.Province_ID.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Province_ID" class="el_Cities_Province_ID">
+<span @Html.Raw(citiesList.Province_ID.ViewAttributes)>
+@Html.Raw(citiesList.Province_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Province_ID.Visible (end) *@
+    @if (citiesList.Province.Visible) { // citiesList.Province.Visible (begin)
+        <td data-name="Province" @Html.Raw(citiesList.Province.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Province" class="el_Cities_Province">
+<span @Html.Raw(citiesList.Province.ViewAttributes)>
+@Html.Raw(citiesList.Province.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Province.Visible (end) *@
+    @if (citiesList.Arabic_Province_Name.Visible) { // citiesList.Arabic_Province_Name.Visible (begin)
+        <td data-name="Arabic_Province_Name" @Html.Raw(citiesList.Arabic_Province_Name.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Arabic_Province_Name" class="el_Cities_Arabic_Province_Name">
+<span @Html.Raw(citiesList.Arabic_Province_Name.ViewAttributes)>
+@Html.Raw(citiesList.Arabic_Province_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Arabic_Province_Name.Visible (end) *@
+    @if (citiesList.Initials.Visible) { // citiesList.Initials.Visible (begin)
+        <td data-name="Initials" @Html.Raw(citiesList.Initials.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Initials" class="el_Cities_Initials">
+<span @Html.Raw(citiesList.Initials.ViewAttributes)>
+@Html.Raw(citiesList.Initials.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Initials.Visible (end) *@
+    @if (citiesList.Population.Visible) { // citiesList.Population.Visible (begin)
+        <td data-name="Population" @Html.Raw(citiesList.Population.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Population" class="el_Cities_Population">
+<span @Html.Raw(citiesList.Population.ViewAttributes)>
+@Html.Raw(citiesList.Population.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Population.Visible (end) *@
+    @if (citiesList.Population_2004.Visible) { // citiesList.Population_2004.Visible (begin)
+        <td data-name="Population_2004" @Html.Raw(citiesList.Population_2004.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Population_2004" class="el_Cities_Population_2004">
+<span @Html.Raw(citiesList.Population_2004.ViewAttributes)>
+@Html.Raw(citiesList.Population_2004.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Population_2004.Visible (end) *@
+    @if (citiesList.Population_2010.Visible) { // citiesList.Population_2010.Visible (begin)
+        <td data-name="Population_2010" @Html.Raw(citiesList.Population_2010.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Population_2010" class="el_Cities_Population_2010">
+<span @Html.Raw(citiesList.Population_2010.ViewAttributes)>
+@Html.Raw(citiesList.Population_2010.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Population_2010.Visible (end) *@
+    @if (citiesList.Population_2022.Visible) { // citiesList.Population_2022.Visible (begin)
+        <td data-name="Population_2022" @Html.Raw(citiesList.Population_2022.CellAttributes)>
+<span id="el@(citiesList.RowIndex == "$rowindex$" ? "$rowindex$" : citiesList.RowCount)_Cities_Population_2022" class="el_Cities_Population_2022">
+<span @Html.Raw(citiesList.Population_2022.ViewAttributes)>
+@Html.Raw(citiesList.Population_2022.GetViewValue())</span>
+</span>
+</td>
+    } @* citiesList.Population_2022.Visible (end) *@
+    @* Render list options (body, right) *@
+    @citiesList.ListOptions.RenderBody("right", citiesList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(citiesList.RowIndex, "$rowindex$"))
+        citiesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((citiesList.IsCopy || citiesList.IsAdd) && citiesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        citiesList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(citiesList.CurrentAction) && !citiesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ citiesList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

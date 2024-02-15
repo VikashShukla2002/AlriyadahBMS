@@ -1,0 +1,892 @@
+@if (!tblLocationList.IsExport()) {
+<div>
+@if (!tblLocationList.IsGridAdd && !(tblLocationList.IsGridEdit && tblLocationList.ModalGridEdit) && !tblLocationList.IsMultiEdit) {
+@Html.Raw(tblLocationList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblLocationList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblLocationList.ModalGridAdd && tblLocationList.IsGridAdd || tblLocationList.ModalGridEdit && tblLocationList.IsGridEdit || tblLocationList.ModalMultiEdit && tblLocationList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblLocationList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblLocation: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblLocationList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblLocationList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblLocationList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblLocationList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblLocationList.FormName)" id="@(tblLocationList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblLocationList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblLocationList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblLocationList.GetMultiColumnRowClass())">
+@if (tblLocationList.TotalRecords > 0 || tblLocationList.IsGridEdit || tblLocationList.IsMultiEdit) {
+    await tblLocationList.SetupGrid();
+    bool eof = tblLocationList.Recordset == null; // DN
+while (tblLocationList.RecordCount < tblLocationList.StopRecord || SameString(tblLocationList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblLocationList.RowIndex, "$rowindex$") &&
+        (!tblLocationList.IsGridAdd || tblLocationList.CurrentMode == "copy") &&
+        (!((tblLocationList.IsCopy || tblLocationList.IsAdd) && tblLocationList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblLocationList.Recordset.ReadAsync();
+    tblLocationList.RecordCount++;
+    if (tblLocationList.RecordCount >= tblLocationList.StartRecord) {
+        await tblLocationList.SetupRow();
+<div class="@(tblLocationList.GetMultiColumnColClass())" @Html.Raw(tblLocationList.RowAttributes)>
+<div class="@(tblLocationList.MultiColumnCardClass)">
+    @if (tblLocationList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblLocationList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblLocationList.ListOptions.Tag = "div";
+    tblLocationList.ListOptions.RenderBody(tblLocationList.MultiColumnListOptionsPosition, tblLocationList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblLocationList.int_Location_Id.Visible) { // tblLocationList.int_Location_Id.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_int_Location_Id">
+            <div class="col col-sm-4 tblLocation_int_Location_Id">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Location_Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.int_Location_Id.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Location_Id.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Location_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_int_Location_Id">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.int_Location_Id.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.int_Location_Id.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Location_Id.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Location_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Name.Visible) { // tblLocationList.str_Name.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Name">
+            <div class="col col-sm-4 tblLocation_str_Name">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Name.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Name.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Name">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Name.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Name.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Name.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Code.Visible) { // tblLocationList.str_Code.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Code">
+            <div class="col col-sm-4 tblLocation_str_Code">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Code))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Code.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Code.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Code.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Code">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Code.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Code.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Code.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Code.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Location_Type.Visible) { // tblLocationList.str_Location_Type.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Location_Type">
+            <div class="col col-sm-4 tblLocation_str_Location_Type">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Location_Type))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Location_Type.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Location_Type.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Location_Type.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Location_Type">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Location_Type.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Location_Type.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Location_Type.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Location_Type.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Address1.Visible) { // tblLocationList.str_Address1.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Address1">
+            <div class="col col-sm-4 tblLocation_str_Address1">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Address1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Address1.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Address1.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Address1.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Address1">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Address1.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Address1.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Address1.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Address1.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Address2.Visible) { // tblLocationList.str_Address2.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Address2">
+            <div class="col col-sm-4 tblLocation_str_Address2">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Address2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Address2.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Address2.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Address2.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Address2">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Address2.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Address2.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Address2.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Address2.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_City.Visible) { // tblLocationList.str_City.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_City">
+            <div class="col col-sm-4 tblLocation_str_City">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_City))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_City.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_City.ViewAttributes)>
+@Html.Raw(tblLocationList.str_City.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_City">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_City.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_City.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_City.ViewAttributes)>
+@Html.Raw(tblLocationList.str_City.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.int_State.Visible) { // tblLocationList.int_State.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_int_State">
+            <div class="col col-sm-4 tblLocation_int_State">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_State))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.int_State.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_State.ViewAttributes)>
+@Html.Raw(tblLocationList.int_State.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_int_State">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.int_State.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.int_State.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_State.ViewAttributes)>
+@Html.Raw(tblLocationList.int_State.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Zip.Visible) { // tblLocationList.str_Zip.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Zip">
+            <div class="col col-sm-4 tblLocation_str_Zip">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Zip))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Zip.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Zip.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Zip.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Zip">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Zip.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Zip.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Zip.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Zip.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_County.Visible) { // tblLocationList.str_County.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_County">
+            <div class="col col-sm-4 tblLocation_str_County">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_County))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_County.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_County.ViewAttributes)>
+@Html.Raw(tblLocationList.str_County.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_County">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_County.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_County.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_County.ViewAttributes)>
+@Html.Raw(tblLocationList.str_County.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Manager.Visible) { // tblLocationList.str_Manager.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Manager">
+            <div class="col col-sm-4 tblLocation_str_Manager">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Manager))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Manager.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Manager.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Manager.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Manager">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Manager.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Manager.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Manager.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Manager.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Phone_Main.Visible) { // tblLocationList.str_Phone_Main.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Phone_Main">
+            <div class="col col-sm-4 tblLocation_str_Phone_Main">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Phone_Main))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Phone_Main.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Phone_Main.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Main.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Phone_Main">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Phone_Main.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Phone_Main.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Phone_Main.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Main.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Phone_Fax.Visible) { // tblLocationList.str_Phone_Fax.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Phone_Fax">
+            <div class="col col-sm-4 tblLocation_str_Phone_Fax">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Phone_Fax))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Phone_Fax.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Phone_Fax.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Fax.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Phone_Fax">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Phone_Fax.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Phone_Fax.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Phone_Fax.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Fax.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Phone_Other.Visible) { // tblLocationList.str_Phone_Other.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Phone_Other">
+            <div class="col col-sm-4 tblLocation_str_Phone_Other">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Phone_Other))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Phone_Other.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Phone_Other.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Other.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Phone_Other">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Phone_Other.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Phone_Other.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Phone_Other.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Phone_Other.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Notes.Visible) { // tblLocationList.str_Notes.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Notes">
+            <div class="col col-sm-4 tblLocation_str_Notes">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Notes))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Notes.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Notes.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Notes.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Notes">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Notes.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Notes.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Notes.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Notes.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.int_Status.Visible) { // tblLocationList.int_Status.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_int_Status">
+            <div class="col col-sm-4 tblLocation_int_Status">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Status))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.int_Status.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Status.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_int_Status">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.int_Status.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.int_Status.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Status.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.date_Created.Visible) { // tblLocationList.date_Created.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_date_Created">
+            <div class="col col-sm-4 tblLocation_date_Created">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.date_Created))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.date_Created.CellAttributes)>
+<span @Html.Raw(tblLocationList.date_Created.ViewAttributes)>
+@Html.Raw(tblLocationList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_date_Created">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.date_Created.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.date_Created.CellAttributes)>
+<span @Html.Raw(tblLocationList.date_Created.ViewAttributes)>
+@Html.Raw(tblLocationList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.date_Modified.Visible) { // tblLocationList.date_Modified.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_date_Modified">
+            <div class="col col-sm-4 tblLocation_date_Modified">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.date_Modified))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblLocationList.date_Modified.ViewAttributes)>
+@Html.Raw(tblLocationList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_date_Modified">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.date_Modified.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblLocationList.date_Modified.ViewAttributes)>
+@Html.Raw(tblLocationList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.int_Created_By.Visible) { // tblLocationList.int_Created_By.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_int_Created_By">
+            <div class="col col-sm-4 tblLocation_int_Created_By">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Created_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_int_Created_By">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.int_Created_By.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.int_Modified_By.Visible) { // tblLocationList.int_Modified_By.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_int_Modified_By">
+            <div class="col col-sm-4 tblLocation_int_Modified_By">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_Modified_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_int_Modified_By">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.int_Modified_By.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblLocationList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.bit_IsDeleted.Visible) { // tblLocationList.bit_IsDeleted.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_bit_IsDeleted">
+            <div class="col col-sm-4 tblLocation_bit_IsDeleted">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.bit_IsDeleted))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.bit_IsDeleted.CellAttributes)>
+<span @Html.Raw(tblLocationList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_bit_IsDeleted">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.bit_IsDeleted.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.bit_IsDeleted.CellAttributes)>
+<span @Html.Raw(tblLocationList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_LocCapacity.Visible) { // tblLocationList.str_LocCapacity.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_LocCapacity">
+            <div class="col col-sm-4 tblLocation_str_LocCapacity">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_LocCapacity))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_LocCapacity.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_LocCapacity.ViewAttributes)>
+@Html.Raw(tblLocationList.str_LocCapacity.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_LocCapacity">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_LocCapacity.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_LocCapacity.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_LocCapacity.ViewAttributes)>
+@Html.Raw(tblLocationList.str_LocCapacity.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_ContactEmail.Visible) { // tblLocationList.str_ContactEmail.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_ContactEmail">
+            <div class="col col-sm-4 tblLocation_str_ContactEmail">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_ContactEmail))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_ContactEmail.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_ContactEmail.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ContactEmail.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_ContactEmail">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_ContactEmail.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_ContactEmail.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_ContactEmail.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ContactEmail.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_SchoolHours.Visible) { // tblLocationList.str_SchoolHours.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_SchoolHours">
+            <div class="col col-sm-4 tblLocation_str_SchoolHours">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_SchoolHours))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_SchoolHours.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_SchoolHours.ViewAttributes)>
+@Html.Raw(tblLocationList.str_SchoolHours.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_SchoolHours">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_SchoolHours.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_SchoolHours.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_SchoolHours.ViewAttributes)>
+@Html.Raw(tblLocationList.str_SchoolHours.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_EmerName.Visible) { // tblLocationList.str_EmerName.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_EmerName">
+            <div class="col col-sm-4 tblLocation_str_EmerName">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_EmerName))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_EmerName.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_EmerName.ViewAttributes)>
+@Html.Raw(tblLocationList.str_EmerName.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_EmerName">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_EmerName.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_EmerName.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_EmerName.ViewAttributes)>
+@Html.Raw(tblLocationList.str_EmerName.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_EmerPhone.Visible) { // tblLocationList.str_EmerPhone.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_EmerPhone">
+            <div class="col col-sm-4 tblLocation_str_EmerPhone">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_EmerPhone))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_EmerPhone.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_EmerPhone.ViewAttributes)>
+@Html.Raw(tblLocationList.str_EmerPhone.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_EmerPhone">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_EmerPhone.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_EmerPhone.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_EmerPhone.ViewAttributes)>
+@Html.Raw(tblLocationList.str_EmerPhone.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Room.Visible) { // tblLocationList.str_Room.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Room">
+            <div class="col col-sm-4 tblLocation_str_Room">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Room))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Room.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Room.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Room.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Room">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Room.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Room.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Room.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Room.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_Email_Content.Visible) { // tblLocationList.str_Email_Content.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_Email_Content">
+            <div class="col col-sm-4 tblLocation_str_Email_Content">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_Email_Content))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_Email_Content.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Email_Content.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Email_Content.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_Email_Content">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_Email_Content.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_Email_Content.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_Email_Content.ViewAttributes)>
+@Html.Raw(tblLocationList.str_Email_Content.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.bit_appointmentColor.Visible) { // tblLocationList.bit_appointmentColor.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_bit_appointmentColor">
+            <div class="col col-sm-4 tblLocation_bit_appointmentColor">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.bit_appointmentColor))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.bit_appointmentColor.CellAttributes)>
+<span @Html.Raw(tblLocationList.bit_appointmentColor.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_appointmentColor_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.bit_appointmentColor.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.bit_appointmentColor.CurrentValue))">
+    <label class="form-check-label" for="x_bit_appointmentColor_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_bit_appointmentColor">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.bit_appointmentColor.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.bit_appointmentColor.CellAttributes)>
+<span @Html.Raw(tblLocationList.bit_appointmentColor.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_appointmentColor_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.bit_appointmentColor.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.bit_appointmentColor.CurrentValue))">
+    <label class="form-check-label" for="x_bit_appointmentColor_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_appointmentColorCode.Visible) { // tblLocationList.str_appointmentColorCode.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_appointmentColorCode">
+            <div class="col col-sm-4 tblLocation_str_appointmentColorCode">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_appointmentColorCode))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_appointmentColorCode.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_appointmentColorCode.ViewAttributes)>
+@Html.Raw(tblLocationList.str_appointmentColorCode.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_appointmentColorCode">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_appointmentColorCode.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_appointmentColorCode.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_appointmentColorCode.ViewAttributes)>
+@Html.Raw(tblLocationList.str_appointmentColorCode.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.isKnowledgeTest.Visible) { // tblLocationList.isKnowledgeTest.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_isKnowledgeTest">
+            <div class="col col-sm-4 tblLocation_isKnowledgeTest">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.isKnowledgeTest))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.isKnowledgeTest.CellAttributes)>
+<span @Html.Raw(tblLocationList.isKnowledgeTest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isKnowledgeTest_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.isKnowledgeTest.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.isKnowledgeTest.CurrentValue))">
+    <label class="form-check-label" for="x_isKnowledgeTest_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_isKnowledgeTest">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.isKnowledgeTest.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.isKnowledgeTest.CellAttributes)>
+<span @Html.Raw(tblLocationList.isKnowledgeTest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isKnowledgeTest_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.isKnowledgeTest.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.isKnowledgeTest.CurrentValue))">
+    <label class="form-check-label" for="x_isKnowledgeTest_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.isRoadTest.Visible) { // tblLocationList.isRoadTest.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_isRoadTest">
+            <div class="col col-sm-4 tblLocation_isRoadTest">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.isRoadTest))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.isRoadTest.CellAttributes)>
+<span @Html.Raw(tblLocationList.isRoadTest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isRoadTest_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.isRoadTest.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.isRoadTest.CurrentValue))">
+    <label class="form-check-label" for="x_isRoadTest_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_isRoadTest">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.isRoadTest.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.isRoadTest.CellAttributes)>
+<span @Html.Raw(tblLocationList.isRoadTest.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_isRoadTest_@(tblLocationList.RowCount)" class="form-check-input" value="@(tblLocationList.isRoadTest.GetViewValue())" disabled checked="@(ConvertToBool(tblLocationList.isRoadTest.CurrentValue))">
+    <label class="form-check-label" for="x_isRoadTest_@(tblLocationList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.dec_Latitude.Visible) { // tblLocationList.dec_Latitude.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_dec_Latitude">
+            <div class="col col-sm-4 tblLocation_dec_Latitude">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.dec_Latitude))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.dec_Latitude.CellAttributes)>
+<span @Html.Raw(tblLocationList.dec_Latitude.ViewAttributes)>
+@Html.Raw(tblLocationList.dec_Latitude.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_dec_Latitude">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.dec_Latitude.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.dec_Latitude.CellAttributes)>
+<span @Html.Raw(tblLocationList.dec_Latitude.ViewAttributes)>
+@Html.Raw(tblLocationList.dec_Latitude.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.dec_Longitude.Visible) { // tblLocationList.dec_Longitude.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_dec_Longitude">
+            <div class="col col-sm-4 tblLocation_dec_Longitude">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.dec_Longitude))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.dec_Longitude.CellAttributes)>
+<span @Html.Raw(tblLocationList.dec_Longitude.ViewAttributes)>
+@Html.Raw(tblLocationList.dec_Longitude.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_dec_Longitude">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.dec_Longitude.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.dec_Longitude.CellAttributes)>
+<span @Html.Raw(tblLocationList.dec_Longitude.ViewAttributes)>
+@Html.Raw(tblLocationList.dec_Longitude.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_nameAr.Visible) { // tblLocationList.str_nameAr.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_nameAr">
+            <div class="col col-sm-4 tblLocation_str_nameAr">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_nameAr))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_nameAr.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_nameAr.ViewAttributes)>
+@Html.Raw(tblLocationList.str_nameAr.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_nameAr">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_nameAr.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_nameAr.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_nameAr.ViewAttributes)>
+@Html.Raw(tblLocationList.str_nameAr.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.IsDistanceBasedScheduling.Visible) { // tblLocationList.IsDistanceBasedScheduling.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_IsDistanceBasedScheduling">
+            <div class="col col-sm-4 tblLocation_IsDistanceBasedScheduling">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.IsDistanceBasedScheduling))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.IsDistanceBasedScheduling.CellAttributes)>
+<span @Html.Raw(tblLocationList.IsDistanceBasedScheduling.ViewAttributes)>
+@Html.Raw(tblLocationList.IsDistanceBasedScheduling.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_IsDistanceBasedScheduling">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.IsDistanceBasedScheduling.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.IsDistanceBasedScheduling.CellAttributes)>
+<span @Html.Raw(tblLocationList.IsDistanceBasedScheduling.ViewAttributes)>
+@Html.Raw(tblLocationList.IsDistanceBasedScheduling.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_ZoomEmail.Visible) { // tblLocationList.str_ZoomEmail.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_ZoomEmail">
+            <div class="col col-sm-4 tblLocation_str_ZoomEmail">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_ZoomEmail))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_ZoomEmail.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_ZoomEmail.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ZoomEmail.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_ZoomEmail">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_ZoomEmail.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_ZoomEmail.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_ZoomEmail.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ZoomEmail.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.str_ProviderLocationId.Visible) { // tblLocationList.str_ProviderLocationId.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_str_ProviderLocationId">
+            <div class="col col-sm-4 tblLocation_str_ProviderLocationId">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.str_ProviderLocationId))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.str_ProviderLocationId.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_ProviderLocationId.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ProviderLocationId.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_str_ProviderLocationId">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.str_ProviderLocationId.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.str_ProviderLocationId.CellAttributes)>
+<span @Html.Raw(tblLocationList.str_ProviderLocationId.ViewAttributes)>
+@Html.Raw(tblLocationList.str_ProviderLocationId.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.int_RoadDistanceCoverage.Visible) { // tblLocationList.int_RoadDistanceCoverage.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_int_RoadDistanceCoverage">
+            <div class="col col-sm-4 tblLocation_int_RoadDistanceCoverage">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.int_RoadDistanceCoverage))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.int_RoadDistanceCoverage.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_RoadDistanceCoverage.ViewAttributes)>
+@Html.Raw(tblLocationList.int_RoadDistanceCoverage.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_int_RoadDistanceCoverage">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.int_RoadDistanceCoverage.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.int_RoadDistanceCoverage.CellAttributes)>
+<span @Html.Raw(tblLocationList.int_RoadDistanceCoverage.ViewAttributes)>
+@Html.Raw(tblLocationList.int_RoadDistanceCoverage.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblLocationList.IsCashDrawer.Visible) { // tblLocationList.IsCashDrawer.Visible (begin)
+        if (tblLocationList.RowType == RowType.View) { // View record
+        <div class="row tblLocation_IsCashDrawer">
+            <div class="col col-sm-4 tblLocation_IsCashDrawer">@Html.Raw(tblLocationList.RenderFieldHeader(tblLocationList.IsCashDrawer))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblLocationList.IsCashDrawer.CellAttributes)>
+<span @Html.Raw(tblLocationList.IsCashDrawer.ViewAttributes)>
+@Html.Raw(tblLocationList.IsCashDrawer.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblLocation_IsCashDrawer">
+            <label class="@(tblLocationList.LeftColumnClass)">@Html.Raw(tblLocationList.IsCashDrawer.Caption)</label>
+            <div class="@(tblLocationList.RightColumnClass)"><div @Html.Raw(tblLocationList.IsCashDrawer.CellAttributes)>
+<span @Html.Raw(tblLocationList.IsCashDrawer.ViewAttributes)>
+@Html.Raw(tblLocationList.IsCashDrawer.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblLocationList.IsExport()) {
+    if (tblLocationList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblLocationList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblLocationList.ListOptions.Tag = "div";
+}
+@tblLocationList.ListOptions.RenderBody(tblLocationList.MultiColumnListOptionsPosition, tblLocationList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblLocationList.RowIndex, "$rowindex$"))
+        tblLocationList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblLocationList.IsCopy || tblLocationList.IsAdd) && tblLocationList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblLocationList.RowIndex = 1;
+} @* End While *@
+} @* tblLocationList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblLocationList.CurrentAction) && !tblLocationList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblLocationList.CloseRecordset(); }

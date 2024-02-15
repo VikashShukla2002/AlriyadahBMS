@@ -1,0 +1,1047 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStaffAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStaffAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStaffAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStaff: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblStaffadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStaffadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [fields.str_Middle_Name.visible && fields.str_Middle_Name.required ? ew.Validators.required(fields.str_Middle_Name.caption) : null], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["str_Username", [fields.str_Username.visible && fields.str_Username.required ? ew.Validators.required(fields.str_Username.caption) : null], fields.str_Username.isInvalid],
+            ["str_Password", [fields.str_Password.visible && fields.str_Password.required ? ew.Validators.required(fields.str_Password.caption) : null], fields.str_Password.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null, ew.Validators.integer], fields.NationalID.isInvalid],
+            ["str_NationalID_Iqama", [fields.str_NationalID_Iqama.visible && fields.str_NationalID_Iqama.required ? ew.Validators.required(fields.str_NationalID_Iqama.caption) : null], fields.str_NationalID_Iqama.isInvalid],
+            ["str_Address", [fields.str_Address.visible && fields.str_Address.required ? ew.Validators.required(fields.str_Address.caption) : null], fields.str_Address.isInvalid],
+            ["str_City", [fields.str_City.visible && fields.str_City.required ? ew.Validators.required(fields.str_City.caption) : null], fields.str_City.isInvalid],
+            ["int_State", [fields.int_State.visible && fields.int_State.required ? ew.Validators.required(fields.int_State.caption) : null], fields.int_State.isInvalid],
+            ["str_Zip", [fields.str_Zip.visible && fields.str_Zip.required ? ew.Validators.required(fields.str_Zip.caption) : null], fields.str_Zip.isInvalid],
+            ["str_Home_Phone", [fields.str_Home_Phone.visible && fields.str_Home_Phone.required ? ew.Validators.required(fields.str_Home_Phone.caption) : null], fields.str_Home_Phone.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["str_Email", [fields.str_Email.visible && fields.str_Email.required ? ew.Validators.required(fields.str_Email.caption) : null, ew.Validators.email], fields.str_Email.isInvalid],
+            ["User_Role", [fields.User_Role.visible && fields.User_Role.required ? ew.Validators.required(fields.User_Role.caption) : null], fields.User_Role.isInvalid],
+            ["UserlevelID", [fields.UserlevelID.visible && fields.UserlevelID.required ? ew.Validators.required(fields.UserlevelID.caption) : null], fields.UserlevelID.isInvalid],
+            ["Activated", [fields.Activated.visible && fields.Activated.required ? ew.Validators.required(fields.Activated.caption) : null], fields.Activated.isInvalid],
+            ["Supervisor_Username", [fields.Supervisor_Username.visible && fields.Supervisor_Username.required ? ew.Validators.required(fields.Supervisor_Username.caption) : null], fields.Supervisor_Username.isInvalid],
+            ["str_Staff_Username", [fields.str_Staff_Username.visible && fields.str_Staff_Username.required ? ew.Validators.required(fields.str_Staff_Username.caption) : null], fields.str_Staff_Username.isInvalid],
+            ["Hijri_Year", [fields.Hijri_Year.visible && fields.Hijri_Year.required ? ew.Validators.required(fields.Hijri_Year.caption) : null], fields.Hijri_Year.isInvalid],
+            ["Hijri_Month", [fields.Hijri_Month.visible && fields.Hijri_Month.required ? ew.Validators.required(fields.Hijri_Month.caption) : null], fields.Hijri_Month.isInvalid],
+            ["Hijri_Day", [fields.Hijri_Day.visible && fields.Hijri_Day.required ? ew.Validators.required(fields.Hijri_Day.caption) : null], fields.Hijri_Day.isInvalid],
+            ["int_Nationality", [fields.int_Nationality.visible && fields.int_Nationality.required ? ew.Validators.required(fields.int_Nationality.caption) : null], fields.int_Nationality.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null], fields.date_Created.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null], fields.int_Created_By.isInvalid],
+            ["str_Emergency_Contact_Name", [fields.str_Emergency_Contact_Name.visible && fields.str_Emergency_Contact_Name.required ? ew.Validators.required(fields.str_Emergency_Contact_Name.caption) : null], fields.str_Emergency_Contact_Name.isInvalid],
+            ["str_Emergency_Contact_Phone", [fields.str_Emergency_Contact_Phone.visible && fields.str_Emergency_Contact_Phone.required ? ew.Validators.required(fields.str_Emergency_Contact_Phone.caption) : null], fields.str_Emergency_Contact_Phone.isInvalid],
+            ["str_Emergency_Contact_Relation", [fields.str_Emergency_Contact_Relation.visible && fields.str_Emergency_Contact_Relation.required ? ew.Validators.required(fields.str_Emergency_Contact_Relation.caption) : null], fields.str_Emergency_Contact_Relation.isInvalid],
+            ["Absherphoto", [fields.Absherphoto.visible && fields.Absherphoto.required ? ew.Validators.fileRequired(fields.Absherphoto.caption) : null], fields.Absherphoto.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_City": @Html.Raw(tblStaffAdd.str_City.ToClientList(tblStaffAdd)),
+            "int_State": @Html.Raw(tblStaffAdd.int_State.ToClientList(tblStaffAdd)),
+            "UserlevelID": @Html.Raw(tblStaffAdd.UserlevelID.ToClientList(tblStaffAdd)),
+            "Activated": @Html.Raw(tblStaffAdd.Activated.ToClientList(tblStaffAdd)),
+            "Supervisor_Username": @Html.Raw(tblStaffAdd.Supervisor_Username.ToClientList(tblStaffAdd)),
+            "Hijri_Year": @Html.Raw(tblStaffAdd.Hijri_Year.ToClientList(tblStaffAdd)),
+            "Hijri_Month": @Html.Raw(tblStaffAdd.Hijri_Month.ToClientList(tblStaffAdd)),
+            "Hijri_Day": @Html.Raw(tblStaffAdd.Hijri_Day.ToClientList(tblStaffAdd)),
+            "int_Nationality": @Html.Raw(tblStaffAdd.int_Nationality.ToClientList(tblStaffAdd)),
+            "str_Emergency_Contact_Relation": @Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.ToClientList(tblStaffAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblStaffAdd.ShowPageHeader()
+@tblStaffAdd.ShowMessages()
+<form name="ftblStaffadd" id="ftblStaffadd" class="@(tblStaffAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblStaffAdd.IsConfirm) { // Confirm page
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="confirm" id="confirm" value="confirm">
+} else {
+<input type="hidden" name="action" id="action" value="confirm">
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblStaffAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblStaffAdd.OldKeyName)" value="@Html.Raw(tblStaffAdd.OldKey)">
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblStaffAdd.MultiPages.ContainerClasses)" id="pages_tblStaffAdd"><!-- multi-page tabs -->
+    <ul class="@(tblStaffAdd.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblStaffAdd.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblStaff1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff1" aria-selected="@(ConvertToJson(tblStaffAdd.MultiPages.IsActive(1)))">@Html.Raw(tblStaffAdd.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblStaffAdd.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblStaff2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff2" aria-selected="@(ConvertToJson(tblStaffAdd.MultiPages.IsActive(2)))">@Html.Raw(tblStaffAdd.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblStaffAdd.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblStaff3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff3" aria-selected="@(ConvertToJson(tblStaffAdd.MultiPages.IsActive(3)))">@Html.Raw(tblStaffAdd.PageCaption(3))</button></li>
+        <li class="nav-item"><button class="@(tblStaffAdd.MultiPages.NavLinkClasses(4))" data-bs-target="#tab_tblStaff4" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblStaff4" aria-selected="@(ConvertToJson(tblStaffAdd.MultiPages.IsActive(4)))">@Html.Raw(tblStaffAdd.PageCaption(4))</button></li>
+    </ul>
+    <div class="@(tblStaffAdd.MultiPages.TabContentClasses)"><!-- multi-page .tab-content -->
+        <div class="@(tblStaffAdd.MultiPages.TabPaneClasses(1))" id="tab_tblStaff1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblStaffAdd.str_First_Name.Visible) { // tblStaffAdd.str_First_Name.Visible (begin)
+    <div id="r_str_First_Name" @Html.Raw(tblStaffAdd.str_First_Name.RowAttributes)>
+        <label id="elh_tblStaff_str_First_Name" for="x_str_First_Name" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_First_Name.Caption)@Html.Raw(tblStaffAdd.str_First_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_First_Name.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_First_Name (begin)
+<span id="el_tblStaff_str_First_Name">
+<input type="@(tblStaffAdd.str_First_Name.InputTextType)" name="x_str_First_Name" id="x_str_First_Name" data-table="tblStaff" data-field="x_str_First_Name" value="@Html.Raw(tblStaffAdd.str_First_Name.EditValue)" data-page="1" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_First_Name.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_First_Name.FormatPattern)"@Html.Raw(tblStaffAdd.str_First_Name.EditAttributes) aria-describedby="x_str_First_Name_help">
+@Html.Raw(tblStaffAdd.str_First_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_First_Name.GetErrorMessage())</div>
+</span>
+} else { // str_First_Name (confirm)
+<span id="el_tblStaff_str_First_Name">
+<span @Html.Raw(tblStaffAdd.str_First_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_First_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_First_Name" data-hidden="1" data-page="1" name="x_str_First_Name" id="x_str_First_Name" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_First_Name.FormValue))">
+</span>
+} @* str_First_Name (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_First_Name.Visible (end) *@
+@if (tblStaffAdd.str_Middle_Name.Visible) { // tblStaffAdd.str_Middle_Name.Visible (begin)
+    <div id="r_str_Middle_Name" @Html.Raw(tblStaffAdd.str_Middle_Name.RowAttributes)>
+        <label id="elh_tblStaff_str_Middle_Name" for="x_str_Middle_Name" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Middle_Name.Caption)@Html.Raw(tblStaffAdd.str_Middle_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Middle_Name.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Middle_Name (begin)
+<span id="el_tblStaff_str_Middle_Name">
+<input type="@(tblStaffAdd.str_Middle_Name.InputTextType)" name="x_str_Middle_Name" id="x_str_Middle_Name" data-table="tblStaff" data-field="x_str_Middle_Name" value="@Html.Raw(tblStaffAdd.str_Middle_Name.EditValue)" data-page="1" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Middle_Name.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Middle_Name.FormatPattern)"@Html.Raw(tblStaffAdd.str_Middle_Name.EditAttributes) aria-describedby="x_str_Middle_Name_help">
+@Html.Raw(tblStaffAdd.str_Middle_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Middle_Name.GetErrorMessage())</div>
+</span>
+} else { // str_Middle_Name (confirm)
+<span id="el_tblStaff_str_Middle_Name">
+<span @Html.Raw(tblStaffAdd.str_Middle_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Middle_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Middle_Name" data-hidden="1" data-page="1" name="x_str_Middle_Name" id="x_str_Middle_Name" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Middle_Name.FormValue))">
+</span>
+} @* str_Middle_Name (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Middle_Name.Visible (end) *@
+@if (tblStaffAdd.str_Last_Name.Visible) { // tblStaffAdd.str_Last_Name.Visible (begin)
+    <div id="r_str_Last_Name" @Html.Raw(tblStaffAdd.str_Last_Name.RowAttributes)>
+        <label id="elh_tblStaff_str_Last_Name" for="x_str_Last_Name" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Last_Name.Caption)@Html.Raw(tblStaffAdd.str_Last_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Last_Name.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Last_Name (begin)
+<span id="el_tblStaff_str_Last_Name">
+<input type="@(tblStaffAdd.str_Last_Name.InputTextType)" name="x_str_Last_Name" id="x_str_Last_Name" data-table="tblStaff" data-field="x_str_Last_Name" value="@Html.Raw(tblStaffAdd.str_Last_Name.EditValue)" data-page="1" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Last_Name.FormatPattern)"@Html.Raw(tblStaffAdd.str_Last_Name.EditAttributes) aria-describedby="x_str_Last_Name_help">
+@Html.Raw(tblStaffAdd.str_Last_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Last_Name.GetErrorMessage())</div>
+</span>
+} else { // str_Last_Name (confirm)
+<span id="el_tblStaff_str_Last_Name">
+<span @Html.Raw(tblStaffAdd.str_Last_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Last_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Last_Name" data-hidden="1" data-page="1" name="x_str_Last_Name" id="x_str_Last_Name" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Last_Name.FormValue))">
+</span>
+} @* str_Last_Name (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Last_Name.Visible (end) *@
+    @if (!tblStaffAdd.IsConfirm) { // str_Username (begin)
+    } else { // str_Username (confirm)
+    <span id="el_tblStaff_str_Username">
+    <input type="hidden" data-table="tblStaff" data-field="x_str_Username" data-hidden="1" data-page="1" name="x_str_Username" id="x_str_Username" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Username.FormValue))">
+    </span>
+    } @* str_Username (end) *@
+@if (tblStaffAdd.NationalID.Visible) { // tblStaffAdd.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblStaffAdd.NationalID.RowAttributes)>
+        <label id="elh_tblStaff_NationalID" for="x_NationalID" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.NationalID.Caption)@Html.Raw(tblStaffAdd.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.NationalID.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // NationalID (begin)
+<span id="el_tblStaff_NationalID">
+<input type="@(tblStaffAdd.NationalID.InputTextType)" name="x_NationalID" id="x_NationalID" data-table="tblStaff" data-field="x_NationalID" value="@Html.Raw(tblStaffAdd.NationalID.EditValue)" data-page="1" size="30" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.NationalID.PlaceHolder))" data-format-pattern="@(tblStaffAdd.NationalID.FormatPattern)"@Html.Raw(tblStaffAdd.NationalID.EditAttributes) aria-describedby="x_NationalID_help">
+@Html.Raw(tblStaffAdd.NationalID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.NationalID.GetErrorMessage())</div>
+</span>
+} else { // NationalID (confirm)
+<span id="el_tblStaff_NationalID">
+<span @Html.Raw(tblStaffAdd.NationalID.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.NationalID.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_NationalID" data-hidden="1" data-page="1" name="x_NationalID" id="x_NationalID" value="@Html.Raw(HtmlEncode(tblStaffAdd.NationalID.FormValue))">
+</span>
+} @* NationalID (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.NationalID.Visible (end) *@
+@if (tblStaffAdd.str_Cell_Phone.Visible) { // tblStaffAdd.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" @Html.Raw(tblStaffAdd.str_Cell_Phone.RowAttributes)>
+        <label id="elh_tblStaff_str_Cell_Phone" for="x_str_Cell_Phone" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Cell_Phone.Caption)@Html.Raw(tblStaffAdd.str_Cell_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Cell_Phone.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Cell_Phone (begin)
+<span id="el_tblStaff_str_Cell_Phone">
+<input type="@(tblStaffAdd.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblStaff" data-field="x_str_Cell_Phone" value="@Html.Raw(tblStaffAdd.str_Cell_Phone.EditValue)" data-page="1" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Cell_Phone.FormatPattern)"@Html.Raw(tblStaffAdd.str_Cell_Phone.EditAttributes) aria-describedby="x_str_Cell_Phone_help">
+@Html.Raw(tblStaffAdd.str_Cell_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Cell_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Cell_Phone (confirm)
+<span id="el_tblStaff_str_Cell_Phone">
+<span @Html.Raw(tblStaffAdd.str_Cell_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Cell_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Cell_Phone" data-hidden="1" data-page="1" name="x_str_Cell_Phone" id="x_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Cell_Phone.FormValue))">
+</span>
+} @* str_Cell_Phone (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Cell_Phone.Visible (end) *@
+@if (tblStaffAdd.str_Email.Visible) { // tblStaffAdd.str_Email.Visible (begin)
+    <div id="r_str_Email" @Html.Raw(tblStaffAdd.str_Email.RowAttributes)>
+        <label id="elh_tblStaff_str_Email" for="x_str_Email" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Email.Caption)@Html.Raw(tblStaffAdd.str_Email.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Email.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Email (begin)
+<span id="el_tblStaff_str_Email">
+<input type="@(tblStaffAdd.str_Email.InputTextType)" name="x_str_Email" id="x_str_Email" data-table="tblStaff" data-field="x_str_Email" value="@Html.Raw(tblStaffAdd.str_Email.EditValue)" data-page="1" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Email.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Email.FormatPattern)"@Html.Raw(tblStaffAdd.str_Email.EditAttributes) aria-describedby="x_str_Email_help">
+@Html.Raw(tblStaffAdd.str_Email.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Email.GetErrorMessage())</div>
+</span>
+} else { // str_Email (confirm)
+<span id="el_tblStaff_str_Email">
+<span @Html.Raw(tblStaffAdd.str_Email.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Email.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Email" data-hidden="1" data-page="1" name="x_str_Email" id="x_str_Email" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Email.FormValue))">
+</span>
+} @* str_Email (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Email.Visible (end) *@
+@if (tblStaffAdd.Hijri_Year.Visible) { // tblStaffAdd.Hijri_Year.Visible (begin)
+    <div id="r_Hijri_Year" @Html.Raw(tblStaffAdd.Hijri_Year.RowAttributes)>
+        <label id="elh_tblStaff_Hijri_Year" for="x_Hijri_Year" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.Hijri_Year.Caption)@Html.Raw(tblStaffAdd.Hijri_Year.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.Hijri_Year.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // Hijri_Year (begin)
+<span id="el_tblStaff_Hijri_Year">
+    <select
+        id="x_Hijri_Year"
+        name="x_Hijri_Year"
+        class="form-select ew-select@(tblStaffAdd.Hijri_Year.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_Hijri_Year"
+        data-table="tblStaff"
+        data-field="x_Hijri_Year"
+        data-page="1"
+        data-value-separator="@(tblStaffAdd.Hijri_Year.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.Hijri_Year.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.Hijri_Year.EditAttributes)>
+        @(tblStaffAdd.Hijri_Year.SelectOptionListHtml("x_Hijri_Year"))
+    </select>
+    @Html.Raw(tblStaffAdd.Hijri_Year.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.Hijri_Year.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.Hijri_Year.Lookup.GetParamTag(tblStaffAdd, "p_x_Hijri_Year"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_Hijri_Year", selectId: "ftblStaffadd_x_Hijri_Year" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.Hijri_Year?.lookupOptions.length) {
+        options.data = { id: "x_Hijri_Year", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_Hijri_Year", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.Hijri_Year.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // Hijri_Year (confirm)
+<span id="el_tblStaff_Hijri_Year">
+<span @Html.Raw(tblStaffAdd.Hijri_Year.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.Hijri_Year.DisplayValue(tblStaffAdd.Hijri_Year.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_Hijri_Year" data-hidden="1" data-page="1" name="x_Hijri_Year" id="x_Hijri_Year" value="@Html.Raw(HtmlEncode(tblStaffAdd.Hijri_Year.FormValue))">
+</span>
+} @* Hijri_Year (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.Hijri_Year.Visible (end) *@
+@if (tblStaffAdd.Hijri_Month.Visible) { // tblStaffAdd.Hijri_Month.Visible (begin)
+    <div id="r_Hijri_Month" @Html.Raw(tblStaffAdd.Hijri_Month.RowAttributes)>
+        <label id="elh_tblStaff_Hijri_Month" for="x_Hijri_Month" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.Hijri_Month.Caption)@Html.Raw(tblStaffAdd.Hijri_Month.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.Hijri_Month.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // Hijri_Month (begin)
+<span id="el_tblStaff_Hijri_Month">
+    <select
+        id="x_Hijri_Month"
+        name="x_Hijri_Month"
+        class="form-select ew-select@(tblStaffAdd.Hijri_Month.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_Hijri_Month"
+        data-table="tblStaff"
+        data-field="x_Hijri_Month"
+        data-page="1"
+        data-value-separator="@(tblStaffAdd.Hijri_Month.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.Hijri_Month.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.Hijri_Month.EditAttributes)>
+        @(tblStaffAdd.Hijri_Month.SelectOptionListHtml("x_Hijri_Month"))
+    </select>
+    @Html.Raw(tblStaffAdd.Hijri_Month.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.Hijri_Month.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.Hijri_Month.Lookup.GetParamTag(tblStaffAdd, "p_x_Hijri_Month"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_Hijri_Month", selectId: "ftblStaffadd_x_Hijri_Month" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.Hijri_Month?.lookupOptions.length) {
+        options.data = { id: "x_Hijri_Month", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_Hijri_Month", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.Hijri_Month.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // Hijri_Month (confirm)
+<span id="el_tblStaff_Hijri_Month">
+<span @Html.Raw(tblStaffAdd.Hijri_Month.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.Hijri_Month.DisplayValue(tblStaffAdd.Hijri_Month.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_Hijri_Month" data-hidden="1" data-page="1" name="x_Hijri_Month" id="x_Hijri_Month" value="@Html.Raw(HtmlEncode(tblStaffAdd.Hijri_Month.FormValue))">
+</span>
+} @* Hijri_Month (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.Hijri_Month.Visible (end) *@
+@if (tblStaffAdd.Hijri_Day.Visible) { // tblStaffAdd.Hijri_Day.Visible (begin)
+    <div id="r_Hijri_Day" @Html.Raw(tblStaffAdd.Hijri_Day.RowAttributes)>
+        <label id="elh_tblStaff_Hijri_Day" for="x_Hijri_Day" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.Hijri_Day.Caption)@Html.Raw(tblStaffAdd.Hijri_Day.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.Hijri_Day.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // Hijri_Day (begin)
+<span id="el_tblStaff_Hijri_Day">
+    <select
+        id="x_Hijri_Day"
+        name="x_Hijri_Day"
+        class="form-select ew-select@(tblStaffAdd.Hijri_Day.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_Hijri_Day"
+        data-table="tblStaff"
+        data-field="x_Hijri_Day"
+        data-page="1"
+        data-value-separator="@(tblStaffAdd.Hijri_Day.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.Hijri_Day.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.Hijri_Day.EditAttributes)>
+        @(tblStaffAdd.Hijri_Day.SelectOptionListHtml("x_Hijri_Day"))
+    </select>
+    @Html.Raw(tblStaffAdd.Hijri_Day.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.Hijri_Day.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.Hijri_Day.Lookup.GetParamTag(tblStaffAdd, "p_x_Hijri_Day"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_Hijri_Day", selectId: "ftblStaffadd_x_Hijri_Day" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.Hijri_Day?.lookupOptions.length) {
+        options.data = { id: "x_Hijri_Day", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_Hijri_Day", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.Hijri_Day.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // Hijri_Day (confirm)
+<span id="el_tblStaff_Hijri_Day">
+<span @Html.Raw(tblStaffAdd.Hijri_Day.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.Hijri_Day.DisplayValue(tblStaffAdd.Hijri_Day.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_Hijri_Day" data-hidden="1" data-page="1" name="x_Hijri_Day" id="x_Hijri_Day" value="@Html.Raw(HtmlEncode(tblStaffAdd.Hijri_Day.FormValue))">
+</span>
+} @* Hijri_Day (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.Hijri_Day.Visible (end) *@
+@if (tblStaffAdd.int_Nationality.Visible) { // tblStaffAdd.int_Nationality.Visible (begin)
+    <div id="r_int_Nationality" @Html.Raw(tblStaffAdd.int_Nationality.RowAttributes)>
+        <label id="elh_tblStaff_int_Nationality" for="x_int_Nationality" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.int_Nationality.Caption)@Html.Raw(tblStaffAdd.int_Nationality.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.int_Nationality.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // int_Nationality (begin)
+<span id="el_tblStaff_int_Nationality">
+    <select
+        id="x_int_Nationality"
+        name="x_int_Nationality"
+        class="form-select ew-select@(tblStaffAdd.int_Nationality.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_int_Nationality"
+        data-table="tblStaff"
+        data-field="x_int_Nationality"
+        data-page="1"
+        data-value-separator="@(tblStaffAdd.int_Nationality.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.int_Nationality.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.int_Nationality.EditAttributes)>
+        @(tblStaffAdd.int_Nationality.SelectOptionListHtml("x_int_Nationality"))
+    </select>
+    @Html.Raw(tblStaffAdd.int_Nationality.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.int_Nationality.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.int_Nationality.Lookup.GetParamTag(tblStaffAdd, "p_x_int_Nationality"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_int_Nationality", selectId: "ftblStaffadd_x_int_Nationality" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.int_Nationality?.lookupOptions.length) {
+        options.data = { id: "x_int_Nationality", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_int_Nationality", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.int_Nationality.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // int_Nationality (confirm)
+<span id="el_tblStaff_int_Nationality">
+<span @Html.Raw(tblStaffAdd.int_Nationality.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.int_Nationality.DisplayValue(tblStaffAdd.int_Nationality.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_int_Nationality" data-hidden="1" data-page="1" name="x_int_Nationality" id="x_int_Nationality" value="@Html.Raw(HtmlEncode(tblStaffAdd.int_Nationality.FormValue))">
+</span>
+} @* int_Nationality (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.int_Nationality.Visible (end) *@
+    @if (!tblStaffAdd.IsConfirm) { // date_Created (begin)
+    } else { // date_Created (confirm)
+    <span id="el_tblStaff_date_Created">
+    <input type="hidden" data-table="tblStaff" data-field="x_date_Created" data-hidden="1" data-page="1" name="x_date_Created" id="x_date_Created" value="@Html.Raw(HtmlEncode(tblStaffAdd.date_Created.FormValue))">
+    </span>
+    } @* date_Created (end) *@
+    @if (!tblStaffAdd.IsConfirm) { // int_Created_By (begin)
+    } else { // int_Created_By (confirm)
+    <span id="el_tblStaff_int_Created_By">
+    <input type="hidden" data-table="tblStaff" data-field="x_int_Created_By" data-hidden="1" data-page="1" name="x_int_Created_By" id="x_int_Created_By" value="@Html.Raw(HtmlEncode(tblStaffAdd.int_Created_By.FormValue))">
+    </span>
+    } @* int_Created_By (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblStaffAdd.MultiPages.TabPaneClasses(2))" id="tab_tblStaff2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblStaffAdd.str_Password.Visible) { // tblStaffAdd.str_Password.Visible (begin)
+    <div id="r_str_Password" @Html.Raw(tblStaffAdd.str_Password.RowAttributes)>
+        <label id="elh_tblStaff_str_Password" for="x_str_Password" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Password.Caption)@Html.Raw(tblStaffAdd.str_Password.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Password.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Password (begin)
+<span id="el_tblStaff_str_Password">
+<input type="@(tblStaffAdd.str_Password.InputTextType)" name="x_str_Password" id="x_str_Password" data-table="tblStaff" data-field="x_str_Password" value="@Html.Raw(tblStaffAdd.str_Password.EditValue)" data-page="2" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Password.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Password.FormatPattern)"@Html.Raw(tblStaffAdd.str_Password.EditAttributes) aria-describedby="x_str_Password_help">
+@Html.Raw(tblStaffAdd.str_Password.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Password.GetErrorMessage())</div>
+</span>
+} else { // str_Password (confirm)
+<span id="el_tblStaff_str_Password">
+<span @Html.Raw(tblStaffAdd.str_Password.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Password.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Password" data-hidden="1" data-page="2" name="x_str_Password" id="x_str_Password" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Password.FormValue))">
+</span>
+} @* str_Password (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Password.Visible (end) *@
+@if (tblStaffAdd.str_NationalID_Iqama.Visible) { // tblStaffAdd.str_NationalID_Iqama.Visible (begin)
+    <div id="r_str_NationalID_Iqama" @Html.Raw(tblStaffAdd.str_NationalID_Iqama.RowAttributes)>
+        <label id="elh_tblStaff_str_NationalID_Iqama" for="x_str_NationalID_Iqama" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_NationalID_Iqama.Caption)@Html.Raw(tblStaffAdd.str_NationalID_Iqama.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_NationalID_Iqama.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_NationalID_Iqama (begin)
+<span id="el_tblStaff_str_NationalID_Iqama">
+<input type="@(tblStaffAdd.str_NationalID_Iqama.InputTextType)" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" data-table="tblStaff" data-field="x_str_NationalID_Iqama" value="@Html.Raw(tblStaffAdd.str_NationalID_Iqama.EditValue)" data-page="2" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_NationalID_Iqama.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_NationalID_Iqama.FormatPattern)"@Html.Raw(tblStaffAdd.str_NationalID_Iqama.EditAttributes) aria-describedby="x_str_NationalID_Iqama_help">
+@Html.Raw(tblStaffAdd.str_NationalID_Iqama.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_NationalID_Iqama.GetErrorMessage())</div>
+</span>
+} else { // str_NationalID_Iqama (confirm)
+<span id="el_tblStaff_str_NationalID_Iqama">
+<span @Html.Raw(tblStaffAdd.str_NationalID_Iqama.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_NationalID_Iqama.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_NationalID_Iqama" data-hidden="1" data-page="2" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_NationalID_Iqama.FormValue))">
+</span>
+} @* str_NationalID_Iqama (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_NationalID_Iqama.Visible (end) *@
+    @if (!tblStaffAdd.IsConfirm) { // User_Role (begin)
+    <span id="el_tblStaff_User_Role">
+    <input type="hidden" data-table="tblStaff" data-field="x_User_Role" data-hidden="1" data-page="2" name="x_User_Role" id="x_User_Role" value="@Html.Raw(HtmlEncode(tblStaffAdd.User_Role.CurrentValue))">
+    </span>
+    } else { // User_Role (confirm)
+    <span id="el_tblStaff_User_Role">
+    <input type="hidden" data-table="tblStaff" data-field="x_User_Role" data-hidden="1" data-page="2" name="x_User_Role" id="x_User_Role" value="@Html.Raw(HtmlEncode(tblStaffAdd.User_Role.FormValue))">
+    </span>
+    } @* User_Role (end) *@
+@if (tblStaffAdd.UserlevelID.Visible) { // tblStaffAdd.UserlevelID.Visible (begin)
+    <div id="r_UserlevelID" @Html.Raw(tblStaffAdd.UserlevelID.RowAttributes)>
+        <label id="elh_tblStaff_UserlevelID" for="x_UserlevelID" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.UserlevelID.Caption)@Html.Raw(tblStaffAdd.UserlevelID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.UserlevelID.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // UserlevelID (begin)
+<span id="el_tblStaff_UserlevelID">
+    <select
+        id="x_UserlevelID"
+        name="x_UserlevelID"
+        class="form-select ew-select@(tblStaffAdd.UserlevelID.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_UserlevelID"
+        data-table="tblStaff"
+        data-field="x_UserlevelID"
+        data-page="2"
+        data-value-separator="@(tblStaffAdd.UserlevelID.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.UserlevelID.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.UserlevelID.EditAttributes)>
+        @(tblStaffAdd.UserlevelID.SelectOptionListHtml("x_UserlevelID"))
+    </select>
+    @Html.Raw(tblStaffAdd.UserlevelID.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.UserlevelID.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.UserlevelID.Lookup.GetParamTag(tblStaffAdd, "p_x_UserlevelID"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_UserlevelID", selectId: "ftblStaffadd_x_UserlevelID" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.UserlevelID?.lookupOptions.length) {
+        options.data = { id: "x_UserlevelID", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_UserlevelID", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.UserlevelID.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // UserlevelID (confirm)
+<span id="el_tblStaff_UserlevelID">
+<span @Html.Raw(tblStaffAdd.UserlevelID.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.UserlevelID.DisplayValue(tblStaffAdd.UserlevelID.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_UserlevelID" data-hidden="1" data-page="2" name="x_UserlevelID" id="x_UserlevelID" value="@Html.Raw(HtmlEncode(tblStaffAdd.UserlevelID.FormValue))">
+</span>
+} @* UserlevelID (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.UserlevelID.Visible (end) *@
+@if (tblStaffAdd.Activated.Visible) { // tblStaffAdd.Activated.Visible (begin)
+    <div id="r_Activated" @Html.Raw(tblStaffAdd.Activated.RowAttributes)>
+        <label id="elh_tblStaff_Activated" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.Activated.Caption)@Html.Raw(tblStaffAdd.Activated.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.Activated.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // Activated (begin)
+<span id="el_tblStaff_Activated">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblStaffAdd.Activated.IsInvalidClass)" data-table="tblStaff" data-field="x_Activated" data-boolean data-page="2" name="x_Activated" id="x_Activated" value="1" checked="@ConvertToBool(tblStaffAdd.Activated.CurrentValue)" @Html.Raw(tblStaffAdd.Activated.EditAttributes) aria-describedby="x_Activated_help">
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.Activated.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblStaffAdd.Activated.GetCustomMessage)
+</span>
+} else { // Activated (confirm)
+<span id="el_tblStaff_Activated">
+<span @Html.Raw(tblStaffAdd.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(tblStaffAdd.RowCount)" class="form-check-input" value="@(tblStaffAdd.Activated.ViewValue)" disabled checked="@(ConvertToBool(tblStaffAdd.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(tblStaffAdd.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblStaff" data-field="x_Activated" data-hidden="1" data-page="2" name="x_Activated" id="x_Activated" value="@Html.Raw(HtmlEncode(tblStaffAdd.Activated.FormValue))">
+</span>
+} @* Activated (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.Activated.Visible (end) *@
+@if (tblStaffAdd.Supervisor_Username.Visible) { // tblStaffAdd.Supervisor_Username.Visible (begin)
+    <div id="r_Supervisor_Username" @Html.Raw(tblStaffAdd.Supervisor_Username.RowAttributes)>
+        <label id="elh_tblStaff_Supervisor_Username" for="x_Supervisor_Username" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.Supervisor_Username.Caption)@Html.Raw(tblStaffAdd.Supervisor_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.Supervisor_Username.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // Supervisor_Username (begin)
+<span id="el_tblStaff_Supervisor_Username">
+    <select
+        id="x_Supervisor_Username"
+        name="x_Supervisor_Username"
+        class="form-select ew-select@(tblStaffAdd.Supervisor_Username.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_Supervisor_Username"
+        data-table="tblStaff"
+        data-field="x_Supervisor_Username"
+        data-page="2"
+        data-value-separator="@(tblStaffAdd.Supervisor_Username.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.Supervisor_Username.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.Supervisor_Username.EditAttributes)>
+        @(tblStaffAdd.Supervisor_Username.SelectOptionListHtml("x_Supervisor_Username"))
+    </select>
+    @Html.Raw(tblStaffAdd.Supervisor_Username.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.Supervisor_Username.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.Supervisor_Username.Lookup.GetParamTag(tblStaffAdd, "p_x_Supervisor_Username"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_Supervisor_Username", selectId: "ftblStaffadd_x_Supervisor_Username" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.Supervisor_Username?.lookupOptions.length) {
+        options.data = { id: "x_Supervisor_Username", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_Supervisor_Username", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.Supervisor_Username.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // Supervisor_Username (confirm)
+<span id="el_tblStaff_Supervisor_Username">
+<span @Html.Raw(tblStaffAdd.Supervisor_Username.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.Supervisor_Username.DisplayValue(tblStaffAdd.Supervisor_Username.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_Supervisor_Username" data-hidden="1" data-page="2" name="x_Supervisor_Username" id="x_Supervisor_Username" value="@Html.Raw(HtmlEncode(tblStaffAdd.Supervisor_Username.FormValue))">
+</span>
+} @* Supervisor_Username (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.Supervisor_Username.Visible (end) *@
+@if (tblStaffAdd.str_Staff_Username.Visible) { // tblStaffAdd.str_Staff_Username.Visible (begin)
+    <div id="r_str_Staff_Username" @Html.Raw(tblStaffAdd.str_Staff_Username.RowAttributes)>
+        <label id="elh_tblStaff_str_Staff_Username" for="x_str_Staff_Username" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Staff_Username.Caption)@Html.Raw(tblStaffAdd.str_Staff_Username.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Staff_Username.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Staff_Username (begin)
+<span id="el_tblStaff_str_Staff_Username">
+<input type="@(tblStaffAdd.str_Staff_Username.InputTextType)" name="x_str_Staff_Username" id="x_str_Staff_Username" data-table="tblStaff" data-field="x_str_Staff_Username" value="@Html.Raw(tblStaffAdd.str_Staff_Username.EditValue)" data-page="2" size="30" maxlength="255" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Staff_Username.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Staff_Username.FormatPattern)"@Html.Raw(tblStaffAdd.str_Staff_Username.EditAttributes) aria-describedby="x_str_Staff_Username_help">
+@Html.Raw(tblStaffAdd.str_Staff_Username.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Staff_Username.GetErrorMessage())</div>
+</span>
+} else { // str_Staff_Username (confirm)
+<span id="el_tblStaff_str_Staff_Username">
+<span @Html.Raw(tblStaffAdd.str_Staff_Username.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Staff_Username.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Staff_Username" data-hidden="1" data-page="2" name="x_str_Staff_Username" id="x_str_Staff_Username" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Staff_Username.FormValue))">
+</span>
+} @* str_Staff_Username (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Staff_Username.Visible (end) *@
+@if (tblStaffAdd.Absherphoto.Visible) { // tblStaffAdd.Absherphoto.Visible (begin)
+    <div id="r_Absherphoto" @Html.Raw(tblStaffAdd.Absherphoto.RowAttributes)>
+        <label id="elh_tblStaff_Absherphoto" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.Absherphoto.Caption)@Html.Raw(tblStaffAdd.Absherphoto.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.Absherphoto.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // Absherphoto (begin)
+<span id="el_tblStaff_Absherphoto">
+<div id="fd_x_Absherphoto" class="fileinput-button ew-file-drop-zone">
+    <input
+        type="file"
+        id="x_Absherphoto"
+        name="x_Absherphoto"
+        class="form-control ew-file-input"
+        title="@(tblStaffAdd.Absherphoto.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblStaff"
+        data-field="x_Absherphoto"
+        data-size="500"
+        data-accept-file-types="@(tblStaffAdd.Absherphoto.AcceptFileTypes)"
+        data-max-file-size="@(tblStaffAdd.Absherphoto.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(tblStaffAdd.Absherphoto.ImageCropper ? 0 : 1)"
+        data-page="2"
+        aria-describedby="x_Absherphoto_help"
+        @Html.Raw((tblStaffAdd.Absherphoto.ReadOnly || tblStaffAdd.Absherphoto.Disabled) ? " disabled" : "")
+        @Html.Raw(tblStaffAdd.Absherphoto.EditAttributes)
+    >
+    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+</div>
+@Html.Raw(tblStaffAdd.Absherphoto.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.Absherphoto.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_Absherphoto" id= "fn_x_Absherphoto" value="@(tblStaffAdd.Absherphoto.Upload.FileName)">
+<input type="hidden" name="fa_x_Absherphoto" id= "fa_x_Absherphoto" value="0">
+<table id="ft_x_Absherphoto" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+} else { // Absherphoto (confirm)
+<span id="el_tblStaff_Absherphoto">
+<div id="fd_x_Absherphoto">
+    <input
+        type="file"
+        id="x_Absherphoto"
+        name="x_Absherphoto"
+        class="form-control ew-file-input d-none"
+        title="@(tblStaffAdd.Absherphoto.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblStaff"
+        data-field="x_Absherphoto"
+        data-size="500"
+        data-accept-file-types="@(tblStaffAdd.Absherphoto.AcceptFileTypes)"
+        data-max-file-size="@(tblStaffAdd.Absherphoto.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(tblStaffAdd.Absherphoto.ImageCropper ? 0 : 1)"
+        data-page="2"
+        aria-describedby="x_Absherphoto_help"
+        @Html.Raw(tblStaffAdd.Absherphoto.EditAttributes)
+    >
+</div>
+@Html.Raw(tblStaffAdd.Absherphoto.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.Absherphoto.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_Absherphoto" id= "fn_x_Absherphoto" value="@(tblStaffAdd.Absherphoto.Upload.FileName)">
+<input type="hidden" name="fa_x_Absherphoto" id= "fa_x_Absherphoto" value="0">
+<table id="ft_x_Absherphoto" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+} @* Absherphoto (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.Absherphoto.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblStaffAdd.MultiPages.TabPaneClasses(3))" id="tab_tblStaff3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblStaffAdd.str_Address.Visible) { // tblStaffAdd.str_Address.Visible (begin)
+    <div id="r_str_Address" @Html.Raw(tblStaffAdd.str_Address.RowAttributes)>
+        <label id="elh_tblStaff_str_Address" for="x_str_Address" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Address.Caption)@Html.Raw(tblStaffAdd.str_Address.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Address.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Address (begin)
+<span id="el_tblStaff_str_Address">
+<input type="@(tblStaffAdd.str_Address.InputTextType)" name="x_str_Address" id="x_str_Address" data-table="tblStaff" data-field="x_str_Address" value="@Html.Raw(tblStaffAdd.str_Address.EditValue)" data-page="3" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Address.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Address.FormatPattern)"@Html.Raw(tblStaffAdd.str_Address.EditAttributes) aria-describedby="x_str_Address_help">
+@Html.Raw(tblStaffAdd.str_Address.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Address.GetErrorMessage())</div>
+</span>
+} else { // str_Address (confirm)
+<span id="el_tblStaff_str_Address">
+<span @Html.Raw(tblStaffAdd.str_Address.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Address.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Address" data-hidden="1" data-page="3" name="x_str_Address" id="x_str_Address" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Address.FormValue))">
+</span>
+} @* str_Address (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Address.Visible (end) *@
+@if (tblStaffAdd.str_City.Visible) { // tblStaffAdd.str_City.Visible (begin)
+    <div id="r_str_City" @Html.Raw(tblStaffAdd.str_City.RowAttributes)>
+        <label id="elh_tblStaff_str_City" for="x_str_City" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_City.Caption)@Html.Raw(tblStaffAdd.str_City.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_City.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_City (begin)
+<span id="el_tblStaff_str_City">
+    <select
+        id="x_str_City"
+        name="x_str_City"
+        class="form-select ew-select@(tblStaffAdd.str_City.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_str_City"
+        data-table="tblStaff"
+        data-field="x_str_City"
+        data-page="3"
+        data-value-separator="@(tblStaffAdd.str_City.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.str_City.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblStaffAdd.str_City.EditAttributes)>
+        @(tblStaffAdd.str_City.SelectOptionListHtml("x_str_City"))
+    </select>
+    @Html.Raw(tblStaffAdd.str_City.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_City.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.str_City.Lookup.GetParamTag(tblStaffAdd, "p_x_str_City"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_str_City", selectId: "ftblStaffadd_x_str_City" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.str_City?.lookupOptions.length) {
+        options.data = { id: "x_str_City", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_str_City", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.str_City.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // str_City (confirm)
+<span id="el_tblStaff_str_City">
+<span @Html.Raw(tblStaffAdd.str_City.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.str_City.DisplayValue(tblStaffAdd.str_City.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_City" data-hidden="1" data-page="3" name="x_str_City" id="x_str_City" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_City.FormValue))">
+</span>
+} @* str_City (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_City.Visible (end) *@
+@if (tblStaffAdd.int_State.Visible) { // tblStaffAdd.int_State.Visible (begin)
+    <div id="r_int_State" @Html.Raw(tblStaffAdd.int_State.RowAttributes)>
+        <label id="elh_tblStaff_int_State" for="x_int_State" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.int_State.Caption)@Html.Raw(tblStaffAdd.int_State.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.int_State.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // int_State (begin)
+<span id="el_tblStaff_int_State">
+    <select
+        id="x_int_State"
+        name="x_int_State"
+        class="form-select ew-select@(tblStaffAdd.int_State.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_int_State"
+        data-table="tblStaff"
+        data-field="x_int_State"
+        data-page="3"
+        data-value-separator="@(tblStaffAdd.int_State.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.int_State.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.int_State.EditAttributes)>
+        @(tblStaffAdd.int_State.SelectOptionListHtml("x_int_State"))
+    </select>
+    @Html.Raw(tblStaffAdd.int_State.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.int_State.GetErrorMessage())</div>
+@Html.Raw(tblStaffAdd.int_State.Lookup.GetParamTag(tblStaffAdd, "p_x_int_State"))
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_int_State", selectId: "ftblStaffadd_x_int_State" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.int_State?.lookupOptions.length) {
+        options.data = { id: "x_int_State", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_int_State", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.int_State.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // int_State (confirm)
+<span id="el_tblStaff_int_State">
+<span @Html.Raw(tblStaffAdd.int_State.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.int_State.DisplayValue(tblStaffAdd.int_State.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_int_State" data-hidden="1" data-page="3" name="x_int_State" id="x_int_State" value="@Html.Raw(HtmlEncode(tblStaffAdd.int_State.FormValue))">
+</span>
+} @* int_State (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.int_State.Visible (end) *@
+@if (tblStaffAdd.str_Zip.Visible) { // tblStaffAdd.str_Zip.Visible (begin)
+    <div id="r_str_Zip" @Html.Raw(tblStaffAdd.str_Zip.RowAttributes)>
+        <label id="elh_tblStaff_str_Zip" for="x_str_Zip" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Zip.Caption)@Html.Raw(tblStaffAdd.str_Zip.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Zip.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Zip (begin)
+<span id="el_tblStaff_str_Zip">
+<input type="@(tblStaffAdd.str_Zip.InputTextType)" name="x_str_Zip" id="x_str_Zip" data-table="tblStaff" data-field="x_str_Zip" value="@Html.Raw(tblStaffAdd.str_Zip.EditValue)" data-page="3" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Zip.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Zip.FormatPattern)"@Html.Raw(tblStaffAdd.str_Zip.EditAttributes) aria-describedby="x_str_Zip_help">
+@Html.Raw(tblStaffAdd.str_Zip.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Zip.GetErrorMessage())</div>
+</span>
+} else { // str_Zip (confirm)
+<span id="el_tblStaff_str_Zip">
+<span @Html.Raw(tblStaffAdd.str_Zip.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Zip.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Zip" data-hidden="1" data-page="3" name="x_str_Zip" id="x_str_Zip" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Zip.FormValue))">
+</span>
+} @* str_Zip (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Zip.Visible (end) *@
+@if (tblStaffAdd.str_Home_Phone.Visible) { // tblStaffAdd.str_Home_Phone.Visible (begin)
+    <div id="r_str_Home_Phone" @Html.Raw(tblStaffAdd.str_Home_Phone.RowAttributes)>
+        <label id="elh_tblStaff_str_Home_Phone" for="x_str_Home_Phone" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Home_Phone.Caption)@Html.Raw(tblStaffAdd.str_Home_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Home_Phone.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Home_Phone (begin)
+<span id="el_tblStaff_str_Home_Phone">
+<input type="@(tblStaffAdd.str_Home_Phone.InputTextType)" name="x_str_Home_Phone" id="x_str_Home_Phone" data-table="tblStaff" data-field="x_str_Home_Phone" value="@Html.Raw(tblStaffAdd.str_Home_Phone.EditValue)" data-page="3" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Home_Phone.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Home_Phone.FormatPattern)"@Html.Raw(tblStaffAdd.str_Home_Phone.EditAttributes) aria-describedby="x_str_Home_Phone_help">
+@Html.Raw(tblStaffAdd.str_Home_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Home_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Home_Phone (confirm)
+<span id="el_tblStaff_str_Home_Phone">
+<span @Html.Raw(tblStaffAdd.str_Home_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Home_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Home_Phone" data-hidden="1" data-page="3" name="x_str_Home_Phone" id="x_str_Home_Phone" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Home_Phone.FormValue))">
+</span>
+} @* str_Home_Phone (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Home_Phone.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblStaffAdd.MultiPages.TabPaneClasses(4))" id="tab_tblStaff4" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+@if (tblStaffAdd.str_Emergency_Contact_Name.Visible) { // tblStaffAdd.str_Emergency_Contact_Name.Visible (begin)
+    <div id="r_str_Emergency_Contact_Name" @Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.RowAttributes)>
+        <label id="elh_tblStaff_str_Emergency_Contact_Name" for="x_str_Emergency_Contact_Name" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.Caption)@Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Emergency_Contact_Name (begin)
+<span id="el_tblStaff_str_Emergency_Contact_Name">
+<input type="@(tblStaffAdd.str_Emergency_Contact_Name.InputTextType)" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" data-table="tblStaff" data-field="x_str_Emergency_Contact_Name" value="@Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.EditValue)" data-page="4" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Emergency_Contact_Name.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Emergency_Contact_Name.FormatPattern)"@Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.EditAttributes) aria-describedby="x_str_Emergency_Contact_Name_help">
+@Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.GetErrorMessage())</div>
+</span>
+} else { // str_Emergency_Contact_Name (confirm)
+<span id="el_tblStaff_str_Emergency_Contact_Name">
+<span @Html.Raw(tblStaffAdd.str_Emergency_Contact_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Emergency_Contact_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Emergency_Contact_Name" data-hidden="1" data-page="4" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Emergency_Contact_Name.FormValue))">
+</span>
+} @* str_Emergency_Contact_Name (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Emergency_Contact_Name.Visible (end) *@
+@if (tblStaffAdd.str_Emergency_Contact_Phone.Visible) { // tblStaffAdd.str_Emergency_Contact_Phone.Visible (begin)
+    <div id="r_str_Emergency_Contact_Phone" @Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.RowAttributes)>
+        <label id="elh_tblStaff_str_Emergency_Contact_Phone" for="x_str_Emergency_Contact_Phone" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.Caption)@Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Emergency_Contact_Phone (begin)
+<span id="el_tblStaff_str_Emergency_Contact_Phone">
+<input type="@(tblStaffAdd.str_Emergency_Contact_Phone.InputTextType)" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" data-table="tblStaff" data-field="x_str_Emergency_Contact_Phone" value="@Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.EditValue)" data-page="4" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(tblStaffAdd.str_Emergency_Contact_Phone.PlaceHolder))" data-format-pattern="@(tblStaffAdd.str_Emergency_Contact_Phone.FormatPattern)"@Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.EditAttributes) aria-describedby="x_str_Emergency_Contact_Phone_help">
+@Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.GetErrorMessage())</div>
+</span>
+} else { // str_Emergency_Contact_Phone (confirm)
+<span id="el_tblStaff_str_Emergency_Contact_Phone">
+<span @Html.Raw(tblStaffAdd.str_Emergency_Contact_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblStaffAdd.str_Emergency_Contact_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Emergency_Contact_Phone" data-hidden="1" data-page="4" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Emergency_Contact_Phone.FormValue))">
+</span>
+} @* str_Emergency_Contact_Phone (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Emergency_Contact_Phone.Visible (end) *@
+@if (tblStaffAdd.str_Emergency_Contact_Relation.Visible) { // tblStaffAdd.str_Emergency_Contact_Relation.Visible (begin)
+    <div id="r_str_Emergency_Contact_Relation" @Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.RowAttributes)>
+        <label id="elh_tblStaff_str_Emergency_Contact_Relation" for="x_str_Emergency_Contact_Relation" class="@(tblStaffAdd.LeftColumnClass)">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.Caption)@Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblStaffAdd.RightColumnClass)"><div @Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.CellAttributes)>
+@if (!tblStaffAdd.IsConfirm) { // str_Emergency_Contact_Relation (begin)
+<span id="el_tblStaff_str_Emergency_Contact_Relation">
+    <select
+        id="x_str_Emergency_Contact_Relation"
+        name="x_str_Emergency_Contact_Relation"
+        class="form-select ew-select@(tblStaffAdd.str_Emergency_Contact_Relation.IsInvalidClass)"
+        data-select2-id="ftblStaffadd_x_str_Emergency_Contact_Relation"
+        data-table="tblStaff"
+        data-field="x_str_Emergency_Contact_Relation"
+        data-page="4"
+        data-value-separator="@(tblStaffAdd.str_Emergency_Contact_Relation.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblStaffAdd.str_Emergency_Contact_Relation.PlaceHolder))"
+        @Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.EditAttributes)>
+        @(tblStaffAdd.str_Emergency_Contact_Relation.SelectOptionListHtml("x_str_Emergency_Contact_Relation"))
+    </select>
+    @Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblStaffadd", function() {
+    var options = { name: "x_str_Emergency_Contact_Relation", selectId: "ftblStaffadd_x_str_Emergency_Contact_Relation" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblStaffadd.lists.str_Emergency_Contact_Relation?.lookupOptions.length) {
+        options.data = { id: "x_str_Emergency_Contact_Relation", form: "ftblStaffadd" };
+    } else {
+        options.ajax = { id: "x_str_Emergency_Contact_Relation", form: "ftblStaffadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStaff.fields.str_Emergency_Contact_Relation.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+} else { // str_Emergency_Contact_Relation (confirm)
+<span id="el_tblStaff_str_Emergency_Contact_Relation">
+<span @Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(tblStaffAdd.str_Emergency_Contact_Relation.DisplayValue(tblStaffAdd.str_Emergency_Contact_Relation.ViewValue))</span></span>
+<input type="hidden" data-table="tblStaff" data-field="x_str_Emergency_Contact_Relation" data-hidden="1" data-page="4" name="x_str_Emergency_Contact_Relation" id="x_str_Emergency_Contact_Relation" value="@Html.Raw(HtmlEncode(tblStaffAdd.str_Emergency_Contact_Relation.FormValue))">
+</span>
+} @* str_Emergency_Contact_Relation (end) *@
+</div></div>
+    </div>
+} @* tblStaffAdd.str_Emergency_Contact_Relation.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+@{ tblStaffAdd.CloseRecordset(); }
+@Html.Raw(tblStaffAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblStaffAdd.OffsetColumnClass)"><!-- buttons offset -->
+@if (!tblStaffAdd.IsConfirm) { // Confirm page
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblStaffadd" data-ew-action="set-action" data-value="confirm">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblStaffadd" data-href="@AppPath(tblStaffAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+} else {
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblStaffadd">@Html.Raw(Language.Phrase("ConfirmBtn"))</button>
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="submit" form="ftblStaffadd" data-ew-action="set-action" data-value="cancel">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblStaffAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblStaffAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStaff");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

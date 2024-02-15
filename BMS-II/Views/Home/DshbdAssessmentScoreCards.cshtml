@@ -1,0 +1,260 @@
+@if (!dshbdAssessmentScoreList.IsExport()) {
+<div>
+@if (!dshbdAssessmentScoreList.IsGridAdd && !(dshbdAssessmentScoreList.IsGridEdit && dshbdAssessmentScoreList.ModalGridEdit) && !dshbdAssessmentScoreList.IsMultiEdit) {
+@Html.Raw(dshbdAssessmentScoreList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@dshbdAssessmentScoreList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (dshbdAssessmentScoreList.ModalGridAdd && dshbdAssessmentScoreList.IsGridAdd || dshbdAssessmentScoreList.ModalGridEdit && dshbdAssessmentScoreList.IsGridEdit || dshbdAssessmentScoreList.ModalMultiEdit && dshbdAssessmentScoreList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(dshbdAssessmentScoreList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { dshbdAssessmentScore: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(dshbdAssessmentScoreList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(dshbdAssessmentScoreList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(dshbdAssessmentScoreList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(dshbdAssessmentScoreList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(dshbdAssessmentScoreList.FormName)" id="@(dshbdAssessmentScoreList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(dshbdAssessmentScoreList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (dshbdAssessmentScoreList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(dshbdAssessmentScoreList.GetMultiColumnRowClass())">
+@if (dshbdAssessmentScoreList.TotalRecords > 0 || dshbdAssessmentScoreList.IsGridEdit || dshbdAssessmentScoreList.IsMultiEdit) {
+    await dshbdAssessmentScoreList.SetupGrid();
+    bool eof = dshbdAssessmentScoreList.Recordset == null; // DN
+while (dshbdAssessmentScoreList.RecordCount < dshbdAssessmentScoreList.StopRecord || SameString(dshbdAssessmentScoreList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(dshbdAssessmentScoreList.RowIndex, "$rowindex$") &&
+        (!dshbdAssessmentScoreList.IsGridAdd || dshbdAssessmentScoreList.CurrentMode == "copy") &&
+        (!((dshbdAssessmentScoreList.IsCopy || dshbdAssessmentScoreList.IsAdd) && dshbdAssessmentScoreList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await dshbdAssessmentScoreList.Recordset.ReadAsync();
+    dshbdAssessmentScoreList.RecordCount++;
+    if (dshbdAssessmentScoreList.RecordCount >= dshbdAssessmentScoreList.StartRecord) {
+        await dshbdAssessmentScoreList.SetupRow();
+<div class="@(dshbdAssessmentScoreList.GetMultiColumnColClass())" @Html.Raw(dshbdAssessmentScoreList.RowAttributes)>
+<div class="@(dshbdAssessmentScoreList.MultiColumnCardClass)">
+    @if (dshbdAssessmentScoreList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(dshbdAssessmentScoreList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    dshbdAssessmentScoreList.ListOptions.Tag = "div";
+    dshbdAssessmentScoreList.ListOptions.RenderBody(dshbdAssessmentScoreList.MultiColumnListOptionsPosition, dshbdAssessmentScoreList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (dshbdAssessmentScoreList.AssessmentID.Visible) { // dshbdAssessmentScoreList.AssessmentID.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_AssessmentID">
+            <div class="col col-sm-4 dshbdAssessmentScore_AssessmentID">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.AssessmentID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.AssessmentID.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.AssessmentID.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.AssessmentID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_AssessmentID">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.AssessmentID.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.AssessmentID.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.AssessmentID.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.AssessmentID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.intDrivinglicenseType.Visible) { // dshbdAssessmentScoreList.intDrivinglicenseType.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_intDrivinglicenseType">
+            <div class="col col-sm-4 dshbdAssessmentScore_intDrivinglicenseType">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.intDrivinglicenseType))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_intDrivinglicenseType">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.intDrivinglicenseType.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.Date_Entered.Visible) { // dshbdAssessmentScoreList.Date_Entered.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_Date_Entered">
+            <div class="col col-sm-4 dshbdAssessmentScore_Date_Entered">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.Date_Entered))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.Date_Entered.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Date_Entered.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Date_Entered.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_Date_Entered">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.Date_Entered.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.Date_Entered.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Date_Entered.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Date_Entered.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.Evaluation_Score.Visible) { // dshbdAssessmentScoreList.Evaluation_Score.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_Evaluation_Score">
+            <div class="col col-sm-4 dshbdAssessmentScore_Evaluation_Score">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.Evaluation_Score))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_Evaluation_Score">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Evaluation_Score.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.Immediate_Failure_Score.Visible) { // dshbdAssessmentScoreList.Immediate_Failure_Score.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_Immediate_Failure_Score">
+            <div class="col col-sm-4 dshbdAssessmentScore_Immediate_Failure_Score">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.Immediate_Failure_Score))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_Immediate_Failure_Score">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Immediate_Failure_Score.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.AssessmentScore.Visible) { // dshbdAssessmentScoreList.AssessmentScore.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_AssessmentScore">
+            <div class="col col-sm-4 dshbdAssessmentScore_AssessmentScore">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.AssessmentScore))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.AssessmentScore.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.AssessmentScore.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.AssessmentScore.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_AssessmentScore">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.AssessmentScore.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.AssessmentScore.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.AssessmentScore.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.AssessmentScore.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.Required_Program.Visible) { // dshbdAssessmentScoreList.Required_Program.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_Required_Program">
+            <div class="col col-sm-4 dshbdAssessmentScore_Required_Program">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.Required_Program))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.Required_Program.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Required_Program.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Required_Program.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_Required_Program">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.Required_Program.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.Required_Program.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Required_Program.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Required_Program.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (dshbdAssessmentScoreList.Price.Visible) { // dshbdAssessmentScoreList.Price.Visible (begin)
+        if (dshbdAssessmentScoreList.RowType == RowType.View) { // View record
+        <div class="row dshbdAssessmentScore_Price">
+            <div class="col col-sm-4 dshbdAssessmentScore_Price">@Html.Raw(dshbdAssessmentScoreList.RenderFieldHeader(dshbdAssessmentScoreList.Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(dshbdAssessmentScoreList.Price.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Price.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row dshbdAssessmentScore_Price">
+            <label class="@(dshbdAssessmentScoreList.LeftColumnClass)">@Html.Raw(dshbdAssessmentScoreList.Price.Caption)</label>
+            <div class="@(dshbdAssessmentScoreList.RightColumnClass)"><div @Html.Raw(dshbdAssessmentScoreList.Price.CellAttributes)>
+<span @Html.Raw(dshbdAssessmentScoreList.Price.ViewAttributes)>
+@Html.Raw(dshbdAssessmentScoreList.Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!dshbdAssessmentScoreList.IsExport()) {
+    if (dshbdAssessmentScoreList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(dshbdAssessmentScoreList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    dshbdAssessmentScoreList.ListOptions.Tag = "div";
+}
+@dshbdAssessmentScoreList.ListOptions.RenderBody(dshbdAssessmentScoreList.MultiColumnListOptionsPosition, dshbdAssessmentScoreList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(dshbdAssessmentScoreList.RowIndex, "$rowindex$"))
+        dshbdAssessmentScoreList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((dshbdAssessmentScoreList.IsCopy || dshbdAssessmentScoreList.IsAdd) && dshbdAssessmentScoreList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        dshbdAssessmentScoreList.RowIndex = 1;
+} @* End While *@
+} @* dshbdAssessmentScoreList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(dshbdAssessmentScoreList.CurrentAction) && !dshbdAssessmentScoreList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ dshbdAssessmentScoreList.CloseRecordset(); }

@@ -1,0 +1,151 @@
+@if (qryBillingNamesList.ModalGridAdd && qryBillingNamesList.IsGridAdd || qryBillingNamesList.ModalGridEdit && qryBillingNamesList.IsGridEdit || qryBillingNamesList.ModalMultiEdit && qryBillingNamesList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryBillingNamesList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryBillingNames: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryBillingNamesList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryBillingNamesList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryBillingNamesList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryBillingNamesList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryBillingNamesList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryBillingNamesList.TableGridClass)">
+@if (!qryBillingNamesList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryBillingNamesList.IsGridAdd && !(qryBillingNamesList.IsGridEdit && qryBillingNamesList.ModalGridEdit) && !qryBillingNamesList.IsMultiEdit) {
+@Html.Raw(qryBillingNamesList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryBillingNamesList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryBillingNamesList.FormName)" id="@(qryBillingNamesList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryBillingNamesList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryBillingNamesList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_qryBillingNames" class="card-body ew-grid-middle-panel @(qryBillingNamesList.TableContainerClass)" style="@(qryBillingNamesList.TableContainerStyle)">
+@if (qryBillingNamesList.TotalRecords > 0 || qryBillingNamesList.IsGridEdit || qryBillingNamesList.IsMultiEdit) {
+<table id="tbl_qryBillingNameslist" class="@(qryBillingNamesList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryBillingNamesList.RowType = RowType.Header;
+
+    // Render list options
+    await qryBillingNamesList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryBillingNamesList.ListOptions.RenderHeader("left")
+@if (qryBillingNamesList.int_Student_ID.Visible) { // qryBillingNamesList.int_Student_ID.Visible (begin)
+        <th data-name="int_Student_ID" class="@(qryBillingNamesList.int_Student_ID.HeaderCellClass)"><div id="elh_qryBillingNames_int_Student_ID" class="qryBillingNames_int_Student_ID">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.int_Student_ID))</div></th>
+} @* qryBillingNamesList.int_Student_ID.Visible (end) *@
+@if (qryBillingNamesList.str_Full_Name.Visible) { // qryBillingNamesList.str_Full_Name.Visible (begin)
+        <th data-name="str_Full_Name" class="@(qryBillingNamesList.str_Full_Name.HeaderCellClass)"><div id="elh_qryBillingNames_str_Full_Name" class="qryBillingNames_str_Full_Name">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.str_Full_Name))</div></th>
+} @* qryBillingNamesList.str_Full_Name.Visible (end) *@
+@if (qryBillingNamesList.NationalID.Visible) { // qryBillingNamesList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(qryBillingNamesList.NationalID.HeaderCellClass)"><div id="elh_qryBillingNames_NationalID" class="qryBillingNames_NationalID">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.NationalID))</div></th>
+} @* qryBillingNamesList.NationalID.Visible (end) *@
+@if (qryBillingNamesList.str_Username.Visible) { // qryBillingNamesList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(qryBillingNamesList.str_Username.HeaderCellClass)"><div id="elh_qryBillingNames_str_Username" class="qryBillingNames_str_Username">@Html.Raw(qryBillingNamesList.RenderFieldHeader(qryBillingNamesList.str_Username))</div></th>
+} @* qryBillingNamesList.str_Username.Visible (end) *@
+@* Render list options (header, right) *@
+@qryBillingNamesList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryBillingNamesList.PageNumber)">
+@{
+    await qryBillingNamesList.SetupGrid();
+    bool eof = qryBillingNamesList.Recordset == null; // DN
+}
+@while (qryBillingNamesList.RecordCount < qryBillingNamesList.StopRecord || SameString(qryBillingNamesList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryBillingNamesList.RowIndex, "$rowindex$") &&
+        (!qryBillingNamesList.IsGridAdd || qryBillingNamesList.CurrentMode == "copy") &&
+        (!((qryBillingNamesList.IsCopy || qryBillingNamesList.IsAdd) && qryBillingNamesList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryBillingNamesList.Recordset.ReadAsync();
+    qryBillingNamesList.RecordCount++;
+    if (qryBillingNamesList.RecordCount >= qryBillingNamesList.StartRecord) {
+        await qryBillingNamesList.SetupRow();
+    <tr @Html.Raw(qryBillingNamesList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryBillingNamesList.ListOptions.RenderBody("left", qryBillingNamesList.RowCount)
+    @if (qryBillingNamesList.int_Student_ID.Visible) { // qryBillingNamesList.int_Student_ID.Visible (begin)
+        <td data-name="int_Student_ID" @Html.Raw(qryBillingNamesList.int_Student_ID.CellAttributes)>
+<span id="el@(qryBillingNamesList.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingNamesList.RowCount)_qryBillingNames_int_Student_ID" class="el_qryBillingNames_int_Student_ID">
+<span @Html.Raw(qryBillingNamesList.int_Student_ID.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.int_Student_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingNamesList.int_Student_ID.Visible (end) *@
+    @if (qryBillingNamesList.str_Full_Name.Visible) { // qryBillingNamesList.str_Full_Name.Visible (begin)
+        <td data-name="str_Full_Name" @Html.Raw(qryBillingNamesList.str_Full_Name.CellAttributes)>
+<span id="el@(qryBillingNamesList.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingNamesList.RowCount)_qryBillingNames_str_Full_Name" class="el_qryBillingNames_str_Full_Name">
+<span @Html.Raw(qryBillingNamesList.str_Full_Name.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.str_Full_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingNamesList.str_Full_Name.Visible (end) *@
+    @if (qryBillingNamesList.NationalID.Visible) { // qryBillingNamesList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(qryBillingNamesList.NationalID.CellAttributes)>
+<span id="el@(qryBillingNamesList.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingNamesList.RowCount)_qryBillingNames_NationalID" class="el_qryBillingNames_NationalID">
+<span @Html.Raw(qryBillingNamesList.NationalID.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingNamesList.NationalID.Visible (end) *@
+    @if (qryBillingNamesList.str_Username.Visible) { // qryBillingNamesList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(qryBillingNamesList.str_Username.CellAttributes)>
+<span id="el@(qryBillingNamesList.RowIndex == "$rowindex$" ? "$rowindex$" : qryBillingNamesList.RowCount)_qryBillingNames_str_Username" class="el_qryBillingNames_str_Username">
+<span @Html.Raw(qryBillingNamesList.str_Username.ViewAttributes)>
+@Html.Raw(qryBillingNamesList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* qryBillingNamesList.str_Username.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryBillingNamesList.ListOptions.RenderBody("right", qryBillingNamesList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryBillingNamesList.RowIndex, "$rowindex$"))
+        qryBillingNamesList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryBillingNamesList.IsCopy || qryBillingNamesList.IsAdd) && qryBillingNamesList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryBillingNamesList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryBillingNamesList.CurrentAction) && !qryBillingNamesList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryBillingNamesList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

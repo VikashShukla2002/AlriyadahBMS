@@ -1,0 +1,135 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentEnrollmentPreview.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+ew.deepAssign(ew.vars, { tables: { tblStudentEnrollment: @Html.Raw(ConvertToJson(tblStudentEnrollmentPreview.ToClientVar())) } });
+</script>
+@tblStudentEnrollmentPreview.ShowPageHeader()
+@if (tblStudentEnrollmentPreview.TotalRecords > 0) {
+<div class="card ew-grid @(tblStudentEnrollmentPreview.TableGridClass)"><!-- .card -->
+<div class="card-header ew-grid-upper-panel ew-preview-upper-panel"><!-- .card-header -->
+@Html.Raw(tblStudentEnrollmentPreview.Pager.Render())
+<div class="ew-preview-other-options">
+@tblStudentEnrollmentPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card-header -->
+<div class="card-body ew-preview-middle-panel ew-grid-middle-panel @(tblStudentEnrollmentPreview.TableContainerClass)" style="@(tblStudentEnrollmentPreview.TableContainerStyle)"><!-- .card-body -->
+<table class="@(tblStudentEnrollmentPreview.TableClass)"><!-- .table -->
+    <thead><!-- Table header -->
+        <tr class="ew-table-header">
+@{
+    await tblStudentEnrollmentPreview.RenderListOptions(); // Render list options
+}
+@tblStudentEnrollmentPreview.ListOptions.RenderHeader("left")
+@if (tblStudentEnrollmentPreview.str_Full_Name.Visible) { // tblStudentEnrollmentPreview.str_Full_Name.Visible (begin)
+    if (Empty(tblStudentEnrollmentPreview.SortUrl(tblStudentEnrollmentPreview.str_Full_Name))) {
+        <th class="@tblStudentEnrollmentPreview.str_Full_Name.HeaderCellClass">@Html.Raw(tblStudentEnrollmentPreview.str_Full_Name.Caption)</th>
+    } else {
+        <th class="@tblStudentEnrollmentPreview.str_Full_Name.HeaderCellClass"><div role="button" data-table="tblStudentEnrollment" data-sort="@tblStudentEnrollmentPreview.str_Full_Name.Name" data-sort-type="2" data-sort-order="@tblStudentEnrollmentPreview.str_Full_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblStudentEnrollmentPreview.str_Full_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblStudentEnrollmentPreview.str_Full_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblStudentEnrollmentPreview.str_Full_Name.Visible (end) *@
+@if (tblStudentEnrollmentPreview.str_Username.Visible) { // tblStudentEnrollmentPreview.str_Username.Visible (begin)
+    if (Empty(tblStudentEnrollmentPreview.SortUrl(tblStudentEnrollmentPreview.str_Username))) {
+        <th class="@tblStudentEnrollmentPreview.str_Username.HeaderCellClass">@Html.Raw(tblStudentEnrollmentPreview.str_Username.Caption)</th>
+    } else {
+        <th class="@tblStudentEnrollmentPreview.str_Username.HeaderCellClass"><div role="button" data-table="tblStudentEnrollment" data-sort="@tblStudentEnrollmentPreview.str_Username.Name" data-sort-type="2" data-sort-order="@tblStudentEnrollmentPreview.str_Username.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblStudentEnrollmentPreview.str_Username.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblStudentEnrollmentPreview.str_Username.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblStudentEnrollmentPreview.str_Username.Visible (end) *@
+@if (tblStudentEnrollmentPreview.str_Package_Name.Visible) { // tblStudentEnrollmentPreview.str_Package_Name.Visible (begin)
+    if (Empty(tblStudentEnrollmentPreview.SortUrl(tblStudentEnrollmentPreview.str_Package_Name))) {
+        <th class="@tblStudentEnrollmentPreview.str_Package_Name.HeaderCellClass">@Html.Raw(tblStudentEnrollmentPreview.str_Package_Name.Caption)</th>
+    } else {
+        <th class="@tblStudentEnrollmentPreview.str_Package_Name.HeaderCellClass"><div role="button" data-table="tblStudentEnrollment" data-sort="@tblStudentEnrollmentPreview.str_Package_Name.Name" data-sort-type="2" data-sort-order="@tblStudentEnrollmentPreview.str_Package_Name.NextSort">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption">@Html.Raw(tblStudentEnrollmentPreview.str_Package_Name.Caption)</span>
+                <span class="ew-table-header-sort">@Html.Raw(tblStudentEnrollmentPreview.str_Package_Name.SortIcon)</span>
+            </div>
+        </th>
+    }
+} @* tblStudentEnrollmentPreview.str_Package_Name.Visible (end) *@
+@tblStudentEnrollmentPreview.ListOptions.RenderHeader("right")
+        </tr>
+    </thead>
+    <tbody><!-- Table body -->
+@{
+    tblStudentEnrollmentPreview.RecordCount = 0;
+    tblStudentEnrollmentPreview.RowCount = 0;
+}
+@do {
+    // Init row class and style
+    tblStudentEnrollmentPreview.RecordCount++;
+    tblStudentEnrollmentPreview.RowCount++;
+    tblStudentEnrollmentPreview.CssStyle = "";
+    tblStudentEnrollmentPreview.LoadListRowValues(tblStudentEnrollmentPreview.Recordset);
+
+    // Render row
+    tblStudentEnrollmentPreview.RowType = RowType.Preview; // Preview record
+    tblStudentEnrollmentPreview.ResetAttributes();
+    await tblStudentEnrollmentPreview.RenderListRow();
+
+    // Render list options
+    await tblStudentEnrollmentPreview.RenderListOptions();
+    <tr @Html.Raw(tblStudentEnrollmentPreview.RowAttributes)>
+    @tblStudentEnrollmentPreview.ListOptions.RenderBody("left", tblStudentEnrollmentPreview.RowCount)
+    @if (tblStudentEnrollmentPreview.str_Full_Name.Visible) { // tblStudentEnrollmentPreview.str_Full_Name.Visible (begin)
+            <td @Html.Raw(tblStudentEnrollmentPreview.str_Full_Name.CellAttributes)>
+<span @Html.Raw(tblStudentEnrollmentPreview.str_Full_Name.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentPreview.str_Full_Name.GetViewValue())</span>
+</td>
+    } @* tblStudentEnrollmentPreview.str_Full_Name.Visible (end) *@
+    @if (tblStudentEnrollmentPreview.str_Username.Visible) { // tblStudentEnrollmentPreview.str_Username.Visible (begin)
+            <td @Html.Raw(tblStudentEnrollmentPreview.str_Username.CellAttributes)>
+<span @Html.Raw(tblStudentEnrollmentPreview.str_Username.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentPreview.str_Username.GetViewValue())</span>
+</td>
+    } @* tblStudentEnrollmentPreview.str_Username.Visible (end) *@
+    @if (tblStudentEnrollmentPreview.str_Package_Name.Visible) { // tblStudentEnrollmentPreview.str_Package_Name.Visible (begin)
+            <td @Html.Raw(tblStudentEnrollmentPreview.str_Package_Name.CellAttributes)>
+<span @Html.Raw(tblStudentEnrollmentPreview.str_Package_Name.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentPreview.str_Package_Name.GetViewValue())</span>
+</td>
+    } @* tblStudentEnrollmentPreview.str_Package_Name.Visible (end) *@
+    @tblStudentEnrollmentPreview.ListOptions.RenderBody("right", tblStudentEnrollmentPreview.RowCount)
+    </tr>
+} while (await tblStudentEnrollmentPreview.Recordset.ReadAsync());
+    </tbody>
+</table><!-- /.table -->
+</div><!-- /.card-body -->
+</div><!-- /.card -->
+} else { @* No record *@
+<div class="card border-0"><!-- .card -->
+<div class="ew-detail-count">@Html.Raw(Language.Phrase("NoRecord"))</div>
+<div class="ew-preview-other-options">
+@tblStudentEnrollmentPreview.OtherOptions.RenderBody()
+</div>
+</div><!-- /.card -->
+}
+@tblStudentEnrollmentPreview.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()

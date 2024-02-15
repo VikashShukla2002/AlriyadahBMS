@@ -1,0 +1,547 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAssessmentEdit.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAssessmentEdit.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblAssessmentEdit.ShowPageHeader()
+@tblAssessmentEdit.ShowMessages()
+<main class="edit">
+<form name="ftblAssessmentedit" id="ftblAssessmentedit" class="@(tblAssessmentEdit.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAssessmentEdit.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+var currentPageID = ew.PAGE_ID = "edit";
+var currentForm;
+var ftblAssessmentedit;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblAssessmentedit")
+        .setPageId("edit")
+
+        // Add fields
+        .setFields([
+
+            ["str_Full_Name_Hdr", [fields.str_Full_Name_Hdr.visible && fields.str_Full_Name_Hdr.required ? ew.Validators.required(fields.str_Full_Name_Hdr.caption) : null], fields.str_Full_Name_Hdr.isInvalid],
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null, ew.Validators.integer], fields.NationalID.isInvalid],
+            ["Assessment_Type", [fields.Assessment_Type.visible && fields.Assessment_Type.required ? ew.Validators.required(fields.Assessment_Type.caption) : null], fields.Assessment_Type.isInvalid],
+            ["AssessmentDate", [fields.AssessmentDate.visible && fields.AssessmentDate.required ? ew.Validators.required(fields.AssessmentDate.caption) : null, ew.Validators.datetime(fields.AssessmentDate.clientFormatPattern)], fields.AssessmentDate.isInvalid],
+            ["isAssessmentDone", [fields.isAssessmentDone.visible && fields.isAssessmentDone.required ? ew.Validators.required(fields.isAssessmentDone.caption) : null], fields.isAssessmentDone.isInvalid],
+            ["AssessmentScore", [fields.AssessmentScore.visible && fields.AssessmentScore.required ? ew.Validators.required(fields.AssessmentScore.caption) : null], fields.AssessmentScore.isInvalid],
+            ["Assessment_Instructor", [fields.Assessment_Instructor.visible && fields.Assessment_Instructor.required ? ew.Validators.required(fields.Assessment_Instructor.caption) : null], fields.Assessment_Instructor.isInvalid],
+            ["intDrivinglicenseType", [fields.intDrivinglicenseType.visible && fields.intDrivinglicenseType.required ? ew.Validators.required(fields.intDrivinglicenseType.caption) : null], fields.intDrivinglicenseType.isInvalid],
+            ["AbsherApptNbr", [fields.AbsherApptNbr.visible && fields.AbsherApptNbr.required ? ew.Validators.required(fields.AbsherApptNbr.caption) : null], fields.AbsherApptNbr.isInvalid],
+            ["Absherphoto", [fields.Absherphoto.visible && fields.Absherphoto.required ? ew.Validators.fileRequired(fields.Absherphoto.caption) : null], fields.Absherphoto.isInvalid],
+            ["date_Birth", [fields.date_Birth.visible && fields.date_Birth.required ? ew.Validators.required(fields.date_Birth.caption) : null], fields.date_Birth.isInvalid],
+            ["date_Birth_Hijri", [fields.date_Birth_Hijri.visible && fields.date_Birth_Hijri.required ? ew.Validators.required(fields.date_Birth_Hijri.caption) : null], fields.date_Birth_Hijri.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["str_Email", [fields.str_Email.visible && fields.str_Email.required ? ew.Validators.required(fields.str_Email.caption) : null], fields.str_Email.isInvalid],
+            ["AccidentOccurrence", [fields.AccidentOccurrence.visible && fields.AccidentOccurrence.required ? ew.Validators.required(fields.AccidentOccurrence.caption) : null], fields.AccidentOccurrence.isInvalid],
+            ["Dt_AccidentOccurrence", [fields.Dt_AccidentOccurrence.visible && fields.Dt_AccidentOccurrence.required ? ew.Validators.required(fields.Dt_AccidentOccurrence.caption) : null], fields.Dt_AccidentOccurrence.isInvalid],
+            ["AccidentNotes", [fields.AccidentNotes.visible && fields.AccidentNotes.required ? ew.Validators.required(fields.AccidentNotes.caption) : null], fields.AccidentNotes.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Multi-Page
+        .setMultiPage(true)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Full_Name_Hdr": @Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.ToClientList(tblAssessmentEdit)),
+            "NationalID": @Html.Raw(tblAssessmentEdit.NationalID.ToClientList(tblAssessmentEdit)),
+            "Assessment_Type": @Html.Raw(tblAssessmentEdit.Assessment_Type.ToClientList(tblAssessmentEdit)),
+            "isAssessmentDone": @Html.Raw(tblAssessmentEdit.isAssessmentDone.ToClientList(tblAssessmentEdit)),
+            "Assessment_Instructor": @Html.Raw(tblAssessmentEdit.Assessment_Instructor.ToClientList(tblAssessmentEdit)),
+            "AccidentOccurrence": @Html.Raw(tblAssessmentEdit.AccidentOccurrence.ToClientList(tblAssessmentEdit)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="update">
+<input type="hidden" name="modal" value="@ConvertToInt(tblAssessmentEdit.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblAssessmentEdit.OldKeyName)" value="@Html.Raw(tblAssessmentEdit.OldKey)">
+@if (tblAssessmentEdit.CurrentMasterTable == "tblStudents") {
+<input type="hidden" name="@Config.TableShowMaster" value="tblStudents">
+<input type="hidden" name="fk_str_Username" value="@(HtmlEncode(tblAssessmentEdit.str_Username.SessionValue))">
+}
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav@(tblAssessmentEdit.MultiPages.ContainerClasses)" id="pages_tblAssessmentEdit"><!-- multi-page tabs -->
+    <ul class="@(tblAssessmentEdit.MultiPages.NavClasses)" role="tablist">
+        <li class="nav-item"><button class="@(tblAssessmentEdit.MultiPages.NavLinkClasses(1))" data-bs-target="#tab_tblAssessment1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment1" aria-selected="@(ConvertToJson(tblAssessmentEdit.MultiPages.IsActive(1)))">@Html.Raw(tblAssessmentEdit.PageCaption(1))</button></li>
+        <li class="nav-item"><button class="@(tblAssessmentEdit.MultiPages.NavLinkClasses(2))" data-bs-target="#tab_tblAssessment2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment2" aria-selected="@(ConvertToJson(tblAssessmentEdit.MultiPages.IsActive(2)))">@Html.Raw(tblAssessmentEdit.PageCaption(2))</button></li>
+        <li class="nav-item"><button class="@(tblAssessmentEdit.MultiPages.NavLinkClasses(3))" data-bs-target="#tab_tblAssessment3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_tblAssessment3" aria-selected="@(ConvertToJson(tblAssessmentEdit.MultiPages.IsActive(3)))">@Html.Raw(tblAssessmentEdit.PageCaption(3))</button></li>
+    </ul>
+    <div class="@(tblAssessmentEdit.MultiPages.TabContentClasses)"><!-- multi-page tabs .tab-content -->
+        <div class="@(tblAssessmentEdit.MultiPages.TabPaneClasses(1))" id="tab_tblAssessment1" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblAssessmentEdit.str_Full_Name_Hdr.Visible) { // tblAssessmentEdit.str_Full_Name_Hdr.Visible (begin)
+    <div id="r_str_Full_Name_Hdr" @Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.RowAttributes)>
+        <label id="elh_tblAssessment_str_Full_Name_Hdr" for="x_str_Full_Name_Hdr" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.Caption)@Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.CellAttributes)>
+<span id="el_tblAssessment_str_Full_Name_Hdr">
+    <select
+        id="x_str_Full_Name_Hdr"
+        name="x_str_Full_Name_Hdr"
+        class="form-select ew-select@(tblAssessmentEdit.str_Full_Name_Hdr.IsInvalidClass)"
+        data-select2-id="ftblAssessmentedit_x_str_Full_Name_Hdr"
+        data-table="tblAssessment"
+        data-field="x_str_Full_Name_Hdr"
+        data-page="1"
+        data-value-separator="@(tblAssessmentEdit.str_Full_Name_Hdr.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAssessmentEdit.str_Full_Name_Hdr.PlaceHolder))"
+        data-ew-action="update-options"
+        @Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.EditAttributes)>
+        @(tblAssessmentEdit.str_Full_Name_Hdr.SelectOptionListHtml("x_str_Full_Name_Hdr"))
+    </select>
+    @Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.GetErrorMessage())</div>
+@Html.Raw(tblAssessmentEdit.str_Full_Name_Hdr.Lookup.GetParamTag(tblAssessmentEdit, "p_x_str_Full_Name_Hdr"))
+<script>
+loadjs.ready("ftblAssessmentedit", function() {
+    var options = { name: "x_str_Full_Name_Hdr", selectId: "ftblAssessmentedit_x_str_Full_Name_Hdr" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAssessmentedit.lists.str_Full_Name_Hdr?.lookupOptions.length) {
+        options.data = { id: "x_str_Full_Name_Hdr", form: "ftblAssessmentedit" };
+    } else {
+        options.ajax = { id: "x_str_Full_Name_Hdr", form: "ftblAssessmentedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.str_Full_Name_Hdr.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.str_Full_Name_Hdr.Visible (end) *@
+@if (tblAssessmentEdit.NationalID.Visible) { // tblAssessmentEdit.NationalID.Visible (begin)
+    <div id="r_NationalID" @Html.Raw(tblAssessmentEdit.NationalID.RowAttributes)>
+        <label id="elh_tblAssessment_NationalID" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.NationalID.Caption)@Html.Raw(tblAssessmentEdit.NationalID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.NationalID.CellAttributes)>
+<span id="el_tblAssessment_NationalID">
+<span>@{
+    if (IsRTL) {
+        tblAssessmentEdit.NationalID.EditAttrs["dir"] = "rtl";
+    }
+}</span>
+<span id="as_x_NationalID" class="ew-auto-suggest">
+    <input type="text" class="form-control" name="sv_x_NationalID" id="sv_x_NationalID" value="@(RemoveHtml(ConvertToString(tblAssessmentEdit.NationalID.EditValue)))" autocomplete="off" size="30" placeholder="@Html.Raw(HtmlEncode(tblAssessmentEdit.NationalID.PlaceHolder))" data-placeholder="@Html.Raw(HtmlEncode(tblAssessmentEdit.NationalID.PlaceHolder))" data-format-pattern="@(tblAssessmentEdit.NationalID.FormatPattern)" @Html.Raw(tblAssessmentEdit.NationalID.EditAttributes) aria-describedby="x_NationalID_help">
+</span>
+<selection-list hidden class="form-control" data-table="tblAssessment" data-field="x_NationalID" data-input="sv_x_NationalID" data-page="1" data-value-separator="@(tblAssessmentEdit.NationalID.DisplayValueSeparatorAttribute)" name="x_NationalID" id="x_NationalID" value="@(HtmlEncode(tblAssessmentEdit.NationalID.CurrentValue))"></selection-list>
+@Html.Raw(tblAssessmentEdit.NationalID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.NationalID.GetErrorMessage())</div>
+<script>
+loadjs.ready(["ftblAssessmentedit"], function() {
+    ftblAssessmentedit.createAutoSuggest(Object.assign({"id":"x_NationalID","forceSelect":false}, { lookupAllDisplayFields: @(tblAssessmentEdit.NationalID.Lookup.LookupAllDisplayFields ? "true" : "false") }, ew.vars.tables.tblAssessment.fields.NationalID.autoSuggestOptions));
+});
+</script>
+@Html.Raw(tblAssessmentEdit.NationalID.Lookup.GetParamTag(tblAssessmentEdit, "p_x_NationalID"))
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.NationalID.Visible (end) *@
+@if (tblAssessmentEdit.AbsherApptNbr.Visible) { // tblAssessmentEdit.AbsherApptNbr.Visible (begin)
+    <div id="r_AbsherApptNbr" @Html.Raw(tblAssessmentEdit.AbsherApptNbr.RowAttributes)>
+        <label id="elh_tblAssessment_AbsherApptNbr" for="x_AbsherApptNbr" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.AbsherApptNbr.Caption)@Html.Raw(tblAssessmentEdit.AbsherApptNbr.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.AbsherApptNbr.CellAttributes)>
+<span id="el_tblAssessment_AbsherApptNbr">
+<span @Html.Raw(tblAssessmentEdit.AbsherApptNbr.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.AbsherApptNbr.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_AbsherApptNbr" data-hidden="1" data-page="1" name="x_AbsherApptNbr" id="x_AbsherApptNbr" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.AbsherApptNbr.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.AbsherApptNbr.Visible (end) *@
+@if (tblAssessmentEdit.Absherphoto.Visible) { // tblAssessmentEdit.Absherphoto.Visible (begin)
+    <div id="r_Absherphoto" @Html.Raw(tblAssessmentEdit.Absherphoto.RowAttributes)>
+        <label id="elh_tblAssessment_Absherphoto" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.Absherphoto.Caption)@Html.Raw(tblAssessmentEdit.Absherphoto.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.Absherphoto.CellAttributes)>
+<span id="el_tblAssessment_Absherphoto">
+<span>
+@Html.Raw(await GetFileViewTag((DbField)tblAssessmentEdit.Absherphoto, ConvertToString(tblAssessmentEdit.Absherphoto.EditValue), false))
+</span>
+<input type="hidden" data-table="tblAssessment" data-field="x_Absherphoto" data-hidden="1" data-page="1" name="x_Absherphoto" id="x_Absherphoto" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.Absherphoto.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.Absherphoto.Visible (end) *@
+@if (tblAssessmentEdit.date_Birth.Visible) { // tblAssessmentEdit.date_Birth.Visible (begin)
+    <div id="r_date_Birth" @Html.Raw(tblAssessmentEdit.date_Birth.RowAttributes)>
+        <label id="elh_tblAssessment_date_Birth" for="x_date_Birth" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.date_Birth.Caption)@Html.Raw(tblAssessmentEdit.date_Birth.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.date_Birth.CellAttributes)>
+<span id="el_tblAssessment_date_Birth">
+<span @Html.Raw(tblAssessmentEdit.date_Birth.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.date_Birth.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_date_Birth" data-hidden="1" data-page="1" name="x_date_Birth" id="x_date_Birth" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.date_Birth.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.date_Birth.Visible (end) *@
+@if (tblAssessmentEdit.date_Birth_Hijri.Visible) { // tblAssessmentEdit.date_Birth_Hijri.Visible (begin)
+    <div id="r_date_Birth_Hijri" @Html.Raw(tblAssessmentEdit.date_Birth_Hijri.RowAttributes)>
+        <label id="elh_tblAssessment_date_Birth_Hijri" for="x_date_Birth_Hijri" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.date_Birth_Hijri.Caption)@Html.Raw(tblAssessmentEdit.date_Birth_Hijri.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.date_Birth_Hijri.CellAttributes)>
+<span id="el_tblAssessment_date_Birth_Hijri">
+<span @Html.Raw(tblAssessmentEdit.date_Birth_Hijri.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.date_Birth_Hijri.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_date_Birth_Hijri" data-hidden="1" data-page="1" name="x_date_Birth_Hijri" id="x_date_Birth_Hijri" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.date_Birth_Hijri.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.date_Birth_Hijri.Visible (end) *@
+@if (tblAssessmentEdit.str_Cell_Phone.Visible) { // tblAssessmentEdit.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" @Html.Raw(tblAssessmentEdit.str_Cell_Phone.RowAttributes)>
+        <label id="elh_tblAssessment_str_Cell_Phone" for="x_str_Cell_Phone" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.str_Cell_Phone.Caption)@Html.Raw(tblAssessmentEdit.str_Cell_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.str_Cell_Phone.CellAttributes)>
+<span id="el_tblAssessment_str_Cell_Phone">
+<span @Html.Raw(tblAssessmentEdit.str_Cell_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.str_Cell_Phone.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_str_Cell_Phone" data-hidden="1" data-page="1" name="x_str_Cell_Phone" id="x_str_Cell_Phone" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.str_Cell_Phone.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.str_Cell_Phone.Visible (end) *@
+@if (tblAssessmentEdit.str_Email.Visible) { // tblAssessmentEdit.str_Email.Visible (begin)
+    <div id="r_str_Email" @Html.Raw(tblAssessmentEdit.str_Email.RowAttributes)>
+        <label id="elh_tblAssessment_str_Email" for="x_str_Email" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.str_Email.Caption)@Html.Raw(tblAssessmentEdit.str_Email.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.str_Email.CellAttributes)>
+<span id="el_tblAssessment_str_Email">
+<span @Html.Raw(tblAssessmentEdit.str_Email.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.str_Email.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_str_Email" data-hidden="1" data-page="1" name="x_str_Email" id="x_str_Email" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.str_Email.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.str_Email.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblAssessmentEdit.MultiPages.TabPaneClasses(2))" id="tab_tblAssessment2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblAssessmentEdit.Assessment_Type.Visible) { // tblAssessmentEdit.Assessment_Type.Visible (begin)
+    <div id="r_Assessment_Type" @Html.Raw(tblAssessmentEdit.Assessment_Type.RowAttributes)>
+        <label id="elh_tblAssessment_Assessment_Type" for="x_Assessment_Type" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.Assessment_Type.Caption)@Html.Raw(tblAssessmentEdit.Assessment_Type.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.Assessment_Type.CellAttributes)>
+<span id="el_tblAssessment_Assessment_Type">
+    <select
+        id="x_Assessment_Type"
+        name="x_Assessment_Type"
+        class="form-select ew-select@(tblAssessmentEdit.Assessment_Type.IsInvalidClass)"
+        data-select2-id="ftblAssessmentedit_x_Assessment_Type"
+        data-table="tblAssessment"
+        data-field="x_Assessment_Type"
+        data-page="2"
+        data-value-separator="@(tblAssessmentEdit.Assessment_Type.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAssessmentEdit.Assessment_Type.PlaceHolder))"
+        @Html.Raw(tblAssessmentEdit.Assessment_Type.EditAttributes)>
+        @(tblAssessmentEdit.Assessment_Type.SelectOptionListHtml("x_Assessment_Type"))
+    </select>
+    @Html.Raw(tblAssessmentEdit.Assessment_Type.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.Assessment_Type.GetErrorMessage())</div>
+<script>
+loadjs.ready("ftblAssessmentedit", function() {
+    var options = { name: "x_Assessment_Type", selectId: "ftblAssessmentedit_x_Assessment_Type" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAssessmentedit.lists.Assessment_Type?.lookupOptions.length) {
+        options.data = { id: "x_Assessment_Type", form: "ftblAssessmentedit" };
+    } else {
+        options.ajax = { id: "x_Assessment_Type", form: "ftblAssessmentedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.Assessment_Type.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.Assessment_Type.Visible (end) *@
+@if (tblAssessmentEdit.AssessmentDate.Visible) { // tblAssessmentEdit.AssessmentDate.Visible (begin)
+    <div id="r_AssessmentDate" @Html.Raw(tblAssessmentEdit.AssessmentDate.RowAttributes)>
+        <label id="elh_tblAssessment_AssessmentDate" for="x_AssessmentDate" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.AssessmentDate.Caption)@Html.Raw(tblAssessmentEdit.AssessmentDate.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.AssessmentDate.CellAttributes)>
+<span id="el_tblAssessment_AssessmentDate">
+<input type="@(tblAssessmentEdit.AssessmentDate.InputTextType)" name="x_AssessmentDate" id="x_AssessmentDate" data-table="tblAssessment" data-field="x_AssessmentDate" value="@Html.Raw(tblAssessmentEdit.AssessmentDate.EditValue)" data-page="2" placeholder="@Html.Raw(HtmlEncode(tblAssessmentEdit.AssessmentDate.PlaceHolder))" data-format-pattern="@(tblAssessmentEdit.AssessmentDate.FormatPattern)"@Html.Raw(tblAssessmentEdit.AssessmentDate.EditAttributes) aria-describedby="x_AssessmentDate_help">
+@Html.Raw(tblAssessmentEdit.AssessmentDate.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.AssessmentDate.GetErrorMessage())</div>
+@if (!tblAssessmentEdit.AssessmentDate.ReadOnly && !tblAssessmentEdit.AssessmentDate.Disabled && !tblAssessmentEdit.AssessmentDate.EditAttrs.Is("readonly") && !tblAssessmentEdit.AssessmentDate.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblAssessmentedit", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(16))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblAssessmentedit", "x_AssessmentDate", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.AssessmentDate.Visible (end) *@
+@if (tblAssessmentEdit.isAssessmentDone.Visible) { // tblAssessmentEdit.isAssessmentDone.Visible (begin)
+    <div id="r_isAssessmentDone" @Html.Raw(tblAssessmentEdit.isAssessmentDone.RowAttributes)>
+        <label id="elh_tblAssessment_isAssessmentDone" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.isAssessmentDone.Caption)@Html.Raw(tblAssessmentEdit.isAssessmentDone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.isAssessmentDone.CellAttributes)>
+<span id="el_tblAssessment_isAssessmentDone">
+<template id="tp_x_isAssessmentDone">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="tblAssessment" data-field="x_isAssessmentDone" name="x_isAssessmentDone" id="x_isAssessmentDone"@Html.Raw(tblAssessmentEdit.isAssessmentDone.EditAttributes)>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_isAssessmentDone" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_isAssessmentDone"
+    name="x_isAssessmentDone"
+    value="@(HtmlEncode(tblAssessmentEdit.isAssessmentDone.CurrentValue))"
+    data-type="select-one"
+    data-template="tp_x_isAssessmentDone"
+    data-target="dsl_x_isAssessmentDone"
+    data-repeatcolumn="5"
+    class="form-control@(tblAssessmentEdit.isAssessmentDone.IsInvalidClass)"
+    data-table="tblAssessment"
+    data-field="x_isAssessmentDone"
+    data-page="2"
+    data-value-separator="@(tblAssessmentEdit.isAssessmentDone.DisplayValueSeparatorAttribute)"
+    @Html.Raw(tblAssessmentEdit.isAssessmentDone.EditAttributes)></selection-list>
+@Html.Raw(tblAssessmentEdit.isAssessmentDone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.isAssessmentDone.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.isAssessmentDone.Visible (end) *@
+@if (tblAssessmentEdit.AssessmentScore.Visible) { // tblAssessmentEdit.AssessmentScore.Visible (begin)
+    <div id="r_AssessmentScore" @Html.Raw(tblAssessmentEdit.AssessmentScore.RowAttributes)>
+        <label id="elh_tblAssessment_AssessmentScore" for="x_AssessmentScore" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.AssessmentScore.Caption)@Html.Raw(tblAssessmentEdit.AssessmentScore.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.AssessmentScore.CellAttributes)>
+<span id="el_tblAssessment_AssessmentScore">
+<span @Html.Raw(tblAssessmentEdit.AssessmentScore.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.AssessmentScore.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_AssessmentScore" data-hidden="1" data-page="2" name="x_AssessmentScore" id="x_AssessmentScore" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.AssessmentScore.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.AssessmentScore.Visible (end) *@
+@if (tblAssessmentEdit.Assessment_Instructor.Visible) { // tblAssessmentEdit.Assessment_Instructor.Visible (begin)
+    <div id="r_Assessment_Instructor" @Html.Raw(tblAssessmentEdit.Assessment_Instructor.RowAttributes)>
+        <label id="elh_tblAssessment_Assessment_Instructor" for="x_Assessment_Instructor" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.Assessment_Instructor.Caption)@Html.Raw(tblAssessmentEdit.Assessment_Instructor.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.Assessment_Instructor.CellAttributes)>
+<span id="el_tblAssessment_Assessment_Instructor">
+    <select
+        id="x_Assessment_Instructor"
+        name="x_Assessment_Instructor"
+        class="form-select ew-select@(tblAssessmentEdit.Assessment_Instructor.IsInvalidClass)"
+        data-select2-id="ftblAssessmentedit_x_Assessment_Instructor"
+        data-table="tblAssessment"
+        data-field="x_Assessment_Instructor"
+        data-page="2"
+        data-value-separator="@(tblAssessmentEdit.Assessment_Instructor.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(tblAssessmentEdit.Assessment_Instructor.PlaceHolder))"
+        @Html.Raw(tblAssessmentEdit.Assessment_Instructor.EditAttributes)>
+        @(tblAssessmentEdit.Assessment_Instructor.SelectOptionListHtml("x_Assessment_Instructor"))
+    </select>
+    @Html.Raw(tblAssessmentEdit.Assessment_Instructor.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.Assessment_Instructor.GetErrorMessage())</div>
+@Html.Raw(tblAssessmentEdit.Assessment_Instructor.Lookup.GetParamTag(tblAssessmentEdit, "p_x_Assessment_Instructor"))
+<script>
+loadjs.ready("ftblAssessmentedit", function() {
+    var options = { name: "x_Assessment_Instructor", selectId: "ftblAssessmentedit_x_Assessment_Instructor" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (ftblAssessmentedit.lists.Assessment_Instructor?.lookupOptions.length) {
+        options.data = { id: "x_Assessment_Instructor", form: "ftblAssessmentedit" };
+    } else {
+        options.ajax = { id: "x_Assessment_Instructor", form: "ftblAssessmentedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblAssessment.fields.Assessment_Instructor.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.Assessment_Instructor.Visible (end) *@
+@if (tblAssessmentEdit.intDrivinglicenseType.Visible) { // tblAssessmentEdit.intDrivinglicenseType.Visible (begin)
+    <div id="r_intDrivinglicenseType" @Html.Raw(tblAssessmentEdit.intDrivinglicenseType.RowAttributes)>
+        <label id="elh_tblAssessment_intDrivinglicenseType" for="x_intDrivinglicenseType" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.intDrivinglicenseType.Caption)@Html.Raw(tblAssessmentEdit.intDrivinglicenseType.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.intDrivinglicenseType.CellAttributes)>
+<span id="el_tblAssessment_intDrivinglicenseType">
+<span @Html.Raw(tblAssessmentEdit.intDrivinglicenseType.ViewAttributes)>
+@if ((!EmptyString(tblAssessmentEdit.intDrivinglicenseType.EditValue) || !EmptyString(tblAssessmentEdit.intDrivinglicenseType.TooltipValue)) && !Empty(tblAssessmentEdit.intDrivinglicenseType.LinkAttributes)) {
+<a @Html.Raw(tblAssessmentEdit.intDrivinglicenseType.LinkAttributes)><input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.intDrivinglicenseType.EditValue)))"></a>
+} else {
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.intDrivinglicenseType.EditValue)))">
+}
+</span>
+<input type="hidden" data-table="tblAssessment" data-field="x_intDrivinglicenseType" data-hidden="1" data-page="2" name="x_intDrivinglicenseType" id="x_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.intDrivinglicenseType.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.intDrivinglicenseType.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="@(tblAssessmentEdit.MultiPages.TabPaneClasses(3))" id="tab_tblAssessment3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+@if (tblAssessmentEdit.AccidentOccurrence.Visible) { // tblAssessmentEdit.AccidentOccurrence.Visible (begin)
+    <div id="r_AccidentOccurrence" @Html.Raw(tblAssessmentEdit.AccidentOccurrence.RowAttributes)>
+        <label id="elh_tblAssessment_AccidentOccurrence" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.AccidentOccurrence.Caption)@Html.Raw(tblAssessmentEdit.AccidentOccurrence.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.AccidentOccurrence.CellAttributes)>
+<span id="el_tblAssessment_AccidentOccurrence">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblAssessmentEdit.AccidentOccurrence.IsInvalidClass)" data-table="tblAssessment" data-field="x_AccidentOccurrence" data-boolean data-page="3" name="x_AccidentOccurrence" id="x_AccidentOccurrence" value="1" checked="@ConvertToBool(tblAssessmentEdit.AccidentOccurrence.CurrentValue)" @Html.Raw(tblAssessmentEdit.AccidentOccurrence.EditAttributes) aria-describedby="x_AccidentOccurrence_help">
+    <div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.AccidentOccurrence.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblAssessmentEdit.AccidentOccurrence.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.AccidentOccurrence.Visible (end) *@
+@if (tblAssessmentEdit.Dt_AccidentOccurrence.Visible) { // tblAssessmentEdit.Dt_AccidentOccurrence.Visible (begin)
+    <div id="r_Dt_AccidentOccurrence" @Html.Raw(tblAssessmentEdit.Dt_AccidentOccurrence.RowAttributes)>
+        <label id="elh_tblAssessment_Dt_AccidentOccurrence" for="x_Dt_AccidentOccurrence" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.Dt_AccidentOccurrence.Caption)@Html.Raw(tblAssessmentEdit.Dt_AccidentOccurrence.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.Dt_AccidentOccurrence.CellAttributes)>
+<span id="el_tblAssessment_Dt_AccidentOccurrence">
+<span @Html.Raw(tblAssessmentEdit.Dt_AccidentOccurrence.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblAssessmentEdit.Dt_AccidentOccurrence.EditValue)))"></span>
+<input type="hidden" data-table="tblAssessment" data-field="x_Dt_AccidentOccurrence" data-hidden="1" data-page="3" name="x_Dt_AccidentOccurrence" id="x_Dt_AccidentOccurrence" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.Dt_AccidentOccurrence.CurrentValue))">
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.Dt_AccidentOccurrence.Visible (end) *@
+@if (tblAssessmentEdit.AccidentNotes.Visible) { // tblAssessmentEdit.AccidentNotes.Visible (begin)
+    <div id="r_AccidentNotes" @Html.Raw(tblAssessmentEdit.AccidentNotes.RowAttributes)>
+        <label id="elh_tblAssessment_AccidentNotes" for="x_AccidentNotes" class="@(tblAssessmentEdit.LeftColumnClass)">@Html.Raw(tblAssessmentEdit.AccidentNotes.Caption)@Html.Raw(tblAssessmentEdit.AccidentNotes.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblAssessmentEdit.RightColumnClass)"><div @Html.Raw(tblAssessmentEdit.AccidentNotes.CellAttributes)>
+<span id="el_tblAssessment_AccidentNotes">
+<textarea data-table="tblAssessment" data-field="x_AccidentNotes" data-page="3" name="x_AccidentNotes" id="x_AccidentNotes" cols="35" rows="4" placeholder="@Html.Raw(HtmlEncode(tblAssessmentEdit.AccidentNotes.PlaceHolder))"@Html.Raw(tblAssessmentEdit.AccidentNotes.EditAttributes) aria-describedby="x_AccidentNotes_help">@(tblAssessmentEdit.AccidentNotes.EditValue)</textarea>
+@Html.Raw(tblAssessmentEdit.AccidentNotes.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblAssessmentEdit.AccidentNotes.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblAssessmentEdit.AccidentNotes.Visible (end) *@
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
+    <input type="hidden" data-table="tblAssessment" data-field="x_AssessmentID" data-hidden="1" name="x_AssessmentID" id="x_AssessmentID" value="@Html.Raw(HtmlEncode(tblAssessmentEdit.AssessmentID.CurrentValue))">
+@{ tblAssessmentEdit.CloseRecordset(); }
+@if (tblAssessmentEdit.CurrentDetailTables.Contains("tblEvaluation") && tblEvaluation.DetailEdit) {
+    if (!Empty(tblAssessmentEdit.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblEvaluation", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblEvaluationGrid")
+    View = this;
+}
+@if (tblAssessmentEdit.CurrentDetailTables.Contains("tblEvaluationMB") && tblEvaluationMb.DetailEdit) {
+    if (!Empty(tblAssessmentEdit.CurrentDetailTable)) {
+<h4 class="ew-detail-caption">@Html.Raw(Language.TablePhrase("tblEvaluationMB", "TblCaption"))</h4>
+    }
+        @await Html.PartialAsync("TblEvaluationMbGrid")
+    View = this;
+}
+@Html.Raw(tblAssessmentEdit.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblAssessmentEdit.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblAssessmentedit">@Html.Raw(Language.Phrase("SaveBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblAssessmentedit" data-href="@AppPath(tblAssessmentEdit.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblAssessmentEdit.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+</main>
+@tblAssessmentEdit.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblAssessment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

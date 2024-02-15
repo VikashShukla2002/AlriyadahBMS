@@ -1,0 +1,304 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblNationalityAdd.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblNationalityAdd.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblNationalityAdd.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblNationality: currentTable } });
+var currentPageID = ew.PAGE_ID = "add";
+var currentForm;
+var ftblNationalityadd;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblNationalityadd")
+        .setPageId("add")
+
+        // Add fields
+        .setFields([
+
+            ["ID", [fields.ID.visible && fields.ID.required ? ew.Validators.required(fields.ID.caption) : null, ew.Validators.integer], fields.ID.isInvalid],
+            ["Nationality_en", [fields.Nationality_en.visible && fields.Nationality_en.required ? ew.Validators.required(fields.Nationality_en.caption) : null], fields.Nationality_en.isInvalid],
+            ["Nationality_arabic", [fields.Nationality_arabic.visible && fields.Nationality_arabic.required ? ew.Validators.required(fields.Nationality_arabic.caption) : null], fields.Nationality_arabic.isInvalid],
+            ["IsActive", [fields.IsActive.visible && fields.IsActive.required ? ew.Validators.required(fields.IsActive.caption) : null], fields.IsActive.isInvalid],
+            ["IsDeleted", [fields.IsDeleted.visible && fields.IsDeleted.required ? ew.Validators.required(fields.IsDeleted.caption) : null], fields.IsDeleted.isInvalid],
+            ["int_Status", [fields.int_Status.visible && fields.int_Status.required ? ew.Validators.required(fields.int_Status.caption) : null, ew.Validators.integer], fields.int_Status.isInvalid],
+            ["int_Created_By", [fields.int_Created_By.visible && fields.int_Created_By.required ? ew.Validators.required(fields.int_Created_By.caption) : null, ew.Validators.float], fields.int_Created_By.isInvalid],
+            ["int_Modified_By", [fields.int_Modified_By.visible && fields.int_Modified_By.required ? ew.Validators.required(fields.int_Modified_By.caption) : null, ew.Validators.float], fields.int_Modified_By.isInvalid],
+            ["date_Created", [fields.date_Created.visible && fields.date_Created.required ? ew.Validators.required(fields.date_Created.caption) : null, ew.Validators.datetime(fields.date_Created.clientFormatPattern)], fields.date_Created.isInvalid],
+            ["date_Modified", [fields.date_Modified.visible && fields.date_Modified.required ? ew.Validators.required(fields.date_Modified.caption) : null, ew.Validators.datetime(fields.date_Modified.clientFormatPattern)], fields.date_Modified.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "IsActive": @Html.Raw(tblNationalityAdd.IsActive.ToClientList(tblNationalityAdd)),
+            "IsDeleted": @Html.Raw(tblNationalityAdd.IsDeleted.ToClientList(tblNationalityAdd)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@tblNationalityAdd.ShowPageHeader()
+@tblNationalityAdd.ShowMessages()
+<form name="ftblNationalityadd" id="ftblNationalityadd" class="@(tblNationalityAdd.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="modal" value="@ConvertToInt(tblNationalityAdd.IsModal)">
+@if (IsJsonResponse()) {
+<input type="hidden" name="json" value="1">
+}
+<input type="hidden" name="@(tblNationalityAdd.OldKeyName)" value="@Html.Raw(tblNationalityAdd.OldKey)">
+<div class="ew-add-div"><!-- page* -->
+@if (tblNationalityAdd.ID.Visible) { // tblNationalityAdd.ID.Visible (begin)
+    <div id="r_ID" @Html.Raw(tblNationalityAdd.ID.RowAttributes)>
+        <label id="elh_tblNationality_ID" for="x_ID" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.ID.Caption)@Html.Raw(tblNationalityAdd.ID.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.ID.CellAttributes)>
+<span id="el_tblNationality_ID">
+<input type="@(tblNationalityAdd.ID.InputTextType)" name="x_ID" id="x_ID" data-table="tblNationality" data-field="x_ID" value="@Html.Raw(tblNationalityAdd.ID.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.ID.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.ID.FormatPattern)"@Html.Raw(tblNationalityAdd.ID.EditAttributes) aria-describedby="x_ID_help">
+@Html.Raw(tblNationalityAdd.ID.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.ID.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.ID.Visible (end) *@
+@if (tblNationalityAdd.Nationality_en.Visible) { // tblNationalityAdd.Nationality_en.Visible (begin)
+    <div id="r_Nationality_en" @Html.Raw(tblNationalityAdd.Nationality_en.RowAttributes)>
+        <label id="elh_tblNationality_Nationality_en" for="x_Nationality_en" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.Nationality_en.Caption)@Html.Raw(tblNationalityAdd.Nationality_en.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.Nationality_en.CellAttributes)>
+<span id="el_tblNationality_Nationality_en">
+<input type="@(tblNationalityAdd.Nationality_en.InputTextType)" name="x_Nationality_en" id="x_Nationality_en" data-table="tblNationality" data-field="x_Nationality_en" value="@Html.Raw(tblNationalityAdd.Nationality_en.EditValue)" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.Nationality_en.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.Nationality_en.FormatPattern)"@Html.Raw(tblNationalityAdd.Nationality_en.EditAttributes) aria-describedby="x_Nationality_en_help">
+@Html.Raw(tblNationalityAdd.Nationality_en.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.Nationality_en.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.Nationality_en.Visible (end) *@
+@if (tblNationalityAdd.Nationality_arabic.Visible) { // tblNationalityAdd.Nationality_arabic.Visible (begin)
+    <div id="r_Nationality_arabic" @Html.Raw(tblNationalityAdd.Nationality_arabic.RowAttributes)>
+        <label id="elh_tblNationality_Nationality_arabic" for="x_Nationality_arabic" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.Nationality_arabic.Caption)@Html.Raw(tblNationalityAdd.Nationality_arabic.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.Nationality_arabic.CellAttributes)>
+<span id="el_tblNationality_Nationality_arabic">
+<input type="@(tblNationalityAdd.Nationality_arabic.InputTextType)" name="x_Nationality_arabic" id="x_Nationality_arabic" data-table="tblNationality" data-field="x_Nationality_arabic" value="@Html.Raw(tblNationalityAdd.Nationality_arabic.EditValue)" size="30" maxlength="200" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.Nationality_arabic.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.Nationality_arabic.FormatPattern)"@Html.Raw(tblNationalityAdd.Nationality_arabic.EditAttributes) aria-describedby="x_Nationality_arabic_help">
+@Html.Raw(tblNationalityAdd.Nationality_arabic.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.Nationality_arabic.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.Nationality_arabic.Visible (end) *@
+@if (tblNationalityAdd.IsActive.Visible) { // tblNationalityAdd.IsActive.Visible (begin)
+    <div id="r_IsActive" @Html.Raw(tblNationalityAdd.IsActive.RowAttributes)>
+        <label id="elh_tblNationality_IsActive" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.IsActive.Caption)@Html.Raw(tblNationalityAdd.IsActive.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.IsActive.CellAttributes)>
+<span id="el_tblNationality_IsActive">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblNationalityAdd.IsActive.IsInvalidClass)" data-table="tblNationality" data-field="x_IsActive" data-boolean name="x_IsActive" id="x_IsActive" value="1" checked="@ConvertToBool(tblNationalityAdd.IsActive.CurrentValue)" @Html.Raw(tblNationalityAdd.IsActive.EditAttributes) aria-describedby="x_IsActive_help">
+    <div class="invalid-feedback">@Html.Raw(tblNationalityAdd.IsActive.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblNationalityAdd.IsActive.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.IsActive.Visible (end) *@
+@if (tblNationalityAdd.IsDeleted.Visible) { // tblNationalityAdd.IsDeleted.Visible (begin)
+    <div id="r_IsDeleted" @Html.Raw(tblNationalityAdd.IsDeleted.RowAttributes)>
+        <label id="elh_tblNationality_IsDeleted" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.IsDeleted.Caption)@Html.Raw(tblNationalityAdd.IsDeleted.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.IsDeleted.CellAttributes)>
+<span id="el_tblNationality_IsDeleted">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(tblNationalityAdd.IsDeleted.IsInvalidClass)" data-table="tblNationality" data-field="x_IsDeleted" data-boolean name="x_IsDeleted" id="x_IsDeleted" value="1" checked="@ConvertToBool(tblNationalityAdd.IsDeleted.CurrentValue)" @Html.Raw(tblNationalityAdd.IsDeleted.EditAttributes) aria-describedby="x_IsDeleted_help">
+    <div class="invalid-feedback">@Html.Raw(tblNationalityAdd.IsDeleted.GetErrorMessage())</div>
+</div>
+@Html.Raw(tblNationalityAdd.IsDeleted.GetCustomMessage)
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.IsDeleted.Visible (end) *@
+@if (tblNationalityAdd.int_Status.Visible) { // tblNationalityAdd.int_Status.Visible (begin)
+    <div id="r_int_Status" @Html.Raw(tblNationalityAdd.int_Status.RowAttributes)>
+        <label id="elh_tblNationality_int_Status" for="x_int_Status" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.int_Status.Caption)@Html.Raw(tblNationalityAdd.int_Status.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.int_Status.CellAttributes)>
+<span id="el_tblNationality_int_Status">
+<input type="@(tblNationalityAdd.int_Status.InputTextType)" name="x_int_Status" id="x_int_Status" data-table="tblNationality" data-field="x_int_Status" value="@Html.Raw(tblNationalityAdd.int_Status.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.int_Status.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.int_Status.FormatPattern)"@Html.Raw(tblNationalityAdd.int_Status.EditAttributes) aria-describedby="x_int_Status_help">
+@Html.Raw(tblNationalityAdd.int_Status.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.int_Status.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.int_Status.Visible (end) *@
+@if (tblNationalityAdd.int_Created_By.Visible) { // tblNationalityAdd.int_Created_By.Visible (begin)
+    <div id="r_int_Created_By" @Html.Raw(tblNationalityAdd.int_Created_By.RowAttributes)>
+        <label id="elh_tblNationality_int_Created_By" for="x_int_Created_By" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.int_Created_By.Caption)@Html.Raw(tblNationalityAdd.int_Created_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.int_Created_By.CellAttributes)>
+<span id="el_tblNationality_int_Created_By">
+<input type="@(tblNationalityAdd.int_Created_By.InputTextType)" name="x_int_Created_By" id="x_int_Created_By" data-table="tblNationality" data-field="x_int_Created_By" value="@Html.Raw(tblNationalityAdd.int_Created_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.int_Created_By.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.int_Created_By.FormatPattern)"@Html.Raw(tblNationalityAdd.int_Created_By.EditAttributes) aria-describedby="x_int_Created_By_help">
+@Html.Raw(tblNationalityAdd.int_Created_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.int_Created_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.int_Created_By.Visible (end) *@
+@if (tblNationalityAdd.int_Modified_By.Visible) { // tblNationalityAdd.int_Modified_By.Visible (begin)
+    <div id="r_int_Modified_By" @Html.Raw(tblNationalityAdd.int_Modified_By.RowAttributes)>
+        <label id="elh_tblNationality_int_Modified_By" for="x_int_Modified_By" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.int_Modified_By.Caption)@Html.Raw(tblNationalityAdd.int_Modified_By.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.int_Modified_By.CellAttributes)>
+<span id="el_tblNationality_int_Modified_By">
+<input type="@(tblNationalityAdd.int_Modified_By.InputTextType)" name="x_int_Modified_By" id="x_int_Modified_By" data-table="tblNationality" data-field="x_int_Modified_By" value="@Html.Raw(tblNationalityAdd.int_Modified_By.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.int_Modified_By.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.int_Modified_By.FormatPattern)"@Html.Raw(tblNationalityAdd.int_Modified_By.EditAttributes) aria-describedby="x_int_Modified_By_help">
+@Html.Raw(tblNationalityAdd.int_Modified_By.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.int_Modified_By.GetErrorMessage())</div>
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.int_Modified_By.Visible (end) *@
+@if (tblNationalityAdd.date_Created.Visible) { // tblNationalityAdd.date_Created.Visible (begin)
+    <div id="r_date_Created" @Html.Raw(tblNationalityAdd.date_Created.RowAttributes)>
+        <label id="elh_tblNationality_date_Created" for="x_date_Created" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.date_Created.Caption)@Html.Raw(tblNationalityAdd.date_Created.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.date_Created.CellAttributes)>
+<span id="el_tblNationality_date_Created">
+<input type="@(tblNationalityAdd.date_Created.InputTextType)" name="x_date_Created" id="x_date_Created" data-table="tblNationality" data-field="x_date_Created" value="@Html.Raw(tblNationalityAdd.date_Created.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.date_Created.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.date_Created.FormatPattern)"@Html.Raw(tblNationalityAdd.date_Created.EditAttributes) aria-describedby="x_date_Created_help">
+@Html.Raw(tblNationalityAdd.date_Created.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.date_Created.GetErrorMessage())</div>
+@if (!tblNationalityAdd.date_Created.ReadOnly && !tblNationalityAdd.date_Created.Disabled && !tblNationalityAdd.date_Created.EditAttrs.Is("readonly") && !tblNationalityAdd.date_Created.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblNationalityadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblNationalityadd", "x_date_Created", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.date_Created.Visible (end) *@
+@if (tblNationalityAdd.date_Modified.Visible) { // tblNationalityAdd.date_Modified.Visible (begin)
+    <div id="r_date_Modified" @Html.Raw(tblNationalityAdd.date_Modified.RowAttributes)>
+        <label id="elh_tblNationality_date_Modified" for="x_date_Modified" class="@(tblNationalityAdd.LeftColumnClass)">@Html.Raw(tblNationalityAdd.date_Modified.Caption)@Html.Raw(tblNationalityAdd.date_Modified.Required ? Language.Phrase("FieldRequiredIndicator") : "")</label>
+        <div class="@(tblNationalityAdd.RightColumnClass)"><div @Html.Raw(tblNationalityAdd.date_Modified.CellAttributes)>
+<span id="el_tblNationality_date_Modified">
+<input type="@(tblNationalityAdd.date_Modified.InputTextType)" name="x_date_Modified" id="x_date_Modified" data-table="tblNationality" data-field="x_date_Modified" value="@Html.Raw(tblNationalityAdd.date_Modified.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblNationalityAdd.date_Modified.PlaceHolder))" data-format-pattern="@(tblNationalityAdd.date_Modified.FormatPattern)"@Html.Raw(tblNationalityAdd.date_Modified.EditAttributes) aria-describedby="x_date_Modified_help">
+@Html.Raw(tblNationalityAdd.date_Modified.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(tblNationalityAdd.date_Modified.GetErrorMessage())</div>
+@if (!tblNationalityAdd.date_Modified.ReadOnly && !tblNationalityAdd.date_Modified.Disabled && !tblNationalityAdd.date_Modified.EditAttrs.Is("readonly") && !tblNationalityAdd.date_Modified.EditAttrs.Is("disabled")) {
+<script>
+loadjs.ready(["ftblNationalityadd", "datetimepicker"], function () {
+    let format = "@Html.Raw(DateFormat(0))", // DN
+        options = {
+                localization: {
+                    locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                    hourCycle: format.match(/H/) ? "h24" : "h12",
+                    format,
+                    ...ew.language.phrase("datetimepicker")
+                },
+                display: {
+                    icons: {
+                        previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                        next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                    },
+                    components: {
+                        hours: !!format.match(/h/i),
+                        minutes: !!format.match(/m/),
+                        seconds: !!format.match(/s/i)
+                    },
+                    theme: ew.isDark() ? "dark" : "auto"
+                }
+            };
+    ew.createDateTimePicker("ftblNationalityadd", "x_date_Modified", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+}
+</span>
+</div></div>
+    </div>
+} @* tblNationalityAdd.date_Modified.Visible (end) *@
+</div><!-- /page* -->
+@{ tblNationalityAdd.CloseRecordset(); }
+@Html.Raw(tblNationalityAdd.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(tblNationalityAdd.OffsetColumnClass)"><!-- buttons offset -->
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="ftblNationalityadd">@Html.Raw(Language.Phrase("AddBtn"))</button>
+@if (IsJsonResponse()) {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" data-bs-dismiss="modal">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+} else {
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="button" form="ftblNationalityadd" data-href="@AppPath(tblNationalityAdd.ReturnUrl)">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(tblNationalityAdd.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+@tblNationalityAdd.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblNationality");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>

@@ -1,0 +1,184 @@
+@if (qryStudEnrllistList.ModalGridAdd && qryStudEnrllistList.IsGridAdd || qryStudEnrllistList.ModalGridEdit && qryStudEnrllistList.IsGridEdit || qryStudEnrllistList.ModalMultiEdit && qryStudEnrllistList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryStudEnrllistList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryStudEnrllist: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryStudEnrllistList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryStudEnrllistList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryStudEnrllistList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryStudEnrllistList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryStudEnrllistList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryStudEnrllistList.TableGridClass)">
+@if (!qryStudEnrllistList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryStudEnrllistList.IsGridAdd && !(qryStudEnrllistList.IsGridEdit && qryStudEnrllistList.ModalGridEdit) && !qryStudEnrllistList.IsMultiEdit) {
+@Html.Raw(qryStudEnrllistList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryStudEnrllistList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryStudEnrllistList.FormName)" id="@(qryStudEnrllistList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryStudEnrllistList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryStudEnrllistList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_qryStudEnrllist" class="card-body ew-grid-middle-panel @(qryStudEnrllistList.TableContainerClass)" style="@(qryStudEnrllistList.TableContainerStyle)">
+@if (qryStudEnrllistList.TotalRecords > 0 || qryStudEnrllistList.IsGridEdit || qryStudEnrllistList.IsMultiEdit) {
+<table id="tbl_qryStudEnrllistlist" class="@(qryStudEnrllistList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryStudEnrllistList.RowType = RowType.Header;
+
+    // Render list options
+    await qryStudEnrllistList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryStudEnrllistList.ListOptions.RenderHeader("left")
+@if (qryStudEnrllistList.int_Enrollement_Id.Visible) { // qryStudEnrllistList.int_Enrollement_Id.Visible (begin)
+        <th data-name="int_Enrollement_Id" class="@(qryStudEnrllistList.int_Enrollement_Id.HeaderCellClass)"><div id="elh_qryStudEnrllist_int_Enrollement_Id" class="qryStudEnrllist_int_Enrollement_Id">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.int_Enrollement_Id))</div></th>
+} @* qryStudEnrllistList.int_Enrollement_Id.Visible (end) *@
+@if (qryStudEnrllistList.int_Package_Id.Visible) { // qryStudEnrllistList.int_Package_Id.Visible (begin)
+        <th data-name="int_Package_Id" class="@(qryStudEnrllistList.int_Package_Id.HeaderCellClass)"><div id="elh_qryStudEnrllist_int_Package_Id" class="qryStudEnrllist_int_Package_Id">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.int_Package_Id))</div></th>
+} @* qryStudEnrllistList.int_Package_Id.Visible (end) *@
+@if (qryStudEnrllistList.str_Username.Visible) { // qryStudEnrllistList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(qryStudEnrllistList.str_Username.HeaderCellClass)"><div id="elh_qryStudEnrllist_str_Username" class="qryStudEnrllist_str_Username">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.str_Username))</div></th>
+} @* qryStudEnrllistList.str_Username.Visible (end) *@
+@if (qryStudEnrllistList.NationalID.Visible) { // qryStudEnrllistList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(qryStudEnrllistList.NationalID.HeaderCellClass)"><div id="elh_qryStudEnrllist_NationalID" class="qryStudEnrllist_NationalID">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.NationalID))</div></th>
+} @* qryStudEnrllistList.NationalID.Visible (end) *@
+@if (qryStudEnrllistList.str_Package_Name.Visible) { // qryStudEnrllistList.str_Package_Name.Visible (begin)
+        <th data-name="str_Package_Name" class="@(qryStudEnrllistList.str_Package_Name.HeaderCellClass)"><div id="elh_qryStudEnrllist_str_Package_Name" class="qryStudEnrllist_str_Package_Name">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.str_Package_Name))</div></th>
+} @* qryStudEnrllistList.str_Package_Name.Visible (end) *@
+@if (qryStudEnrllistList.course.Visible) { // qryStudEnrllistList.course.Visible (begin)
+        <th data-name="course" class="@(qryStudEnrllistList.course.HeaderCellClass)"><div id="elh_qryStudEnrllist_course" class="qryStudEnrllist_course">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.course))</div></th>
+} @* qryStudEnrllistList.course.Visible (end) *@
+@if (qryStudEnrllistList.institution.Visible) { // qryStudEnrllistList.institution.Visible (begin)
+        <th data-name="institution" class="@(qryStudEnrllistList.institution.HeaderCellClass)"><div id="elh_qryStudEnrllist_institution" class="qryStudEnrllist_institution">@Html.Raw(qryStudEnrllistList.RenderFieldHeader(qryStudEnrllistList.institution))</div></th>
+} @* qryStudEnrllistList.institution.Visible (end) *@
+@* Render list options (header, right) *@
+@qryStudEnrllistList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryStudEnrllistList.PageNumber)">
+@{
+    await qryStudEnrllistList.SetupGrid();
+    bool eof = qryStudEnrllistList.Recordset == null; // DN
+}
+@while (qryStudEnrllistList.RecordCount < qryStudEnrllistList.StopRecord || SameString(qryStudEnrllistList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryStudEnrllistList.RowIndex, "$rowindex$") &&
+        (!qryStudEnrllistList.IsGridAdd || qryStudEnrllistList.CurrentMode == "copy") &&
+        (!((qryStudEnrllistList.IsCopy || qryStudEnrllistList.IsAdd) && qryStudEnrllistList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryStudEnrllistList.Recordset.ReadAsync();
+    qryStudEnrllistList.RecordCount++;
+    if (qryStudEnrllistList.RecordCount >= qryStudEnrllistList.StartRecord) {
+        await qryStudEnrllistList.SetupRow();
+    <tr @Html.Raw(qryStudEnrllistList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryStudEnrllistList.ListOptions.RenderBody("left", qryStudEnrllistList.RowCount)
+    @if (qryStudEnrllistList.int_Enrollement_Id.Visible) { // qryStudEnrllistList.int_Enrollement_Id.Visible (begin)
+        <td data-name="int_Enrollement_Id" @Html.Raw(qryStudEnrllistList.int_Enrollement_Id.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_int_Enrollement_Id" class="el_qryStudEnrllist_int_Enrollement_Id">
+<span @Html.Raw(qryStudEnrllistList.int_Enrollement_Id.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.int_Enrollement_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.int_Enrollement_Id.Visible (end) *@
+    @if (qryStudEnrllistList.int_Package_Id.Visible) { // qryStudEnrllistList.int_Package_Id.Visible (begin)
+        <td data-name="int_Package_Id" @Html.Raw(qryStudEnrllistList.int_Package_Id.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_int_Package_Id" class="el_qryStudEnrllist_int_Package_Id">
+<span @Html.Raw(qryStudEnrllistList.int_Package_Id.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.int_Package_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.int_Package_Id.Visible (end) *@
+    @if (qryStudEnrllistList.str_Username.Visible) { // qryStudEnrllistList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(qryStudEnrllistList.str_Username.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_str_Username" class="el_qryStudEnrllist_str_Username">
+<span @Html.Raw(qryStudEnrllistList.str_Username.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.str_Username.Visible (end) *@
+    @if (qryStudEnrllistList.NationalID.Visible) { // qryStudEnrllistList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(qryStudEnrllistList.NationalID.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_NationalID" class="el_qryStudEnrllist_NationalID">
+<span @Html.Raw(qryStudEnrllistList.NationalID.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.NationalID.Visible (end) *@
+    @if (qryStudEnrllistList.str_Package_Name.Visible) { // qryStudEnrllistList.str_Package_Name.Visible (begin)
+        <td data-name="str_Package_Name" @Html.Raw(qryStudEnrllistList.str_Package_Name.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_str_Package_Name" class="el_qryStudEnrllist_str_Package_Name">
+<span @Html.Raw(qryStudEnrllistList.str_Package_Name.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.str_Package_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.str_Package_Name.Visible (end) *@
+    @if (qryStudEnrllistList.course.Visible) { // qryStudEnrllistList.course.Visible (begin)
+        <td data-name="course" @Html.Raw(qryStudEnrllistList.course.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_course" class="el_qryStudEnrllist_course">
+<span @Html.Raw(qryStudEnrllistList.course.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.course.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.course.Visible (end) *@
+    @if (qryStudEnrllistList.institution.Visible) { // qryStudEnrllistList.institution.Visible (begin)
+        <td data-name="institution" @Html.Raw(qryStudEnrllistList.institution.CellAttributes)>
+<span id="el@(qryStudEnrllistList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStudEnrllistList.RowCount)_qryStudEnrllist_institution" class="el_qryStudEnrllist_institution">
+<span @Html.Raw(qryStudEnrllistList.institution.ViewAttributes)>
+@Html.Raw(qryStudEnrllistList.institution.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStudEnrllistList.institution.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryStudEnrllistList.ListOptions.RenderBody("right", qryStudEnrllistList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryStudEnrllistList.RowIndex, "$rowindex$"))
+        qryStudEnrllistList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryStudEnrllistList.IsCopy || qryStudEnrllistList.IsAdd) && qryStudEnrllistList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryStudEnrllistList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryStudEnrllistList.CurrentAction) && !qryStudEnrllistList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryStudEnrllistList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

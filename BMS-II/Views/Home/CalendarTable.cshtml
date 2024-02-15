@@ -1,0 +1,220 @@
+@if (calendarList.ModalGridAdd && calendarList.IsGridAdd || calendarList.ModalGridEdit && calendarList.IsGridEdit || calendarList.ModalMultiEdit && calendarList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(calendarList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Calendar: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(calendarList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(calendarList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(calendarList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(calendarList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(calendarList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(calendarList.TableGridClass)">
+@if (!calendarList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!calendarList.IsGridAdd && !(calendarList.IsGridEdit && calendarList.ModalGridEdit) && !calendarList.IsMultiEdit) {
+@Html.Raw(calendarList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@calendarList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(calendarList.FormName)" id="@(calendarList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(calendarList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (calendarList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_Calendar" class="card-body ew-grid-middle-panel @(calendarList.TableContainerClass)" style="@(calendarList.TableContainerStyle)">
+@if (calendarList.TotalRecords > 0 || calendarList.IsGridEdit || calendarList.IsMultiEdit) {
+<table id="tbl_Calendarlist" class="@(calendarList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    calendarList.RowType = RowType.Header;
+
+    // Render list options
+    await calendarList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@calendarList.ListOptions.RenderHeader("left")
+@if (calendarList.Id.Visible) { // calendarList.Id.Visible (begin)
+        <th data-name="Id" class="@(calendarList.Id.HeaderCellClass)"><div id="elh_Calendar_Id" class="Calendar_Id">@Html.Raw(calendarList.RenderFieldHeader(calendarList.Id))</div></th>
+} @* calendarList.Id.Visible (end) *@
+@if (calendarList._Title.Visible) { // calendarList._Title.Visible (begin)
+        <th data-name="_Title" class="@(calendarList._Title.HeaderCellClass)"><div id="elh_Calendar__Title" class="Calendar__Title">@Html.Raw(calendarList.RenderFieldHeader(calendarList._Title))</div></th>
+} @* calendarList._Title.Visible (end) *@
+@if (calendarList.Start.Visible) { // calendarList.Start.Visible (begin)
+        <th data-name="Start" class="@(calendarList.Start.HeaderCellClass)"><div id="elh_Calendar_Start" class="Calendar_Start">@Html.Raw(calendarList.RenderFieldHeader(calendarList.Start))</div></th>
+} @* calendarList.Start.Visible (end) *@
+@if (calendarList.End.Visible) { // calendarList.End.Visible (begin)
+        <th data-name="End" class="@(calendarList.End.HeaderCellClass)"><div id="elh_Calendar_End" class="Calendar_End">@Html.Raw(calendarList.RenderFieldHeader(calendarList.End))</div></th>
+} @* calendarList.End.Visible (end) *@
+@if (calendarList.AllDay.Visible) { // calendarList.AllDay.Visible (begin)
+        <th data-name="AllDay" class="@(calendarList.AllDay.HeaderCellClass)"><div id="elh_Calendar_AllDay" class="Calendar_AllDay">@Html.Raw(calendarList.RenderFieldHeader(calendarList.AllDay))</div></th>
+} @* calendarList.AllDay.Visible (end) *@
+@if (calendarList.str_Username.Visible) { // calendarList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(calendarList.str_Username.HeaderCellClass)"><div id="elh_Calendar_str_Username" class="Calendar_str_Username">@Html.Raw(calendarList.RenderFieldHeader(calendarList.str_Username))</div></th>
+} @* calendarList.str_Username.Visible (end) *@
+@if (calendarList._Url.Visible) { // calendarList._Url.Visible (begin)
+        <th data-name="_Url" class="@(calendarList._Url.HeaderCellClass)"><div id="elh_Calendar__Url" class="Calendar__Url">@Html.Raw(calendarList.RenderFieldHeader(calendarList._Url))</div></th>
+} @* calendarList._Url.Visible (end) *@
+@if (calendarList.ClassNames.Visible) { // calendarList.ClassNames.Visible (begin)
+        <th data-name="ClassNames" class="@(calendarList.ClassNames.HeaderCellClass)"><div id="elh_Calendar_ClassNames" class="Calendar_ClassNames">@Html.Raw(calendarList.RenderFieldHeader(calendarList.ClassNames))</div></th>
+} @* calendarList.ClassNames.Visible (end) *@
+@if (calendarList.Display.Visible) { // calendarList.Display.Visible (begin)
+        <th data-name="Display" class="@(calendarList.Display.HeaderCellClass)"><div id="elh_Calendar_Display" class="Calendar_Display">@Html.Raw(calendarList.RenderFieldHeader(calendarList.Display))</div></th>
+} @* calendarList.Display.Visible (end) *@
+@if (calendarList.BackgroundColor.Visible) { // calendarList.BackgroundColor.Visible (begin)
+        <th data-name="BackgroundColor" class="@(calendarList.BackgroundColor.HeaderCellClass)"><div id="elh_Calendar_BackgroundColor" class="Calendar_BackgroundColor">@Html.Raw(calendarList.RenderFieldHeader(calendarList.BackgroundColor))</div></th>
+} @* calendarList.BackgroundColor.Visible (end) *@
+@* Render list options (header, right) *@
+@calendarList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(calendarList.PageNumber)">
+@{
+    await calendarList.SetupGrid();
+    bool eof = calendarList.Recordset == null; // DN
+}
+@while (calendarList.RecordCount < calendarList.StopRecord || SameString(calendarList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(calendarList.RowIndex, "$rowindex$") &&
+        (!calendarList.IsGridAdd || calendarList.CurrentMode == "copy") &&
+        (!((calendarList.IsCopy || calendarList.IsAdd) && calendarList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await calendarList.Recordset.ReadAsync();
+    calendarList.RecordCount++;
+    if (calendarList.RecordCount >= calendarList.StartRecord) {
+        await calendarList.SetupRow();
+    <tr @Html.Raw(calendarList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @calendarList.ListOptions.RenderBody("left", calendarList.RowCount)
+    @if (calendarList.Id.Visible) { // calendarList.Id.Visible (begin)
+        <td data-name="Id" @Html.Raw(calendarList.Id.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_Id" class="el_Calendar_Id">
+<span @Html.Raw(calendarList.Id.ViewAttributes)>
+@Html.Raw(calendarList.Id.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.Id.Visible (end) *@
+    @if (calendarList._Title.Visible) { // calendarList._Title.Visible (begin)
+        <td data-name="_Title" @Html.Raw(calendarList._Title.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar__Title" class="el_Calendar__Title">
+<span @Html.Raw(calendarList._Title.ViewAttributes)>
+@Html.Raw(calendarList._Title.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList._Title.Visible (end) *@
+    @if (calendarList.Start.Visible) { // calendarList.Start.Visible (begin)
+        <td data-name="Start" @Html.Raw(calendarList.Start.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_Start" class="el_Calendar_Start">
+<span @Html.Raw(calendarList.Start.ViewAttributes)>
+@Html.Raw(calendarList.Start.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.Start.Visible (end) *@
+    @if (calendarList.End.Visible) { // calendarList.End.Visible (begin)
+        <td data-name="End" @Html.Raw(calendarList.End.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_End" class="el_Calendar_End">
+<span @Html.Raw(calendarList.End.ViewAttributes)>
+@Html.Raw(calendarList.End.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.End.Visible (end) *@
+    @if (calendarList.AllDay.Visible) { // calendarList.AllDay.Visible (begin)
+        <td data-name="AllDay" @Html.Raw(calendarList.AllDay.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_AllDay" class="el_Calendar_AllDay">
+<span @Html.Raw(calendarList.AllDay.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_AllDay_@(calendarList.RowCount)" class="form-check-input" value="@(calendarList.AllDay.GetViewValue())" disabled checked="@(ConvertToBool(calendarList.AllDay.CurrentValue))">
+    <label class="form-check-label" for="x_AllDay_@(calendarList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* calendarList.AllDay.Visible (end) *@
+    @if (calendarList.str_Username.Visible) { // calendarList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(calendarList.str_Username.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_str_Username" class="el_Calendar_str_Username">
+<span @Html.Raw(calendarList.str_Username.ViewAttributes)>
+@Html.Raw(calendarList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.str_Username.Visible (end) *@
+    @if (calendarList._Url.Visible) { // calendarList._Url.Visible (begin)
+        <td data-name="_Url" @Html.Raw(calendarList._Url.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar__Url" class="el_Calendar__Url">
+<span @Html.Raw(calendarList._Url.ViewAttributes)>
+@Html.Raw(calendarList._Url.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList._Url.Visible (end) *@
+    @if (calendarList.ClassNames.Visible) { // calendarList.ClassNames.Visible (begin)
+        <td data-name="ClassNames" @Html.Raw(calendarList.ClassNames.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_ClassNames" class="el_Calendar_ClassNames">
+<span @Html.Raw(calendarList.ClassNames.ViewAttributes)>
+@Html.Raw(calendarList.ClassNames.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.ClassNames.Visible (end) *@
+    @if (calendarList.Display.Visible) { // calendarList.Display.Visible (begin)
+        <td data-name="Display" @Html.Raw(calendarList.Display.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_Display" class="el_Calendar_Display">
+<span @Html.Raw(calendarList.Display.ViewAttributes)>
+@Html.Raw(calendarList.Display.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.Display.Visible (end) *@
+    @if (calendarList.BackgroundColor.Visible) { // calendarList.BackgroundColor.Visible (begin)
+        <td data-name="BackgroundColor" @Html.Raw(calendarList.BackgroundColor.CellAttributes)>
+<span id="el@(calendarList.RowIndex == "$rowindex$" ? "$rowindex$" : calendarList.RowCount)_Calendar_BackgroundColor" class="el_Calendar_BackgroundColor">
+<span @Html.Raw(calendarList.BackgroundColor.ViewAttributes)>
+@Html.Raw(calendarList.BackgroundColor.GetViewValue())</span>
+</span>
+</td>
+    } @* calendarList.BackgroundColor.Visible (end) *@
+    @* Render list options (body, right) *@
+    @calendarList.ListOptions.RenderBody("right", calendarList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(calendarList.RowIndex, "$rowindex$"))
+        calendarList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((calendarList.IsCopy || calendarList.IsAdd) && calendarList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        calendarList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(calendarList.CurrentAction) && !calendarList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ calendarList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

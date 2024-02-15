@@ -1,0 +1,249 @@
+@if (!tblStaffList.IsExport()) {
+<div>
+@if (!tblStaffList.IsGridAdd && !(tblStaffList.IsGridEdit && tblStaffList.ModalGridEdit) && !tblStaffList.IsMultiEdit) {
+@Html.Raw(tblStaffList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblStaffList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblStaffList.ModalGridAdd && tblStaffList.IsGridAdd || tblStaffList.ModalGridEdit && tblStaffList.IsGridEdit || tblStaffList.ModalMultiEdit && tblStaffList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStaffList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStaff: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblStaffList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblStaffList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblStaffList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblStaffList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblStaffList.FormName)" id="@(tblStaffList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblStaffList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblStaffList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblStaffList.GetMultiColumnRowClass())">
+@if (tblStaffList.TotalRecords > 0 || tblStaffList.IsGridEdit || tblStaffList.IsMultiEdit) {
+    await tblStaffList.SetupGrid();
+    bool eof = tblStaffList.Recordset == null; // DN
+while (tblStaffList.RecordCount < tblStaffList.StopRecord || SameString(tblStaffList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblStaffList.RowIndex, "$rowindex$") &&
+        (!tblStaffList.IsGridAdd || tblStaffList.CurrentMode == "copy") &&
+        (!((tblStaffList.IsCopy || tblStaffList.IsAdd) && tblStaffList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblStaffList.Recordset.ReadAsync();
+    tblStaffList.RecordCount++;
+    if (tblStaffList.RecordCount >= tblStaffList.StartRecord) {
+        await tblStaffList.SetupRow();
+<div class="@(tblStaffList.GetMultiColumnColClass())" @Html.Raw(tblStaffList.RowAttributes)>
+<div class="@(tblStaffList.MultiColumnCardClass)">
+    @if (tblStaffList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblStaffList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblStaffList.ListOptions.Tag = "div";
+    tblStaffList.ListOptions.RenderBody(tblStaffList.MultiColumnListOptionsPosition, tblStaffList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblStaffList.str_Full_Name.Visible) { // tblStaffList.str_Full_Name.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_str_Full_Name">
+            <div class="col col-sm-4 tblStaff_str_Full_Name">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.str_Full_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.str_Full_Name.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_Full_Name.ViewAttributes)>
+@Html.Raw(tblStaffList.str_Full_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_str_Full_Name">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.str_Full_Name.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.str_Full_Name.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_Full_Name.ViewAttributes)>
+@Html.Raw(tblStaffList.str_Full_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStaffList.str_NationalID_Iqama.Visible) { // tblStaffList.str_NationalID_Iqama.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_str_NationalID_Iqama">
+            <div class="col col-sm-4 tblStaff_str_NationalID_Iqama">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.str_NationalID_Iqama))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.str_NationalID_Iqama.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStaffList.str_NationalID_Iqama.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_str_NationalID_Iqama">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.str_NationalID_Iqama.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.str_NationalID_Iqama.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStaffList.str_NationalID_Iqama.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStaffList.str_Cell_Phone.Visible) { // tblStaffList.str_Cell_Phone.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_str_Cell_Phone">
+            <div class="col col-sm-4 tblStaff_str_Cell_Phone">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.str_Cell_Phone))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStaffList.str_Cell_Phone.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_str_Cell_Phone">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.str_Cell_Phone.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.str_Cell_Phone.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStaffList.str_Cell_Phone.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStaffList.str_Email.Visible) { // tblStaffList.str_Email.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_str_Email">
+            <div class="col col-sm-4 tblStaff_str_Email">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.str_Email))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.str_Email.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_Email.ViewAttributes)>
+@Html.Raw(tblStaffList.str_Email.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_str_Email">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.str_Email.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.str_Email.CellAttributes)>
+<span @Html.Raw(tblStaffList.str_Email.ViewAttributes)>
+@Html.Raw(tblStaffList.str_Email.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStaffList.Activated.Visible) { // tblStaffList.Activated.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_Activated">
+            <div class="col col-sm-4 tblStaff_Activated">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.Activated))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.Activated.CellAttributes)>
+<span @Html.Raw(tblStaffList.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(tblStaffList.RowCount)" class="form-check-input" value="@(tblStaffList.Activated.GetViewValue())" disabled checked="@(ConvertToBool(tblStaffList.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(tblStaffList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_Activated">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.Activated.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.Activated.CellAttributes)>
+<span @Html.Raw(tblStaffList.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(tblStaffList.RowCount)" class="form-check-input" value="@(tblStaffList.Activated.GetViewValue())" disabled checked="@(ConvertToBool(tblStaffList.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(tblStaffList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStaffList.Supervisor_Username.Visible) { // tblStaffList.Supervisor_Username.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_Supervisor_Username">
+            <div class="col col-sm-4 tblStaff_Supervisor_Username">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.Supervisor_Username))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.Supervisor_Username.CellAttributes)>
+<span @Html.Raw(tblStaffList.Supervisor_Username.ViewAttributes)>
+@Html.Raw(tblStaffList.Supervisor_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_Supervisor_Username">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.Supervisor_Username.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.Supervisor_Username.CellAttributes)>
+<span @Html.Raw(tblStaffList.Supervisor_Username.ViewAttributes)>
+@Html.Raw(tblStaffList.Supervisor_Username.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblStaffList.Absherphoto.Visible) { // tblStaffList.Absherphoto.Visible (begin)
+        if (tblStaffList.RowType == RowType.View) { // View record
+        <div class="row tblStaff_Absherphoto">
+            <div class="col col-sm-4 tblStaff_Absherphoto">@Html.Raw(tblStaffList.RenderFieldHeader(tblStaffList.Absherphoto))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblStaffList.Absherphoto.CellAttributes)>
+<span @Html.Raw(tblStaffList.Absherphoto.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblStaffList.Absherphoto, ConvertToString(tblStaffList.Absherphoto.GetViewValue()), false))
+</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblStaff_Absherphoto">
+            <label class="@(tblStaffList.LeftColumnClass)">@Html.Raw(tblStaffList.Absherphoto.Caption)</label>
+            <div class="@(tblStaffList.RightColumnClass)"><div @Html.Raw(tblStaffList.Absherphoto.CellAttributes)>
+<span @Html.Raw(tblStaffList.Absherphoto.ViewAttributes)>
+@Html.Raw(await GetFileViewTag((DbField)tblStaffList.Absherphoto, ConvertToString(tblStaffList.Absherphoto.GetViewValue()), false))
+</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblStaffList.IsExport()) {
+    if (tblStaffList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblStaffList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblStaffList.ListOptions.Tag = "div";
+}
+@tblStaffList.ListOptions.RenderBody(tblStaffList.MultiColumnListOptionsPosition, tblStaffList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblStaffList.RowIndex, "$rowindex$"))
+        tblStaffList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblStaffList.IsCopy || tblStaffList.IsAdd) && tblStaffList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblStaffList.RowIndex = 1;
+} @* End While *@
+} @* tblStaffList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblStaffList.CurrentAction) && !tblStaffList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblStaffList.CloseRecordset(); }

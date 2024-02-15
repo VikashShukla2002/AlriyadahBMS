@@ -1,0 +1,1018 @@
+@if (!tblProductInfoList.IsExport()) {
+<div>
+@if (!tblProductInfoList.IsGridAdd && !(tblProductInfoList.IsGridEdit && tblProductInfoList.ModalGridEdit) && !tblProductInfoList.IsMultiEdit) {
+@Html.Raw(tblProductInfoList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblProductInfoList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+@if (tblProductInfoList.ModalGridAdd && tblProductInfoList.IsGridAdd || tblProductInfoList.ModalGridEdit && tblProductInfoList.IsGridEdit || tblProductInfoList.ModalMultiEdit && tblProductInfoList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblProductInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblProductInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblProductInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblProductInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblProductInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblProductInfoList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<form name="@(tblProductInfoList.FormName)" id="@(tblProductInfoList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblProductInfoList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblProductInfoList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div class="@(tblProductInfoList.GetMultiColumnRowClass())">
+@if (tblProductInfoList.TotalRecords > 0 || tblProductInfoList.IsGridEdit || tblProductInfoList.IsMultiEdit) {
+    await tblProductInfoList.SetupGrid();
+    bool eof = tblProductInfoList.Recordset == null; // DN
+while (tblProductInfoList.RecordCount < tblProductInfoList.StopRecord || SameString(tblProductInfoList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblProductInfoList.RowIndex, "$rowindex$") &&
+        (!tblProductInfoList.IsGridAdd || tblProductInfoList.CurrentMode == "copy") &&
+        (!((tblProductInfoList.IsCopy || tblProductInfoList.IsAdd) && tblProductInfoList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblProductInfoList.Recordset.ReadAsync();
+    tblProductInfoList.RecordCount++;
+    if (tblProductInfoList.RecordCount >= tblProductInfoList.StartRecord) {
+        await tblProductInfoList.SetupRow();
+<div class="@(tblProductInfoList.GetMultiColumnColClass())" @Html.Raw(tblProductInfoList.RowAttributes)>
+<div class="@(tblProductInfoList.MultiColumnCardClass)">
+    @if (tblProductInfoList.MultiColumnListOptionsPosition.StartsWith("top", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-header">
+        <div class="ew-multi-column-list-option ew-@(tblProductInfoList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblProductInfoList.ListOptions.Tag = "div";
+    tblProductInfoList.ListOptions.RenderBody(tblProductInfoList.MultiColumnListOptionsPosition, tblProductInfoList.RowCount);
+}
+        </div><!-- /.ew-multi-column-list-option -->
+    </div>
+    }
+    <div class="card-body">
+    @if (tblProductInfoList.int_Product_Id.Visible) { // tblProductInfoList.int_Product_Id.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Product_Id">
+            <div class="col col-sm-4 tblProductInfo_int_Product_Id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Product_Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Product_Id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Product_Id">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Product_Id.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Product_Id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Product_Name.Visible) { // tblProductInfoList.str_Product_Name.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Product_Name">
+            <div class="col col-sm-4 tblProductInfo_str_Product_Name">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Product_Name))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Product_Name.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Product_Name.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Product_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Product_Name">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Product_Name.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Product_Name.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Product_Name.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Product_Name.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Item_Code.Visible) { // tblProductInfoList.str_Item_Code.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Item_Code">
+            <div class="col col-sm-4 tblProductInfo_str_Item_Code">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Item_Code))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Item_Code.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Item_Code.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Item_Code.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Item_Code">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Item_Code.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Item_Code.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Item_Code.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Item_Code.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.mny_Price.Visible) { // tblProductInfoList.mny_Price.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_mny_Price">
+            <div class="col col-sm-4 tblProductInfo_mny_Price">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.mny_Price))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.mny_Price.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.mny_Price.ViewAttributes)>
+@Html.Raw(tblProductInfoList.mny_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_mny_Price">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.mny_Price.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.mny_Price.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.mny_Price.ViewAttributes)>
+@Html.Raw(tblProductInfoList.mny_Price.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.bit_IsTaxable.Visible) { // tblProductInfoList.bit_IsTaxable.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_bit_IsTaxable">
+            <div class="col col-sm-4 tblProductInfo_bit_IsTaxable">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_IsTaxable))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.bit_IsTaxable.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_IsTaxable.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsTaxable_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_IsTaxable.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_IsTaxable.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsTaxable_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_bit_IsTaxable">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.bit_IsTaxable.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.bit_IsTaxable.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_IsTaxable.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsTaxable_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_IsTaxable.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_IsTaxable.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsTaxable_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Web_Description.Visible) { // tblProductInfoList.str_Web_Description.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Web_Description">
+            <div class="col col-sm-4 tblProductInfo_str_Web_Description">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Web_Description))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Web_Description.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Web_Description.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Web_Description.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Web_Description">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Web_Description.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Web_Description.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Web_Description.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Web_Description.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.dec_StateTax.Visible) { // tblProductInfoList.dec_StateTax.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_dec_StateTax">
+            <div class="col col-sm-4 tblProductInfo_dec_StateTax">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.dec_StateTax))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.dec_StateTax.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.dec_StateTax.ViewAttributes)>
+@Html.Raw(tblProductInfoList.dec_StateTax.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_dec_StateTax">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.dec_StateTax.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.dec_StateTax.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.dec_StateTax.ViewAttributes)>
+@Html.Raw(tblProductInfoList.dec_StateTax.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.dec_AddTax.Visible) { // tblProductInfoList.dec_AddTax.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_dec_AddTax">
+            <div class="col col-sm-4 tblProductInfo_dec_AddTax">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.dec_AddTax))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.dec_AddTax.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.dec_AddTax.ViewAttributes)>
+@Html.Raw(tblProductInfoList.dec_AddTax.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_dec_AddTax">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.dec_AddTax.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.dec_AddTax.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.dec_AddTax.ViewAttributes)>
+@Html.Raw(tblProductInfoList.dec_AddTax.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.mny_TotalPrice.Visible) { // tblProductInfoList.mny_TotalPrice.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_mny_TotalPrice">
+            <div class="col col-sm-4 tblProductInfo_mny_TotalPrice">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.mny_TotalPrice))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.mny_TotalPrice.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.mny_TotalPrice.ViewAttributes)>
+@Html.Raw(tblProductInfoList.mny_TotalPrice.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_mny_TotalPrice">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.mny_TotalPrice.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.mny_TotalPrice.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.mny_TotalPrice.ViewAttributes)>
+@Html.Raw(tblProductInfoList.mny_TotalPrice.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Product_Type.Visible) { // tblProductInfoList.int_Product_Type.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Product_Type">
+            <div class="col col-sm-4 tblProductInfo_int_Product_Type">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Product_Type))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Product_Type.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Product_Type.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Type.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Product_Type">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Product_Type.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Product_Type.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Product_Type.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Type.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Product_Sub_Type.Visible) { // tblProductInfoList.int_Product_Sub_Type.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Product_Sub_Type">
+            <div class="col col-sm-4 tblProductInfo_int_Product_Sub_Type">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Product_Sub_Type))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Product_Sub_Type.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Product_Sub_Type.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Sub_Type.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Product_Sub_Type">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Product_Sub_Type.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Product_Sub_Type.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Product_Sub_Type.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Product_Sub_Type.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Status.Visible) { // tblProductInfoList.int_Status.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Status">
+            <div class="col col-sm-4 tblProductInfo_int_Status">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Status))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Status.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Status.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Status">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Status.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Status.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Status.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Status.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.bit_Is_Web_Purchase.Visible) { // tblProductInfoList.bit_Is_Web_Purchase.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_bit_Is_Web_Purchase">
+            <div class="col col-sm-4 tblProductInfo_bit_Is_Web_Purchase">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_Is_Web_Purchase))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_Is_Web_Purchase_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_Is_Web_Purchase.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_Is_Web_Purchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_Is_Web_Purchase_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_bit_Is_Web_Purchase">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_Is_Web_Purchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_Is_Web_Purchase_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_Is_Web_Purchase.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_Is_Web_Purchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_Is_Web_Purchase_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_BTW_Hours.Visible) { // tblProductInfoList.str_BTW_Hours.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_BTW_Hours">
+            <div class="col col-sm-4 tblProductInfo_str_BTW_Hours">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_BTW_Hours))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_BTW_Hours.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_BTW_Hours.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_BTW_Hours.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_BTW_Hours">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_BTW_Hours.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_BTW_Hours.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_BTW_Hours.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_BTW_Hours.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Hour.Visible) { // tblProductInfoList.str_Hour.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Hour">
+            <div class="col col-sm-4 tblProductInfo_str_Hour">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Hour))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Hour.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Hour.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Hour.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Hour">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Hour.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Hour.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Hour.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Hour.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.Str_Minutes.Visible) { // tblProductInfoList.Str_Minutes.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_Str_Minutes">
+            <div class="col col-sm-4 tblProductInfo_Str_Minutes">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.Str_Minutes))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.Str_Minutes.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.Str_Minutes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Str_Minutes.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_Str_Minutes">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.Str_Minutes.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.Str_Minutes.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.Str_Minutes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Str_Minutes.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Appointment_Duration.Visible) { // tblProductInfoList.str_Appointment_Duration.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Appointment_Duration">
+            <div class="col col-sm-4 tblProductInfo_str_Appointment_Duration">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Appointment_Duration))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Appointment_Duration.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Appointment_Duration.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Appointment_Duration.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Appointment_Duration">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Appointment_Duration.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Appointment_Duration.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Appointment_Duration.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Appointment_Duration.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Notes.Visible) { // tblProductInfoList.str_Notes.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Notes">
+            <div class="col col-sm-4 tblProductInfo_str_Notes">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Notes))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Notes.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Notes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Notes.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Notes">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Notes.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Notes.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Notes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Notes.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Created_By.Visible) { // tblProductInfoList.int_Created_By.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Created_By">
+            <div class="col col-sm-4 tblProductInfo_int_Created_By">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Created_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Created_By">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Created_By.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Created_By.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Created_By.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Created_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Modified_By.Visible) { // tblProductInfoList.int_Modified_By.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Modified_By">
+            <div class="col col-sm-4 tblProductInfo_int_Modified_By">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Modified_By))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Modified_By">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Modified_By.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Modified_By.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Modified_By.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Modified_By.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.date_Created.Visible) { // tblProductInfoList.date_Created.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_date_Created">
+            <div class="col col-sm-4 tblProductInfo_date_Created">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.date_Created))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.date_Created.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.date_Created.ViewAttributes)>
+@Html.Raw(tblProductInfoList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_date_Created">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.date_Created.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.date_Created.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.date_Created.ViewAttributes)>
+@Html.Raw(tblProductInfoList.date_Created.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.date_Modified.Visible) { // tblProductInfoList.date_Modified.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_date_Modified">
+            <div class="col col-sm-4 tblProductInfo_date_Modified">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.date_Modified))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.date_Modified.ViewAttributes)>
+@Html.Raw(tblProductInfoList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_date_Modified">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.date_Modified.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.date_Modified.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.date_Modified.ViewAttributes)>
+@Html.Raw(tblProductInfoList.date_Modified.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.bit_IsDeleted.Visible) { // tblProductInfoList.bit_IsDeleted.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_bit_IsDeleted">
+            <div class="col col-sm-4 tblProductInfo_bit_IsDeleted">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_IsDeleted))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.bit_IsDeleted.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_bit_IsDeleted">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.bit_IsDeleted.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.bit_IsDeleted.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_IsDeleted.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_IsDeleted_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_IsDeleted.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_IsDeleted.CurrentValue))">
+    <label class="form-check-label" for="x_bit_IsDeleted_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Dollar.Visible) { // tblProductInfoList.int_Dollar.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Dollar">
+            <div class="col col-sm-4 tblProductInfo_int_Dollar">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Dollar))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Dollar.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Dollar.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Dollar.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Dollar">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Dollar.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Dollar.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Dollar.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Dollar.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.bit_PortalPurchase.Visible) { // tblProductInfoList.bit_PortalPurchase.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_bit_PortalPurchase">
+            <div class="col col-sm-4 tblProductInfo_bit_PortalPurchase">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_PortalPurchase))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.bit_PortalPurchase.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_PortalPurchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_PortalPurchase_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_PortalPurchase.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_PortalPurchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_PortalPurchase_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_bit_PortalPurchase">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.bit_PortalPurchase.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.bit_PortalPurchase.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_PortalPurchase.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_PortalPurchase_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_PortalPurchase.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_PortalPurchase.CurrentValue))">
+    <label class="form-check-label" for="x_bit_PortalPurchase_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_WebName.Visible) { // tblProductInfoList.str_WebName.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_WebName">
+            <div class="col col-sm-4 tblProductInfo_str_WebName">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_WebName))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_WebName.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_WebName.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_WebName.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_WebName">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_WebName.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_WebName.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_WebName.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_WebName.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.bit_ExtraChk1.Visible) { // tblProductInfoList.bit_ExtraChk1.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_bit_ExtraChk1">
+            <div class="col col-sm-4 tblProductInfo_bit_ExtraChk1">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_ExtraChk1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.bit_ExtraChk1.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_ExtraChk1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk1_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_ExtraChk1.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_ExtraChk1.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk1_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_bit_ExtraChk1">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.bit_ExtraChk1.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.bit_ExtraChk1.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_ExtraChk1.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk1_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_ExtraChk1.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_ExtraChk1.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk1_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.bit_ExtraChk2.Visible) { // tblProductInfoList.bit_ExtraChk2.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_bit_ExtraChk2">
+            <div class="col col-sm-4 tblProductInfo_bit_ExtraChk2">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.bit_ExtraChk2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.bit_ExtraChk2.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_ExtraChk2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk2_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_ExtraChk2.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_ExtraChk2.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk2_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_bit_ExtraChk2">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.bit_ExtraChk2.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.bit_ExtraChk2.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.bit_ExtraChk2.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_bit_ExtraChk2_@(tblProductInfoList.RowCount)" class="form-check-input" value="@(tblProductInfoList.bit_ExtraChk2.GetViewValue())" disabled checked="@(ConvertToBool(tblProductInfoList.bit_ExtraChk2.CurrentValue))">
+    <label class="form-check-label" for="x_bit_ExtraChk2_@(tblProductInfoList.RowCount)"></label>
+</div></span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_ExtraDrpDown1.Visible) { // tblProductInfoList.str_ExtraDrpDown1.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_ExtraDrpDown1">
+            <div class="col col-sm-4 tblProductInfo_str_ExtraDrpDown1">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_ExtraDrpDown1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_ExtraDrpDown1.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_ExtraDrpDown1.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_ExtraDrpDown1.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_ExtraDrpDown1">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_ExtraDrpDown1.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_ExtraDrpDown1.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_ExtraDrpDown1.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_ExtraDrpDown1.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_ExtraDrpDown2.Visible) { // tblProductInfoList.str_ExtraDrpDown2.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_ExtraDrpDown2">
+            <div class="col col-sm-4 tblProductInfo_str_ExtraDrpDown2">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_ExtraDrpDown2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_ExtraDrpDown2.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_ExtraDrpDown2.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_ExtraDrpDown2.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_ExtraDrpDown2">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_ExtraDrpDown2.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_ExtraDrpDown2.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_ExtraDrpDown2.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_ExtraDrpDown2.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Extratxt1.Visible) { // tblProductInfoList.str_Extratxt1.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Extratxt1">
+            <div class="col col-sm-4 tblProductInfo_str_Extratxt1">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Extratxt1))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Extratxt1.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Extratxt1.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Extratxt1.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Extratxt1">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Extratxt1.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Extratxt1.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Extratxt1.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Extratxt1.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_Extratxt2.Visible) { // tblProductInfoList.str_Extratxt2.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_Extratxt2">
+            <div class="col col-sm-4 tblProductInfo_str_Extratxt2">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_Extratxt2))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_Extratxt2.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Extratxt2.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Extratxt2.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_Extratxt2">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_Extratxt2.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_Extratxt2.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_Extratxt2.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_Extratxt2.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_OBHours.Visible) { // tblProductInfoList.str_OBHours.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_OBHours">
+            <div class="col col-sm-4 tblProductInfo_str_OBHours">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_OBHours))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_OBHours.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_OBHours.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_OBHours.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_OBHours">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_OBHours.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_OBHours.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_OBHours.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_OBHours.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_OBMinutes.Visible) { // tblProductInfoList.str_OBMinutes.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_OBMinutes">
+            <div class="col col-sm-4 tblProductInfo_str_OBMinutes">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_OBMinutes))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_OBMinutes.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_OBMinutes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_OBMinutes.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_OBMinutes">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_OBMinutes.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_OBMinutes.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_OBMinutes.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_OBMinutes.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.str_TotalOB_Mins.Visible) { // tblProductInfoList.str_TotalOB_Mins.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_str_TotalOB_Mins">
+            <div class="col col-sm-4 tblProductInfo_str_TotalOB_Mins">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.str_TotalOB_Mins))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.str_TotalOB_Mins.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_TotalOB_Mins.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_TotalOB_Mins.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_str_TotalOB_Mins">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.str_TotalOB_Mins.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.str_TotalOB_Mins.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.str_TotalOB_Mins.ViewAttributes)>
+@Html.Raw(tblProductInfoList.str_TotalOB_Mins.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.LMSProductID.Visible) { // tblProductInfoList.LMSProductID.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_LMSProductID">
+            <div class="col col-sm-4 tblProductInfo_LMSProductID">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.LMSProductID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.LMSProductID.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.LMSProductID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.LMSProductID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_LMSProductID">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.LMSProductID.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.LMSProductID.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.LMSProductID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.LMSProductID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.LMSNoOfAttempts.Visible) { // tblProductInfoList.LMSNoOfAttempts.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_LMSNoOfAttempts">
+            <div class="col col-sm-4 tblProductInfo_LMSNoOfAttempts">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.LMSNoOfAttempts))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.LMSNoOfAttempts.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.LMSNoOfAttempts.ViewAttributes)>
+@Html.Raw(tblProductInfoList.LMSNoOfAttempts.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_LMSNoOfAttempts">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.LMSNoOfAttempts.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.LMSNoOfAttempts.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.LMSNoOfAttempts.ViewAttributes)>
+@Html.Raw(tblProductInfoList.LMSNoOfAttempts.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_LMSLinkExpirationDays.Visible) { // tblProductInfoList.int_LMSLinkExpirationDays.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_LMSLinkExpirationDays">
+            <div class="col col-sm-4 tblProductInfo_int_LMSLinkExpirationDays">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_LMSLinkExpirationDays))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_LMSLinkExpirationDays">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_LMSLinkExpirationDays.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.IGD_product_id.Visible) { // tblProductInfoList.IGD_product_id.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_IGD_product_id">
+            <div class="col col-sm-4 tblProductInfo_IGD_product_id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.IGD_product_id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.IGD_product_id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.IGD_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.IGD_product_id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_IGD_product_id">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.IGD_product_id.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.IGD_product_id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.IGD_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.IGD_product_id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.IEC_product_id.Visible) { // tblProductInfoList.IEC_product_id.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_IEC_product_id">
+            <div class="col col-sm-4 tblProductInfo_IEC_product_id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.IEC_product_id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.IEC_product_id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.IEC_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.IEC_product_id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_IEC_product_id">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.IEC_product_id.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.IEC_product_id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.IEC_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.IEC_product_id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.Somastream_Product_ID.Visible) { // tblProductInfoList.Somastream_Product_ID.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_Somastream_Product_ID">
+            <div class="col col-sm-4 tblProductInfo_Somastream_Product_ID">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.Somastream_Product_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.Somastream_Product_ID.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.Somastream_Product_ID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Somastream_Product_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_Somastream_Product_ID">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.Somastream_Product_ID.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.Somastream_Product_ID.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.Somastream_Product_ID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Somastream_Product_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.ProTREAD_Product_ID.Visible) { // tblProductInfoList.ProTREAD_Product_ID.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_ProTREAD_Product_ID">
+            <div class="col col-sm-4 tblProductInfo_ProTREAD_Product_ID">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.ProTREAD_Product_ID))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.ProTREAD_Product_ID.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.ProTREAD_Product_ID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.ProTREAD_Product_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_ProTREAD_Product_ID">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.ProTREAD_Product_ID.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.ProTREAD_Product_ID.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.ProTREAD_Product_ID.ViewAttributes)>
+@Html.Raw(tblProductInfoList.ProTREAD_Product_ID.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.ASD_product_id.Visible) { // tblProductInfoList.ASD_product_id.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_ASD_product_id">
+            <div class="col col-sm-4 tblProductInfo_ASD_product_id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.ASD_product_id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.ASD_product_id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.ASD_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.ASD_product_id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_ASD_product_id">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.ASD_product_id.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.ASD_product_id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.ASD_product_id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.ASD_product_id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.D2L_product_Id.Visible) { // tblProductInfoList.D2L_product_Id.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_D2L_product_Id">
+            <div class="col col-sm-4 tblProductInfo_D2L_product_Id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.D2L_product_Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.D2L_product_Id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.D2L_product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.D2L_product_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_D2L_product_Id">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.D2L_product_Id.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.D2L_product_Id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.D2L_product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.D2L_product_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.int_Course_Duration.Visible) { // tblProductInfoList.int_Course_Duration.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_int_Course_Duration">
+            <div class="col col-sm-4 tblProductInfo_int_Course_Duration">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.int_Course_Duration))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.int_Course_Duration.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Course_Duration.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Course_Duration.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_int_Course_Duration">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.int_Course_Duration.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.int_Course_Duration.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.int_Course_Duration.ViewAttributes)>
+@Html.Raw(tblProductInfoList.int_Course_Duration.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    @if (tblProductInfoList.Moodle_product_Id.Visible) { // tblProductInfoList.Moodle_product_Id.Visible (begin)
+        if (tblProductInfoList.RowType == RowType.View) { // View record
+        <div class="row tblProductInfo_Moodle_product_Id">
+            <div class="col col-sm-4 tblProductInfo_Moodle_product_Id">@Html.Raw(tblProductInfoList.RenderFieldHeader(tblProductInfoList.Moodle_product_Id))</div>
+            <div class="col col-sm-8"><div @Html.Raw(tblProductInfoList.Moodle_product_Id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.Moodle_product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Moodle_product_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        } else { // Add/edit record
+        <div class="row tblProductInfo_Moodle_product_Id">
+            <label class="@(tblProductInfoList.LeftColumnClass)">@Html.Raw(tblProductInfoList.Moodle_product_Id.Caption)</label>
+            <div class="@(tblProductInfoList.RightColumnClass)"><div @Html.Raw(tblProductInfoList.Moodle_product_Id.CellAttributes)>
+<span @Html.Raw(tblProductInfoList.Moodle_product_Id.ViewAttributes)>
+@Html.Raw(tblProductInfoList.Moodle_product_Id.GetViewValue())</span>
+</div></div>
+        </div>
+        }
+    }
+    </div><!-- /.card-body -->
+@if (!tblProductInfoList.IsExport()) {
+    if (tblProductInfoList.MultiColumnListOptionsPosition.StartsWith("bottom", StringComparison.InvariantCultureIgnoreCase)) {
+    <div class="card-footer">
+        <div class="ew-multi-column-list-option ew-@(tblProductInfoList.MultiColumnListOptionsPosition)">
+@{
+    // Render list options (body, bottom)
+    tblProductInfoList.ListOptions.Tag = "div";
+}
+@tblProductInfoList.ListOptions.RenderBody(tblProductInfoList.MultiColumnListOptionsPosition, tblProductInfoList.RowCount)
+        </div><!-- /.ew-multi-column-list-option -->
+    </div><!-- /.card-footer -->
+    }
+}
+</div><!-- /.card -->
+</div><!-- /.col-* -->
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblProductInfoList.RowIndex, "$rowindex$"))
+        tblProductInfoList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblProductInfoList.IsCopy || tblProductInfoList.IsAdd) && tblProductInfoList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblProductInfoList.RowIndex = 1;
+} @* End While *@
+} @* tblProductInfoList.TotalRecords > 0 (end) *@
+</div><!-- /.ew-multi-column-row -->
+@if (Empty(tblProductInfoList.CurrentAction) && !tblProductInfoList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblProductInfoList.CloseRecordset(); }

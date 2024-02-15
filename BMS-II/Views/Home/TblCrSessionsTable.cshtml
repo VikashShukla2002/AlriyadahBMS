@@ -1,0 +1,239 @@
+@if (tblCrSessionsList.ModalGridAdd && tblCrSessionsList.IsGridAdd || tblCrSessionsList.ModalGridEdit && tblCrSessionsList.IsGridEdit || tblCrSessionsList.ModalMultiEdit && tblCrSessionsList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblCrSessionsList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblCRSessions: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblCrSessionsList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblCrSessionsList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblCrSessionsList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblCrSessionsList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(tblCrSessionsList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblCrSessionsList.TableGridClass)">
+@if (!tblCrSessionsList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!tblCrSessionsList.IsGridAdd && !(tblCrSessionsList.IsGridEdit && tblCrSessionsList.ModalGridEdit) && !tblCrSessionsList.IsMultiEdit) {
+@Html.Raw(tblCrSessionsList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@tblCrSessionsList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(tblCrSessionsList.FormName)" id="@(tblCrSessionsList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(tblCrSessionsList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (tblCrSessionsList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_tblCRSessions" class="card-body ew-grid-middle-panel @(tblCrSessionsList.TableContainerClass)" style="@(tblCrSessionsList.TableContainerStyle)">
+@if (tblCrSessionsList.TotalRecords > 0 || tblCrSessionsList.IsGridEdit || tblCrSessionsList.IsMultiEdit) {
+<table id="tbl_tblCRSessionslist" class="@(tblCrSessionsList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblCrSessionsList.RowType = RowType.Header;
+
+    // Render list options
+    await tblCrSessionsList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblCrSessionsList.ListOptions.RenderHeader("left")
+@if (tblCrSessionsList.str_CR_Number.Visible) { // tblCrSessionsList.str_CR_Number.Visible (begin)
+        <th data-name="str_CR_Number" class="@(tblCrSessionsList.str_CR_Number.HeaderCellClass)"><div id="elh_tblCRSessions_str_CR_Number" class="tblCRSessions_str_CR_Number">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.str_CR_Number))</div></th>
+} @* tblCrSessionsList.str_CR_Number.Visible (end) *@
+@if (tblCrSessionsList.int_Status.Visible) { // tblCrSessionsList.int_Status.Visible (begin)
+        <th data-name="int_Status" class="@(tblCrSessionsList.int_Status.HeaderCellClass)"><div id="elh_tblCRSessions_int_Status" class="tblCRSessions_int_Status">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.int_Status))</div></th>
+} @* tblCrSessionsList.int_Status.Visible (end) *@
+@if (tblCrSessionsList.Instructor.Visible) { // tblCrSessionsList.Instructor.Visible (begin)
+        <th data-name="Instructor" class="@(tblCrSessionsList.Instructor.HeaderCellClass)"><div id="elh_tblCRSessions_Instructor" class="tblCRSessions_Instructor">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.Instructor))</div></th>
+} @* tblCrSessionsList.Instructor.Visible (end) *@
+@if (tblCrSessionsList.Location.Visible) { // tblCrSessionsList.Location.Visible (begin)
+        <th data-name="Location" class="@(tblCrSessionsList.Location.HeaderCellClass)"><div id="elh_tblCRSessions_Location" class="tblCRSessions_Location">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.Location))</div></th>
+} @* tblCrSessionsList.Location.Visible (end) *@
+@if (tblCrSessionsList.int_Session_ID.Visible) { // tblCrSessionsList.int_Session_ID.Visible (begin)
+        <th data-name="int_Session_ID" class="@(tblCrSessionsList.int_Session_ID.HeaderCellClass)"><div id="elh_tblCRSessions_int_Session_ID" class="tblCRSessions_int_Session_ID">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.int_Session_ID))</div></th>
+} @* tblCrSessionsList.int_Session_ID.Visible (end) *@
+@if (tblCrSessionsList.str_Session_Date.Visible) { // tblCrSessionsList.str_Session_Date.Visible (begin)
+        <th data-name="str_Session_Date" class="@(tblCrSessionsList.str_Session_Date.HeaderCellClass)"><div id="elh_tblCRSessions_str_Session_Date" class="tblCRSessions_str_Session_Date">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.str_Session_Date))</div></th>
+} @* tblCrSessionsList.str_Session_Date.Visible (end) *@
+@if (tblCrSessionsList.int_Day_ID.Visible) { // tblCrSessionsList.int_Day_ID.Visible (begin)
+        <th data-name="int_Day_ID" class="@(tblCrSessionsList.int_Day_ID.HeaderCellClass)"><div id="elh_tblCRSessions_int_Day_ID" class="tblCRSessions_int_Day_ID">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.int_Day_ID))</div></th>
+} @* tblCrSessionsList.int_Day_ID.Visible (end) *@
+@if (tblCrSessionsList.str_Time_Start.Visible) { // tblCrSessionsList.str_Time_Start.Visible (begin)
+        <th data-name="str_Time_Start" class="@(tblCrSessionsList.str_Time_Start.HeaderCellClass)"><div id="elh_tblCRSessions_str_Time_Start" class="tblCRSessions_str_Time_Start">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.str_Time_Start))</div></th>
+} @* tblCrSessionsList.str_Time_Start.Visible (end) *@
+@if (tblCrSessionsList.str_Time_End.Visible) { // tblCrSessionsList.str_Time_End.Visible (begin)
+        <th data-name="str_Time_End" class="@(tblCrSessionsList.str_Time_End.HeaderCellClass)"><div id="elh_tblCRSessions_str_Time_End" class="tblCRSessions_str_Time_End">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.str_Time_End))</div></th>
+} @* tblCrSessionsList.str_Time_End.Visible (end) *@
+@if (tblCrSessionsList.int_Student_Id.Visible) { // tblCrSessionsList.int_Student_Id.Visible (begin)
+        <th data-name="int_Student_Id" class="@(tblCrSessionsList.int_Student_Id.HeaderCellClass)"><div id="elh_tblCRSessions_int_Student_Id" class="tblCRSessions_int_Student_Id">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.int_Student_Id))</div></th>
+} @* tblCrSessionsList.int_Student_Id.Visible (end) *@
+@if (tblCrSessionsList.str_Username.Visible) { // tblCrSessionsList.str_Username.Visible (begin)
+        <th data-name="str_Username" class="@(tblCrSessionsList.str_Username.HeaderCellClass)"><div id="elh_tblCRSessions_str_Username" class="tblCRSessions_str_Username">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.str_Username))</div></th>
+} @* tblCrSessionsList.str_Username.Visible (end) *@
+@if (tblCrSessionsList.str_Status.Visible) { // tblCrSessionsList.str_Status.Visible (begin)
+        <th data-name="str_Status" class="@(tblCrSessionsList.str_Status.HeaderCellClass)"><div id="elh_tblCRSessions_str_Status" class="tblCRSessions_str_Status">@Html.Raw(tblCrSessionsList.RenderFieldHeader(tblCrSessionsList.str_Status))</div></th>
+} @* tblCrSessionsList.str_Status.Visible (end) *@
+@* Render list options (header, right) *@
+@tblCrSessionsList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblCrSessionsList.PageNumber)">
+@{
+    await tblCrSessionsList.SetupGrid();
+    bool eof = tblCrSessionsList.Recordset == null; // DN
+}
+@while (tblCrSessionsList.RecordCount < tblCrSessionsList.StopRecord || SameString(tblCrSessionsList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblCrSessionsList.RowIndex, "$rowindex$") &&
+        (!tblCrSessionsList.IsGridAdd || tblCrSessionsList.CurrentMode == "copy") &&
+        (!((tblCrSessionsList.IsCopy || tblCrSessionsList.IsAdd) && tblCrSessionsList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblCrSessionsList.Recordset.ReadAsync();
+    tblCrSessionsList.RecordCount++;
+    if (tblCrSessionsList.RecordCount >= tblCrSessionsList.StartRecord) {
+        await tblCrSessionsList.SetupRow();
+    <tr @Html.Raw(tblCrSessionsList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblCrSessionsList.ListOptions.RenderBody("left", tblCrSessionsList.RowCount)
+    @if (tblCrSessionsList.str_CR_Number.Visible) { // tblCrSessionsList.str_CR_Number.Visible (begin)
+        <td data-name="str_CR_Number" @Html.Raw(tblCrSessionsList.str_CR_Number.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_str_CR_Number" class="el_tblCRSessions_str_CR_Number">
+<span @Html.Raw(tblCrSessionsList.str_CR_Number.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.str_CR_Number.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.str_CR_Number.Visible (end) *@
+    @if (tblCrSessionsList.int_Status.Visible) { // tblCrSessionsList.int_Status.Visible (begin)
+        <td data-name="int_Status" @Html.Raw(tblCrSessionsList.int_Status.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_int_Status" class="el_tblCRSessions_int_Status">
+<span @Html.Raw(tblCrSessionsList.int_Status.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.int_Status.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.int_Status.Visible (end) *@
+    @if (tblCrSessionsList.Instructor.Visible) { // tblCrSessionsList.Instructor.Visible (begin)
+        <td data-name="Instructor" @Html.Raw(tblCrSessionsList.Instructor.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_Instructor" class="el_tblCRSessions_Instructor">
+<span @Html.Raw(tblCrSessionsList.Instructor.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.Instructor.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.Instructor.Visible (end) *@
+    @if (tblCrSessionsList.Location.Visible) { // tblCrSessionsList.Location.Visible (begin)
+        <td data-name="Location" @Html.Raw(tblCrSessionsList.Location.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_Location" class="el_tblCRSessions_Location">
+<span @Html.Raw(tblCrSessionsList.Location.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.Location.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.Location.Visible (end) *@
+    @if (tblCrSessionsList.int_Session_ID.Visible) { // tblCrSessionsList.int_Session_ID.Visible (begin)
+        <td data-name="int_Session_ID" @Html.Raw(tblCrSessionsList.int_Session_ID.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_int_Session_ID" class="el_tblCRSessions_int_Session_ID">
+<span @Html.Raw(tblCrSessionsList.int_Session_ID.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.int_Session_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.int_Session_ID.Visible (end) *@
+    @if (tblCrSessionsList.str_Session_Date.Visible) { // tblCrSessionsList.str_Session_Date.Visible (begin)
+        <td data-name="str_Session_Date" @Html.Raw(tblCrSessionsList.str_Session_Date.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_str_Session_Date" class="el_tblCRSessions_str_Session_Date">
+<span @Html.Raw(tblCrSessionsList.str_Session_Date.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.str_Session_Date.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.str_Session_Date.Visible (end) *@
+    @if (tblCrSessionsList.int_Day_ID.Visible) { // tblCrSessionsList.int_Day_ID.Visible (begin)
+        <td data-name="int_Day_ID" @Html.Raw(tblCrSessionsList.int_Day_ID.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_int_Day_ID" class="el_tblCRSessions_int_Day_ID">
+<span @Html.Raw(tblCrSessionsList.int_Day_ID.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.int_Day_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.int_Day_ID.Visible (end) *@
+    @if (tblCrSessionsList.str_Time_Start.Visible) { // tblCrSessionsList.str_Time_Start.Visible (begin)
+        <td data-name="str_Time_Start" @Html.Raw(tblCrSessionsList.str_Time_Start.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_str_Time_Start" class="el_tblCRSessions_str_Time_Start">
+<span @Html.Raw(tblCrSessionsList.str_Time_Start.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.str_Time_Start.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.str_Time_Start.Visible (end) *@
+    @if (tblCrSessionsList.str_Time_End.Visible) { // tblCrSessionsList.str_Time_End.Visible (begin)
+        <td data-name="str_Time_End" @Html.Raw(tblCrSessionsList.str_Time_End.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_str_Time_End" class="el_tblCRSessions_str_Time_End">
+<span @Html.Raw(tblCrSessionsList.str_Time_End.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.str_Time_End.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.str_Time_End.Visible (end) *@
+    @if (tblCrSessionsList.int_Student_Id.Visible) { // tblCrSessionsList.int_Student_Id.Visible (begin)
+        <td data-name="int_Student_Id" @Html.Raw(tblCrSessionsList.int_Student_Id.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_int_Student_Id" class="el_tblCRSessions_int_Student_Id">
+<span @Html.Raw(tblCrSessionsList.int_Student_Id.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.int_Student_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.int_Student_Id.Visible (end) *@
+    @if (tblCrSessionsList.str_Username.Visible) { // tblCrSessionsList.str_Username.Visible (begin)
+        <td data-name="str_Username" @Html.Raw(tblCrSessionsList.str_Username.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_str_Username" class="el_tblCRSessions_str_Username">
+<span @Html.Raw(tblCrSessionsList.str_Username.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.str_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.str_Username.Visible (end) *@
+    @if (tblCrSessionsList.str_Status.Visible) { // tblCrSessionsList.str_Status.Visible (begin)
+        <td data-name="str_Status" @Html.Raw(tblCrSessionsList.str_Status.CellAttributes)>
+<span id="el@(tblCrSessionsList.RowIndex == "$rowindex$" ? "$rowindex$" : tblCrSessionsList.RowCount)_tblCRSessions_str_Status" class="el_tblCRSessions_str_Status">
+<span @Html.Raw(tblCrSessionsList.str_Status.ViewAttributes)>
+@Html.Raw(tblCrSessionsList.str_Status.GetViewValue())</span>
+</span>
+</td>
+    } @* tblCrSessionsList.str_Status.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblCrSessionsList.ListOptions.RenderBody("right", tblCrSessionsList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblCrSessionsList.RowIndex, "$rowindex$"))
+        tblCrSessionsList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblCrSessionsList.IsCopy || tblCrSessionsList.IsAdd) && tblCrSessionsList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblCrSessionsList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblCrSessionsList.CurrentAction) && !tblCrSessionsList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ tblCrSessionsList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

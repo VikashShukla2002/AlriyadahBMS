@@ -1,0 +1,272 @@
+@if (equipmentList.ModalGridAdd && equipmentList.IsGridAdd || equipmentList.ModalGridEdit && equipmentList.IsGridEdit || equipmentList.ModalMultiEdit && equipmentList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(equipmentList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Equipment: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(equipmentList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(equipmentList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(equipmentList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(equipmentList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(equipmentList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(equipmentList.TableGridClass)">
+@if (!equipmentList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!equipmentList.IsGridAdd && !(equipmentList.IsGridEdit && equipmentList.ModalGridEdit) && !equipmentList.IsMultiEdit) {
+@Html.Raw(equipmentList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@equipmentList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(equipmentList.FormName)" id="@(equipmentList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(equipmentList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (equipmentList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_Equipment" class="card-body ew-grid-middle-panel @(equipmentList.TableContainerClass)" style="@(equipmentList.TableContainerStyle)">
+@if (equipmentList.TotalRecords > 0 || equipmentList.IsGridEdit || equipmentList.IsMultiEdit) {
+<table id="tbl_Equipmentlist" class="@(equipmentList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    equipmentList.RowType = RowType.Header;
+
+    // Render list options
+    await equipmentList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@equipmentList.ListOptions.RenderHeader("left")
+@if (equipmentList.int_Location.Visible) { // equipmentList.int_Location.Visible (begin)
+        <th data-name="int_Location" class="@(equipmentList.int_Location.HeaderCellClass)"><div id="elh_Equipment_int_Location" class="Equipment_int_Location">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.int_Location))</div></th>
+} @* equipmentList.int_Location.Visible (end) *@
+@if (equipmentList.Equipment_Type_ID.Visible) { // equipmentList.Equipment_Type_ID.Visible (begin)
+        <th data-name="Equipment_Type_ID" class="@(equipmentList.Equipment_Type_ID.HeaderCellClass)"><div id="elh_Equipment_Equipment_Type_ID" class="Equipment_Equipment_Type_ID">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Equipment_Type_ID))</div></th>
+} @* equipmentList.Equipment_Type_ID.Visible (end) *@
+@if (equipmentList.Equipment_Type_Name.Visible) { // equipmentList.Equipment_Type_Name.Visible (begin)
+        <th data-name="Equipment_Type_Name" class="@(equipmentList.Equipment_Type_Name.HeaderCellClass)"><div id="elh_Equipment_Equipment_Type_Name" class="Equipment_Equipment_Type_Name">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Equipment_Type_Name))</div></th>
+} @* equipmentList.Equipment_Type_Name.Visible (end) *@
+@if (equipmentList.Manufacturer_Name.Visible) { // equipmentList.Manufacturer_Name.Visible (begin)
+        <th data-name="Manufacturer_Name" class="@(equipmentList.Manufacturer_Name.HeaderCellClass)"><div id="elh_Equipment_Manufacturer_Name" class="Equipment_Manufacturer_Name">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Manufacturer_Name))</div></th>
+} @* equipmentList.Manufacturer_Name.Visible (end) *@
+@if (equipmentList.Serial_VIN_Number.Visible) { // equipmentList.Serial_VIN_Number.Visible (begin)
+        <th data-name="Serial_VIN_Number" class="@(equipmentList.Serial_VIN_Number.HeaderCellClass)"><div id="elh_Equipment_Serial_VIN_Number" class="Equipment_Serial_VIN_Number">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Serial_VIN_Number))</div></th>
+} @* equipmentList.Serial_VIN_Number.Visible (end) *@
+@if (equipmentList.Retailer_Name.Visible) { // equipmentList.Retailer_Name.Visible (begin)
+        <th data-name="Retailer_Name" class="@(equipmentList.Retailer_Name.HeaderCellClass)"><div id="elh_Equipment_Retailer_Name" class="Equipment_Retailer_Name">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Retailer_Name))</div></th>
+} @* equipmentList.Retailer_Name.Visible (end) *@
+@if (equipmentList.DatePurchased.Visible) { // equipmentList.DatePurchased.Visible (begin)
+        <th data-name="DatePurchased" class="@(equipmentList.DatePurchased.HeaderCellClass)"><div id="elh_Equipment_DatePurchased" class="Equipment_DatePurchased">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.DatePurchased))</div></th>
+} @* equipmentList.DatePurchased.Visible (end) *@
+@if (equipmentList.ServiceInception_Date.Visible) { // equipmentList.ServiceInception_Date.Visible (begin)
+        <th data-name="ServiceInception_Date" class="@(equipmentList.ServiceInception_Date.HeaderCellClass)"><div id="elh_Equipment_ServiceInception_Date" class="Equipment_ServiceInception_Date">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.ServiceInception_Date))</div></th>
+} @* equipmentList.ServiceInception_Date.Visible (end) *@
+@if (equipmentList.UsefulLife.Visible) { // equipmentList.UsefulLife.Visible (begin)
+        <th data-name="UsefulLife" class="@(equipmentList.UsefulLife.HeaderCellClass)"><div id="elh_Equipment_UsefulLife" class="Equipment_UsefulLife">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.UsefulLife))</div></th>
+} @* equipmentList.UsefulLife.Visible (end) *@
+@if (equipmentList.Price.Visible) { // equipmentList.Price.Visible (begin)
+        <th data-name="Price" class="@(equipmentList.Price.HeaderCellClass)"><div id="elh_Equipment_Price" class="Equipment_Price">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Price))</div></th>
+} @* equipmentList.Price.Visible (end) *@
+@if (equipmentList.VAT.Visible) { // equipmentList.VAT.Visible (begin)
+        <th data-name="VAT" class="@(equipmentList.VAT.HeaderCellClass)"><div id="elh_Equipment_VAT" class="Equipment_VAT">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.VAT))</div></th>
+} @* equipmentList.VAT.Visible (end) *@
+@if (equipmentList.Creation_Date.Visible) { // equipmentList.Creation_Date.Visible (begin)
+        <th data-name="Creation_Date" class="@(equipmentList.Creation_Date.HeaderCellClass)"><div id="elh_Equipment_Creation_Date" class="Equipment_Creation_Date">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Creation_Date))</div></th>
+} @* equipmentList.Creation_Date.Visible (end) *@
+@if (equipmentList.Modified_Date.Visible) { // equipmentList.Modified_Date.Visible (begin)
+        <th data-name="Modified_Date" class="@(equipmentList.Modified_Date.HeaderCellClass)"><div id="elh_Equipment_Modified_Date" class="Equipment_Modified_Date">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Modified_Date))</div></th>
+} @* equipmentList.Modified_Date.Visible (end) *@
+@if (equipmentList.Created_by.Visible) { // equipmentList.Created_by.Visible (begin)
+        <th data-name="Created_by" class="@(equipmentList.Created_by.HeaderCellClass)"><div id="elh_Equipment_Created_by" class="Equipment_Created_by">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Created_by))</div></th>
+} @* equipmentList.Created_by.Visible (end) *@
+@if (equipmentList.Modified_by.Visible) { // equipmentList.Modified_by.Visible (begin)
+        <th data-name="Modified_by" class="@(equipmentList.Modified_by.HeaderCellClass)"><div id="elh_Equipment_Modified_by" class="Equipment_Modified_by">@Html.Raw(equipmentList.RenderFieldHeader(equipmentList.Modified_by))</div></th>
+} @* equipmentList.Modified_by.Visible (end) *@
+@* Render list options (header, right) *@
+@equipmentList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(equipmentList.PageNumber)">
+@{
+    await equipmentList.SetupGrid();
+    bool eof = equipmentList.Recordset == null; // DN
+}
+@while (equipmentList.RecordCount < equipmentList.StopRecord || SameString(equipmentList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(equipmentList.RowIndex, "$rowindex$") &&
+        (!equipmentList.IsGridAdd || equipmentList.CurrentMode == "copy") &&
+        (!((equipmentList.IsCopy || equipmentList.IsAdd) && equipmentList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await equipmentList.Recordset.ReadAsync();
+    equipmentList.RecordCount++;
+    if (equipmentList.RecordCount >= equipmentList.StartRecord) {
+        await equipmentList.SetupRow();
+    <tr @Html.Raw(equipmentList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @equipmentList.ListOptions.RenderBody("left", equipmentList.RowCount)
+    @if (equipmentList.int_Location.Visible) { // equipmentList.int_Location.Visible (begin)
+        <td data-name="int_Location" @Html.Raw(equipmentList.int_Location.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_int_Location" class="el_Equipment_int_Location">
+<span @Html.Raw(equipmentList.int_Location.ViewAttributes)>
+@Html.Raw(equipmentList.int_Location.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.int_Location.Visible (end) *@
+    @if (equipmentList.Equipment_Type_ID.Visible) { // equipmentList.Equipment_Type_ID.Visible (begin)
+        <td data-name="Equipment_Type_ID" @Html.Raw(equipmentList.Equipment_Type_ID.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Equipment_Type_ID" class="el_Equipment_Equipment_Type_ID">
+<span @Html.Raw(equipmentList.Equipment_Type_ID.ViewAttributes)>
+@Html.Raw(equipmentList.Equipment_Type_ID.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Equipment_Type_ID.Visible (end) *@
+    @if (equipmentList.Equipment_Type_Name.Visible) { // equipmentList.Equipment_Type_Name.Visible (begin)
+        <td data-name="Equipment_Type_Name" @Html.Raw(equipmentList.Equipment_Type_Name.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Equipment_Type_Name" class="el_Equipment_Equipment_Type_Name">
+<span @Html.Raw(equipmentList.Equipment_Type_Name.ViewAttributes)>
+@Html.Raw(equipmentList.Equipment_Type_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Equipment_Type_Name.Visible (end) *@
+    @if (equipmentList.Manufacturer_Name.Visible) { // equipmentList.Manufacturer_Name.Visible (begin)
+        <td data-name="Manufacturer_Name" @Html.Raw(equipmentList.Manufacturer_Name.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Manufacturer_Name" class="el_Equipment_Manufacturer_Name">
+<span @Html.Raw(equipmentList.Manufacturer_Name.ViewAttributes)>
+@Html.Raw(equipmentList.Manufacturer_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Manufacturer_Name.Visible (end) *@
+    @if (equipmentList.Serial_VIN_Number.Visible) { // equipmentList.Serial_VIN_Number.Visible (begin)
+        <td data-name="Serial_VIN_Number" @Html.Raw(equipmentList.Serial_VIN_Number.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Serial_VIN_Number" class="el_Equipment_Serial_VIN_Number">
+<span @Html.Raw(equipmentList.Serial_VIN_Number.ViewAttributes)>
+@Html.Raw(equipmentList.Serial_VIN_Number.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Serial_VIN_Number.Visible (end) *@
+    @if (equipmentList.Retailer_Name.Visible) { // equipmentList.Retailer_Name.Visible (begin)
+        <td data-name="Retailer_Name" @Html.Raw(equipmentList.Retailer_Name.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Retailer_Name" class="el_Equipment_Retailer_Name">
+<span @Html.Raw(equipmentList.Retailer_Name.ViewAttributes)>
+@Html.Raw(equipmentList.Retailer_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Retailer_Name.Visible (end) *@
+    @if (equipmentList.DatePurchased.Visible) { // equipmentList.DatePurchased.Visible (begin)
+        <td data-name="DatePurchased" @Html.Raw(equipmentList.DatePurchased.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_DatePurchased" class="el_Equipment_DatePurchased">
+<span @Html.Raw(equipmentList.DatePurchased.ViewAttributes)>
+@Html.Raw(equipmentList.DatePurchased.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.DatePurchased.Visible (end) *@
+    @if (equipmentList.ServiceInception_Date.Visible) { // equipmentList.ServiceInception_Date.Visible (begin)
+        <td data-name="ServiceInception_Date" @Html.Raw(equipmentList.ServiceInception_Date.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_ServiceInception_Date" class="el_Equipment_ServiceInception_Date">
+<span @Html.Raw(equipmentList.ServiceInception_Date.ViewAttributes)>
+@Html.Raw(equipmentList.ServiceInception_Date.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.ServiceInception_Date.Visible (end) *@
+    @if (equipmentList.UsefulLife.Visible) { // equipmentList.UsefulLife.Visible (begin)
+        <td data-name="UsefulLife" @Html.Raw(equipmentList.UsefulLife.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_UsefulLife" class="el_Equipment_UsefulLife">
+<span @Html.Raw(equipmentList.UsefulLife.ViewAttributes)>
+@Html.Raw(equipmentList.UsefulLife.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.UsefulLife.Visible (end) *@
+    @if (equipmentList.Price.Visible) { // equipmentList.Price.Visible (begin)
+        <td data-name="Price" @Html.Raw(equipmentList.Price.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Price" class="el_Equipment_Price">
+<span @Html.Raw(equipmentList.Price.ViewAttributes)>
+@Html.Raw(equipmentList.Price.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Price.Visible (end) *@
+    @if (equipmentList.VAT.Visible) { // equipmentList.VAT.Visible (begin)
+        <td data-name="VAT" @Html.Raw(equipmentList.VAT.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_VAT" class="el_Equipment_VAT">
+<span @Html.Raw(equipmentList.VAT.ViewAttributes)>
+@Html.Raw(equipmentList.VAT.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.VAT.Visible (end) *@
+    @if (equipmentList.Creation_Date.Visible) { // equipmentList.Creation_Date.Visible (begin)
+        <td data-name="Creation_Date" @Html.Raw(equipmentList.Creation_Date.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Creation_Date" class="el_Equipment_Creation_Date">
+<span @Html.Raw(equipmentList.Creation_Date.ViewAttributes)>
+@Html.Raw(equipmentList.Creation_Date.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Creation_Date.Visible (end) *@
+    @if (equipmentList.Modified_Date.Visible) { // equipmentList.Modified_Date.Visible (begin)
+        <td data-name="Modified_Date" @Html.Raw(equipmentList.Modified_Date.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Modified_Date" class="el_Equipment_Modified_Date">
+<span @Html.Raw(equipmentList.Modified_Date.ViewAttributes)>
+@Html.Raw(equipmentList.Modified_Date.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Modified_Date.Visible (end) *@
+    @if (equipmentList.Created_by.Visible) { // equipmentList.Created_by.Visible (begin)
+        <td data-name="Created_by" @Html.Raw(equipmentList.Created_by.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Created_by" class="el_Equipment_Created_by">
+<span @Html.Raw(equipmentList.Created_by.ViewAttributes)>
+@Html.Raw(equipmentList.Created_by.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Created_by.Visible (end) *@
+    @if (equipmentList.Modified_by.Visible) { // equipmentList.Modified_by.Visible (begin)
+        <td data-name="Modified_by" @Html.Raw(equipmentList.Modified_by.CellAttributes)>
+<span id="el@(equipmentList.RowIndex == "$rowindex$" ? "$rowindex$" : equipmentList.RowCount)_Equipment_Modified_by" class="el_Equipment_Modified_by">
+<span @Html.Raw(equipmentList.Modified_by.ViewAttributes)>
+@Html.Raw(equipmentList.Modified_by.GetViewValue())</span>
+</span>
+</td>
+    } @* equipmentList.Modified_by.Visible (end) *@
+    @* Render list options (body, right) *@
+    @equipmentList.ListOptions.RenderBody("right", equipmentList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(equipmentList.RowIndex, "$rowindex$"))
+        equipmentList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((equipmentList.IsCopy || equipmentList.IsAdd) && equipmentList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        equipmentList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(equipmentList.CurrentAction) && !equipmentList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ equipmentList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

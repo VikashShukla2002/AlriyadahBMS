@@ -1,0 +1,319 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (sessionsSummary.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (DashboardReport) {
+        if (!sessionsSummary.Visible) { // Not visible, return
+            return;
+        }
+        Layout = ""; // No layout
+    } else {
+        if (!sessionsSummary.UseLayout) // UseLayout = false // DN
+            Layout = "";
+        else
+            Layout = "_Layout";
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!sessionsSummary.IsExport() && !sessionsSummary.DrillDown && !DashboardReport) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(sessionsSummary.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Sessions: currentTable } });
+var currentPageID = ew.PAGE_ID = "summary";
+var currentForm;
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+<a id="top"></a>
+<!-- Content Container -->
+<div id="ew-report" class="ew-report container-fluid">
+<div class="btn-toolbar ew-toolbar">
+@if (!sessionsSummary.DrillDownInPanel) {
+    sessionsSummary.ExportOptions.Render("body");
+    sessionsSummary.SearchOptions.Render("body");
+    sessionsSummary.FilterOptions.Render("body");
+}
+</div>
+@if (!sessionsSummary.IsExport() && !sessionsSummary.DrillDown && !DashboardReport) {
+}
+@sessionsSummary.ShowPageHeader()
+@sessionsSummary.ShowMessages()
+@if (sessionsSummary.ShowReport) {
+<!-- Summary report (begin) -->
+@if (!sessionsSummary.IsExport("pdf")) {
+@:<main class="report-summary @(sessionsSummary.TotalGroups == 0 ? " ew-no-record" : "")">
+}
+@while (sessionsSummary.GroupCount <= sessionsSummary.GroupRecords.Count && sessionsSummary.GroupCount <= sessionsSummary.DisplayGroups) {
+    // Show header
+    if (sessionsSummary.ShowHeader) {
+if (sessionsSummary.GroupCount > 1) {
+@:</tbody>
+@:</table>
+if (!sessionsSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!sessionsSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+@Html.Raw(sessionsSummary.PageBreakHtml)
+}
+if (!sessionsSummary.IsExport("pdf")) {
+@:<div class="@Html.Raw(sessionsSummary.ReportContainerClass)">
+}
+if (!sessionsSummary.IsExport() && !(sessionsSummary.DrillDown && sessionsSummary.TotalGroups > 0)) {
+<!-- Top pager -->
+<div class="card-header ew-grid-upper-panel">
+@sessionsSummary.Pager.Render()
+</div>
+}
+if (!sessionsSummary.IsExport("pdf")) {
+<!-- Report grid (begin) -->
+@:<div id="gmp_Sessions" class="card-body ew-grid-middle-panel @(sessionsSummary.TableContainerClass)">
+}
+@:<table class="@(sessionsSummary.TableClass)">
+<thead>
+    <!-- Table header -->
+    <tr class="ew-table-header">
+@if (sessionsSummary.str_CR_Number.Visible) { // sessionsSummary.str_CR_Number.Visible (begin)
+    if (sessionsSummary.str_CR_Number.ShowGroupHeaderAsRow) {
+    <th data-name="str_CR_Number">&nbsp;</th>
+    } else {
+    <th data-name="str_CR_Number" class="@(sessionsSummary.str_CR_Number.HeaderCellClass)"><div class="Sessions_str_CR_Number">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_CR_Number))</div></th>
+    }
+} @* sessionsSummary.str_CR_Number.Visible (end) *@
+@if (sessionsSummary.str_Session_Date.Visible) { // sessionsSummary.str_Session_Date.Visible (begin)
+    if (sessionsSummary.str_Session_Date.ShowGroupHeaderAsRow) {
+    <th data-name="str_Session_Date">&nbsp;</th>
+    } else {
+    <th data-name="str_Session_Date" class="@(sessionsSummary.str_Session_Date.HeaderCellClass)"><div class="Sessions_str_Session_Date">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_Session_Date))</div></th>
+    }
+} @* sessionsSummary.str_Session_Date.Visible (end) *@
+@if (sessionsSummary.int_CRSession_ID.Visible) { // sessionsSummary.int_CRSession_ID.Visible (begin)
+    <th data-name="int_CRSession_ID" class="@(sessionsSummary.int_CRSession_ID.HeaderCellClass)"><div class="Sessions_int_CRSession_ID">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.int_CRSession_ID))</div></th>
+} @* sessionsSummary.int_CRSession_ID.Visible (end) *@
+@if (sessionsSummary.int_Status.Visible) { // sessionsSummary.int_Status.Visible (begin)
+    <th data-name="int_Status" class="@(sessionsSummary.int_Status.HeaderCellClass)"><div class="Sessions_int_Status">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.int_Status))</div></th>
+} @* sessionsSummary.int_Status.Visible (end) *@
+@if (sessionsSummary.str_Day_Name.Visible) { // sessionsSummary.str_Day_Name.Visible (begin)
+    <th data-name="str_Day_Name" class="@(sessionsSummary.str_Day_Name.HeaderCellClass)"><div class="Sessions_str_Day_Name">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_Day_Name))</div></th>
+} @* sessionsSummary.str_Day_Name.Visible (end) *@
+@if (sessionsSummary.str_Time_Start.Visible) { // sessionsSummary.str_Time_Start.Visible (begin)
+    <th data-name="str_Time_Start" class="@(sessionsSummary.str_Time_Start.HeaderCellClass)"><div class="Sessions_str_Time_Start">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_Time_Start))</div></th>
+} @* sessionsSummary.str_Time_Start.Visible (end) *@
+@if (sessionsSummary.str_Time_End.Visible) { // sessionsSummary.str_Time_End.Visible (begin)
+    <th data-name="str_Time_End" class="@(sessionsSummary.str_Time_End.HeaderCellClass)"><div class="Sessions_str_Time_End">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_Time_End))</div></th>
+} @* sessionsSummary.str_Time_End.Visible (end) *@
+    </tr>
+</thead>
+@:<tbody>
+        if (sessionsSummary.TotalGroups == 0) {
+            break; // Show header only
+        }
+        sessionsSummary.ShowHeader = false;
+    } // End show header
+
+    // Build detail SQL
+    string where = DetailFilterSql(sessionsSummary.str_CR_Number, sessionsSummary.SqlFirstGroupField, sessionsSummary.str_CR_Number?.GroupValue, sessionsSummary.DbId); // DN
+    if (!Empty(sessionsSummary.PageFirstGroupFilter)) {
+        sessionsSummary.PageFirstGroupFilter += " OR ";
+    }
+    sessionsSummary.PageFirstGroupFilter += where;
+    if (!Empty(sessionsSummary.Filter)) {
+        where = "(" + sessionsSummary.Filter + ") AND (" + where + ")";
+    }
+    sqlWrk = BuildReportSql(sessionsSummary.SqlSelect, sessionsSummary.SqlWhere, sessionsSummary.SqlGroupBy, sessionsSummary.SqlHaving, sessionsSummary.SqlOrderBy, where, sessionsSummary.Sort);
+    sessionsSummary.DetailRecords = await sessionsSummary.Connection.GetRowsAsync(sqlWrk); // DN
+    sessionsSummary.DetailRecordCount = sessionsSummary.DetailRecords?.Count ?? 0; // DN
+
+    // Load detail records
+    sessionsSummary.str_CR_Number.Records = sessionsSummary.DetailRecords;
+    sessionsSummary.str_CR_Number.LevelBreak = true; // Set field level break
+        sessionsSummary.GroupCounter[1] = sessionsSummary.GroupCount;
+        sessionsSummary.str_CR_Number.GetCnt(sessionsSummary.str_CR_Number.Records); // Get record count
+if (sessionsSummary.str_CR_Number.Visible && sessionsSummary.str_CR_Number.ShowGroupHeaderAsRow) {
+    // Render header row
+    sessionsSummary.ResetAttributes();
+    sessionsSummary.RowType = RowType.Total;
+    sessionsSummary.RowTotalType = RowSummary.Group;
+    sessionsSummary.RowTotalSubType = RowTotal.Header;
+    sessionsSummary.RowGroupLevel = 1;
+    await sessionsSummary.RenderRow();
+    @:<tr @Html.Raw(sessionsSummary.RowAttributes)>
+if (sessionsSummary.str_CR_Number.Visible) {
+    sessionsSummary.str_CR_Number.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_CR_Number" @Html.Raw(sessionsSummary.str_CR_Number.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    sessionsSummary.str_CR_Number.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_CR_Number" colspan="@(sessionsSummary.GroupColumnCount + sessionsSummary.DetailColumnCount - 1)" @Html.Raw(sessionsSummary.str_CR_Number.CellAttributes)>
+        <span class="ew-summary-caption Sessions_str_CR_Number">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_CR_Number))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(sessionsSummary.str_CR_Number.ViewAttributes)>@Html.Raw(sessionsSummary.str_CR_Number.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(sessionsSummary.str_CR_Number.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    sessionsSummary.str_Session_Date.GetDistinctValues(sessionsSummary.str_CR_Number.Records, sessionsSummary.str_Session_Date.Sort);
+    sessionsSummary.SetGroupCount(sessionsSummary.str_Session_Date.DistinctValues.Count, sessionsSummary.GroupCounter[1]);
+    sessionsSummary.GroupCounter[2] = 0; // Init group count index
+    foreach (var str_Session_Date in sessionsSummary.str_Session_Date.DistinctValues) { // Load records for this distinct value
+        sessionsSummary.str_Session_Date.GroupValue = str_Session_Date; // Set group value
+        sessionsSummary.str_Session_Date.GetDistinctRecords(sessionsSummary.str_CR_Number.Records, sessionsSummary.str_Session_Date.GroupValue);
+        sessionsSummary.str_Session_Date.LevelBreak = true; // Set field level break
+        sessionsSummary.GroupCounter[2]++;
+        sessionsSummary.str_Session_Date.GetCnt(sessionsSummary.str_Session_Date.Records); // Get record count
+        sessionsSummary.SetGroupCount(sessionsSummary.str_Session_Date.Count, sessionsSummary.GroupCounter[1], sessionsSummary.GroupCounter[2]);
+if (sessionsSummary.str_Session_Date.Visible && sessionsSummary.str_Session_Date.ShowGroupHeaderAsRow) {
+    // Render header row
+    sessionsSummary.str_Session_Date.SetDbValue(str_Session_Date); // Set current value for str_Session_Date
+    sessionsSummary.ResetAttributes();
+    sessionsSummary.RowType = RowType.Total;
+    sessionsSummary.RowTotalType = RowSummary.Group;
+    sessionsSummary.RowTotalSubType = RowTotal.Header;
+    sessionsSummary.RowGroupLevel = 2;
+    await sessionsSummary.RenderRow();
+    @:<tr @Html.Raw(sessionsSummary.RowAttributes)>
+if (sessionsSummary.str_CR_Number.Visible) {
+        <td data-field="str_CR_Number" @Html.Raw(sessionsSummary.str_CR_Number.CellAttributes)></td>
+}
+if (sessionsSummary.str_Session_Date.Visible) {
+    sessionsSummary.str_Session_Date.CellAttrs.AppendClass("ew-rpt-grp-caret");
+        <td data-field="str_Session_Date" @Html.Raw(sessionsSummary.str_Session_Date.CellAttributes)><i class="ew-group-toggle fa-solid fa-caret-down"></i></td>
+    sessionsSummary.str_Session_Date.CellAttrs.RemoveClass("ew-rpt-grp-caret");
+}
+        <td data-field="str_Session_Date" colspan="@(sessionsSummary.GroupColumnCount + sessionsSummary.DetailColumnCount - 2)" @Html.Raw(sessionsSummary.str_Session_Date.CellAttributes)>
+        <span class="ew-summary-caption Sessions_str_Session_Date">@Html.Raw(sessionsSummary.RenderFieldHeader(sessionsSummary.str_Session_Date))</span>@Html.Raw(Language.Phrase("SummaryColon"))<span @Html.Raw(sessionsSummary.str_Session_Date.ViewAttributes)>@Html.Raw(sessionsSummary.str_Session_Date.GroupViewValue)</span>
+        <span class="ew-summary-count">(<span class="ew-aggregate-caption">@Html.Raw(Language.Phrase("RptCnt"))</span><span class="ew-aggregate-equal">@Html.Raw(Language.Phrase("AggregateEqual"))</span><span class="ew-aggregate-value">@FormatNumber(sessionsSummary.str_Session_Date.Count, "N0")</span>)</span>
+        </td>
+    @:</tr>
+}
+    sessionsSummary.RecordCount = 0; // Reset record count
+    foreach (var record in sessionsSummary.str_Session_Date.Records) {
+        sessionsSummary.RecordCount++;
+        sessionsSummary.RecordIndex++;
+        sessionsSummary.LoadRowValues(record);
+
+        // Render detail row
+        sessionsSummary.ResetAttributes();
+        sessionsSummary.RowType = RowType.Detail;
+        await sessionsSummary.RenderRow();
+    @:<tr @Html.Raw(sessionsSummary.RowAttributes)>
+if (sessionsSummary.str_CR_Number.Visible) {
+    if (sessionsSummary.str_CR_Number.ShowGroupHeaderAsRow) {
+        <td data-field="str_CR_Number" @Html.Raw(sessionsSummary.str_CR_Number.CellAttributes)></td>
+    } else {
+        <td data-field="str_CR_Number" @Html.Raw(sessionsSummary.str_CR_Number.CellAttributes)><span @Html.Raw(sessionsSummary.str_CR_Number.ViewAttributes)>@Html.Raw(sessionsSummary.str_CR_Number.GroupViewValue)</span></td>
+    }
+}
+if (sessionsSummary.str_Session_Date.Visible) {
+    if (sessionsSummary.str_Session_Date.ShowGroupHeaderAsRow) {
+        <td data-field="str_Session_Date" @Html.Raw(sessionsSummary.str_Session_Date.CellAttributes)></td>
+    } else {
+        <td data-field="str_Session_Date" @Html.Raw(sessionsSummary.str_Session_Date.CellAttributes)><span @Html.Raw(sessionsSummary.str_Session_Date.ViewAttributes)>@Html.Raw(sessionsSummary.str_Session_Date.GroupViewValue)</span></td>
+    }
+}
+if (sessionsSummary.int_CRSession_ID.Visible) {
+        <td data-field="int_CRSession_ID" @Html.Raw(sessionsSummary.int_CRSession_ID.CellAttributes)>
+<span @Html.Raw(sessionsSummary.int_CRSession_ID.ViewAttributes)>
+@Html.Raw(sessionsSummary.int_CRSession_ID.GetViewValue())</span>
+</td>
+}
+if (sessionsSummary.int_Status.Visible) {
+        <td data-field="int_Status" @Html.Raw(sessionsSummary.int_Status.CellAttributes)>
+<span @Html.Raw(sessionsSummary.int_Status.ViewAttributes)>
+@Html.Raw(sessionsSummary.int_Status.GetViewValue())</span>
+</td>
+}
+if (sessionsSummary.str_Day_Name.Visible) {
+        <td data-field="str_Day_Name" @Html.Raw(sessionsSummary.str_Day_Name.CellAttributes)>
+<span @Html.Raw(sessionsSummary.str_Day_Name.ViewAttributes)>
+@Html.Raw(sessionsSummary.str_Day_Name.GetViewValue())</span>
+</td>
+}
+if (sessionsSummary.str_Time_Start.Visible) {
+        <td data-field="str_Time_Start" @Html.Raw(sessionsSummary.str_Time_Start.CellAttributes)>
+<span @Html.Raw(sessionsSummary.str_Time_Start.ViewAttributes)>
+@Html.Raw(sessionsSummary.str_Time_Start.GetViewValue())</span>
+</td>
+}
+if (sessionsSummary.str_Time_End.Visible) {
+        <td data-field="str_Time_End" @Html.Raw(sessionsSummary.str_Time_End.CellAttributes)>
+<span @Html.Raw(sessionsSummary.str_Time_End.ViewAttributes)>
+@Html.Raw(sessionsSummary.str_Time_End.GetViewValue())</span>
+</td>
+}
+    @:</tr>
+    }
+    } // End group level 1
+
+    // Next group
+    sessionsSummary.LoadGroupRowValues();
+
+    // Show header if page break
+    if (sessionsSummary.IsExport()) {
+        sessionsSummary.ShowHeader = (sessionsSummary.ExportPageBreakCount == 0) ? false : (sessionsSummary.GroupCount % sessionsSummary.ExportPageBreakCount == 0);
+    }
+
+    // Page Breaking server event
+    if (sessionsSummary.ShowHeader) {
+        bool pageShowHeader = sessionsSummary.ShowHeader;
+        string pageBreakHtml = sessionsSummary.PageBreakHtml;
+        sessionsSummary.PageBreaking(ref pageShowHeader, ref pageBreakHtml);
+        sessionsSummary.ShowHeader = pageShowHeader;
+        sessionsSummary.PageBreakHtml = pageBreakHtml;
+    }
+    sessionsSummary.GroupCount++;
+} @* End while *@
+@if (sessionsSummary.TotalGroups > 0) {
+@:</tbody>
+@:<tfoot>
+@:</tfoot>
+@:</table>
+if (!sessionsSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid-middle-panel -->
+<!-- Report grid (end) -->
+}
+if (!sessionsSummary.IsExport("pdf")) {
+@:</div>
+<!-- /.ew-grid -->
+}
+}
+@if (!sessionsSummary.IsExport("pdf")) {
+@:</main>
+<!-- /.report-summary -->
+}
+<!-- Summary report (end) -->
+}
+</div>
+<!-- /.ew-report -->
+@sessionsSummary.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!sessionsSummary.IsExport() && !sessionsSummary.DrillDown && !DashboardReport) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

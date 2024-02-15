@@ -1,0 +1,353 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblAssessmentList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblAssessmentList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblAssessmentList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAssessmentList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblAssessmentList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblAssessmentList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblAssessmentList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblAssessmentList.FormKeyCountName)")
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Username": @Html.Raw(tblAssessmentList.str_Username.ToClientList(tblAssessmentList)),
+            "Assessment_Type": @Html.Raw(tblAssessmentList.Assessment_Type.ToClientList(tblAssessmentList)),
+            "AssessmentDate": @Html.Raw(tblAssessmentList.AssessmentDate.ToClientList(tblAssessmentList)),
+            "isAssessmentDone": @Html.Raw(tblAssessmentList.isAssessmentDone.ToClientList(tblAssessmentList)),
+            "AssessmentScore": @Html.Raw(tblAssessmentList.AssessmentScore.ToClientList(tblAssessmentList)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblAssessmentList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblAssessmentList.TotalRecords > 0 && tblAssessmentList.ExportOptions.Visible) {
+    tblAssessmentList.ExportOptions.Render("body");
+}
+@if (tblAssessmentList.ImportOptions.Visible) {
+    tblAssessmentList.ImportOptions.Render("body");
+}
+@if (tblAssessmentList.SearchOptions.Visible) {
+    tblAssessmentList.SearchOptions.Render("body");
+}
+@if (tblAssessmentList.FilterOptions.Visible) {
+    tblAssessmentList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblAssessmentList.IsExport() || Config.ExportMasterRecord && tblAssessmentList.IsExport("print")) {
+if (!Empty(tblAssessmentList.DbMasterFilter) && tblAssessmentList.CurrentMasterTable == "tblStudents") {
+    if (tblAssessmentList.MasterRecordExists) {
+        @await Html.PartialAsync("TblStudentsMaster.cshtml")
+    }
+}
+}
+@if (tblAssessmentList.ShowCurrentFilter) {
+    tblAssessmentList.ShowFilterList();
+}
+@if (!tblAssessmentList.IsModal) {
+<form name="ftblAssessmentsrch" id="ftblAssessmentsrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblAssessmentsrch_search_panel" class="mb-2 mb-sm-0 @(tblAssessmentList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblAssessmentList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblAssessment: currentTable } });
+var currentForm;
+var ftblAssessmentsrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblAssessmentsrch")
+        .setPageId("list")
+@if (tblAssessmentList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Add fields
+        .setFields([
+
+            ["str_First_Name", [], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [], fields.str_Last_Name.isInvalid],
+            ["str_Username", [], fields.str_Username.isInvalid],
+            ["Assessment_Type", [], fields.Assessment_Type.isInvalid],
+            ["AssessmentDate", [], fields.AssessmentDate.isInvalid],
+            ["isAssessmentDone", [], fields.isAssessmentDone.isInvalid],
+            ["AssessmentScore", [], fields.AssessmentScore.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "str_Username": @Html.Raw(tblAssessmentList.str_Username.ToClientList(tblAssessmentList)),
+            "AssessmentDate": @Html.Raw(tblAssessmentList.AssessmentDate.ToClientList(tblAssessmentList)),
+            "AssessmentScore": @Html.Raw(tblAssessmentList.AssessmentScore.ToClientList(tblAssessmentList)),
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblAssessmentList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblAssessmentList.IsExport() && Empty(tblAssessmentList.CurrentAction) && tblAssessmentList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0@(tblAssessmentList.SearchFieldsPerRow > 0 ? " row-cols-sm-" + tblAssessmentList.SearchFieldsPerRow : "")">
+@{
+    // Render search row
+    tblAssessmentList.RowType = RowType.Search;
+    tblAssessmentList.ResetAttributes();
+    await tblAssessmentList.RenderRow();
+}
+@if (tblAssessmentList.str_Username.Visible) { // tblAssessmentList.str_Username.Visible (begin)
+    if (!tblAssessmentList.str_Username.UseFilter) {
+        tblAssessmentList.SearchColumnCount++;
+    }
+    <div id="xs_str_Username" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblAssessmentList.str_Username.UseFilter ? " ew-filter-field" : "")">
+        <select
+            id="x_str_Username"
+            name="x_str_Username[]"
+            class="form-control ew-select@(tblAssessmentList.str_Username.IsInvalidClass)"
+            data-select2-id="ftblAssessmentsrch_x_str_Username"
+            data-table="tblAssessment"
+            data-field="x_str_Username"
+            data-caption="@Html.Raw(HtmlEncode(RemoveHtml(tblAssessmentList.str_Username.Caption)))"
+            data-filter="true"
+            multiple
+            size="1"
+            data-value-separator="@(tblAssessmentList.str_Username.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentList.str_Username.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblAssessmentList.str_Username.EditAttributes)>
+            @(tblAssessmentList.str_Username.SelectOptionListHtml("x_str_Username", true))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentList.str_Username.GetErrorMessage(false))</div>
+        <script>
+        loadjs.ready("ftblAssessmentsrch", function() {
+            var options = {
+                name: "x_str_Username",
+                selectId: "ftblAssessmentsrch_x_str_Username",
+                ajax: { id: "x_str_Username", form: "ftblAssessmentsrch", limit: ew.FILTER_PAGE_SIZE, data: { ajax: "filter" } }
+            };
+            options = Object.assign({}, ew.filterOptions, options, ew.vars.tables.tblAssessment.fields.str_Username.filterOptions);
+            ew.createFilter(options);
+        });
+        </script>
+    </div><!-- /.col-sm-auto -->
+} @* tblAssessmentList.str_Username.Visible (end) *@
+@if (tblAssessmentList.AssessmentDate.Visible) { // tblAssessmentList.AssessmentDate.Visible (begin)
+    if (!tblAssessmentList.AssessmentDate.UseFilter) {
+        tblAssessmentList.SearchColumnCount++;
+    }
+    <div id="xs_AssessmentDate" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblAssessmentList.AssessmentDate.UseFilter ? " ew-filter-field" : "")">
+        <select
+            id="x_AssessmentDate"
+            name="x_AssessmentDate[]"
+            class="form-control ew-select@(tblAssessmentList.AssessmentDate.IsInvalidClass)"
+            data-select2-id="ftblAssessmentsrch_x_AssessmentDate"
+            data-table="tblAssessment"
+            data-field="x_AssessmentDate"
+            data-caption="@Html.Raw(HtmlEncode(RemoveHtml(tblAssessmentList.AssessmentDate.Caption)))"
+            data-filter="true"
+            multiple
+            size="1"
+            data-value-separator="@(tblAssessmentList.AssessmentDate.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentList.AssessmentDate.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblAssessmentList.AssessmentDate.EditAttributes)>
+            @(tblAssessmentList.AssessmentDate.SelectOptionListHtml("x_AssessmentDate", true))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentList.AssessmentDate.GetErrorMessage(false))</div>
+        <script>
+        loadjs.ready("ftblAssessmentsrch", function() {
+            var options = {
+                name: "x_AssessmentDate",
+                selectId: "ftblAssessmentsrch_x_AssessmentDate",
+                ajax: { id: "x_AssessmentDate", form: "ftblAssessmentsrch", limit: ew.FILTER_PAGE_SIZE, data: { ajax: "filter" } }
+            };
+            options = Object.assign({}, ew.filterOptions, options, ew.vars.tables.tblAssessment.fields.AssessmentDate.filterOptions);
+            ew.createFilter(options);
+        });
+        </script>
+    </div><!-- /.col-sm-auto -->
+} @* tblAssessmentList.AssessmentDate.Visible (end) *@
+@if (tblAssessmentList.AssessmentScore.Visible) { // tblAssessmentList.AssessmentScore.Visible (begin)
+    if (!tblAssessmentList.AssessmentScore.UseFilter) {
+        tblAssessmentList.SearchColumnCount++;
+    }
+    <div id="xs_AssessmentScore" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2@(tblAssessmentList.AssessmentScore.UseFilter ? " ew-filter-field" : "")">
+        <select
+            id="x_AssessmentScore"
+            name="x_AssessmentScore[]"
+            class="form-control ew-select@(tblAssessmentList.AssessmentScore.IsInvalidClass)"
+            data-select2-id="ftblAssessmentsrch_x_AssessmentScore"
+            data-table="tblAssessment"
+            data-field="x_AssessmentScore"
+            data-caption="@Html.Raw(HtmlEncode(RemoveHtml(tblAssessmentList.AssessmentScore.Caption)))"
+            data-filter="true"
+            multiple
+            size="1"
+            data-value-separator="@(tblAssessmentList.AssessmentScore.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblAssessmentList.AssessmentScore.PlaceHolder))"
+            data-ew-action="update-options"
+            @Html.Raw(tblAssessmentList.AssessmentScore.EditAttributes)>
+            @(tblAssessmentList.AssessmentScore.SelectOptionListHtml("x_AssessmentScore", true))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblAssessmentList.AssessmentScore.GetErrorMessage(false))</div>
+        <script>
+        loadjs.ready("ftblAssessmentsrch", function() {
+            var options = {
+                name: "x_AssessmentScore",
+                selectId: "ftblAssessmentsrch_x_AssessmentScore",
+                ajax: { id: "x_AssessmentScore", form: "ftblAssessmentsrch", limit: ew.FILTER_PAGE_SIZE, data: { ajax: "filter" } }
+            };
+            options = Object.assign({}, ew.filterOptions, options, ew.vars.tables.tblAssessment.fields.AssessmentScore.filterOptions);
+            ew.createFilter(options);
+        });
+        </script>
+    </div><!-- /.col-sm-auto -->
+} @* tblAssessmentList.AssessmentScore.Visible (end) *@
+</div><!-- /.row -->
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblAssessmentList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblAssessmentList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblAssessmentList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblAssessmentList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblAssessmentsrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblAssessmentList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblAssessmentsrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblAssessmentList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblAssessmentsrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblAssessmentList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblAssessmentsrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblAssessmentList.ShowPageHeader()
+@tblAssessmentList.ShowMessages()
+<main class="list @(tblAssessmentList.TotalRecords == 0 && !tblAssessmentList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblAssessmentList.TotalRecords > 0 || !Empty(tblAssessmentList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblAssessmentList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblAssessment" + TitleCaseInvariant(tblAssessmentList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblAssessmentList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblAssessmentList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblAssessmentList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblAssessment");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

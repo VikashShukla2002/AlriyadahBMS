@@ -1,0 +1,14 @@
+{
+    "name": "jun26",
+    "version": "20.5.3",
+    "description": "jun26",
+    "license": "SEE LICENSE IN LICENSE.md",
+    "private": true,
+    "dependencies": {
+        "timepicker": "^1.13.18",
+        "tinymce": "5.10.0"
+    },
+    "engines": {
+        "node": ">=16"
+    }
+}

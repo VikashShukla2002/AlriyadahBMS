@@ -1,0 +1,172 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblPackageInfoList.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblPackageInfoList.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblPackageInfoList.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblPackageInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblPackageInfo: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(tblPackageInfoList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(tblPackageInfoList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(tblPackageInfoList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(tblPackageInfoList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblPackageInfoList.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+@if (tblPackageInfoList.TotalRecords > 0 && tblPackageInfoList.ExportOptions.Visible) {
+    tblPackageInfoList.ExportOptions.Render("body");
+}
+@if (tblPackageInfoList.ImportOptions.Visible) {
+    tblPackageInfoList.ImportOptions.Render("body");
+}
+@if (tblPackageInfoList.SearchOptions.Visible) {
+    tblPackageInfoList.SearchOptions.Render("body");
+}
+@if (tblPackageInfoList.FilterOptions.Visible) {
+    tblPackageInfoList.FilterOptions.Render("body");
+}
+</div>
+}
+@if (!tblPackageInfoList.IsModal) {
+<form name="ftblPackageInfosrch" id="ftblPackageInfosrch" class="ew-form ew-ext-search-form" action="@AppPath(CurrentPageName())" novalidate autocomplete="off">
+<div id="ftblPackageInfosrch_search_panel" class="mb-2 mb-sm-0 @(tblPackageInfoList.SearchPanelClass)"><!-- .ew-search-panel -->
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblPackageInfoList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblPackageInfo: currentTable } });
+var currentForm;
+var ftblPackageInfosrch, currentSearchForm, currentAdvancedSearchForm;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery,
+        fields = currentTable.fields;
+
+    // Form object for search
+    let form = new ew.FormBuilder()
+        .setId("ftblPackageInfosrch")
+        .setPageId("list")
+@if (tblPackageInfoList.UseAjaxActions) {
+        <text>.setSubmitWithFetch(true)</text>
+}
+
+        // Dynamic selection lists
+        .setLists({
+        })
+
+        // Filters
+        .setFilterList(@Html.Raw(await tblPackageInfoList.GetFilterList()))
+        .build();
+    window[form.id] = form;
+    currentSearchForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<input type="hidden" name="cmd" value="search">
+@if (Security.CanSearch) {
+if (!tblPackageInfoList.IsExport() && Empty(tblPackageInfoList.CurrentAction) && tblPackageInfoList.HasSearchFields()) { @* Show search form (begin) *@
+<div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0">
+    <div class="col-sm-auto px-0 pe-sm-2">
+        <div class="ew-basic-search input-group">
+            <input type="search" name="@(Config.TableBasicSearch)" id="@(Config.TableBasicSearch)" class="form-control ew-basic-search-keyword" value="@Html.Raw(HtmlEncode(tblPackageInfoList.BasicSearch.SessionKeyword))" placeholder="@(HtmlEncode(Language.Phrase("Search")))" aria-label="@(HtmlEncode(Language.Phrase("Search")))">
+            <input type="hidden" name="@(Config.TableBasicSearchType)" id="@(Config.TableBasicSearchType)" class="ew-basic-search-type" value="@(HtmlEncode(tblPackageInfoList.BasicSearch.SessionType))">
+            <button type="button" data-bs-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" aria-haspopup="true" aria-expanded="false">
+                <span id="searchtype">@Html.Raw(tblPackageInfoList.BasicSearch.TypeNameShort)</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button type="button" class="dropdown-item@(tblPackageInfoList.BasicSearch.SessionType == "" ? " active" : "")" form="ftblPackageInfosrch" data-ew-action="search-type">@Html.Raw(Language.Phrase("QuickSearchAuto"))</button>
+                <button type="button" class="dropdown-item@(tblPackageInfoList.BasicSearch.SessionType == "=" ? " active" : "")" form="ftblPackageInfosrch" data-ew-action="search-type" data-search-type="=">@Html.Raw(Language.Phrase("QuickSearchExact"))</button>
+                <button type="button" class="dropdown-item@(tblPackageInfoList.BasicSearch.SessionType == "AND" ? " active" : "")" form="ftblPackageInfosrch" data-ew-action="search-type" data-search-type="AND">@Html.Raw(Language.Phrase("QuickSearchAll"))</button>
+                <button type="button" class="dropdown-item@(tblPackageInfoList.BasicSearch.SessionType == "OR" ? " active" : "")" form="ftblPackageInfosrch" data-ew-action="search-type" data-search-type="OR">@Html.Raw(Language.Phrase("QuickSearchAny"))</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-auto mb-3">
+        <button class="btn btn-primary" name="btn-submit" id="btn-submit" type="submit">@Html.Raw(Language.Phrase("SearchBtn"))</button>
+    </div>
+</div>
+</div><!-- /.ew-extended-search -->
+} @* Show search form (end) *@
+}
+</div><!-- /.ew-search-panel -->
+</form>
+}
+@tblPackageInfoList.ShowPageHeader()
+@tblPackageInfoList.ShowMessages()
+<main class="list @(tblPackageInfoList.TotalRecords == 0 && !tblPackageInfoList.IsAdd ? " ew-no-record" : "")">
+<div id="ew-list">
+@if (tblPackageInfoList.TotalRecords > 0 || !Empty(tblPackageInfoList.CurrentAction)) {
+<div class="ew-multi-column-grid p-0 overlay-wrapper">
+@{ tblPackageInfoList.LayoutOptions.Render("body"); }
+@await Html.PartialAsync("TblPackageInfo" + TitleCaseInvariant(tblPackageInfoList.MultiColumnLayout))
+</div><!-- /.ew-multi-column-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblPackageInfoList.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@tblPackageInfoList.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblPackageInfoList.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblPackageInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

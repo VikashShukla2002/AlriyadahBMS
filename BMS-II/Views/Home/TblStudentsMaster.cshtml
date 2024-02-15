@@ -1,0 +1,81 @@
+@{
+    tblStudents.TableClass = "table table-bordered table-hover ew-table ew-master-table"; // DN
+}
+@if (tblStudents.Visible) { // tblStudents.Visible (begin)
+<div class="ew-master-div">
+<table id="tbl_tblStudentsmaster" class="table ew-view-table ew-master-table ew-vertical">
+    <tbody>
+        @if (tblStudents.str_First_Name.Visible) { // tblStudents.str_First_Name.Visible (begin)
+        <tr id="r_str_First_Name" @Html.Raw(tblStudents.str_First_Name.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.str_First_Name.Caption)</td>
+            <td @Html.Raw(tblStudents.str_First_Name.CellAttributes)>
+<span id="el_tblStudents_str_First_Name">
+<span @Html.Raw(tblStudents.str_First_Name.ViewAttributes)>
+@Html.Raw(tblStudents.str_First_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.str_First_Name.Visible (end) *@
+        @if (tblStudents.str_Last_Name.Visible) { // tblStudents.str_Last_Name.Visible (begin)
+        <tr id="r_str_Last_Name" @Html.Raw(tblStudents.str_Last_Name.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.str_Last_Name.Caption)</td>
+            <td @Html.Raw(tblStudents.str_Last_Name.CellAttributes)>
+<span id="el_tblStudents_str_Last_Name">
+<span @Html.Raw(tblStudents.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblStudents.str_Last_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.str_Last_Name.Visible (end) *@
+        @if (tblStudents.str_Cell_Phone.Visible) { // tblStudents.str_Cell_Phone.Visible (begin)
+        <tr id="r_str_Cell_Phone" @Html.Raw(tblStudents.str_Cell_Phone.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.str_Cell_Phone.Caption)</td>
+            <td @Html.Raw(tblStudents.str_Cell_Phone.CellAttributes)>
+<span id="el_tblStudents_str_Cell_Phone">
+<span @Html.Raw(tblStudents.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(tblStudents.str_Cell_Phone.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.str_Cell_Phone.Visible (end) *@
+        @if (tblStudents.str_Email.Visible) { // tblStudents.str_Email.Visible (begin)
+        <tr id="r_str_Email" @Html.Raw(tblStudents.str_Email.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.str_Email.Caption)</td>
+            <td @Html.Raw(tblStudents.str_Email.CellAttributes)>
+<span id="el_tblStudents_str_Email">
+<span @Html.Raw(tblStudents.str_Email.ViewAttributes)>
+@Html.Raw(tblStudents.str_Email.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.str_Email.Visible (end) *@
+        @if (tblStudents.str_NationalID_Iqama.Visible) { // tblStudents.str_NationalID_Iqama.Visible (begin)
+        <tr id="r_str_NationalID_Iqama" @Html.Raw(tblStudents.str_NationalID_Iqama.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.str_NationalID_Iqama.Caption)</td>
+            <td @Html.Raw(tblStudents.str_NationalID_Iqama.CellAttributes)>
+<span id="el_tblStudents_str_NationalID_Iqama">
+<span @Html.Raw(tblStudents.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(tblStudents.str_NationalID_Iqama.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.str_NationalID_Iqama.Visible (end) *@
+        @if (tblStudents.intDrivinglicenseType.Visible) { // tblStudents.intDrivinglicenseType.Visible (begin)
+        <tr id="r_intDrivinglicenseType" @Html.Raw(tblStudents.intDrivinglicenseType.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.intDrivinglicenseType.Caption)</td>
+            <td @Html.Raw(tblStudents.intDrivinglicenseType.CellAttributes)>
+<span id="el_tblStudents_intDrivinglicenseType">
+<span @Html.Raw(tblStudents.intDrivinglicenseType.ViewAttributes)>
+@Html.Raw(tblStudents.intDrivinglicenseType.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.intDrivinglicenseType.Visible (end) *@
+        @if (tblStudents.AbsherApptNbr.Visible) { // tblStudents.AbsherApptNbr.Visible (begin)
+        <tr id="r_AbsherApptNbr" @Html.Raw(tblStudents.AbsherApptNbr.RowAttributes)>
+            <td class="@(tblStudents.TableLeftColumnClass)">@Html.Raw(tblStudents.AbsherApptNbr.Caption)</td>
+            <td @Html.Raw(tblStudents.AbsherApptNbr.CellAttributes)>
+<span id="el_tblStudents_AbsherApptNbr">
+<span @Html.Raw(tblStudents.AbsherApptNbr.ViewAttributes)>
+@Html.Raw(tblStudents.AbsherApptNbr.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblStudents.AbsherApptNbr.Visible (end) *@
+    </tbody>
+</table>
+</div>
+} @* tblStudents.Visible (end) *@

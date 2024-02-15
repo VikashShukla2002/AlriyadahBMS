@@ -1,0 +1,175 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (appointmentCldrView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!appointmentCldrView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!appointmentCldrView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!appointmentCldrView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @appointmentCldrView.ExportOptions.RenderBody()
+    @appointmentCldrView.OtherOptions.RenderBody()
+</div>
+}
+@appointmentCldrView.ShowPageHeader()
+@appointmentCldrView.ShowMessages()
+<main class="view">
+<form name="fAppointment_Cldrview" id="fAppointment_Cldrview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!appointmentCldrView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(appointmentCldrView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { Appointment_Cldr: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var fAppointment_Cldrview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fAppointment_Cldrview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(appointmentCldrView.IsModal)">
+<table class="@(appointmentCldrView.TableClass)">
+@if (appointmentCldrView.Id.Visible) { // appointmentCldrView.Id.Visible (begin)
+    <tr id="r_Id" @Html.Raw(appointmentCldrView.Id.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_Id">@Html.Raw(appointmentCldrView.Id.Caption)</span></td>
+        <td data-name="Id" @Html.Raw(appointmentCldrView.Id.CellAttributes)>
+<span id="el_Appointment_Cldr_Id">
+<span @Html.Raw(appointmentCldrView.Id.ViewAttributes)>
+@Html.Raw(appointmentCldrView.Id.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.Id.Visible (end) *@
+@if (appointmentCldrView.int_PackageID.Visible) { // appointmentCldrView.int_PackageID.Visible (begin)
+    <tr id="r_int_PackageID" @Html.Raw(appointmentCldrView.int_PackageID.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_int_PackageID">@Html.Raw(appointmentCldrView.int_PackageID.Caption)</span></td>
+        <td data-name="int_PackageID" @Html.Raw(appointmentCldrView.int_PackageID.CellAttributes)>
+<span id="el_Appointment_Cldr_int_PackageID">
+<span @Html.Raw(appointmentCldrView.int_PackageID.ViewAttributes)>
+@Html.Raw(appointmentCldrView.int_PackageID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.int_PackageID.Visible (end) *@
+@if (appointmentCldrView._Title.Visible) { // appointmentCldrView._Title.Visible (begin)
+    <tr id="r__Title" @Html.Raw(appointmentCldrView._Title.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr__Title">@Html.Raw(appointmentCldrView._Title.Caption)</span></td>
+        <td data-name="_Title" @Html.Raw(appointmentCldrView._Title.CellAttributes)>
+<span id="el_Appointment_Cldr__Title">
+<span @Html.Raw(appointmentCldrView._Title.ViewAttributes)>
+@Html.Raw(appointmentCldrView._Title.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView._Title.Visible (end) *@
+@if (appointmentCldrView.Start.Visible) { // appointmentCldrView.Start.Visible (begin)
+    <tr id="r_Start" @Html.Raw(appointmentCldrView.Start.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_Start">@Html.Raw(appointmentCldrView.Start.Caption)</span></td>
+        <td data-name="Start" @Html.Raw(appointmentCldrView.Start.CellAttributes)>
+<span id="el_Appointment_Cldr_Start">
+<span @Html.Raw(appointmentCldrView.Start.ViewAttributes)>
+@Html.Raw(appointmentCldrView.Start.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.Start.Visible (end) *@
+@if (appointmentCldrView.End.Visible) { // appointmentCldrView.End.Visible (begin)
+    <tr id="r_End" @Html.Raw(appointmentCldrView.End.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_End">@Html.Raw(appointmentCldrView.End.Caption)</span></td>
+        <td data-name="End" @Html.Raw(appointmentCldrView.End.CellAttributes)>
+<span id="el_Appointment_Cldr_End">
+<span @Html.Raw(appointmentCldrView.End.ViewAttributes)>
+@Html.Raw(appointmentCldrView.End.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.End.Visible (end) *@
+@if (appointmentCldrView.Description.Visible) { // appointmentCldrView.Description.Visible (begin)
+    <tr id="r_Description" @Html.Raw(appointmentCldrView.Description.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_Description">@Html.Raw(appointmentCldrView.Description.Caption)</span></td>
+        <td data-name="Description" @Html.Raw(appointmentCldrView.Description.CellAttributes)>
+<span id="el_Appointment_Cldr_Description">
+<span @Html.Raw(appointmentCldrView.Description.ViewAttributes)>
+@Html.Raw(appointmentCldrView.Description.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.Description.Visible (end) *@
+@if (appointmentCldrView.str_AppointmentType.Visible) { // appointmentCldrView.str_AppointmentType.Visible (begin)
+    <tr id="r_str_AppointmentType" @Html.Raw(appointmentCldrView.str_AppointmentType.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_str_AppointmentType">@Html.Raw(appointmentCldrView.str_AppointmentType.Caption)</span></td>
+        <td data-name="str_AppointmentType" @Html.Raw(appointmentCldrView.str_AppointmentType.CellAttributes)>
+<span id="el_Appointment_Cldr_str_AppointmentType">
+<span @Html.Raw(appointmentCldrView.str_AppointmentType.ViewAttributes)>
+@Html.Raw(appointmentCldrView.str_AppointmentType.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.str_AppointmentType.Visible (end) *@
+@if (appointmentCldrView.str_AppointmentStatus.Visible) { // appointmentCldrView.str_AppointmentStatus.Visible (begin)
+    <tr id="r_str_AppointmentStatus" @Html.Raw(appointmentCldrView.str_AppointmentStatus.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_str_AppointmentStatus">@Html.Raw(appointmentCldrView.str_AppointmentStatus.Caption)</span></td>
+        <td data-name="str_AppointmentStatus" @Html.Raw(appointmentCldrView.str_AppointmentStatus.CellAttributes)>
+<span id="el_Appointment_Cldr_str_AppointmentStatus">
+<span @Html.Raw(appointmentCldrView.str_AppointmentStatus.ViewAttributes)>
+@Html.Raw(appointmentCldrView.str_AppointmentStatus.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.str_AppointmentStatus.Visible (end) *@
+@if (appointmentCldrView.str_Username.Visible) { // appointmentCldrView.str_Username.Visible (begin)
+    <tr id="r_str_Username" @Html.Raw(appointmentCldrView.str_Username.RowAttributes)>
+        <td class="@(appointmentCldrView.TableLeftColumnClass)"><span id="elh_Appointment_Cldr_str_Username">@Html.Raw(appointmentCldrView.str_Username.Caption)</span></td>
+        <td data-name="str_Username" @Html.Raw(appointmentCldrView.str_Username.CellAttributes)>
+<span id="el_Appointment_Cldr_str_Username">
+<span @Html.Raw(appointmentCldrView.str_Username.ViewAttributes)>
+@Html.Raw(appointmentCldrView.str_Username.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* appointmentCldrView.str_Username.Visible (end) *@
+</table>
+@{ appointmentCldrView.CloseRecordset(); }
+</form>
+</main>
+@appointmentCldrView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!appointmentCldrView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

@@ -1,0 +1,992 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (register.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!register.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+<script>
+var currentTable = @Html.Raw(ConvertToJson(register.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudents: currentTable } });
+var currentPageID = ew.PAGE_ID = "register";
+var currentForm;
+var fregister;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("fregister")
+        .setPageId("register")
+
+        // Add fields
+        .setFields([
+
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Middle_Name", [fields.str_Middle_Name.visible && fields.str_Middle_Name.required ? ew.Validators.required(fields.str_Middle_Name.caption) : null], fields.str_Middle_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["str_Cell_Phone", [fields.str_Cell_Phone.visible && fields.str_Cell_Phone.required ? ew.Validators.required(fields.str_Cell_Phone.caption) : null], fields.str_Cell_Phone.isInvalid],
+            ["str_Email", [fields.str_Email.visible && fields.str_Email.required ? ew.Validators.required(fields.str_Email.caption) : null, ew.Validators.email], fields.str_Email.isInvalid],
+            ["c_str_Password", [ew.Validators.required(ew.language.phrase("ConfirmPassword")), ew.Validators.mismatchPassword], fields.str_Password.isInvalid],
+            ["str_Password", [fields.str_Password.visible && fields.str_Password.required ? ew.Validators.required(fields.str_Password.caption) : null, ew.Validators.password(fields.str_Password.raw)], fields.str_Password.isInvalid],
+            ["Hijri_Year", [fields.Hijri_Year.visible && fields.Hijri_Year.required ? ew.Validators.required(fields.Hijri_Year.caption) : null], fields.Hijri_Year.isInvalid],
+            ["Hijri_Month", [fields.Hijri_Month.visible && fields.Hijri_Month.required ? ew.Validators.required(fields.Hijri_Month.caption) : null], fields.Hijri_Month.isInvalid],
+            ["Hijri_Day", [fields.Hijri_Day.visible && fields.Hijri_Day.required ? ew.Validators.required(fields.Hijri_Day.caption) : null], fields.Hijri_Day.isInvalid],
+            ["str_Emergency_Contact_Name", [fields.str_Emergency_Contact_Name.visible && fields.str_Emergency_Contact_Name.required ? ew.Validators.required(fields.str_Emergency_Contact_Name.caption) : null], fields.str_Emergency_Contact_Name.isInvalid],
+            ["str_Emergency_Contact_Phone", [fields.str_Emergency_Contact_Phone.visible && fields.str_Emergency_Contact_Phone.required ? ew.Validators.required(fields.str_Emergency_Contact_Phone.caption) : null], fields.str_Emergency_Contact_Phone.isInvalid],
+            ["str_Emergency_Contact_Relation", [fields.str_Emergency_Contact_Relation.visible && fields.str_Emergency_Contact_Relation.required ? ew.Validators.required(fields.str_Emergency_Contact_Relation.caption) : null], fields.str_Emergency_Contact_Relation.isInvalid],
+            ["str_NationalID_Iqama", [fields.str_NationalID_Iqama.visible && fields.str_NationalID_Iqama.required ? ew.Validators.required(fields.str_NationalID_Iqama.caption) : null, ew.Validators.integer], fields.str_NationalID_Iqama.isInvalid],
+            ["IsDrivingexperience", [fields.IsDrivingexperience.visible && fields.IsDrivingexperience.required ? ew.Validators.required(fields.IsDrivingexperience.caption) : null], fields.IsDrivingexperience.isInvalid],
+            ["intDrivinglicenseType", [fields.intDrivinglicenseType.visible && fields.intDrivinglicenseType.required ? ew.Validators.required(fields.intDrivinglicenseType.caption) : null], fields.intDrivinglicenseType.isInvalid],
+            ["AbsherApptNbr", [fields.AbsherApptNbr.visible && fields.AbsherApptNbr.required ? ew.Validators.required(fields.AbsherApptNbr.caption) : null], fields.AbsherApptNbr.isInvalid],
+            ["Absherphoto", [fields.Absherphoto.visible && fields.Absherphoto.required ? ew.Validators.fileRequired(fields.Absherphoto.caption) : null], fields.Absherphoto.isInvalid]
+        ])
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    if($('#Div_NationalID_Iqama_Verify').length > 0)
+                    {
+                        alert(fnGetLanguageMessageBaseOnURLParameter('RequiredVerificationNationalID'));
+                        return false;
+                    }
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "Hijri_Year": @Html.Raw(register.Hijri_Year.ToClientList(register)),
+            "Hijri_Month": @Html.Raw(register.Hijri_Month.ToClientList(register)),
+            "Hijri_Day": @Html.Raw(register.Hijri_Day.ToClientList(register)),
+            "str_Emergency_Contact_Relation": @Html.Raw(register.str_Emergency_Contact_Relation.ToClientList(register)),
+            "IsDrivingexperience": @Html.Raw(register.IsDrivingexperience.ToClientList(register)),
+            "intDrivinglicenseType": @Html.Raw(register.intDrivinglicenseType.ToClientList(register)),
+        })
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+@register.ShowPageHeader()
+@register.ShowMessages()
+<form name="fregister" id="fregister" class="@(register.FormClassName)" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@(ConvertToInt(register.IsModal))">
+@if (register.IsConfirm) { // Confirm page
+<input type="hidden" name="action" id="action" value="insert">
+<input type="hidden" name="confirm" id="confirm" value="confirm">
+} else {
+<input type="hidden" name="action" id="action" value="confirm">
+}
+<div class="ew-register-div d-none"><!-- page* -->
+@if (register.str_First_Name.Visible) { // register.str_First_Name.Visible (begin)
+    <div id="r_str_First_Name" @Html.Raw(register.str_First_Name.RowAttributes)>
+        <label id="elh_tblStudents_str_First_Name" for="x_str_First_Name" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_First_Name">@Html.Raw(register.str_First_Name.Caption)@Html.Raw(register.str_First_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_First_Name.CellAttributes)>
+@if (!register.IsConfirm) { // str_First_Name (begin)
+<template id="tpx_tblStudents_str_First_Name"><span id="el_tblStudents_str_First_Name">
+<input type="@(register.str_First_Name.InputTextType)" name="x_str_First_Name" id="x_str_First_Name" data-table="tblStudents" data-field="x_str_First_Name" value="@Html.Raw(register.str_First_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(register.str_First_Name.PlaceHolder))" data-format-pattern="@(register.str_First_Name.FormatPattern)"@Html.Raw(register.str_First_Name.EditAttributes) aria-describedby="x_str_First_Name_help">
+@Html.Raw(register.str_First_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_First_Name.GetErrorMessage())</div>
+</span></template>
+} else { // str_First_Name (confirm)
+<template id="tpx_tblStudents_str_First_Name"><span id="el_tblStudents_str_First_Name">
+<span @Html.Raw(register.str_First_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_First_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_First_Name" data-hidden="1" name="x_str_First_Name" id="x_str_First_Name" value="@Html.Raw(HtmlEncode(register.str_First_Name.FormValue))">
+</span></template>
+} @* str_First_Name (end) *@
+</div></div>
+    </div>
+} @* register.str_First_Name.Visible (end) *@
+@if (register.str_Middle_Name.Visible) { // register.str_Middle_Name.Visible (begin)
+    <div id="r_str_Middle_Name" @Html.Raw(register.str_Middle_Name.RowAttributes)>
+        <label id="elh_tblStudents_str_Middle_Name" for="x_str_Middle_Name" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Middle_Name">@Html.Raw(register.str_Middle_Name.Caption)@Html.Raw(register.str_Middle_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Middle_Name.CellAttributes)>
+@if (!register.IsConfirm) { // str_Middle_Name (begin)
+<template id="tpx_tblStudents_str_Middle_Name"><span id="el_tblStudents_str_Middle_Name">
+<input type="@(register.str_Middle_Name.InputTextType)" name="x_str_Middle_Name" id="x_str_Middle_Name" data-table="tblStudents" data-field="x_str_Middle_Name" value="@Html.Raw(register.str_Middle_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(register.str_Middle_Name.PlaceHolder))" data-format-pattern="@(register.str_Middle_Name.FormatPattern)"@Html.Raw(register.str_Middle_Name.EditAttributes) aria-describedby="x_str_Middle_Name_help">
+@Html.Raw(register.str_Middle_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Middle_Name.GetErrorMessage())</div>
+</span></template>
+} else { // str_Middle_Name (confirm)
+<template id="tpx_tblStudents_str_Middle_Name"><span id="el_tblStudents_str_Middle_Name">
+<span @Html.Raw(register.str_Middle_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Middle_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Middle_Name" data-hidden="1" name="x_str_Middle_Name" id="x_str_Middle_Name" value="@Html.Raw(HtmlEncode(register.str_Middle_Name.FormValue))">
+</span></template>
+} @* str_Middle_Name (end) *@
+</div></div>
+    </div>
+} @* register.str_Middle_Name.Visible (end) *@
+@if (register.str_Last_Name.Visible) { // register.str_Last_Name.Visible (begin)
+    <div id="r_str_Last_Name" @Html.Raw(register.str_Last_Name.RowAttributes)>
+        <label id="elh_tblStudents_str_Last_Name" for="x_str_Last_Name" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Last_Name">@Html.Raw(register.str_Last_Name.Caption)@Html.Raw(register.str_Last_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Last_Name.CellAttributes)>
+@if (!register.IsConfirm) { // str_Last_Name (begin)
+<template id="tpx_tblStudents_str_Last_Name"><span id="el_tblStudents_str_Last_Name">
+<input type="@(register.str_Last_Name.InputTextType)" name="x_str_Last_Name" id="x_str_Last_Name" data-table="tblStudents" data-field="x_str_Last_Name" value="@Html.Raw(register.str_Last_Name.EditValue)" size="30" maxlength="40" placeholder="@Html.Raw(HtmlEncode(register.str_Last_Name.PlaceHolder))" data-format-pattern="@(register.str_Last_Name.FormatPattern)"@Html.Raw(register.str_Last_Name.EditAttributes) aria-describedby="x_str_Last_Name_help">
+@Html.Raw(register.str_Last_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Last_Name.GetErrorMessage())</div>
+</span></template>
+} else { // str_Last_Name (confirm)
+<template id="tpx_tblStudents_str_Last_Name"><span id="el_tblStudents_str_Last_Name">
+<span @Html.Raw(register.str_Last_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Last_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Last_Name" data-hidden="1" name="x_str_Last_Name" id="x_str_Last_Name" value="@Html.Raw(HtmlEncode(register.str_Last_Name.FormValue))">
+</span></template>
+} @* str_Last_Name (end) *@
+</div></div>
+    </div>
+} @* register.str_Last_Name.Visible (end) *@
+@if (register.str_Cell_Phone.Visible) { // register.str_Cell_Phone.Visible (begin)
+    <div id="r_str_Cell_Phone" @Html.Raw(register.str_Cell_Phone.RowAttributes)>
+        <label id="elh_tblStudents_str_Cell_Phone" for="x_str_Cell_Phone" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Cell_Phone">@Html.Raw(register.str_Cell_Phone.Caption)@Html.Raw(register.str_Cell_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Cell_Phone.CellAttributes)>
+@if (!register.IsConfirm) { // str_Cell_Phone (begin)
+<template id="tpx_tblStudents_str_Cell_Phone"><span id="el_tblStudents_str_Cell_Phone">
+<input type="@(register.str_Cell_Phone.InputTextType)" name="x_str_Cell_Phone" id="x_str_Cell_Phone" data-table="tblStudents" data-field="x_str_Cell_Phone" value="@Html.Raw(register.str_Cell_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(register.str_Cell_Phone.PlaceHolder))" data-format-pattern="@(register.str_Cell_Phone.FormatPattern)"@Html.Raw(register.str_Cell_Phone.EditAttributes) aria-describedby="x_str_Cell_Phone_help">
+@Html.Raw(register.str_Cell_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Cell_Phone.GetErrorMessage())</div>
+</span></template>
+} else { // str_Cell_Phone (confirm)
+<template id="tpx_tblStudents_str_Cell_Phone"><span id="el_tblStudents_str_Cell_Phone">
+<span @Html.Raw(register.str_Cell_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Cell_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Cell_Phone" data-hidden="1" name="x_str_Cell_Phone" id="x_str_Cell_Phone" value="@Html.Raw(HtmlEncode(register.str_Cell_Phone.FormValue))">
+</span></template>
+} @* str_Cell_Phone (end) *@
+</div></div>
+    </div>
+} @* register.str_Cell_Phone.Visible (end) *@
+@if (register.str_Email.Visible) { // register.str_Email.Visible (begin)
+    <div id="r_str_Email" @Html.Raw(register.str_Email.RowAttributes)>
+        <label id="elh_tblStudents_str_Email" for="x_str_Email" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Email">@Html.Raw(register.str_Email.Caption)@Html.Raw(register.str_Email.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Email.CellAttributes)>
+@if (!register.IsConfirm) { // str_Email (begin)
+<template id="tpx_tblStudents_str_Email"><span id="el_tblStudents_str_Email">
+<input type="@(register.str_Email.InputTextType)" name="x_str_Email" id="x_str_Email" data-table="tblStudents" data-field="x_str_Email" value="@Html.Raw(register.str_Email.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(register.str_Email.PlaceHolder))" data-format-pattern="@(register.str_Email.FormatPattern)"@Html.Raw(register.str_Email.EditAttributes) aria-describedby="x_str_Email_help">
+@Html.Raw(register.str_Email.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Email.GetErrorMessage())</div>
+</span></template>
+} else { // str_Email (confirm)
+<template id="tpx_tblStudents_str_Email"><span id="el_tblStudents_str_Email">
+<span @Html.Raw(register.str_Email.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Email.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Email" data-hidden="1" name="x_str_Email" id="x_str_Email" value="@Html.Raw(HtmlEncode(register.str_Email.FormValue))">
+</span></template>
+} @* str_Email (end) *@
+</div></div>
+    </div>
+} @* register.str_Email.Visible (end) *@
+@if (register.str_Password.Visible) { // register.str_Password.Visible (begin)
+    <div id="r_str_Password" @Html.Raw(register.str_Password.RowAttributes)>
+        <label id="elh_tblStudents_str_Password" for="x_str_Password" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Password">@Html.Raw(register.str_Password.Caption)@Html.Raw(register.str_Password.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Password.CellAttributes)>
+@if (!register.IsConfirm) { // str_Password (begin)
+<template id="tpx_tblStudents_str_Password"><span id="el_tblStudents_str_Password">
+<div class="input-group">
+    <input type="password" name="x_str_Password" id="x_str_Password" autocomplete="new-password" data-field="x_str_Password" size="30" maxlength="50" placeholder="@(HtmlEncode(register.str_Password.PlaceHolder))"@Html.Raw(register.str_Password.EditAttributes) aria-describedby="x_str_Password_help">
+    <button type="button" class="btn btn-default ew-toggle-password rounded-end" data-ew-action="password"><i class="fa-solid fa-eye"></i></button>
+</div>
+@Html.Raw(register.str_Password.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Password.GetErrorMessage())</div>
+</span></template>
+} else { // str_Password (confirm)
+<template id="tpx_tblStudents_str_Password"><span id="el_tblStudents_str_Password">
+<span @Html.Raw(register.str_Password.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Password.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Password" data-hidden="1" name="x_str_Password" id="x_str_Password" value="@Html.Raw(HtmlEncode(register.str_Password.FormValue))">
+</span></template>
+} @* str_Password (end) *@
+</div></div>
+    </div>
+} @* register.str_Password.Visible (end) *@
+@if (register.str_Password.Visible) { // register.str_Password.Visible (begin)
+    <div id="r_c_str_Password" class="row">
+        <label id="elh_c_tblStudents_str_Password" for="c_str_Password" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_c_str_Password">@Html.Raw(Language.Phrase("Confirm")) @Html.Raw(register.str_Password.Caption)@Html.Raw(register.str_Password.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Password.CellAttributes)>
+@if (!register.IsConfirm) { // str_Password (begin)
+<template id="tpx_tblStudents_str_Password"><span id="el_c_tblStudents_str_Password">
+<div class="input-group">
+    <input type="password" name="c_str_Password" id="c_str_Password" autocomplete="new-password" data-field="c_str_Password" size="30" maxlength="50" placeholder="@(HtmlEncode(register.str_Password.PlaceHolder))"@Html.Raw(register.str_Password.EditAttributes) aria-describedby="x_str_Password_help">
+    <button type="button" class="btn btn-default ew-toggle-password rounded-end" data-ew-action="password"><i class="fa-solid fa-eye"></i></button>
+</div>
+@Html.Raw(register.str_Password.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Password.GetErrorMessage())</div>
+</span></template>
+} else { // str_Password (confirm)
+<template id="tpx_tblStudents_str_Password"><span id="el_c_tblStudents_str_Password">
+<span @Html.Raw(register.str_Password.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Password.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Password" data-hidden="1" name="c_str_Password" id="c_str_Password" value="@Html.Raw(HtmlEncode(register.str_Password.FormValue))">
+</span></template>
+} @* str_Password (end) *@
+</div></div>
+    </div>
+} @* register.str_Password.Visible (end) *@
+@if (register.Hijri_Year.Visible) { // register.Hijri_Year.Visible (begin)
+    <div id="r_Hijri_Year" @Html.Raw(register.Hijri_Year.RowAttributes)>
+        <label id="elh_tblStudents_Hijri_Year" for="x_Hijri_Year" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_Hijri_Year">@Html.Raw(register.Hijri_Year.Caption)@Html.Raw(register.Hijri_Year.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.Hijri_Year.CellAttributes)>
+@if (!register.IsConfirm) { // Hijri_Year (begin)
+<template id="tpx_tblStudents_Hijri_Year"><span id="el_tblStudents_Hijri_Year">
+    <select
+        id="x_Hijri_Year"
+        name="x_Hijri_Year"
+        class="form-select ew-select@(register.Hijri_Year.IsInvalidClass)"
+        data-select2-id="fregister_x_Hijri_Year"
+        data-table="tblStudents"
+        data-field="x_Hijri_Year"
+        data-value-separator="@(register.Hijri_Year.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(register.Hijri_Year.PlaceHolder))"
+        @Html.Raw(register.Hijri_Year.EditAttributes)>
+        @(register.Hijri_Year.SelectOptionListHtml("x_Hijri_Year"))
+    </select>
+    @Html.Raw(register.Hijri_Year.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(register.Hijri_Year.GetErrorMessage())</div>
+<script>
+loadjs.ready("fregister", function() {
+    var options = { name: "x_Hijri_Year", selectId: "fregister_x_Hijri_Year" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fregister.lists.Hijri_Year?.lookupOptions.length) {
+        options.data = { id: "x_Hijri_Year", form: "fregister" };
+    } else {
+        options.ajax = { id: "x_Hijri_Year", form: "fregister", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.Hijri_Year.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span></template>
+} else { // Hijri_Year (confirm)
+<template id="tpx_tblStudents_Hijri_Year"><span id="el_tblStudents_Hijri_Year">
+<span @Html.Raw(register.Hijri_Year.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(register.Hijri_Year.DisplayValue(register.Hijri_Year.ViewValue))</span></span>
+<input type="hidden" data-table="tblStudents" data-field="x_Hijri_Year" data-hidden="1" name="x_Hijri_Year" id="x_Hijri_Year" value="@Html.Raw(HtmlEncode(register.Hijri_Year.FormValue))">
+</span></template>
+} @* Hijri_Year (end) *@
+</div></div>
+    </div>
+} @* register.Hijri_Year.Visible (end) *@
+@if (register.Hijri_Month.Visible) { // register.Hijri_Month.Visible (begin)
+    <div id="r_Hijri_Month" @Html.Raw(register.Hijri_Month.RowAttributes)>
+        <label id="elh_tblStudents_Hijri_Month" for="x_Hijri_Month" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_Hijri_Month">@Html.Raw(register.Hijri_Month.Caption)@Html.Raw(register.Hijri_Month.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.Hijri_Month.CellAttributes)>
+@if (!register.IsConfirm) { // Hijri_Month (begin)
+<template id="tpx_tblStudents_Hijri_Month"><span id="el_tblStudents_Hijri_Month">
+    <select
+        id="x_Hijri_Month"
+        name="x_Hijri_Month"
+        class="form-select ew-select@(register.Hijri_Month.IsInvalidClass)"
+        data-select2-id="fregister_x_Hijri_Month"
+        data-table="tblStudents"
+        data-field="x_Hijri_Month"
+        data-value-separator="@(register.Hijri_Month.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(register.Hijri_Month.PlaceHolder))"
+        @Html.Raw(register.Hijri_Month.EditAttributes)>
+        @(register.Hijri_Month.SelectOptionListHtml("x_Hijri_Month"))
+    </select>
+    @Html.Raw(register.Hijri_Month.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(register.Hijri_Month.GetErrorMessage())</div>
+<script>
+loadjs.ready("fregister", function() {
+    var options = { name: "x_Hijri_Month", selectId: "fregister_x_Hijri_Month" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fregister.lists.Hijri_Month?.lookupOptions.length) {
+        options.data = { id: "x_Hijri_Month", form: "fregister" };
+    } else {
+        options.ajax = { id: "x_Hijri_Month", form: "fregister", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.Hijri_Month.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span></template>
+} else { // Hijri_Month (confirm)
+<template id="tpx_tblStudents_Hijri_Month"><span id="el_tblStudents_Hijri_Month">
+<span @Html.Raw(register.Hijri_Month.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(register.Hijri_Month.DisplayValue(register.Hijri_Month.ViewValue))</span></span>
+<input type="hidden" data-table="tblStudents" data-field="x_Hijri_Month" data-hidden="1" name="x_Hijri_Month" id="x_Hijri_Month" value="@Html.Raw(HtmlEncode(register.Hijri_Month.FormValue))">
+</span></template>
+} @* Hijri_Month (end) *@
+</div></div>
+    </div>
+} @* register.Hijri_Month.Visible (end) *@
+@if (register.Hijri_Day.Visible) { // register.Hijri_Day.Visible (begin)
+    <div id="r_Hijri_Day" @Html.Raw(register.Hijri_Day.RowAttributes)>
+        <label id="elh_tblStudents_Hijri_Day" for="x_Hijri_Day" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_Hijri_Day">@Html.Raw(register.Hijri_Day.Caption)@Html.Raw(register.Hijri_Day.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.Hijri_Day.CellAttributes)>
+@if (!register.IsConfirm) { // Hijri_Day (begin)
+<template id="tpx_tblStudents_Hijri_Day"><span id="el_tblStudents_Hijri_Day">
+    <select
+        id="x_Hijri_Day"
+        name="x_Hijri_Day"
+        class="form-select ew-select@(register.Hijri_Day.IsInvalidClass)"
+        data-select2-id="fregister_x_Hijri_Day"
+        data-table="tblStudents"
+        data-field="x_Hijri_Day"
+        data-value-separator="@(register.Hijri_Day.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(register.Hijri_Day.PlaceHolder))"
+        @Html.Raw(register.Hijri_Day.EditAttributes)>
+        @(register.Hijri_Day.SelectOptionListHtml("x_Hijri_Day"))
+    </select>
+    @Html.Raw(register.Hijri_Day.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(register.Hijri_Day.GetErrorMessage())</div>
+<script>
+loadjs.ready("fregister", function() {
+    var options = { name: "x_Hijri_Day", selectId: "fregister_x_Hijri_Day" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fregister.lists.Hijri_Day?.lookupOptions.length) {
+        options.data = { id: "x_Hijri_Day", form: "fregister" };
+    } else {
+        options.ajax = { id: "x_Hijri_Day", form: "fregister", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.Hijri_Day.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span></template>
+} else { // Hijri_Day (confirm)
+<template id="tpx_tblStudents_Hijri_Day"><span id="el_tblStudents_Hijri_Day">
+<span @Html.Raw(register.Hijri_Day.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(register.Hijri_Day.DisplayValue(register.Hijri_Day.ViewValue))</span></span>
+<input type="hidden" data-table="tblStudents" data-field="x_Hijri_Day" data-hidden="1" name="x_Hijri_Day" id="x_Hijri_Day" value="@Html.Raw(HtmlEncode(register.Hijri_Day.FormValue))">
+</span></template>
+} @* Hijri_Day (end) *@
+</div></div>
+    </div>
+} @* register.Hijri_Day.Visible (end) *@
+@if (register.str_Emergency_Contact_Name.Visible) { // register.str_Emergency_Contact_Name.Visible (begin)
+    <div id="r_str_Emergency_Contact_Name" @Html.Raw(register.str_Emergency_Contact_Name.RowAttributes)>
+        <label id="elh_tblStudents_str_Emergency_Contact_Name" for="x_str_Emergency_Contact_Name" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Emergency_Contact_Name">@Html.Raw(register.str_Emergency_Contact_Name.Caption)@Html.Raw(register.str_Emergency_Contact_Name.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Emergency_Contact_Name.CellAttributes)>
+@if (!register.IsConfirm) { // str_Emergency_Contact_Name (begin)
+<template id="tpx_tblStudents_str_Emergency_Contact_Name"><span id="el_tblStudents_str_Emergency_Contact_Name">
+<input type="@(register.str_Emergency_Contact_Name.InputTextType)" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" data-table="tblStudents" data-field="x_str_Emergency_Contact_Name" value="@Html.Raw(register.str_Emergency_Contact_Name.EditValue)" size="30" maxlength="20" placeholder="@Html.Raw(HtmlEncode(register.str_Emergency_Contact_Name.PlaceHolder))" data-format-pattern="@(register.str_Emergency_Contact_Name.FormatPattern)"@Html.Raw(register.str_Emergency_Contact_Name.EditAttributes) aria-describedby="x_str_Emergency_Contact_Name_help">
+@Html.Raw(register.str_Emergency_Contact_Name.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Emergency_Contact_Name.GetErrorMessage())</div>
+</span></template>
+} else { // str_Emergency_Contact_Name (confirm)
+<template id="tpx_tblStudents_str_Emergency_Contact_Name"><span id="el_tblStudents_str_Emergency_Contact_Name">
+<span @Html.Raw(register.str_Emergency_Contact_Name.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Emergency_Contact_Name.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Emergency_Contact_Name" data-hidden="1" name="x_str_Emergency_Contact_Name" id="x_str_Emergency_Contact_Name" value="@Html.Raw(HtmlEncode(register.str_Emergency_Contact_Name.FormValue))">
+</span></template>
+} @* str_Emergency_Contact_Name (end) *@
+</div></div>
+    </div>
+} @* register.str_Emergency_Contact_Name.Visible (end) *@
+@if (register.str_Emergency_Contact_Phone.Visible) { // register.str_Emergency_Contact_Phone.Visible (begin)
+    <div id="r_str_Emergency_Contact_Phone" @Html.Raw(register.str_Emergency_Contact_Phone.RowAttributes)>
+        <label id="elh_tblStudents_str_Emergency_Contact_Phone" for="x_str_Emergency_Contact_Phone" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Emergency_Contact_Phone">@Html.Raw(register.str_Emergency_Contact_Phone.Caption)@Html.Raw(register.str_Emergency_Contact_Phone.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Emergency_Contact_Phone.CellAttributes)>
+@if (!register.IsConfirm) { // str_Emergency_Contact_Phone (begin)
+<template id="tpx_tblStudents_str_Emergency_Contact_Phone"><span id="el_tblStudents_str_Emergency_Contact_Phone">
+<input type="@(register.str_Emergency_Contact_Phone.InputTextType)" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" data-table="tblStudents" data-field="x_str_Emergency_Contact_Phone" value="@Html.Raw(register.str_Emergency_Contact_Phone.EditValue)" size="30" maxlength="14" placeholder="@Html.Raw(HtmlEncode(register.str_Emergency_Contact_Phone.PlaceHolder))" data-format-pattern="@(register.str_Emergency_Contact_Phone.FormatPattern)"@Html.Raw(register.str_Emergency_Contact_Phone.EditAttributes) aria-describedby="x_str_Emergency_Contact_Phone_help">
+@Html.Raw(register.str_Emergency_Contact_Phone.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_Emergency_Contact_Phone.GetErrorMessage())</div>
+</span></template>
+} else { // str_Emergency_Contact_Phone (confirm)
+<template id="tpx_tblStudents_str_Emergency_Contact_Phone"><span id="el_tblStudents_str_Emergency_Contact_Phone">
+<span @Html.Raw(register.str_Emergency_Contact_Phone.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_Emergency_Contact_Phone.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Emergency_Contact_Phone" data-hidden="1" name="x_str_Emergency_Contact_Phone" id="x_str_Emergency_Contact_Phone" value="@Html.Raw(HtmlEncode(register.str_Emergency_Contact_Phone.FormValue))">
+</span></template>
+} @* str_Emergency_Contact_Phone (end) *@
+</div></div>
+    </div>
+} @* register.str_Emergency_Contact_Phone.Visible (end) *@
+@if (register.str_Emergency_Contact_Relation.Visible) { // register.str_Emergency_Contact_Relation.Visible (begin)
+    <div id="r_str_Emergency_Contact_Relation" @Html.Raw(register.str_Emergency_Contact_Relation.RowAttributes)>
+        <label id="elh_tblStudents_str_Emergency_Contact_Relation" for="x_str_Emergency_Contact_Relation" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_Emergency_Contact_Relation">@Html.Raw(register.str_Emergency_Contact_Relation.Caption)@Html.Raw(register.str_Emergency_Contact_Relation.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_Emergency_Contact_Relation.CellAttributes)>
+@if (!register.IsConfirm) { // str_Emergency_Contact_Relation (begin)
+<template id="tpx_tblStudents_str_Emergency_Contact_Relation"><span id="el_tblStudents_str_Emergency_Contact_Relation">
+    <select
+        id="x_str_Emergency_Contact_Relation"
+        name="x_str_Emergency_Contact_Relation"
+        class="form-select ew-select@(register.str_Emergency_Contact_Relation.IsInvalidClass)"
+        data-select2-id="fregister_x_str_Emergency_Contact_Relation"
+        data-table="tblStudents"
+        data-field="x_str_Emergency_Contact_Relation"
+        data-value-separator="@(register.str_Emergency_Contact_Relation.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(register.str_Emergency_Contact_Relation.PlaceHolder))"
+        @Html.Raw(register.str_Emergency_Contact_Relation.EditAttributes)>
+        @(register.str_Emergency_Contact_Relation.SelectOptionListHtml("x_str_Emergency_Contact_Relation"))
+    </select>
+    @Html.Raw(register.str_Emergency_Contact_Relation.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(register.str_Emergency_Contact_Relation.GetErrorMessage())</div>
+<script>
+loadjs.ready("fregister", function() {
+    var options = { name: "x_str_Emergency_Contact_Relation", selectId: "fregister_x_str_Emergency_Contact_Relation" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fregister.lists.str_Emergency_Contact_Relation?.lookupOptions.length) {
+        options.data = { id: "x_str_Emergency_Contact_Relation", form: "fregister" };
+    } else {
+        options.ajax = { id: "x_str_Emergency_Contact_Relation", form: "fregister", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.str_Emergency_Contact_Relation.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span></template>
+} else { // str_Emergency_Contact_Relation (confirm)
+<template id="tpx_tblStudents_str_Emergency_Contact_Relation"><span id="el_tblStudents_str_Emergency_Contact_Relation">
+<span @Html.Raw(register.str_Emergency_Contact_Relation.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(register.str_Emergency_Contact_Relation.DisplayValue(register.str_Emergency_Contact_Relation.ViewValue))</span></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_Emergency_Contact_Relation" data-hidden="1" name="x_str_Emergency_Contact_Relation" id="x_str_Emergency_Contact_Relation" value="@Html.Raw(HtmlEncode(register.str_Emergency_Contact_Relation.FormValue))">
+</span></template>
+} @* str_Emergency_Contact_Relation (end) *@
+</div></div>
+    </div>
+} @* register.str_Emergency_Contact_Relation.Visible (end) *@
+@if (register.str_NationalID_Iqama.Visible) { // register.str_NationalID_Iqama.Visible (begin)
+    <div id="r_str_NationalID_Iqama" @Html.Raw(register.str_NationalID_Iqama.RowAttributes)>
+        <label id="elh_tblStudents_str_NationalID_Iqama" for="x_str_NationalID_Iqama" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_str_NationalID_Iqama">@Html.Raw(register.str_NationalID_Iqama.Caption)@Html.Raw(register.str_NationalID_Iqama.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.str_NationalID_Iqama.CellAttributes)>
+@if (!register.IsConfirm) { // str_NationalID_Iqama (begin)
+<template id="tpx_tblStudents_str_NationalID_Iqama"><span id="el_tblStudents_str_NationalID_Iqama">
+<input type="@(register.str_NationalID_Iqama.InputTextType)" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" data-table="tblStudents" data-field="x_str_NationalID_Iqama" value="@Html.Raw(register.str_NationalID_Iqama.EditValue)" size="30" maxlength="250" placeholder="@Html.Raw(HtmlEncode(register.str_NationalID_Iqama.PlaceHolder))" data-format-pattern="@(register.str_NationalID_Iqama.FormatPattern)"@Html.Raw(register.str_NationalID_Iqama.EditAttributes) aria-describedby="x_str_NationalID_Iqama_help">
+@Html.Raw(register.str_NationalID_Iqama.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.str_NationalID_Iqama.GetErrorMessage())</div>
+</span></template>
+} else { // str_NationalID_Iqama (confirm)
+<template id="tpx_tblStudents_str_NationalID_Iqama"><span id="el_tblStudents_str_NationalID_Iqama">
+<span @Html.Raw(register.str_NationalID_Iqama.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.str_NationalID_Iqama.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_str_NationalID_Iqama" data-hidden="1" name="x_str_NationalID_Iqama" id="x_str_NationalID_Iqama" value="@Html.Raw(HtmlEncode(register.str_NationalID_Iqama.FormValue))">
+</span></template>
+} @* str_NationalID_Iqama (end) *@
+</div></div>
+    </div>
+} @* register.str_NationalID_Iqama.Visible (end) *@
+@if (register.IsDrivingexperience.Visible) { // register.IsDrivingexperience.Visible (begin)
+    <div id="r_IsDrivingexperience" @Html.Raw(register.IsDrivingexperience.RowAttributes)>
+        <label id="elh_tblStudents_IsDrivingexperience" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_IsDrivingexperience">@Html.Raw(register.IsDrivingexperience.Caption)@Html.Raw(register.IsDrivingexperience.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.IsDrivingexperience.CellAttributes)>
+@if (!register.IsConfirm) { // IsDrivingexperience (begin)
+<template id="tpx_tblStudents_IsDrivingexperience"><span id="el_tblStudents_IsDrivingexperience">
+<div class="form-check d-inline-block">
+    <input type="checkbox" class="form-check-input@(register.IsDrivingexperience.IsInvalidClass)" data-table="tblStudents" data-field="x_IsDrivingexperience" data-boolean name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="1" checked="@ConvertToBool(register.IsDrivingexperience.CurrentValue)" @Html.Raw(register.IsDrivingexperience.EditAttributes) aria-describedby="x_IsDrivingexperience_help">
+    <div class="invalid-feedback">@Html.Raw(register.IsDrivingexperience.GetErrorMessage())</div>
+</div>
+@Html.Raw(register.IsDrivingexperience.GetCustomMessage)
+</span></template>
+} else { // IsDrivingexperience (confirm)
+<template id="tpx_tblStudents_IsDrivingexperience"><span id="el_tblStudents_IsDrivingexperience">
+<span @Html.Raw(register.IsDrivingexperience.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_IsDrivingexperience_@(register.RowCount)" class="form-check-input" value="@(register.IsDrivingexperience.ViewValue)" disabled checked="@(ConvertToBool(register.IsDrivingexperience.CurrentValue))">
+    <label class="form-check-label" for="x_IsDrivingexperience_@(register.RowCount)"></label>
+</div></span>
+<input type="hidden" data-table="tblStudents" data-field="x_IsDrivingexperience" data-hidden="1" name="x_IsDrivingexperience" id="x_IsDrivingexperience" value="@Html.Raw(HtmlEncode(register.IsDrivingexperience.FormValue))">
+</span></template>
+} @* IsDrivingexperience (end) *@
+</div></div>
+    </div>
+} @* register.IsDrivingexperience.Visible (end) *@
+@if (register.intDrivinglicenseType.Visible) { // register.intDrivinglicenseType.Visible (begin)
+    <div id="r_intDrivinglicenseType" @Html.Raw(register.intDrivinglicenseType.RowAttributes)>
+        <label id="elh_tblStudents_intDrivinglicenseType" for="x_intDrivinglicenseType" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_intDrivinglicenseType">@Html.Raw(register.intDrivinglicenseType.Caption)@Html.Raw(register.intDrivinglicenseType.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.intDrivinglicenseType.CellAttributes)>
+@if (!register.IsConfirm) { // intDrivinglicenseType (begin)
+<template id="tpx_tblStudents_intDrivinglicenseType"><span id="el_tblStudents_intDrivinglicenseType">
+    <select
+        id="x_intDrivinglicenseType"
+        name="x_intDrivinglicenseType"
+        class="form-select ew-select@(register.intDrivinglicenseType.IsInvalidClass)"
+        data-select2-id="fregister_x_intDrivinglicenseType"
+        data-table="tblStudents"
+        data-field="x_intDrivinglicenseType"
+        data-value-separator="@(register.intDrivinglicenseType.DisplayValueSeparatorAttribute)"
+        data-placeholder="@(HtmlEncode(register.intDrivinglicenseType.PlaceHolder))"
+        @Html.Raw(register.intDrivinglicenseType.EditAttributes)>
+        @(register.intDrivinglicenseType.SelectOptionListHtml("x_intDrivinglicenseType"))
+    </select>
+    @Html.Raw(register.intDrivinglicenseType.GetCustomMessage)
+    <div class="invalid-feedback">@Html.Raw(register.intDrivinglicenseType.GetErrorMessage())</div>
+<script>
+loadjs.ready("fregister", function() {
+    var options = { name: "x_intDrivinglicenseType", selectId: "fregister_x_intDrivinglicenseType" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fregister.lists.intDrivinglicenseType?.lookupOptions.length) {
+        options.data = { id: "x_intDrivinglicenseType", form: "fregister" };
+    } else {
+        options.ajax = { id: "x_intDrivinglicenseType", form: "fregister", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblStudents.fields.intDrivinglicenseType.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+</span></template>
+} else { // intDrivinglicenseType (confirm)
+<template id="tpx_tblStudents_intDrivinglicenseType"><span id="el_tblStudents_intDrivinglicenseType">
+<span @Html.Raw(register.intDrivinglicenseType.ViewAttributes)>
+<span class="form-control-plaintext">@Html.Raw(register.intDrivinglicenseType.DisplayValue(register.intDrivinglicenseType.ViewValue))</span></span>
+<input type="hidden" data-table="tblStudents" data-field="x_intDrivinglicenseType" data-hidden="1" name="x_intDrivinglicenseType" id="x_intDrivinglicenseType" value="@Html.Raw(HtmlEncode(register.intDrivinglicenseType.FormValue))">
+</span></template>
+} @* intDrivinglicenseType (end) *@
+</div></div>
+    </div>
+} @* register.intDrivinglicenseType.Visible (end) *@
+@if (register.AbsherApptNbr.Visible) { // register.AbsherApptNbr.Visible (begin)
+    <div id="r_AbsherApptNbr" @Html.Raw(register.AbsherApptNbr.RowAttributes)>
+        <label id="elh_tblStudents_AbsherApptNbr" for="x_AbsherApptNbr" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_AbsherApptNbr">@Html.Raw(register.AbsherApptNbr.Caption)@Html.Raw(register.AbsherApptNbr.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.AbsherApptNbr.CellAttributes)>
+@if (!register.IsConfirm) { // AbsherApptNbr (begin)
+<template id="tpx_tblStudents_AbsherApptNbr"><span id="el_tblStudents_AbsherApptNbr">
+<input type="@(register.AbsherApptNbr.InputTextType)" name="x_AbsherApptNbr" id="x_AbsherApptNbr" data-table="tblStudents" data-field="x_AbsherApptNbr" value="@Html.Raw(register.AbsherApptNbr.EditValue)" size="30" maxlength="300" placeholder="@Html.Raw(HtmlEncode(register.AbsherApptNbr.PlaceHolder))" data-format-pattern="@(register.AbsherApptNbr.FormatPattern)"@Html.Raw(register.AbsherApptNbr.EditAttributes) aria-describedby="x_AbsherApptNbr_help">
+@Html.Raw(register.AbsherApptNbr.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.AbsherApptNbr.GetErrorMessage())</div>
+</span></template>
+} else { // AbsherApptNbr (confirm)
+<template id="tpx_tblStudents_AbsherApptNbr"><span id="el_tblStudents_AbsherApptNbr">
+<span @Html.Raw(register.AbsherApptNbr.ViewAttributes)>
+<input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(register.AbsherApptNbr.ViewValue)))"></span>
+<input type="hidden" data-table="tblStudents" data-field="x_AbsherApptNbr" data-hidden="1" name="x_AbsherApptNbr" id="x_AbsherApptNbr" value="@Html.Raw(HtmlEncode(register.AbsherApptNbr.FormValue))">
+</span></template>
+} @* AbsherApptNbr (end) *@
+</div></div>
+    </div>
+} @* register.AbsherApptNbr.Visible (end) *@
+@if (register.Absherphoto.Visible) { // register.Absherphoto.Visible (begin)
+    <div id="r_Absherphoto" @Html.Raw(register.Absherphoto.RowAttributes)>
+        <label id="elh_tblStudents_Absherphoto" class="@(register.LeftColumnClass)"><template id="tpc_tblStudents_Absherphoto">@Html.Raw(register.Absherphoto.Caption)@Html.Raw(register.Absherphoto.Required ? Language.Phrase("FieldRequiredIndicator") : "")</template></label>
+        <div class="@(register.RightColumnClass)"><div @Html.Raw(register.Absherphoto.CellAttributes)>
+@if (!register.IsConfirm) { // Absherphoto (begin)
+<template id="tpx_tblStudents_Absherphoto"><span id="el_tblStudents_Absherphoto">
+<div id="fd_x_Absherphoto" class="fileinput-button ew-file-drop-zone">
+    <input
+        type="file"
+        id="x_Absherphoto"
+        name="x_Absherphoto"
+        class="form-control ew-file-input"
+        title="@(register.Absherphoto.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblStudents"
+        data-field="x_Absherphoto"
+        data-size="500"
+        data-accept-file-types="@(register.Absherphoto.AcceptFileTypes)"
+        data-max-file-size="@(register.Absherphoto.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(register.Absherphoto.ImageCropper ? 0 : 1)"
+        aria-describedby="x_Absherphoto_help"
+        @Html.Raw((register.Absherphoto.ReadOnly || register.Absherphoto.Disabled) ? " disabled" : "")
+        @Html.Raw(register.Absherphoto.EditAttributes)
+    >
+    <div class="text-muted ew-file-text">@Html.Raw(Language.Phrase("ChooseFile"))</div>
+</div>
+@Html.Raw(register.Absherphoto.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.Absherphoto.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_Absherphoto" id= "fn_x_Absherphoto" value="@(register.Absherphoto.Upload.FileName)">
+<input type="hidden" name="fa_x_Absherphoto" id= "fa_x_Absherphoto" value="0">
+<table id="ft_x_Absherphoto" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span></template>
+} else { // Absherphoto (confirm)
+<template id="tpx_tblStudents_Absherphoto"><span id="el_tblStudents_Absherphoto">
+<div id="fd_x_Absherphoto">
+    <input
+        type="file"
+        id="x_Absherphoto"
+        name="x_Absherphoto"
+        class="form-control ew-file-input d-none"
+        title="@(register.Absherphoto.Title)"
+        lang="@(CurrentLanguageID)"
+        data-table="tblStudents"
+        data-field="x_Absherphoto"
+        data-size="500"
+        data-accept-file-types="@(register.Absherphoto.AcceptFileTypes)"
+        data-max-file-size="@(register.Absherphoto.UploadMaxFileSize)"
+        data-max-number-of-files="null"
+        data-disable-image-crop="@(register.Absherphoto.ImageCropper ? 0 : 1)"
+        aria-describedby="x_Absherphoto_help"
+        @Html.Raw(register.Absherphoto.EditAttributes)
+    >
+</div>
+@Html.Raw(register.Absherphoto.GetCustomMessage)
+<div class="invalid-feedback">@Html.Raw(register.Absherphoto.GetErrorMessage())</div>
+<input type="hidden" name="fn_x_Absherphoto" id= "fn_x_Absherphoto" value="@(register.Absherphoto.Upload.FileName)">
+<input type="hidden" name="fa_x_Absherphoto" id= "fa_x_Absherphoto" value="0">
+<table id="ft_x_Absherphoto" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span></template>
+} @* Absherphoto (end) *@
+</div></div>
+    </div>
+} @* register.Absherphoto.Visible (end) *@
+</div><!-- /page* -->
+<div id="tpd_tblStudentsregister" class="ew-custom-template"></div>
+<template id="tpm_tblStudentsregister">
+<div id="ct_register"><input type="hidden" id="HDN_NationalID_Iqama_Verify_TransId" name="HDN_NationalID_Iqama_Verify_TransId" value="">
+<input type="hidden" id="HDN_NationalIDVerificationStatus" value="@Language.Phrase("NafathSendMessage")">
+<ul class="nav nav-tabs" id="registraction-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="general-information-tab" data-bs-toggle="tab" data-bs-target="#tab_tblStudents1" type="button" role="tab" aria-controls="tab_tblStudents1" aria-selected="true"> @Language.Phrase("RegistrationTab1") </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="access-credentials-tab" data-bs-toggle="tab" data-bs-target="#tab_tblStudents2" type="button" role="tab" aria-controls="tab_tblStudents2" aria-selected="false"> @Language.Phrase("RegistrationTab2") </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="driving-status-and-absher-tab" data-bs-toggle="tab" data-bs-target="#tab_tblStudents3" type="button" role="tab" aria-controls="tab_tblStudents3" aria-selected="false"> @Language.Phrase("RegistrationTab3") </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="emergency-contact-tab" data-bs-toggle="tab" data-bs-target="#tab_tblStudents4" type="button" role="tab" aria-controls="tab_tblStudents4" aria-selected="false"> @Language.Phrase("RegistrationTab4") </button>
+    </li>
+</ul>
+<div class="tab-content" id="registraction-tabs-content">
+    <!-- General Information -->
+    <div class="tab-pane fade show active" id="tab_tblStudents1" role="tabpanel" aria-labelledby="general-information-tab">
+        <div id="r_str_First_Name" class="mb-3 row">
+            <label for="x_str_First_Name" class="col-sm-2 col-form-label">@Html.Raw(register.str_First_Name.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_First_Name"></slot></div>
+        </div>
+        <div id="r_str_Middle_Name" class="mb-3 row">
+            <label for="x_str_Middle_Name" class="col-sm-2 col-form-label">@Html.Raw(register.str_Middle_Name.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Middle_Name"></slot></div>
+        </div>
+        <div id="r_str_Last_Name" class="mb-3 row">
+            <label for="x_str_Last_Name" class="col-sm-2 col-form-label">@Html.Raw(register.str_Last_Name.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Last_Name"></slot></div>
+        </div>
+        <div id="r_str_Cell_Phone" class="mb-3 row">
+            <label for="x_str_Cell_Phone" class="col-sm-2 col-form-label">@Html.Raw(register.str_Cell_Phone.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Cell_Phone"></slot></div>
+        </div>
+        <div id="r_str_Email" class="mb-3 row">
+            <label for="x_str_Email" class="col-sm-2 col-form-label">@Html.Raw(register.str_Email.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Email"></slot></div>
+        </div>
+        <div id="r_Hijri_Year" class="mb-3 row">
+            <label for="x_Hijri_Year" class="col-sm-2 col-form-label">@Html.Raw(register.Hijri_Year.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_Hijri_Year"></slot></div>
+        </div>
+        <div id="r_Hijri_Month" class="mb-3 row">
+            <label for="x_Hijri_Month" class="col-sm-2 col-form-label">@Html.Raw(register.Hijri_Month.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_Hijri_Month"></slot></div>
+        </div>
+        <div id="r_Hijri_Day" class="mb-3 row">
+            <label for="x_Hijri_Day" class="col-sm-2 col-form-label">@Html.Raw(register.Hijri_Day.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_Hijri_Day"></slot></div>
+        </div>
+        <!--<div id="r_int_Location" class="mb-3 row">
+            <label for="x_int_Location" class="col-sm-2 col-form-label">@Html.Raw(register.int_Location.Caption) </label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_int_Location"></slot></div>
+        </div> -->
+    </div>
+    <!-- Access Credentials  -->
+    <div class="tab-pane fade" id="tab_tblStudents2" role="tabpanel" aria-labelledby="access-credentials-tab">
+        <!-- <div id="r_str_Username" class="mb-3 row">
+            <label for="x_str_Username" class="col-sm-2 col-form-label">@Html.Raw(register.str_Username.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Username"></slot></div>
+        </div> -->
+        <div id="r_str_Password" class="mb-3 row">
+            <label for="x_str_Password" class="col-sm-2 col-form-label">@Html.Raw(register.str_Password.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Password"></slot></div>
+        </div>
+        <div id="r_c_str_Password" class="mb-3 row">
+            <label for="c_str_Password" class="col-sm-2 col-form-label"> @Language.Phrase("ConfirmPassword") <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i>
+            </label>
+            <div class="col-sm-10">
+                <div>
+                    <span id="SpanComparePassword" class="d-none">
+                        <span>
+                            <input type="text" readonly="" class="form-control-plaintext" value="********"></span>
+                        <input type="hidden" data-table="tblStudents" data-field="HdnComparePassword" data-hidden="1" data-page="2" name="HdnComparePassword" id="HdnComparePassword" value="">
+                    </span>
+                    <span id="el_c_tblStudents_str_Password">
+                        <div class="input-group">
+                            <input type="password" name="c_str_Password" id="c_str_Password" autocomplete="new-password" data-field="c_str_Password" size="30" maxlength="50" placeholder="@Language.Phrase("ConfirmPassword")" class="form-control" aria-describedby="x_str_Password_help">
+                            <button type="button" class="btn btn-default ew-toggle-password rounded-end" data-ew-action="password"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                        <div class="invalid-feedback">@Language.Phrase("EnterRequiredField")</div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!--<div id="r_date_Birth" class="mb-3 row">
+            <label for="x_date_Birth" class="col-sm-2 col-form-label">@Html.Raw(register.date_Birth.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_date_Birth"></slot></div>
+        </div> -->
+        <!-- <div id="r_int_Nationality" class="mb-3 row">
+            <label for="x_int_Nationality" class="col-sm-2 col-form-label">@Html.Raw(register.int_Nationality.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_int_Nationality"></slot></div>
+        </div> -->
+        <!-- <div id="r_int_Status" class="mb-3 row">
+            <label for="x_int_Status" class="col-sm-2 col-form-label">@Html.Raw(register.int_Status.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_int_Status"></slot></div>
+        </div> -->
+        <!--<div id="r_ProfileField" class="mb-3 row">
+            <label for="x_ProfileField" class="col-sm-2 col-form-label">@Html.Raw(register.ProfileField.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_ProfileField"></slot></div>
+        </div> -->
+        <div id="r_str_NationalID_Iqama" class="mb-3 row">
+            <label for="x_str_NationalID_Iqama" class="col-sm-2 col-form-label">@Html.Raw(register.str_NationalID_Iqama.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_NationalID_Iqama"></slot></div>
+        </div>
+        <div id="Div_NationalID_Iqama_Verify" class="mb-3 row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3">
+                <input type="text" id="NationalID_Iqama_Verify_Random_Code" class="form-control w-100" disabled />
+            </div>
+            <div class="col-sm">
+                <button id="btn-verify" type="button" class="btn btn-primary"> @Language.Phrase("NafathBtnVerify") </button>
+                <button id="btn-verify-number" type="button" class="btn btn-primary"> @Language.Phrase("NafathBtnVerifyNumber") </button>
+            </div>
+        </div>
+    </div>
+    <!-- Driving Status and Absher -->
+    <div class="tab-pane fade" id="tab_tblStudents3" role="tabpanel" aria-labelledby="driving-status-and-absher-tab">
+        <!-- <div id="r_Institution" class="mb-3 row">
+            <label for="x_Institution" class="col-sm-2 col-form-label">@Html.Raw(register.Institution.Caption)</label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_Institution"></slot></div>
+        </div> -->
+        <div id="r_IsDrivingexperience" class="mb-3 row">
+            <label for="x_IsDrivingexperience" class="col-sm-2 col-form-label">@Html.Raw(register.IsDrivingexperience.Caption)</label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_IsDrivingexperience"></slot></div>
+        </div>
+        <div id="r_intDrivinglicenseType" class="mb-3 row">
+            <label for="x_intDrivinglicenseType" class="col-sm-2 col-form-label">@Html.Raw(register.intDrivinglicenseType.Caption)<i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_intDrivinglicenseType"></slot></div>
+        </div>
+        <div id="r_AbsherApptNbr" class="mb-3 row">
+            <label for="x_AbsherApptNbr" class="col-sm-2 col-form-label">@Html.Raw(register.AbsherApptNbr.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_AbsherApptNbr"></slot></div>
+        </div>
+        <div id="r_Absherphoto" class="mb-3 row">
+            <label for="x_Absherphoto" class="col-sm-2 col-form-label">@Html.Raw(register.Absherphoto.Caption) <i data-phrase="FieldRequiredIndicator" class="fa-solid fa-asterisk ew-required"><span class="visually-hidden"></span></i></label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_Absherphoto"></slot></div>
+        </div>
+        <!-- <div id="r_Fingerprint" class="mb-3 row">
+            <label for="x_Fingerprint" class="col-sm-2 col-form-label">@Html.Raw(register.Fingerprint.Caption) </label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_Fingerprint"></slot></div>
+        </div> -->
+    </div>
+    <!-- Emergency Contact (Optional)  -->
+    <div class="tab-pane fade" id="tab_tblStudents4" role="tabpanel" aria-labelledby="emergency-contact-tab">
+        <div id="r_str_Emergency_Contact_Name" class="mb-3 row">
+            <label for="x_str_Emergency_Contact_Name" class="col-sm-2 col-form-label">@Html.Raw(register.str_Emergency_Contact_Name.Caption)</label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Emergency_Contact_Name"></slot></div>
+        </div>
+        <div id="r_str_Emergency_Contact_Phone" class="mb-3 row">
+            <label for="x_str_Emergency_Contact_Phone" class="col-sm-2 col-form-label">@Html.Raw(register.str_Emergency_Contact_Phone.Caption)</label>
+            <div class="col-sm-10"><slot class="ew-slot" name="tpx_tblStudents_str_Emergency_Contact_Phone"></slot></div>
+        </div>
+        <div id="r_str_Emergency_Contact_Relation" class="mb-3 row">
+            <label for="x_str_Emergency_Contact_Relation" class="col-sm-2 col-form-label">@Html.Raw(register.str_Emergency_Contact_Relation.Caption)</label>
+            <div class="col-sm-10"> <slot class="ew-slot" name="tpx_tblStudents_str_Emergency_Contact_Relation"></slot> </div>
+        </div>
+    </div>
+</div></div>
+</template>
+@Html.Raw(register.IsModal ? "<template class=\"ew-modal-buttons\">" : "<div class=\"row ew-buttons\">")<!-- buttons .row -->
+    <div class="@(register.OffsetColumnClass)"><!-- buttons offset -->
+@if (!register.IsConfirm) { // Confirm page
+    <button class="btn btn-primary ew-btn disabled enable-on-init" name="btn-action" id="btn-action" type="submit" form="fregister" data-ew-action="set-action" data-value="confirm">@Html.Raw(Language.Phrase("RegisterBtn"))</button>
+} else {
+    <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="fregister">@Html.Raw(Language.Phrase("ConfirmBtn"))</button>
+    <button class="btn btn-default ew-btn" name="btn-cancel" id="btn-cancel" type="submit" form="fregister" data-ew-action="set-action" data-value="cancel">@Html.Raw(Language.Phrase("CancelBtn"))</button>
+}
+    </div><!-- /buttons offset -->
+@Html.Raw(register.IsModal ? "</template>" : "</div>")<!-- /buttons .row -->
+</form>
+<script class="ew-apply-template">
+loadjs.ready(ew.applyTemplateId, function() {
+    var $ = jQuery;
+    ew.templateData = { rows: @Html.Raw(ConvertToJson(register.Rows)) };
+    ew.applyTemplate("tpd_tblStudentsregister", "tpm_tblStudentsregister", "tblStudentsregister", "@(register.Export)", "tblStudents", ew.templateData.rows[0], @(register.IsModal ? "true" : "false"));
+    loadjs.done("customtemplate");
+});
+</script>
+@register.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblStudents");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Startup script
+    $(document).ready(function () {
+        $('#btn-verify-number').prop('disabled', true);
+        if($('#btn-action').text().trim().toUpperCase() == 'CONFIRM')
+        {
+            $('#el_c_tblStudents_str_Password').remove();
+            $('#Div_NationalID_Iqama_Verify').remove();
+            $('#SpanComparePassword').removeClass('d-none');
+            $('#SpanComparePassword').attr('id', 'el_c_tblStudents_str_Password');
+            $('#HdnComparePassword').val($('#x_str_Password').val());
+            $('#HdnComparePassword').attr('name', 'c_str_Password');
+            $('#HdnComparePassword').attr('data-field', 'x_str_Password');
+            $('#HdnComparePassword').attr('id', 'c_str_Password');
+        }
+        $('#btn-verify').on('click', function () {
+            alert(fnGetLanguageMessageBaseOnURLParameter('VerifyNationalAlertMessage'));
+            var nationalIDIqama = $('#x_str_NationalID_Iqama').val();
+            if(!(/^\d+$/.test(nationalIDIqama) && nationalIDIqama.length === 10) ) {
+                $('.invalid-feedback', '#el_tblStudents_str_NationalID_Iqama').show();
+                return false;
+            }
+            else
+            {
+                $('.invalid-feedback', '#el_tblStudents_str_NationalID_Iqama').hide();
+            }
+            $.ajax({
+                url: "/api/nafath/mfarequest",
+                method: "POST",
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                    nationalIDIqama: nationalIDIqama,
+                },
+                success: function (response) {
+                    console.log("Success:", response);
+                    $('#NationalID_Iqama_Verify_Random_Code').val(response['Random']);
+                    $('#HDN_NationalID_Iqama_Verify_TransId').val(response['TransId']);
+                    $('#fregister').find('button[data-ew-action="set-action"][data-value="confirm"]').prop('disabled', true);
+                    // $('#btn-verify').remove();
+                    $('#btn-verify').prop('disabled', true);
+                    $('#btn-verify-number').prop('disabled', false);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", status, error);
+                },
+                complete: function () {
+                    console.log("Request complete");
+                }
+            });
+        });
+        $('#btn-verify-number').on('click', function () {
+            var nationalIDIqama = $('#x_str_NationalID_Iqama').val();
+            var transId = $('#HDN_NationalID_Iqama_Verify_TransId').val();
+    		var inputRandomCode = $('#NationalID_Iqama_Verify_Random_Code');
+    		var btnVerifyNumber = $('#btn-verify-number');
+            var btnVerify = $('#btn-verify');
+            $.ajax({
+                url: "/api/nafath/mfarequeststatus",
+                method: "POST",
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                    nationalIDIqama: nationalIDIqama,
+                    transId: transId,
+                    random: inputRandomCode.val()
+                },
+                success: function (response) {
+    				console.log("Success:", response);
+    				switch (response['StatusCode']) 
+                    {
+                        case 1: // COMPLETED
+                            {
+                                $('#x_str_NationalID_Iqama_help').remove();
+                                $('#Div_NationalID_Iqama_Verify').remove();
+                                $('#x_str_NationalID_Iqama').prop('readonly',true);
+                                $('#x_str_NationalID_Iqama').addClass('form-control-plaintext');
+                                break;
+                            }
+                        case 2: // WAITING
+                            {
+                                break;
+                            }
+                        case 3: // EXPIRED
+                            {
+                                inputRandomCode.text("EXPIRED! Request Again");
+                                btnVerifyNumber.prop('disabled',true);
+                                btnVerify.prop('disabled', false);
+                                break;
+                            }
+                        case 4: // REJECTED
+                            {
+                                inputRandomCode.text("REJECTED! Request Again");
+                                btnVerifyNumber.prop('disabled',true);
+                                btnVerify.prop('disabled', false);
+                                break;
+                            }
+                        default:
+                            {
+                                inputRandomCode.text("Something wrong! Request Again");
+                                btnVerifyNumber.prop('disabled',true);
+                                btnVerify.prop('disabled', false);
+                            }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", status, error);
+                },
+                complete: function () {
+                    console.log("Request complete");
+                }
+            });
+        });
+        $('button[data-ew-action="set-action"][data-value="confirm"]').on('click',function(){
+            setTimeout(function () {
+                if($('.is-invalid').length > 0){
+                    var tabContent = $($('.is-invalid')[0]).closest('div[role="tabpanel"]');
+                    var tabButton = $(`button[aria-controls="${tabContent[0].id}"]`);
+                    var tab = new bootstrap.Tab(tabButton);
+                    tab.show();
+                }
+            }, 1000);
+        });
+    });
+});
+</script>

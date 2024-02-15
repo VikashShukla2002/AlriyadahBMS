@@ -1,0 +1,656 @@
+@{
+    // View
+    View = this;
+
+    // Set up CurrentGrid
+    CurrentGrid = tblBillingInfoGrid;
+
+    // Run
+    await tblBillingInfoGrid.Run();
+
+    // Check action result
+    if (tblBillingInfoGrid.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblBillingInfoGrid.IsExport()) {
+<script>
+var ftblBillingInfogrid;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let currentTable = @Html.Raw(ConvertToJson(tblBillingInfoGrid.ToClientVar()));
+    ew.deepAssign(ew.vars, { tables: { tblBillingInfo: currentTable } });
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblBillingInfogrid")
+        .setPageId("grid")
+        .setFormKeyCountName("@(tblBillingInfoGrid.FormKeyCountName)")
+
+        // Add fields
+        .setFields([
+
+            ["NationalID", [fields.NationalID.visible && fields.NationalID.required ? ew.Validators.required(fields.NationalID.caption) : null], fields.NationalID.isInvalid],
+            ["str_First_Name", [fields.str_First_Name.visible && fields.str_First_Name.required ? ew.Validators.required(fields.str_First_Name.caption) : null], fields.str_First_Name.isInvalid],
+            ["str_Last_Name", [fields.str_Last_Name.visible && fields.str_Last_Name.required ? ew.Validators.required(fields.str_Last_Name.caption) : null], fields.str_Last_Name.isInvalid],
+            ["date_Paid", [fields.date_Paid.visible && fields.date_Paid.required ? ew.Validators.required(fields.date_Paid.caption) : null, ew.Validators.datetime(fields.date_Paid.clientFormatPattern)], fields.date_Paid.isInvalid],
+            ["str_ApprovalCode", [fields.str_ApprovalCode.visible && fields.str_ApprovalCode.required ? ew.Validators.required(fields.str_ApprovalCode.caption) : null], fields.str_ApprovalCode.isInvalid],
+            ["Payment_Number", [fields.Payment_Number.visible && fields.Payment_Number.required ? ew.Validators.required(fields.Payment_Number.caption) : null, ew.Validators.integer], fields.Payment_Number.isInvalid],
+            ["Pricelist", [fields.Pricelist.visible && fields.Pricelist.required ? ew.Validators.required(fields.Pricelist.caption) : null, ew.Validators.float], fields.Pricelist.isInvalid],
+            ["str_Amount_Pay", [fields.str_Amount_Pay.visible && fields.str_Amount_Pay.required ? ew.Validators.required(fields.str_Amount_Pay.caption) : null], fields.str_Amount_Pay.isInvalid],
+            ["mny_Running_Payments", [fields.mny_Running_Payments.visible && fields.mny_Running_Payments.required ? ew.Validators.required(fields.mny_Running_Payments.caption) : null, ew.Validators.float], fields.mny_Running_Payments.isInvalid],
+            ["mny_Running_Balance", [fields.mny_Running_Balance.visible && fields.mny_Running_Balance.required ? ew.Validators.required(fields.mny_Running_Balance.caption) : null], fields.mny_Running_Balance.isInvalid]
+        ])
+
+        // Check empty row
+        .setEmptyRow(
+            function (rowIndex) {
+                let fobj = this.getForm(),
+                    fields = [["NationalID",false],["str_First_Name",false],["str_Last_Name",false],["date_Paid",false],["str_ApprovalCode",false],["Payment_Number",false],["Pricelist",false],["str_Amount_Pay",false],["mny_Running_Payments",false],["mny_Running_Balance",false]];
+                if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
+                    return false;
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function(fobj) { // DO NOT CHANGE THIS LINE!
+                    // Your custom validation code here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
+        // Dynamic selection lists
+        .setLists({
+            "NationalID": @Html.Raw(tblBillingInfoGrid.NationalID.ToClientList(tblBillingInfoGrid)),
+        })
+        .build();
+    window[form.id] = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+<main class="list">
+<div id="ew-list">
+@if (tblBillingInfoGrid.TotalRecords > 0 || !Empty(tblBillingInfoGrid.CurrentAction)) {
+<div class="card ew-card ew-grid@(tblBillingInfoGrid.IsAddOrEdit ? " ew-grid-add-edit" : "") @(tblBillingInfoGrid.TableGridClass)">
+@if (tblBillingInfoGrid.ShowOtherOptions) {
+<div class="card-header ew-grid-upper-panel">
+    @tblBillingInfoGrid.OtherOptions.RenderBody()
+</div>
+}
+<div id="ftblBillingInfogrid" class="ew-form ew-list-form">
+<div id="gmp_tblBillingInfo" class="card-body ew-grid-middle-panel @(tblBillingInfoGrid.TableContainerClass)" style="@(tblBillingInfoGrid.TableContainerStyle)">
+<table id="tbl_tblBillingInfogrid" class="@(tblBillingInfoGrid.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    tblBillingInfoGrid.RowType = RowType.Header;
+
+    // Render list options
+    await tblBillingInfoGrid.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@tblBillingInfoGrid.ListOptions.RenderHeader("left")
+@if (tblBillingInfoGrid.NationalID.Visible) { // tblBillingInfoGrid.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(tblBillingInfoGrid.NationalID.HeaderCellClass)"><div id="elh_tblBillingInfo_NationalID" class="tblBillingInfo_NationalID">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.NationalID))</div></th>
+} @* tblBillingInfoGrid.NationalID.Visible (end) *@
+@if (tblBillingInfoGrid.str_First_Name.Visible) { // tblBillingInfoGrid.str_First_Name.Visible (begin)
+        <th data-name="str_First_Name" class="@(tblBillingInfoGrid.str_First_Name.HeaderCellClass)"><div id="elh_tblBillingInfo_str_First_Name" class="tblBillingInfo_str_First_Name">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.str_First_Name))</div></th>
+} @* tblBillingInfoGrid.str_First_Name.Visible (end) *@
+@if (tblBillingInfoGrid.str_Last_Name.Visible) { // tblBillingInfoGrid.str_Last_Name.Visible (begin)
+        <th data-name="str_Last_Name" class="@(tblBillingInfoGrid.str_Last_Name.HeaderCellClass)"><div id="elh_tblBillingInfo_str_Last_Name" class="tblBillingInfo_str_Last_Name">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.str_Last_Name))</div></th>
+} @* tblBillingInfoGrid.str_Last_Name.Visible (end) *@
+@if (tblBillingInfoGrid.date_Paid.Visible) { // tblBillingInfoGrid.date_Paid.Visible (begin)
+        <th data-name="date_Paid" class="@(tblBillingInfoGrid.date_Paid.HeaderCellClass)" style="white-space: nowrap;"><div id="elh_tblBillingInfo_date_Paid" class="tblBillingInfo_date_Paid">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.date_Paid))</div></th>
+} @* tblBillingInfoGrid.date_Paid.Visible (end) *@
+@if (tblBillingInfoGrid.str_ApprovalCode.Visible) { // tblBillingInfoGrid.str_ApprovalCode.Visible (begin)
+        <th data-name="str_ApprovalCode" class="@(tblBillingInfoGrid.str_ApprovalCode.HeaderCellClass)"><div id="elh_tblBillingInfo_str_ApprovalCode" class="tblBillingInfo_str_ApprovalCode">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.str_ApprovalCode))</div></th>
+} @* tblBillingInfoGrid.str_ApprovalCode.Visible (end) *@
+@if (tblBillingInfoGrid.Payment_Number.Visible) { // tblBillingInfoGrid.Payment_Number.Visible (begin)
+        <th data-name="Payment_Number" class="@(tblBillingInfoGrid.Payment_Number.HeaderCellClass)"><div id="elh_tblBillingInfo_Payment_Number" class="tblBillingInfo_Payment_Number">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.Payment_Number))</div></th>
+} @* tblBillingInfoGrid.Payment_Number.Visible (end) *@
+@if (tblBillingInfoGrid.Pricelist.Visible) { // tblBillingInfoGrid.Pricelist.Visible (begin)
+        <th data-name="Pricelist" class="@(tblBillingInfoGrid.Pricelist.HeaderCellClass)"><div id="elh_tblBillingInfo_Pricelist" class="tblBillingInfo_Pricelist">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.Pricelist))</div></th>
+} @* tblBillingInfoGrid.Pricelist.Visible (end) *@
+@if (tblBillingInfoGrid.str_Amount_Pay.Visible) { // tblBillingInfoGrid.str_Amount_Pay.Visible (begin)
+        <th data-name="str_Amount_Pay" class="@(tblBillingInfoGrid.str_Amount_Pay.HeaderCellClass)"><div id="elh_tblBillingInfo_str_Amount_Pay" class="tblBillingInfo_str_Amount_Pay">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.str_Amount_Pay))</div></th>
+} @* tblBillingInfoGrid.str_Amount_Pay.Visible (end) *@
+@if (tblBillingInfoGrid.mny_Running_Payments.Visible) { // tblBillingInfoGrid.mny_Running_Payments.Visible (begin)
+        <th data-name="mny_Running_Payments" class="@(tblBillingInfoGrid.mny_Running_Payments.HeaderCellClass)"><div id="elh_tblBillingInfo_mny_Running_Payments" class="tblBillingInfo_mny_Running_Payments">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.mny_Running_Payments))</div></th>
+} @* tblBillingInfoGrid.mny_Running_Payments.Visible (end) *@
+@if (tblBillingInfoGrid.mny_Running_Balance.Visible) { // tblBillingInfoGrid.mny_Running_Balance.Visible (begin)
+        <th data-name="mny_Running_Balance" class="@(tblBillingInfoGrid.mny_Running_Balance.HeaderCellClass)"><div id="elh_tblBillingInfo_mny_Running_Balance" class="tblBillingInfo_mny_Running_Balance">@Html.Raw(tblBillingInfoGrid.RenderFieldHeader(tblBillingInfoGrid.mny_Running_Balance))</div></th>
+} @* tblBillingInfoGrid.mny_Running_Balance.Visible (end) *@
+@* Render list options (header, right) *@
+@tblBillingInfoGrid.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(tblBillingInfoGrid.PageNumber)">
+@{
+    await tblBillingInfoGrid.SetupGrid();
+    bool eof = tblBillingInfoGrid.Recordset == null; // DN
+}
+@while (tblBillingInfoGrid.RecordCount < tblBillingInfoGrid.StopRecord || SameString(tblBillingInfoGrid.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(tblBillingInfoGrid.RowIndex, "$rowindex$") &&
+        (!tblBillingInfoGrid.IsGridAdd || tblBillingInfoGrid.CurrentMode == "copy") &&
+        (!((tblBillingInfoGrid.IsCopy || tblBillingInfoGrid.IsAdd) && tblBillingInfoGrid.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await tblBillingInfoGrid.Recordset.ReadAsync();
+    tblBillingInfoGrid.RecordCount++;
+    if (tblBillingInfoGrid.RecordCount >= tblBillingInfoGrid.StartRecord) {
+        await tblBillingInfoGrid.SetupRow();
+
+        // Skip 1) delete row / empty row for confirm page, 2) hidden row
+        if (tblBillingInfoGrid.RowAction != "delete" &&
+            tblBillingInfoGrid.RowAction != "insertdelete" &&
+            !(tblBillingInfoGrid.RowAction == "insert" && tblBillingInfoGrid.IsConfirm && tblBillingInfoGrid.EmptyRow()) &&
+            tblBillingInfoGrid.RowAction != "hide") {
+    <tr @Html.Raw(tblBillingInfoGrid.RowAttributes)>
+    @* Render list options (body, left) *@
+    @tblBillingInfoGrid.ListOptions.RenderBody("left", tblBillingInfoGrid.RowCount)
+    @if (tblBillingInfoGrid.NationalID.Visible) { // tblBillingInfoGrid.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(tblBillingInfoGrid.NationalID.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* NationalID (begin) *@
+    @if (!Empty(tblBillingInfoGrid.NationalID.SessionValue)) {
+    <span @Html.Raw(tblBillingInfoGrid.NationalID.ViewAttributes)>
+    <span class="form-control-plaintext">@Html.Raw(tblBillingInfoGrid.NationalID.DisplayValue(tblBillingInfoGrid.NationalID.ViewValue))</span></span>
+    <input type="hidden" id="x@(tblBillingInfoGrid.RowIndex)_NationalID" name="x@(tblBillingInfoGrid.RowIndex)_NationalID" value="@(HtmlEncode(tblBillingInfoGrid.NationalID.CurrentValue))" data-hidden="1">
+    } else {
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_NationalID" class="el_tblBillingInfo_NationalID">
+        <select
+            id="x@(tblBillingInfoGrid.RowIndex)_NationalID"
+            name="x@(tblBillingInfoGrid.RowIndex)_NationalID"
+            class="form-select ew-select@(tblBillingInfoGrid.NationalID.IsInvalidClass)"
+            data-select2-id="ftblBillingInfogrid_x@(tblBillingInfoGrid.RowIndex)_NationalID"
+            data-table="tblBillingInfo"
+            data-field="x_NationalID"
+            data-value-separator="@(tblBillingInfoGrid.NationalID.DisplayValueSeparatorAttribute)"
+            data-placeholder="@(HtmlEncode(tblBillingInfoGrid.NationalID.PlaceHolder))"
+            @Html.Raw(tblBillingInfoGrid.NationalID.EditAttributes)>
+            @(tblBillingInfoGrid.NationalID.SelectOptionListHtml("x" + tblBillingInfoGrid.RowIndex + "_NationalID"))
+        </select>
+        <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.NationalID.GetErrorMessage())</div>
+    @Html.Raw(tblBillingInfoGrid.NationalID.Lookup.GetParamTag(tblBillingInfoGrid, "p_x" + tblBillingInfoGrid.RowIndex + "_NationalID"))
+    <script>
+    loadjs.ready("ftblBillingInfogrid", function() {
+        var options = { name: "x@(tblBillingInfoGrid.RowIndex)_NationalID", selectId: "ftblBillingInfogrid_x@(tblBillingInfoGrid.RowIndex)_NationalID" },
+            el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+        if (!el)
+            return;
+        options.closeOnSelect = !options.multiple;
+        options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+        if (ftblBillingInfogrid.lists.NationalID?.lookupOptions.length) {
+            options.data = { id: "x@(tblBillingInfoGrid.RowIndex)_NationalID", form: "ftblBillingInfogrid" };
+        } else {
+            options.ajax = { id: "x@(tblBillingInfoGrid.RowIndex)_NationalID", form: "ftblBillingInfogrid", limit: ew.LOOKUP_PAGE_SIZE };
+        }
+        options.minimumResultsForSearch = Infinity;
+        options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.tblBillingInfo.fields.NationalID.selectOptions);
+        ew.createSelect(options);
+    });
+    </script>
+    </span>
+    }
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_NationalID" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_NationalID" id="o@(tblBillingInfoGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.NationalID.OldValue))">
+    @* NationalID (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_NationalID" class="el_tblBillingInfo_NationalID">
+    <span @Html.Raw(tblBillingInfoGrid.NationalID.ViewAttributes)>
+    <span class="form-control-plaintext">@Html.Raw(tblBillingInfoGrid.NationalID.DisplayValue(tblBillingInfoGrid.NationalID.EditValue))</span></span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_NationalID" data-hidden="1" name="x@(tblBillingInfoGrid.RowIndex)_NationalID" id="x@(tblBillingInfoGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.NationalID.CurrentValue))">
+    </span>
+    @* NationalID (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* NationalID (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_NationalID" class="el_tblBillingInfo_NationalID">
+    <span @Html.Raw(tblBillingInfoGrid.NationalID.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.NationalID.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_NationalID" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_NationalID" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.NationalID.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_NationalID" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_NationalID" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_NationalID" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.NationalID.OldValue))">
+    }
+    @* NationalID (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.NationalID.Visible (end) *@
+    @if (tblBillingInfoGrid.str_First_Name.Visible) { // tblBillingInfoGrid.str_First_Name.Visible (begin)
+        <td data-name="str_First_Name" @Html.Raw(tblBillingInfoGrid.str_First_Name.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_First_Name (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_First_Name" class="el_tblBillingInfo_str_First_Name">
+    <input type="@(tblBillingInfoGrid.str_First_Name.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_str_First_Name" id="x@(tblBillingInfoGrid.RowIndex)_str_First_Name" data-table="tblBillingInfo" data-field="x_str_First_Name" value="@Html.Raw(tblBillingInfoGrid.str_First_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_First_Name.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.str_First_Name.FormatPattern)"@Html.Raw(tblBillingInfoGrid.str_First_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.str_First_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_First_Name" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_str_First_Name" id="o@(tblBillingInfoGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_First_Name.OldValue))">
+    @* str_First_Name (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_First_Name (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_First_Name" class="el_tblBillingInfo_str_First_Name">
+    <span @Html.Raw(tblBillingInfoGrid.str_First_Name.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoGrid.str_First_Name.EditValue)))"></span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_First_Name" data-hidden="1" name="x@(tblBillingInfoGrid.RowIndex)_str_First_Name" id="x@(tblBillingInfoGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_First_Name.CurrentValue))">
+    </span>
+    @* str_First_Name (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* str_First_Name (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_First_Name" class="el_tblBillingInfo_str_First_Name">
+    <span @Html.Raw(tblBillingInfoGrid.str_First_Name.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.str_First_Name.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_First_Name" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_First_Name" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_First_Name.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_First_Name" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_First_Name" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_First_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_First_Name.OldValue))">
+    }
+    @* str_First_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.str_First_Name.Visible (end) *@
+    @if (tblBillingInfoGrid.str_Last_Name.Visible) { // tblBillingInfoGrid.str_Last_Name.Visible (begin)
+        <td data-name="str_Last_Name" @Html.Raw(tblBillingInfoGrid.str_Last_Name.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Last_Name (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_Last_Name" class="el_tblBillingInfo_str_Last_Name">
+    <input type="@(tblBillingInfoGrid.str_Last_Name.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_str_Last_Name" id="x@(tblBillingInfoGrid.RowIndex)_str_Last_Name" data-table="tblBillingInfo" data-field="x_str_Last_Name" value="@Html.Raw(tblBillingInfoGrid.str_Last_Name.EditValue)" size="30" maxlength="150" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Last_Name.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.str_Last_Name.FormatPattern)"@Html.Raw(tblBillingInfoGrid.str_Last_Name.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.str_Last_Name.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Last_Name" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_str_Last_Name" id="o@(tblBillingInfoGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Last_Name.OldValue))">
+    @* str_Last_Name (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Last_Name (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_Last_Name" class="el_tblBillingInfo_str_Last_Name">
+    <span @Html.Raw(tblBillingInfoGrid.str_Last_Name.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoGrid.str_Last_Name.EditValue)))"></span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Last_Name" data-hidden="1" name="x@(tblBillingInfoGrid.RowIndex)_str_Last_Name" id="x@(tblBillingInfoGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Last_Name.CurrentValue))">
+    </span>
+    @* str_Last_Name (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* str_Last_Name (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_Last_Name" class="el_tblBillingInfo_str_Last_Name">
+    <span @Html.Raw(tblBillingInfoGrid.str_Last_Name.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.str_Last_Name.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Last_Name" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_Last_Name" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Last_Name.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Last_Name" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_Last_Name" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_Last_Name" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Last_Name.OldValue))">
+    }
+    @* str_Last_Name (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.str_Last_Name.Visible (end) *@
+    @if (tblBillingInfoGrid.date_Paid.Visible) { // tblBillingInfoGrid.date_Paid.Visible (begin)
+        <td data-name="date_Paid" @Html.Raw(tblBillingInfoGrid.date_Paid.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* date_Paid (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_date_Paid" class="el_tblBillingInfo_date_Paid">
+    <input type="@(tblBillingInfoGrid.date_Paid.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_date_Paid" id="x@(tblBillingInfoGrid.RowIndex)_date_Paid" data-table="tblBillingInfo" data-field="x_date_Paid" value="@Html.Raw(tblBillingInfoGrid.date_Paid.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.date_Paid.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.date_Paid.FormatPattern)"@Html.Raw(tblBillingInfoGrid.date_Paid.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.date_Paid.GetErrorMessage())</div>
+    @if (!tblBillingInfoGrid.date_Paid.ReadOnly && !tblBillingInfoGrid.date_Paid.Disabled && !tblBillingInfoGrid.date_Paid.EditAttrs.Is("readonly") && !tblBillingInfoGrid.date_Paid.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["ftblBillingInfogrid", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(116))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("ftblBillingInfogrid", "x@(tblBillingInfoGrid.RowIndex)_date_Paid", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_date_Paid" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_date_Paid" id="o@(tblBillingInfoGrid.RowIndex)_date_Paid" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.date_Paid.OldValue))">
+    @* date_Paid (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* date_Paid (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_date_Paid" class="el_tblBillingInfo_date_Paid">
+    <input type="@(tblBillingInfoGrid.date_Paid.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_date_Paid" id="x@(tblBillingInfoGrid.RowIndex)_date_Paid" data-table="tblBillingInfo" data-field="x_date_Paid" value="@Html.Raw(tblBillingInfoGrid.date_Paid.EditValue)" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.date_Paid.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.date_Paid.FormatPattern)"@Html.Raw(tblBillingInfoGrid.date_Paid.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.date_Paid.GetErrorMessage())</div>
+    @if (!tblBillingInfoGrid.date_Paid.ReadOnly && !tblBillingInfoGrid.date_Paid.Disabled && !tblBillingInfoGrid.date_Paid.EditAttrs.Is("readonly") && !tblBillingInfoGrid.date_Paid.EditAttrs.Is("disabled")) {
+    <script>
+    loadjs.ready(["ftblBillingInfogrid", "datetimepicker"], function () {
+        let format = "@Html.Raw(DateFormat(116))", // DN
+            options = {
+                    localization: {
+                        locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                        hourCycle: format.match(/H/) ? "h24" : "h12",
+                        format,
+                        ...ew.language.phrase("datetimepicker")
+                    },
+                    display: {
+                        icons: {
+                            previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                            next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                        },
+                        components: {
+                            hours: !!format.match(/h/i),
+                            minutes: !!format.match(/m/),
+                            seconds: !!format.match(/s/i)
+                        },
+                        theme: ew.isDark() ? "dark" : "auto"
+                    }
+                };
+        ew.createDateTimePicker("ftblBillingInfogrid", "x@(tblBillingInfoGrid.RowIndex)_date_Paid", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    });
+    </script>
+    }
+    </span>
+    @* date_Paid (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* date_Paid (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_date_Paid" class="el_tblBillingInfo_date_Paid">
+    <span @Html.Raw(tblBillingInfoGrid.date_Paid.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.date_Paid.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_date_Paid" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_date_Paid" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_date_Paid" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.date_Paid.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_date_Paid" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_date_Paid" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_date_Paid" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.date_Paid.OldValue))">
+    }
+    @* date_Paid (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.date_Paid.Visible (end) *@
+    @if (tblBillingInfoGrid.str_ApprovalCode.Visible) { // tblBillingInfoGrid.str_ApprovalCode.Visible (begin)
+        <td data-name="str_ApprovalCode" @Html.Raw(tblBillingInfoGrid.str_ApprovalCode.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_ApprovalCode (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_ApprovalCode" class="el_tblBillingInfo_str_ApprovalCode">
+    <input type="@(tblBillingInfoGrid.str_ApprovalCode.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" id="x@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" value="@Html.Raw(tblBillingInfoGrid.str_ApprovalCode.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_ApprovalCode.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.str_ApprovalCode.FormatPattern)"@Html.Raw(tblBillingInfoGrid.str_ApprovalCode.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.str_ApprovalCode.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" id="o@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_ApprovalCode.OldValue))">
+    @* str_ApprovalCode (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_ApprovalCode (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_ApprovalCode" class="el_tblBillingInfo_str_ApprovalCode">
+    <input type="@(tblBillingInfoGrid.str_ApprovalCode.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" id="x@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" value="@Html.Raw(tblBillingInfoGrid.str_ApprovalCode.EditValue)" size="30" maxlength="100" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_ApprovalCode.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.str_ApprovalCode.FormatPattern)"@Html.Raw(tblBillingInfoGrid.str_ApprovalCode.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.str_ApprovalCode.GetErrorMessage())</div>
+    </span>
+    @* str_ApprovalCode (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* str_ApprovalCode (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_ApprovalCode" class="el_tblBillingInfo_str_ApprovalCode">
+    <span @Html.Raw(tblBillingInfoGrid.str_ApprovalCode.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.str_ApprovalCode.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_ApprovalCode.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_ApprovalCode" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_ApprovalCode" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_ApprovalCode.OldValue))">
+    }
+    @* str_ApprovalCode (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.str_ApprovalCode.Visible (end) *@
+    @if (tblBillingInfoGrid.Payment_Number.Visible) { // tblBillingInfoGrid.Payment_Number.Visible (begin)
+        <td data-name="Payment_Number" @Html.Raw(tblBillingInfoGrid.Payment_Number.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* Payment_Number (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_Payment_Number" class="el_tblBillingInfo_Payment_Number">
+    <input type="@(tblBillingInfoGrid.Payment_Number.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_Payment_Number" id="x@(tblBillingInfoGrid.RowIndex)_Payment_Number" data-table="tblBillingInfo" data-field="x_Payment_Number" value="@Html.Raw(tblBillingInfoGrid.Payment_Number.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Payment_Number.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.Payment_Number.FormatPattern)"@Html.Raw(tblBillingInfoGrid.Payment_Number.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.Payment_Number.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_Payment_Number" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_Payment_Number" id="o@(tblBillingInfoGrid.RowIndex)_Payment_Number" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Payment_Number.OldValue))">
+    @* Payment_Number (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* Payment_Number (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_Payment_Number" class="el_tblBillingInfo_Payment_Number">
+    <input type="@(tblBillingInfoGrid.Payment_Number.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_Payment_Number" id="x@(tblBillingInfoGrid.RowIndex)_Payment_Number" data-table="tblBillingInfo" data-field="x_Payment_Number" value="@Html.Raw(tblBillingInfoGrid.Payment_Number.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Payment_Number.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.Payment_Number.FormatPattern)"@Html.Raw(tblBillingInfoGrid.Payment_Number.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.Payment_Number.GetErrorMessage())</div>
+    </span>
+    @* Payment_Number (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* Payment_Number (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_Payment_Number" class="el_tblBillingInfo_Payment_Number">
+    <span @Html.Raw(tblBillingInfoGrid.Payment_Number.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.Payment_Number.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_Payment_Number" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_Payment_Number" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_Payment_Number" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Payment_Number.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_Payment_Number" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_Payment_Number" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_Payment_Number" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Payment_Number.OldValue))">
+    }
+    @* Payment_Number (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.Payment_Number.Visible (end) *@
+    @if (tblBillingInfoGrid.Pricelist.Visible) { // tblBillingInfoGrid.Pricelist.Visible (begin)
+        <td data-name="Pricelist" @Html.Raw(tblBillingInfoGrid.Pricelist.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* Pricelist (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_Pricelist" class="el_tblBillingInfo_Pricelist">
+    <input type="@(tblBillingInfoGrid.Pricelist.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_Pricelist" id="x@(tblBillingInfoGrid.RowIndex)_Pricelist" data-table="tblBillingInfo" data-field="x_Pricelist" value="@Html.Raw(tblBillingInfoGrid.Pricelist.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Pricelist.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.Pricelist.FormatPattern)"@Html.Raw(tblBillingInfoGrid.Pricelist.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.Pricelist.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_Pricelist" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_Pricelist" id="o@(tblBillingInfoGrid.RowIndex)_Pricelist" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Pricelist.OldValue))">
+    @* Pricelist (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* Pricelist (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_Pricelist" class="el_tblBillingInfo_Pricelist">
+    <input type="@(tblBillingInfoGrid.Pricelist.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_Pricelist" id="x@(tblBillingInfoGrid.RowIndex)_Pricelist" data-table="tblBillingInfo" data-field="x_Pricelist" value="@Html.Raw(tblBillingInfoGrid.Pricelist.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Pricelist.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.Pricelist.FormatPattern)"@Html.Raw(tblBillingInfoGrid.Pricelist.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.Pricelist.GetErrorMessage())</div>
+    </span>
+    @* Pricelist (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* Pricelist (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_Pricelist" class="el_tblBillingInfo_Pricelist">
+    <span @Html.Raw(tblBillingInfoGrid.Pricelist.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.Pricelist.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_Pricelist" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_Pricelist" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_Pricelist" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Pricelist.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_Pricelist" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_Pricelist" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_Pricelist" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.Pricelist.OldValue))">
+    }
+    @* Pricelist (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.Pricelist.Visible (end) *@
+    @if (tblBillingInfoGrid.str_Amount_Pay.Visible) { // tblBillingInfoGrid.str_Amount_Pay.Visible (begin)
+        <td data-name="str_Amount_Pay" @Html.Raw(tblBillingInfoGrid.str_Amount_Pay.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* str_Amount_Pay (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_Amount_Pay" class="el_tblBillingInfo_str_Amount_Pay">
+    <input type="@(tblBillingInfoGrid.str_Amount_Pay.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" id="x@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" value="@Html.Raw(tblBillingInfoGrid.str_Amount_Pay.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Amount_Pay.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.str_Amount_Pay.FormatPattern)"@Html.Raw(tblBillingInfoGrid.str_Amount_Pay.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.str_Amount_Pay.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" id="o@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Amount_Pay.OldValue))">
+    @* str_Amount_Pay (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* str_Amount_Pay (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_Amount_Pay" class="el_tblBillingInfo_str_Amount_Pay">
+    <input type="@(tblBillingInfoGrid.str_Amount_Pay.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" id="x@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" value="@Html.Raw(tblBillingInfoGrid.str_Amount_Pay.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Amount_Pay.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.str_Amount_Pay.FormatPattern)"@Html.Raw(tblBillingInfoGrid.str_Amount_Pay.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.str_Amount_Pay.GetErrorMessage())</div>
+    </span>
+    @* str_Amount_Pay (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* str_Amount_Pay (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_str_Amount_Pay" class="el_tblBillingInfo_str_Amount_Pay">
+    <span @Html.Raw(tblBillingInfoGrid.str_Amount_Pay.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.str_Amount_Pay.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Amount_Pay.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_str_Amount_Pay" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_str_Amount_Pay" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.str_Amount_Pay.OldValue))">
+    }
+    @* str_Amount_Pay (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.str_Amount_Pay.Visible (end) *@
+    @if (tblBillingInfoGrid.mny_Running_Payments.Visible) { // tblBillingInfoGrid.mny_Running_Payments.Visible (begin)
+        <td data-name="mny_Running_Payments" @Html.Raw(tblBillingInfoGrid.mny_Running_Payments.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* mny_Running_Payments (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_mny_Running_Payments" class="el_tblBillingInfo_mny_Running_Payments">
+    <input type="@(tblBillingInfoGrid.mny_Running_Payments.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" id="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" data-table="tblBillingInfo" data-field="x_mny_Running_Payments" value="@Html.Raw(tblBillingInfoGrid.mny_Running_Payments.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Payments.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.mny_Running_Payments.FormatPattern)"@Html.Raw(tblBillingInfoGrid.mny_Running_Payments.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.mny_Running_Payments.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Payments" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" id="o@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Payments.OldValue))">
+    @* mny_Running_Payments (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* mny_Running_Payments (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_mny_Running_Payments" class="el_tblBillingInfo_mny_Running_Payments">
+    <input type="@(tblBillingInfoGrid.mny_Running_Payments.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" id="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" data-table="tblBillingInfo" data-field="x_mny_Running_Payments" value="@Html.Raw(tblBillingInfoGrid.mny_Running_Payments.EditValue)" size="30" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Payments.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.mny_Running_Payments.FormatPattern)"@Html.Raw(tblBillingInfoGrid.mny_Running_Payments.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.mny_Running_Payments.GetErrorMessage())</div>
+    </span>
+    @* mny_Running_Payments (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* mny_Running_Payments (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_mny_Running_Payments" class="el_tblBillingInfo_mny_Running_Payments">
+    <span @Html.Raw(tblBillingInfoGrid.mny_Running_Payments.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.mny_Running_Payments.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Payments" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Payments.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Payments" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_mny_Running_Payments" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Payments.OldValue))">
+    }
+    @* mny_Running_Payments (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.mny_Running_Payments.Visible (end) *@
+    @if (tblBillingInfoGrid.mny_Running_Balance.Visible) { // tblBillingInfoGrid.mny_Running_Balance.Visible (begin)
+        <td data-name="mny_Running_Balance" @Html.Raw(tblBillingInfoGrid.mny_Running_Balance.CellAttributes)>
+@if (tblBillingInfoGrid.RowType == RowType.Add) { // Add (begin)
+    @* mny_Running_Balance (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_mny_Running_Balance" class="el_tblBillingInfo_mny_Running_Balance">
+    <input type="@(tblBillingInfoGrid.mny_Running_Balance.InputTextType)" name="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" id="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" value="@Html.Raw(tblBillingInfoGrid.mny_Running_Balance.EditValue)" size="30" maxlength="50" placeholder="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Balance.PlaceHolder))" data-format-pattern="@(tblBillingInfoGrid.mny_Running_Balance.FormatPattern)"@Html.Raw(tblBillingInfoGrid.mny_Running_Balance.EditAttributes)>
+    <div class="invalid-feedback">@Html.Raw(tblBillingInfoGrid.mny_Running_Balance.GetErrorMessage())</div>
+    </span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" data-hidden="1" data-old name="o@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" id="o@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Balance.OldValue))">
+    @* mny_Running_Balance (end) *@
+} @* Add (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.Edit) { // Edit (begin)
+    @* mny_Running_Balance (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_mny_Running_Balance" class="el_tblBillingInfo_mny_Running_Balance">
+    <span @Html.Raw(tblBillingInfoGrid.mny_Running_Balance.ViewAttributes)>
+    <input type="text" readonly class="form-control-plaintext" value="@Html.Raw(RemoveHtml(ConvertToString(tblBillingInfoGrid.mny_Running_Balance.EditValue)))"></span>
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" data-hidden="1" name="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" id="x@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Balance.CurrentValue))">
+    </span>
+    @* mny_Running_Balance (end) *@
+} @* Edit (end) *@
+@if (tblBillingInfoGrid.RowType == RowType.View) { // View (begin)
+    @* mny_Running_Balance (begin) *@
+    <span id="el@(tblBillingInfoGrid.RowIndex == "$rowindex$" ? "$rowindex$" : tblBillingInfoGrid.RowCount)_tblBillingInfo_mny_Running_Balance" class="el_tblBillingInfo_mny_Running_Balance">
+    <span @Html.Raw(tblBillingInfoGrid.mny_Running_Balance.ViewAttributes)>
+    @Html.Raw(tblBillingInfoGrid.mny_Running_Balance.GetViewValue())</span>
+    </span>
+    if (tblBillingInfoGrid.IsConfirm) {
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" data-hidden="1" name="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" id="ftblBillingInfogrid$x@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Balance.FormValue))">
+    <input type="hidden" data-table="tblBillingInfo" data-field="x_mny_Running_Balance" data-hidden="1" data-old name="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" id="ftblBillingInfogrid$o@(tblBillingInfoGrid.RowIndex)_mny_Running_Balance" value="@Html.Raw(HtmlEncode(tblBillingInfoGrid.mny_Running_Balance.OldValue))">
+    }
+    @* mny_Running_Balance (end) *@
+} @* View (end) *@
+</td>
+    } @* tblBillingInfoGrid.mny_Running_Balance.Visible (end) *@
+    @* Render list options (body, right) *@
+    @tblBillingInfoGrid.ListOptions.RenderBody("right", tblBillingInfoGrid.RowCount)
+    </tr>
+if (tblBillingInfoGrid.RowType == RowType.Add || tblBillingInfoGrid.RowType == RowType.Edit) {
+<script>
+loadjs.ready(["ftblBillingInfogrid","load"], () => ftblBillingInfogrid.updateLists(@(tblBillingInfoGrid.RowIndex)@(tblBillingInfoGrid.IsAdd || tblBillingInfoGrid.IsEdit || tblBillingInfoGrid.IsCopy || SameString(tblBillingInfoGrid.RowIndex, "$rowindex$") ? ", true" : "")));
+</script>
+}
+    } @* End delete row checking *@
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(tblBillingInfoGrid.RowIndex, "$rowindex$"))
+        tblBillingInfoGrid.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((tblBillingInfoGrid.IsCopy || tblBillingInfoGrid.IsAdd) && tblBillingInfoGrid.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        tblBillingInfoGrid.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+@if (tblBillingInfoGrid.CurrentMode == "add" || tblBillingInfoGrid.CurrentMode == "copy") {
+<input type="hidden" name="@(tblBillingInfoGrid.FormKeyCountName)" id="@(tblBillingInfoGrid.FormKeyCountName)" value="@(tblBillingInfoGrid.KeyCount)">
+@Html.Raw(tblBillingInfoGrid.MultiSelectKey)
+}
+@if (tblBillingInfoGrid.CurrentMode == "edit") {
+<input type="hidden" name="@(tblBillingInfoGrid.FormKeyCountName)" id="@(tblBillingInfoGrid.FormKeyCountName)" value="@(tblBillingInfoGrid.KeyCount)">
+@Html.Raw(tblBillingInfoGrid.MultiSelectKey)
+}
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(tblBillingInfoGrid.CurrentMode)) {
+<input type="hidden" name="action" id="action" value="">
+}
+<input type="hidden" name="detailpage" value="ftblBillingInfogrid">
+</div><!-- /.ew-list-form -->
+@{ tblBillingInfoGrid.CloseRecordset(); }
+</div><!-- /.ew-grid -->
+} else { // Show other options
+<div class="ew-list-other-options">
+@tblBillingInfoGrid.OtherOptions.ForEach(opt => opt.ButtonClass = "").RenderBody()
+</div>
+}
+</div>
+</main>
+@if (!tblBillingInfoGrid.IsExport()) {
+<script>
+// Field event handlers
+loadjs.ready("head", function() {
+    ew.addEventHandlers("tblBillingInfo");
+});
+</script>
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}
+@{
+    // Close Recordset
+    tblBillingInfoGrid.CloseRecordset(); // DN
+    // Clear CurrentGrid
+    CurrentGrid = null;
+}

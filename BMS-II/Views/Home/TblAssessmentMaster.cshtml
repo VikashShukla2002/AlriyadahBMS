@@ -1,0 +1,91 @@
+@{
+    tblAssessment.TableClass = "table table-bordered table-hover ew-table ew-master-table"; // DN
+}
+@if (tblAssessment.Visible) { // tblAssessment.Visible (begin)
+<div class="ew-master-div">
+<table id="tbl_tblAssessmentmaster" class="table ew-view-table ew-master-table ew-vertical">
+    <tbody>
+        @if (tblAssessment.str_First_Name.Visible) { // tblAssessment.str_First_Name.Visible (begin)
+        <tr id="r_str_First_Name" @Html.Raw(tblAssessment.str_First_Name.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.str_First_Name.Caption)</td>
+            <td @Html.Raw(tblAssessment.str_First_Name.CellAttributes)>
+<span id="el_tblAssessment_str_First_Name">
+<span @Html.Raw(tblAssessment.str_First_Name.ViewAttributes)>
+@Html.Raw(tblAssessment.str_First_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.str_First_Name.Visible (end) *@
+        @if (tblAssessment.str_Middle_Name.Visible) { // tblAssessment.str_Middle_Name.Visible (begin)
+        <tr id="r_str_Middle_Name" @Html.Raw(tblAssessment.str_Middle_Name.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.str_Middle_Name.Caption)</td>
+            <td @Html.Raw(tblAssessment.str_Middle_Name.CellAttributes)>
+<span id="el_tblAssessment_str_Middle_Name">
+<span @Html.Raw(tblAssessment.str_Middle_Name.ViewAttributes)>
+@Html.Raw(tblAssessment.str_Middle_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.str_Middle_Name.Visible (end) *@
+        @if (tblAssessment.str_Last_Name.Visible) { // tblAssessment.str_Last_Name.Visible (begin)
+        <tr id="r_str_Last_Name" @Html.Raw(tblAssessment.str_Last_Name.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.str_Last_Name.Caption)</td>
+            <td @Html.Raw(tblAssessment.str_Last_Name.CellAttributes)>
+<span id="el_tblAssessment_str_Last_Name">
+<span @Html.Raw(tblAssessment.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblAssessment.str_Last_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.str_Last_Name.Visible (end) *@
+        @if (tblAssessment.str_Username.Visible) { // tblAssessment.str_Username.Visible (begin)
+        <tr id="r_str_Username" @Html.Raw(tblAssessment.str_Username.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.str_Username.Caption)</td>
+            <td @Html.Raw(tblAssessment.str_Username.CellAttributes)>
+<span id="el_tblAssessment_str_Username">
+<span @Html.Raw(tblAssessment.str_Username.ViewAttributes)>
+@Html.Raw(tblAssessment.str_Username.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.str_Username.Visible (end) *@
+        @if (tblAssessment.Assessment_Type.Visible) { // tblAssessment.Assessment_Type.Visible (begin)
+        <tr id="r_Assessment_Type" @Html.Raw(tblAssessment.Assessment_Type.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.Assessment_Type.Caption)</td>
+            <td @Html.Raw(tblAssessment.Assessment_Type.CellAttributes)>
+<span id="el_tblAssessment_Assessment_Type">
+<span @Html.Raw(tblAssessment.Assessment_Type.ViewAttributes)>
+@Html.Raw(tblAssessment.Assessment_Type.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.Assessment_Type.Visible (end) *@
+        @if (tblAssessment.AssessmentDate.Visible) { // tblAssessment.AssessmentDate.Visible (begin)
+        <tr id="r_AssessmentDate" @Html.Raw(tblAssessment.AssessmentDate.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.AssessmentDate.Caption)</td>
+            <td @Html.Raw(tblAssessment.AssessmentDate.CellAttributes)>
+<span id="el_tblAssessment_AssessmentDate">
+<span @Html.Raw(tblAssessment.AssessmentDate.ViewAttributes)>
+@Html.Raw(tblAssessment.AssessmentDate.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.AssessmentDate.Visible (end) *@
+        @if (tblAssessment.isAssessmentDone.Visible) { // tblAssessment.isAssessmentDone.Visible (begin)
+        <tr id="r_isAssessmentDone" @Html.Raw(tblAssessment.isAssessmentDone.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.isAssessmentDone.Caption)</td>
+            <td @Html.Raw(tblAssessment.isAssessmentDone.CellAttributes)>
+<span id="el_tblAssessment_isAssessmentDone">
+<span @Html.Raw(tblAssessment.isAssessmentDone.ViewAttributes)>
+@Html.Raw(tblAssessment.isAssessmentDone.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.isAssessmentDone.Visible (end) *@
+        @if (tblAssessment.AssessmentScore.Visible) { // tblAssessment.AssessmentScore.Visible (begin)
+        <tr id="r_AssessmentScore" @Html.Raw(tblAssessment.AssessmentScore.RowAttributes)>
+            <td class="@(tblAssessment.TableLeftColumnClass)">@Html.Raw(tblAssessment.AssessmentScore.Caption)</td>
+            <td @Html.Raw(tblAssessment.AssessmentScore.CellAttributes)>
+<span id="el_tblAssessment_AssessmentScore">
+<span @Html.Raw(tblAssessment.AssessmentScore.ViewAttributes)>
+@Html.Raw(tblAssessment.AssessmentScore.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblAssessment.AssessmentScore.Visible (end) *@
+    </tbody>
+</table>
+</div>
+} @* tblAssessment.Visible (end) *@

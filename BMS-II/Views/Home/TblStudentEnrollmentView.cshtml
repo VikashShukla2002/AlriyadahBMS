@@ -1,0 +1,185 @@
+@{
+    // View
+    View = this;
+
+    // Check action result
+    if (tblStudentEnrollmentView.ActionResult is EmptyResult) { // Terminate page
+        return;
+    }
+
+    // Layout
+    if (!tblStudentEnrollmentView.UseLayout) // UseLayout = false // DN
+        Layout = "";
+    else
+        Layout = "_Layout";
+
+    // Local variables (Temp data)
+    #pragma warning disable 168
+    string? sqlWrk, filterWrk, whereWrk, curVal, dispVal;
+    List<Dictionary<string, object>>? rswrk;
+    string[]? arWrk;
+    List<object?>? listWrk;
+    object? guidWrk;
+    Func<string>? lookupFilter;
+    #pragma warning restore 168
+}
+@if (!tblStudentEnrollmentView.IsExport()) {
+<script>
+loadjs.ready("head", function() {
+    // Write your client script here, no need to add script tags.
+});
+</script>
+}
+@if (!tblStudentEnrollmentView.IsExport()) {
+<div class="btn-toolbar ew-toolbar">
+    @tblStudentEnrollmentView.ExportOptions.RenderBody()
+    @tblStudentEnrollmentView.OtherOptions.RenderBody()
+</div>
+}
+@tblStudentEnrollmentView.ShowPageHeader()
+@tblStudentEnrollmentView.ShowMessages()
+<main class="view">
+<form name="ftblStudentEnrollmentview" id="ftblStudentEnrollmentview" class="ew-form ew-view-form overlay-wrapper" action="@AppPath(CurrentPageName())" method="post" novalidate autocomplete="off">
+@if (!tblStudentEnrollmentView.IsExport()) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(tblStudentEnrollmentView.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { tblStudentEnrollment: currentTable } });
+var currentPageID = ew.PAGE_ID = "view";
+var currentForm;
+var ftblStudentEnrollmentview;
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("ftblStudentEnrollmentview")
+        .setPageId("view")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+}
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+<input type="hidden" name="modal" value="@ConvertToInt(tblStudentEnrollmentView.IsModal)">
+<table class="@(tblStudentEnrollmentView.TableClass)">
+@if (tblStudentEnrollmentView.str_Full_Name.Visible) { // tblStudentEnrollmentView.str_Full_Name.Visible (begin)
+    <tr id="r_str_Full_Name" @Html.Raw(tblStudentEnrollmentView.str_Full_Name.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Full_Name">@Html.Raw(tblStudentEnrollmentView.str_Full_Name.Caption)</span></td>
+        <td data-name="str_Full_Name" @Html.Raw(tblStudentEnrollmentView.str_Full_Name.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Full_Name">
+<span @Html.Raw(tblStudentEnrollmentView.str_Full_Name.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.str_Full_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.str_Full_Name.Visible (end) *@
+@if (tblStudentEnrollmentView.NationalID.Visible) { // tblStudentEnrollmentView.NationalID.Visible (begin)
+    <tr id="r_NationalID" @Html.Raw(tblStudentEnrollmentView.NationalID.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_NationalID">@Html.Raw(tblStudentEnrollmentView.NationalID.Caption)</span></td>
+        <td data-name="NationalID" @Html.Raw(tblStudentEnrollmentView.NationalID.CellAttributes)>
+<span id="el_tblStudentEnrollment_NationalID">
+<span @Html.Raw(tblStudentEnrollmentView.NationalID.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.NationalID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.NationalID.Visible (end) *@
+@if (tblStudentEnrollmentView.int_CR_ID.Visible) { // tblStudentEnrollmentView.int_CR_ID.Visible (begin)
+    <tr id="r_int_CR_ID" @Html.Raw(tblStudentEnrollmentView.int_CR_ID.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_int_CR_ID">@Html.Raw(tblStudentEnrollmentView.int_CR_ID.Caption)</span></td>
+        <td data-name="int_CR_ID" @Html.Raw(tblStudentEnrollmentView.int_CR_ID.CellAttributes)>
+<span id="el_tblStudentEnrollment_int_CR_ID">
+<span @Html.Raw(tblStudentEnrollmentView.int_CR_ID.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.int_CR_ID.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.int_CR_ID.Visible (end) *@
+@if (tblStudentEnrollmentView.str_Package_Name.Visible) { // tblStudentEnrollmentView.str_Package_Name.Visible (begin)
+    <tr id="r_str_Package_Name" @Html.Raw(tblStudentEnrollmentView.str_Package_Name.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Package_Name">@Html.Raw(tblStudentEnrollmentView.str_Package_Name.Caption)</span></td>
+        <td data-name="str_Package_Name" @Html.Raw(tblStudentEnrollmentView.str_Package_Name.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Package_Name">
+<span @Html.Raw(tblStudentEnrollmentView.str_Package_Name.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.str_Package_Name.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.str_Package_Name.Visible (end) *@
+@if (tblStudentEnrollmentView.str_PurchaseAmount.Visible) { // tblStudentEnrollmentView.str_PurchaseAmount.Visible (begin)
+    <tr id="r_str_PurchaseAmount" @Html.Raw(tblStudentEnrollmentView.str_PurchaseAmount.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_str_PurchaseAmount">@Html.Raw(tblStudentEnrollmentView.str_PurchaseAmount.Caption)</span></td>
+        <td data-name="str_PurchaseAmount" @Html.Raw(tblStudentEnrollmentView.str_PurchaseAmount.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_PurchaseAmount">
+<span @Html.Raw(tblStudentEnrollmentView.str_PurchaseAmount.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.str_PurchaseAmount.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.str_PurchaseAmount.Visible (end) *@
+@if (tblStudentEnrollmentView.course.Visible) { // tblStudentEnrollmentView.course.Visible (begin)
+    <tr id="r_course" @Html.Raw(tblStudentEnrollmentView.course.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_course">@Html.Raw(tblStudentEnrollmentView.course.Caption)</span></td>
+        <td data-name="course" @Html.Raw(tblStudentEnrollmentView.course.CellAttributes)>
+<span id="el_tblStudentEnrollment_course">
+<span @Html.Raw(tblStudentEnrollmentView.course.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.course.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.course.Visible (end) *@
+@if (tblStudentEnrollmentView.institution.Visible) { // tblStudentEnrollmentView.institution.Visible (begin)
+    <tr id="r_institution" @Html.Raw(tblStudentEnrollmentView.institution.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_institution">@Html.Raw(tblStudentEnrollmentView.institution.Caption)</span></td>
+        <td data-name="institution" @Html.Raw(tblStudentEnrollmentView.institution.CellAttributes)>
+<span id="el_tblStudentEnrollment_institution">
+<span @Html.Raw(tblStudentEnrollmentView.institution.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.institution.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.institution.Visible (end) *@
+@if (tblStudentEnrollmentView.str_Notes.Visible) { // tblStudentEnrollmentView.str_Notes.Visible (begin)
+    <tr id="r_str_Notes" @Html.Raw(tblStudentEnrollmentView.str_Notes.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Notes">@Html.Raw(tblStudentEnrollmentView.str_Notes.Caption)</span></td>
+        <td data-name="str_Notes" @Html.Raw(tblStudentEnrollmentView.str_Notes.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Notes">
+<span @Html.Raw(tblStudentEnrollmentView.str_Notes.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.str_Notes.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.str_Notes.Visible (end) *@
+@if (tblStudentEnrollmentView.str_Amount_Pay.Visible) { // tblStudentEnrollmentView.str_Amount_Pay.Visible (begin)
+    <tr id="r_str_Amount_Pay" @Html.Raw(tblStudentEnrollmentView.str_Amount_Pay.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_str_Amount_Pay">@Html.Raw(tblStudentEnrollmentView.str_Amount_Pay.Caption)</span></td>
+        <td data-name="str_Amount_Pay" @Html.Raw(tblStudentEnrollmentView.str_Amount_Pay.CellAttributes)>
+<span id="el_tblStudentEnrollment_str_Amount_Pay">
+<span @Html.Raw(tblStudentEnrollmentView.str_Amount_Pay.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.str_Amount_Pay.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.str_Amount_Pay.Visible (end) *@
+@if (tblStudentEnrollmentView.UniqueIdx.Visible) { // tblStudentEnrollmentView.UniqueIdx.Visible (begin)
+    <tr id="r_UniqueIdx" @Html.Raw(tblStudentEnrollmentView.UniqueIdx.RowAttributes)>
+        <td class="@(tblStudentEnrollmentView.TableLeftColumnClass)"><span id="elh_tblStudentEnrollment_UniqueIdx">@Html.Raw(tblStudentEnrollmentView.UniqueIdx.Caption)</span></td>
+        <td data-name="UniqueIdx" @Html.Raw(tblStudentEnrollmentView.UniqueIdx.CellAttributes)>
+<span id="el_tblStudentEnrollment_UniqueIdx">
+<span @Html.Raw(tblStudentEnrollmentView.UniqueIdx.ViewAttributes)>
+@Html.Raw(tblStudentEnrollmentView.UniqueIdx.GetViewValue())</span>
+</span></td>
+    </tr>
+} @* tblStudentEnrollmentView.UniqueIdx.Visible (end) *@
+</table>
+@{ tblStudentEnrollmentView.CloseRecordset(); }
+</form>
+</main>
+@tblStudentEnrollmentView.ShowPageFooter()
+@Html.Raw(GetDebugMessage())
+@ElapsedTime()
+@if (!tblStudentEnrollmentView.IsExport()) {
+<script>
+loadjs.ready("load", function() {
+    // Write your table-specific startup script here
+    // document.write("page loaded");
+});
+</script>
+}

@@ -1,0 +1,451 @@
+@if (qryStaffListList.ModalGridAdd && qryStaffListList.IsGridAdd || qryStaffListList.ModalGridEdit && qryStaffListList.IsGridEdit || qryStaffListList.ModalMultiEdit && qryStaffListList.IsMultiEdit) {
+<script>
+var currentTable = @Html.Raw(ConvertToJson(qryStaffListList.ToClientVar()));
+ew.deepAssign(ew.vars, { tables: { qryStaffList: currentTable } });
+var currentPageID = ew.PAGE_ID = "list";
+var currentForm;
+var @(qryStaffListList.FormName);
+loadjs.ready(["wrapper", "head"], function () {
+    let $ = jQuery;
+    let fields = currentTable.fields;
+
+    // Form object
+    let form = new ew.FormBuilder()
+        .setId("@(qryStaffListList.FormName)")
+        .setPageId("list")
+        .setSubmitWithFetch(@(qryStaffListList.UseAjaxActions ? "true" : "false"))
+        .setFormKeyCountName("@(qryStaffListList.FormKeyCountName)")
+        .build();
+    window[form.id] = form;
+    currentForm = form;
+    loadjs.done(form.id);
+});
+</script>
+<script>
+ew.PREVIEW_SELECTOR = ".ew-preview-btn";
+ew.PREVIEW_MODAL_CLASS = "modal modal-fullscreen-sm-down";
+ew.PREVIEW_ROW = true;
+ew.PREVIEW_SINGLE_ROW = false;
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=20.5.0", "preview");
+</script>
+}
+<div class="card ew-card ew-grid@(qryStaffListList.IsAddOrEdit ? " ew-grid-add-edit" : "") @(qryStaffListList.TableGridClass)">
+@if (!qryStaffListList.IsExport()) {
+<div class="card-header ew-grid-upper-panel">
+@if (!qryStaffListList.IsGridAdd && !(qryStaffListList.IsGridEdit && qryStaffListList.ModalGridEdit) && !qryStaffListList.IsMultiEdit) {
+@Html.Raw(qryStaffListList.Pager.Render())
+}
+<div class="ew-list-other-options">
+@qryStaffListList.OtherOptions.RenderBody()
+</div>
+</div>
+}
+<form name="@(qryStaffListList.FormName)" id="@(qryStaffListList.FormName)" class="ew-form ew-list-form ew-multi-column-form" action="@AppPath(qryStaffListList.PageName)" method="post" novalidate autocomplete="off">
+@if (CurrentPage.CheckToken) {
+    <input type="hidden" name="@Config.TokenNameKey" value="@Config.TokenName"><!-- CSRF token name -->
+    @Html.AntiForgeryToken()
+}
+@if (qryStaffListList.IsModal) {
+<input type="hidden" name="modal" value="1">
+}
+<div id="gmp_qryStaffList" class="card-body ew-grid-middle-panel @(qryStaffListList.TableContainerClass)" style="@(qryStaffListList.TableContainerStyle)">
+@if (qryStaffListList.TotalRecords > 0 || qryStaffListList.IsGridEdit || qryStaffListList.IsMultiEdit) {
+<table id="tbl_qryStaffListlist" class="@(qryStaffListList.TableClass)"><!-- .ew-table -->
+<thead>
+    <tr class="ew-table-header">
+@{
+    // Header row
+    qryStaffListList.RowType = RowType.Header;
+
+    // Render list options
+    await qryStaffListList.RenderListOptions();
+}
+@* Render list options (header, left) *@
+@qryStaffListList.ListOptions.RenderHeader("left")
+@if (qryStaffListList.int_Staff_Id.Visible) { // qryStaffListList.int_Staff_Id.Visible (begin)
+        <th data-name="int_Staff_Id" class="@(qryStaffListList.int_Staff_Id.HeaderCellClass)"><div id="elh_qryStaffList_int_Staff_Id" class="qryStaffList_int_Staff_Id">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.int_Staff_Id))</div></th>
+} @* qryStaffListList.int_Staff_Id.Visible (end) *@
+@if (qryStaffListList.str_Password.Visible) { // qryStaffListList.str_Password.Visible (begin)
+        <th data-name="str_Password" class="@(qryStaffListList.str_Password.HeaderCellClass)"><div id="elh_qryStaffList_str_Password" class="qryStaffList_str_Password">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Password))</div></th>
+} @* qryStaffListList.str_Password.Visible (end) *@
+@if (qryStaffListList.str_NationalID_Iqama.Visible) { // qryStaffListList.str_NationalID_Iqama.Visible (begin)
+        <th data-name="str_NationalID_Iqama" class="@(qryStaffListList.str_NationalID_Iqama.HeaderCellClass)"><div id="elh_qryStaffList_str_NationalID_Iqama" class="qryStaffList_str_NationalID_Iqama">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_NationalID_Iqama))</div></th>
+} @* qryStaffListList.str_NationalID_Iqama.Visible (end) *@
+@if (qryStaffListList.NationalID.Visible) { // qryStaffListList.NationalID.Visible (begin)
+        <th data-name="NationalID" class="@(qryStaffListList.NationalID.HeaderCellClass)"><div id="elh_qryStaffList_NationalID" class="qryStaffList_NationalID">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.NationalID))</div></th>
+} @* qryStaffListList.NationalID.Visible (end) *@
+@if (qryStaffListList.str_Full_Name.Visible) { // qryStaffListList.str_Full_Name.Visible (begin)
+        <th data-name="str_Full_Name" class="@(qryStaffListList.str_Full_Name.HeaderCellClass)"><div id="elh_qryStaffList_str_Full_Name" class="qryStaffList_str_Full_Name">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Full_Name))</div></th>
+} @* qryStaffListList.str_Full_Name.Visible (end) *@
+@if (qryStaffListList.User_Role.Visible) { // qryStaffListList.User_Role.Visible (begin)
+        <th data-name="User_Role" class="@(qryStaffListList.User_Role.HeaderCellClass)"><div id="elh_qryStaffList_User_Role" class="qryStaffList_User_Role">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.User_Role))</div></th>
+} @* qryStaffListList.User_Role.Visible (end) *@
+@if (qryStaffListList.UserlevelID.Visible) { // qryStaffListList.UserlevelID.Visible (begin)
+        <th data-name="UserlevelID" class="@(qryStaffListList.UserlevelID.HeaderCellClass)"><div id="elh_qryStaffList_UserlevelID" class="qryStaffList_UserlevelID">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.UserlevelID))</div></th>
+} @* qryStaffListList.UserlevelID.Visible (end) *@
+@if (qryStaffListList.Activated.Visible) { // qryStaffListList.Activated.Visible (begin)
+        <th data-name="Activated" class="@(qryStaffListList.Activated.HeaderCellClass)"><div id="elh_qryStaffList_Activated" class="qryStaffList_Activated">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.Activated))</div></th>
+} @* qryStaffListList.Activated.Visible (end) *@
+@if (qryStaffListList.Supervisor_Username.Visible) { // qryStaffListList.Supervisor_Username.Visible (begin)
+        <th data-name="Supervisor_Username" class="@(qryStaffListList.Supervisor_Username.HeaderCellClass)"><div id="elh_qryStaffList_Supervisor_Username" class="qryStaffList_Supervisor_Username">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.Supervisor_Username))</div></th>
+} @* qryStaffListList.Supervisor_Username.Visible (end) *@
+@if (qryStaffListList.str_Staff_Username.Visible) { // qryStaffListList.str_Staff_Username.Visible (begin)
+        <th data-name="str_Staff_Username" class="@(qryStaffListList.str_Staff_Username.HeaderCellClass)"><div id="elh_qryStaffList_str_Staff_Username" class="qryStaffList_str_Staff_Username">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Staff_Username))</div></th>
+} @* qryStaffListList.str_Staff_Username.Visible (end) *@
+@if (qryStaffListList.str_First_Name.Visible) { // qryStaffListList.str_First_Name.Visible (begin)
+        <th data-name="str_First_Name" class="@(qryStaffListList.str_First_Name.HeaderCellClass)"><div id="elh_qryStaffList_str_First_Name" class="qryStaffList_str_First_Name">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_First_Name))</div></th>
+} @* qryStaffListList.str_First_Name.Visible (end) *@
+@if (qryStaffListList.str_Middle_Name.Visible) { // qryStaffListList.str_Middle_Name.Visible (begin)
+        <th data-name="str_Middle_Name" class="@(qryStaffListList.str_Middle_Name.HeaderCellClass)"><div id="elh_qryStaffList_str_Middle_Name" class="qryStaffList_str_Middle_Name">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Middle_Name))</div></th>
+} @* qryStaffListList.str_Middle_Name.Visible (end) *@
+@if (qryStaffListList.str_Last_Name.Visible) { // qryStaffListList.str_Last_Name.Visible (begin)
+        <th data-name="str_Last_Name" class="@(qryStaffListList.str_Last_Name.HeaderCellClass)"><div id="elh_qryStaffList_str_Last_Name" class="qryStaffList_str_Last_Name">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Last_Name))</div></th>
+} @* qryStaffListList.str_Last_Name.Visible (end) *@
+@if (qryStaffListList.str_Address.Visible) { // qryStaffListList.str_Address.Visible (begin)
+        <th data-name="str_Address" class="@(qryStaffListList.str_Address.HeaderCellClass)"><div id="elh_qryStaffList_str_Address" class="qryStaffList_str_Address">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Address))</div></th>
+} @* qryStaffListList.str_Address.Visible (end) *@
+@if (qryStaffListList.str_City.Visible) { // qryStaffListList.str_City.Visible (begin)
+        <th data-name="str_City" class="@(qryStaffListList.str_City.HeaderCellClass)"><div id="elh_qryStaffList_str_City" class="qryStaffList_str_City">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_City))</div></th>
+} @* qryStaffListList.str_City.Visible (end) *@
+@if (qryStaffListList.int_State.Visible) { // qryStaffListList.int_State.Visible (begin)
+        <th data-name="int_State" class="@(qryStaffListList.int_State.HeaderCellClass)"><div id="elh_qryStaffList_int_State" class="qryStaffList_int_State">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.int_State))</div></th>
+} @* qryStaffListList.int_State.Visible (end) *@
+@if (qryStaffListList.str_Zip.Visible) { // qryStaffListList.str_Zip.Visible (begin)
+        <th data-name="str_Zip" class="@(qryStaffListList.str_Zip.HeaderCellClass)"><div id="elh_qryStaffList_str_Zip" class="qryStaffList_str_Zip">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Zip))</div></th>
+} @* qryStaffListList.str_Zip.Visible (end) *@
+@if (qryStaffListList.str_Home_Phone.Visible) { // qryStaffListList.str_Home_Phone.Visible (begin)
+        <th data-name="str_Home_Phone" class="@(qryStaffListList.str_Home_Phone.HeaderCellClass)"><div id="elh_qryStaffList_str_Home_Phone" class="qryStaffList_str_Home_Phone">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Home_Phone))</div></th>
+} @* qryStaffListList.str_Home_Phone.Visible (end) *@
+@if (qryStaffListList.str_Cell_Phone.Visible) { // qryStaffListList.str_Cell_Phone.Visible (begin)
+        <th data-name="str_Cell_Phone" class="@(qryStaffListList.str_Cell_Phone.HeaderCellClass)"><div id="elh_qryStaffList_str_Cell_Phone" class="qryStaffList_str_Cell_Phone">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Cell_Phone))</div></th>
+} @* qryStaffListList.str_Cell_Phone.Visible (end) *@
+@if (qryStaffListList.str_Email.Visible) { // qryStaffListList.str_Email.Visible (begin)
+        <th data-name="str_Email" class="@(qryStaffListList.str_Email.HeaderCellClass)"><div id="elh_qryStaffList_str_Email" class="qryStaffList_str_Email">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.str_Email))</div></th>
+} @* qryStaffListList.str_Email.Visible (end) *@
+@if (qryStaffListList.date_Birth.Visible) { // qryStaffListList.date_Birth.Visible (begin)
+        <th data-name="date_Birth" class="@(qryStaffListList.date_Birth.HeaderCellClass)"><div id="elh_qryStaffList_date_Birth" class="qryStaffList_date_Birth">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.date_Birth))</div></th>
+} @* qryStaffListList.date_Birth.Visible (end) *@
+@if (qryStaffListList.date_Birth_Hijri.Visible) { // qryStaffListList.date_Birth_Hijri.Visible (begin)
+        <th data-name="date_Birth_Hijri" class="@(qryStaffListList.date_Birth_Hijri.HeaderCellClass)"><div id="elh_qryStaffList_date_Birth_Hijri" class="qryStaffList_date_Birth_Hijri">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.date_Birth_Hijri))</div></th>
+} @* qryStaffListList.date_Birth_Hijri.Visible (end) *@
+@if (qryStaffListList.int_Location.Visible) { // qryStaffListList.int_Location.Visible (begin)
+        <th data-name="int_Location" class="@(qryStaffListList.int_Location.HeaderCellClass)"><div id="elh_qryStaffList_int_Location" class="qryStaffList_int_Location">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.int_Location))</div></th>
+} @* qryStaffListList.int_Location.Visible (end) *@
+@if (qryStaffListList.date_Created.Visible) { // qryStaffListList.date_Created.Visible (begin)
+        <th data-name="date_Created" class="@(qryStaffListList.date_Created.HeaderCellClass)"><div id="elh_qryStaffList_date_Created" class="qryStaffList_date_Created">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.date_Created))</div></th>
+} @* qryStaffListList.date_Created.Visible (end) *@
+@if (qryStaffListList.date_Modified.Visible) { // qryStaffListList.date_Modified.Visible (begin)
+        <th data-name="date_Modified" class="@(qryStaffListList.date_Modified.HeaderCellClass)"><div id="elh_qryStaffList_date_Modified" class="qryStaffList_date_Modified">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.date_Modified))</div></th>
+} @* qryStaffListList.date_Modified.Visible (end) *@
+@if (qryStaffListList.int_Created_By.Visible) { // qryStaffListList.int_Created_By.Visible (begin)
+        <th data-name="int_Created_By" class="@(qryStaffListList.int_Created_By.HeaderCellClass)"><div id="elh_qryStaffList_int_Created_By" class="qryStaffList_int_Created_By">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.int_Created_By))</div></th>
+} @* qryStaffListList.int_Created_By.Visible (end) *@
+@if (qryStaffListList.int_Modified_By.Visible) { // qryStaffListList.int_Modified_By.Visible (begin)
+        <th data-name="int_Modified_By" class="@(qryStaffListList.int_Modified_By.HeaderCellClass)"><div id="elh_qryStaffList_int_Modified_By" class="qryStaffList_int_Modified_By">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.int_Modified_By))</div></th>
+} @* qryStaffListList.int_Modified_By.Visible (end) *@
+@if (qryStaffListList.int_Nationality.Visible) { // qryStaffListList.int_Nationality.Visible (begin)
+        <th data-name="int_Nationality" class="@(qryStaffListList.int_Nationality.HeaderCellClass)"><div id="elh_qryStaffList_int_Nationality" class="qryStaffList_int_Nationality">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.int_Nationality))</div></th>
+} @* qryStaffListList.int_Nationality.Visible (end) *@
+@if (qryStaffListList.Hijri_Day.Visible) { // qryStaffListList.Hijri_Day.Visible (begin)
+        <th data-name="Hijri_Day" class="@(qryStaffListList.Hijri_Day.HeaderCellClass)"><div id="elh_qryStaffList_Hijri_Day" class="qryStaffList_Hijri_Day">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.Hijri_Day))</div></th>
+} @* qryStaffListList.Hijri_Day.Visible (end) *@
+@if (qryStaffListList.Hijri_Month.Visible) { // qryStaffListList.Hijri_Month.Visible (begin)
+        <th data-name="Hijri_Month" class="@(qryStaffListList.Hijri_Month.HeaderCellClass)"><div id="elh_qryStaffList_Hijri_Month" class="qryStaffList_Hijri_Month">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.Hijri_Month))</div></th>
+} @* qryStaffListList.Hijri_Month.Visible (end) *@
+@if (qryStaffListList.Hijri_Year.Visible) { // qryStaffListList.Hijri_Year.Visible (begin)
+        <th data-name="Hijri_Year" class="@(qryStaffListList.Hijri_Year.HeaderCellClass)"><div id="elh_qryStaffList_Hijri_Year" class="qryStaffList_Hijri_Year">@Html.Raw(qryStaffListList.RenderFieldHeader(qryStaffListList.Hijri_Year))</div></th>
+} @* qryStaffListList.Hijri_Year.Visible (end) *@
+@* Render list options (header, right) *@
+@qryStaffListList.ListOptions.RenderHeader("right")
+    </tr>
+</thead>
+<tbody data-page="@(qryStaffListList.PageNumber)">
+@{
+    await qryStaffListList.SetupGrid();
+    bool eof = qryStaffListList.Recordset == null; // DN
+}
+@while (qryStaffListList.RecordCount < qryStaffListList.StopRecord || SameString(qryStaffListList.RowIndex, "$rowindex$")) { // Begin While
+    if (!eof && !SameString(qryStaffListList.RowIndex, "$rowindex$") &&
+        (!qryStaffListList.IsGridAdd || qryStaffListList.CurrentMode == "copy") &&
+        (!((qryStaffListList.IsCopy || qryStaffListList.IsAdd) && qryStaffListList.RowIndex is int rowIndex && rowIndex == 0))) // DN
+        eof = !await qryStaffListList.Recordset.ReadAsync();
+    qryStaffListList.RecordCount++;
+    if (qryStaffListList.RecordCount >= qryStaffListList.StartRecord) {
+        await qryStaffListList.SetupRow();
+    <tr @Html.Raw(qryStaffListList.RowAttributes)>
+    @* Render list options (body, left) *@
+    @qryStaffListList.ListOptions.RenderBody("left", qryStaffListList.RowCount)
+    @if (qryStaffListList.int_Staff_Id.Visible) { // qryStaffListList.int_Staff_Id.Visible (begin)
+        <td data-name="int_Staff_Id" @Html.Raw(qryStaffListList.int_Staff_Id.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_int_Staff_Id" class="el_qryStaffList_int_Staff_Id">
+<span @Html.Raw(qryStaffListList.int_Staff_Id.ViewAttributes)>
+@Html.Raw(qryStaffListList.int_Staff_Id.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.int_Staff_Id.Visible (end) *@
+    @if (qryStaffListList.str_Password.Visible) { // qryStaffListList.str_Password.Visible (begin)
+        <td data-name="str_Password" @Html.Raw(qryStaffListList.str_Password.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Password" class="el_qryStaffList_str_Password">
+<span @Html.Raw(qryStaffListList.str_Password.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Password.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Password.Visible (end) *@
+    @if (qryStaffListList.str_NationalID_Iqama.Visible) { // qryStaffListList.str_NationalID_Iqama.Visible (begin)
+        <td data-name="str_NationalID_Iqama" @Html.Raw(qryStaffListList.str_NationalID_Iqama.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_NationalID_Iqama" class="el_qryStaffList_str_NationalID_Iqama">
+<span @Html.Raw(qryStaffListList.str_NationalID_Iqama.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_NationalID_Iqama.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_NationalID_Iqama.Visible (end) *@
+    @if (qryStaffListList.NationalID.Visible) { // qryStaffListList.NationalID.Visible (begin)
+        <td data-name="NationalID" @Html.Raw(qryStaffListList.NationalID.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_NationalID" class="el_qryStaffList_NationalID">
+<span @Html.Raw(qryStaffListList.NationalID.ViewAttributes)>
+@Html.Raw(qryStaffListList.NationalID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.NationalID.Visible (end) *@
+    @if (qryStaffListList.str_Full_Name.Visible) { // qryStaffListList.str_Full_Name.Visible (begin)
+        <td data-name="str_Full_Name" @Html.Raw(qryStaffListList.str_Full_Name.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Full_Name" class="el_qryStaffList_str_Full_Name">
+<span @Html.Raw(qryStaffListList.str_Full_Name.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Full_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Full_Name.Visible (end) *@
+    @if (qryStaffListList.User_Role.Visible) { // qryStaffListList.User_Role.Visible (begin)
+        <td data-name="User_Role" @Html.Raw(qryStaffListList.User_Role.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_User_Role" class="el_qryStaffList_User_Role">
+<span @Html.Raw(qryStaffListList.User_Role.ViewAttributes)>
+@Html.Raw(qryStaffListList.User_Role.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.User_Role.Visible (end) *@
+    @if (qryStaffListList.UserlevelID.Visible) { // qryStaffListList.UserlevelID.Visible (begin)
+        <td data-name="UserlevelID" @Html.Raw(qryStaffListList.UserlevelID.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_UserlevelID" class="el_qryStaffList_UserlevelID">
+<span @Html.Raw(qryStaffListList.UserlevelID.ViewAttributes)>
+@Html.Raw(qryStaffListList.UserlevelID.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.UserlevelID.Visible (end) *@
+    @if (qryStaffListList.Activated.Visible) { // qryStaffListList.Activated.Visible (begin)
+        <td data-name="Activated" @Html.Raw(qryStaffListList.Activated.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_Activated" class="el_qryStaffList_Activated">
+<span @Html.Raw(qryStaffListList.Activated.ViewAttributes)>
+<div class="form-check d-inline-block">
+    <input type="checkbox" id="x_Activated_@(qryStaffListList.RowCount)" class="form-check-input" value="@(qryStaffListList.Activated.GetViewValue())" disabled checked="@(ConvertToBool(qryStaffListList.Activated.CurrentValue))">
+    <label class="form-check-label" for="x_Activated_@(qryStaffListList.RowCount)"></label>
+</div></span>
+</span>
+</td>
+    } @* qryStaffListList.Activated.Visible (end) *@
+    @if (qryStaffListList.Supervisor_Username.Visible) { // qryStaffListList.Supervisor_Username.Visible (begin)
+        <td data-name="Supervisor_Username" @Html.Raw(qryStaffListList.Supervisor_Username.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_Supervisor_Username" class="el_qryStaffList_Supervisor_Username">
+<span @Html.Raw(qryStaffListList.Supervisor_Username.ViewAttributes)>
+@Html.Raw(qryStaffListList.Supervisor_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.Supervisor_Username.Visible (end) *@
+    @if (qryStaffListList.str_Staff_Username.Visible) { // qryStaffListList.str_Staff_Username.Visible (begin)
+        <td data-name="str_Staff_Username" @Html.Raw(qryStaffListList.str_Staff_Username.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Staff_Username" class="el_qryStaffList_str_Staff_Username">
+<span @Html.Raw(qryStaffListList.str_Staff_Username.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Staff_Username.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Staff_Username.Visible (end) *@
+    @if (qryStaffListList.str_First_Name.Visible) { // qryStaffListList.str_First_Name.Visible (begin)
+        <td data-name="str_First_Name" @Html.Raw(qryStaffListList.str_First_Name.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_First_Name" class="el_qryStaffList_str_First_Name">
+<span @Html.Raw(qryStaffListList.str_First_Name.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_First_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_First_Name.Visible (end) *@
+    @if (qryStaffListList.str_Middle_Name.Visible) { // qryStaffListList.str_Middle_Name.Visible (begin)
+        <td data-name="str_Middle_Name" @Html.Raw(qryStaffListList.str_Middle_Name.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Middle_Name" class="el_qryStaffList_str_Middle_Name">
+<span @Html.Raw(qryStaffListList.str_Middle_Name.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Middle_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Middle_Name.Visible (end) *@
+    @if (qryStaffListList.str_Last_Name.Visible) { // qryStaffListList.str_Last_Name.Visible (begin)
+        <td data-name="str_Last_Name" @Html.Raw(qryStaffListList.str_Last_Name.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Last_Name" class="el_qryStaffList_str_Last_Name">
+<span @Html.Raw(qryStaffListList.str_Last_Name.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Last_Name.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Last_Name.Visible (end) *@
+    @if (qryStaffListList.str_Address.Visible) { // qryStaffListList.str_Address.Visible (begin)
+        <td data-name="str_Address" @Html.Raw(qryStaffListList.str_Address.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Address" class="el_qryStaffList_str_Address">
+<span @Html.Raw(qryStaffListList.str_Address.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Address.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Address.Visible (end) *@
+    @if (qryStaffListList.str_City.Visible) { // qryStaffListList.str_City.Visible (begin)
+        <td data-name="str_City" @Html.Raw(qryStaffListList.str_City.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_City" class="el_qryStaffList_str_City">
+<span @Html.Raw(qryStaffListList.str_City.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_City.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_City.Visible (end) *@
+    @if (qryStaffListList.int_State.Visible) { // qryStaffListList.int_State.Visible (begin)
+        <td data-name="int_State" @Html.Raw(qryStaffListList.int_State.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_int_State" class="el_qryStaffList_int_State">
+<span @Html.Raw(qryStaffListList.int_State.ViewAttributes)>
+@Html.Raw(qryStaffListList.int_State.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.int_State.Visible (end) *@
+    @if (qryStaffListList.str_Zip.Visible) { // qryStaffListList.str_Zip.Visible (begin)
+        <td data-name="str_Zip" @Html.Raw(qryStaffListList.str_Zip.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Zip" class="el_qryStaffList_str_Zip">
+<span @Html.Raw(qryStaffListList.str_Zip.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Zip.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Zip.Visible (end) *@
+    @if (qryStaffListList.str_Home_Phone.Visible) { // qryStaffListList.str_Home_Phone.Visible (begin)
+        <td data-name="str_Home_Phone" @Html.Raw(qryStaffListList.str_Home_Phone.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Home_Phone" class="el_qryStaffList_str_Home_Phone">
+<span @Html.Raw(qryStaffListList.str_Home_Phone.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Home_Phone.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Home_Phone.Visible (end) *@
+    @if (qryStaffListList.str_Cell_Phone.Visible) { // qryStaffListList.str_Cell_Phone.Visible (begin)
+        <td data-name="str_Cell_Phone" @Html.Raw(qryStaffListList.str_Cell_Phone.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Cell_Phone" class="el_qryStaffList_str_Cell_Phone">
+<span @Html.Raw(qryStaffListList.str_Cell_Phone.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Cell_Phone.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Cell_Phone.Visible (end) *@
+    @if (qryStaffListList.str_Email.Visible) { // qryStaffListList.str_Email.Visible (begin)
+        <td data-name="str_Email" @Html.Raw(qryStaffListList.str_Email.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_str_Email" class="el_qryStaffList_str_Email">
+<span @Html.Raw(qryStaffListList.str_Email.ViewAttributes)>
+@Html.Raw(qryStaffListList.str_Email.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.str_Email.Visible (end) *@
+    @if (qryStaffListList.date_Birth.Visible) { // qryStaffListList.date_Birth.Visible (begin)
+        <td data-name="date_Birth" @Html.Raw(qryStaffListList.date_Birth.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_date_Birth" class="el_qryStaffList_date_Birth">
+<span @Html.Raw(qryStaffListList.date_Birth.ViewAttributes)>
+@Html.Raw(qryStaffListList.date_Birth.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.date_Birth.Visible (end) *@
+    @if (qryStaffListList.date_Birth_Hijri.Visible) { // qryStaffListList.date_Birth_Hijri.Visible (begin)
+        <td data-name="date_Birth_Hijri" @Html.Raw(qryStaffListList.date_Birth_Hijri.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_date_Birth_Hijri" class="el_qryStaffList_date_Birth_Hijri">
+<span @Html.Raw(qryStaffListList.date_Birth_Hijri.ViewAttributes)>
+@Html.Raw(qryStaffListList.date_Birth_Hijri.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.date_Birth_Hijri.Visible (end) *@
+    @if (qryStaffListList.int_Location.Visible) { // qryStaffListList.int_Location.Visible (begin)
+        <td data-name="int_Location" @Html.Raw(qryStaffListList.int_Location.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_int_Location" class="el_qryStaffList_int_Location">
+<span @Html.Raw(qryStaffListList.int_Location.ViewAttributes)>
+@Html.Raw(qryStaffListList.int_Location.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.int_Location.Visible (end) *@
+    @if (qryStaffListList.date_Created.Visible) { // qryStaffListList.date_Created.Visible (begin)
+        <td data-name="date_Created" @Html.Raw(qryStaffListList.date_Created.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_date_Created" class="el_qryStaffList_date_Created">
+<span @Html.Raw(qryStaffListList.date_Created.ViewAttributes)>
+@Html.Raw(qryStaffListList.date_Created.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.date_Created.Visible (end) *@
+    @if (qryStaffListList.date_Modified.Visible) { // qryStaffListList.date_Modified.Visible (begin)
+        <td data-name="date_Modified" @Html.Raw(qryStaffListList.date_Modified.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_date_Modified" class="el_qryStaffList_date_Modified">
+<span @Html.Raw(qryStaffListList.date_Modified.ViewAttributes)>
+@Html.Raw(qryStaffListList.date_Modified.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.date_Modified.Visible (end) *@
+    @if (qryStaffListList.int_Created_By.Visible) { // qryStaffListList.int_Created_By.Visible (begin)
+        <td data-name="int_Created_By" @Html.Raw(qryStaffListList.int_Created_By.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_int_Created_By" class="el_qryStaffList_int_Created_By">
+<span @Html.Raw(qryStaffListList.int_Created_By.ViewAttributes)>
+@Html.Raw(qryStaffListList.int_Created_By.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.int_Created_By.Visible (end) *@
+    @if (qryStaffListList.int_Modified_By.Visible) { // qryStaffListList.int_Modified_By.Visible (begin)
+        <td data-name="int_Modified_By" @Html.Raw(qryStaffListList.int_Modified_By.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_int_Modified_By" class="el_qryStaffList_int_Modified_By">
+<span @Html.Raw(qryStaffListList.int_Modified_By.ViewAttributes)>
+@Html.Raw(qryStaffListList.int_Modified_By.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.int_Modified_By.Visible (end) *@
+    @if (qryStaffListList.int_Nationality.Visible) { // qryStaffListList.int_Nationality.Visible (begin)
+        <td data-name="int_Nationality" @Html.Raw(qryStaffListList.int_Nationality.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_int_Nationality" class="el_qryStaffList_int_Nationality">
+<span @Html.Raw(qryStaffListList.int_Nationality.ViewAttributes)>
+@Html.Raw(qryStaffListList.int_Nationality.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.int_Nationality.Visible (end) *@
+    @if (qryStaffListList.Hijri_Day.Visible) { // qryStaffListList.Hijri_Day.Visible (begin)
+        <td data-name="Hijri_Day" @Html.Raw(qryStaffListList.Hijri_Day.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_Hijri_Day" class="el_qryStaffList_Hijri_Day">
+<span @Html.Raw(qryStaffListList.Hijri_Day.ViewAttributes)>
+@Html.Raw(qryStaffListList.Hijri_Day.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.Hijri_Day.Visible (end) *@
+    @if (qryStaffListList.Hijri_Month.Visible) { // qryStaffListList.Hijri_Month.Visible (begin)
+        <td data-name="Hijri_Month" @Html.Raw(qryStaffListList.Hijri_Month.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_Hijri_Month" class="el_qryStaffList_Hijri_Month">
+<span @Html.Raw(qryStaffListList.Hijri_Month.ViewAttributes)>
+@Html.Raw(qryStaffListList.Hijri_Month.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.Hijri_Month.Visible (end) *@
+    @if (qryStaffListList.Hijri_Year.Visible) { // qryStaffListList.Hijri_Year.Visible (begin)
+        <td data-name="Hijri_Year" @Html.Raw(qryStaffListList.Hijri_Year.CellAttributes)>
+<span id="el@(qryStaffListList.RowIndex == "$rowindex$" ? "$rowindex$" : qryStaffListList.RowCount)_qryStaffList_Hijri_Year" class="el_qryStaffList_Hijri_Year">
+<span @Html.Raw(qryStaffListList.Hijri_Year.ViewAttributes)>
+@Html.Raw(qryStaffListList.Hijri_Year.GetViewValue())</span>
+</span>
+</td>
+    } @* qryStaffListList.Hijri_Year.Visible (end) *@
+    @* Render list options (body, right) *@
+    @qryStaffListList.ListOptions.RenderBody("right", qryStaffListList.RowCount)
+    </tr>
+    } @* End if *@
+
+    // Reset for template row
+    if (SameString(qryStaffListList.RowIndex, "$rowindex$"))
+        qryStaffListList.RowIndex = 0;
+
+    // Reset inline add/copy row
+    if ((qryStaffListList.IsCopy || qryStaffListList.IsAdd) && qryStaffListList.RowIndex is int rowIndex2 && rowIndex2 == 0)
+        qryStaffListList.RowIndex = 1;
+} @* End While *@
+</tbody>
+</table><!-- /.ew-table -->
+} @* End If TotalRecords > 0 *@
+</div><!-- /.ew-grid-middle-panel -->
+@if (Empty(qryStaffListList.CurrentAction) && !qryStaffListList.UseAjaxActions) {
+<input type="hidden" name="action" id="action" value="">
+}
+</form><!-- /.ew-list-form -->
+@{ qryStaffListList.CloseRecordset(); }
+</div><!-- /.ew-grid -->

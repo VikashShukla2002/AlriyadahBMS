@@ -1,0 +1,12 @@
+{
+  "id": "ar-SA",
+  "desc": "العربية (المملكة العربية السعودية)",
+  "number": "#,##0.###",
+  "currency": "#,##0.00 ¤",
+  "currency_code": "SAR",
+  "currency_symbol": "ر.س.‏",
+  "percent": "#,##0%",
+  "date": "d‏/M‏/y GGGGG",
+  "time": "h:mm a",
+  "numbering_system": "arab"
+}

@@ -1,0 +1,111 @@
+@{
+    tblBillingInfo.TableClass = "table table-bordered table-hover ew-table ew-master-table"; // DN
+}
+@if (tblBillingInfo.Visible) { // tblBillingInfo.Visible (begin)
+<div class="ew-master-div">
+<table id="tbl_tblBillingInfomaster" class="table ew-view-table ew-master-table ew-vertical">
+    <tbody>
+        @if (tblBillingInfo.NationalID.Visible) { // tblBillingInfo.NationalID.Visible (begin)
+        <tr id="r_NationalID" @Html.Raw(tblBillingInfo.NationalID.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.NationalID.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.NationalID.CellAttributes)>
+<span id="el_tblBillingInfo_NationalID">
+<span @Html.Raw(tblBillingInfo.NationalID.ViewAttributes)>
+@Html.Raw(tblBillingInfo.NationalID.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.NationalID.Visible (end) *@
+        @if (tblBillingInfo.str_First_Name.Visible) { // tblBillingInfo.str_First_Name.Visible (begin)
+        <tr id="r_str_First_Name" @Html.Raw(tblBillingInfo.str_First_Name.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.str_First_Name.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.str_First_Name.CellAttributes)>
+<span id="el_tblBillingInfo_str_First_Name">
+<span @Html.Raw(tblBillingInfo.str_First_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfo.str_First_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.str_First_Name.Visible (end) *@
+        @if (tblBillingInfo.str_Last_Name.Visible) { // tblBillingInfo.str_Last_Name.Visible (begin)
+        <tr id="r_str_Last_Name" @Html.Raw(tblBillingInfo.str_Last_Name.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.str_Last_Name.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.str_Last_Name.CellAttributes)>
+<span id="el_tblBillingInfo_str_Last_Name">
+<span @Html.Raw(tblBillingInfo.str_Last_Name.ViewAttributes)>
+@Html.Raw(tblBillingInfo.str_Last_Name.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.str_Last_Name.Visible (end) *@
+        @if (tblBillingInfo.date_Paid.Visible) { // tblBillingInfo.date_Paid.Visible (begin)
+        <tr id="r_date_Paid" @Html.Raw(tblBillingInfo.date_Paid.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.date_Paid.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.date_Paid.CellAttributes)>
+<span id="el_tblBillingInfo_date_Paid">
+<span @Html.Raw(tblBillingInfo.date_Paid.ViewAttributes)>
+@Html.Raw(tblBillingInfo.date_Paid.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.date_Paid.Visible (end) *@
+        @if (tblBillingInfo.str_ApprovalCode.Visible) { // tblBillingInfo.str_ApprovalCode.Visible (begin)
+        <tr id="r_str_ApprovalCode" @Html.Raw(tblBillingInfo.str_ApprovalCode.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.str_ApprovalCode.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.str_ApprovalCode.CellAttributes)>
+<span id="el_tblBillingInfo_str_ApprovalCode">
+<span @Html.Raw(tblBillingInfo.str_ApprovalCode.ViewAttributes)>
+@Html.Raw(tblBillingInfo.str_ApprovalCode.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.str_ApprovalCode.Visible (end) *@
+        @if (tblBillingInfo.Payment_Number.Visible) { // tblBillingInfo.Payment_Number.Visible (begin)
+        <tr id="r_Payment_Number" @Html.Raw(tblBillingInfo.Payment_Number.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.Payment_Number.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.Payment_Number.CellAttributes)>
+<span id="el_tblBillingInfo_Payment_Number">
+<span @Html.Raw(tblBillingInfo.Payment_Number.ViewAttributes)>
+@Html.Raw(tblBillingInfo.Payment_Number.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.Payment_Number.Visible (end) *@
+        @if (tblBillingInfo.Pricelist.Visible) { // tblBillingInfo.Pricelist.Visible (begin)
+        <tr id="r_Pricelist" @Html.Raw(tblBillingInfo.Pricelist.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.Pricelist.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.Pricelist.CellAttributes)>
+<span id="el_tblBillingInfo_Pricelist">
+<span @Html.Raw(tblBillingInfo.Pricelist.ViewAttributes)>
+@Html.Raw(tblBillingInfo.Pricelist.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.Pricelist.Visible (end) *@
+        @if (tblBillingInfo.str_Amount_Pay.Visible) { // tblBillingInfo.str_Amount_Pay.Visible (begin)
+        <tr id="r_str_Amount_Pay" @Html.Raw(tblBillingInfo.str_Amount_Pay.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.str_Amount_Pay.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.str_Amount_Pay.CellAttributes)>
+<span id="el_tblBillingInfo_str_Amount_Pay">
+<span @Html.Raw(tblBillingInfo.str_Amount_Pay.ViewAttributes)>
+@Html.Raw(tblBillingInfo.str_Amount_Pay.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.str_Amount_Pay.Visible (end) *@
+        @if (tblBillingInfo.mny_Running_Payments.Visible) { // tblBillingInfo.mny_Running_Payments.Visible (begin)
+        <tr id="r_mny_Running_Payments" @Html.Raw(tblBillingInfo.mny_Running_Payments.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.mny_Running_Payments.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.mny_Running_Payments.CellAttributes)>
+<span id="el_tblBillingInfo_mny_Running_Payments">
+<span @Html.Raw(tblBillingInfo.mny_Running_Payments.ViewAttributes)>
+@Html.Raw(tblBillingInfo.mny_Running_Payments.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.mny_Running_Payments.Visible (end) *@
+        @if (tblBillingInfo.mny_Running_Balance.Visible) { // tblBillingInfo.mny_Running_Balance.Visible (begin)
+        <tr id="r_mny_Running_Balance" @Html.Raw(tblBillingInfo.mny_Running_Balance.RowAttributes)>
+            <td class="@(tblBillingInfo.TableLeftColumnClass)">@Html.Raw(tblBillingInfo.mny_Running_Balance.Caption)</td>
+            <td @Html.Raw(tblBillingInfo.mny_Running_Balance.CellAttributes)>
+<span id="el_tblBillingInfo_mny_Running_Balance">
+<span @Html.Raw(tblBillingInfo.mny_Running_Balance.ViewAttributes)>
+@Html.Raw(tblBillingInfo.mny_Running_Balance.GetViewValue())</span>
+</span></td>
+        </tr>
+        } @* tblBillingInfo.mny_Running_Balance.Visible (end) *@
+    </tbody>
+</table>
+</div>
+} @* tblBillingInfo.Visible (end) *@
