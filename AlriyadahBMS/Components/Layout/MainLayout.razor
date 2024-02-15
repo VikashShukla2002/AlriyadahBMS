@@ -1,0 +1,94 @@
+﻿@inherits LayoutComponentBase
+
+@* <div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div> *@
+
+
+<MudDialogProvider />
+<MudSnackbarProvider />
+@* <MudThemeProvider Theme="_themeManager.Theme" /> *@
+<MudThemeProvider Theme="MyCustomTheme" />
+
+<CascadingValue Value="this">
+    <ChildContent>
+        <MudLayout>
+            <MudAppBar Elevation="1">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+            </MudAppBar>
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
+                <MudDrawerHeader>
+                    <MudText Typo="Typo.h5" Class="mt-1">AlriyadahBMS</MudText>
+                </MudDrawerHeader>
+                @* <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+                </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                </NavLink>
+                </div> *@
+
+
+                <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
+                    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
+                </MudNavLink>
+                <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
+                    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
+                </MudNavLink>
+
+            </MudDrawer>
+            <MudMainContent>
+                @Body
+            </MudMainContent>
+        </MudLayout>
+
+    </ChildContent>
+</CascadingValue>
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                AppbarBackground = new MudBlazor.Utilities.MudColor("#198754"),
+                DrawerBackground = new MudBlazor.Utilities.MudColor("#f1e9d2")
+            },
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily = new[] { "Poppins", "sans-serif" }
+                }
+
+            }
+
+        };
+}
