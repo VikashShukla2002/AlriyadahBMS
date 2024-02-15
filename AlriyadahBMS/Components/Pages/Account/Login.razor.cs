@@ -1,4 +1,5 @@
-﻿using AlriyadahBMS.Models;
+﻿
+using AlriyadahBMS.Shared.ViewModels;
 using MudBlazor;
 using System;
 using System.Collections.Generic;

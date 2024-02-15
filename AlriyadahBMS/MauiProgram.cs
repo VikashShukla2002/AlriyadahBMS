@@ -17,10 +17,12 @@ namespace AlriyadahBMS
 
             builder.Services.AddMudServices();
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:52985") });
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
+
 #endif
 
             return builder.Build();

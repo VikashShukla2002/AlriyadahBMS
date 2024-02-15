@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlriyadahBMS.Models
+namespace AlriyadahBMS.Shared.ViewModels
 {
     public class LoginModel
     {
