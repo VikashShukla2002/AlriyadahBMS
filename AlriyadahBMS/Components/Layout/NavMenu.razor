@@ -1,4 +1,7 @@
-﻿<MudDrawerHeader>
+﻿@inject IAccountService AccountService
+
+
+<MudDrawerHeader>
     <MudText Typo="Typo.h5" Class="mt-1">AlriyadahBMS</MudText>
 </MudDrawerHeader>
 <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
@@ -6,4 +9,9 @@
 </MudNavLink>
 <MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
     <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
+</MudNavLink>
+
+<MudNavLink Href="/logout" Match="NavLinkMatch.All" Style="font-size: 16px">
+    <MudIcon Icon="@Icons.Material.Filled.Logout" />
+    Logout
 </MudNavLink>

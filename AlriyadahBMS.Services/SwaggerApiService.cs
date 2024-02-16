@@ -1,4 +1,5 @@
 ﻿using AlriyadahBMS.Services.IServices;
+using AlriyadahBMS.Shared.ApiModels;
 using Newtonsoft.Json;
 
 namespace AlriyadahBMS.Services
@@ -18,25 +19,38 @@ namespace AlriyadahBMS.Services
             throw new NotImplementedException();
         }
 
-        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest request)
+        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest request) where TResponse : BaseApiResponse
         {
+
             var fromData = JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(request));
             var content = new FormUrlEncodedContent(fromData!);
-            var response = await _client.PostAsync(_client.BaseAddress + url, content);
-
-            var contentTemp = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            var errorResult = Activator.CreateInstance(typeof(TResponse)) as TResponse;
+            try
             {
-                var result = JsonConvert.DeserializeObject<TResponse>(contentTemp);
-                return result;
-            }
-            else
-            {
-                // var errorResponse = response.Content.ReadFromJsonAsync<ErrorResponse>();
-            }
+                var response = await _client.PostAsync(_client.BaseAddress + url, content);
+                
+                var contentTemp = await response.Content.ReadAsStringAsync();
 
-            return default;
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = JsonConvert.DeserializeObject<TResponse>(contentTemp);
+                    result!.StatusCode = response.StatusCode;
+                    result.Success = true;
+                    return result;
+                }
+                else
+                {
+
+                    errorResult!.StatusCode = response.StatusCode;
+                    errorResult!.Message = contentTemp;
+                }
+            }
+            catch (Exception ex)
+            {
+                errorResult!.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                errorResult.Message = ex.Message;
+            }
+            return errorResult;
         }
     }
 }

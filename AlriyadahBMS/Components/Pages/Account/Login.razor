@@ -1,5 +1,8 @@
 ﻿@page "/login"
 @inject ISwaggerApiService Swagger
+@inject IAccountService AccountService
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="container-fluid">
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">

@@ -25,6 +25,8 @@ namespace AlriyadahBMS
             builder.Services.AddScoped<ISwaggerApiService, SwaggerApiService>();
             builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationStateService>();
             builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

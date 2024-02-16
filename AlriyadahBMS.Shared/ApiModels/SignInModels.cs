@@ -21,7 +21,7 @@ namespace AlriyadahBMS.Shared.ApiModels
         public int Expire { get; set; }
     }
 
-    public class SignInResponse
+    public class SignInResponse : BaseApiResponse
     {
         public string JWT { get; set; } = null!;
     }

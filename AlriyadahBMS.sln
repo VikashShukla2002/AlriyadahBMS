@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlriyadahBMS", "AlriyadahBM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JUN26", "BMS-II\JUN26.csproj", "{CEF17EF6-7EC2-4749-AFDE-803FC4B21252}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlriyadahBMS.Shared", "AlriyadahBMS.Shared\AlriyadahBMS.Shared.csproj", "{CDB55B97-749A-4EAD-B893-76F23EEFA925}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlriyadahBMS.Shared", "AlriyadahBMS.Shared\AlriyadahBMS.Shared.csproj", "{CDB55B97-749A-4EAD-B893-76F23EEFA925}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlriyadahBMS.Services", "AlriyadahBMS.Services\AlriyadahBMS.Services.csproj", "{602F9EC0-AB4E-492F-AB35-4A5E5A1FB42F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlriyadahBMS.Services", "AlriyadahBMS.Services\AlriyadahBMS.Services.csproj", "{602F9EC0-AB4E-492F-AB35-4A5E5A1FB42F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

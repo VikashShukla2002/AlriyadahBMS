@@ -1,6 +1,7 @@
 ﻿
 using AlriyadahBMS.Shared.ApiModels;
 using AlriyadahBMS.Shared.ViewModels;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
@@ -16,29 +17,47 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private bool ShowPassword { get; set; } = false;
 
+        protected override async Task OnInitializedAsync()
+        {
+            await CheckAuthenticationState();
+        }
+
         private async Task OnValidSubmitAsync()
         {
 
-            var response = await Swagger.PostAsync<SignInRequest, SignInResponse>("api/login", new SignInRequest
+            //var response = await Swagger.PostAsync<SignInRequest, SignInResponse>("api/login", new SignInRequest
+            //{
+            //    UserName = LoginModel.UserName,
+            //    Password = LoginModel.Password
+            //});
+            var response = await AccountService!.LoginAsync(new SignInRequest
             {
-                UserName = LoginModel.UserName,
-                Password = LoginModel.Password
+                UserName = LoginModel!.UserName,
+                Password = LoginModel!.Password
             });
-           
+
+            if (response!.Success)
+            {
+                NavigationManager.NavigateTo("/", false, true);
+            }
+            else
+            {
+            //    Snackbar.Add(response.Message, Severity.Error);
+            }
 
         }
 
         private async Task CheckAuthenticationState()
         {
-            //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            //var user = authState.User;
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
 
-            //if (user!.Identity!.IsAuthenticated)
-            //{
-            //    // User is already authenticated, redirect to another page
-            //    NavigationManager.NavigateTo("/", false, true);
-            //    //await JSRuntime.ShowToastAsync("You don't have access to open this page", SwalIcon.Success);
-            //}
+            if (user!.Identity!.IsAuthenticated)
+            {
+                // User is already authenticated, redirect to another page
+                NavigationManager.NavigateTo("/", false, true);
+                //await JSRuntime.ShowToastAsync("You don't have access to open this page", SwalIcon.Success);
+            }
         }
 
         private InputType GetInputType()
