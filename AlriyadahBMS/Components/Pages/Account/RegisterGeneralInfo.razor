@@ -1,0 +1,46 @@
+﻿@using AlriyadahBMS.Shared.ViewModels
+
+
+<MudPaper Elevation="3" Class="pa-4">
+
+    <MudTextField Label="First Name" @bind-Value="registerModels.str_First_Name" Required="true" RequiredError="User name is required!" />
+    <MudTextField Label="Middle Name" @bind-Value="registerModels.str_Middle_Name" Required="true" RequiredError="Middle name is required" />
+    <MudTextField Label="Last Name" @bind-Value="registerModels.str_Last_Name" Required="true" RequiredError="Mobile Number is required!" />
+    <MudTextField Label="Cell Phone" @bind-Value="registerModels.str_Cell_Phone" Required="true" RequiredError="Mobile Number is required!" Mask="@(new PatternMask("00 0000 0000"))" />
+    <MudTextField Label="Email" @bind-Value="registerModels.str_Email" Required="true" RequiredError="Email is required!" />
+
+    <MudSelect T="string" Label="Hijri Year" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("1374")" />
+        <MudSelectItem Value="@("1375")" />
+        <MudSelectItem Value="@("1376")" />
+    </MudSelect>
+
+    <MudSelect T="string" Label="Hijri Month" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("Muharran")" />
+        <MudSelectItem Value="@("Safar")" />
+        <MudSelectItem Value="@("Rajab")" />
+        <MudSelectItem Value="@("Ramadan")" />
+        <MudSelectItem Value="@("Rajab")" />
+    </MudSelect>
+
+    <MudSelect T="string" Label="Hijri Day" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("1")" />
+        <MudSelectItem Value="@("2")" />
+        <MudSelectItem Value="@("4")" />
+        <MudSelectItem Value="@("5")" />
+        <MudSelectItem Value="@("6")" />
+        <MudSelectItem Value="@("7")" />
+        <MudSelectItem Value="@("8")" />
+        <MudSelectItem Value="@("9")" />
+        <MudSelectItem Value="@("10")" />
+        <MudSelectItem Value="@("11")" />
+    </MudSelect>
+
+</MudPaper>
+
+
+@code {
+
+    private RegisterModels registerModels { get; set; } = new();
+
+}

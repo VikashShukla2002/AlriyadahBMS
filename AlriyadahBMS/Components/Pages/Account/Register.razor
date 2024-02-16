@@ -1,0 +1,48 @@
+﻿@page "/register"
+
+<h3> Sign-up</h3>
+
+<MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+        <MudTabPanel Text="General Information">
+            <MudItem xs="4">
+                <RegisterGeneralInfo />
+            </MudItem>
+        </MudTabPanel>
+        <MudTabPanel Text="Access Credentials">
+            <MudItem xs="4">
+                <AccessCredentials />
+            </MudItem>
+        </MudTabPanel>
+        <MudTabPanel Text="Driving Status and Absher">
+            <MudItem xs="4">
+                <DrivingStatus />
+            </MudItem>
+        </MudTabPanel>
+        <MudTabPanel Text="Emergency Contact(Optional)">
+            <MudText xs="4">
+                <EmergencyContact />
+            </MudText>
+        </MudTabPanel>
+    </MudTabs>
+</MudHidden>
+
+<MudHidden Breakpoint="Breakpoint.SmAndDown " Invert="true">
+    <MudExpansionPanels MultiExpansion="false">
+        <MudExpansionPanel Text="General Information">
+            <MudItem>
+                <RegisterGeneralInfo />
+            </MudItem>
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Access Credentials">
+            <AccessCredentials />
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Driving Status and Absher">
+            <DrivingStatus />
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Emergency Contact(Optional)">
+            <EmergencyContact />
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+</MudHidden>
+

@@ -22,10 +22,10 @@
 <MudThemeProvider Theme="MyCustomTheme" />
 
 <CascadingValue Value="this">
-    <ChildContent>
-        <MudLayout>
-          @*   <AuthorizeView>
-                <Authorized> *@
+    <MudLayout>
+        <ChildContent>
+            <AuthorizeView>
+                <Authorized>
                     <MudAppBar Elevation="1">
                         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                         <MudSpacer />
@@ -34,14 +34,9 @@
                     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
                         <NavMenu />
                     </MudDrawer>
-                    <MudMainContent>
-                        
-                        @* @Body *@
-
-                    </MudMainContent>
-                @* </Authorized>
-            </AuthorizeView> *@
+                </Authorized>
+            </AuthorizeView>
             @Body
-        </MudLayout>
-    </ChildContent>
+        </ChildContent>
+    </MudLayout>
 </CascadingValue>

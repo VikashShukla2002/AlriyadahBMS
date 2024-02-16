@@ -1,0 +1,18 @@
+﻿@using AlriyadahBMS.Shared.ViewModels
+<MudPaper Elevation="3" class="pa-4" >
+    <MudCheckBox @bind-Value="@registerModels.IsDrivingexperience" Label="Do you have driving experience?" Color="Color.Primary"></MudCheckBox>
+
+    <MudSelect T="string" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("Private Vehicle")" />
+        <MudSelectItem Value="@("Motorbike")" />
+        <MudSelectItem Value="@("Taxi")" />
+        <MudSelectItem Value="@("CDL (Trucks & Buses)")" />
+    </MudSelect>
+    <MudTextField Label="Absher Appointment Number" @bind-Value="registerModels.AbsherApptNbr" Required="true" RequiredError="This field is required!" />
+
+
+</MudPaper>
+
+@code{
+    private RegisterModels registerModels {get;set;} = new();
+}

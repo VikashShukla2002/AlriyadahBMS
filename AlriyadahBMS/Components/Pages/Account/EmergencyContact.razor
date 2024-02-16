@@ -1,0 +1,18 @@
+﻿@using AlriyadahBMS.Shared.ViewModels
+
+<MudPaper Elevation="3" Class="pa-4">
+    <MudTextField Label="Emergency Contact Name" @bind-Value="registerModels.str_Emergency_Contact_Name" />
+    <MudTextField Label="Emergency Contact Phone" @bind-Value="registerModels.str_Emergency_Contact_Phone" />
+
+    <MudSelect T="string" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("Father")" />
+        <MudSelectItem Value="@("Mother")" />
+        <MudSelectItem Value="@("Brother")" />
+        <MudSelectItem Value="@("Sister")" />
+    </MudSelect>
+</MudPaper>
+
+@code{
+    private RegisterModels registerModels { get; set; } = new();
+
+}
