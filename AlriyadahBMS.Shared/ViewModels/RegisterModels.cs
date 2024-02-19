@@ -22,6 +22,7 @@ namespace AlriyadahBMS.Shared.ViewModels
 
         // Access credentials
         public string str_Password { get; set; }
+        public string str_ConfirmPassword { get; set; }  // new
         public string str_NationalID_Iqama { get; set; }
 
 
@@ -36,8 +37,6 @@ namespace AlriyadahBMS.Shared.ViewModels
         public string str_Emergency_Contact_Name { get; set; }
         public string str_Emergency_Contact_Phone { get; set; }
         public string str_Emergency_Contact_Relation { get; set; }
-
-
 
 
     }

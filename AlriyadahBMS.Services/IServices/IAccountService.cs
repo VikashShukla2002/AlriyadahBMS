@@ -11,7 +11,10 @@ namespace AlriyadahBMS.Services.IServices
     {
    
         Task<SignInResponse> LoginAsync(SignInRequest signInRequest);
-      
+
+
+      //  Task<SignUpResponse> RegisterUserAsync(SignUpRequest signUpRequest);
+
         void Logout();
     }
 }

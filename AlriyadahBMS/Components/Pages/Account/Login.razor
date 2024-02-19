@@ -3,6 +3,7 @@
 @inject IAccountService AccountService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
 
 <div class="container-fluid">
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
@@ -39,7 +40,7 @@
 
                 <div class="text-center mt-4">
                     <p>
-                        <a href="/forgotpass" class="forgot-link">Forgot password</a>
+                        <a href="/resetpass" class="forgot-link">Forgot password</a>
                     </p>
                     <NavLink Href="/register" Class="forgot-link">Don't have an account? Sign Up</NavLink>
                 </div>

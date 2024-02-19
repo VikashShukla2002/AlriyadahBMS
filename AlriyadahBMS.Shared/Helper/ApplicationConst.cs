@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlriyadahBMS.Shared.ViewModels
+namespace AlriyadahBMS.Shared.Helper
 {
-    public class ResetModel
+    public static class ApplicationConst
     {
-
+        public const string Local_Token = "JWTToken";
     }
 }

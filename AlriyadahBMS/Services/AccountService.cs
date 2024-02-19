@@ -1,5 +1,6 @@
 ﻿using AlriyadahBMS.Services.IServices;
 using AlriyadahBMS.Shared.ApiModels;
+using AlriyadahBMS.Shared.Helper;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,11 @@ namespace AlriyadahBMS.Services
 
         public async Task<SignInResponse> LoginAsync(SignInRequest signInRequest)
         {
-            var response = await _apiService.PostAsync<SignInRequest, SignInResponse>("api/login", signInRequest);
+            var response = await _apiService.PostAsync<SignInRequest, SignInResponse>(AccountApiConst.POST_SignIn, signInRequest);
             if (response!.Success)
             {
-                await SecureStorage.SetAsync("JWTToken", response!.JWT!);
+                //await SecureStorage.SetAsync("JWTToken", response!.JWT!);
+                await SecureStorage.SetAsync(ApplicationConst.Local_Token, response!.JWT!);
                 ((AuthenticationStateService)_authStateProvider).NotifyUserLoggedIn(response.JWT);
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.JWT);
             }
@@ -37,7 +39,7 @@ namespace AlriyadahBMS.Services
 
         public void Logout()
         {
-            SecureStorage.Remove("JWTToken");
+            SecureStorage.Remove(ApplicationConst.Local_Token);
             ((AuthenticationStateService)_authStateProvider).NotifyUserLogout();
             _client.DefaultRequestHeaders.Authorization = null;
         }

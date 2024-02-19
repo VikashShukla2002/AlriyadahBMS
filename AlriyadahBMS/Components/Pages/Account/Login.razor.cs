@@ -39,10 +39,12 @@ namespace AlriyadahBMS.Components.Pages.Account
             if (response!.Success)
             {
                 NavigationManager.NavigateTo("/", false, true);
+                Snackbar.Add(response?.Message?.ToString(), Severity.Success);
             }
             else
             {
-            //    Snackbar.Add(response.Message, Severity.Error);
+                Snackbar.Add(response?.Message?.ToString(), Severity.Error);
+                //Snackbar.Add("some error occured", Severity.Error);
             }
 
         }

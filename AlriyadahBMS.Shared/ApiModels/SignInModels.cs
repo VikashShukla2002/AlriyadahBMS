@@ -26,3 +26,4 @@ namespace AlriyadahBMS.Shared.ApiModels
         public string JWT { get; set; } = null!;
     }
 }
+

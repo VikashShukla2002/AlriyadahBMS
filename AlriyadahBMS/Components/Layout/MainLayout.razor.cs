@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Button = MudBlazor.Button;
 
 namespace AlriyadahBMS.Components.Layout
 {
@@ -29,9 +30,16 @@ namespace AlriyadahBMS.Components.Layout
                 Default = new Default()
                 {
                     FontFamily = new[] { "Poppins", "sans-serif" }
-                }
+                },
 
+                Button = new Button()
+                {
+                    TextTransform = "unset"
+                }
+               
             }
         };
     }
 }
+
+

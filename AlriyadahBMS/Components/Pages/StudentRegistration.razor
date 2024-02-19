@@ -1,0 +1,31 @@
+﻿@page "/tblStudentlist"
+@using AlriyadahBMS.Shared.ViewModels
+
+@attribute [Authorize]
+
+<MudMainContent>
+    <MudItem xs="4">
+        <MudPaper Elevation="3" Class="pa-4">
+            <div class="text-center mb-4">
+                <h4>Student Registration</h4>
+            </div>
+            <MudTextField Label="First Name" @bind-Value="studentRegistrationModel.str_First_Name" />
+            <MudTextField Label="Last Name" @bind-Value="studentRegistrationModel.str_Last_Name" />
+            <MudTextField Label="Cell Phone" @bind-Value="studentRegistrationModel.str_Cell_Phone" Mask="@(new PatternMask("00 0000 0000"))" />
+            <MudTextField Label="Email" @bind-Value="studentRegistrationModel.str_Email" />
+
+            <MudTextField Label="Absher Appointment Number" @bind-Value="studentRegistrationModel.AbsherApptNbr" />
+            <MudTextField @bind-Value="studentRegistrationModel.AbsherApptNbr" Variant="Variant.Outlined" />
+
+            <MudButton Variant="Variant.Filled" Size="Size.Medium" Color="Color.Primary">Medium</MudButton>
+
+        </MudPaper>
+    </MudItem>
+</MudMainContent>
+
+
+@code {
+
+    public StudentRegistrationModel studentRegistrationModel { get; set; } = new();
+
+}
