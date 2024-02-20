@@ -33,7 +33,8 @@ public class ListController : ApiController
     [HttpGet("{table}")]
     public async Task<IActionResult> List([FromRoute] string table)
     {
-        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null) {
+        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null)
+        {
             var obj = CreateInstance(classType.Name + "List", new object[] { this });
             if (obj != null)
                 return await obj.Run();
@@ -41,6 +42,7 @@ public class ListController : ApiController
         return new JsonBoolResult(new { success = false, error = Language.Phrase("FailedToCreate"), version = Config.ProductVersion }, false);
     }
 }
+
 
 /// <summary>
 /// Get a record from a table
@@ -54,7 +56,8 @@ public class ViewController : ApiController
     [HttpGet("{table}/{**key}")]
     public async Task<IActionResult> Get([FromRoute] string table)
     {
-        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null) {
+        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null)
+        {
             var obj = CreateInstance(classType.Name + "View", new object[] { this });
             if (obj != null)
                 return await obj.Run();
@@ -75,7 +78,8 @@ public class AddController : ApiController
     [HttpPost("{table}")]
     public async Task<IActionResult> Add([FromRoute] string table)
     {
-        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null) {
+        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null)
+        {
             var obj = CreateInstance(classType.Name + "Add", new object[] { this });
             if (obj != null)
                 return await obj.Run();
@@ -96,7 +100,8 @@ public class EditController : ApiController
     [HttpPost("{table}/{**key}")]
     public async Task<IActionResult> Edit([FromRoute] string table)
     {
-        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null) {
+        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null)
+        {
             var obj = CreateInstance(classType.Name + "Edit", new object[] { this });
             if (obj != null)
                 return await obj.Run();
@@ -118,7 +123,8 @@ public class DeleteController : ApiController
     [HttpPost("{table}")]
     public async Task<IActionResult> Delete([FromRoute] string table)
     {
-        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null) {
+        if (Config.NamedTypes.TryGetValue(table, out Type? classType) && classType != null)
+        {
             var obj = CreateInstance(classType.Name + "Delete", new object[] { this });
             if (obj != null)
                 return await obj.Run();
@@ -146,7 +152,7 @@ public class ExportController : ApiController
     [HttpGet("{type}/{table}")]
     public async Task<IActionResult> ExportData([FromRoute] string type, [FromRoute] string table)
     {
-        ExportHandler obj = new (this);
+        ExportHandler obj = new(this);
         return await obj.ExportData(type, table);
     }
 
@@ -161,7 +167,7 @@ public class ExportController : ApiController
     [HttpGet("{type}/{table}/{**key}")]
     public async Task<IActionResult> ExportData([FromRoute] string type, [FromRoute] string table, [FromRoute] string key)
     {
-        ExportHandler obj = new (this);
+        ExportHandler obj = new(this);
         return await obj.ExportData(type, table, key.Split('/'));
     }
 
@@ -173,7 +179,7 @@ public class ExportController : ApiController
     [HttpGet("{search}")]
     public async Task<IActionResult> Search([FromRoute] string search)
     {
-        ExportHandler obj = new (this);
+        ExportHandler obj = new(this);
         return await obj.Search(search);
     }
 }
@@ -243,7 +249,7 @@ public class FileController : ApiController
     public async Task<IActionResult> GetFile([FromRoute] string table, [FromRoute] string field, [FromRoute] string key)
     {
         Language = ResolveLanguage(); // Set up CurrentNumberFormat
-        FileViewer obj = new (this);
+        FileViewer obj = new(this);
         return await obj.GetFile(table, field, key.Split('/'));
     }
 
@@ -258,7 +264,7 @@ public class FileController : ApiController
     public async Task<IActionResult> GetFile([FromRoute] string table, [FromRoute] string fn)
     {
         Language = ResolveLanguage(); // Set up CurrentNumberFormat
-        FileViewer obj = new (this);
+        FileViewer obj = new(this);
         return await obj.GetFile(table, fn);
     }
 
@@ -272,7 +278,7 @@ public class FileController : ApiController
     public async Task<IActionResult> GetFile([FromRoute] string fn)
     {
         Language = ResolveLanguage(); // Set up CurrentNumberFormat
-        FileViewer obj = new (this);
+        FileViewer obj = new(this);
         return await obj.GetFile(fn);
     }
 }
@@ -354,12 +360,15 @@ public class LookupController : ApiController
     [Consumes("application/json")]
     public async Task<IActionResult> Batch([FromBody] List<Dictionary<string, string>> pages) // Batch request (json)
     {
-        List<object> responses = new ();
-        foreach (Dictionary<string, string> req in pages) {
-            if (req.TryGetValue(Config.ApiLookupPage, out string? page) && req.TryGetValue(Config.ApiFieldName, out string? fieldName)) {
+        List<object> responses = new();
+        foreach (Dictionary<string, string> req in pages)
+        {
+            if (req.TryGetValue(Config.ApiLookupPage, out string? page) && req.TryGetValue(Config.ApiFieldName, out string? fieldName))
+            {
                 dynamic? obj = Resolve(page); // Get object
                 dynamic? tbl = obj?.FieldByName(fieldName)?.Lookup?.GetTable(); // Get table
-                if (tbl != null) {
+                if (tbl != null)
+                {
                     Security.LoadTablePermissions(tbl.TableVar);
                     object res = Security.CanLookup
                         ? await obj?.Lookup(req) ?? new { success = false, error = Language.Phrase("FailedToCreate"), version = Config.ProductVersion }
@@ -410,24 +419,31 @@ public class PermissionsController : ApiController
 
         // Check user level
         int userLevel = -2; // Default anonymous
-        List<int> userLevels = new ();
+        List<int> userLevels = new();
         userLevels.Add(userLevel);
-        if (Security.IsLoggedIn) {
-            if (Security.IsSysAdmin && IsNumeric(userlevel) && userlevel != "-1") { // Get permissions for user level
-                if (Security.UserLevelIDExists(Convert.ToInt32(userlevel))) { // Make sure user level exists
+        if (Security.IsLoggedIn)
+        {
+            if (Security.IsSysAdmin && IsNumeric(userlevel) && userlevel != "-1")
+            { // Get permissions for user level
+                if (Security.UserLevelIDExists(Convert.ToInt32(userlevel)))
+                { // Make sure user level exists
                     userLevel = Convert.ToInt32(userlevel);
                     userLevels.Clear();
                     userLevels.Add(userLevel);
                 }
-            } else { // Get current user permissions
+            }
+            else
+            { // Get current user permissions
                 userLevel = Convert.ToInt32(Security.CurrentUserLevelID);
                 userLevels = Security.UserLevelID;
             }
         }
-        Dictionary<string, int> privs = new ();
+        Dictionary<string, int> privs = new();
         var wrkTable = Config.UserLevelTablePermissions;
-        foreach (var table in wrkTable) {
-            if (table.Allowed) {
+        foreach (var table in wrkTable)
+        {
+            if (table.Allowed)
+            {
                 int priv = 0;
                 foreach (int lvl in userLevels)
                     priv |= Security.GetUserLevelPriv(table.ProjectId + table.TableName, lvl);
@@ -451,17 +467,22 @@ public class PermissionsController : ApiController
 
         // Check user level
         int userLevel;
-        if (IsNumeric(userlevel) && userlevel != "-1") { // Set permissions for user level
+        if (IsNumeric(userlevel) && userlevel != "-1")
+        { // Set permissions for user level
             userLevel = Convert.ToInt32(userlevel);
-        } else {
+        }
+        else
+        {
             return new EmptyResult();
         }
-        Dictionary<string, int> privs = new ();
-        Dictionary<string, int> privsOut = new ();
+        Dictionary<string, int> privs = new();
+        Dictionary<string, int> privsOut = new();
         StringValues sv;
         var wrkTable = Config.UserLevelTablePermissions;
-        foreach (var table in wrkTable) {
-            if (table.Allowed && Post(table.TableVar, out sv)) {
+        foreach (var table in wrkTable)
+        {
+            if (table.Allowed && Post(table.TableVar, out sv))
+            {
                 int priv = Convert.ToInt32(sv);
                 privs.Add(table.ProjectId + table.TableName, priv);
                 privsOut.Add(table.TableName, priv);
@@ -490,7 +511,7 @@ public class PushController : ApiController
     [HttpPost("subscribe")]
     public async Task<IActionResult> Subscribe()
     {
-        PushNotification push = new ();
+        PushNotification push = new();
         bool subscribe = await push.Subscribe();
         return Json(new { success = subscribe });
     }
@@ -501,7 +522,7 @@ public class PushController : ApiController
     [HttpPost("send")]
     public async Task<IActionResult> Send()
     {
-        PushNotification push = new ();
+        PushNotification push = new();
         var res = await push.Send();
         return Json(res);
     }
@@ -512,7 +533,7 @@ public class PushController : ApiController
     [HttpPost("delete")]
     public async Task<IActionResult> Delete()
     {
-        PushNotification push = new ();
+        PushNotification push = new();
         var res = await push.Delete();
         return Json(res);
     }
@@ -617,4 +638,32 @@ public class NafathController : ApiController
         }
         return Ok(new { Status = false, Data = "" });
     }
+}
+
+
+//[Authorize(Policy = "ApiUserLevel")]
+public class TableController : ApiController
+{
+    [HttpGet("{table}")]
+
+    public async Task<IActionResult> RecordList([FromRoute] string table)
+    {
+        if (await IsTableExists(table))
+        {
+            var query = $"SELECT * FROM {table}";
+            return Ok(await ExecuteJsonAsync(query));
+        }
+        else
+        {
+            return BadRequest($"Table '{table}' does not exist.");
+        }
+    }
+
+    private async Task<bool> IsTableExists(string tableName)
+    {
+        string query = $"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}'";
+        var result = await ExecuteScalarAsync(query);
+        return Convert.ToInt32(result) > 0;
+    }
+
 }

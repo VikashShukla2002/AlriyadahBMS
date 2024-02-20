@@ -10,6 +10,8 @@ namespace AlriyadahBMS.Services.IServices
     public interface ISwaggerApiService
     {
         Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest request) where TResponse : BaseApiResponse;
-        Task<TResponse?> GetAsync<TResponse>(string url, Dictionary<string, string>? queryParams = null);
+        //Task<TResponse?> GetAsync<TResponse>(string url, Dictionary<string, string>? queryParams = null) where TResponse : BaseApiResponse;
+        //Task<TResponse?> GetAsync<TResponse>(string url) where TResponse : ApiResponse<TResponse>;
+        Task<TResponse?> GetAsync<TResponse>(string url);
     }
 }

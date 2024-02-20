@@ -26,6 +26,7 @@ namespace AlriyadahBMS
             builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationStateService>();
             builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<TableService>();
 
 
 #if DEBUG

@@ -1,10 +1,14 @@
 ﻿@page "/tblStudentlist"
+@using AlriyadahBMS.Services
 @using AlriyadahBMS.Shared.ViewModels
+@inject ISwaggerApiService Swagger
+@inject TableService tableService
+@inject IDialogService Dialog
 
 @attribute [Authorize]
 
 <MudMainContent>
-    <MudItem xs="4">
+  @*   <MudItem xs="4">
         <MudPaper Elevation="3" Class="pa-4">
             <div class="text-center mb-4">
                 <h4>Student Registration</h4>
@@ -20,12 +24,46 @@
             <MudButton Variant="Variant.Filled" Size="Size.Medium" Color="Color.Primary">Medium</MudButton>
 
         </MudPaper>
-    </MudItem>
-</MudMainContent>
+    </MudItem> *@
 
 
-@code {
+    <MudTable Items="@tblRecord" Dense="false" Hover="true" ReadOnly="false" CanCancelEdit="false" Filter="new Func<StudentRegistrationModel,bool>(FilterFunc)"
+              SortLabel="Sort By">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Student Registration</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
 
-    public StudentRegistrationModel studentRegistrationModel { get; set; } = new();
+        <HeaderContent>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_First_Name)">First Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Last_Name)">Last Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Cell_Phone)">Cell Phone</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Email)">Email</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_NationalID_Iqama)">National ID Iqama</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.intDrivinglicenseType)">Driving License Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.AbsherApptNbr)">Absher Appointment Number</MudTableSortLabel></MudTh>
+            <MudTh>Action</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="First Name">@context.str_First_Name</MudTd>
+                <MudTd DataLabel="Last Name">@context.str_Last_Name</MudTd>
+                <MudTd DataLabel="Cell Phone">@context.str_Cell_Phone</MudTd>
+                <MudTd DataLabel="Email">@context.str_Email</MudTd>
+                <MudTd DataLabel="National ID Iqama">@context.str_NationalID_Iqama</MudTd>
+                <MudTd DataLabel="Driving License Type">@context.intDrivinglicenseType</MudTd>
+                <MudTd DataLabel="Absher Appointment Number">@context.AbsherApptNbr</MudTd>
+                <MudTd>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.RemoveRedEye" />
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
+                    @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" /> *@
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    </MudMainContent>
 
-}
+
+
