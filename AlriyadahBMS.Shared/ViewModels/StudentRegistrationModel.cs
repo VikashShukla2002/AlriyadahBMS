@@ -20,8 +20,10 @@ namespace AlriyadahBMS.Shared.ViewModels
         public string? str_City { get; set; }
         public int? int_State { get; set; }
         public string? str_Zip { get; set; }
-        public DateTime? date_Hired { get; set; }
-        public DateTime? date_Left { get; set; }
+        //public DateTime? date_Hired { get; set; }
+        public string? date_Hired { get; set; }
+        //public DateTime? date_Left { get; set; }
+        public string? date_Left { get; set; }
         public string? str_CertNumber { get; set; }
         public string? date_CertExp { get; set; }
         public string? str_Home_Phone { get; set; }
@@ -33,7 +35,7 @@ namespace AlriyadahBMS.Shared.ViewModels
         public string? str_Password { get; set; }
         public string? Parent_Username { get; set; }
         public string? date_Birth_Hijri { get; set; }
-        public DateTime? date_Birth { get; set; }
+        public DateTime? date_Birth { get; set; }   
         public string? str_Emergency_Contact_Name { get; set; }
         public string? str_Emergency_Contact_Phone { get; set; }
         public string? str_Emergency_Contact_Relation { get; set; }

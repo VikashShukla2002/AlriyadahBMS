@@ -1,0 +1,207 @@
+﻿@using AlriyadahBMS.Shared.ViewModels
+
+@{
+    DrivingLicense type = (DrivingLicense)(StudentData?.intDrivinglicenseType ?? 0);
+}
+
+<MudDialog>
+    <DialogContent>
+
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+            <MudTabPanel Text="General Information">
+                <MudText>
+                    @*    <p>Name: @StudentData?.str_Full_Name </p>
+                    <p>Cell Phone: @StudentData?.str_Cell_Phone</p> *@
+                    <table class="table table-bordered table-hover ew-view-table">
+                        <tbody>
+                            <tr>
+                                <td class="w-col-2"><strong>Full Name</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.str_Full_Name
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"> <strong>Cell Phone </strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.str_Cell_Phone
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>Email</strong> </td>
+                                <td>
+                                    <span>
+                                        @StudentData?.str_Email
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>Nationality</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.int_Nationality
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr id="r_User_Role">
+                                <td class="w-col-2"><strong>User Role</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.User_Role
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>Staff Id</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.int_Staff_Id
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </MudText>
+            </MudTabPanel>
+            <MudTabPanel Text="Access Credentials">
+                <MudText>
+                    <table class="table table-bordered table-hover ew-view-table">
+                        <tbody>
+                            <tr>
+                                <td class="w-col-2"><strong>User Name</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.str_Username
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"> <strong>Date of Birth (Hijri)</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.date_Birth_Hijri
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>Date of Birth (Gregorian)</strong> </td>
+                                <td>
+                                    <span>
+                                        @if (StudentData?.date_Birth.HasValue == true)
+                                        {
+                                            <text>@StudentData.date_Birth.Value.ToString("MM/dd/yyyy HH:mm:ss")</text>
+                                        }
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>National ID Iqama</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.str_NationalID_Iqama
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr id="r_User_Role">
+                                <td class="w-col-2"><strong>Parent Username</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.Parent_Username
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </MudText>
+            </MudTabPanel>
+            <MudTabPanel Text="Driving Status and Absher">
+                <MudText>
+                    <table class="table table-bordered table-hover ew-view-table">
+                        <tbody>
+                            <tr>
+                                <td class="w-col-2"><strong>Institution</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.Institution
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"> <strong>Do you have driving experience?</strong></td>
+                                <td>
+                                    <span>
+                                        @if (StudentData?.IsDrivingexperience ?? false)
+                                        {
+                                            <text>Yes</text>
+                                        }
+                                        else
+                                        {
+                                            <text>No</text>
+                                        }
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>Driving License Type</strong> </td>
+                                <td>
+                                    <span>
+                                        @if (type != 0)
+                                        {
+                                        <span>@type.ToDescriptionString()</span>
+                                        }
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-col-2"><strong>Absher Appointment Number</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.AbsherApptNbr
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr id="r_User_Role">
+                                <td class="w-col-2"><strong>Absher Appointment Photo</strong></td>
+                                <td>
+                                    <span>
+                                        @StudentData?.Absherphoto
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </MudText>
+            </MudTabPanel>
+        </MudTabs>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Color="Color.Primary">Cancel</MudButton>
+
+        @* <MudButton OnClick="StudentDataEdit"> </MudButton> *@
+
+    </DialogActions>
+</MudDialog>
+
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter]
+    public StudentRegistrationModel? StudentData { get; set; }
+
+   // DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+
+
+    // void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+}

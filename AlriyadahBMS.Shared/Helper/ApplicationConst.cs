@@ -10,4 +10,11 @@ namespace AlriyadahBMS.Shared.Helper
     {
         public const string Local_Token = "JWTToken";
     }
+    public static class TableConst
+    {
+        public const string TblStudents = "tblStudents";
+        public const string Cities = "Cities";
+        public const string Hijri_Table = "Hijri_Table";
+        public const string UserLevels = "UserLevels";
+    }
 }

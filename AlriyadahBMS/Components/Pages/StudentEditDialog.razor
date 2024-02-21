@@ -1,0 +1,108 @@
+﻿@using AlriyadahBMS.Services
+@using AlriyadahBMS.Shared.ViewModels
+
+@inject TableService tableService
+<MudDialog>
+    <DialogContent>
+
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+            <MudTabPanel Text="General Information">
+                @*  <MudText>
+                check1
+                </MudText> *@
+
+                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                    @* <label for="Category-Title">First Name</label> *@
+                    <MudTextField T="string" Label="First Name" Variant="Variant.Outlined" Placeholder="First Name" @bind-Value="StudentEditData.str_First_Name" />
+                    <MudTextField T="string" Label="Middle Name" Variant="Variant.Outlined" Placeholder="Middle Name" @bind-Value="StudentEditData.str_Middle_Name" />
+                    <MudTextField T="string" Label="Last Name" Variant="Variant.Outlined" Placeholder="Last Name" @bind-Value="StudentEditData.str_Last_Name" />
+                    <MudTextField T="string" Label="Address" Variant="Variant.Outlined" Placeholder="Address" @bind-Value="StudentEditData.str_Address" />
+
+                    <MudSelect T="string" Label="City" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.str_City">
+                        @if (CityList != null)
+                            foreach (var cityName in CityList)
+                            {
+                                <MudSelectItem T="string" Value="@cityName.City">@cityName.City</MudSelectItem>
+                            }
+                    </MudSelect>
+
+                    <MudTextField T="string" Label="Zip" Variant="Variant.Outlined" Placeholder="Zip" @bind-Value="StudentEditData.str_Zip" />
+                    <MudTextField T="string" Label="Date Hired" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.date_Hired" />
+
+                    <MudTextField T="string" Label="Cell Phone" Variant="Variant.Outlined" Placeholder="Cell Phone" @bind-Value="StudentEditData.str_Cell_Phone" />
+                    <MudTextField T="string" Label="Home Phone" Variant="Variant.Outlined" Placeholder="Home Phone" @bind-Value="StudentEditData.str_Home_Phone" />
+                    <MudTextField T="string" Label="Other Phone" Variant="Variant.Outlined" Placeholder="Other Phone" @bind-Value="StudentEditData.str_Other_Phone" />
+                    <MudTextField T="string" Label="Email" Variant="Variant.Outlined" Placeholder="Email" @bind-Value="StudentEditData.str_Email" />
+                    <MudSelect Label="Hijri Year" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Year">
+                        @if (HijriList != null)
+                        {
+                            foreach (var hijriyear in HijriList)
+                            {
+                                <MudSelectItem T="int?" value="@hijriyear.Hijri_Year">@hijriyear.Hijri_Year</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+
+                    <MudSelect Label="Hijri Month" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Month">
+                        @if (HijriList != null)
+                        {
+                            foreach (var hijriMonth in HijriList)
+                            {
+                                <MudSelectItem T="int?" value="@hijriMonth.Hijri_Month">@hijriMonth.Hijri_Month</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+
+                    <MudSelect Label="Hijri Day" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Day">
+                        @if (HijriList != null)
+                        {
+                            foreach (var hijriDay in HijriList)
+                            {
+                                <MudSelectItem T="int?" value="@hijriDay.Hijri_Day">@hijriDay.Hijri_Day</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+
+                    <MudTextField Label="Nationality" Variant="Variant.Outlined" Placeholder="Email" @bind-Value="StudentEditData.int_Nationality" />
+                    <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.User_Role">
+                        <MudSelectItem T="string" value="User Role">User Role</MudSelectItem>
+                        <MudSelectItem T="string" value="Employee">Employee</MudSelectItem>
+                    </MudSelect>
+
+                    <MudTextField Label="Staff Id" Variant="Variant.Outlined" Placeholder="Staff Id" @bind-Value="StudentEditData.int_Staff_Id" />
+
+                </MudPaper>
+
+            </MudTabPanel>
+            <MudTabPanel Text="Access Credentials">
+                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                    <MudTextField Label="National ID Iqama" Variant="Variant.Outlined" Placeholder="National ID Iqama" @bind-Value="StudentEditData.str_NationalID_Iqama" />
+                    <MudTextField Label="User Level ID" Variant="Variant.Outlined" Placeholder="User Level ID" @bind-Value="StudentEditData.UserlevelID" />
+                    <MudTextField Label="Parent User Name" Variant="Variant.Outlined" Placeholder="Parent User Name" @bind-Value="StudentEditData.Parent_Username" />
+                    <MudCheckBox @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary">Close</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Text="Driving Status and Absher">
+                <MudText>
+                    check3
+                </MudText>
+            </MudTabPanel>
+            <MudTabPanel Text="Emergency Contact (Optional)">
+                <MudText>
+                    check4
+                </MudText>
+            </MudTabPanel>
+        </MudTabs>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Color="Color.Primary">Cancel</MudButton>
+
+        @* <MudButton OnClick="StudentDataEdit"> </MudButton> *@
+
+    </DialogActions>
+</MudDialog>
+

@@ -8,22 +8,22 @@
 @attribute [Authorize]
 
 <MudMainContent>
-  @*   <MudItem xs="4">
-        <MudPaper Elevation="3" Class="pa-4">
-            <div class="text-center mb-4">
-                <h4>Student Registration</h4>
-            </div>
-            <MudTextField Label="First Name" @bind-Value="studentRegistrationModel.str_First_Name" />
-            <MudTextField Label="Last Name" @bind-Value="studentRegistrationModel.str_Last_Name" />
-            <MudTextField Label="Cell Phone" @bind-Value="studentRegistrationModel.str_Cell_Phone" Mask="@(new PatternMask("00 0000 0000"))" />
-            <MudTextField Label="Email" @bind-Value="studentRegistrationModel.str_Email" />
+    @*   <MudItem xs="4">
+    <MudPaper Elevation="3" Class="pa-4">
+    <div class="text-center mb-4">
+    <h4>Student Registration</h4>
+    </div>
+    <MudTextField Label="First Name" @bind-Value="studentRegistrationModel.str_First_Name" />
+    <MudTextField Label="Last Name" @bind-Value="studentRegistrationModel.str_Last_Name" />
+    <MudTextField Label="Cell Phone" @bind-Value="studentRegistrationModel.str_Cell_Phone" Mask="@(new PatternMask("00 0000 0000"))" />
+    <MudTextField Label="Email" @bind-Value="studentRegistrationModel.str_Email" />
 
-            <MudTextField Label="Absher Appointment Number" @bind-Value="studentRegistrationModel.AbsherApptNbr" />
-            <MudTextField @bind-Value="studentRegistrationModel.AbsherApptNbr" Variant="Variant.Outlined" />
+    <MudTextField Label="Absher Appointment Number" @bind-Value="studentRegistrationModel.AbsherApptNbr" />
+    <MudTextField @bind-Value="studentRegistrationModel.AbsherApptNbr" Variant="Variant.Outlined" />
 
-            <MudButton Variant="Variant.Filled" Size="Size.Medium" Color="Color.Primary">Medium</MudButton>
+    <MudButton Variant="Variant.Filled" Size="Size.Medium" Color="Color.Primary">Medium</MudButton>
 
-        </MudPaper>
+    </MudPaper>
     </MudItem> *@
 
 
@@ -41,7 +41,9 @@
             <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Cell_Phone)">Cell Phone</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Email)">Email</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_NationalID_Iqama)">National ID Iqama</MudTableSortLabel></MudTh>
+
             <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.intDrivinglicenseType)">Driving License Type</MudTableSortLabel></MudTh>
+
             <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.AbsherApptNbr)">Absher Appointment Number</MudTableSortLabel></MudTh>
             <MudTh>Action</MudTh>
         </HeaderContent>
@@ -51,11 +53,22 @@
                 <MudTd DataLabel="Cell Phone">@context.str_Cell_Phone</MudTd>
                 <MudTd DataLabel="Email">@context.str_Email</MudTd>
                 <MudTd DataLabel="National ID Iqama">@context.str_NationalID_Iqama</MudTd>
-                <MudTd DataLabel="Driving License Type">@context.intDrivinglicenseType</MudTd>
-                <MudTd DataLabel="Absher Appointment Number">@context.AbsherApptNbr</MudTd>
+
+                @* <MudTd DataLabel="Driving License Type">@context.intDrivinglicenseType</MudTd> *@
+                <MudTd DataLabel="Driving License Type">
+                    @{
+                    DrivingLicense type = (DrivingLicense)(context?.intDrivinglicenseType ?? 0);
+                    if (type != 0)
+                    {
+                        <span>@type.ToDescriptionString()</span>
+                    }
+                }
+            </MudTd>
+
+            <MudTd DataLabel="Absher Appointment Number">@context.AbsherApptNbr</MudTd>
                 <MudTd>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.RemoveRedEye" />
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.RemoveRedEye" OnClick="(()=> OnClick_StudentViewDetails(context))" />
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="(()=> OnClick_StudentEditDetails(context))" />
                     @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" /> *@
                 </MudTd>
             </RowTemplate>

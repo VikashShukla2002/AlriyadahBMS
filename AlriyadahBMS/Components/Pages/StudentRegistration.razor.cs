@@ -11,16 +11,20 @@ namespace AlriyadahBMS.Components.Pages
 {
     public partial class StudentRegistration
     {
-        public StudentRegistrationModel studentRegistrationModel { get; set; } = new();
-        private List<StudentRegistrationModel>? students;
+      //  public StudentRegistrationModel studentRegistrationModel { get; set; } = new();
+       // private List<StudentRegistrationModel>? students;
+
+        public StudentRegistrationModel? StudentData { get; set; }
 
         private string searchString = "";
         private IEnumerable<StudentRegistrationModel>? tblRecord = new List<StudentRegistrationModel>();
+        public IEnumerable<CityModel>? CityList = new List<CityModel>();
         protected override async Task OnInitializedAsync()
         {
-            tblRecord = await tableService.GetRecords<List<StudentRegistrationModel>>("tblStudents");
+            tblRecord = await tableService.GetRecords<List<StudentRegistrationModel>>(TableConst.TblStudents);
+           // CityList = await tableService.GetRecords<List<CityModel>>(TableConst.Cities);
         }
-
+            
         private bool FilterFunc(StudentRegistrationModel record)
         {
             if (record == null)
@@ -45,12 +49,32 @@ namespace AlriyadahBMS.Components.Pages
         }
 
 
-        private void OnClick_SelectFileItems(StudentRegistrationModel value)
+        private void OnClick_StudentViewDetails(StudentRegistrationModel value)
         {
-            SelectedFile = value;
+            StudentData = value;
             var parameters = new DialogParameters();
-            parameters.Add("SelectedFile", SelectedFile);
-            Dialog.Show<SetAsMainDialoge>(SelectedFile.MediaName, parameters);
+            DialogOptions dialogOptions = new DialogOptions()
+            {
+              MaxWidth= MaxWidth.Medium,
+              FullWidth = true,
+              Position = DialogPosition.TopCenter
+            };
+            parameters.Add("StudentData", StudentData);
+            Dialog.Show<StudentViewDialog>("View", parameters, dialogOptions);
+        }
+
+        private void OnClick_StudentEditDetails(StudentRegistrationModel value)
+        {
+            StudentData = value;
+            var parameters = new DialogParameters();
+            DialogOptions dialogOptions = new DialogOptions()
+            {
+              MaxWidth= MaxWidth.Medium,
+              FullWidth = true,
+              Position = DialogPosition.TopCenter
+            };
+            parameters.Add("StudentEditData", StudentData);
+            Dialog.Show<StudentEditDialog>("Edit", parameters, dialogOptions);
         }
 
 
