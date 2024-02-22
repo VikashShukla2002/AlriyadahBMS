@@ -21,4 +21,15 @@ namespace AlriyadahBMS.Shared.Helper
         [Description("CDL (Trucks & Buses)")]
         CdlTruckAndBus = 4
     }
+
+    public enum RelationshipType
+    {
+        Father,
+        Mother,
+        Brother,
+        Sister,
+        Uncle,
+        Aunt,
+        Friend
+    }
 }

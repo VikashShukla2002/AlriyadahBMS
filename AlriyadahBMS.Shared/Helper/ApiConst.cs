@@ -17,6 +17,7 @@ namespace AlriyadahBMS.Shared.Helper
     {
         public static string Base = "api/";
         public static string GET_TblList = Base + "Table/{table}";
+        public static string POST_TblUpdate = Base + "edit/{table}/{key}";
     }
 
 

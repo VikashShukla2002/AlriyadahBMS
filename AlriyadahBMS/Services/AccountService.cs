@@ -26,7 +26,7 @@ namespace AlriyadahBMS.Services
 
         public async Task<SignInResponse> LoginAsync(SignInRequest signInRequest)
         {
-            var response = await _apiService.PostAsync<SignInRequest, SignInResponse>(AccountApiConst.POST_SignIn, signInRequest);
+            var response = await _apiService.PostWithFormBodyAsync<SignInRequest, SignInResponse>(AccountApiConst.POST_SignIn, signInRequest);
             if (response!.Success)
             {
                 //await SecureStorage.SetAsync("JWTToken", response!.JWT!);

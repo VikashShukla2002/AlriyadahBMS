@@ -7,10 +7,6 @@
 
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
             <MudTabPanel Text="General Information">
-                @*  <MudText>
-                check1
-                </MudText> *@
-
                 <MudPaper Class="pa-2 ma-2" Elevation="0">
                     @* <label for="Category-Title">First Name</label> *@
                     <MudTextField T="string" Label="First Name" Variant="Variant.Outlined" Placeholder="First Name" @bind-Value="StudentEditData.str_First_Name" />
@@ -25,10 +21,8 @@
                                 <MudSelectItem T="string" Value="@cityName.City">@cityName.City</MudSelectItem>
                             }
                     </MudSelect>
-
                     <MudTextField T="string" Label="Zip" Variant="Variant.Outlined" Placeholder="Zip" @bind-Value="StudentEditData.str_Zip" />
                     <MudTextField T="string" Label="Date Hired" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.date_Hired" />
-
                     <MudTextField T="string" Label="Cell Phone" Variant="Variant.Outlined" Placeholder="Cell Phone" @bind-Value="StudentEditData.str_Cell_Phone" />
                     <MudTextField T="string" Label="Home Phone" Variant="Variant.Outlined" Placeholder="Home Phone" @bind-Value="StudentEditData.str_Home_Phone" />
                     <MudTextField T="string" Label="Other Phone" Variant="Variant.Outlined" Placeholder="Other Phone" @bind-Value="StudentEditData.str_Other_Phone" />
@@ -42,7 +36,6 @@
                             }
                         }
                     </MudSelect>
-
                     <MudSelect Label="Hijri Month" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Month">
                         @if (HijriList != null)
                         {
@@ -52,7 +45,6 @@
                             }
                         }
                     </MudSelect>
-
                     <MudSelect Label="Hijri Day" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Day">
                         @if (HijriList != null)
                         {
@@ -62,39 +54,70 @@
                             }
                         }
                     </MudSelect>
-
                     <MudTextField Label="Nationality" Variant="Variant.Outlined" Placeholder="Email" @bind-Value="StudentEditData.int_Nationality" />
                     <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.User_Role">
                         <MudSelectItem T="string" value="User Role">User Role</MudSelectItem>
                         <MudSelectItem T="string" value="Employee">Employee</MudSelectItem>
                     </MudSelect>
-
                     <MudTextField Label="Staff Id" Variant="Variant.Outlined" Placeholder="Staff Id" @bind-Value="StudentEditData.int_Staff_Id" />
-
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
                 </MudPaper>
-
             </MudTabPanel>
             <MudTabPanel Text="Access Credentials">
                 <MudPaper Class="pa-2 ma-2" Elevation="0">
                     <MudTextField Label="National ID Iqama" Variant="Variant.Outlined" Placeholder="National ID Iqama" @bind-Value="StudentEditData.str_NationalID_Iqama" />
-                    <MudTextField Label="User Level ID" Variant="Variant.Outlined" Placeholder="User Level ID" @bind-Value="StudentEditData.UserlevelID" />
+                    <MudTextField Label="User Level ID" Variant="Variant.Outlined" Placeholder="User Level ID" Value="@Utility.GetCurrentUserLevelName(StudentEditData.UserlevelID)" Disabled="true" />
                     <MudTextField Label="Parent User Name" Variant="Variant.Outlined" Placeholder="Parent User Name" @bind-Value="StudentEditData.Parent_Username" />
-                    <MudCheckBox @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
-
-                    <MudButton Variant="Variant.Filled" Color="Color.Secondary">Close</MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
-
+                    <MudCheckBox Label="Activated" @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
                 </MudPaper>
             </MudTabPanel>
             <MudTabPanel Text="Driving Status and Absher">
-                <MudText>
-                    check3
-                </MudText>
+                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                    <MudCheckBox Label="Do you have driving experience?" @bind-Value="@StudentEditData.IsDrivingexperience" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+                    <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.intDrivinglicenseType">
+                        @{
+                            foreach (DrivingLicense type in Enum.GetValues(typeof(DrivingLicense)))
+                            {
+                                int? value = (int)type;
+                                <MudSelectItem T="int?" value="@value">@type.ToDescriptionString()</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+                    <MudTextField Label="Absher Appointment Number" Variant="Variant.Outlined" Placeholder="Absher Appointment Number" @bind-Value="StudentEditData.AbsherApptNbr" />
+                    <MudTextField Label="Absher Appointment Photo" Variant="Variant.Outlined" Placeholder="Absher Appointment Photo" @bind-Value="StudentEditData.Absherphoto" />
+
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateGeneralInformation">Save</MudButton>
+                </MudPaper>
             </MudTabPanel>
+
+
             <MudTabPanel Text="Emergency Contact (Optional)">
-                <MudText>
-                    check4
-                </MudText>
+                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                    <MudTextField Label="Date Started" Variant="Variant.Outlined" Placeholder="Absher Appointment Number" @bind-Value="StudentEditData.date_Started" />
+                    <MudTextField Label="Date Hired" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.str_DateHired" />
+                    <MudTextField Label="Date Left" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.str_DateLeft" />
+                    <MudTextField Label="Emergency Contact Name" Variant="Variant.Outlined" Placeholder="Emergency Contact Name" @bind-Value="StudentEditData.str_Emergency_Contact_Name" />
+                    <MudTextField Label="Emergency Contact Phone" Variant="Variant.Outlined" Placeholder="Emergency Contact Phone" @bind-Value="StudentEditData.str_Emergency_Contact_Phone" />
+                    <MudTextField Label="Emergency Contact Relation" Variant="Variant.Outlined" Placeholder="Emergency Contact Phone" @bind-Value="StudentEditData.str_Emergency_Contact_Relation" />
+                    <MudSelect Label="Emergency Contact Relation" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.str_Emergency_Contact_Relation">
+                        @* <MudSelectItem T="string" Value="">Please select</MudSelectItem> *@
+                        @foreach (RelationshipType relation in Enum.GetValues(typeof(RelationshipType)))
+                        {
+                            <MudSelectItem T="string" Value="@relation.ToString()">@relation.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudTextField T="string" Label="Notes" Lines="7" Variant="Variant.Outlined" @bind-Value="StudentEditData.str_Notes" />
+
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+                </MudPaper>
+
+
             </MudTabPanel>
         </MudTabs>
     </DialogContent>

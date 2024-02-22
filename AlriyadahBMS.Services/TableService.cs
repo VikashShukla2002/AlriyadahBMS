@@ -25,5 +25,11 @@ namespace AlriyadahBMS.Services
             return records;
         }
 
+        public async Task<UpdateApiResponse<TResponse>> UpdateRecord<TRequest, TResponse>(string table, int key, TRequest request)
+        {
+            var records = await _swagger!.PostAsync<TRequest, TResponse>(TableApiConst.POST_TblUpdate.Replace("{table}", table).Replace("{key}", key.ToString()),table, request);
+            return records;
+        }
+
     }
 }

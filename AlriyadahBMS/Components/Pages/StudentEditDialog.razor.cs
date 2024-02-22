@@ -32,6 +32,15 @@ namespace AlriyadahBMS.Components.Pages
 
         }
 
+
+
+
         void Cancel() => MudDialog.Cancel();
+
+        public async void OnClick_UpdateGeneralInformation()
+        {
+          
+        }
+
     }
 }
