@@ -23,10 +23,10 @@ namespace AlriyadahBMS.Components.Pages
         {
             tblRecord = await tableService.GetRecords<List<StudentRegistrationModel>>(TableConst.TblStudents);
             // CityList = await tableService.GetRecords<List<CityModel>>(TableConst.Cities);
-            var check = await tableService.UpdateRecord<UserLevel, UserLevel>(TableConst.UserLevels, -2, new UserLevel
-            {
-                UserLevelName = "Captain"
-            });
+            //var check = await tableService.UpdateRecord<UserLevel, UserLevel>(TableConst.UserLevels, -2, new UserLevel
+            //{
+            //    UserLevelName = "Anonymous"
+            //});
         }
 
         private bool FilterFunc(StudentRegistrationModel record)

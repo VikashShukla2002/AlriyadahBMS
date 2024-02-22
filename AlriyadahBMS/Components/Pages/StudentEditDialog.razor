@@ -89,8 +89,7 @@
                     <MudTextField Label="Absher Appointment Number" Variant="Variant.Outlined" Placeholder="Absher Appointment Number" @bind-Value="StudentEditData.AbsherApptNbr" />
                     <MudTextField Label="Absher Appointment Photo" Variant="Variant.Outlined" Placeholder="Absher Appointment Photo" @bind-Value="StudentEditData.Absherphoto" />
 
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateGeneralInformation">Save</MudButton>
+                    @* <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton> *@
                 </MudPaper>
             </MudTabPanel>
 
@@ -113,8 +112,8 @@
 
                     <MudTextField T="string" Label="Notes" Lines="7" Variant="Variant.Outlined" @bind-Value="StudentEditData.str_Notes" />
 
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+                   @*  <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton> *@
                 </MudPaper>
 
 
@@ -122,7 +121,11 @@
         </MudTabs>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel" Color="Color.Primary">Cancel</MudButton>
+
+        @* <MudButton OnClick="Cancel"  Color="Color.Primary">Cancel</MudButton> *@
+
+        <MudButton Class="mt-3" OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+        <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateGeneralInformation">Save</MudButton>
 
         @* <MudButton OnClick="StudentDataEdit"> </MudButton> *@
 

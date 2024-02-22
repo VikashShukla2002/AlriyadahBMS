@@ -6,6 +6,10 @@ using System.Net.Http.Json;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using AlriyadahBMS.Shared.Helper;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Components;
 
 namespace AlriyadahBMS.Services
 {
@@ -13,15 +17,27 @@ namespace AlriyadahBMS.Services
     {
 
         private readonly HttpClient _client;
+        private readonly NavigationManager _navigation;
 
-        public SwaggerApiService(HttpClient client)
+
+        public SwaggerApiService(HttpClient client, NavigationManager navigation)
         {
             _client = client;
+            _navigation = navigation;
         }
 
         public async Task<TResponse?> GetAsync<TResponse>(string url)
         //where TResponse : ApiResponse<TResponse>
         {
+
+            // var jwtPayloadData = JwtSecurityTokenHandler
+
+            //if (!IsValidToken())
+            //{
+            //    _navigation.NavigateTo("/logout");
+            //    return default;
+            //}
+
             //var errorResult = Activator.CreateInstance(typeof(TResponse)) as TResponse;
             try
             {
@@ -63,6 +79,12 @@ namespace AlriyadahBMS.Services
 
         public async Task<UpdateApiResponse<TResponse>> PostAsync<TRequest, TResponse>(string url, string tableName, TRequest request)
         {
+            if (!IsValidToken())
+            {
+                _navigation.NavigateTo("/logout");
+            }
+
+
             var errorResult = new UpdateApiResponse<TResponse>();
             try
             {
@@ -76,9 +98,11 @@ namespace AlriyadahBMS.Services
                 {
                     var tempResult = JsonConvert.DeserializeObject<Dictionary<string, object>>(contentTemp);
                     var result = JsonConvert.DeserializeObject<UpdateApiResponse<TResponse>>(contentTemp);
-                    if (tempResult!.ContainsKey(tableName))
+                    result!.Success = false;
+                    if (tempResult!.TryGetValue(tableName, out object? value))
                     {
-                        result!.Data = ((JObject)tempResult[tableName]).ToObject<TResponse>();
+                        result.Success = true;
+                        result!.Data = ((JObject)value).ToObject<TResponse>();
                     }
                     return result!;
                 }
@@ -127,5 +151,41 @@ namespace AlriyadahBMS.Services
             }
             return errorResult;
         }
+
+
+        private bool IsValidToken()
+        {
+            
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String("K9tcLJ5Eqxav6yfc")),
+                ValidateIssuer = false, 
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero 
+            };
+
+            try
+            {
+                SecurityToken validatedToken;
+                tokenHandler.ValidateToken(_client.DefaultRequestHeaders.Authorization?.Parameter, validationParameters, out validatedToken);
+                return true;
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                return false; // Token has expired
+            }
+            catch (SecurityTokenInvalidSignatureException)
+            {
+                return false; // Token signature is invalid or tampered
+            }
+            catch (SecurityTokenValidationException)
+            {
+                return false; // Token validation failed
+            }
+        }
+
+
     }
 }

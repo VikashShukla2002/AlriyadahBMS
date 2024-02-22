@@ -642,6 +642,8 @@ public class NafathController : ApiController
 
 
 //[Authorize(Policy = "ApiUserLevel")]
+[Authorize]
+
 public class TableController : ApiController
 {
     [HttpGet("{table}")]

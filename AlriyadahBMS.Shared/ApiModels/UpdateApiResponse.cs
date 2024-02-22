@@ -10,7 +10,7 @@ namespace AlriyadahBMS.Shared.ApiModels
         {
             public bool Success { get; set; } = false;
             public string? FailureMessage { get; set; }
-            public string? z { get; set; }
+            public string? Action { get; set; }
             public string? Version { get; set; }
             public TResponse? Data { get; set; }
         }

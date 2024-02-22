@@ -10,15 +10,24 @@ namespace AlriyadahBMS.Shared.Helper
 {
     public static class JwtParser
     {
+        public static Dictionary<string, object>? GetJwtPayloadData(string? jwt)
+        {
+            if (string.IsNullOrEmpty(jwt)) return null;
+
+            var payload = jwt.Split('.')[1];
+            var jsonBytes = ParseBase64WithoutPadding(payload);
+            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+            return keyValuePairs;
+        }
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var claims = new List<Claim>();
-            var payload = jwt.Split('.')[1];
 
-            var jsonBytes = ParseBase64WithoutPadding(payload);
+            if (GetJwtPayloadData(jwt) is Dictionary<string, object> payloadData)
+            {
+                claims.AddRange(payloadData.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString() ?? "")));
+            }
 
-            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
             return claims;
         }
         private static byte[] ParseBase64WithoutPadding(string base64)
