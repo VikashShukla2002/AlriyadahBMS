@@ -34,7 +34,7 @@ namespace AlriyadahBMS.Components.Pages
 
         void Cancel() => MudDialog.Cancel();
 
-        public async void OnClick_UpdateGeneralInformation()
+        public async void OnClick_UpdateStudentRegistration()
         {
             var check = await tableService.UpdateRecord<StudentRegistrationModel, StudentRegistrationModel>(TableConst.TblStudents, StudentEditData!.int_Student_ID.GetValueOrDefault(), StudentEditData);
             

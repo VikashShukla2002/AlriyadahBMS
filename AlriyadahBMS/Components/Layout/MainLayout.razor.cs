@@ -1,4 +1,5 @@
-﻿using MudBlazor;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace AlriyadahBMS.Components.Layout
     public partial class MainLayout
     {
         bool _drawerOpen = true;
+
+        [Parameter]
+        public string PageName { get; set; } = "Home";
 
         void DrawerToggle()
         {

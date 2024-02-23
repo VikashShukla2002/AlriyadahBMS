@@ -79,10 +79,10 @@ namespace AlriyadahBMS.Services
 
         public async Task<UpdateApiResponse<TResponse>> PostAsync<TRequest, TResponse>(string url, string tableName, TRequest request)
         {
-            if (!IsValidToken())
-            {
-                _navigation.NavigateTo("/logout");
-            }
+            //if (!IsValidToken())
+            //{
+            //    _navigation.NavigateTo("/logout");
+            //}
 
 
             var errorResult = new UpdateApiResponse<TResponse>();

@@ -2,6 +2,7 @@
 using AlriyadahBMS.Shared.Helper;
 using AlriyadahBMS.Shared.ViewModels;
 using MudBlazor;
+using MudBlazor.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,14 @@ namespace AlriyadahBMS.Components.Pages
                 FullWidth = true,
                 Position = DialogPosition.TopCenter
             };
+
+            
+            //{
+            //    dialogOptions.FullScreen = true;
+            //}
+
+            //Breakpoint = "Breakpoint.SmAndDown "
+
             parameters.Add("paymentsEditData", PaymentData);
             Dialog.Show<PaymentEditDialog>("Payment Edit", parameters, dialogOptions);
 

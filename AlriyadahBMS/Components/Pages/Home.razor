@@ -3,10 +3,9 @@
 @attribute [Authorize]
 
 <MudMainContent>
-    <h1>Hello, world!</h1>
+    <h1>Welcome to AlriyadahBMS</h1>
 
-    Welcome to your new app.
-
+    
 
     <AuthorizeView>
         <Authorized>
@@ -14,3 +13,13 @@
         </Authorized>
     </AuthorizeView>
 </MudMainContent>
+
+
+@code{
+    protected override void OnInitialized()
+    {
+        // PageName = "Home";
+
+
+    }
+}

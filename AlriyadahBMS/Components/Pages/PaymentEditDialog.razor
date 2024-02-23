@@ -1,6 +1,7 @@
-﻿@using AlriyadahBMS.Shared.ViewModels
+﻿@using AlriyadahBMS.Services
+@using AlriyadahBMS.Shared.ViewModels
 
-
+@inject TableService tableService
 
 <MudDialog>
 
@@ -53,7 +54,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" OnClick="Cancel" Color="Color.Default">Cancel</MudButton>
-        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdatePayment">Save</MudButton>
 
     </DialogActions>
 
@@ -65,4 +66,22 @@
     [Parameter]
     public PaymentsModel? paymentsEditData { get; set; }
     void Cancel() => MudDialog.Cancel();
+
+    public async void OnClick_UpdatePayment()
+    {
+        var check = await tableService.UpdateRecord<PaymentsModel, PaymentsModel>(TableConst.TblPayments, paymentsEditData!.int_Bill_ID, paymentsEditData);
+        ClosePopup();
+    }
+
+    // public async void OnClick_UpdateStudentRegistration()
+    // {
+    //     var check = await tableService.UpdateRecord<StudentRegistrationModel, StudentRegistrationModel>(TableConst.TblStudents, StudentEditData!.int_Student_ID.GetValueOrDefault(), StudentEditData);
+
+    // }
+
+    private void ClosePopup()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
 }
