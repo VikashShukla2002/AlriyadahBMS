@@ -66,7 +66,7 @@ namespace AlriyadahBMS.Components.Pages
             parameters.Add("StudentData", StudentData);
             Dialog.Show<StudentViewDialog>("View", parameters, dialogOptions);
         }
-
+                
         private void OnClick_StudentEditDetails(StudentRegistrationModel value)
         {
             StudentData = value;

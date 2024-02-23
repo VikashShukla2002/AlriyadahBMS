@@ -60,8 +60,7 @@
                         <MudSelectItem T="string" value="Employee">Employee</MudSelectItem>
                     </MudSelect>
                     <MudTextField Label="Staff Id" Variant="Variant.Outlined" Placeholder="Staff Id" @bind-Value="StudentEditData.int_Staff_Id" />
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+
                 </MudPaper>
             </MudTabPanel>
             <MudTabPanel Text="Access Credentials">
@@ -70,8 +69,7 @@
                     <MudTextField Label="User Level ID" Variant="Variant.Outlined" Placeholder="User Level ID" Value="@Utility.GetCurrentUserLevelName(StudentEditData.UserlevelID)" Disabled="true" />
                     <MudTextField Label="Parent User Name" Variant="Variant.Outlined" Placeholder="Parent User Name" @bind-Value="StudentEditData.Parent_Username" />
                     <MudCheckBox Label="Activated" @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+
                 </MudPaper>
             </MudTabPanel>
             <MudTabPanel Text="Driving Status and Absher">
@@ -112,8 +110,6 @@
 
                     <MudTextField T="string" Label="Notes" Lines="7" Variant="Variant.Outlined" @bind-Value="StudentEditData.str_Notes" />
 
-                   @*  <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-                    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton> *@
                 </MudPaper>
 
 
@@ -124,8 +120,8 @@
 
         @* <MudButton OnClick="Cancel"  Color="Color.Primary">Cancel</MudButton> *@
 
-        <MudButton Class="mt-3" OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-        <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateGeneralInformation">Save</MudButton>
+        <MudButton Class="mt-3 mb-2" OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
+        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateGeneralInformation">Save</MudButton>
 
         @* <MudButton OnClick="StudentDataEdit"> </MudButton> *@
 

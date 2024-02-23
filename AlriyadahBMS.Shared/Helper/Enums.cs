@@ -32,4 +32,20 @@ namespace AlriyadahBMS.Shared.Helper
         Aunt,
         Friend
     }
+
+    public enum PaymentMethod
+    {
+        [Description("Mada / Credit Card")]
+        MadaCreditCard = 1,
+
+        [Description("Cash")]
+        Cash = 2,
+
+        [Description("Apple Pay")]
+        ApplePay = 3,
+
+        [Description("STC Pay")]
+        STCPay = 4
+    }
+
 }

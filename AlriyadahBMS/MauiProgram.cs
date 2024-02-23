@@ -22,6 +22,7 @@ namespace AlriyadahBMS
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:52985") });
+            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://bmstest.alriyadahbms.com") });
             builder.Services.AddScoped<ISwaggerApiService, SwaggerApiService>();
             builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationStateService>();
             builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();

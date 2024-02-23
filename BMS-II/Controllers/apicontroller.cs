@@ -642,7 +642,7 @@ public class NafathController : ApiController
 
 
 //[Authorize(Policy = "ApiUserLevel")]
-[Authorize]
+//[Authorize]
 
 public class TableController : ApiController
 {
