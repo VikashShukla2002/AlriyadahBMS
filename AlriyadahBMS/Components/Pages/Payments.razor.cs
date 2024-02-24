@@ -21,6 +21,7 @@ namespace AlriyadahBMS.Components.Pages
         private IEnumerable<PaymentsModel>? tblPaymentsRecord = new List<PaymentsModel>();
         protected override async Task OnInitializedAsync()
         {
+            var t = Language;
             tblPaymentsRecord = await tableService.GetRecords<List<PaymentsModel>>(TableConst.TblPayments);
 
             var check = tblPaymentsRecord;

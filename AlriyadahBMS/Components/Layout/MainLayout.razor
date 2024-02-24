@@ -26,20 +26,11 @@
             <ChildContent>
                 <AuthorizeView>
                     <Authorized>
-                        @*  <MudAppBar Elevation="1">
+                         <MudAppBar Elevation="1">
                         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                         <MudSpacer />
                         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
-                        </MudAppBar> *@
-
-
-                        <MudAppBar Elevation="1">
-                            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-                            @* <span class="navbar-text mx-auto">@PageName</span> *@
-                            <MudSpacer />
-                            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
                         </MudAppBar>
-
                         <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
                             <NavMenu />
                         </MudDrawer>

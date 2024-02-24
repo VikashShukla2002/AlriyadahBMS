@@ -5,15 +5,15 @@
 
 @inject IDialogService Dialog
 @inject TableService tableService
+@inject LocalizationService Language
 
 
-
-    <MudMainContent>
+   <PageLayout Title="Payments">
 
         <MudTable Items="@tblPaymentsRecord" Dense="false" Hover="true" ReadOnly="false" CanCancelEdit="false" Filter="new Func<PaymentsModel,bool>(FilterFunc)"
                   SortLabel="Sort By">
             <ToolBarContent>
-                <MudText Typo="Typo.h6">Payments</MudText>
+                @* <MudText Typo="Typo.h6">Payments</MudText> *@
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
@@ -83,7 +83,7 @@
                 </PagerContent>
             </MudTable>
 
-        </MudMainContent>
+   </PageLayout>
 
 
 

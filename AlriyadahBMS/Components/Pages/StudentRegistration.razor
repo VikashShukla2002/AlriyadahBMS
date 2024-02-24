@@ -6,8 +6,8 @@
 @inject IDialogService Dialog
 
 @attribute [Authorize]
-
-<MudMainContent>
+@inject LocalizationService Language
+<PageLayout Title="Student Registration">
     @*   <MudItem xs="4">
     <MudPaper Elevation="3" Class="pa-4">
     <div class="text-center mb-4">
@@ -30,7 +30,7 @@
     <MudTable Items="@tblRecord" Dense="false" Hover="true" ReadOnly="false" CanCancelEdit="false" Filter="new Func<StudentRegistrationModel,bool>(FilterFunc)"
               SortLabel="Sort By">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Student Registration</MudText>
+            @* <MudText Typo="Typo.h6">Student Registration</MudText> *@
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -76,7 +76,7 @@
                 <MudTablePager />
             </PagerContent>
         </MudTable>
-    </MudMainContent>
+  </PageLayout>
 
 
 

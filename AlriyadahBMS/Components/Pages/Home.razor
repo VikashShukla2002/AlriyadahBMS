@@ -1,25 +1,24 @@
 ﻿@page "/"
 
+@inject LocalizationService Language
 @attribute [Authorize]
 
-<MudMainContent>
+
+<PageLayout Title="Home">
     <h1>Welcome to AlriyadahBMS</h1>
-
-    
-
     <AuthorizeView>
         <Authorized>
             @context.User!.Identity!.Name
         </Authorized>
     </AuthorizeView>
-</MudMainContent>
 
+</PageLayout>
 
-@code{
+@code {
     protected override void OnInitialized()
     {
         // PageName = "Home";
 
-
+        var p1 = Language.Phrase("smsafterassessmenttest");
     }
 }

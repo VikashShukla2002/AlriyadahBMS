@@ -8,8 +8,7 @@
         }
         else
         {
-            @* <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="MainLayout.OnClick_BtnMenu" /> *@
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="MainLayout.DrawerToggle" />
         }
     }
     else
@@ -28,10 +27,17 @@
     {
         @RightContainer
     }
+  @*   else
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    } *@
 
 </MudAppBar>
- 
-@ChildContent 
+
+<MudMainContent>
+
+    @ChildContent
+</MudMainContent>
 
 @code {
     [CascadingParameter]
