@@ -38,7 +38,7 @@ namespace AlriyadahBMS.Services
                 //    Id = phrase.Attribute("id")!.Value,
                 //    Value = phrase.Attribute("value")!.Value
                 //});
-                var childElements = languageElement.Elements();
+                var childElements = languageElement.Elements("");
                 var descendantElements = childElements.ToList();
 
                 var phrases = doc.Descendants("global").Elements("phrase").Select(phrase => new Phrase()
