@@ -7,7 +7,10 @@
 
 @attribute [Authorize]
 @inject LocalizationService Language
+
+
 <PageLayout Title="Student Registration">
+@* <PageLayout Title="@Language.Phrase("tblstudents","tblcaption")"> *@
     @*   <MudItem xs="4">
     <MudPaper Elevation="3" Class="pa-4">
     <div class="text-center mb-4">
