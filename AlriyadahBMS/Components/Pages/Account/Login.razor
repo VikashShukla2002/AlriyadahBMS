@@ -4,6 +4,8 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ISnackbar Snackbar
+@inject LocalizationService Language
+
 
 <div class="container-fluid">
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
@@ -17,32 +19,32 @@
                 </div>
 
                 <div class="text-center mb-4">
-                    <h4>Sign in to start your session</h4>
+                    <h4>@Language.Phrase("loginmsg")</h4>
                 </div>
 
                 <div class="mb-4">
-                    <MudTextField @bind-Value="LoginModel.UserName" For="@(() => LoginModel.UserName)" Label="User name" />
+                    <MudTextField @bind-Value="LoginModel.UserName" For="@(() => LoginModel.UserName)" Label="@Language.Phrase("username")" Required="true" RequiredError="@Language.Phrase("usernamevalidation")" />
                 </div>
 
                 <div class="mb-4">
-                    <MudTextField @bind-Value="LoginModel.Password" For="@(() => LoginModel.Password)" Label="Password" InputType="@GetInputType()" />
+                    <MudTextField @bind-Value="LoginModel.Password" For="@(() => LoginModel.Password)" Label="@Language.Phrase("password")" InputType="@GetInputType()" Required="true" RequiredError="@Language.Phrase("userpasswordvalidation")" />
                 </div>
 
                 <div class="mb-4">
                     <label>
-                        <input type="checkbox" @bind="ShowPassword" /> Show password
+                        <input type="checkbox" @bind="ShowPassword" /> @Language.Phrase("loginregistrationshowpassword")
                     </label>
                 </div>
 
                 <div class="d-flex align-center justify-content-between">
-                    <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Sign In</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton>
                 </div>
 
                 <div class="text-center mt-4">
                     <p>
-                        <a href="/resetpass" class="forgot-link">Forgot password</a>
+                            <a href="/resetpass" class="forgot-link">@Language.Phrase("resetpwd")</a>
                     </p>
-                    <NavLink Href="/register" Class="forgot-link">Don't have an account? Sign Up</NavLink>
+                    <NavLink Href="/register" Class="forgot-link">@Language.Phrase("registerSignup")</NavLink>
                 </div>
             </MudPaper>
         </div>

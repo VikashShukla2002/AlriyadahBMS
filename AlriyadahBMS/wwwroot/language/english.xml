@@ -23,6 +23,9 @@
     <phrase id="registrationtab4" value="Emergency Contact (Optional)" />
     <phrase id="nafathsendmessage" value="To verify your National ID Iqama, we've sent a request to your mobile. Please select the option on your mobile that matches the two-digit number shown below." />
     <phrase id="2fadisabled" value="Two factor authentication disabled" />
+    <phrase id="loginregistrationshowpassword" value="Show password" />
+    <phrase id="requiredemailvalidation" value="Email address is required" />
+	  
     <!-- v2022 -->
     <phrase id="2faenabled" value="Two factor authentication enabled" />
     <!-- v2022 -->
@@ -714,6 +717,11 @@
     <phrase id="relatedrecordrequired" value="You cannot add or update a record because the foreign key value does not exist in the master table '%t'" />
     <phrase id="relatedrecordexists" value="You cannot delete a record because related records exist in the detail table '%t'" />
     <phrase id="reloadbtn" value="Reload" />
+    <phrase id="registerSignup" value="Don't have an account? Sign Up" />
+    <phrase id="usernamevalidation" value="User Name is required." />
+    <phrase id="userpasswordvalidation" value="Password is required." />
+	  
+	  
     <!-- v2017 -->
     <phrase id="reloadlink" value="Reload" />
     <phrase id="rememberme" value="Remember me" />

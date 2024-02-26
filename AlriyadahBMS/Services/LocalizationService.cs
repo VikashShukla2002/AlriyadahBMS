@@ -14,11 +14,13 @@ namespace AlriyadahBMS.Services
     internal class LocalizationService
     {
         public static List<EwLanguage> EwLanguages { get; } = new();
+
         public static EwLanguage? SelectedLanguage { get; set; }
+        public static bool IsRTL { get; set; } = false;
         static LocalizationService()
         {
             //var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot","language");
-            var path = System.IO.Path.Combine(AppContext.BaseDirectory, "wwwroot", "language");
+                var path = System.IO.Path.Combine(AppContext.BaseDirectory, "wwwroot", "language");
             var files = System.IO.Directory.GetFiles(path);
 
             foreach (var file in files)
@@ -31,11 +33,21 @@ namespace AlriyadahBMS.Services
                 var description = languageElement.Attribute("desc")!.Value;
                 var author = languageElement.Attribute("author")!.Value;
                 var date = languageElement.Attribute("date")!.Value;
-                var phrases = doc.Descendants("phrase").Select(phrase => new Phrase()
+                //var phrases = doc.Descendants("phrase").Select(phrase => new Phrase()
+                //{
+                //    Id = phrase.Attribute("id")!.Value,
+                //    Value = phrase.Attribute("value")!.Value
+                //});
+                var childElements = languageElement.Elements();
+                var descendantElements = childElements.ToList();
+
+                var phrases = doc.Descendants("global").Elements("phrase").Select(phrase => new Phrase()
                 {
                     Id = phrase.Attribute("id")!.Value,
                     Value = phrase.Attribute("value")!.Value
                 });
+
+
                 EwLanguages.Add(new EwLanguage()
                 {
                     Id = id,

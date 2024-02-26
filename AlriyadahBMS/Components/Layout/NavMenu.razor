@@ -1,26 +1,75 @@
-﻿@inject IAccountService AccountService
-
+﻿@using AlriyadahBMS.Shared.ViewModels
+@inject IAccountService AccountService
+@inject LocalizationService Language
 
 <MudDrawerHeader>
     <MudText Typo="Typo.h5" Class="mt-1">AlriyadahBMS</MudText>
 </MudDrawerHeader>
-<MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
-    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
-</MudNavLink>
-<MudNavLink Href="/Feature" Match="NavLinkMatch.All" Style="font-size: 16px">
-    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
-</MudNavLink>
 
-<MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
-    <MudIcon Icon="@Icons.Material.Filled.AppRegistration" /> Student Registration
-</MudNavLink>
+<MudDrawerContainer>
+    <MudNavMenu Class="mud-width-full">
+        <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
+            <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
+        </MudNavLink>
 
-<MudNavLink Href="/paymentsInfo" Match="NavLinkMatch.All" Style="font-size: 16px">
-    <MudIcon Icon="@Icons.Material.Filled.Payment" /> Payments
-</MudNavLink>
+        <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
+            <MudIcon Icon="@Icons.Material.Filled.AppRegistration" /> Student Registration
+        </MudNavLink>
+
+        <MudNavLink Href="/paymentsInfo" Match="NavLinkMatch.All" Style="font-size: 16px">
+            <MudIcon Icon="@Icons.Material.Filled.Payment" /> Payments
+        </MudNavLink>
+
+        <MudNavLink Variant="Variant.Text" Style="font-size: 16px" OnClick="OpenDrawer">
+            <MudIcon Icon="@Icons.Material.Filled.Language" /> Language
+        </MudNavLink>
+
+        <MudNavLink Href="/logout" Match="NavLinkMatch.All" Style="font-size: 16px">
+            <MudIcon Icon="@Icons.Material.Filled.Logout" />
+            Logout
+        </MudNavLink>
+    </MudNavMenu>
+</MudDrawerContainer>
+
+<MudDrawer Class="ro" @bind-Open="@open" Anchor="Anchor.Bottom" Variant="@DrawerVariant.Temporary">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">App Language</MudText>
+    </MudDrawerHeader>
+    <MudDrawerContainer>
+        <MudRadioGroup T="EwLanguage" ValueChanged="LanguageSelectedOptionChanged">
+            @foreach (var language in LocalizationService.EwLanguages)
+            {
+                <MudItem xs="12" md="1">
+                    <MudRadio Value="language">
+                        @language.Name
+                    </MudRadio>
+                </MudItem>
+            }
+        </MudRadioGroup>
+    </MudDrawerContainer>
+</MudDrawer>
 
 
-<MudNavLink Href="/logout" Match="NavLinkMatch.All" Style="font-size: 16px">
-    <MudIcon Icon="@Icons.Material.Filled.Logout" />
-    Logout
-</MudNavLink>
+@code {
+
+    bool open = false;
+
+    void OpenDrawer()
+    {
+        open = !open;
+    }
+    public void LanguageSelectedOptionChanged(EwLanguage language)
+    {
+        LocalizationService.SelectedLanguage = language;
+
+        if (LocalizationService.SelectedLanguage.Id == "ar-SA")
+        {
+            LocalizationService.IsRTL = true;
+        }
+        else
+        {
+            LocalizationService.IsRTL = false;
+        }
+        open = false;
+    }
+}

@@ -23,13 +23,13 @@
 
     <MudSpacer></MudSpacer>
 
-    @if (RightContainer != null)
+    @if (RightContainer == null)
     {
-        @RightContainer
-    }
-  @*   else
-    {
+        @* @RightContainer *@
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    }
+    @* else
+    {
     } *@
 
 </MudAppBar>

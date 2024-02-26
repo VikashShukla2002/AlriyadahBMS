@@ -2,12 +2,12 @@
 @using AlriyadahBMS.Shared.ViewModels
 
 @inject TableService tableService
-<MudDialog>
+<MudDialog Class="overflow-y-scroll">
     <DialogContent>
 
-        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-            <MudTabPanel Text="General Information">
-                <MudPaper Class="pa-2 ma-2" Elevation="0">
+        <MudExpansionPanels MultiExpansion="false">
+            <MudExpansionPanel Text="General Information" IsInitiallyExpanded="true">
+                <MudPaper  Elevation="0">
                     @* <label for="Category-Title">First Name</label> *@
                     <MudTextField T="string" Label="First Name" Variant="Variant.Outlined" Placeholder="First Name" @bind-Value="StudentEditData.str_First_Name" />
                     <MudTextField T="string" Label="Middle Name" Variant="Variant.Outlined" Placeholder="Middle Name" @bind-Value="StudentEditData.str_Middle_Name" />
@@ -62,18 +62,18 @@
                     <MudTextField Label="Staff Id" Variant="Variant.Outlined" Placeholder="Staff Id" @bind-Value="StudentEditData.int_Staff_Id" />
 
                 </MudPaper>
-            </MudTabPanel>
-            <MudTabPanel Text="Access Credentials">
-                <MudPaper Class="pa-2 ma-2" Elevation="0">
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Access Credentials">
+                <MudPaper  Elevation="0">
                     <MudTextField Label="National ID Iqama" Variant="Variant.Outlined" Placeholder="National ID Iqama" @bind-Value="StudentEditData.str_NationalID_Iqama" />
                     <MudTextField Label="User Level ID" Variant="Variant.Outlined" Placeholder="User Level ID" Value="@Utility.GetCurrentUserLevelName(StudentEditData.UserlevelID)" Disabled="true" />
                     <MudTextField Label="Parent User Name" Variant="Variant.Outlined" Placeholder="Parent User Name" @bind-Value="StudentEditData.Parent_Username" />
                     <MudCheckBox Label="Activated" @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
 
                 </MudPaper>
-            </MudTabPanel>
-            <MudTabPanel Text="Driving Status and Absher">
-                <MudPaper Class="pa-2 ma-2" Elevation="0">
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Driving Status and Absher">
+                <MudPaper  Elevation="0">
                     <MudCheckBox Label="Do you have driving experience?" @bind-Value="@StudentEditData.IsDrivingexperience" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
                     <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.intDrivinglicenseType">
                         @{
@@ -89,11 +89,9 @@
 
                     @* <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton> *@
                 </MudPaper>
-            </MudTabPanel>
-
-
-            <MudTabPanel Text="Emergency Contact (Optional)">
-                <MudPaper Class="pa-2 ma-2" Elevation="0">
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Emergency Contact (Optional)">
+                <MudPaper  Elevation="0">
                     <MudTextField Label="Date Started" Variant="Variant.Outlined" Placeholder="Absher Appointment Number" @bind-Value="StudentEditData.date_Started" />
                     <MudTextField Label="Date Hired" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.str_DateHired" />
                     <MudTextField Label="Date Left" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.str_DateLeft" />
@@ -113,8 +111,8 @@
                 </MudPaper>
 
 
-            </MudTabPanel>
-        </MudTabs>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
     </DialogContent>
     <DialogActions>
 

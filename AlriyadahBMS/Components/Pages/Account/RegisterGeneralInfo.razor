@@ -1,9 +1,10 @@
 ﻿@using AlriyadahBMS.Shared.ViewModels
 
+@inject LocalizationService Language
 
 <MudPaper Elevation="3" Class="pa-4">
 
-    <MudTextField Label="First Name" @bind-Value="registerModels.str_First_Name" Required="true" RequiredError="User name is required!" />
+    <MudTextField Label="@Language.Phrase("fldcaption")" @bind-Value="registerModels.str_First_Name" Required="true" RequiredError="User name is required!" />
     <MudTextField Label="Middle Name" @bind-Value="registerModels.str_Middle_Name" Required="true" RequiredError="Middle name is required" />
     <MudTextField Label="Last Name" @bind-Value="registerModels.str_Last_Name" Required="true" RequiredError="Mobile Number is required!" />
     <MudTextField Label="Cell Phone" @bind-Value="registerModels.str_Cell_Phone" Required="true" RequiredError="Mobile Number is required!" Mask="@(new PatternMask("00 0000 0000"))" />

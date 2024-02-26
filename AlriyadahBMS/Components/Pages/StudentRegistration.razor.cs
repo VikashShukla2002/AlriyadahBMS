@@ -62,9 +62,10 @@ namespace AlriyadahBMS.Components.Pages
             var parameters = new DialogParameters();
             DialogOptions dialogOptions = new DialogOptions()
             {
-                MaxWidth = MaxWidth.Medium,
-                FullWidth = true,
-                Position = DialogPosition.TopCenter
+                //MaxWidth = MaxWidth.Large,
+                //FullWidth = true,
+                //Position = DialogPosition.TopCenter,
+                FullScreen = true
             };
             parameters.Add("StudentData", StudentData);
             Dialog.Show<StudentViewDialog>("View", parameters, dialogOptions);
@@ -76,9 +77,10 @@ namespace AlriyadahBMS.Components.Pages
             var parameters = new DialogParameters();
             DialogOptions dialogOptions = new DialogOptions()
             {
-                MaxWidth = MaxWidth.Medium,
-                FullWidth = true,
-                Position = DialogPosition.TopCenter
+                //MaxWidth = MaxWidth.Medium,
+                //FullWidth = true,
+                //Position = DialogPosition.TopCenter
+                FullScreen = true
             };
             parameters.Add("StudentEditData", StudentData);
             Dialog.Show<StudentEditDialog>("Edit", parameters, dialogOptions);
