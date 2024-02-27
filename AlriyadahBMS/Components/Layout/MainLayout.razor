@@ -72,25 +72,24 @@
                             <MudDrawerContainer>
 
                                 <MudPaper Class="pa-3">
+                                    @if (LocalizationService.SelectedLanguage != null)
+                                    {
+                                        <MudRadioGroup T="EwLanguage" Value="LocalizationService.SelectedLanguage" ValueChanged="LanguageSelectedOptionChanged">
+                                            <MudStack Spacing="0">
 
-                                    <MudRadioGroup T="EwLanguage" ValueChanged="LanguageSelectedOptionChanged">
-                                        <MudStack Spacing="0">
-
-                                            @foreach (var language in LocalizationService.EwLanguages)
-                                            {
-                                                <MudRadio Value="language">
-                                                    @language.Name
-                                                </MudRadio>
-                                                @* <MudItem xs="12" md="1">
-                                            </MudItem> *@
-                                            }
-                                        </MudStack>
-                                    </MudRadioGroup>
-
+                                                @foreach (var language in LocalizationService.EwLanguages)
+                                                {
+                                                    <MudRadio Value="language">
+                                                        @language.Name
+                                                    </MudRadio>
+                                                }
+                                            </MudStack>
+                                        </MudRadioGroup>
+                                    }
                                 </MudPaper>
 
 
-                              
+
                             </MudDrawerContainer>
                         </MudDrawer>
                     </Authorized>
@@ -111,18 +110,28 @@
     {
         open = !open;
     }
-    public void LanguageSelectedOptionChanged(EwLanguage language)
-    {
-        LocalizationService.SelectedLanguage = language;
 
-        if (LocalizationService.SelectedLanguage.Id == "ar-SA")
-        {
-            LocalizationService.IsRTL = true;
-        }
-        else
-        {
-            LocalizationService.IsRTL = false;
-        }
+    protected override void OnInitialized()
+    {
+        StateHasChanged();
+    }
+
+    public async Task LanguageSelectedOptionChanged(EwLanguage language)
+    {
+        // LocalizationService.SelectedLanguage = language;
+
+        // if (LocalizationService.SelectedLanguage.Id == "ar-SA")
+        // {
+        //     LocalizationService.IsRTL = true;
+        // }
+        // else
+        // {
+        //     LocalizationService.IsRTL = false;
+        // }
+
+        await LocalizationService.SetLanguageAsync(language);
         open = false;
+        StateHasChanged();
+
     }
 }

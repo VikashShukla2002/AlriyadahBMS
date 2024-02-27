@@ -21,6 +21,7 @@ namespace AlriyadahBMS
             builder.Services.AddMudServices();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddSingleton<LocalizationService>();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:52985") });
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://bmstest.alriyadahbms.com") });
             builder.Services.AddScoped<ISwaggerApiService, SwaggerApiService>();
@@ -28,7 +29,6 @@ namespace AlriyadahBMS
             builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<TableService>();
-            builder.Services.AddSingleton<LocalizationService>();
 
 
 #if DEBUG
@@ -36,7 +36,7 @@ namespace AlriyadahBMS
     		builder.Logging.AddDebug();
 
 #endif
-
+            LocalizationService.InitializeAsync().GetAwaiter().GetResult();
             return builder.Build();
         }
     }

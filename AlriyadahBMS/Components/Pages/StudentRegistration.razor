@@ -9,8 +9,8 @@
 @inject LocalizationService Language
 
 
-<PageLayout Title="Student Registration">
-@* <PageLayout Title="@Language.Phrase("tblstudents","tblcaption")"> *@
+@* <PageLayout Title="Student Registration"> *@
+<PageLayout Title="@Language.Phrase("tblstudents","tblcaption")">
     @*   <MudItem xs="4">
     <MudPaper Elevation="3" Class="pa-4">
     <div class="text-center mb-4">
@@ -39,19 +39,22 @@
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_First_Name)">First Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Last_Name)">Last Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Cell_Phone)">Cell Phone</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Email)">Email</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_NationalID_Iqama)">National ID Iqama</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_First_Name)">  @Language.Phrase("tblstudents", "str_first_name", "fldcaption") </MudTableSortLabel></MudTh>
 
-            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.intDrivinglicenseType)">Driving License Type</MudTableSortLabel></MudTh>
 
-            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.AbsherApptNbr)">Absher Appointment Number</MudTableSortLabel></MudTh>
-            <MudTh>Action</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="First Name">@context.str_First_Name</MudTd>
+
+                <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Last_Name)">@Language.Phrase("tblstudents", "str_last_name", "fldcaption")</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Cell_Phone)">@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")  </MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_Email)">@Language.Phrase("tblstudents", "str_email", "fldcaption") </MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.str_NationalID_Iqama)">@Language.Phrase("tblstudents", "str_nationalid_iqama", "fldcaption") </MudTableSortLabel></MudTh>
+
+                <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.intDrivinglicenseType)">@Language.Phrase("tblstudents", "intdrivinglicensetype", "fldcaption")</MudTableSortLabel></MudTh>
+
+                <MudTh><MudTableSortLabel SortBy="new Func<StudentRegistrationModel, object>(x=>x.AbsherApptNbr)">@Language.Phrase("tblstudents", "absherapptnbr", "fldcaption")</MudTableSortLabel></MudTh>
+                <MudTh>@Language.Phrase("tblstudents", "student_action", "fldcaption")</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="First Name">@context.str_First_Name</MudTd>
                 <MudTd DataLabel="Last Name">@context.str_Last_Name</MudTd>
                 <MudTd DataLabel="Cell Phone">@context.str_Cell_Phone</MudTd>
                 <MudTd DataLabel="Email">@context.str_Email</MudTd>
@@ -79,7 +82,7 @@
                 <MudTablePager />
             </PagerContent>
         </MudTable>
-  </PageLayout>
+    </PageLayout>
 
 
 

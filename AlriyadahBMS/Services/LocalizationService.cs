@@ -1,5 +1,7 @@
-﻿using AlriyadahBMS.Shared.ViewModels;
+﻿using AlriyadahBMS.Shared.Helper;
+using AlriyadahBMS.Shared.ViewModels;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,8 @@ namespace AlriyadahBMS.Services
     {
         public static List<EwLanguage> EwLanguages { get; } = new();
 
-        public static EwLanguage? SelectedLanguage { get; set; }
-        public static bool IsRTL { get; set; } = false;
+        public static EwLanguage? SelectedLanguage { get; private set; }
+        public static bool IsRTL { get; set; }
         static LocalizationService()
         {
             //var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot","language");
@@ -68,7 +70,6 @@ namespace AlriyadahBMS.Services
                     }
                 });
 
-
                 project.Tables = doc.Descendants("project").Elements("table").Select(table => new Table
                 {
                     Id = table.Attribute("id")?.Value ?? "",
@@ -102,37 +103,83 @@ namespace AlriyadahBMS.Services
                     Global = globalPhrases,
                     Project = project,
                 });
-
-
-
-
             }
+        }
+
+
+        public static async Task SetLanguageAsync(EwLanguage language)
+        {
+            SelectedLanguage = language;
+            SetRTL(language);
+            await SecureStorage.SetAsync(ApplicationConst.Local_Language, language.Id);
+        }
+
+        public static void SetRTL(EwLanguage language)
+        {
+            if (language.Id == Language.EnUS.ToDescriptionString())
+            {
+                IsRTL = false;
+            }
+            else
+            {
+                IsRTL = true;
+            }
+        }
+
+
+        public static async Task InitializeAsync()
+        {
+            var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
+            if (!language.IsNullOrEmpty())
+            {
+                SelectedLanguage = EwLanguages.First(a => a.Id == language);
+            }
+            else
+            {
+                SelectedLanguage ??= EwLanguages.First();
+                await SecureStorage.SetAsync(ApplicationConst.Local_Language, SelectedLanguage.Id);
+            }
+            SetRTL(SelectedLanguage);
         }
 
         public string? Phrase(string id)
         {
-            if (SelectedLanguage == null)
-            {
-                SelectedLanguage = EwLanguages.First();
-            }
-            var value = SelectedLanguage.Global.FirstOrDefault(a => a.Id.Equals(id.Trim(), StringComparison.CurrentCultureIgnoreCase))?.Value;
+
+            var value = SelectedLanguage!.Global.FirstOrDefault(a => a.Id.Equals(id.Trim(), StringComparison.CurrentCultureIgnoreCase))?.Value;
             return value;
         }
 
-
         public string? Phrase(string tableId, string phraseId)
         {
-            var table = SelectedLanguage.Project.Tables.FirstOrDefault(t => t.Id == tableId);
+
+            var table = SelectedLanguage?.Project.Tables.FirstOrDefault(t => t.Id == tableId);
             if (table != null)
             {
-
-
-                var fieldPhrase = table.Phrases.FirstOrDefault(p => p.Id == phraseId);
-                if (fieldPhrase != null)
+                var phrase = table.Phrases.FirstOrDefault(p => p.Id == phraseId);
+                if (phrase != null)
                 {
-                    return fieldPhrase.Value;
+                    return phrase.Value;
                 }
+            }
+            return null;
+        }
 
+        public string? Phrase(string tableId, string fieldId, string phraseId)
+        {
+            var table = SelectedLanguage?.Project.Tables.FirstOrDefault(t => t.Id == tableId);
+            if (table != null)
+            {
+                var field = table.Fields.FirstOrDefault(p => p.Id == fieldId);
+                if (field != null)
+                {
+                    //return phrase.Value;
+                    var phrase = field.Phrases.FirstOrDefault(a => a.Id == phraseId);
+                    if (phrase != null)
+                    {
+                        return phrase.Value;
+                    }
+
+                }
             }
             return null;
         }

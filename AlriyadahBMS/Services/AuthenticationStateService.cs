@@ -38,7 +38,6 @@ namespace AlriyadahBMS.Services
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
             NotifyAuthenticationStateChanged(authState);
             
-
         }
 
         public void NotifyUserLogout()

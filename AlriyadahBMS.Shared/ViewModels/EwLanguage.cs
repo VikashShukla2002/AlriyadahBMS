@@ -11,6 +11,7 @@ namespace AlriyadahBMS.Shared.ViewModels
         public string Version { get; set; } = null!;
         public string Id { get; set; } = null!;
         public string Name { get; set; } = null!;
+        //public string Name { get; set; } = "English (US)";
         public string Description { get; set; } = null!;
         public string Author { get; set; } = null!;
         public string Date { get; set; } = null!;

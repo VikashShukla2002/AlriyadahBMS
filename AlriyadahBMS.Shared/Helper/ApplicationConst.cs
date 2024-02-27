@@ -9,6 +9,7 @@ namespace AlriyadahBMS.Shared.Helper
     public static class ApplicationConst
     {
         public const string Local_Token = "JWTToken";
+        public const string Local_Language = "Language";
     }
     public static class TableConst
     {

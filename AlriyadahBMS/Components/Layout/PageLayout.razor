@@ -58,9 +58,11 @@
     [Parameter]
     public bool IsChild { get; set; } = false;
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     await MainLayout.NotifyChangeAsync();
-    // }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        StateHasChanged();
+    }
 
 }

@@ -22,14 +22,7 @@ namespace AlriyadahBMS.Components.Pages
         public IEnumerable<CityModel>? CityList = new List<CityModel>();
         protected override async Task OnInitializedAsync()
         {
-
-            var t = Language;
             tblRecord = await tableService.GetRecords<List<StudentRegistrationModel>>(TableConst.TblStudents);
-            // CityList = await tableService.GetRecords<List<CityModel>>(TableConst.Cities);
-            //var check = await tableService.UpdateRecord<UserLevel, UserLevel>(TableConst.UserLevels, -2, new UserLevel
-            //{
-            //    UserLevelName = "Anonymous"
-            //});
         }
 
         private bool FilterFunc(StudentRegistrationModel record)

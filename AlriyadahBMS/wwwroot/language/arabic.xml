@@ -4242,6 +4242,11 @@
 			<field id="int_staff_id">
 				<phrase id="fldcaption" value="int Staff Id" />
 			</field>
+
+			<field id="student_action">
+				<phrase id="fldcaption" value="فعل" />
+			</field>
+			
 		</table>
 		<table id="tblstudentenrollment">
 			<phrase id="tblcaption" value="تسجيلات الطلاب" />

@@ -1,4 +1,6 @@
 ﻿@using AlriyadahBMS.Shared.ViewModels
+@using AlriyadahBMS.Services
+@inject LocalizationService Language
 
 @{
     DrivingLicense type = (DrivingLicense)(StudentData?.intDrivinglicenseType ?? 0);
@@ -9,12 +11,12 @@
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Medium" />
 
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-            <MudTabPanel Text="General Information">
+            <MudTabPanel Text="@Language.Phrase("tblstudents","tblpagecaption1")">
                 <MudText>
                     <table class="table table-bordered table-hover ew-view-table">
                         <tbody>
                             <tr>
-                                <td class="w-col-2"><strong>Full Name</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "str_full_name", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.str_Full_Name
@@ -22,7 +24,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"> <strong>Cell Phone </strong></td>
+                                <td class="w-col-2"> <strong> @Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.str_Cell_Phone
@@ -30,7 +32,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Email</strong> </td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "str_email", "fldcaption")</strong> </td>
                                 <td>
                                     <span>
                                         @StudentData?.str_Email
@@ -38,7 +40,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Nationality</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "int_nationality", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.int_Nationality
@@ -46,7 +48,7 @@
                                 </td>
                             </tr>
                             <tr id="r_User_Role">
-                                <td class="w-col-2"><strong>User Role</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "user_role", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.User_Role
@@ -54,7 +56,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Staff Id</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblcrsessions", "int_staff_id", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.int_Staff_Id
@@ -66,12 +68,12 @@
 
                 </MudText>
             </MudTabPanel>
-            <MudTabPanel Text="Access Credentials">
+            <MudTabPanel Text="@Language.Phrase("tblstudents","tblpagecaption2")">
                 <MudText>
                     <table class="table table-bordered table-hover ew-view-table">
                         <tbody>
                             <tr>
-                                <td class="w-col-2"><strong>User Name</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("username")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.str_Username
@@ -79,7 +81,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"> <strong>Date of Birth (Hijri)</strong></td>
+                                <td class="w-col-2"> <strong>@Language.Phrase("tblstudents", "date_birth_hijri", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.date_Birth_Hijri
@@ -87,7 +89,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Date of Birth (Gregorian)</strong> </td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "date_birth", "fldcaption")</strong> </td>
                                 <td>
                                     <span>
                                         @if (StudentData?.date_Birth.HasValue == true)
@@ -99,7 +101,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>National ID Iqama</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "str_nationalid_iqama", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.str_NationalID_Iqama
@@ -107,7 +109,7 @@
                                 </td>
                             </tr>
                             <tr id="r_User_Role">
-                                <td class="w-col-2"><strong>Parent Username</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "parent_username", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.Parent_Username
@@ -119,7 +121,7 @@
 
                 </MudText>
             </MudTabPanel>
-            <MudTabPanel Text="Driving Status and Absher">
+            <MudTabPanel Text="@Language.Phrase("tblstudents","tblpagecaption3")">
                 <MudText>
                     <table class="table table-bordered table-hover ew-view-table">
                         <tbody>
@@ -132,7 +134,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"> <strong>Do you have driving experience?</strong></td>
+                                <td class="w-col-2"> <strong>@Language.Phrase("tblstudents", "isdrivingexperience", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @if (StudentData?.IsDrivingexperience ?? false)
@@ -147,18 +149,18 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Driving License Type</strong> </td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "intdrivinglicensetype", "fldcaption")</strong> </td>
                                 <td>
                                     <span>
                                         @if (type != 0)
                                         {
-                                        <span>@type.ToDescriptionString()</span>
+                                            <span>@type.ToDescriptionString()</span>
                                         }
                                     </span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Absher Appointment Number</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "absherapptnbr", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.AbsherApptNbr
@@ -166,7 +168,7 @@
                                 </td>
                             </tr>
                             <tr id="r_User_Role">
-                                <td class="w-col-2"><strong>Absher Appointment Photo</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "absherphoto", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @StudentData?.Absherphoto
@@ -197,7 +199,7 @@
     [Parameter]
     public StudentRegistrationModel? StudentData { get; set; }
 
-   // DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    // DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
 
 

@@ -47,5 +47,11 @@ namespace AlriyadahBMS.Shared.Helper
         [Description("STC Pay")]
         STCPay = 4
     }
-
+    public enum Language
+    {
+        [Description("en-US")]
+        EnUS,
+        [Description("ar-SA")]
+        ArSA
+    }
 }
