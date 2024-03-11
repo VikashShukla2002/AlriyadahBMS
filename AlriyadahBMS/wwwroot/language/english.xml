@@ -1773,7 +1773,10 @@
 			</field>
 		</table>
 		<table id="tblbillinginfo">
-			<phrase id="tblcaption" value="Paymemts" />
+			
+			<phrase id="tblcaption" value="Payments" />
+			<phrase id="tbl-paymentview-caption" value="Payment View" />
+			
 			<phrase id="tblpagecaption1" value="Payment Information" />
 			<phrase id="tblpagecaption2" value="Transaction Information" />
 			<field id="int_bill_id">
@@ -1825,31 +1828,34 @@
 				<phrase id="fldcaption" value="Amount Paid" />
 			</field>
 			<field id="str_cc_holder_name">
-				<phrase id="fldcaption" value="str CC Holder Name" />
+				<phrase id="fldcaption" value="Card Holder Name" />
 			</field>
 			<field id="str_cc_number">
-				<phrase id="fldcaption" value="str CC Number" />
+				<phrase id="fldcaption" value="Card Number" />
 			</field>
 			<field id="int_cc_expmonth">
-				<phrase id="fldcaption" value="int CC Exp Month" />
+				<phrase id="fldcaption" value="Expiry date (month)" />
 			</field>
 			<field id="int_cc_expyear">
-				<phrase id="fldcaption" value="int CC Exp Year" />
+				<phrase id="fldcaption" value="Expiry date (year)" />
 			</field>
 			<field id="int_cc_type">
-				<phrase id="fldcaption" value="int CC Type" />
+				<phrase id="fldcaption" value="Card Type" />
 			</field>
 			<field id="str_card_id">
-				<phrase id="fldcaption" value="str Card Id" />
+				<phrase id="fldcaption" value="Card Id" />
 			</field>
 			<field id="str_cc_validationnum">
-				<phrase id="fldcaption" value="str CC Validation Num" />
+				<phrase id="fldcaption" value="Card Validation Num" />
 			</field>
 			<field id="str_reference">
-				<phrase id="fldcaption" value="str reference" />
+				<phrase id="fldcaption" value="Reference" />
 			</field>
 			<field id="str_amount_pay">
-				<phrase id="fldcaption" value="str Amount Pay" />
+				<phrase id="fldcaption" value="Amount Pay" />
+			</field>
+			<field id="str_amount_pay_updated">
+				<phrase id="fldcaption" value="Amount Pay" />
 			</field>
 			<field id="mny_running_payments">
 				<phrase id="fldcaption" value="mny Running Payments" />
@@ -1940,6 +1946,9 @@
 			<field id="str_transactiontime">
 				<phrase id="fldcaption" value="str Transaction Time" />
 			</field>
+			<field id="str_transactiontime_updated">
+				<phrase id="fldcaption" value="Transaction Time" />
+			</field>
 			<field id="int_location_id">
 				<phrase id="fldcaption" value="int Location Id" />
 			</field>
@@ -1951,6 +1960,9 @@
 			</field>
 			<field id="str_payment_note">
 				<phrase id="fldcaption" value="str Payment Note" />
+			</field>
+			<field id="str_payment_note_updated">
+				<phrase id="fldcaption" value="Payment Note" />
 			</field>
 			<field id="int_package_id">
 				<phrase id="fldcaption" value="int Package ID" />
@@ -4032,8 +4044,15 @@
 			<field id="str_datehired">
 				<phrase id="fldcaption" value="str Date Hired" />
 			</field>
+			<field id="str_datehired_updated">
+				<phrase id="fldcaption" value="Date Hired" />
+			</field>
 			<field id="str_dateleft">
 				<phrase id="fldcaption" value="str Date Left" />
+			</field>
+			
+			<field id="str_dateleft_updated">
+				<phrase id="fldcaption" value="Date Left" />
 			</field>
 			<field id="str_emergency_contact_name">
 				<phrase id="fldcaption" value="Emergency Contact Name" />
@@ -4247,6 +4266,9 @@
 
 			<field id="student_action">
 				<phrase id="fldcaption" value="Action" />
+			</field>
+			<field id="int_staff_id_updated">
+				<phrase id="fldcaption" value="Staff Id" />
 			</field>
 
 
@@ -4757,6 +4779,11 @@
 			<field id="userlevelname">
 				<phrase id="fldcaption" value="User Level Name" />
 			</field>
+			<field id="parentusername">
+				<phrase id="fldcaption" value="Parent User Name" />
+			</field>
+		
+		
 		</table>
 		<table id="qryevalcalcwsht_results">
 			<phrase id="tblcaption" value="qry Eval Calc Wsht Results" />

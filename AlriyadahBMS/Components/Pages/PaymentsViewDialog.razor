@@ -1,17 +1,18 @@
 ﻿@using AlriyadahBMS.Shared.ViewModels
 
 
+@inject LocalizationService Language
 <MudDialog Class="overflow-y-scroll">
 
     <DialogContent>
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-            <MudTabPanel Text="Payment Information">
+            <MudTabPanel Text="@Language.Phrase("tblbillinginfo","tblpagecaption1")">
 
                 <MudText>
                     <table class="table table-bordered table-hover ew-view-table">
                         <tbody>
                             <tr>
-                                <td class="w-col-2"><strong>National ID</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "nationalid", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.NationalID
@@ -19,7 +20,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"> <strong>str First Name</strong></td>
+                                <td class="w-col-2"> <strong>@Language.Phrase("tblstudents", "str_first_name", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.str_First_Name
@@ -27,7 +28,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>str Last Name</strong> </td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblstudents", "str_last_name", "fldcaption")</strong> </td>
                                 <td>
                                     <span>
                                         @paymentsData?.str_Last_Name
@@ -35,7 +36,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Approval Code</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("billing_status", "str_approvalcode", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.str_ApprovalCode
@@ -43,7 +44,7 @@
                                 </td>
                             </tr>
                             <tr id="r_User_Role">
-                                <td class="w-col-2"><strong>str Transaction Time</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "str_transactiontime_updated", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.str_TransactionTime
@@ -51,7 +52,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Package Name</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "package_name", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.Package_Name
@@ -59,7 +60,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Price</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "price", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.Price
@@ -67,7 +68,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Course</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "course", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.course
@@ -75,7 +76,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="w-col-2"><strong>Institution</strong></td>
+                                <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "institution", "fldcaption")</strong></td>
                                 <td>
                                     <span>
                                         @paymentsData?.institution
@@ -88,12 +89,12 @@
                 </MudText>
 
             </MudTabPanel>
-            <MudTabPanel Text="Transaction Information">
+            <MudTabPanel Text="@Language.Phrase("tblbillinginfo", "tblpagecaption2")">
 
                 <table class="table table-bordered table-hover ew-view-table">
                     <tbody>
                         <tr>
-                            <td class="w-col-2"><strong>Payment Method</strong></td>
+                            <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "int_payment_method", "fldcaption")</strong></td>
                             <td>
                                 <span>
                                     @paymentsData?.int_Payment_Method
@@ -101,7 +102,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-col-2"> <strong>Date Paid</strong></td>
+                            <td class="w-col-2"> <strong>@Language.Phrase("tblbillinginfo", "date_paid", "fldcaption")</strong></td>
                             <td>
                                 <span>
                                     @paymentsData?.date_Paid
@@ -109,7 +110,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-col-2"><strong>str Amount Pay</strong> </td>
+                            <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "str_amount_pay_updated", "fldcaption")</strong> </td>
                             <td>
                                 <span>
                                     @paymentsData?.str_Amount_Pay
@@ -117,7 +118,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-col-2"><strong>mny Running Payments</strong></td>
+                            <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "mny_running_payments", "fldcaption")</strong></td>
                             <td>
                                 <span>
                                     @paymentsData?.mny_Running_Payments
@@ -125,7 +126,7 @@
                             </td>
                         </tr>
                         <tr id="r_User_Role">
-                            <td class="w-col-2"><strong>mny Running Balance</strong></td>
+                            <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "mny_running_balance", "fldcaption")</strong></td>
                             <td>
                                 <span>
                                     @paymentsData?.mny_Running_Balance
@@ -133,7 +134,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-col-2"><strong>str Payment Note</strong></td>
+                            <td class="w-col-2"><strong>@Language.Phrase("tblbillinginfo", "str_payment_note_updated", "fldcaption")</strong></td>
                             <td>
                                 <span>
                                     @paymentsData?.str_Payment_Note
@@ -147,7 +148,7 @@
         </MudTabs>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel" Color="Color.Primary">Cancel</MudButton>
+        <MudButton OnClick="Cancel" Color="Color.Primary">@Language.Phrase("cancelbtn")</MudButton>
 
     </DialogActions>
 

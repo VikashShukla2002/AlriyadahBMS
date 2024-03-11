@@ -5,24 +5,25 @@
 @* <h3> Sign-up</h3> *@
 <h3> @Language.Phrase("register")</h3>
 
+
 <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-        <MudTabPanel Text="@Language.Phrase("tblpagecaption1")">
+        <MudTabPanel Text="@Language.Phrase("registrationtab1")">
             <MudItem xs="4">
                 <RegisterGeneralInfo />
             </MudItem>
         </MudTabPanel>
-        <MudTabPanel Text="@Language.Phrase("tblpagecaption2")">
+        <MudTabPanel Text="@Language.Phrase("registrationtab2")">
             <MudItem xs="4">
                 <AccessCredentials />
             </MudItem>
         </MudTabPanel>
-        <MudTabPanel Text="@Language.Phrase("tblpagecaption3")">
+        <MudTabPanel Text="@Language.Phrase("registrationtab3")">
             <MudItem xs="4">
                 <DrivingStatus />
             </MudItem>
         </MudTabPanel>
-        <MudTabPanel Text="@Language.Phrase("tblpagecaption4")">
+        <MudTabPanel Text="@Language.Phrase("registrationtab4")">
             <MudText xs="4">
                 <EmergencyContact />
             </MudText>
@@ -32,20 +33,21 @@
 
 <MudHidden Breakpoint="Breakpoint.SmAndDown " Invert="true">
     <MudExpansionPanels MultiExpansion="false">
-        <MudExpansionPanel Text="@Language.Phrase("tblpagecaption1")">
+        <MudExpansionPanel Text="@Language.Phrase("registrationtab1")">
             <MudItem>
                 <RegisterGeneralInfo />
             </MudItem>
         </MudExpansionPanel>
-        <MudExpansionPanel Text="@Language.Phrase("tblpagecaption2")">
+        <MudExpansionPanel Text="@Language.Phrase("registrationtab2")">
             <AccessCredentials />
         </MudExpansionPanel>
-        <MudExpansionPanel Text="@Language.Phrase("tblpagecaption3")">
+        <MudExpansionPanel Text="@Language.Phrase("registrationtab3")">
             <DrivingStatus />
         </MudExpansionPanel>
-        <MudExpansionPanel Text="@Language.Phrase("tblpagecaption4")">
+        <MudExpansionPanel Text="@Language.Phrase("registrationtab4")">
             <EmergencyContact />
         </MudExpansionPanel>
     </MudExpansionPanels>
 </MudHidden>
+
 

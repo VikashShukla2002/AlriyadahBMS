@@ -164,6 +164,13 @@ namespace AlriyadahBMS.Services
             return null;
         }
 
+        public IEnumerable<Phrase>? GetPhrases(string tableId, string phraseId)
+        {
+            var table = SelectedLanguage?.Project.Tables.FirstOrDefault(t => t.Id == tableId);
+            var tablePhrases = table?.Fields.First(p => p.Id == phraseId).Phrases;
+            return tablePhrases;
+        }
+
         public string? Phrase(string tableId, string fieldId, string phraseId)
         {
             var table = SelectedLanguage?.Project.Tables.FirstOrDefault(t => t.Id == tableId);

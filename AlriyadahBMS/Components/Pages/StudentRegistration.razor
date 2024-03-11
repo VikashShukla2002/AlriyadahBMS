@@ -54,14 +54,14 @@
                 <MudTh>@Language.Phrase("tblstudents", "student_action", "fldcaption")</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="First Name">@context.str_First_Name</MudTd>
-                <MudTd DataLabel="Last Name">@context.str_Last_Name</MudTd>
-                <MudTd DataLabel="Cell Phone">@context.str_Cell_Phone</MudTd>
-                <MudTd DataLabel="Email">@context.str_Email</MudTd>
-                <MudTd DataLabel="National ID Iqama">@context.str_NationalID_Iqama</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")">@context.str_First_Name</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")">@context.str_Last_Name</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")">@context.str_Cell_Phone</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_email", "fldcaption")">@context.str_Email</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_nationalid_iqama", "fldcaption")">@context.str_NationalID_Iqama</MudTd>
 
                 @* <MudTd DataLabel="Driving License Type">@context.intDrivinglicenseType</MudTd> *@
-                <MudTd DataLabel="Driving License Type">
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "intdrivinglicensetype", "fldcaption")">
                     @{
                     DrivingLicense type = (DrivingLicense)(context?.intDrivinglicenseType ?? 0);
                     if (type != 0)
@@ -71,7 +71,7 @@
                 }
             </MudTd>
 
-            <MudTd DataLabel="Absher Appointment Number">@context.AbsherApptNbr</MudTd>
+            <MudTd DataLabel="@Language.Phrase("tblstudents", "absherapptnbr", "fldcaption")">@context.AbsherApptNbr</MudTd>
                 <MudTd>
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.RemoveRedEye" OnClick="(()=> OnClick_StudentViewDetails(context))" />
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="(()=> OnClick_StudentEditDetails(context))" />

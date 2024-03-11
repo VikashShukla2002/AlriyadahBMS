@@ -58,7 +58,8 @@ namespace AlriyadahBMS.Components.Pages
                 FullScreen = true
             };
             parameters.Add("paymentsData", PaymentData);
-            Dialog.Show<PaymentsViewDialog>("Payment View", parameters, dialogOptions);
+
+            Dialog.Show<PaymentsViewDialog>(Language.Phrase("tblbillinginfo", "tbl-paymentview-caption"), parameters, dialogOptions);
         }
 
         private void OnClick_PaymentsEditDetails(PaymentsModel value)

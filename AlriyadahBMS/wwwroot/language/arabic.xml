@@ -1772,6 +1772,8 @@
 		</table>
 		<table id="tblbillinginfo">
 			<phrase id="tblcaption" value="المدفوعات" />
+
+			<phrase id="tbl-paymentview-caption" value="عرض الدفع" />
 			<phrase id="tblpagecaption1" value="معلومات الدفع" />
 			<phrase id="tblpagecaption2" value="معلومات العملية" />
 			<field id="int_bill_id">
@@ -1848,6 +1850,9 @@
 			</field>
 			<field id="str_amount_pay">
 				<phrase id="fldcaption" value="المبلغ المدفوع" />
+			</field>
+			<field id="str_amount_pay_updated">
+				<phrase id="fldcaption" value="دفع المبلغ" />
 			</field>
 			<field id="mny_running_payments">
 				<phrase id="fldcaption" value="المدفوعات الجارية" />
@@ -1938,6 +1943,12 @@
 			<field id="str_transactiontime">
 				<phrase id="fldcaption" value="وقت العملية" />
 			</field>
+
+
+			<field id="str_transactiontime_updated">
+				<phrase id="fldcaption" value="وقت المعاملة" />
+			</field>
+			
 			<field id="int_location_id">
 				<phrase id="fldcaption" value="الموقع" />
 			</field>
@@ -1949,6 +1960,9 @@
 			</field>
 			<field id="str_payment_note">
 				<phrase id="fldcaption" value="ملاحظات عند الدفع" />
+			</field>
+			<field id="str_payment_note_updated">
+				<phrase id="fldcaption" value="مذكرة الدفع" />
 			</field>
 			<field id="int_package_id">
 				<phrase id="fldcaption" value="نوع الحزمة" />
@@ -4030,9 +4044,19 @@
 			<field id="str_datehired">
 				<phrase id="fldcaption" value="تاريخ التعيين" />
 			</field>
+
+			<field id="str_datehired_updated">
+				<phrase id="fldcaption" value="تاريخ التعاقد" />
+			</field>
+			
 			<field id="str_dateleft">
 				<phrase id="fldcaption" value="تاريخ المغادرة" />
 			</field>
+
+			<field id="str_dateleft_updated">
+				<phrase id="fldcaption" value="التاريخ الأيسر" />
+			</field>
+			
 			<field id="str_emergency_contact_name">
 				<phrase id="fldcaption" value="اسم جهة الاتصال في حالة الطوارئ" />
 			</field>
@@ -4220,7 +4244,7 @@
 				<phrase id="fldcaption" value="مستوى المستخدم" />
 			</field>
 			<field id="parent_username">
-				<phrase id="fldcaption" value="Parent Username" />
+				<phrase id="fldcaption" value="اسم المستخدم الأصلي" />
 			</field>
 			<field id="activated">
 				<phrase id="fldcaption" value="مفعل" />
@@ -4246,6 +4270,11 @@
 			<field id="student_action">
 				<phrase id="fldcaption" value="فعل" />
 			</field>
+
+			<field id="int_staff_id_updated">
+				<phrase id="fldcaption" value="معرف الموظفين" />
+			</field>
+			
 			
 		</table>
 		<table id="tblstudentenrollment">
@@ -4753,6 +4782,12 @@
 			<field id="userlevelname">
 				<phrase id="fldcaption" value="اسم مستوى المستخدم" />
 			</field>
+
+			<field id="parentusername">
+				<phrase id="fldcaption" value="اسم المستخدم الأصل" />
+			</field>
+
+
 		</table>
 		<table id="qryevalcalcwsht_results">
 			<phrase id="tblcaption" value="qry Eval Calc Wsht Results" />

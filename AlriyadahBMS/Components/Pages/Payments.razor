@@ -8,82 +8,82 @@
 @inject LocalizationService Language
 
 
-   <PageLayout Title="Payments">
+<PageLayout Title="@Language.Phrase("tblbillinginfo", "tblcaption")">
 
-        <MudTable Items="@tblPaymentsRecord" Dense="false" Hover="true" ReadOnly="false" CanCancelEdit="false" Filter="new Func<PaymentsModel,bool>(FilterFunc)"
-                  SortLabel="Sort By">
-            <ToolBarContent>
-                @* <MudText Typo="Typo.h6">Payments</MudText> *@
-                <MudSpacer />
-                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            </ToolBarContent>
+    <MudTable Items="@tblPaymentsRecord" Dense="false" Hover="true" ReadOnly="false" CanCancelEdit="false" Filter="new Func<PaymentsModel,bool>(FilterFunc)"
+              SortLabel="Sort By">
+        <ToolBarContent>
+            @* <MudText Typo="Typo.h6">Payments</MudText> *@
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="@Language.Phrase("buttonsearch")" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
 
-            <HeaderContent>
-                <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<PaymentsModel, object>(x=>x.NationalID)">National ID</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.str_First_Name)">First Name</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.str_Last_Name)">Last Name</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.date_Paid)">Date Paid</MudTableSortLabel></MudTh>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<PaymentsModel, object>(x=>x.NationalID)">@Language.Phrase("tblbillinginfo", "nationalid", "fldcaption")</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.str_First_Name)">@Language.Phrase("tblstudents", "str_first_name", "fldcaption")</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.str_Last_Name)">@Language.Phrase("tblstudents", "str_last_name", "fldcaption")</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.date_Paid)">@Language.Phrase("billing_status", "date_paid", "fldcaption")</MudTableSortLabel></MudTh>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.str_ApprovalCode)">
-                        Approval Code
+                        @Language.Phrase("tblbillinginfo", "str_approvalcode", "fldcaption")
                     </MudTableSortLabel>
                 </MudTh>
 
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.Payment_Number)">
-                        Payment Number
+                    @Language.Phrase("tblbillinginfo", "payment_number", "fldcaption")
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.Pricelist)">
-                        Pricelist
+                    @Language.Phrase("tblbillinginfo", "pricelist", "fldcaption")
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.str_Amount_Pay)">
-                        Amount Pay
+                    @Language.Phrase("tblbillinginfo", "str_amount_pay_updated", "fldcaption")
                     </MudTableSortLabel>
                 </MudTh>
 
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.mny_Running_Payments)">
-                        mny Running Payments
+                    @Language.Phrase("tblbillinginfo", "mny_running_payments", "fldcaption")
                     </MudTableSortLabel>
                 </MudTh>
 
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<PaymentsModel, object>(x=>x.mny_Running_Balance)">
-                        mny Running Balance
+                    @Language.Phrase("tblbillinginfo", "mny_running_balance", "fldcaption")
                     </MudTableSortLabel>
                 </MudTh>
 
-                <MudTh>Action</MudTh>
+            <MudTh>@Language.Phrase("tblstudents", "student_action", "fldcaption")</MudTh>
 
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="National ID">@context.NationalID</MudTd>
-                    <MudTd DataLabel="First Name">@context.str_First_Name</MudTd>
-                    <MudTd DataLabel="Last Name">@context.str_Last_Name</MudTd>
-                    <MudTd DataLabel="Date Paid">@context.date_Paid</MudTd>
-                    <MudTd DataLabel="Approval Code">@context.str_ApprovalCode</MudTd>
-                    <MudTd DataLabel="Payment Number">@context.Payment_Number</MudTd>
-                    <MudTd DataLabel="Pricelist">@context.Pricelist</MudTd>
-                    <MudTd DataLabel="Amount Pay">@context.str_Amount_Pay</MudTd>
-                    <MudTd DataLabel="Mny Running Payments">@context.mny_Running_Payments</MudTd>
-                    <MudTd DataLabel="Mny Running Balance">@context.mny_Running_Balance</MudTd>
-                    <MudTd>
-                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.RemoveRedEye" OnClick="(()=> OnClick_PaymentsDetails(context))" />
-                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="(()=> OnClick_PaymentsEditDetails(context))" />
-                        @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" /> *@
-                    </MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "nationalid", "fldcaption")">@context.NationalID</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_first_name", "fldcaption")">@context.str_First_Name</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")">@context.str_Last_Name</MudTd>
+                <MudTd DataLabel="@Language.Phrase("billing_status", "date_paid", "fldcaption")">@context.date_Paid</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "str_approvalcode", "fldcaption")">@context.str_ApprovalCode</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "payment_number", "fldcaption")">@context.Payment_Number</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "pricelist", "fldcaption")">@context.Pricelist</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "str_amount_pay_updated", "fldcaption")">@context.str_Amount_Pay</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "mny_running_payments", "fldcaption")">@context.mny_Running_Payments</MudTd>
+                <MudTd DataLabel="@Language.Phrase("tblbillinginfo", "mny_running_balance", "fldcaption")">@context.mny_Running_Balance</MudTd>
+                <MudTd>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.RemoveRedEye" OnClick="(()=> OnClick_PaymentsDetails(context))" />
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="(()=> OnClick_PaymentsEditDetails(context))" />
+                    @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" /> *@
+                </MudTd>
 
-                </RowTemplate>
-                <PagerContent>
-                    <MudTablePager />
-                </PagerContent>
-            </MudTable>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
 
-   </PageLayout>
+    </PageLayout>
 
 
 

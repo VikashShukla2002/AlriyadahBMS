@@ -2,31 +2,32 @@
 @using AlriyadahBMS.Shared.ViewModels
 
 @inject TableService tableService
+@inject LocalizationService Language
 
 <MudDialog Class="overflow-y-scroll">
 
     <DialogContent>
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-            <MudTabPanel Text="Payment Information">
+            <MudTabPanel Text="@Language.Phrase("tblbillinginfo", "tblpagecaption1")">
 
                 <MudPaper Class="pa-2 ma-2" Elevation="0">
-                 
-                     <MudTextField Label="National ID" Variant="Variant.Outlined" @bind-Value="@paymentsEditData.NationalID" Disabled/>
-                     <MudTextField Label="str First Name" @bind-Value="@paymentsEditData.str_First_Name" Variant="Variant.Outlined" Disabled />
-                     <MudTextField Label="str Last Name" @bind-Value="@paymentsEditData.str_Last_Name" Variant="Variant.Outlined" Disabled />
-                     <MudTextField Label="Approval Code" @bind-Value="@paymentsEditData.str_ApprovalCode" Variant="Variant.Outlined"  />
 
-                     <MudCheckBox Label="Refund" @bind-Value="@paymentsEditData.bit_IsRefund" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
-                     <MudTextField Label="Package Name" @bind-Value="@paymentsEditData.Package_Name" Variant="Variant.Outlined" DisableUnderLine />
-                     <MudTextField Label="Price" @bind-Value="@paymentsEditData.Price" Variant="Variant.Outlined" DisableUnderLine />
+                    <MudTextField Label="@Language.Phrase("tblbillinginfo","nationalid","fldcaption")" Variant="Variant.Outlined" @bind-Value="@paymentsEditData.NationalID" Disabled />
+                     <MudTextField Label="@Language.Phrase("tblstudents","str_first_name","fldcaption")" @bind-Value="@paymentsEditData.str_First_Name" Variant="Variant.Outlined" Disabled />
+                     <MudTextField Label="@Language.Phrase("tblstudents","str_last_name","fldcaption")" @bind-Value="@paymentsEditData.str_Last_Name" Variant="Variant.Outlined" Disabled />
+                     <MudTextField Label="@Language.Phrase("tblbillinginfo","str_approvalcode","fldcaption")" @bind-Value="@paymentsEditData.str_ApprovalCode" Variant="Variant.Outlined" />
+
+                     <MudCheckBox Label="@Language.Phrase("tblbillinginfo","bit_isrefund","fldcaption")" @bind-Value="@paymentsEditData.bit_IsRefund" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+                     <MudTextField Label="@Language.Phrase("tblbillinginfo","package_name","fldcaption")" @bind-Value="@paymentsEditData.Package_Name" Variant="Variant.Outlined" DisableUnderLine />
+                     <MudTextField Label="@Language.Phrase("tblbillinginfo","price","fldcaption")" @bind-Value="@paymentsEditData.Price" Variant="Variant.Outlined" DisableUnderLine />
                    
                     @* <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton> *@
                 </MudPaper>
 
             </MudTabPanel>
-            <MudTabPanel Text="Transaction Information">
+             <MudTabPanel Text="@Language.Phrase("tblbillinginfo", "tblpagecaption2")">
 
-                 <MudSelect Label="Payment Method" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="paymentsEditData.int_Payment_Method">
+                 <MudSelect Label="@Language.Phrase("tblbillinginfo", "int_payment_method", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="paymentsEditData.int_Payment_Method">
                      @{
                         foreach (PaymentMethod type in Enum.GetValues(typeof(PaymentMethod)))
                         {
@@ -37,24 +38,24 @@
                 </MudSelect>
 
                 <MudDatePicker Label="Editable with Placeholder" Editable="true" @bind-Date="paymentsEditData.date_Paid" Placeholder="Select Date" Variant="Variant.Outlined" />
-                <MudTextField Label="str CC Holder Name" @bind-Value="@paymentsEditData.str_CC_Holder_Name" Variant="Variant.Outlined" />
-                <MudTextField Label="str CC Number" @bind-Value="@paymentsEditData.str_CC_Number" Variant="Variant.Outlined" />
-                <MudTextField Label="int CC Exp Month" @bind-Value="@paymentsEditData.int_CC_ExpMonth" Variant="Variant.Outlined" />
-                <MudTextField Label="int CC Exp Year" @bind-Value="@paymentsEditData.int_CC_ExpYear" Variant="Variant.Outlined" />
-                <MudTextField Label="int CC Type" @bind-Value="@paymentsEditData.int_CC_Type" Variant="Variant.Outlined" />
-                <MudTextField Label="str Card Id" @bind-Value="@paymentsEditData.str_Card_Id" Variant="Variant.Outlined" />
-                <MudTextField Label="str CC Validation Num" @bind-Value="@paymentsEditData.str_CC_ValidationNum" Variant="Variant.Outlined" />
-                <MudTextField Label="str Amount Pay" @bind-Value="@paymentsEditData.str_Amount_Pay" Variant="Variant.Outlined" />
-                <MudTextField Label="mny Running Balance" @bind-Value="@paymentsEditData.mny_Running_Balance" Variant="Variant.Outlined" />
-                <MudTextField T="string" Label="str Payment Note" Lines="3" Variant="Variant.Outlined" @bind-Value="paymentsEditData.str_Payment_Note" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","str_cc_holder_name","fldcaption")" @bind-Value="@paymentsEditData.str_CC_Holder_Name" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","str_cc_number","fldcaption")" @bind-Value="@paymentsEditData.str_CC_Number" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","int_cc_expmonth","fldcaption")" @bind-Value="@paymentsEditData.int_CC_ExpMonth" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","int_cc_expyear","fldcaption")" @bind-Value="@paymentsEditData.int_CC_ExpYear" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","int_cc_type","fldcaption")" @bind-Value="@paymentsEditData.int_CC_Type" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","str_card_id","fldcaption")" @bind-Value="@paymentsEditData.str_Card_Id" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","str_cc_validationnum","fldcaption")" @bind-Value="@paymentsEditData.str_CC_ValidationNum" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","str_amount_pay","fldcaption")" @bind-Value="@paymentsEditData.str_Amount_Pay" Variant="Variant.Outlined" />
+                <MudTextField Label="@Language.Phrase("tblbillinginfo","mny_running_payments","fldcaption")" @bind-Value="@paymentsEditData.mny_Running_Balance" Variant="Variant.Outlined" />
+                <MudTextField T="string" Label="@Language.Phrase("tblbillinginfo","str_payment_note_updated","fldcaption")" Lines="3" Variant="Variant.Outlined" @bind-Value="paymentsEditData.str_Payment_Note" />
 
 
             </MudTabPanel>
         </MudTabs>
     </DialogContent>
     <DialogActions>
-        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" OnClick="Cancel" Color="Color.Default">Cancel</MudButton>
-        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdatePayment">Save</MudButton>
+        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" OnClick="Cancel" Color="Color.Default">@Language.Phrase("cancelbtn")</MudButton>
+            <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdatePayment">@Language.Phrase("savebtn")</MudButton>
 
     </DialogActions>
 

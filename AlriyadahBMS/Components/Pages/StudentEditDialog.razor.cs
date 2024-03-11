@@ -24,6 +24,9 @@ namespace AlriyadahBMS.Components.Pages
         public IEnumerable<HijriModel>? HijriList = new List<HijriModel>();
         public IEnumerable<UserLevelModel>? userLevels = new List<UserLevelModel>();
 
+        public string? SelectedLanguageName { get; set; }
+
+
         protected override async Task OnInitializedAsync()
         {
             CityList = await tableService.GetRecords<List<CityModel>>(TableConst.Cities);
@@ -37,7 +40,7 @@ namespace AlriyadahBMS.Components.Pages
         public async void OnClick_UpdateStudentRegistration()
         {
             var check = await tableService.UpdateRecord<StudentRegistrationModel, StudentRegistrationModel>(TableConst.TblStudents, StudentEditData!.int_Student_ID.GetValueOrDefault(), StudentEditData);
-            
+
         }
     }
 }

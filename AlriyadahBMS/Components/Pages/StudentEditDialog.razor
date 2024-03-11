@@ -1,33 +1,37 @@
 ﻿@using AlriyadahBMS.Services
 @using AlriyadahBMS.Shared.ViewModels
 
+
+@inject LocalizationService Language
 @inject TableService tableService
 <MudDialog Class="overflow-y-scroll">
     <DialogContent>
 
         <MudExpansionPanels MultiExpansion="false">
             <MudExpansionPanel Text="General Information" IsInitiallyExpanded="true">
-                <MudPaper  Elevation="0">
+                <MudPaper Elevation="0">
                     @* <label for="Category-Title">First Name</label> *@
-                    <MudTextField T="string" Label="First Name" Variant="Variant.Outlined" Placeholder="First Name" @bind-Value="StudentEditData.str_First_Name" />
-                    <MudTextField T="string" Label="Middle Name" Variant="Variant.Outlined" Placeholder="Middle Name" @bind-Value="StudentEditData.str_Middle_Name" />
-                    <MudTextField T="string" Label="Last Name" Variant="Variant.Outlined" Placeholder="Last Name" @bind-Value="StudentEditData.str_Last_Name" />
-                    <MudTextField T="string" Label="Address" Variant="Variant.Outlined" Placeholder="Address" @bind-Value="StudentEditData.str_Address" />
+                    @* <MudTextField T="string" Label="First Name" Variant="Variant.Outlined" Placeholder="First Name" @bind-Value="StudentEditData.str_First_Name" /> *@
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_first_name", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_first_name", "fldcaption")" @bind-Value="StudentEditData.str_First_Name" />
 
-                    <MudSelect T="string" Label="City" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.str_City">
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_middle_name", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_middle_name", "fldcaption")" @bind-Value="StudentEditData.str_Middle_Name" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")" @bind-Value="StudentEditData.str_Last_Name" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_address", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_address", "fldcaption")" @bind-Value="StudentEditData.str_Address" />
+
+                    <MudSelect T="string" Label="@Language.Phrase("tblstudents", "str_city", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.str_City">
                         @if (CityList != null)
                             foreach (var cityName in CityList)
                             {
                                 <MudSelectItem T="string" Value="@cityName.City">@cityName.City</MudSelectItem>
                             }
                     </MudSelect>
-                    <MudTextField T="string" Label="Zip" Variant="Variant.Outlined" Placeholder="Zip" @bind-Value="StudentEditData.str_Zip" />
-                    <MudTextField T="string" Label="Date Hired" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.date_Hired" />
-                    <MudTextField T="string" Label="Cell Phone" Variant="Variant.Outlined" Placeholder="Cell Phone" @bind-Value="StudentEditData.str_Cell_Phone" />
-                    <MudTextField T="string" Label="Home Phone" Variant="Variant.Outlined" Placeholder="Home Phone" @bind-Value="StudentEditData.str_Home_Phone" />
-                    <MudTextField T="string" Label="Other Phone" Variant="Variant.Outlined" Placeholder="Other Phone" @bind-Value="StudentEditData.str_Other_Phone" />
-                    <MudTextField T="string" Label="Email" Variant="Variant.Outlined" Placeholder="Email" @bind-Value="StudentEditData.str_Email" />
-                    <MudSelect Label="Hijri Year" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Year">
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_zip", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_zip", "fldcaption")" @bind-Value="StudentEditData.str_Zip" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "date_hired", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "date_hired", "fldcaption")" @bind-Value="StudentEditData.date_Hired" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")" @bind-Value="StudentEditData.str_Cell_Phone" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_home_phone", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_home_phone", "fldcaption")" @bind-Value="StudentEditData.str_Home_Phone" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_other_phone", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_other_phone", "fldcaption")" @bind-Value="StudentEditData.str_Other_Phone" />
+                    <MudTextField T="string" Label="@Language.Phrase("tblstudents", "str_email", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_email", "fldcaption")" @bind-Value="StudentEditData.str_Email" />
+                    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_year", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Year">
                         @if (HijriList != null)
                         {
                             foreach (var hijriyear in HijriList)
@@ -36,16 +40,16 @@
                             }
                         }
                     </MudSelect>
-                    <MudSelect Label="Hijri Month" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Month">
+                    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_month", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Month">
                         @if (HijriList != null)
                         {
-                            foreach (var hijriMonth in HijriList)
+                            foreach (var hijriMonth in HijriList!.Take(12))
                             {
-                                <MudSelectItem T="int?" value="@hijriMonth.Hijri_Month">@hijriMonth.Hijri_Month</MudSelectItem>
+                                <MudSelectItem T="int?" value="@hijriMonth.Hijri_Month">@(LocalizationService.SelectedLanguage!.Name == "English (US)" ? hijriMonth.Hijri_Monthname : hijriMonth.Hijri_mon_ar.Split('-')[1].Trim())</MudSelectItem>
                             }
                         }
                     </MudSelect>
-                    <MudSelect Label="Hijri Day" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Day">
+                    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_day", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Day">
                         @if (HijriList != null)
                         {
                             foreach (var hijriDay in HijriList)
@@ -54,51 +58,58 @@
                             }
                         }
                     </MudSelect>
-                    <MudTextField Label="Nationality" Variant="Variant.Outlined" Placeholder="Email" @bind-Value="StudentEditData.int_Nationality" />
-                    <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.User_Role">
-                        <MudSelectItem T="string" value="User Role">User Role</MudSelectItem>
-                        <MudSelectItem T="string" value="Employee">Employee</MudSelectItem>
-                    </MudSelect>
-                    <MudTextField Label="Staff Id" Variant="Variant.Outlined" Placeholder="Staff Id" @bind-Value="StudentEditData.int_Staff_Id" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "int_nationality", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "int_nationality", "fldcaption")" @bind-Value="StudentEditData.int_Nationality" />
+                    <MudSelect Label="@Language.Phrase("tblstudents", "user_role", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.User_Role">
+                        <MudSelectItem T="string" value="User Role">@Language.Phrase("tblstudents", "user_role", "fldcaption")</MudSelectItem>
+                            <MudSelectItem T="string" value="Employee">@Language.Phrase("tblstudents", "user_role", "fldtagcaption2")</MudSelectItem>
+                        </MudSelect>
+                        <MudTextField Label="@Language.Phrase("tblstudents", "int_staff_id_updated", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "int_staff_id_updated", "fldcaption")" @bind-Value="StudentEditData.int_Staff_Id" />
 
-                </MudPaper>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Access Credentials">
-                <MudPaper  Elevation="0">
-                    <MudTextField Label="National ID Iqama" Variant="Variant.Outlined" Placeholder="National ID Iqama" @bind-Value="StudentEditData.str_NationalID_Iqama" />
-                    <MudTextField Label="User Level ID" Variant="Variant.Outlined" Placeholder="User Level ID" Value="@Utility.GetCurrentUserLevelName(StudentEditData.UserlevelID)" Disabled="true" />
-                    <MudTextField Label="Parent User Name" Variant="Variant.Outlined" Placeholder="Parent User Name" @bind-Value="StudentEditData.Parent_Username" />
-                    <MudCheckBox Label="Activated" @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+                    </MudPaper>
 
-                </MudPaper>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Driving Status and Absher">
-                <MudPaper  Elevation="0">
-                    <MudCheckBox Label="Do you have driving experience?" @bind-Value="@StudentEditData.IsDrivingexperience" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
-                    <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.intDrivinglicenseType">
-                        @{
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="@Language.Phrase("tblstudents", "tblpagecaption2")">
+                    <MudPaper Elevation="0">
+                        <MudTextField Label="@Language.Phrase("tblstudents", "str_nationalid_iqama", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_nationalid_iqama", "fldcaption")" @bind-Value="StudentEditData.str_NationalID_Iqama" />
+                        <MudTextField Label="@Language.Phrase("userlevels", "userlevelid", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("userlevels", "userlevelid", "fldcaption")" Value="@Utility.GetCurrentUserLevelName(StudentEditData.UserlevelID)" Disabled="true" />
+                        <MudTextField Label="@Language.Phrase("tblstudents", "parent_username", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "parent_username", "fldcaption")" @bind-Value="StudentEditData.Parent_Username" />
+                        <MudCheckBox Label="@Language.Phrase("tblstudents", "activated", "fldcaption")" @bind-Value="@StudentEditData.Activated" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+
+                    </MudPaper>
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="@Language.Phrase("tblstudents", "tblpagecaption3")">
+                    <MudPaper Elevation="0">
+                        <MudCheckBox Label="@Language.Phrase("tblstudents", "isdrivingexperience", "fldcaption")" @bind-Value="@StudentEditData.IsDrivingexperience" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
+                        <MudSelect Label="User Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.intDrivinglicenseType">
+                            @{
+
+
+                         //   var check = Language.GetPhrases("tblstudents", "intdrivinglicensetype");
+                           
+
                             foreach (DrivingLicense type in Enum.GetValues(typeof(DrivingLicense)))
                             {
                                 int? value = (int)type;
                                 <MudSelectItem T="int?" value="@value">@type.ToDescriptionString()</MudSelectItem>
+
                             }
                         }
                     </MudSelect>
-                    <MudTextField Label="Absher Appointment Number" Variant="Variant.Outlined" Placeholder="Absher Appointment Number" @bind-Value="StudentEditData.AbsherApptNbr" />
-                    <MudTextField Label="Absher Appointment Photo" Variant="Variant.Outlined" Placeholder="Absher Appointment Photo" @bind-Value="StudentEditData.Absherphoto" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "absherapptnbr", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "absherapptnbr", "fldcaption")" @bind-Value="StudentEditData.AbsherApptNbr" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "absherphoto", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "absherphoto", "fldcaption")" @bind-Value="StudentEditData.Absherphoto" />
 
                     @* <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton> *@
                 </MudPaper>
             </MudExpansionPanel>
-            <MudExpansionPanel Text="Emergency Contact (Optional)">
-                <MudPaper  Elevation="0">
-                    <MudTextField Label="Date Started" Variant="Variant.Outlined" Placeholder="Absher Appointment Number" @bind-Value="StudentEditData.date_Started" />
-                    <MudTextField Label="Date Hired" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.str_DateHired" />
-                    <MudTextField Label="Date Left" Variant="Variant.Outlined" Placeholder="Date Hired" @bind-Value="StudentEditData.str_DateLeft" />
-                    <MudTextField Label="Emergency Contact Name" Variant="Variant.Outlined" Placeholder="Emergency Contact Name" @bind-Value="StudentEditData.str_Emergency_Contact_Name" />
-                    <MudTextField Label="Emergency Contact Phone" Variant="Variant.Outlined" Placeholder="Emergency Contact Phone" @bind-Value="StudentEditData.str_Emergency_Contact_Phone" />
-                    <MudTextField Label="Emergency Contact Relation" Variant="Variant.Outlined" Placeholder="Emergency Contact Phone" @bind-Value="StudentEditData.str_Emergency_Contact_Relation" />
-                    <MudSelect Label="Emergency Contact Relation" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.str_Emergency_Contact_Relation">
+            <MudExpansionPanel Text="@Language.Phrase("tblstudents", "tblpagecaption4")">
+                <MudPaper Elevation="0">
+                    <MudTextField Label="@Language.Phrase("tblstudents", "date_started", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "date_started", "fldcaption")" @bind-Value="StudentEditData.date_Started" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "str_datehired_updated", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_datehired_updated", "fldcaption")" @bind-Value="StudentEditData.str_DateHired" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "str_dateleft_updated", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_dateleft_updated", "fldcaption")" @bind-Value="StudentEditData.str_DateLeft" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "str_emergency_contact_name", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_emergency_contact_name", "fldcaption")" @bind-Value="StudentEditData.str_Emergency_Contact_Name" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "str_emergency_contact_phone", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_emergency_contact_phone", "fldcaption")" @bind-Value="StudentEditData.str_Emergency_Contact_Phone" />
+                    <MudTextField Label="@Language.Phrase("tblstudents", "str_emergency_contact_relation", "fldcaption")" Variant="Variant.Outlined" Placeholder="@Language.Phrase("tblstudents", "str_emergency_contact_relation", "fldcaption")" @bind-Value="StudentEditData.str_Emergency_Contact_Relation" />
+                    <MudSelect Label="@Language.Phrase("tblstudents", "str_emergency_contact_relation", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.str_Emergency_Contact_Relation">
                         @* <MudSelectItem T="string" Value="">Please select</MudSelectItem> *@
                         @foreach (RelationshipType relation in Enum.GetValues(typeof(RelationshipType)))
                         {
@@ -106,7 +117,7 @@
                         }
                     </MudSelect>
 
-                    <MudTextField T="string" Label="Notes" Lines="7" Variant="Variant.Outlined" @bind-Value="StudentEditData.str_Notes" />
+                    <MudTextField T="string" Label="@Language.Phrase("calendar2", "notes", "fldcaption")" Lines="7" Variant="Variant.Outlined" @bind-Value="StudentEditData.str_Notes" />
 
                 </MudPaper>
 
@@ -118,11 +129,11 @@
 
         @* <MudButton OnClick="Cancel"  Color="Color.Primary">Cancel</MudButton> *@
 
-        <MudButton Class="mt-3 mb-2" OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">Close</MudButton>
-        <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateStudentRegistration">Save</MudButton>
+        <MudButton Class="mt-3 mb-2" OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">@Language.Phrase("closebtn")</MudButton>
+            <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdateStudentRegistration">@Language.Phrase("savebtn")</MudButton>
 
-        @* <MudButton OnClick="StudentDataEdit"> </MudButton> *@
+            @* <MudButton OnClick="StudentDataEdit"> </MudButton> *@
 
-    </DialogActions>
-</MudDialog>
+        </DialogActions>
+    </MudDialog>
 
