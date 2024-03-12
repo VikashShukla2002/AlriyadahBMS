@@ -4,7 +4,7 @@
     <MudTextField Label="Emergency Contact Name" @bind-Value="registerModels.str_Emergency_Contact_Name" />
     <MudTextField Label="Emergency Contact Phone" @bind-Value="registerModels.str_Emergency_Contact_Phone" />
 
-    <MudSelect T="string" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect T="string" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.str_Emergency_Contact_Relation">
         <MudSelectItem Value="@("Father")" />
         <MudSelectItem Value="@("Mother")" />
         <MudSelectItem Value="@("Brother")" />

@@ -25,11 +25,6 @@ namespace AlriyadahBMS.Components.Pages.Account
         private async Task OnValidSubmitAsync()
         {
 
-            //var response = await Swagger.PostAsync<SignInRequest, SignInResponse>("api/login", new SignInRequest
-            //{
-            //    UserName = LoginModel.UserName,
-            //    Password = LoginModel.Password
-            //});
             var response = await AccountService!.LoginAsync(new SignInRequest
             {
                 UserName = LoginModel!.UserName,
@@ -44,7 +39,6 @@ namespace AlriyadahBMS.Components.Pages.Account
             else
             {
                 Snackbar.Add(response?.Message?.ToString(), Severity.Error);
-                //Snackbar.Add("some error occured", Severity.Error);
             }
 
         }
@@ -56,7 +50,6 @@ namespace AlriyadahBMS.Components.Pages.Account
 
             if (user!.Identity!.IsAuthenticated)
             {
-                // User is already authenticated, redirect to another page
                 NavigationManager.NavigateTo("/", false, true);
                 //await JSRuntime.ShowToastAsync("You don't have access to open this page", SwalIcon.Success);
             }

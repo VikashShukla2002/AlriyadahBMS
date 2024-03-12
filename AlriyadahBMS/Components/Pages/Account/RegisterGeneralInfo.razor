@@ -1,40 +1,73 @@
 ﻿@using AlriyadahBMS.Shared.ViewModels
 
 @inject LocalizationService Language
+@inject TableService tableService
 
 <MudPaper Elevation="3" Class="pa-4">
 
-    <MudTextField Label="@Language.Phrase("fldcaption")" @bind-Value="registerModels.str_First_Name" Required="true" RequiredError="User name is required!" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_first_name", "fldcaption")" @bind-Value="registerModels.str_First_Name" Required="true" RequiredError="User name is required!" />
     <MudTextField Label="Middle Name" @bind-Value="registerModels.str_Middle_Name" Required="true" RequiredError="Middle name is required" />
-    <MudTextField Label="Last Name" @bind-Value="registerModels.str_Last_Name" Required="true" RequiredError="Mobile Number is required!" />
-    <MudTextField Label="Cell Phone" @bind-Value="registerModels.str_Cell_Phone" Required="true" RequiredError="Mobile Number is required!" Mask="@(new PatternMask("00 0000 0000"))" />
-    <MudTextField Label="Email" @bind-Value="registerModels.str_Email" Required="true" RequiredError="Email is required!" />
-
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")" @bind-Value="registerModels.str_Last_Name" Required="true" RequiredError="Mobile Number is required!" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")" @bind-Value="registerModels.str_Cell_Phone" Required="true" RequiredError="Mobile Number is required!" Mask="@(new PatternMask("00 0000 0000"))" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_email", "fldcaption")" @bind-Value="registerModels.str_Email" Required="true" RequiredError="Email is required!" />
+    @*
     <MudSelect T="string" Label="Hijri Year" AnchorOrigin="Origin.BottomCenter">
-        <MudSelectItem Value="@("1374")" />
-        <MudSelectItem Value="@("1375")" />
-        <MudSelectItem Value="@("1376")" />
+    <MudSelectItem Value="@("1374")" />
+    <MudSelectItem Value="@("1375")" />
+    <MudSelectItem Value="@("1376")" />
+    </MudSelect>
+    *@
+
+    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_year", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.Hijri_Year">
+        @if (HijriList != null)
+        {
+            foreach (var hijriyear in HijriList)
+            {
+                <MudSelectItem T="int" value="@hijriyear.Hijri_Year">@hijriyear.Hijri_Year</MudSelectItem>
+            }
+        }
     </MudSelect>
 
+@* 
     <MudSelect T="string" Label="Hijri Month" AnchorOrigin="Origin.BottomCenter">
         <MudSelectItem Value="@("Muharran")" />
         <MudSelectItem Value="@("Safar")" />
         <MudSelectItem Value="@("Rajab")" />
         <MudSelectItem Value="@("Ramadan")" />
         <MudSelectItem Value="@("Rajab")" />
-    </MudSelect>
+    </MudSelect> *@
 
+    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_month", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.Hijri_Month">
+        @if (HijriList != null)
+        {
+            foreach (var hijriMonth in HijriList!.Take(12))
+            {
+                <MudSelectItem T="int" value="@hijriMonth.Hijri_Month">@(LocalizationService.SelectedLanguage!.Name == "English (US)" ? hijriMonth.Hijri_Monthname : hijriMonth.Hijri_mon_ar.Split('-')[1].Trim())</MudSelectItem>
+            }
+        }
+    </MudSelect>
+    @*
     <MudSelect T="string" Label="Hijri Day" AnchorOrigin="Origin.BottomCenter">
-        <MudSelectItem Value="@("1")" />
-        <MudSelectItem Value="@("2")" />
-        <MudSelectItem Value="@("4")" />
-        <MudSelectItem Value="@("5")" />
-        <MudSelectItem Value="@("6")" />
-        <MudSelectItem Value="@("7")" />
-        <MudSelectItem Value="@("8")" />
-        <MudSelectItem Value="@("9")" />
-        <MudSelectItem Value="@("10")" />
-        <MudSelectItem Value="@("11")" />
+    <MudSelectItem Value="@("1")" />
+    <MudSelectItem Value="@("2")" />
+    <MudSelectItem Value="@("4")" />
+    <MudSelectItem Value="@("5")" />
+    <MudSelectItem Value="@("6")" />
+    <MudSelectItem Value="@("7")" />
+    <MudSelectItem Value="@("8")" />
+    <MudSelectItem Value="@("9")" />
+    <MudSelectItem Value="@("10")" />
+    <MudSelectItem Value="@("11")" />
+    </MudSelect> *@
+
+    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_day", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.Hijri_Day">
+        @if (HijriList != null)
+        {
+            foreach (var hijriDay in HijriList!.Take(30))
+            {
+                <MudSelectItem T="int" value="@hijriDay.Hijri_Day">@hijriDay.Hijri_Day</MudSelectItem>
+            }
+        }
     </MudSelect>
 
 </MudPaper>
@@ -44,4 +77,14 @@
 
     private RegisterModels registerModels { get; set; } = new();
 
+    public IEnumerable<CityModel>? CityList = new List<CityModel>();
+    public IEnumerable<HijriModel>? HijriList = new List<HijriModel>();
+    public IEnumerable<UserLevelModel>? userLevels = new List<UserLevelModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        CityList = await tableService.GetRecords<List<CityModel>>(TableConst.Cities);
+        HijriList = await tableService.GetRecords<List<HijriModel>>(TableConst.Hijri_Table);
+        userLevels = await tableService.GetRecords<List<UserLevelModel>>(TableConst.UserLevels);
+    }
 }

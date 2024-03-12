@@ -18,6 +18,8 @@ namespace AlriyadahBMS.Shared.ApiModels
             public int Hijri_Day { get; set; }
             public int Hijri_Month { get; set; }
             public int Hijri_Year { get; set; }
+
+
         }
 
         public class SignInResponse : BaseApiResponse

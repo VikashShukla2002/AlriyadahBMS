@@ -2,14 +2,21 @@
 <MudPaper Elevation="3" class="pa-4" >
     <MudCheckBox @bind-Value="@registerModels.IsDrivingexperience" Label="Do you have driving experience?" Color="Color.Primary"></MudCheckBox>
 
-    <MudSelect T="string" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter">
-        <MudSelectItem Value="@("Private Vehicle")" />
+    <MudSelect T="int" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.intDrivinglicenseType">
+     @*    <MudSelectItem Value="@("Private Vehicle")" />
         <MudSelectItem Value="@("Motorbike")" />
         <MudSelectItem Value="@("Taxi")" />
-        <MudSelectItem Value="@("CDL (Trucks & Buses)")" />
+        <MudSelectItem Value="@("CDL (Trucks & Buses)")" /> *@
+        
+        <MudSelectItem Value="1">Private Vehicle</MudSelectItem>
+        <MudSelectItem Value="2">Motorbike</MudSelectItem>
+        <MudSelectItem Value="3">Taxi</MudSelectItem>
+        <MudSelectItem Value="4">CDL (Trucks & Buses)</MudSelectItem>
+       
     </MudSelect>
     <MudTextField Label="Absher Appointment Number" @bind-Value="registerModels.AbsherApptNbr" Required="true" RequiredError="This field is required!" />
 
+    
 
 </MudPaper>
 

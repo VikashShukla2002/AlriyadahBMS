@@ -669,3 +669,16 @@ public class TableController : ApiController
     }
 
 }
+
+public class RegistrationController : ApiController
+{
+    [HttpPost]
+    [Route("registeration")]
+    public IActionResult RegisterUser(string signUpRequest)
+    {
+
+        return Ok();
+    }
+}
+
+

@@ -1,4 +1,5 @@
 ﻿using AlriyadahBMS.Shared.ApiModels;
+using AlriyadahBMS.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace AlriyadahBMS.Services.IServices
         Task<SignInResponse> LoginAsync(SignInRequest signInRequest);
 
 
-      //  Task<SignUpResponse> RegisterUserAsync(SignUpRequest signUpRequest);
+        Task<bool> RegisterUserAsync(RegisterModels signUpRequest);
 
         void Logout();
     }

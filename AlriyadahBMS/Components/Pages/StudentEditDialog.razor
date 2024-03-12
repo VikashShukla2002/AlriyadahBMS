@@ -52,7 +52,7 @@
                     <MudSelect Label="@Language.Phrase("hijri_table", "hijri_day", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="StudentEditData.Hijri_Day">
                         @if (HijriList != null)
                         {
-                            foreach (var hijriDay in HijriList)
+                            foreach (var hijriDay in HijriList!.Take(30))
                             {
                                 <MudSelectItem T="int?" value="@hijriDay.Hijri_Day">@hijriDay.Hijri_Day</MudSelectItem>
                             }

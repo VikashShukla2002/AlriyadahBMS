@@ -1,6 +1,7 @@
 ﻿using AlriyadahBMS.Services.IServices;
 using AlriyadahBMS.Shared.ApiModels;
 using AlriyadahBMS.Shared.Helper;
+using AlriyadahBMS.Shared.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,13 @@ namespace AlriyadahBMS.Services
             SecureStorage.Remove(ApplicationConst.Local_Token);
             ((AuthenticationStateService)_authStateProvider).NotifyUserLogout();
             _client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public Task<bool> RegisterUserAsync(RegisterModels signUpRequest)
+        {
+
+
+            throw new NotImplementedException();
         }
     }
 }

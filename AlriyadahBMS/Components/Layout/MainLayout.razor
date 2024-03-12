@@ -65,7 +65,7 @@
                             </MudDrawerContainer>
                         </MudDrawer>
 
-                        <MudDrawer Class="mud-theme-primary rounded-t-xl" @bind-Open="@open" Anchor="Anchor.Bottom" Variant="@DrawerVariant.Temporary">
+                        <MudDrawer Class="mud-theme-primary rounded-t-xl" @bind-Open="@open" Anchor="Anchor.Bottom" Variant="@DrawerVariant.Temporary"  >
                             <MudDrawerHeader>
                                 <MudText Typo="Typo.h6">App Language</MudText>
                             </MudDrawerHeader>
@@ -87,7 +87,6 @@
                                         </MudRadioGroup>
                                     }
                                 </MudPaper>
-
                             </MudDrawerContainer>
                         </MudDrawer>
                     </Authorized>
@@ -107,6 +106,7 @@
     void OpenDrawer()
     {
         open = !open;
+        
     }
 
     protected override void OnInitialized()

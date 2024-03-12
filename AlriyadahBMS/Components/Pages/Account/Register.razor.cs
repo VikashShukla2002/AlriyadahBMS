@@ -13,5 +13,7 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private RegisterModels registerModels { get; set; } = new();
 
+
+
     }
 }
