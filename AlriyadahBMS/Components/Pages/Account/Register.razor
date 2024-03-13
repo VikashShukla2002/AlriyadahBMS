@@ -33,9 +33,9 @@
 
 <MudHidden Breakpoint="Breakpoint.SmAndDown " Invert="true">
     <MudExpansionPanels MultiExpansion="false">
-        <MudExpansionPanel Text="@Language.Phrase("registrationtab1")">
+        <MudExpansionPanel Text="@Language.Phrase("registrationtab1")" >
             <MudItem>
-                <RegisterGeneralInfo />
+                <RegisterGeneralInfo Model="RegisterModel" />
 
             </MudItem>
         </MudExpansionPanel>
@@ -49,7 +49,7 @@
             <EmergencyContact />
         </MudExpansionPanel>
     </MudExpansionPanels>
-    <MudButton Color="Color.Primary" OnClick="()=>OnClickSubmit(registerModels)">Submit</MudButton>
+    <MudButton Color="Color.Primary" OnClick="()=>OnClickSubmit(RegisterModel)">Submit</MudButton>
 </MudHidden>
 
 
