@@ -5,6 +5,7 @@ using AlriyadahBMS.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,10 +21,11 @@ namespace AlriyadahBMS.Services
             _swagger = swagger;
         }
 
-        public async Task<SignUpResponse> RegisterAsync(RegisterModels registerModel)
+        public async Task<SignUpResponse> Register(RegisterModels registerModel)
         {
-            var response = await _swagger.PostAsync<RegisterModels, SignUpResponse>(RegisterApiConst.POST_RegisterAccount, "tblStudents", registerModel);
-            return response.Data;
+            //var response = await _swagger.PostAsync<RegisterModels, SignUpResponse>(RegisterApiConst.POST_RegisterAccount, "tblStudents", registerModel);
+            var response = await _swagger.RegisterAsync<RegisterModels, SignUpResponse>(RegisterApiConst.POST_RegisterAccount, registerModel);
+            return response;
         }
     }
 }

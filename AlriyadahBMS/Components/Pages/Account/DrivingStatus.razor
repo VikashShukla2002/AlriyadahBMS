@@ -3,9 +3,9 @@
 
 @using AlriyadahBMS.Shared.ViewModels
 <MudPaper Elevation="3" class="pa-4">
-    <MudCheckBox @bind-Value="@registerModels.IsDrivingexperience" Label="Do you have driving experience?" Color="Color.Primary"></MudCheckBox>
+    <MudCheckBox @bind-Value="@Model.IsDrivingexperience" Label="Do you have driving experience?" Color="Color.Primary"></MudCheckBox>
 
-    <MudSelect T="int" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.intDrivinglicenseType">
+    <MudSelect T="int" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.intDrivinglicenseType">
         @*    <MudSelectItem Value="@("Private Vehicle")" />
         <MudSelectItem Value="@("Motorbike")" />
         <MudSelectItem Value="@("Taxi")" />
@@ -17,7 +17,7 @@
         <MudSelectItem Value="4">CDL (Trucks & Buses)</MudSelectItem>
 
     </MudSelect>
-    <MudTextField Label="Absher Appointment Number" @bind-Value="registerModels.AbsherApptNbr" Required="true" RequiredError="This field is required!" />
+    <MudTextField Label="Absher Appointment Number" @bind-Value="Model.AbsherApptNbr" Required="true" RequiredError="This field is required!" />
 
 
   @*   <MudFileUpload T="IBrowserFile" FilesChanged="UploadFile">
@@ -50,7 +50,12 @@
 </MudPaper>
 
 @code {
-    private RegisterModels registerModels { get; set; } = new();
+  
+
+    [Parameter]
+    public RegisterModels Model { get; set; } = null!;
+
+
     string Message = "No file(s) selected";
     private string? ImageSrc { get; set; }
 
@@ -59,7 +64,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        registerModels.AbsherApptNbr = "file_example_PNG_500kB.png";
+        Model.AbsherApptNbr = "file_example_PNG_500kB.png";
         return base.OnInitializedAsync();
     }
 

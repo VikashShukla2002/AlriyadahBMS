@@ -30,6 +30,7 @@ namespace AlriyadahBMS
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<TableService>();
             builder.Services.AddScoped<FileUploadService>();
+            builder.Services.AddScoped<RegisterService>();
 
 
 #if DEBUG

@@ -154,13 +154,34 @@ namespace AlriyadahBMS.Services
             return errorResult;
         }
 
-
-
-
-        public Task<SignUpResponse> RegisterAsync(RegisterModels registerModel)
+        public async Task<TResponse> RegisterAsync<TRequest, TResponse>(string url, TRequest request)
         {
-            throw new NotImplementedException();
+
+
+
+            var requestContent = JsonContent.Create(request);
+
+            // Send the POST request to the specified URL with the request content
+            var response = await _client.PostAsync(url, requestContent);
+
+            // Check if the response is successful
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the response content to the specified response type
+            var responseData = await response.Content.ReadFromJsonAsync<TResponse>();
+
+            return responseData;
+
+            //throw new NotImplementedException();
         }
+
+
+
+
+        //public Task<SignUpResponse> RegisterAsync(RegisterModels registerModel)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
 
