@@ -10,6 +10,8 @@ using AlriyadahBMS.Shared.Helper;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Net.Http;
 
 namespace AlriyadahBMS.Services
 {
@@ -152,6 +154,41 @@ namespace AlriyadahBMS.Services
             return errorResult;
         }
 
+
+
+
+        public Task<SignUpResponse> RegisterAsync(RegisterModels registerModel)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+        //public Task<UploadResult> UploadFilesAsync(string url, IEnumerable<IBrowserFile> files)
+        //{
+
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<UploadResult> UploadFilesAsync(string url, IBrowserFile files)
+        {
+
+            var formData = new MultipartFormDataContent();
+
+            var fileStreamContent = new StreamContent(files.OpenReadStream());
+
+            formData.Add(fileStreamContent, "file", files.Name);
+            var response = await _client.PostAsync(_client.BaseAddress + url, formData);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var uploadResult = JsonConvert.DeserializeObject<UploadResult>(responseContent);
+
+            return uploadResult;
+
+            //throw new NotImplementedException();
+        }
 
         private bool IsValidToken()
         {

@@ -13,7 +13,10 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private RegisterModels registerModels { get; set; } = new();
 
+        private async Task OnClickSubmit(RegisterModels register)
+        {
 
+        }
 
     }
 }

@@ -36,6 +36,7 @@
         <MudExpansionPanel Text="@Language.Phrase("registrationtab1")">
             <MudItem>
                 <RegisterGeneralInfo />
+
             </MudItem>
         </MudExpansionPanel>
         <MudExpansionPanel Text="@Language.Phrase("registrationtab2")">
@@ -48,6 +49,7 @@
             <EmergencyContact />
         </MudExpansionPanel>
     </MudExpansionPanels>
+    <MudButton Color="Color.Primary" OnClick="()=>OnClickSubmit(registerModels)">Submit</MudButton>
 </MudHidden>
 
 

@@ -20,5 +20,15 @@ namespace AlriyadahBMS.Shared.Helper
         public static string POST_TblUpdate = Base + "edit/{table}/{key}";
     }
 
+    public static class FileUploadApiConst
+    {
+        public static string Base = "api/";
+        public static string POST_FileUpload = Base + "upload";
+    }
+    public static class RegisterApiConst
+    {
+        public static string Base = "api/";
+        public static string POST_RegisterAccount = Base + "register";
+    }
 
 }

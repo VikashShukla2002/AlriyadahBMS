@@ -1,25 +1,84 @@
-﻿@using AlriyadahBMS.Shared.ViewModels
-<MudPaper Elevation="3" class="pa-4" >
+﻿@inject FileUploadService FileUpload
+
+
+@using AlriyadahBMS.Shared.ViewModels
+<MudPaper Elevation="3" class="pa-4">
     <MudCheckBox @bind-Value="@registerModels.IsDrivingexperience" Label="Do you have driving experience?" Color="Color.Primary"></MudCheckBox>
 
     <MudSelect T="int" Label="Driving License Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="registerModels.intDrivinglicenseType">
-     @*    <MudSelectItem Value="@("Private Vehicle")" />
+        @*    <MudSelectItem Value="@("Private Vehicle")" />
         <MudSelectItem Value="@("Motorbike")" />
         <MudSelectItem Value="@("Taxi")" />
         <MudSelectItem Value="@("CDL (Trucks & Buses)")" /> *@
-        
+
         <MudSelectItem Value="1">Private Vehicle</MudSelectItem>
         <MudSelectItem Value="2">Motorbike</MudSelectItem>
         <MudSelectItem Value="3">Taxi</MudSelectItem>
         <MudSelectItem Value="4">CDL (Trucks & Buses)</MudSelectItem>
-       
+
     </MudSelect>
     <MudTextField Label="Absher Appointment Number" @bind-Value="registerModels.AbsherApptNbr" Required="true" RequiredError="This field is required!" />
 
-    
 
+  @*   <MudFileUpload T="IBrowserFile" FilesChanged="UploadFile">
+        <ButtonTemplate>
+            <MudButton HtmlTag="label"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       for="@context.Id">
+                Single File
+            </MudButton>
+        </ButtonTemplate>
+        <SelectedTemplate>
+            @if (context != null)
+            {
+
+                <MudText>@context.Name</MudText>
+            }
+            else
+            {
+                <MudText>No File</MudText>
+            }
+        </SelectedTemplate>
+
+    </MudFileUpload>
+    @if (!string.IsNullOrEmpty(ImageSrc))
+    {
+        <MudImage Src="@ImageSrc" Width="200" Height="150" Alt="Swedish Farm House" Elevation="25" Class="rounded-lg ma-4" />
+    }
+ *@
 </MudPaper>
 
-@code{
-    private RegisterModels registerModels {get;set;} = new();
+@code {
+    private RegisterModels registerModels { get; set; } = new();
+    string Message = "No file(s) selected";
+    private string? ImageSrc { get; set; }
+
+
+
+
+    protected override Task OnInitializedAsync()
+    {
+        registerModels.AbsherApptNbr = "file_example_PNG_500kB.png";
+        return base.OnInitializedAsync();
+    }
+
+    private async Task UploadFile(IBrowserFile file)
+    {
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.OpenReadStream(file.Size).CopyToAsync(memoryStream);
+
+            var buffer = memoryStream.ToArray();
+
+            var base64String = Convert.ToBase64String(buffer);
+
+            ImageSrc = $"data:{file.ContentType};base64," + base64String;
+
+
+
+            var fileUploadResponse = FileUpload.UploadFiles(file);
+        }
+
+    }
 }
