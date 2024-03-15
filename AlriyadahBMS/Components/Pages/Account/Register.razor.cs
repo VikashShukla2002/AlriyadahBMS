@@ -16,6 +16,7 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private async Task OnClickSubmit(RegisterModels register)
         {
+          //   register.Absherphoto = "file_example_PNG_500kB.png";
               var response =  await RegisterService.Register(register);
             var check = response;
 
