@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MudBlazor.CategoryTypes;
 
 namespace AlriyadahBMS.Components.Pages.Account
 {
@@ -17,6 +18,7 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private bool ShowPassword { get; set; } = false;
 
+        private MudForm form { get; set; } = null!;
         protected override async Task OnInitializedAsync()
         {
             await CheckAuthenticationState();
@@ -24,24 +26,39 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private async Task OnValidSubmitAsync()
         {
+            //await form.Validate();
+            //if (form.IsValid)
+            //{
 
-            var response = await AccountService!.LoginAsync(new SignInRequest
-            {
-                UserName = LoginModel!.UserName,
-                Password = LoginModel!.Password
-            });
 
-            if (response!.Success)
-            {
-                NavigationManager.NavigateTo("/", false, true);
-                Snackbar.Add(response?.Message?.ToString(), Severity.Success);
-            }
-            else
-            {
-                Snackbar.Add(response?.Message?.ToString(), Severity.Error);
-            }
+                var response = await AccountService!.LoginAsync(new SignInRequest
+                {
+                    UserName = LoginModel!.UserName,
+                    Password = LoginModel!.Password
+                });
+
+                if (response!.Success)
+                {
+                    NavigationManager.NavigateTo("/", false, true);
+                    Snackbar.Add(response?.Message?.ToString(), Severity.Success);
+                }
+                else
+                {
+                    Snackbar.Add(response?.Message?.ToString(), Severity.Error);
+                }
+          //  }
+
+            //else
+            //{
+
+            //}
 
         }
+
+        
+
+
+
 
         private async Task CheckAuthenticationState()
         {

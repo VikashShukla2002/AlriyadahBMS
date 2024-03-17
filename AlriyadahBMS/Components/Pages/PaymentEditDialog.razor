@@ -3,6 +3,7 @@
 
 @inject TableService tableService
 @inject LocalizationService Language
+@inject ISnackbar Snackbar
 
 <MudDialog Class="overflow-y-scroll">
 
@@ -12,7 +13,7 @@
 
                 <MudPaper Class="pa-2 ma-2" Elevation="0">
 
-                    <MudTextField Label="@Language.Phrase("tblbillinginfo","nationalid","fldcaption")" Variant="Variant.Outlined" @bind-Value="@paymentsEditData.NationalID" Disabled />
+                     <MudTextField Label="@Language.Phrase("tblbillinginfo","nationalid","fldcaption")" Variant="Variant.Outlined" @bind-Value="@paymentsEditData.NationalID" Disabled />
                      <MudTextField Label="@Language.Phrase("tblstudents","str_first_name","fldcaption")" @bind-Value="@paymentsEditData.str_First_Name" Variant="Variant.Outlined" Disabled />
                      <MudTextField Label="@Language.Phrase("tblstudents","str_last_name","fldcaption")" @bind-Value="@paymentsEditData.str_Last_Name" Variant="Variant.Outlined" Disabled />
                      <MudTextField Label="@Language.Phrase("tblbillinginfo","str_approvalcode","fldcaption")" @bind-Value="@paymentsEditData.str_ApprovalCode" Variant="Variant.Outlined" />
@@ -71,7 +72,15 @@
     public async void OnClick_UpdatePayment()
     {
         var check = await tableService.UpdateRecord<PaymentsModel, PaymentsModel>(TableConst.TblPayments, paymentsEditData!.int_Bill_ID, paymentsEditData);
-        ClosePopup();
+        if (check.Success)
+        {
+            Snackbar.Add("Payment has been updated", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Some error occured", Severity.Error);
+        }
+        ClosePopup(); 
     }
 
     // public async void OnClick_UpdateStudentRegistration()

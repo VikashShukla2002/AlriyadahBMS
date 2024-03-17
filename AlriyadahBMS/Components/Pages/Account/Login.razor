@@ -7,52 +7,60 @@
 @inject LocalizationService Language
 
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
 
-        <div class="col-md-6 col-lg-4">
-            <MudPaper Class="pa-4">
-               
 
-                <div class="d-flex align-center justify-center mb-4">
-                    <MudImage Src="images/logo.png" Alt="Alriyadah" Class="rounded-lg" Height="100" />
-                </div>
 
-                <div class="text-center mb-4">
-                    <h4>@Language.Phrase("loginmsg")</h4>
-                </div>
+<EditForm Model="LoginModel" Context="Login" OnValidSubmit="OnValidSubmitAsync">
+      <DataAnnotationsValidator />
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
 
-                <div class="mb-4">
-                    <MudTextField @bind-Value="LoginModel.UserName" For="@(() => LoginModel.UserName)" Label="@Language.Phrase("username")" Required="true" RequiredError="@Language.Phrase("usernamevalidation")" />
-                </div>
+            <div class="col-md-6 col-lg-4">
 
-                <div class="mb-4">
-                    <MudTextField @bind-Value="LoginModel.Password" For="@(() => LoginModel.Password)" Label="@Language.Phrase("password")" InputType="@GetInputType()" Required="true" RequiredError="@Language.Phrase("userpasswordvalidation")" />
-                </div>
 
-                <div class="mb-4">
-                    <label>
-                        <input type="checkbox" @bind="ShowPassword" /> @Language.Phrase("loginregistrationshowpassword")
-                    </label>
-                </div>
+                <MudPaper Class="pa-4">
 
-                <div class="d-flex align-center justify-content-between">
-                    <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton>
-                </div>
 
-                <div class="text-center mt-4">
-                    <p>
+                    <div class="d-flex align-center justify-center mb-4">
+                        <MudImage Src="images/logo.png" Alt="Alriyadah" Class="rounded-lg" Height="100" />
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <h4>@Language.Phrase("loginmsg")</h4>
+                    </div>
+
+                    <div class="mb-4">
+                        <MudTextField @bind-Value="LoginModel.UserName" For="@(() => LoginModel.UserName)" Label="@Language.Phrase("username")" Required="true" RequiredError="@Language.Phrase("usernamevalidation")" Immediate="true"/>
+                    </div>
+
+                    <div class="mb-4">
+                        <MudTextField @bind-Value="LoginModel.Password" For="@(() => LoginModel.Password)" Label="@Language.Phrase("password")" InputType="@GetInputType()" Required="true" RequiredError="@Language.Phrase("userpasswordvalidation")" Immediate="true" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label>
+                            <input type="checkbox" @bind="ShowPassword" /> @Language.Phrase("loginregistrationshowpassword")
+                        </label>
+                    </div>
+
+                    <div class="d-flex align-center justify-content-between">
+                        @* <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton> *@
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <p>
                             <a href="/resetpass" class="forgot-link">@Language.Phrase("resetpwd")</a>
-                    </p>
-                    <NavLink Href="/register" Class="forgot-link">@Language.Phrase("registerSignup")</NavLink>
-                </div>
-            </MudPaper>
+                        </p>
+                        <NavLink Href="/register" Class="forgot-link">@Language.Phrase("registerSignup")</NavLink>
+                    </div>
+                </MudPaper>
+            </div>
         </div>
     </div>
-</div>
 
 
-
+</EditForm>
 
 @code {
 

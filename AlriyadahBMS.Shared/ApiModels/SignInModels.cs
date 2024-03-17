@@ -9,10 +9,10 @@ namespace AlriyadahBMS.Shared.ApiModels
 {
     public class SignInRequest
     {
-        [Required(ErrorMessage = "UserName is required")]
+        //[Required(ErrorMessage = "UserName is required")]
         public string UserName { get; set; } = null!;
 
-        [Required(ErrorMessage = "Password is required.")]
+        //[Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; } = null!;
         public string? SecurityCode { get; set; }
 
