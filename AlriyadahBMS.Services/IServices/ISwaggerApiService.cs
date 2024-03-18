@@ -19,8 +19,7 @@ namespace AlriyadahBMS.Services.IServices
         Task<UploadResult> UploadFilesAsync(string url, IBrowserFile files);
 
         //Task<SignUpResponse> RegisterAsync(string url, RegisterModels registerModel);
-        Task<TResponse> RegisterAsync<TRequest, TResponse>(string url, TRequest request);
-
+        Task<TResponse> RegisterAsync<TRequest, TResponse>(string url, TRequest request, byte[] file, string name);
 
     }
 }

@@ -13,6 +13,7 @@ namespace AlriyadahBMS.Shared.ApiModels
         public RegisterModels? TblStudents { get; set; }
         public string Action { get; set; }
         public string Version { get; set; }
+        public string FailureMessage { get; set; }
 
     }
 }

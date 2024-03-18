@@ -39,7 +39,11 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     </PropertyGroup>
 
-    <ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+
+	<ItemGroup>
         <!-- App Icon -->
         <!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
         <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundScale="0.72" />
@@ -71,5 +75,4 @@
       <ProjectReference Include="..\AlriyadahBMS.Services\AlriyadahBMS.Services.csproj" />
       <ProjectReference Include="..\AlriyadahBMS.Shared\AlriyadahBMS.Shared.csproj" />
     </ItemGroup>
-
 </Project>

@@ -40,6 +40,10 @@ namespace AlriyadahBMS.Components.Pages
         public async void OnClick_UpdateStudentRegistration()
         {
             var check = await tableService.UpdateRecord<StudentRegistrationModel, StudentRegistrationModel>(TableConst.TblStudents, StudentEditData!.int_Student_ID.GetValueOrDefault(), StudentEditData);
+            if(check.Success)
+            {
+                    
+            }
 
         }
     }

@@ -20,19 +20,18 @@
     <MudTextField Label="Absher Appointment Number" @bind-Value="Model.AbsherApptNbr" Required="true" RequiredError="This field is required!" />
 
 
-  @*   <MudFileUpload T="IBrowserFile" FilesChanged="UploadFile">
+    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFile">
         <ButtonTemplate>
             <MudButton HtmlTag="label"
                        Variant="Variant.Filled"
                        Color="Color.Primary"
                        for="@context.Id">
-                Single File
+                Absher Appointment Photo
             </MudButton>
         </ButtonTemplate>
         <SelectedTemplate>
             @if (context != null)
             {
-
                 <MudText>@context.Name</MudText>
             }
             else
@@ -40,21 +39,22 @@
                 <MudText>No File</MudText>
             }
         </SelectedTemplate>
-
     </MudFileUpload>
     @if (!string.IsNullOrEmpty(ImageSrc))
     {
         <MudImage Src="@ImageSrc" Width="200" Height="150" Alt="Swedish Farm House" Elevation="25" Class="rounded-lg ma-4" />
     }
- *@
+
 </MudPaper>
 
 @code {
-  
+
 
     [Parameter]
     public RegisterModels Model { get; set; } = null!;
 
+    [Parameter]
+    public EventCallback<byte[]> FileChanged { get; set; }
 
     string Message = "No file(s) selected";
     private string? ImageSrc { get; set; }
@@ -64,9 +64,10 @@
 
     protected override Task OnInitializedAsync()
     {
-        Model.Absherphoto = "file_example_PNG_500kB.png";
+        // Model.Absherphoto = "file_example_PNG_500kB.png";
         return base.OnInitializedAsync();
     }
+
 
     private async Task UploadFile(IBrowserFile file)
     {
@@ -80,9 +81,10 @@
 
             ImageSrc = $"data:{file.ContentType};base64," + base64String;
 
+            await FileChanged.InvokeAsync(buffer);
 
-
-            var fileUploadResponse = FileUpload.UploadFiles(file);
+            Model.Absherphoto = file.Name;
+            // var fileUploadResponse = FileUpload.UploadFiles(file);
         }
 
     }

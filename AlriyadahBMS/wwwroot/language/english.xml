@@ -720,6 +720,8 @@
 		<phrase id="registerSignup" value="Don't have an account? Sign Up" />
 		<phrase id="usernamevalidation" value="User Name is required." />
 		<phrase id="userpasswordvalidation" value="Password is required." />
+		
+		<phrase id="alreadyhaveuseraccount" value="Already have an account? Sign In" />
 
 
 		<!-- v2017 -->

@@ -1,0 +1,72 @@
+﻿@using AlriyadahBMS.Shared.ApiModels
+@inject LocalizationService Language
+@inject NafathService Nafath
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+
+        <MudStack AlignItems="AlignItems.Center">
+            <MudPaper Class="pa-3" Elevation="0">
+                @Language.Phrase("nafathsendmessage")
+            </MudPaper>
+            <MudPaper Class="pa-3" Elevation="0">
+                <MudAvatar Color="Color.Primary">@Random</MudAvatar>
+                </MudPaper>
+            </MudStack>
+
+
+        </DialogContent>
+        <DialogActions>
+            @* <MudButton OnClick="Cancel">Resend</MudButton> *@
+            <MudButton OnClick="Cancel">Close</MudButton>
+            <MudButton Color="Color.Primary" OnClick="Confirm">Confirm</MudButton>
+        </DialogActions>
+    </MudDialog>
+    @code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter]
+    public string Random { get; set; } = null!;
+
+    [Parameter]
+    public string TransId { get; set; } = null!;
+
+    [Parameter]
+    public string NationalIDIqama { get; set; } = null!;
+
+    public async Task Confirm()
+    {
+        var request = new MFAStatusRequest
+            {
+                NationalIDIqama = NationalIDIqama,
+                Random = Random,
+                TransId = TransId
+            };
+        var response = await Nafath.MFARequestStatus(request);
+        switch (response.StatusCode)
+        {
+            case 1:
+                Snackbar.Add("Confirmed!", Severity.Success);
+                break;
+            case 3:
+                Snackbar.Add("Expired!", Severity.Info);
+                break;
+            case 4:
+                Snackbar.Add("Rejected!", Severity.Error);
+                break;
+        };
+
+        if (!(response.StatusCode == 2))
+        {
+            MudDialog.Close(DialogResult.Ok<MFAResponse>(response));
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+    }
+    void Cancel() => MudDialog.Cancel();
+}

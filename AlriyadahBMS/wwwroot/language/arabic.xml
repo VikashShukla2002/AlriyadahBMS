@@ -29,6 +29,8 @@
 		<phrase id="userpasswordvalidation" value="كلمة المرور مطلوبة." />
 		<phrase id="requiredemailvalidation" value="عنوان البريد الإلكتروني مطلوب" />
 
+		<phrase id="alreadyhaveuseraccount" value="هل لديك حساب؟ تسجيل الدخول" />
+
 		<!-- v2022 -->
 		<phrase id="2faenabled" value="تم تمكين المصادقة الثنائية" />
 		<!-- v2022 -->

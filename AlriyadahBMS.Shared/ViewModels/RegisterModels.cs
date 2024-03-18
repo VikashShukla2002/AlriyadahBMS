@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,13 +23,18 @@ namespace AlriyadahBMS.Shared.ViewModels
 
         // Access credentials
         public string str_Password { get; set; }
+
+        [JsonProperty("c_str_Password")]
         public string str_ConfirmPassword { get; set; }  // new
         public string str_NationalID_Iqama { get; set; }
+
 
 
         // Driving status 
         public bool IsDrivingexperience { get; set; }
         public int intDrivinglicenseType { get; set; }
+
+
         public string AbsherApptNbr { get; set; }
         public string? Absherphoto { get; set; }
 

@@ -2,55 +2,74 @@
 
 @inject LocalizationService Language
 @inject RegisterService RegisterService
+@inject ISnackbar Snackbar
 
+@inject NavigationManager NavigationManager
+
+
+
+<div class="d-flex align-center justify-center mb-4 mt-3">
+    <MudImage Src="images/logo.png" Alt="Alriyadah" Class="rounded-lg" Height="100" />
+</div>
 @* <h3> Sign-up</h3> *@
-<h3> @Language.Phrase("register")</h3>
+<h3 class="d-flex align-center justify-center"> @Language.Phrase("register")</h3>
 
 
-<MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
-    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-        <MudTabPanel Text="@Language.Phrase("registrationtab1")">
-            <MudItem xs="4">
-                <RegisterGeneralInfo Model="RegisterModel" />
-            </MudItem>
-        </MudTabPanel>
-        <MudTabPanel Text="@Language.Phrase("registrationtab2")">
-            <MudItem xs="4">
-                <AccessCredentials Model="RegisterModel" />
-            </MudItem>
-        </MudTabPanel>
-        <MudTabPanel Text="@Language.Phrase("registrationtab3")">
-            <MudItem xs="4">
-                <DrivingStatus Model="RegisterModel" />
-            </MudItem>
-        </MudTabPanel>
-        <MudTabPanel Text="@Language.Phrase("registrationtab4")">
-            <MudText xs="4">
+<MudForm @ref="Form" Model="RegisterModel">
+    <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+            <MudTabPanel Text="@Language.Phrase("registrationtab1")">
+                <MudItem xs="4">
+                    <RegisterGeneralInfo Model="RegisterModel" />
+                </MudItem>
+            </MudTabPanel>
+            <MudTabPanel Text="@Language.Phrase("registrationtab2")">
+                <MudItem xs="4">
+                    <AccessCredentials Model="RegisterModel" />
+                </MudItem>
+            </MudTabPanel>
+            <MudTabPanel Text="@Language.Phrase("registrationtab3")">
+                <MudItem xs="4">
+                    <DrivingStatus Model="RegisterModel" FileChanged="FileChanged" />
+                </MudItem>
+            </MudTabPanel>
+            <MudTabPanel Text="@Language.Phrase("registrationtab4")">
+                <MudText xs="4">
+                    <EmergencyContact Model="RegisterModel" />
+                </MudText>
+            </MudTabPanel>
+        </MudTabs>
+    </MudHidden>
+
+    <MudHidden Breakpoint="Breakpoint.SmAndDown " Invert="true">
+        <MudExpansionPanels MultiExpansion="false">
+            <MudExpansionPanel Text="@Language.Phrase("registrationtab1")">
+                <MudItem>
+                    <RegisterGeneralInfo Model="RegisterModel" />
+
+                </MudItem>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="@Language.Phrase("registrationtab2")">
+                <AccessCredentials Model="RegisterModel" NationalIdValid="NationalIdValidate" />
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="@Language.Phrase("registrationtab3")">
+                <DrivingStatus Model="RegisterModel" FileChanged="FileChanged" />
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="@Language.Phrase("registrationtab4")">
                 <EmergencyContact Model="RegisterModel" />
-            </MudText>
-        </MudTabPanel>
-    </MudTabs>
-</MudHidden>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudHidden>
+</MudForm>
+@* <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="()=>OnClickSubmit(RegisterModel)">@Language.Phrase("registerbtn")</MudButton>
 
-<MudHidden Breakpoint="Breakpoint.SmAndDown " Invert="true">
-    <MudExpansionPanels MultiExpansion="false">
-        <MudExpansionPanel Text="@Language.Phrase("registrationtab1")" >
-            <MudItem>
-                <RegisterGeneralInfo Model="RegisterModel" />
+<NavLink Href="/login" Class="forgot-link">@Language.Phrase("alreadyhaveuseraccount")</NavLink>
+ *@
+<div class="d-flex align-center justify-content-between">
+    @* <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton> *@
+    <MudButton Class="mr-4 ml-4 mt-3 mb-4" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="()=>OnClickSubmit(RegisterModel)" FullWidth="true">@Language.Phrase("registerbtn")</MudButton>
+    </div>
 
-            </MudItem>
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="@Language.Phrase("registrationtab2")">
-            <AccessCredentials Model="RegisterModel" />
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="@Language.Phrase("registrationtab3")">
-            <DrivingStatus Model="RegisterModel"/>
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="@Language.Phrase("registrationtab4")">
-            <EmergencyContact Model="RegisterModel"/>
-        </MudExpansionPanel>
-    </MudExpansionPanels>
-    <MudButton Color="Color.Primary" OnClick="()=>OnClickSubmit(RegisterModel)">Submit</MudButton>
-</MudHidden>
 
+    <NavLink Href="/login" Class="forgot-link d-flex align-center justify-center">@Language.Phrase("alreadyhaveuseraccount")</NavLink>
 

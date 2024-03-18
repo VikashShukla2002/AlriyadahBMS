@@ -578,6 +578,8 @@ public class NafathController : ApiController
         {
             return BadRequest();
         }
+
+        //return Ok(new { TransId = guid.ToString(), Random = "99" });
     }
 
     [HttpPost("mfarequeststatus")]
@@ -614,6 +616,18 @@ public class NafathController : ApiController
         {
             return BadRequest();
         }
+
+        //string status = "COMPLETED";
+        //var statusCode = status switch
+        //{
+        //    "COMPLETED" => 1,
+        //    "WAITING" => 2,
+        //    "EXPIRED" => 3,
+        //    "REJECTED" => 4,
+        //    _ => 0,
+        //};
+
+        //return Ok(new { StatusCode = statusCode, Status = status });
     }
 
     [HttpPost("callback")]

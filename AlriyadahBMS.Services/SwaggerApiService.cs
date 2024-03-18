@@ -7,11 +7,12 @@ using System.Net;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using AlriyadahBMS.Shared.Helper;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
+//using System.IdentityModel.Tokens.Jwt;
+//using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace AlriyadahBMS.Services
 {
@@ -154,20 +155,75 @@ namespace AlriyadahBMS.Services
             return errorResult;
         }
 
-        public async Task<TResponse> RegisterAsync<TRequest, TResponse>(string url, TRequest request)
+        public async Task<TResponse> RegisterAsync<TRequest, TResponse>(string url, TRequest request, byte[] file, string fileName)
         {
+            try
+            {
+
+                var formData = new MultipartFormDataContent();
 
 
+                //formData.Add(new StringContent("Tom"), "str_First_Name");
+                //formData.Add(new StringContent("dom"), "str_Middle_Name");
+                //formData.Add(new StringContent("Jerry"), "str_Last_Name");
+                //formData.Add(new StringContent("7894561237"), "str_Cell_Phone");
+                //formData.Add(new StringContent("check@gmail.com"), "str_Email");
+                //formData.Add(new StringContent("Light@12345"), "str_Password");
+                //formData.Add(new StringContent("Light@12345"), "c_str_Password");
+                //formData.Add(new StringContent("1375"), "Hijri_Year");
+                //formData.Add(new StringContent("2"), "Hijri_Month");
+                //formData.Add(new StringContent("4"), "Hijri_Day");
+                //formData.Add(new StringContent("emergency"), "str_Emergency_Contact_Name");
+                //formData.Add(new StringContent("7800349449"), "str_Emergency_Contact_Phone");
+                //formData.Add(new StringContent("Father"), "str_Emergency_Contact_Relation");
+                //formData.Add(new StringContent("4456812304"), "str_NationalID_Iqama");
+                //formData.Add(new StringContent("0"), "IsDrivingexperience");
+                //formData.Add(new StringContent("1"), "intDrivinglicenseType");
+                //formData.Add(new StringContent("78945612305"), "AbsherApptNbr");
 
 
+                var requestDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(request));
 
-            var requestContent = JsonContent.Create(request);
-            var response = await _client.PostAsync(url, requestContent);
-            response.EnsureSuccessStatusCode();
-            var responseData = await response.Content.ReadFromJsonAsync<TResponse>();
+                if (requestDict?.Any() == true)
+                {
+                    foreach (var item in requestDict)
+                    {
+                        formData.Add(new StringContent(item.Value), item.Key);
+                    }
+                }
 
-            return responseData;
+                var fileContent = new ByteArrayContent(file);
 
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "File",
+                    FileName = fileName,
+                };
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+
+                formData.Add(fileContent, "Absherphoto", fileName);
+
+                //using (var memoryStream = new MemoryStream())
+                //{
+                //    await file.OpenReadStream(file.Size).CopyToAsync(memoryStream);
+
+                //    var buffer = memoryStream.ToArray();
+                //}
+
+                var response = await _client.PostAsync(url, formData);
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+                //var responseData = await response.Content.ReadFromJsonAsync<TResponse>();
+                var responseData = JsonConvert.DeserializeObject<TResponse>(responseString);
+
+                return responseData!;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return default;
             //throw new NotImplementedException();
         }
 
@@ -207,38 +263,38 @@ namespace AlriyadahBMS.Services
             //throw new NotImplementedException();
         }
 
-        private bool IsValidToken()
-        {
-            
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String("K9tcLJ5Eqxav6yfc")),
-                ValidateIssuer = false, 
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero 
-            };
+        //private bool IsValidToken()
+        //{
 
-            try
-            {
-                SecurityToken validatedToken;
-                tokenHandler.ValidateToken(_client.DefaultRequestHeaders.Authorization?.Parameter, validationParameters, out validatedToken);
-                return true;
-            }
-            catch (SecurityTokenExpiredException)
-            {
-                return false; // Token has expired
-            }
-            catch (SecurityTokenInvalidSignatureException)
-            {
-                return false; // Token signature is invalid or tampered
-            }
-            catch (SecurityTokenValidationException)
-            {
-                return false; // Token validation failed
-            }
-        }
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var validationParameters = new TokenValidationParameters
+        //    {
+        //        ValidateIssuerSigningKey = true,
+        //        IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String("K9tcLJ5Eqxav6yfc")),
+        //        ValidateIssuer = false,
+        //        ValidateAudience = false,
+        //        ClockSkew = TimeSpan.Zero
+        //    };
+
+        //    try
+        //    {
+        //        SecurityToken validatedToken;
+        //        tokenHandler.ValidateToken(_client.DefaultRequestHeaders.Authorization?.Parameter, validationParameters, out validatedToken);
+        //        return true;
+        //    }
+        //    catch (SecurityTokenExpiredException)
+        //    {
+        //        return false; // Token has expired
+        //    }
+        //    catch (SecurityTokenInvalidSignatureException)
+        //    {
+        //        return false; // Token signature is invalid or tampered
+        //    }
+        //    catch (SecurityTokenValidationException)
+        //    {
+        //        return false; // Token validation failed
+        //    }
+        //}
 
 
     }

@@ -1,7 +1,7 @@
 ﻿using AlriyadahBMS.Shared.Helper;
 using AlriyadahBMS.Shared.ViewModels;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
+//using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,7 +130,7 @@ namespace AlriyadahBMS.Services
         public static async Task InitializeAsync()
         {
             var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
-            if (!language.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(language))
             {
                 SelectedLanguage = EwLanguages.First(a => a.Id == language);
             }
