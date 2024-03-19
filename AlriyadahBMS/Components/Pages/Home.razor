@@ -1,6 +1,10 @@
 ﻿@page "/"
+@using AlriyadahBMS.Resources.Languages
+@using Microsoft.Extensions.Localization
 
-@inject LocalizationService Language
+@* @inject LocalizationService Language *@
+@inject IStringLocalizer<Strings> Localizer
+
 @attribute [Authorize]
 
 
@@ -9,9 +13,12 @@
     <AuthorizeView>
         <Authorized>
             @context.User!.Identity!.Name
+
+            <h1>@Localizer["nafathbtnverifynumber"]</h1>
+
         </Authorized>
     </AuthorizeView>
-
+    <h1>@Localizer["nafathbtnverifynumber"]</h1>
 </PageLayout>
 
 @code {

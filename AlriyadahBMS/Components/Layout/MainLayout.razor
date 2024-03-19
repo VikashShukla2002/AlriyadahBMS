@@ -1,6 +1,6 @@
 ﻿@using AlriyadahBMS.Shared.ViewModels
 @inherits LayoutComponentBase
-@inject LocalizationService Language
+@* @inject LocalizationService Language *@
 
 @* <div class="page">
     <div class="sidebar">
@@ -19,6 +19,7 @@
 </div> *@
 
 <MudRTLProvider RightToLeft="@LocalizationService.IsRTL">
+    @* <MudRTLProvider RightToLeft="false"> *@
     <MudDialogProvider />
     <MudSnackbarProvider />
     <MudThemeProvider Theme="MyCustomTheme" />
@@ -41,8 +42,8 @@
 
                             <MudDrawerContainer>
                                 <MudNavMenu Class="mud-width-full">
-                                @*     <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
-                                        <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
+                                    @*     <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
+                                    <MudIcon Icon="@Icons.Material.Filled.Dashboard" /> Status check
                                     </MudNavLink> *@
 
                                     <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
@@ -65,27 +66,39 @@
                             </MudDrawerContainer>
                         </MudDrawer>
 
-                        <MudDrawer Class="mud-theme-primary rounded-t-xl" @bind-Open="@open" Anchor="Anchor.Bottom" Variant="@DrawerVariant.Temporary"  >
+                        <MudDrawer Class="mud-theme-primary rounded-t-xl" @bind-Open="@open" Anchor="Anchor.Bottom" Variant="@DrawerVariant.Temporary">
                             <MudDrawerHeader>
                                 <MudText Typo="Typo.h6">App Language</MudText>
                             </MudDrawerHeader>
                             <MudDrawerContainer>
 
-                                <MudPaper Class="pa-3">
-                                    @if (LocalizationService.SelectedLanguage != null)
-                                    {
-                                        <MudRadioGroup T="EwLanguage" Value="LocalizationService.SelectedLanguage" ValueChanged="LanguageSelectedOptionChanged">
-                                            <MudStack Spacing="0">
+                                @*    <MudPaper Class="pa-3">
+                                @if (LocalizationService.SelectedLanguage != null)
+                                {
+                                <MudRadioGroup T="EwLanguage" Value="LocalizationService.SelectedLanguage" ValueChanged="LanguageSelectedOptionChanged">
+                                <MudStack Spacing="0">
 
-                                                @foreach (var language in LocalizationService.EwLanguages)
-                                                {
-                                                    <MudRadio Value="language">
-                                                        @language.Name
-                                                    </MudRadio>
-                                                }
-                                            </MudStack>
-                                        </MudRadioGroup>
-                                    }
+                                @foreach (var language in LocalizationService.EwLanguages)
+                                {
+                                <MudRadio Value="language">
+                                @language.Name
+                                </MudRadio>
+                                }
+                                </MudStack>
+                                </MudRadioGroup>
+                                }
+                                </MudPaper> *@
+
+                                <MudPaper Class="pa-3">
+                                    <MudRadioGroup T="Language"  ValueChanged="LanguageSelectedOptionChanged">
+                                        <MudStack Spacing="0">
+
+                                            @foreach (Language language in Enum.GetValues(typeof(Language)))
+                                            {
+                                                <MudRadio Value="language">@language.ToDescriptionString()</MudRadio>
+                                            }
+                                        </MudStack>
+                                    </MudRadioGroup>
                                 </MudPaper>
                             </MudDrawerContainer>
                         </MudDrawer>
@@ -106,7 +119,7 @@
     void OpenDrawer()
     {
         open = !open;
-        
+
     }
 
     protected override void OnInitialized()
@@ -114,7 +127,7 @@
         StateHasChanged();
     }
 
-    public async Task LanguageSelectedOptionChanged(EwLanguage language)
+    public async Task LanguageSelectedOptionChanged(Language language)
     {
         // LocalizationService.SelectedLanguage = language;
 

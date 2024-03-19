@@ -6,8 +6,8 @@
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(Components.Layout.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
-</Router>*@
-
+</Router>
+ *@
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(MauiProgram).Assembly">
         <Found Context="routeData">
@@ -15,8 +15,9 @@
                 <Authorizing>
                     <p>Please wait, we are authorizring the user!</p>
                 </Authorizing>
-                <NotAuthorized>
+                <NotAuthorized>                
                     <Login />
+                    @* <AlriyadahBMS.Components.Pages.Home/> *@
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>

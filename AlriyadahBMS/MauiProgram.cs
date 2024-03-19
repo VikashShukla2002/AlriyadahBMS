@@ -10,6 +10,7 @@ namespace AlriyadahBMS
     {
         public static MauiApp CreateMauiApp()
         {
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -21,13 +22,14 @@ namespace AlriyadahBMS
             builder.Services.AddMudServices();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddLocalization();
             builder.Services.AddSingleton<LocalizationService>();
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:52985") });
 
             builder.Services.AddScoped(sp => {
                 var httpClient = new HttpClient
                 {
-                    BaseAddress = new Uri("http://bmstest.alriyadahbms.com"),
+                    BaseAddress = new Uri("http://localhost:52985"),
                     Timeout = TimeSpan.FromSeconds(20000) // Timeout set to 30 seconds
                 };
                 return httpClient;

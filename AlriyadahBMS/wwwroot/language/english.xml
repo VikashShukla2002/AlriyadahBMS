@@ -1437,6 +1437,7 @@
 		<menu id="55">
 			<phrase id="menutext" value="qry Reg Driver Exp 1" />
 		</menu>
+		
 		<table id="tblappointmentsinfo">
 			<phrase id="tblcaption" value="Appointments " />
 			<field id="int_appt_id">
@@ -1781,6 +1782,8 @@
 			
 			<phrase id="tblpagecaption1" value="Payment Information" />
 			<phrase id="tblpagecaption2" value="Transaction Information" />
+			
+			
 			<field id="int_bill_id">
 				<phrase id="fldcaption" value="int Bill Id" />
 			</field>

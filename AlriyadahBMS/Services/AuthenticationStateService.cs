@@ -17,19 +17,28 @@ namespace AlriyadahBMS.Services
         //private readonly ILocalStorageService _localStorage;
 
         public AuthenticationStateService(HttpClient httpClient)
-        {
+        {            
             _httpClient = httpClient;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await SecureStorage.GetAsync("JWTToken");
-            if (token == null)
+            try
+            {
+
+
+                var token = await SecureStorage.GetAsync("JWTToken");
+                if (token == null)
+                {
+                    return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                }
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "JWTAuthType")));
+            }
+            catch (Exception ex)
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "JWTAuthType")));
         }
         public void NotifyUserLoggedIn(string? token)
         {

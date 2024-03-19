@@ -37,7 +37,7 @@
         <MudSelectItem Value="@("Rajab")" />
     </MudSelect> *@
 
-    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_month", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.Hijri_Month">
+   @*  <MudSelect Label="@Language.Phrase("hijri_table", "hijri_month", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.Hijri_Month">
         @if (HijriList != null)
         {
             foreach (var hijriMonth in HijriList!.Take(12))
@@ -45,7 +45,7 @@
                 <MudSelectItem T="int" value="@hijriMonth.Hijri_Month">@(LocalizationService.SelectedLanguage!.Name == "English (US)" ? hijriMonth.Hijri_Monthname : hijriMonth.Hijri_mon_ar.Split('-')[1].Trim())</MudSelectItem>
             }
         }
-    </MudSelect>
+    </MudSelect> *@
     @*
     <MudSelect T="string" Label="Hijri Day" AnchorOrigin="Origin.BottomCenter">
     <MudSelectItem Value="@("1")" />
