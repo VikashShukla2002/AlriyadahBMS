@@ -44,17 +44,29 @@ namespace AlriyadahBMS.Services
 
         public static async Task InitializeAsync()
         {
-            var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
-            if (!string.IsNullOrEmpty(language))
+            try
             {
-                var culture = new CultureInfo(language);
-                CultureInfo.DefaultThreadCurrentCulture = culture;
-                SetRTL(Language.EnUS.ToDescriptionString() == language ? Language.EnUS : Language.ArSA);
+
+
+                // var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
+
+                var language = Preferences.Get(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
+
+                if (!string.IsNullOrEmpty(language))
+                {
+                    var culture = new CultureInfo(language);
+                    CultureInfo.DefaultThreadCurrentCulture = culture;
+                    SetRTL(Language.EnUS.ToDescriptionString() == language ? Language.EnUS : Language.ArSA);
+                }
+                else
+                {
+                    await SecureStorage.SetAsync(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
+                    SetRTL(Language.EnUS);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                await SecureStorage.SetAsync(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
-                SetRTL(Language.EnUS);
+
             }
         }
 
