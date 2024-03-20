@@ -23,6 +23,7 @@ namespace AlriyadahBMS.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             tblRecord = await tableService.GetRecords<List<StudentRegistrationModel>>(TableConst.TblStudents);
+            StateHasChanged();
         }
 
         private bool FilterFunc(StudentRegistrationModel record)

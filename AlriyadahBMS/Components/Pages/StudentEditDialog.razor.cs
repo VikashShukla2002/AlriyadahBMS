@@ -32,7 +32,7 @@ namespace AlriyadahBMS.Components.Pages
             CityList = await tableService.GetRecords<List<CityModel>>(TableConst.Cities);
             HijriList = await tableService.GetRecords<List<HijriModel>>(TableConst.Hijri_Table);
             userLevels = await tableService.GetRecords<List<UserLevelModel>>(TableConst.UserLevels);
-
+            StateHasChanged();
         }
 
         void Cancel() => MudDialog.Cancel();

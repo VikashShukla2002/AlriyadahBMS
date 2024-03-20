@@ -26,7 +26,7 @@
     @if (RightContainer == null)
     {
         @* @RightContainer *@
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+        @* <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" /> *@
     }
     @* else
     {
@@ -60,7 +60,7 @@
 
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         StateHasChanged();
     }

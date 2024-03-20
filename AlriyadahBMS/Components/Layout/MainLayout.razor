@@ -2,6 +2,7 @@
 @using AlriyadahBMS.Shared.ViewModels
 @inherits LayoutComponentBase
 @inject LocalizationService Language
+@inject IJSRuntime JsService
 
 @* <div class="page">
     <div class="sidebar">
@@ -38,9 +39,8 @@
                         <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
 
                             <MudDrawerHeader>
-                                <MudText Typo="Typo.h5" Class="mt-1">AlriyadahBMS</MudText>
+                                <MudImage Src="images/drawerLogo.png" Alt="Alriyadah" Class="rounded-lg" Height="100" />
                             </MudDrawerHeader>
-
                             <MudDrawerContainer>
                                 <MudNavMenu Class="mud-width-full">
                                     @*     <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
@@ -91,7 +91,7 @@
                                 </MudPaper> *@
 
                                 <MudPaper Class="pa-3">
-                                    <MudRadioGroup T="Language"  ValueChanged="LanguageSelectedOptionChanged">
+                                    <MudRadioGroup T="Language" ValueChanged="LanguageSelectedOptionChanged" Value="LocalizationService.CurrentLanguage">
                                         <MudStack Spacing="0">
 
                                             @foreach (Language language in Enum.GetValues(typeof(Language)))
@@ -125,25 +125,34 @@
 
     protected override void OnInitialized()
     {
-        StateHasChanged();
+        //StateHasChanged();
     }
 
     public async Task LanguageSelectedOptionChanged(Language language)
     {
-        // LocalizationService.SelectedLanguage = language;
 
-        // if (LocalizationService.SelectedLanguage.Id == "ar-SA")
-        // {
-        //     LocalizationService.IsRTL = true;
-        // }
-        // else
-        // {
-        //     LocalizationService.IsRTL = false;
-        // }
 
-        await LocalizationService.SetLanguageAsync(language);
-        open = false;
-        StateHasChanged();
+        //  await LocalizationService.SetLanguageAsync(language);
+        //  open = false;
+        // StateHasChanged();
+
+
+        if (language != LocalizationService.CurrentLanguage)
+        {
+            await LocalizationService.SetLanguageAsync(language);
+            open = false;
+            StateHasChanged();
+
+            // Update the currentLanguage to the new language
+            LocalizationService.CurrentLanguage = language;
+
+            // Reload the application
+            await Task.Delay(500);
+            await JsService.InvokeVoidAsync("location.reload");
+        }
+
+
+         // await JsService.InvokeVoidAsync("location.reload");
 
     }
 }

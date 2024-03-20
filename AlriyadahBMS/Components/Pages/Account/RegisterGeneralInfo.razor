@@ -1,4 +1,5 @@
-﻿@using AlriyadahBMS.Shared.ViewModels
+﻿@using AlriyadahBMS.Services
+@using AlriyadahBMS.Shared.ViewModels
 
 @inject LocalizationService Language
 @inject TableService tableService
@@ -19,6 +20,7 @@
     *@
 
     <MudSelect Label="@Language.Phrase("hijri_table", "hijri_year", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.Hijri_Year">
+
         @if (HijriList != null)
         {
             foreach (var hijriyear in HijriList)
@@ -28,24 +30,24 @@
         }
     </MudSelect>
 
-@* 
+    @*
     <MudSelect T="string" Label="Hijri Month" AnchorOrigin="Origin.BottomCenter">
-        <MudSelectItem Value="@("Muharran")" />
-        <MudSelectItem Value="@("Safar")" />
-        <MudSelectItem Value="@("Rajab")" />
-        <MudSelectItem Value="@("Ramadan")" />
-        <MudSelectItem Value="@("Rajab")" />
+    <MudSelectItem Value="@("Muharran")" />
+    <MudSelectItem Value="@("Safar")" />
+    <MudSelectItem Value="@("Rajab")" />
+    <MudSelectItem Value="@("Ramadan")" />
+    <MudSelectItem Value="@("Rajab")" />
     </MudSelect> *@
 
-   @*  <MudSelect Label="@Language.Phrase("hijri_table", "hijri_month", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.Hijri_Month">
+    <MudSelect Label="@Language.Phrase("hijri_table", "hijri_month", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.Hijri_Month">
         @if (HijriList != null)
         {
             foreach (var hijriMonth in HijriList!.Take(12))
             {
-                <MudSelectItem T="int" value="@hijriMonth.Hijri_Month">@(LocalizationService.SelectedLanguage!.Name == "English (US)" ? hijriMonth.Hijri_Monthname : hijriMonth.Hijri_mon_ar.Split('-')[1].Trim())</MudSelectItem>
+                <MudSelectItem T="int" value="@hijriMonth.Hijri_Month">@(LocalizationService.CurrentLanguage == AlriyadahBMS.Shared.Helper.Language.EnUS ? hijriMonth.Hijri_Monthname : hijriMonth.Hijri_mon_ar.Split('-')[1].Trim())</MudSelectItem>
             }
         }
-    </MudSelect> *@
+    </MudSelect>
     @*
     <MudSelect T="string" Label="Hijri Day" AnchorOrigin="Origin.BottomCenter">
     <MudSelectItem Value="@("1")" />
@@ -75,7 +77,7 @@
 
 @code {
     [Parameter]
-    public RegisterModels Model { get; set; } =null!;
+    public RegisterModels Model { get; set; } = null!;
 
     public IEnumerable<CityModel>? CityList = new List<CityModel>();
     public IEnumerable<HijriModel>? HijriList = new List<HijriModel>();

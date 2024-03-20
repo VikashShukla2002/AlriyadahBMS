@@ -29,24 +29,26 @@ namespace AlriyadahBMS.Components.Pages.Account
             //await form.Validate();
             //if (form.IsValid)
             //{
+            var response = await AccountService!.LoginAsync(new SignInRequest
+            {
+                UserName = LoginModel!.UserName,
+                Password = LoginModel!.Password
+            });
 
+            if (response!.Success)
+            {
+                NavigationManager.NavigateTo("/tblStudentlist", false, true);
 
-                var response = await AccountService!.LoginAsync(new SignInRequest
-                {
-                    UserName = LoginModel!.UserName,
-                    Password = LoginModel!.Password
-                });
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                Snackbar.Add(response?.Message?.ToString(), Severity.Success);
+            }
+            else
+            {
 
-                if (response!.Success)
-                {
-                    NavigationManager.NavigateTo("/tblStudentlist", false, true);
-                    Snackbar.Add(response?.Message?.ToString(), Severity.Success);
-                }
-                else
-                {
-                    Snackbar.Add(response?.Message?.ToString(), Severity.Error);
-                }
-          //  }
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                Snackbar.Add(response?.Message?.ToString(), Severity.Error);
+            }
+            //}
 
             //else
             //{
@@ -55,7 +57,7 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         }
 
-        
+
 
 
 

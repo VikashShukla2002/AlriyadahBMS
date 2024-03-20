@@ -13,6 +13,7 @@ namespace AlriyadahBMS.Services
     {
        
         public static bool IsRTL { get; set; } = false;
+        public static Language CurrentLanguage { get; set; } = Language.EnUS;
 
         private readonly IStringLocalizer<Strings> _localizer;
 
@@ -26,6 +27,7 @@ namespace AlriyadahBMS.Services
             var culture = new CultureInfo(language.ToDescriptionString());
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CurrentLanguage = language;
             SetRTL(language);
             await SecureStorage.SetAsync(ApplicationConst.Local_Language, language.ToDescriptionString());
         }
@@ -48,7 +50,7 @@ namespace AlriyadahBMS.Services
             {
 
 
-                // var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
+              // var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
 
                 var language = Preferences.Get(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
 
@@ -56,11 +58,15 @@ namespace AlriyadahBMS.Services
                 {
                     var culture = new CultureInfo(language);
                     CultureInfo.DefaultThreadCurrentCulture = culture;
-                    SetRTL(Language.EnUS.ToDescriptionString() == language ? Language.EnUS : Language.ArSA);
+                    CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+                    CurrentLanguage = Language.EnUS.ToDescriptionString() == language ? Language.EnUS : Language.ArSA;
+                    SetRTL(CurrentLanguage);
                 }
                 else
                 {
                     await SecureStorage.SetAsync(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
+                    CurrentLanguage = Language.EnUS;
                     SetRTL(Language.EnUS);
                 }
             }
