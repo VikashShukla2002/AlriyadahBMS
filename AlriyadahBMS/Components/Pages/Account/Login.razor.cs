@@ -39,7 +39,7 @@ namespace AlriyadahBMS.Components.Pages.Account
 
                 if (response!.Success)
                 {
-                    NavigationManager.NavigateTo("/", false, true);
+                    NavigationManager.NavigateTo("/tblStudentlist", false, true);
                     Snackbar.Add(response?.Message?.ToString(), Severity.Success);
                 }
                 else
@@ -67,7 +67,7 @@ namespace AlriyadahBMS.Components.Pages.Account
 
             if (user!.Identity!.IsAuthenticated)
             {
-                NavigationManager.NavigateTo("/", false, true);
+                NavigationManager.NavigateTo("/tblStudentlist", false, true);
                 //await JSRuntime.ShowToastAsync("You don't have access to open this page", SwalIcon.Success);
             }
         }

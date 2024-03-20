@@ -61,7 +61,7 @@ namespace AlriyadahBMS.Components.Pages
                 FullScreen = true
             };
             parameters.Add("StudentData", StudentData);
-            Dialog.Show<StudentViewDialog>("View", parameters, dialogOptions);
+            Dialog.Show<StudentViewDialog>(Language.Phrase("permissionsearch"), parameters, dialogOptions);
         }
                 
         private void OnClick_StudentEditDetails(StudentRegistrationModel value)
@@ -76,7 +76,7 @@ namespace AlriyadahBMS.Components.Pages
                 FullScreen = true
             };
             parameters.Add("StudentEditData", StudentData);
-            Dialog.Show<StudentEditDialog>("Edit", parameters, dialogOptions);
+            Dialog.Show<StudentEditDialog>(Language.Phrase("edit"), parameters, dialogOptions);
         }
 
 

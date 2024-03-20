@@ -1,17 +1,28 @@
-﻿@using AlriyadahBMS.Shared.ViewModels
+﻿@using AlriyadahBMS.Services
+@using AlriyadahBMS.Shared.ViewModels
+
+@inject LocalizationService Language
 
 <MudPaper Elevation="3" Class="pa-4">
-    <MudTextField Label="Emergency Contact Name" @bind-Value="Model.str_Emergency_Contact_Name" />
-    <MudTextField Label="Emergency Contact Phone" @bind-Value="Model.str_Emergency_Contact_Phone" Mask="@(new PatternMask("00 0000 0000"))" />
+    <MudTextField Label="@Language.Phrase("tblstaff","str_emergency_contact_name","fldcaption")" @bind-Value="Model.str_Emergency_Contact_Name" />
+    <MudTextField Label="@Language.Phrase("tblstaff","str_emergency_contact_phone","fldcaption")" @bind-Value="Model.str_Emergency_Contact_Phone" Mask="@(new PatternMask("00 0000 0000"))" />
 
-    <MudSelect T="string" Label="Emergency contact relation" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.str_Emergency_Contact_Relation">
-        <MudSelectItem Value="@("Father")" />
+    <MudSelect T="string" Label="@Language.Phrase("tblstaff","str_emergency_contact_relation","fldcaption")" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.str_Emergency_Contact_Relation">
+        @* <MudSelectItem Value="@("Father")" />
         <MudSelectItem Value="@("Mother")" />
         <MudSelectItem Value="@("Brother")" />
         <MudSelectItem Value="@("Sister")" />
         <MudSelectItem Value="@("Uncle")" />
         <MudSelectItem Value="@("Aunt")" />
-        <MudSelectItem Value="@("Friend")" />
+        <MudSelectItem Value="@("Friend")" /> *@
+        
+        <MudSelectItem Value="@Language.Phrase("fatherEmergencyContact")" />
+        <MudSelectItem Value="@Language.Phrase("motherEmergencyContact")" />
+        <MudSelectItem Value="@Language.Phrase("brotherEmergencyContact")" />
+        <MudSelectItem Value="@Language.Phrase("sisterEmergencyContact")" />
+        <MudSelectItem Value="@Language.Phrase("uncleEmergencyContact")" />
+        <MudSelectItem Value="@Language.Phrase("AuntEmergencyContact")" />
+        <MudSelectItem Value="@Language.Phrase("friendEmergencyContact")" /> 
     </MudSelect>
 </MudPaper>
 

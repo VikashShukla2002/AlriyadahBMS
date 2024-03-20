@@ -1,6 +1,7 @@
-﻿@using AlriyadahBMS.Shared.ViewModels
+﻿@using AlriyadahBMS.Services
+@using AlriyadahBMS.Shared.ViewModels
 @inherits LayoutComponentBase
-@* @inject LocalizationService Language *@
+@inject LocalizationService Language
 
 @* <div class="page">
     <div class="sidebar">
@@ -32,7 +33,7 @@
                         <MudAppBar Elevation="1">
                             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                             <MudSpacer />
-                            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+                            @* <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" /> *@
                         </MudAppBar>
                         <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
 
@@ -47,20 +48,20 @@
                                     </MudNavLink> *@
 
                                     <MudNavLink Href="/tblStudentlist" Match="NavLinkMatch.All" Style="font-size: 16px">
-                                        <MudIcon Icon="@Icons.Material.Filled.AppRegistration" /> Student Registration
+                                        <MudIcon Icon="@Icons.Material.Filled.AppRegistration" /> @Language.Phrase("tblstudents", "tblcaption")
                                     </MudNavLink>
 
                                     <MudNavLink Href="/paymentsInfo" Match="NavLinkMatch.All" Style="font-size: 16px">
-                                        <MudIcon Icon="@Icons.Material.Filled.Payment" /> Payments
+                                        <MudIcon Icon="@Icons.Material.Filled.Payment" /> @Language.Phrase("tblbillinginfo", "tblcaption")
                                     </MudNavLink>
 
                                     <MudNavLink Variant="Variant.Text" Style="font-size: 16px" OnClick="OpenDrawer">
-                                        <MudIcon Icon="@Icons.Material.Filled.Language" /> Language
+                                        <MudIcon Icon="@Icons.Material.Filled.Language" /> @Language.Phrase("language")
                                     </MudNavLink>
 
                                     <MudNavLink Href="/logout" Match="NavLinkMatch.All" Style="font-size: 16px">
                                         <MudIcon Icon="@Icons.Material.Filled.Logout" />
-                                        Logout
+                                        @Language.Phrase("logout")
                                     </MudNavLink>
                                 </MudNavMenu>
                             </MudDrawerContainer>

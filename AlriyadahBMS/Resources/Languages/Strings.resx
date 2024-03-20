@@ -14478,4 +14478,55 @@
   <data name="equipment__tblpagecaption3" xml:space="preserve">
     <value>Asset Status</value>
   </data>
+  <data name="abshrenumberRequired" xml:space="preserve">
+    <value>Absher Appointment Number is required</value>
+  </data>
+  <data name="AuntEmergencyContact" xml:space="preserve">
+    <value>Aunt</value>
+  </data>
+  <data name="brotherEmergencyContact" xml:space="preserve">
+    <value>Brother</value>
+  </data>
+  <data name="cellPhoneRequired" xml:space="preserve">
+    <value>Cell phone is required</value>
+  </data>
+  <data name="EmailRequiredMessage" xml:space="preserve">
+    <value>Email is required</value>
+  </data>
+  <data name="fatherEmergencyContact" xml:space="preserve">
+    <value>Father</value>
+  </data>
+  <data name="friendEmergencyContact" xml:space="preserve">
+    <value>Friend</value>
+  </data>
+  <data name="lastNameRequired" xml:space="preserve">
+    <value>Last name is required</value>
+  </data>
+  <data name="middleNameRequired" xml:space="preserve">
+    <value>Middle name is required</value>
+  </data>
+  <data name="mobileNumberRequired" xml:space="preserve">
+    <value>Mobile number is required</value>
+  </data>
+  <data name="motherEmergencyContact" xml:space="preserve">
+    <value>Mother</value>
+  </data>
+  <data name="nationalIdIqamaRequired" xml:space="preserve">
+    <value>National Id Iqama is required</value>
+  </data>
+  <data name="noFileUploaded" xml:space="preserve">
+    <value>No File</value>
+  </data>
+  <data name="retypePassword" xml:space="preserve">
+    <value>Retype Password</value>
+  </data>
+  <data name="retypePasswordRequiredValidation" xml:space="preserve">
+    <value>Retype password is required!</value>
+  </data>
+  <data name="sisterEmergencyContact" xml:space="preserve">
+    <value>Sister</value>
+  </data>
+  <data name="uncleEmergencyContact" xml:space="preserve">
+    <value>Uncle</value>
+  </data>
 </root>

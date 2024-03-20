@@ -5,11 +5,11 @@
 
 <MudPaper Elevation="3" Class="pa-4">
 
-    <MudTextField Label="@Language.Phrase("tblstudents", "str_first_name", "fldcaption")" @bind-Value="Model.str_First_Name" Required="true" RequiredError="User name is required!" />
-    <MudTextField Label="Middle Name" @bind-Value="Model.str_Middle_Name" Required="true" RequiredError="Middle name is required" />
-    <MudTextField Label="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")" @bind-Value="Model.str_Last_Name" Required="true" RequiredError="Mobile Number is required!" />
-    <MudTextField Label="@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")" @bind-Value="Model.str_Cell_Phone" Required="true" RequiredError="Mobile Number is required!" Mask="@(new PatternMask("00 0000 0000"))" />
-    <MudTextField Label="@Language.Phrase("tblstudents", "str_email", "fldcaption")" @bind-Value="Model.str_Email" Required="true" RequiredError="Email is required!" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_first_name", "fldcaption")" @bind-Value="Model.str_First_Name" Required="true" RequiredError="@Language.Phrase("usernamevalidation")" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_middle_name", "fldcaption")" @bind-Value="Model.str_Middle_Name" Required="true" RequiredError="@Language.Phrase("middleNameRequired")" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_last_name", "fldcaption")" @bind-Value="Model.str_Last_Name" Required="true" RequiredError="@Language.Phrase("lastNameRequired")" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_cell_phone", "fldcaption")" @bind-Value="Model.str_Cell_Phone" Required="true" RequiredError="@Language.Phrase("cellPhoneRequired")" Mask="@(new PatternMask("00 0000 0000"))" />
+    <MudTextField Label="@Language.Phrase("tblstudents", "str_email", "fldcaption")" @bind-Value="Model.str_Email" Required="true" RequiredError="@Language.Phrase("EmailRequiredMessage")" />
     @*
     <MudSelect T="string" Label="Hijri Year" AnchorOrigin="Origin.BottomCenter">
     <MudSelectItem Value="@("1374")" />

@@ -29,7 +29,8 @@ namespace AlriyadahBMS
             builder.Services.AddScoped(sp => {
                 var httpClient = new HttpClient
                 {
-                    BaseAddress = new Uri("http://localhost:52985"),
+                    //BaseAddress = new Uri("http://localhost:52985"),
+                    BaseAddress = new Uri("http://bmstest.alriyadahbms.com"),
                     Timeout = TimeSpan.FromSeconds(20000) // Timeout set to 30 seconds
                 };
                 return httpClient;
