@@ -11,8 +11,13 @@
 
 
 
-<EditForm Model="LoginModel" Context="Login" OnValidSubmit="OnValidSubmitAsync">
-      <DataAnnotationsValidator />
+@* <EditForm Model="LoginModel" Context="Login" OnValidSubmit="OnValidSubmitAsync"> *@
+
+<MudForm @ref="form" Model="LoginModel">
+
+    
+
+      @* <DataAnnotationsValidator /> *@
     <div class="container-fluid">
         @* <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;"> *@
         <div  style="min-height: 100vh;">
@@ -46,8 +51,8 @@
                     </div>
 
                     <div class="d-flex align-center justify-content-between">
-                        @* <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton> *@
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" @onclick="OnValidSubmitAsync">@Language.Phrase("login")</MudButton>
+                        @* <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@Language.Phrase("login")</MudButton> *@
                     </div>
 
                     <div class="text-center mt-4">
@@ -62,7 +67,7 @@
     </div>
 
 
-</EditForm>
+</MudForm>
 
 @code {
 

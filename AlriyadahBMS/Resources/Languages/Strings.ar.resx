@@ -14523,4 +14523,7 @@
   <data name="uncleEmergencyContact" xml:space="preserve">
     <value>عم</value>
   </data>
+  <data name="globalRequiredField" xml:space="preserve">
+    <value>هذه الخانة مطلوبه</value>
+  </data>
 </root>

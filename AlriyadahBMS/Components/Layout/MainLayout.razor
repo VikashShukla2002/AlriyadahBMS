@@ -142,11 +142,7 @@
             await LocalizationService.SetLanguageAsync(language);
             open = false;
             StateHasChanged();
-
-            // Update the currentLanguage to the new language
             LocalizationService.CurrentLanguage = language;
-
-            // Reload the application
             await Task.Delay(500);
             await JsService.InvokeVoidAsync("location.reload");
         }

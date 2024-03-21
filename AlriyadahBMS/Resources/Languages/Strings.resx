@@ -14529,4 +14529,7 @@
   <data name="uncleEmergencyContact" xml:space="preserve">
     <value>Uncle</value>
   </data>
+  <data name="globalRequiredField" xml:space="preserve">
+    <value>This field is required</value>
+  </data>
 </root>

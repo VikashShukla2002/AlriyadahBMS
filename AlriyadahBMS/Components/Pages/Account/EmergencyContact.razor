@@ -4,10 +4,10 @@
 @inject LocalizationService Language
 
 <MudPaper Elevation="3" Class="pa-4">
-    <MudTextField Label="@Language.Phrase("tblstaff","str_emergency_contact_name","fldcaption")" @bind-Value="Model.str_Emergency_Contact_Name" />
-    <MudTextField Label="@Language.Phrase("tblstaff","str_emergency_contact_phone","fldcaption")" @bind-Value="Model.str_Emergency_Contact_Phone" Mask="@(new PatternMask("00 0000 0000"))" />
+    <MudTextField Label="@Language.Phrase("tblstaff","str_emergency_contact_name","fldcaption")" @bind-Value="Model.str_Emergency_Contact_Name" ReadOnly="true" Required="true" RequiredError="@Language.Phrase("globalRequiredField")" Immediate="true"/>
+    <MudTextField Label="@Language.Phrase("tblstaff","str_emergency_contact_phone","fldcaption")" @bind-Value="Model.str_Emergency_Contact_Phone" Mask="@(new PatternMask("00 0000 0000"))" Required="true" RequiredError="@Language.Phrase("globalRequiredField")" Immediate="true" />
 
-    <MudSelect T="string" Label="@Language.Phrase("tblstaff","str_emergency_contact_relation","fldcaption")" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.str_Emergency_Contact_Relation">
+    <MudSelect T="string" Label="@Language.Phrase("tblstaff","str_emergency_contact_relation","fldcaption")" AnchorOrigin="Origin.BottomCenter" @bind-Value="Model.str_Emergency_Contact_Relation" Required="true" RequiredError="@Language.Phrase("globalRequiredField")" Immediate="true">
         @* <MudSelectItem Value="@("Father")" />
         <MudSelectItem Value="@("Mother")" />
         <MudSelectItem Value="@("Brother")" />
