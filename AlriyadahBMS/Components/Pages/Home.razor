@@ -7,25 +7,4 @@
 
 @attribute [Authorize]
 
-
-<PageLayout Title="Home">
-    <h1>Welcome to AlriyadahBMS</h1>
-    <AuthorizeView>
-        <Authorized>
-            @context.User!.Identity!.Name
-
-            <h1>@Localizer["nafathbtnverifynumber"]</h1>
-
-        </Authorized>
-    </AuthorizeView>
-    <h1>@Localizer["nafathbtnverifynumber"]</h1>
-</PageLayout>
-
-@code {
-    protected override void OnInitialized()
-    {
-        // PageName = "Home";
-
-       // var p1 = Language.Phrase("smsafterassessmenttest");
-    }
-}
+<StudentRegistration></StudentRegistration>

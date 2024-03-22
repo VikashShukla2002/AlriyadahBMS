@@ -26,9 +26,9 @@ namespace AlriyadahBMS.Components.Pages.Account
 
         private async Task OnValidSubmitAsync()
         {
-            await form.Validate();
-            if (form.IsValid)
-            {
+            //await form.Validate();
+            //if (form.IsValid)
+            //{
                 var response = await AccountService!.LoginAsync(new SignInRequest
                 {
                     UserName = LoginModel!.UserName,
@@ -48,7 +48,7 @@ namespace AlriyadahBMS.Components.Pages.Account
                     Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
                     Snackbar.Add(response?.Message?.ToString(), Severity.Error);
                 }
-            }
+           // }
 
             //else
             //{
