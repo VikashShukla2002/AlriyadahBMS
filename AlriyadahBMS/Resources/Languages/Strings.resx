@@ -14544,4 +14544,7 @@
   <data name="updateResponsefromapi" xml:space="preserve">
     <value>Updated successfully</value>
   </data>
+  <data name="arabicLanguage" xml:space="preserve">
+    <value>Arabic</value>
+  </data>
 </root>

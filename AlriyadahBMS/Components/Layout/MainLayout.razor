@@ -27,6 +27,7 @@
     <MudThemeProvider Theme="MyCustomTheme" />
 
     <CascadingValue Value="this">
+
         <MudLayout>
             <ChildContent>
                 <AuthorizeView>
@@ -70,10 +71,10 @@
                         <MudDrawer Class="mud-theme-primary rounded-t-xl" @bind-Open="@open" Anchor="Anchor.Bottom" Variant="@DrawerVariant.Temporary">
                             <MudDrawerHeader>
                                 <MudText Typo="Typo.h6">@Language.Phrase("appLanguage")</MudText>
-                            </MudDrawerHeader>
-                            <MudDrawerContainer>
+                                </MudDrawerHeader>
+                                <MudDrawerContainer>
 
-                                @*    <MudPaper Class="pa-3">
+                                    @*    <MudPaper Class="pa-3">
                                 @if (LocalizationService.SelectedLanguage != null)
                                 {
                                 <MudRadioGroup T="EwLanguage" Value="LocalizationService.SelectedLanguage" ValueChanged="LanguageSelectedOptionChanged">
@@ -90,22 +91,23 @@
                                 }
                                 </MudPaper> *@
 
-                                <MudPaper Class="pa-3">
-                                    <MudRadioGroup T="Language" ValueChanged="LanguageSelectedOptionChanged" Value="LocalizationService.CurrentLanguage">
-                                        <MudStack Spacing="0">
+                                    <MudPaper Class="pa-3">
+                                        <MudRadioGroup T="Language" ValueChanged="LanguageSelectedOptionChanged" Value="LocalizationService.CurrentLanguage">
+                                            <MudStack Spacing="0">
 
-                                            @foreach (Language language in Enum.GetValues(typeof(Language)))
-                                            {
-                                                <MudRadio Value="language">@language.ToDescriptionString()</MudRadio>
-                                            }
-                                        </MudStack>
-                                    </MudRadioGroup>
-                                </MudPaper>
-                            </MudDrawerContainer>
-                        </MudDrawer>
-                    </Authorized>
-                </AuthorizeView>
-                @Body
+
+                                                <MudRadio Value="AlriyadahBMS.Shared.Helper.Language.EnUS">English</MudRadio>
+                                                <MudRadio Value="AlriyadahBMS.Shared.Helper.Language.ArSA">@Language.Phrase("arabicLanguage")</MudRadio>
+
+
+                                            </MudStack>
+                                        </MudRadioGroup>
+                                    </MudPaper>
+                                </MudDrawerContainer>
+                            </MudDrawer>
+                        </Authorized>
+                    </AuthorizeView>
+                    @Body
             </ChildContent>
         </MudLayout>
     </CascadingValue>
@@ -148,7 +150,7 @@
         }
 
 
-         // await JsService.InvokeVoidAsync("location.reload");
+        // await JsService.InvokeVoidAsync("location.reload");
 
     }
 }

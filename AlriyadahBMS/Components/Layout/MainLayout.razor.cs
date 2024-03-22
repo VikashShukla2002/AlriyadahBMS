@@ -15,7 +15,7 @@ namespace AlriyadahBMS.Components.Layout
 
         [Parameter]
         public string PageName { get; set; } = "Home";
-
+            
         public void DrawerToggle()
         {
             _drawerOpen = !_drawerOpen;

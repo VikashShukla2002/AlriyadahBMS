@@ -27,7 +27,7 @@ namespace AlriyadahBMS.Services
             {
 
 
-                var token = await SecureStorage.GetAsync("JWTToken");
+                var token = await SecureStorage.GetAsync(ApplicationConst.Local_Token);
                 if (token == null)
                 {
                     return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));

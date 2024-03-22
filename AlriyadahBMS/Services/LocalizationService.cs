@@ -50,9 +50,9 @@ namespace AlriyadahBMS.Services
             {
 
 
-              // var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
+                var language = await SecureStorage.GetAsync(ApplicationConst.Local_Language);
 
-                var language = Preferences.Get(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
+                //var language = Preferences.Get(ApplicationConst.Local_Language, Language.EnUS.ToDescriptionString());
 
                 if (!string.IsNullOrEmpty(language))
                 {

@@ -32,6 +32,12 @@ namespace AlriyadahBMS.Services
             {
                 //await SecureStorage.SetAsync("JWTToken", response!.JWT!);
                 await SecureStorage.SetAsync(ApplicationConst.Local_Token, response!.JWT!);
+
+
+
+                //Preferences.Set(ApplicationConst.Local_Token, response!.JWT!);
+
+                // await SecureStorage.SetAsync(ApplicationConst.Local_Token, response!.JWT!);
                 ((AuthenticationStateService)_authStateProvider).NotifyUserLoggedIn(response.JWT);
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.JWT);
             }
@@ -40,6 +46,7 @@ namespace AlriyadahBMS.Services
 
         public void Logout()
         {
+            //Preferences.Remove(ApplicationConst.Local_Token);          
             SecureStorage.Remove(ApplicationConst.Local_Token);
             ((AuthenticationStateService)_authStateProvider).NotifyUserLogout();
             _client.DefaultRequestHeaders.Authorization = null;
