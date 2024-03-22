@@ -13,7 +13,7 @@
 
                 <MudPaper Class="pa-2 ma-2" Elevation="0">
 
-                     <MudTextField Label="@Language.Phrase("tblbillinginfo","nationalid","fldcaption")" Variant="Variant.Outlined" @bind-Value="@paymentsEditData.NationalID" Disabled />
+                    <MudTextField Label="@Language.Phrase("tblbillinginfo","nationalid","fldcaption")" Variant="Variant.Outlined" @bind-Value="@paymentsEditData.NationalID" Disabled />
                      <MudTextField Label="@Language.Phrase("tblstudents","str_first_name","fldcaption")" @bind-Value="@paymentsEditData.str_First_Name" Variant="Variant.Outlined" Disabled />
                      <MudTextField Label="@Language.Phrase("tblstudents","str_last_name","fldcaption")" @bind-Value="@paymentsEditData.str_Last_Name" Variant="Variant.Outlined" Disabled />
                      <MudTextField Label="@Language.Phrase("tblbillinginfo","str_approvalcode","fldcaption")" @bind-Value="@paymentsEditData.str_ApprovalCode" Variant="Variant.Outlined" />
@@ -21,11 +21,11 @@
                      <MudCheckBox Label="@Language.Phrase("tblbillinginfo","bit_isrefund","fldcaption")" @bind-Value="@paymentsEditData.bit_IsRefund" Size="Size.Small" Color="Color.Primary"></MudCheckBox>
                      <MudTextField Label="@Language.Phrase("tblbillinginfo","package_name","fldcaption")" @bind-Value="@paymentsEditData.Package_Name" Variant="Variant.Outlined" DisableUnderLine />
                      <MudTextField Label="@Language.Phrase("tblbillinginfo","price","fldcaption")" @bind-Value="@paymentsEditData.Price" Variant="Variant.Outlined" DisableUnderLine />
-                   
-                    @* <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton> *@
-                </MudPaper>
 
-            </MudTabPanel>
+                     @* <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Default">Close</MudButton> *@
+                 </MudPaper>
+
+             </MudTabPanel>
              <MudTabPanel Text="@Language.Phrase("tblbillinginfo", "tblpagecaption2")">
 
                  <MudSelect Label="@Language.Phrase("tblbillinginfo", "int_payment_method", "fldcaption")" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="paymentsEditData.int_Payment_Method">
@@ -58,11 +58,11 @@
         <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" OnClick="Cancel" Color="Color.Default">@Language.Phrase("cancelbtn")</MudButton>
             <MudButton Class="mt-3 mb-2" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClick_UpdatePayment">@Language.Phrase("savebtn")</MudButton>
 
-    </DialogActions>
+        </DialogActions>
 
-</MudDialog>
+    </MudDialog>
 
-@code {
+    @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter]
@@ -74,13 +74,16 @@
         var check = await tableService.UpdateRecord<PaymentsModel, PaymentsModel>(TableConst.TblPayments, paymentsEditData!.int_Bill_ID, paymentsEditData);
         if (check.Success)
         {
-            Snackbar.Add("Payment has been updated", Severity.Success);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            Snackbar.Add(Language.Phrase("updateResponsefromapi"), Severity.Success);
+            ClosePopup();
+
         }
         else
         {
-            Snackbar.Add("Some error occured", Severity.Error);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            Snackbar.Add(Language.Phrase("errorresponsefromapi"), Severity.Error);
         }
-        ClosePopup(); 
     }
 
     // public async void OnClick_UpdateStudentRegistration()

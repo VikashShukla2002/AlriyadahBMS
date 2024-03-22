@@ -47,8 +47,6 @@ namespace AlriyadahBMS.Services
 
         public Task<bool> RegisterUserAsync(RegisterModels signUpRequest)
         {
-
-
             throw new NotImplementedException();
         }
     }

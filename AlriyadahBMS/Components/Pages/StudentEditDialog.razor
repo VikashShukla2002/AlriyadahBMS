@@ -6,6 +6,9 @@
 
 @inject LocalizationService Language
 @inject TableService tableService
+@inject ISnackbar Snackbar
+
+
 <MudDialog Class="overflow-y-scroll">
     <DialogContent>
 
@@ -122,7 +125,6 @@
                     <MudTextField T="string" Label="@Language.Phrase("calendar2", "notes", "fldcaption")" Lines="7" Variant="Variant.Outlined" @bind-Value="StudentEditData.str_Notes" />
 
                 </MudPaper>
-
 
             </MudExpansionPanel>
         </MudExpansionPanels>

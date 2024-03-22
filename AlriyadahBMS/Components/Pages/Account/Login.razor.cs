@@ -58,10 +58,6 @@ namespace AlriyadahBMS.Components.Pages.Account
         }
 
 
-
-
-
-
         private async Task CheckAuthenticationState()
         {
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();

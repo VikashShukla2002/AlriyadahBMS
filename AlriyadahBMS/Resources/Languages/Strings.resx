@@ -14532,4 +14532,13 @@
   <data name="globalRequiredField" xml:space="preserve">
     <value>This field is required</value>
   </data>
+  <data name="errorresponsefromapi" xml:space="preserve">
+    <value>Some error occurred</value>
+  </data>
+  <data name="successresponsefromapi" xml:space="preserve">
+    <value>Data Updated successfully</value>
+  </data>
+  <data name="updateResponsefromapi" xml:space="preserve">
+    <value>Updated successfully</value>
+  </data>
 </root>

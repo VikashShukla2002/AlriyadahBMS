@@ -62,7 +62,7 @@ namespace AlriyadahBMS.Components.Pages
             Dialog.Show<PaymentsViewDialog>(Language.Phrase("tblbillinginfo", "tbl-paymentview-caption"), parameters, dialogOptions);
         }
 
-        private void OnClick_PaymentsEditDetails(PaymentsModel value)
+        private async void OnClick_PaymentsEditDetails(PaymentsModel value)
         {
             PaymentData = value;
             var parameters = new DialogParameters();
@@ -83,7 +83,19 @@ namespace AlriyadahBMS.Components.Pages
             //Breakpoint = "Breakpoint.SmAndDown "
 
             parameters.Add("paymentsEditData", PaymentData);
-            Dialog.Show<PaymentEditDialog>("Payment Edit", parameters, dialogOptions);
+            var dialog =  Dialog.Show<PaymentEditDialog>("Payment Edit", parameters, dialogOptions);
+
+
+
+            // = DialogService.Show<StudentEditDialog>(Language.Phrase("edit"), parameters, dialogOptions);
+
+
+            var result = await dialog.Result;
+            if (!result.Canceled)
+            {               
+                tblPaymentsRecord = await tableService.GetRecords<List<PaymentsModel>>(TableConst.TblPayments);
+                StateHasChanged();
+            }
 
         }
 

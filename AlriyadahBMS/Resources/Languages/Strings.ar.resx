@@ -14526,4 +14526,13 @@
   <data name="globalRequiredField" xml:space="preserve">
     <value>هذه الخانة مطلوبه</value>
   </data>
+  <data name="errorresponsefromapi" xml:space="preserve">
+    <value>حدث بعض الخطأ</value>
+  </data>
+  <data name="successresponsefromapi" xml:space="preserve">
+    <value>تم تحديث البيانات بنجاح</value>
+  </data>
+  <data name="updateResponsefromapi" xml:space="preserve">
+    <value>تم التحديث بنجاح</value>
+  </data>
 </root>

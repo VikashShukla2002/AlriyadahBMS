@@ -39,11 +39,22 @@ namespace AlriyadahBMS.Components.Pages
 
         public async void OnClick_UpdateStudentRegistration()
         {
-            var check = await tableService.UpdateRecord<StudentRegistrationModel, StudentRegistrationModel>(TableConst.TblStudents, StudentEditData!.int_Student_ID.GetValueOrDefault(), StudentEditData);
-            if(check.Success)
+            var response = await tableService.UpdateRecord<StudentRegistrationModel, StudentRegistrationModel>(TableConst.TblStudents, StudentEditData!.int_Student_ID.GetValueOrDefault(), StudentEditData);
+            if (response.Success)
             {
-                    
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                Snackbar.Add(Language.Phrase("successresponsefromapi"), Severity.Success);
+                Cancel();
+                
             }
+            else
+            {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                Snackbar.Add("Some error occurred", Severity.Error);
+                Snackbar.Add(Language.Phrase("errorresponsefromapi"), Severity.Error);
+            }
+
+            StateHasChanged();
 
         }
     }
