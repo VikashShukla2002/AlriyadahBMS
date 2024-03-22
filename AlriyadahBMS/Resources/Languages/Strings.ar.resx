@@ -14526,6 +14526,9 @@
   <data name="globalRequiredField" xml:space="preserve">
     <value>هذه الخانة مطلوبه</value>
   </data>
+  <data name="appLanguage" xml:space="preserve">
+    <value>لغة التطبيق</value>
+  </data>
   <data name="errorresponsefromapi" xml:space="preserve">
     <value>حدث بعض الخطأ</value>
   </data>

@@ -14532,6 +14532,9 @@
   <data name="globalRequiredField" xml:space="preserve">
     <value>This field is required</value>
   </data>
+  <data name="appLanguage" xml:space="preserve">
+    <value>App Language</value>
+  </data>
   <data name="errorresponsefromapi" xml:space="preserve">
     <value>Some error occurred</value>
   </data>
